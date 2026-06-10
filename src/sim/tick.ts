@@ -6,23 +6,15 @@
 import type { World } from "koota";
 import { drainEvents } from "./events";
 import { reduceEvent } from "./quests";
-import { createRng, type Rng } from "./rng";
 import { updateCamera } from "./systems/camera";
+import { combatStep } from "./systems/combat";
 import { moveEntities } from "./systems/movement";
-import { Clock, CombatTimers, HitFlash, RngState } from "./traits";
+import { Clock, CombatTimers, HitFlash } from "./traits";
+import { rngFor } from "./worldRng";
 
 export const SIM_DT = 1 / 60;
 
-const rngStreams = new WeakMap<World, Rng>();
-
-export function rngFor(world: World): Rng {
-  let rng = rngStreams.get(world);
-  if (!rng) {
-    rng = createRng(world.get(RngState)?.seed ?? 1);
-    rngStreams.set(world, rng);
-  }
-  return rng;
-}
+export { rngFor } from "./worldRng";
 
 function tickTimers(world: World, dt: number): void {
   for (const entity of world.query(CombatTimers)) {
@@ -46,6 +38,7 @@ export function step(world: World, dt: number = SIM_DT): void {
   if (clock) world.set(Clock, { t: clock.t + dt, dt });
   tickTimers(world, dt);
   moveEntities(world, dt);
+  combatStep(world, dt);
   for (const event of drainEvents(world)) reduceEvent(world, event);
   updateCamera(world, rngFor(world));
 }

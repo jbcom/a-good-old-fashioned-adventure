@@ -72,7 +72,7 @@ describe("movement", () => {
     player.set(MoveIntent, { x: 1, y: 0 });
     for (let i = 0; i < 120; i++) step(world);
     const t = player.get(Transform);
-    expect(t && t.x).toBeLessThan(32 * 16 - 5); // never crossed into the water column
+    expect(t?.x).toBeLessThan(32 * 16 - 5); // never crossed into the water column
   });
 
   it("clamps to world bounds", () => {

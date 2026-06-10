@@ -34,6 +34,7 @@ export const ShieldState = trait({ active: false });
 export const HitFlash = trait({ left: 0 });
 
 export const Projectile = trait({ type: "", vx: 0, vy: 0, life: 0, fromPlayer: false });
+export const PlayerGold = trait({ value: 0 });
 
 // — world-level resources —
 export const MapRuntime = trait(() => ({

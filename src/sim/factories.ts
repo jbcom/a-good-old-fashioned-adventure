@@ -27,6 +27,8 @@ import {
   MapRuntime,
   MoveIntent,
   Outbox,
+  PlayerGold,
+  Projectile,
   PropRef,
   QuestLog,
   RngState,
@@ -68,6 +70,7 @@ export function spawnPlayer(world: World, classId: string, x: number, y: number)
     MoveIntent({ x: 0, y: 0 }),
     CombatTimers({ attack: 0, dash: 0, dashCooldown: 0, iframes: 0 }),
     ShieldState({ active: false }),
+    PlayerGold({ value: 0 }),
     SpriteRef({ spriteId: classDef.sprite, paletteId: classDef.palette }),
   );
 }
@@ -130,6 +133,21 @@ export function spawnProp(world: World, propId: string, x: number, y: number): E
 
 export function spawnPickup(world: World, itemId: string, x: number, y: number, value = 0): Entity {
   return world.spawn(IsPickup({ itemId, value }), Transform({ x, y }));
+}
+
+export interface ProjectileSpawn {
+  type: string;
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  life: number;
+  fromPlayer: boolean;
+}
+
+export function spawnProjectile(world: World, spec: ProjectileSpawn): Entity {
+  const { x, y, ...rest } = spec;
+  return world.spawn(Projectile(rest), Transform({ x, y }));
 }
 
 export interface InstantiateOptions {
