@@ -1,0 +1,28 @@
+<!-- profile: arcade-game+agent-state+mobile-android+standard-repo v1 -->
+# a-good-old-fashioned-adventure
+
+TypeScript adventure game shipped to Android via Capacitor (arcade-cabinet dialect: Vite + Capacitor + Biome + Playwright + release-please).
+
+## Profiles loaded
+
+@/Users/jbogaty/.claude/profiles/arcade-game.md
+@/Users/jbogaty/.claude/profiles/agent-state.md
+@/Users/jbogaty/.claude/profiles/mobile-android.md
+@/Users/jbogaty/.claude/profiles/standard-repo.md
+
+## Repo-specific
+
+Repo is pre-scaffold — no `package.json` yet. First work unit: scaffold the
+arcade-game dialect (pnpm + Vite + TS + Capacitor + Biome + Playwright +
+release-please), then verify and fill in the real commands below.
+
+- **Run:** _not scaffolded yet — will be `pnpm dev` once package.json exists_
+- **Test:** _not scaffolded yet — will be `pnpm test` / `pnpm test:browser` / `pnpm test:e2e`_
+- **Build:** _not scaffolded yet — will be `pnpm build`_
+- **Deploy:** _not scaffolded yet — Android via `pnpm cap:sync` + `pnpm cap:run:android`_
+
+## Notes
+
+- `.agent-state/directive.md` seeded with Status: RELEASED — flip to ACTIVE to start a continuous work session.
+- `.claude/gates.json` seeded with the arcade-game defaults (sim-purity bans, visual/audio coverage rules, `pnpm cap:sync` evidence). Adjust globs once the real `src/` layout exists.
+- Git repo initialized on `main` 2026-06-10; no remote yet.

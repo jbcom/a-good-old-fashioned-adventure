@@ -1,0 +1,41 @@
+{
+  "coverage_rules": [
+    {
+      "when_changed": ["src/render/**", "src/ui/**"],
+      "require_changed": ["tests/visual/**", "tests/harness/**"],
+      "or_explicit_skip": "// no-visual-impact: <≥10 word reason>",
+      "block_message": "Render/UI change without visual test update."
+    },
+    {
+      "when_changed": ["src/audio/**"],
+      "require_changed": ["tests/audio/**", "tests/browser/**"],
+      "block_message": "Audio change without audio graph test."
+    },
+    {
+      "when_changed": ["src/sim/**", "src/engine/**", "src/systems/**"],
+      "require_changed": ["tests/unit/**", "tests/browser/**"],
+      "block_message": "Sim/engine change without unit or browser test."
+    },
+    {
+      "when_changed": ["src/render/**", "src/ui/**"],
+      "require_run": "pnpm test:browser --reporter=line",
+      "evidence_pattern": "Tests:\\s+\\d+\\s+passed",
+      "block_message": "Render/UI change requires real-browser test pass."
+    },
+    {
+      "when_changed": ["capacitor.config.ts", "android/**"],
+      "require_run": "pnpm cap:sync",
+      "evidence_pattern": "(✔ Sync finished|Sync finished in)",
+      "block_message": "Capacitor/Android change requires `pnpm cap:sync`."
+    }
+  ],
+  "ban_patterns": [
+    { "pattern": "Math\\.random\\(\\)", "globs": ["src/sim/**", "src/engine/**", "src/systems/**"], "message": "Use createRng(seed) facade — determinism." },
+    { "pattern": "performance\\.now\\(\\)", "globs": ["src/sim/**", "src/engine/**"], "message": "Use engine clock facade — determinism." }
+  ],
+  "forbidden_bash": [
+    "--no-verify", "git push --force(?!-with-lease)", "--admin",
+    "yarn ", "npm install", "package-lock\\.json", "yarn\\.lock"
+  ],
+  "max_lines_warn": 600
+}
