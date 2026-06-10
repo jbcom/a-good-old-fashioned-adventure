@@ -40,7 +40,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 
 ### S2 Renderer decision (research died with prior session — redo, validate myself)
 - [ ] S2.1 Research 2.5D extrapolation of 16-bit pixel art (FF7-era: pre-rendered perspective, billboards, y-sort scaling, parallax, Mode-7 planes; modern: depth maps, normal maps for pixel art); web-renderer options; write docs/RESEARCH-2.5D.md with cited findings I verified
-- [ ] S2.2 Build BOTH spikes: pixi 2D (y-sort + parallax + scale-by-depth "2.5D-lite") and r3f true-3D-billboard spike, render real content (hero sprite + tiles), screenshot each, READ screenshots, judge quality
+- [x] S2.2 Build BOTH spikes: pixi 2D (y-sort + parallax + scale-by-depth "2.5D-lite") and r3f true-3D-billboard spike, render real content (hero sprite + tiles), screenshot each, READ screenshots, judge quality
 - [ ] S2.3 Record decision + why in docs/ARCHITECTURE.md; delete losing spike; wire winner as src/render foundation
 
 ### S3 Core runtime

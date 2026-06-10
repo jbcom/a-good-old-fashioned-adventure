@@ -15,11 +15,14 @@
     "test:all": "vitest run"
   },
   "dependencies": {
+    "@react-three/fiber": "^9.6.1",
     "ajv": "^8.20.0",
     "animejs": "^4.4.1",
     "koota": "^0.6.6",
+    "pixi.js": "^8.19.0",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
+    "three": "^0.184.0",
     "tone": "^15.1.22",
     "yuka": "^0.7.8"
   },
@@ -28,6 +31,7 @@
     "@types/node": "^25.9.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
+    "@types/three": "^0.184.1",
     "@vitejs/plugin-react": "^6.0.2",
     "@vitest/browser": "^4.1.8",
     "@vitest/browser-playwright": "^4.1.8",

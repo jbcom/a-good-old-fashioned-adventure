@@ -9,3 +9,7 @@
 # deps / build (arcade-game dialect)
 node_modules/
 dist/
+
+# screenshot scratch output from browser tests
+tests/browser/*.png
+tests/browser/__screenshots__/
