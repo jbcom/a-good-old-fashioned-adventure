@@ -54,7 +54,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 ### S4 Presentation
 - [x] S4.1 Sprite atlas baker: (grid × palette) → offscreen canvas; palette swap correctness test (pixel-compare screenshots)
 - [x] S4.2 Renderer: live GameStage reconciles the Koota world per frame (ground recompose on rev bump, billboards via atlas, hit-flash frames, pickups/projectiles, camera follow); screenshots judged, evidence committed
-- [ ] S4.3 AnimeJS bindings: walk-bob, hit-flash, pickup-bob, trail-fade driven from anim:* content; visible in browser test
+- [x] S4.3 AnimeJS bindings: walk-bob, hit-flash, pickup-bob, trail-fade driven from anim:* content; visible in browser test
 - [ ] S4.4 ToneJS audio engine: synth SFX from audio.json recipes + BGM sequencer (themes, per-map switch); browser test asserts Tone graph nodes
 - [ ] S4.5 Input layer: keyboard + on-screen pad (pointer), single InputState consumed by sim; test-injectable
 

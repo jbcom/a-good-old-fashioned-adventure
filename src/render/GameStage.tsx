@@ -18,19 +18,23 @@ import {
   SRGBColorSpace,
 } from "three";
 import { engine } from "../lib/config";
-import { getItem } from "../lib/content/registry";
+import { getAnimation, getItem, getSprite } from "../lib/content/registry";
 import {
   CameraState,
+  CombatTimers,
   Facing,
   HitFlash,
   IsPickup,
+  IsPlayer,
   MapRuntime,
+  MoveIntent,
   Projectile,
   PropRef,
   SpriteRef,
   Transform,
 } from "../sim/traits";
 import { flashCanvas, propCanvas, spriteCanvas, tileCanvas } from "./atlas";
+import { fadeOut, playMotion, releaseMotion } from "./motion";
 
 const TILE = 16;
 const PROJECTILE_COLORS: Record<string, string> = {
@@ -159,9 +163,17 @@ class SceneSync {
       const id = entity as unknown as number;
       const tracked = this.billboard(canvas, key, id, scene);
       const dir = entity.get(Facing)?.dir ?? 1;
-      tracked.mesh.position.set(t.x, canvas.height / 2, t.y);
+      const intent = entity.get(MoveIntent);
+      const moving = !!intent && (intent.x !== 0 || intent.y !== 0);
+      const spriteDef = getSprite(ref.spriteId);
+      const channels = playMotion(
+        id,
+        moving ? (spriteDef.animations.walk ?? null) : (spriteDef.animations.idle ?? null),
+      );
+      tracked.mesh.position.set(t.x, canvas.height / 2 - channels.translateY, t.y);
       tracked.mesh.scale.x = dir;
       seen.add(id);
+      if (entity.get(IsPlayer)) this.spawnDashGhosts(entity, canvas, scene);
     }
 
     for (const entity of world.query(Transform, PropRef)) {
@@ -192,7 +204,9 @@ class SceneSync {
         tracked = { mesh, textureKey: info.itemId };
         this.meshes.set(id, tracked);
       }
-      tracked.mesh.position.set(t.x, 5, t.y);
+      const bobAnim = getItem(info.itemId).pickup?.anim ?? null;
+      const channels = playMotion(id, bobAnim);
+      tracked.mesh.position.set(t.x, 5 - channels.translateY, t.y);
       seen.add(id);
     }
 
@@ -223,8 +237,52 @@ class SceneSync {
       if (!seen.has(id)) {
         scene.remove(tracked.mesh);
         tracked.mesh.geometry.dispose();
+        releaseMotion(id);
         this.meshes.delete(id);
       }
+    }
+  }
+
+  private lastDash = 0;
+
+  /** Dash/blink afterimages: anim:trail-fade content drives ghost opacity. */
+  private spawnDashGhosts(
+    player: import("koota").Entity,
+    canvas: HTMLCanvasElement,
+    scene: Scene,
+  ): void {
+    const dash = player.get(CombatTimers)?.dash ?? 0;
+    const started = dash > 0 && this.lastDash <= 0;
+    this.lastDash = dash;
+    if (!started) return;
+    const t = player.get(Transform);
+    const dir = player.get(Facing)?.dir ?? 1;
+    if (!t) return;
+    const trail = getAnimation("anim:trail-fade");
+    const startAlpha = ((trail.keyframes?.[0] as { alpha?: number })?.alpha ?? 0.4) as number;
+    for (let i = 0; i < 4; i++) {
+      const material = new MeshBasicMaterial({
+        map: textureFor(canvas),
+        transparent: true,
+        opacity: startAlpha,
+        toneMapped: false,
+      });
+      const ghost = new Mesh(new PlaneGeometry(canvas.width, canvas.height), material);
+      ghost.rotation.x = engine.stage.billboardTilt;
+      ghost.scale.x = dir;
+      ghost.position.set(t.x - dir * (i + 1) * 12, canvas.height / 2, t.y);
+      scene.add(ghost);
+      fadeOut(
+        material as unknown as Record<string, unknown>,
+        "opacity",
+        startAlpha,
+        trail.duration + i * 40,
+        () => {
+          scene.remove(ghost);
+          ghost.geometry.dispose();
+          material.dispose();
+        },
+      );
     }
   }
 
