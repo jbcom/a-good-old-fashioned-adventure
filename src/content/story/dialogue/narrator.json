@@ -4,9 +4,7 @@
   "kind": "dialogue-bank",
   "speaker": "char:narrator",
   "portraitOverride": "Wizard",
-  "slots": [
-    { "id": "intro", "node": "intro" }
-  ],
+  "slots": [{ "id": "intro", "node": "intro" }],
   "nodes": {
     "intro": {
       "lines": [

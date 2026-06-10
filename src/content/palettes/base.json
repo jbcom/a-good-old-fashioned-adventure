@@ -30,7 +30,13 @@
     "T": { "hex": "#009e6c", "name": "Mythic Teal/Swamp" },
     "K": { "hex": "#48206b", "name": "Rogue Purple Shadow" },
     "k": { "hex": "#1a0d2e", "name": "Deep Rogue Dark Violet" },
-    "Y": { "hex": "#f7e214", "name": "Banner Gold (added: used by castle/dragon grids, missing from prototype palette)" },
-    "O": { "hex": "#df7126", "name": "Ember Orange (added: used by dragon grid, missing from prototype palette)" }
+    "Y": {
+      "hex": "#f7e214",
+      "name": "Banner Gold (added: used by castle/dragon grids, missing from prototype palette)"
+    },
+    "O": {
+      "hex": "#df7126",
+      "name": "Ember Orange (added: used by dragon grid, missing from prototype palette)"
+    }
   }
 }

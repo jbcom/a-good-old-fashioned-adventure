@@ -30,9 +30,12 @@
   "crt": { "defaultOn": true, "scanlineHeight": 4 },
   "controls": {
     "keyboard": {
-      "up": ["ArrowUp", "w"], "down": ["ArrowDown", "s"],
-      "left": ["ArrowLeft", "a"], "right": ["ArrowRight", "d"],
-      "actionA": ["j", " "], "actionB": ["k", "Shift"]
+      "up": ["ArrowUp", "w"],
+      "down": ["ArrowDown", "s"],
+      "left": ["ArrowLeft", "a"],
+      "right": ["ArrowRight", "d"],
+      "actionA": ["j", " "],
+      "actionB": ["k", "Shift"]
     },
     "touch": { "dpad": true, "faceButtons": ["B", "A"] }
   }

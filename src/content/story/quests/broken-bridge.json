@@ -21,11 +21,13 @@
       "id": "cull-orcs",
       "log": "Defeat Forest Orcs ({orcsKilled}/4)",
       "counters": {
-        "orcsKilled": { "event": "enemy:defeated", "match": { "archetypes": ["forest-orc", "orc-scout", "forest-shaman"] }, "target": 4 }
+        "orcsKilled": {
+          "event": "enemy:defeated",
+          "match": { "archetypes": ["forest-orc", "orc-scout", "forest-shaman"] },
+          "target": 4
+        }
       },
-      "advance": [
-        { "when": { "counterDone": "orcsKilled" }, "to": "report-back" }
-      ]
+      "advance": [{ "when": { "counterDone": "orcsKilled" }, "to": "report-back" }]
     },
     {
       "id": "report-back",

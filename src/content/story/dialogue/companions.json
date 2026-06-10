@@ -3,9 +3,7 @@
   "id": "dlgbank:companions",
   "kind": "dialogue-bank",
   "speaker": "by-character",
-  "slots": [
-    { "default": true, "node": "rally" }
-  ],
+  "slots": [{ "default": true, "node": "rally" }],
   "nodes": {
     "rally": {
       "lines": ["Onward! Reclaim our castles and cleanse the blight!"],

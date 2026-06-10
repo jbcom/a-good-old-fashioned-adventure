@@ -18,7 +18,9 @@
       "emits": "dlg:woodcutter.request"
     },
     "progress": {
-      "lines": ["I need 4 Orcs cleared! You've only stopped {quest:broken-bridge.orcsKilled}/4 of them."],
+      "lines": [
+        "I need 4 Orcs cleared! You've only stopped {quest:broken-bridge.orcsKilled}/4 of them."
+      ],
       "emits": "dlg:woodcutter.progress"
     },
     "repaired": {

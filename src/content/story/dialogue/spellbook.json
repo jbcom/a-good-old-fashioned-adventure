@@ -4,9 +4,7 @@
   "kind": "dialogue-bank",
   "speaker": "char:spellbook",
   "portraitOverride": "Wizard",
-  "slots": [
-    { "id": "key-recovered", "node": "key-recovered" }
-  ],
+  "slots": [{ "id": "key-recovered", "node": "key-recovered" }],
   "nodes": {
     "key-recovered": {
       "lines": [

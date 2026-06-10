@@ -24,7 +24,10 @@
         "required": ["id"],
         "properties": {
           "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
-          "log": { "type": "string", "description": "Quest-log line; {counterName} and {quest:id.counter} interpolate live values." },
+          "log": {
+            "type": "string",
+            "description": "Quest-log line; {counterName} and {quest:id.counter} interpolate live values."
+          },
           "terminal": { "type": "boolean" },
           "counters": {
             "type": "object",
@@ -60,7 +63,10 @@
       "type": "object",
       "minProperties": 1,
       "properties": {
-        "dialogueEvent": { "type": "string", "description": "Fires when a dialogue node emits, optionally suffixed ':<choiceId>' or ':seen'." },
+        "dialogueEvent": {
+          "type": "string",
+          "description": "Fires when a dialogue node emits, optionally suffixed ':<choiceId>' or ':seen'."
+        },
         "counterDone": { "type": "string" },
         "enemyDefeated": { "type": "string" },
         "itemAcquired": { "type": "string", "pattern": "^item:[a-z0-9-]+$" },

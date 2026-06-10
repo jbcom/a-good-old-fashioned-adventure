@@ -3,7 +3,17 @@
   "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/map.schema.json",
   "title": "Map definition",
   "type": "object",
-  "required": ["id", "kind", "name", "size", "baseTile", "bgmTheme", "generation", "playerSpawn", "entities"],
+  "required": [
+    "id",
+    "kind",
+    "name",
+    "size",
+    "baseTile",
+    "bgmTheme",
+    "generation",
+    "playerSpawn",
+    "entities"
+  ],
   "properties": {
     "id": { "type": "string", "pattern": "^map:[a-z0-9-]+$" },
     "kind": { "const": "map" },
@@ -11,7 +21,10 @@
     "size": {
       "type": "object",
       "required": ["cols", "rows"],
-      "properties": { "cols": { "type": "integer", "minimum": 1 }, "rows": { "type": "integer", "minimum": 1 } }
+      "properties": {
+        "cols": { "type": "integer", "minimum": 1 },
+        "rows": { "type": "integer", "minimum": 1 }
+      }
     },
     "baseTile": { "$ref": "#/$defs/tileRef" },
     "bgmTheme": { "type": "string" },
@@ -23,9 +36,12 @@
         "properties": {
           "op": { "enum": ["border", "col", "row", "col-span", "row-span", "region", "set"] },
           "tile": { "$ref": "#/$defs/tileRef" },
-          "x": { "type": "integer" }, "y": { "type": "integer" },
-          "x0": { "type": "integer" }, "x1": { "type": "integer" },
-          "y0": { "type": "integer" }, "y1": { "type": "integer" },
+          "x": { "type": "integer" },
+          "y": { "type": "integer" },
+          "x0": { "type": "integer" },
+          "x1": { "type": "integer" },
+          "y0": { "type": "integer" },
+          "y1": { "type": "integer" },
           "at": { "$ref": "#/$defs/tileCoord" },
           "exceptRows": { "type": "array", "items": { "type": "integer" } },
           "exceptCols": { "type": "array", "items": { "type": "integer" } },
@@ -52,7 +68,8 @@
           "ref": { "type": "string", "pattern": "^(char|prop):[a-z0-9-]+$" },
           "enemy": { "type": "string", "pattern": "^[a-z0-9-]+$" },
           "spawnRule": { "type": "string" },
-          "x": { "type": "number" }, "y": { "type": "number" },
+          "x": { "type": "number" },
+          "y": { "type": "number" },
           "tileAt": { "$ref": "#/$defs/tileCoord" },
           "dir": { "enum": [1, -1] },
           "contents": { "type": "string" },

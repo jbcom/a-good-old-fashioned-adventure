@@ -3,8 +3,6 @@
   "id": "tile:path",
   "kind": "tile",
   "solid": false,
-  "layers": [
-    { "op": "fill", "color": "@B" }
-  ],
+  "layers": [{ "op": "fill", "color": "@B" }],
   "koota": { "traits": ["Tile"] }
 }

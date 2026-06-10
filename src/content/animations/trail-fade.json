@@ -4,10 +4,7 @@
   "kind": "animation",
   "engine": "animejs",
   "target": "spriteAlpha",
-  "keyframes": [
-    { "alpha": 0.4 },
-    { "alpha": 0 }
-  ],
+  "keyframes": [{ "alpha": 0.4 }, { "alpha": 0 }],
   "duration": 300,
   "easing": "linear",
   "loop": false,

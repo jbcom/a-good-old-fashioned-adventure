@@ -4,7 +4,10 @@
   "kind": "dialogue-bank",
   "speaker": "char:gwydion",
   "slots": [
-    { "when": { "quest": "quest:dungeon-key", "stageIn": ["seek-the-wyrm", "claim-the-key"] }, "node": "hint" },
+    {
+      "when": { "quest": "quest:dungeon-key", "stageIn": ["seek-the-wyrm", "claim-the-key"] },
+      "node": "hint"
+    },
     { "default": true, "node": "hint" }
   ],
   "nodes": {

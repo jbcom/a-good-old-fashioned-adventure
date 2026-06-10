@@ -4,9 +4,7 @@
   "kind": "dialogue-bank",
   "speaker": "char:dungeon-guard",
   "portraitOverride": "Skeleton",
-  "slots": [
-    { "id": "taunt", "node": "taunt" }
-  ],
+  "slots": [{ "id": "taunt", "node": "taunt" }],
   "nodes": {
     "taunt": {
       "lines": ["Fools! None survive the Obsidian Throne dungeon! Prepare to perish!"],

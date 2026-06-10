@@ -30,12 +30,25 @@
     }
   ],
   "ban_patterns": [
-    { "pattern": "Math\\.random\\(\\)", "globs": ["src/sim/**", "src/engine/**", "src/systems/**"], "message": "Use createRng(seed) facade — determinism." },
-    { "pattern": "performance\\.now\\(\\)", "globs": ["src/sim/**", "src/engine/**"], "message": "Use engine clock facade — determinism." }
+    {
+      "pattern": "Math\\.random\\(\\)",
+      "globs": ["src/sim/**", "src/engine/**", "src/systems/**"],
+      "message": "Use createRng(seed) facade — determinism."
+    },
+    {
+      "pattern": "performance\\.now\\(\\)",
+      "globs": ["src/sim/**", "src/engine/**"],
+      "message": "Use engine clock facade — determinism."
+    }
   ],
   "forbidden_bash": [
-    "--no-verify", "git push --force(?!-with-lease)", "--admin",
-    "yarn ", "npm install", "package-lock\\.json", "yarn\\.lock"
+    "--no-verify",
+    "git push --force(?!-with-lease)",
+    "--admin",
+    "yarn ",
+    "npm install",
+    "package-lock\\.json",
+    "yarn\\.lock"
   ],
   "max_lines_warn": 600
 }

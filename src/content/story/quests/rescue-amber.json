@@ -11,9 +11,7 @@
     {
       "id": "survive-the-crypt",
       "log": "Defeat Shadow Warlord & Rescue Princess Amber",
-      "advance": [
-        { "when": { "enemyDefeated": "shadow-warlord" }, "to": "reach-amber" }
-      ]
+      "advance": [{ "when": { "enemyDefeated": "shadow-warlord" }, "to": "reach-amber" }]
     },
     {
       "id": "reach-amber",

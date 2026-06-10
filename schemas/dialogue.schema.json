@@ -49,11 +49,18 @@
               "properties": {
                 "id": { "type": "string" },
                 "text": { "type": "string" },
-                "goto": { "type": "string", "description": "Optional next node in this bank, for branching trees." }
+                "goto": {
+                  "type": "string",
+                  "description": "Optional next node in this bank, for branching trees."
+                }
               }
             }
           },
-          "emits": { "type": "string", "pattern": "^dlg:[a-z0-9.-]+$", "description": "Event fired when the node finishes ('<event>:seen') or a choice is taken ('<event>:<choiceId>'). Quests listen for these." }
+          "emits": {
+            "type": "string",
+            "pattern": "^dlg:[a-z0-9.-]+$",
+            "description": "Event fired when the node finishes ('<event>:seen') or a choice is taken ('<event>:<choiceId>'). Quests listen for these."
+          }
         }
       }
     }

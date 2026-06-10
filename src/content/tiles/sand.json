@@ -3,8 +3,6 @@
   "id": "tile:sand",
   "kind": "tile",
   "solid": false,
-  "layers": [
-    { "op": "fill", "color": "@d" }
-  ],
+  "layers": [{ "op": "fill", "color": "@d" }],
   "koota": { "traits": ["Tile"] }
 }

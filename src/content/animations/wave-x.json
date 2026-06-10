@@ -4,11 +4,7 @@
   "kind": "animation",
   "engine": "animejs",
   "target": "layerOffset",
-  "keyframes": [
-    { "translateX": -1 },
-    { "translateX": 1 },
-    { "translateX": -1 }
-  ],
+  "keyframes": [{ "translateX": -1 }, { "translateX": 1 }, { "translateX": -1 }],
   "duration": 1885,
   "easing": "easeInOutSine",
   "loop": true,

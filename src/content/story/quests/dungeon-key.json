@@ -11,7 +11,10 @@
       "id": "seek-the-wyrm",
       "log": "Collect the Golden Dungeon Key from the Sandwyrm on the Sand Beach",
       "hints": [
-        { "dialogueEvent": "dlg:gwydion.hint:seen", "note": "optional midpoint — Gwydion points at the southern shore; not required to advance" }
+        {
+          "dialogueEvent": "dlg:gwydion.hint:seen",
+          "note": "optional midpoint — Gwydion points at the southern shore; not required to advance"
+        }
       ],
       "advance": [
         {
@@ -27,15 +30,18 @@
     {
       "id": "claim-the-key",
       "log": "Pick up the brass Dungeon Key",
-      "advance": [
-        { "when": { "itemAcquired": "item:dungeon-key" }, "to": "to-the-gate" }
-      ]
+      "advance": [{ "when": { "itemAcquired": "item:dungeon-key" }, "to": "to-the-gate" }]
     },
     {
       "id": "to-the-gate",
       "log": "Unlock the Castle dungeon gates to the Northeast",
       "advance": [
-        { "when": { "enterZone": { "map": "map:overworld", "trigger": "trigger:castle-gate-entry" } }, "to": "done" }
+        {
+          "when": {
+            "enterZone": { "map": "map:overworld", "trigger": "trigger:castle-gate-entry" }
+          },
+          "to": "done"
+        }
       ]
     },
     { "id": "done", "terminal": true, "log": "The castle gate stands open" }

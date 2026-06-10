@@ -34,25 +34,46 @@
       "dialogue": "dlgbank:princess-amber"
     },
     "char:companion-knight": {
-      "name": "Knight", "role": "npc", "sprite": "sprite:hero", "palette": "palette:knight",
-      "portraitColor": "#c2c1e8", "dialogue": "dlgbank:companions"
+      "name": "Knight",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:knight",
+      "portraitColor": "#c2c1e8",
+      "dialogue": "dlgbank:companions"
     },
     "char:companion-ranger": {
-      "name": "Ranger", "role": "npc", "sprite": "sprite:hero", "palette": "palette:ranger",
-      "portraitColor": "#2c6114", "dialogue": "dlgbank:companions"
+      "name": "Ranger",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:ranger",
+      "portraitColor": "#2c6114",
+      "dialogue": "dlgbank:companions"
     },
     "char:companion-wizard": {
-      "name": "Wizard", "role": "npc", "sprite": "sprite:hero", "palette": "palette:wizard",
-      "portraitColor": "#00d2f7", "dialogue": "dlgbank:companions"
+      "name": "Wizard",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:wizard",
+      "portraitColor": "#00d2f7",
+      "dialogue": "dlgbank:companions"
     },
     "char:narrator": {
-      "name": "Narrator", "role": "voice", "portraitColor": "#00d2f7", "dialogue": "dlgbank:narrator"
+      "name": "Narrator",
+      "role": "voice",
+      "portraitColor": "#00d2f7",
+      "dialogue": "dlgbank:narrator"
     },
     "char:dungeon-guard": {
-      "name": "Dungeon Guard", "role": "voice", "portraitColor": "#99aab8", "dialogue": "dlgbank:dungeon-guard"
+      "name": "Dungeon Guard",
+      "role": "voice",
+      "portraitColor": "#99aab8",
+      "dialogue": "dlgbank:dungeon-guard"
     },
     "char:spellbook": {
-      "name": "Spellbook System", "role": "voice", "portraitColor": "#00d2f7", "dialogue": "dlgbank:spellbook"
+      "name": "Spellbook System",
+      "role": "voice",
+      "portraitColor": "#00d2f7",
+      "dialogue": "dlgbank:spellbook"
     }
   }
 }

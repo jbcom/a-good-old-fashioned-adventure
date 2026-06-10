@@ -10,7 +10,10 @@
     "grid": {
       "type": "object",
       "required": ["w", "h"],
-      "properties": { "w": { "type": "integer", "minimum": 1 }, "h": { "type": "integer", "minimum": 1 } }
+      "properties": {
+        "w": { "type": "integer", "minimum": 1 },
+        "h": { "type": "integer", "minimum": 1 }
+      }
     },
     "anchor": {
       "type": "object",
@@ -34,12 +37,21 @@
       "additionalProperties": {
         "type": "object",
         "oneOf": [
-          { "required": ["rows"], "properties": { "rows": { "type": "array", "items": { "type": "string" } } } },
-          { "required": ["drawOps"], "properties": { "drawOps": { "$ref": "./draw-ops.schema.json#/$defs/opList" } } }
+          {
+            "required": ["rows"],
+            "properties": { "rows": { "type": "array", "items": { "type": "string" } } }
+          },
+          {
+            "required": ["drawOps"],
+            "properties": { "drawOps": { "$ref": "./draw-ops.schema.json#/$defs/opList" } }
+          }
         ]
       }
     },
-    "recolorChannels": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 1 } },
+    "recolorChannels": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 1 }
+    },
     "defaultPalette": { "type": "string", "pattern": "^palette:[a-z0-9-]+$" },
     "koota": {
       "type": "object",
