@@ -11,6 +11,7 @@ import {
   CameraState,
   Clock,
   CombatTimers,
+  EventQueue,
   Facing,
   FlagState,
   Health,
@@ -25,7 +26,9 @@ import {
   LootContainer,
   MapRuntime,
   MoveIntent,
+  Outbox,
   PropRef,
+  QuestLog,
   RngState,
   ShieldState,
   Speed,
@@ -43,6 +46,9 @@ export function createGameWorld(seed = 1): World {
     RngState({ seed }),
     Clock({ t: 0, dt: 0 }),
     CameraState({ x: 0, y: 0, shake: 0 }),
+    EventQueue({ events: [] }),
+    QuestLog({ active: {}, completed: [] }),
+    Outbox({ sfx: [], dialogue: null, mapLoad: null, endGame: null }),
   );
   return world;
 }

@@ -4,6 +4,8 @@
  * comes from fixed steps + seeded RNG, never wall-clock.
  */
 import type { World } from "koota";
+import { drainEvents } from "./events";
+import { reduceEvent } from "./quests";
 import { createRng, type Rng } from "./rng";
 import { updateCamera } from "./systems/camera";
 import { moveEntities } from "./systems/movement";
@@ -44,5 +46,6 @@ export function step(world: World, dt: number = SIM_DT): void {
   if (clock) world.set(Clock, { t: clock.t + dt, dt });
   tickTimers(world, dt);
   moveEntities(world, dt);
+  for (const event of drainEvents(world)) reduceEvent(world, event);
   updateCamera(world, rngFor(world));
 }

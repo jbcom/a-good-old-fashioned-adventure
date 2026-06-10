@@ -46,3 +46,38 @@ export const FlagState = trait(() => ({ values: {} as Record<string, boolean> })
 export const RngState = trait({ seed: 1 });
 export const Clock = trait({ t: 0, dt: 0 });
 export const CameraState = trait({ x: 0, y: 0, shake: 0 });
+
+export interface GameEvent {
+  type: "enemy:defeated" | "item:acquired" | "dlg" | "zone:entered" | "map:entered";
+  archetypeId?: string;
+  itemId?: string;
+  /** Full dialogue event string, e.g. "dlg:woodcutter.request:accepted". */
+  event?: string;
+  mapId?: string;
+  triggerId?: string;
+  x?: number;
+  y?: number;
+}
+
+export const EventQueue = trait(() => ({ events: [] as GameEvent[] }));
+
+export interface ActiveQuest {
+  stage: string;
+  counters: Record<string, number>;
+}
+
+export const QuestLog = trait(() => ({
+  active: {} as Record<string, ActiveQuest>,
+  completed: [] as string[],
+}));
+
+/**
+ * Sim → presentation outbox: side effects the app shell must perform
+ * (play sfx, open dialogue, switch maps, end the game). Drained each frame.
+ */
+export const Outbox = trait(() => ({
+  sfx: [] as string[],
+  dialogue: null as { bank: string; slot?: string } | null,
+  mapLoad: null as string | null,
+  endGame: null as "victory" | "gameover" | null,
+}));
