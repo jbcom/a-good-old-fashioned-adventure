@@ -52,7 +52,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S3.6 Yuka enemy behaviors: yuka steering (patrol, chase/seek, flee-kite for shaman, boss charge+spread); validated in deterministic 60Hz unit sims; live browser validation folds into the S5.6 playthrough test
 
 ### S4 Presentation
-- [ ] S4.1 Sprite atlas baker: (grid × palette) → offscreen canvas; palette swap correctness test (pixel-compare screenshots)
+- [x] S4.1 Sprite atlas baker: (grid × palette) → offscreen canvas; palette swap correctness test (pixel-compare screenshots)
 - [ ] S4.2 Renderer: tile layers, y-sorted entities, draw-ops, water/anim layers; screenshot vs prototype reference
 - [ ] S4.3 AnimeJS bindings: walk-bob, hit-flash, pickup-bob, trail-fade driven from anim:* content; visible in browser test
 - [ ] S4.4 ToneJS audio engine: synth SFX from audio.json recipes + BGM sequencer (themes, per-map switch); browser test asserts Tone graph nodes
