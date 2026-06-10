@@ -43,7 +43,7 @@ export function createGameWorld(seed = 1): World {
   const flagDefaults: Record<string, boolean> = {};
   for (const [id, def] of flags) flagDefaults[id] = def.default;
   world.add(
-    MapRuntime({ mapId: "", cols: 0, rows: 0, grid: [] }),
+    MapRuntime({ mapId: "", cols: 0, rows: 0, grid: [], rev: 0 }),
     FlagState({ values: flagDefaults }),
     RngState({ seed }),
     Clock({ t: 0, dt: 0 }),
@@ -174,6 +174,7 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
     cols: def.size.cols,
     rows: def.size.rows,
     grid: buildGrid(def),
+    rev: 0,
   });
 
   const { x, y } = def.playerSpawn;

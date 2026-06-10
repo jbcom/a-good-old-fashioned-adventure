@@ -13,5 +13,14 @@
     "backgroundColor": "#141013",
     "entityShadow": { "color": "rgba(20, 16, 19, 0.45)", "height": 3, "widthPad": 2 }
   },
-  "playerBounds": { "edgeX": 8, "edgeTop": 16, "edgeBottom": 8 }
+  "playerBounds": { "edgeX": 8, "edgeTop": 16, "edgeBottom": 8 },
+  "stage": {
+    "fov": 38,
+    "cameraHeight": 170,
+    "cameraBehind": 130,
+    "lookAheadZ": -24,
+    "billboardTilt": -0.32,
+    "near": 1,
+    "far": 2000
+  }
 }

@@ -41,6 +41,23 @@ export function propCanvas(propId: string, state: string, paletteId?: string): H
   });
 }
 
+/** White silhouette of a sprite — the damage hit-flash frame. */
+export function flashCanvas(spriteId: string, paletteId: string): HTMLCanvasElement {
+  return baked(`${spriteId}|${paletteId}|flash`, () => {
+    const source = spriteCanvas(spriteId, paletteId);
+    const canvas = document.createElement("canvas");
+    canvas.width = source.width;
+    canvas.height = source.height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("2d context unavailable");
+    ctx.drawImage(source, 0, 0);
+    ctx.globalCompositeOperation = "source-in";
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    return canvas;
+  });
+}
+
 /** Tile face (16×16 draw-ops at the base palette). */
 export function tileCanvas(tileId: string): HTMLCanvasElement {
   return baked(`${tileId}|palette:base`, () => {

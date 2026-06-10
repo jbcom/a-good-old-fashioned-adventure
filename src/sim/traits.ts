@@ -42,6 +42,8 @@ export const MapRuntime = trait(() => ({
   cols: 0,
   rows: 0,
   grid: [] as string[][],
+  /** bumped whenever a tile mutates (e.g. bridge repair) so renderers recompose */
+  rev: 0,
 }));
 export const FlagState = trait(() => ({ values: {} as Record<string, boolean> }));
 export const RngState = trait({ seed: 1 });

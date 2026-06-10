@@ -93,6 +93,7 @@ export function applyEffects(
       const runtime = world.get(MapRuntime);
       if (runtime && runtime.mapId === map) {
         runtime.grid[at[1]][at[0]] = tile;
+        world.set(MapRuntime, { ...runtime, rev: runtime.rev + 1 });
       }
     }
     if (effect.spawnItem) {
