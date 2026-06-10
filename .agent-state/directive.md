@@ -39,9 +39,9 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S1.4 Biome config; `pnpm lint`/`pnpm format` green; .gitignore covers artifacts
 
 ### S2 Renderer decision (research died with prior session — redo, validate myself)
-- [ ] S2.1 Research 2.5D extrapolation of 16-bit pixel art (FF7-era: pre-rendered perspective, billboards, y-sort scaling, parallax, Mode-7 planes; modern: depth maps, normal maps for pixel art); web-renderer options; write docs/RESEARCH-2.5D.md with cited findings I verified
+- [x] S2.1 Research 2.5D extrapolation of 16-bit pixel art (FF7-era: pre-rendered perspective, billboards, y-sort scaling, parallax, Mode-7 planes; modern: depth maps, normal maps for pixel art); web-renderer options; write docs/RESEARCH-2.5D.md with cited findings I verified
 - [x] S2.2 Build BOTH spikes: pixi 2D (y-sort + parallax + scale-by-depth "2.5D-lite") and r3f true-3D-billboard spike, render real content (hero sprite + tiles), screenshot each, READ screenshots, judge quality
-- [ ] S2.3 Record decision + why in docs/ARCHITECTURE.md; delete losing spike; wire winner as src/render foundation
+- [x] S2.3 Record decision + why in docs/ARCHITECTURE.md; delete losing spike; wire winner as src/render foundation
 
 ### S3 Core runtime
 - [ ] S3.1 Content loader: glob-import + ajv at boot + typed registries (tiles/props/sprites/palettes/anims/maps/chars/items/flags/quests/dlgbanks)
@@ -81,4 +81,6 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 
 ## Learnings log (forward sweeps append here)
 - 2026-06-10: prior session's deep-research workflow + reviewer died on session exit — background work must be treated as lost across session boundaries; redo in-queue (S2.1).
+- S2 learnings now binding: fixed camera yaw (Octopath constraint, verified); integer-scale + letterbox presentation for Android fractional DPR (2.625 Pixel-class); NearestFilter+no-mipmaps+SRGB on every texture; low-virtual-res render + integer upscale; HUD/UI is React DOM, never canvas. pixi.js evaluated and REMOVED — do not reintroduce.
+- Sprite normal/height maps can be computed procedurally at atlas-bake time from pixel grids (research: external tools exist but we own the grids) — lighting polish option for S4.2.
 - Prototype does not run (drawPixelSprite undefined, Y/O palette keys missing, orc quest unwinnable) — it is reference-only; fidelity means "values match", not "behavior matches bugs".
