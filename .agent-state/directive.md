@@ -44,8 +44,8 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S2.3 Record decision + why in docs/ARCHITECTURE.md; delete losing spike; wire winner as src/render foundation
 
 ### S3 Core runtime
-- [ ] S3.1 Content loader: glob-import + ajv at boot + typed registries (tiles/props/sprites/palettes/anims/maps/chars/items/flags/quests/dlgbanks)
-- [ ] S3.2 Koota world + traits from content `koota.traits` vocab; factories own ALL spawning; map instantiation (generation ops → grid, spawn tables → entities)
+- [x] S3.1 Content loader: glob-import + ajv at boot + typed registries (tiles/props/sprites/palettes/anims/maps/chars/items/flags/quests/dlgbanks)
+- [x] S3.2 Koota world + traits from content `koota.traits` vocab; factories own ALL spawning; map instantiation (generation ops → grid, spawn tables → entities)
 - [ ] S3.3 Sim systems: clock, seeded RNG, movement+tile collision, camera follow/shake; unit tests
 - [ ] S3.4 Event bus (enemy:defeated, item:acquired, dlg:*, zone:entered); quest engine as reducer over events; dialogue slot resolver; unit tests for full quest chain logic
 - [ ] S3.5 Combat: melee swing, projectiles, damage/knockback/iframes, drops; unit tests
