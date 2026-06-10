@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/animation.schema.json",
+  "id": "anim:trail-fade",
+  "kind": "animation",
+  "engine": "animejs",
+  "target": "spriteAlpha",
+  "keyframes": [
+    { "alpha": 0.4 },
+    { "alpha": 0 }
+  ],
+  "duration": 300,
+  "easing": "linear",
+  "loop": false,
+  "description": "Dash/blink afterimage ghost: spawns at 40% alpha and fades out over its lifetime."
+}

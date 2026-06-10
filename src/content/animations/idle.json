@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../schemas/animation.schema.json",
+  "id": "anim:idle",
+  "kind": "animation",
+  "engine": "animejs",
+  "target": "spriteOffset",
+  "properties": { "translateY": 0 },
+  "duration": 1,
+  "loop": false,
+  "description": "Rest pose — no movement. Exists so every sprite state maps to a named animation."
+}

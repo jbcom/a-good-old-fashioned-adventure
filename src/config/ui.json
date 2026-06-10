@@ -1,0 +1,39 @@
+{
+  "$schema": "../../schemas/config.schema.json",
+  "font": { "family": "Press Start 2P", "fallback": "monospace" },
+  "theme": {
+    "background": "#141013",
+    "panel": "#1b1c2c",
+    "panelBorder": "#c2c1e8",
+    "shell": "#333c57",
+    "textPrimary": "#ffffff",
+    "textBody": "#b2bec7",
+    "textMuted": "#646985",
+    "accentGold": "#f7e214",
+    "accentGreen": "#6fe014",
+    "accentGreenDark": "#2c6114",
+    "accentRed": "#e03d50",
+    "accentRedDark": "#901e38",
+    "accentBlue": "#00d2f7",
+    "accentPink": "#ff8cb0",
+    "hpBar": "#e03d50",
+    "xpBar": "#6fe014"
+  },
+  "floaterColors": {
+    "damage": "#ff3355",
+    "xp": "#6fe014",
+    "heal": "#e03d50",
+    "gold": "#f7e214",
+    "maxHp": "#ff8cb0",
+    "attack": "#00d2f7"
+  },
+  "crt": { "defaultOn": true, "scanlineHeight": 4 },
+  "controls": {
+    "keyboard": {
+      "up": ["ArrowUp", "w"], "down": ["ArrowDown", "s"],
+      "left": ["ArrowLeft", "a"], "right": ["ArrowRight", "d"],
+      "actionA": ["j", " "], "actionB": ["k", "Shift"]
+    },
+    "touch": { "dpad": true, "faceButtons": ["B", "A"] }
+  }
+}

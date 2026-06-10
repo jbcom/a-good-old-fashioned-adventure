@@ -1,0 +1,16 @@
+{
+  "$schema": "../../schemas/config.schema.json",
+  "xpCurve": {
+    "firstLevelXp": 50,
+    "growthFactor": 1.5
+  },
+  "onLevelUp": {
+    "maxHpBonus": 10,
+    "fullHeal": true,
+    "sfx": "levelUp"
+  },
+  "xpDrop": {
+    "base": 12,
+    "enemyMaxHpFactor": 0.5
+  }
+}

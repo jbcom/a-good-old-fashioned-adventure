@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:grass",
+  "kind": "tile",
+  "solid": false,
+  "layers": [
+    { "op": "fill", "color": "@e" },
+    { "op": "rect", "color": "#142a07", "x": 2, "y": 2, "w": 1, "h": 1 },
+    { "op": "rect", "color": "#142a07", "x": 10, "y": 6, "w": 1, "h": 1 },
+    { "op": "rect", "color": "#142a07", "x": 5, "y": 11, "w": 1, "h": 1 }
+  ],
+  "koota": { "traits": ["Tile"] }
+}

@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/sprite.schema.json",
+  "title": "Recolorable pixel character sprite model",
+  "type": "object",
+  "required": ["id", "kind", "grid", "anchor", "rows", "recolorChannels", "defaultPalette", "animations", "koota"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^sprite:[a-z0-9-]+$" },
+    "kind": { "const": "character-sprite" },
+    "description": { "type": "string" },
+    "grid": {
+      "type": "object",
+      "required": ["w", "h"],
+      "properties": { "w": { "type": "integer", "minimum": 1 }, "h": { "type": "integer", "minimum": 1 } }
+    },
+    "anchor": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+    },
+    "rows": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "recolorChannels": { "type": "array", "items": { "type": "string", "minLength": 1, "maxLength": 1 } },
+    "defaultPalette": { "type": "string", "pattern": "^palette:[a-z0-9-]+$" },
+    "facing": {
+      "type": "object",
+      "properties": {
+        "method": { "enum": ["mirror-x", "frames"] },
+        "defaultDir": { "enum": [1, -1] }
+      }
+    },
+    "animations": {
+      "type": "object",
+      "additionalProperties": { "type": "string", "pattern": "^anim:[a-z0-9-]+$" }
+    },
+    "koota": {
+      "type": "object",
+      "required": ["traits"],
+      "properties": { "traits": { "type": "array", "items": { "type": "string" } } }
+    }
+  }
+}

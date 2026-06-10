@@ -1,0 +1,13 @@
+{
+  "$schema": "../../schemas/config.schema.json",
+  "onEnemyDeath": {
+    "always": [{ "item": "item:xp-orb" }],
+    "rolls": [{ "item": "item:heart", "chance": 0.6, "offsetX": 8 }]
+  },
+  "pickupRadius": 12,
+  "chestContents": {
+    "Gold": { "item": "item:gold", "amount": 50 },
+    "HPUp": { "item": "item:max-hp-up", "amount": 20 },
+    "AttackUp": { "item": "item:attack-up", "amount": 1 }
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../schemas/animation.schema.json",
+  "id": "anim:wave-x",
+  "kind": "animation",
+  "engine": "animejs",
+  "target": "layerOffset",
+  "keyframes": [
+    { "translateX": -1 },
+    { "translateX": 1 },
+    { "translateX": -1 }
+  ],
+  "duration": 1885,
+  "easing": "easeInOutSine",
+  "loop": true,
+  "description": "Horizontal water shimmer: sin(t/300ms + worldX*0.1) scaled by per-layer amplitude (full period 2*pi*300ms ≈ 1885ms)."
+}

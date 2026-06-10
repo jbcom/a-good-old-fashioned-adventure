@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:wood-bridge",
+  "kind": "tile",
+  "solid": false,
+  "layers": [
+    { "op": "rect", "color": "@b", "x": 0, "y": 0, "w": 16, "h": 2 },
+    { "op": "rect", "color": "@b", "x": 0, "y": 14, "w": 16, "h": 2 },
+    { "op": "repeat-rect", "color": "@B", "x": 2, "y": 2, "w": 2, "h": 12, "stepX": 4, "count": 4 }
+  ],
+  "koota": { "traits": ["Tile"] }
+}

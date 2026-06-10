@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/draw-ops.schema.json",
+  "title": "Declarative pixel draw operations",
+  "description": "Shared op vocabulary for tile layers, prop states, and trigger indicators. Colors are either a literal hex/transparent or '@K' referencing key K in palette:base (after any active swap).",
+  "$defs": {
+    "color": { "type": "string", "pattern": "^(#[0-9a-fA-F]{6}|transparent|rgba?\\(.+\\)|@.)$" },
+    "animateRef": {
+      "type": "object",
+      "required": ["anim"],
+      "properties": {
+        "anim": { "type": "string", "pattern": "^anim:[a-z0-9-]+$" },
+        "amplitude": { "type": "number" },
+        "periodMs": { "type": "number", "exclusiveMinimum": 0 },
+        "phaseFromWorldX": { "type": "number" }
+      }
+    },
+    "op": {
+      "type": "object",
+      "required": ["op", "color"],
+      "properties": {
+        "op": { "enum": ["fill", "rect", "triangle", "repeat-rect"] },
+        "color": { "$ref": "#/$defs/color" },
+        "x": { "type": "number" }, "y": { "type": "number" },
+        "w": { "type": "number" }, "h": { "type": "number" },
+        "points": {
+          "type": "array",
+          "items": { "type": "array", "items": { "type": "number" }, "minItems": 2, "maxItems": 2 },
+          "minItems": 3
+        },
+        "stepX": { "type": "number" }, "stepY": { "type": "number" },
+        "count": { "type": "integer", "minimum": 1 },
+        "animate": { "$ref": "#/$defs/animateRef" }
+      },
+      "allOf": [
+        { "if": { "properties": { "op": { "const": "rect" } } }, "then": { "required": ["x", "y", "w", "h"] } },
+        { "if": { "properties": { "op": { "const": "triangle" } } }, "then": { "required": ["points"] } },
+        { "if": { "properties": { "op": { "const": "repeat-rect" } } }, "then": { "required": ["x", "y", "w", "h", "count"] } }
+      ]
+    },
+    "opList": { "type": "array", "items": { "$ref": "#/$defs/op" }, "minItems": 1 }
+  }
+}

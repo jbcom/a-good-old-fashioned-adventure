@@ -1,0 +1,39 @@
+{
+  "$schema": "../../../schemas/item.schema.json",
+  "kind": "items",
+  "items": {
+    "item:xp-orb": {
+      "name": "Experience",
+      "pickup": { "color": "#6fe014", "anim": "anim:pickup-bob", "sfx": "pickup" },
+      "onPickup": [{ "grantXp": "from-drop-value" }],
+      "floater": { "text": "+{value} XP", "color": "#6fe014" }
+    },
+    "item:heart": {
+      "name": "Heart",
+      "pickup": { "color": "#e03d50", "anim": "anim:pickup-bob", "sfx": "pickup" },
+      "onPickup": [{ "heal": 20 }],
+      "floater": { "text": "+{value} HP", "color": "#e03d50" }
+    },
+    "item:dungeon-key": {
+      "name": "Brass Dungeon Key",
+      "pickup": { "color": "#f7e214", "anim": "anim:pickup-bob", "sfx": "pickup" },
+      "onPickup": [{ "setFlag": "flag:has-dungeon-key" }],
+      "floater": { "text": "Dungeon Key!", "color": "#f7e214" }
+    },
+    "item:gold": {
+      "name": "Gold",
+      "onPickup": [{ "grantGold": "from-drop-value" }],
+      "floater": { "text": "+{value} Gold", "color": "#f7e214" }
+    },
+    "item:max-hp-up": {
+      "name": "Heart Container",
+      "onPickup": [{ "maxHpUp": 20 }, { "fullHeal": true }],
+      "floater": { "text": "Max HP +{value}!", "color": "#ff8cb0" }
+    },
+    "item:attack-up": {
+      "name": "Whetstone",
+      "onPickup": [{ "levelUp": 1 }],
+      "floater": { "text": "Attack Up!", "color": "#00d2f7" }
+    }
+  }
+}

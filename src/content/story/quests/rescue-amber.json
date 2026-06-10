@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:rescue-amber",
+  "kind": "quest",
+  "title": "The Obsidian Throne",
+  "act": 2,
+  "autoStart": false,
+  "startOn": { "enterMap": "map:castle-dungeon" },
+  "start": "survive-the-crypt",
+  "stages": [
+    {
+      "id": "survive-the-crypt",
+      "log": "Defeat Shadow Warlord & Rescue Princess Amber",
+      "advance": [
+        { "when": { "enemyDefeated": "shadow-warlord" }, "to": "reach-amber" }
+      ]
+    },
+    {
+      "id": "reach-amber",
+      "log": "Free Princess Amber",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:princess-amber.rescued:seen" },
+          "to": "done",
+          "effects": [{ "sfx": "victory" }, { "endGame": "victory" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true, "log": "The kingdom is saved" }
+  ]
+}

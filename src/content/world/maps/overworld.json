@@ -1,0 +1,58 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:overworld",
+  "kind": "map",
+  "name": "Kingdom Overworld",
+  "size": { "cols": 96, "rows": 48 },
+  "baseTile": "tile:grass",
+  "bgmTheme": "overworld",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain" },
+    { "op": "col", "tile": "tile:water", "x": 32, "note": "the river" },
+    { "op": "col", "tile": "tile:mountain", "x": 64, "exceptRows": [24, 25], "note": "castle wall; rows 24-25 are the gate gap" },
+    { "op": "row-span", "tile": "tile:path", "y": 12, "x0": 1, "x1": 31 },
+    { "op": "col-span", "tile": "tile:path", "x": 16, "y0": 12, "y1": 28 },
+    { "op": "row-span", "tile": "tile:path", "y": 28, "x0": 16, "x1": 31 },
+    { "op": "region", "tile": "tile:sand", "x0": 33, "x1": 63, "y0": 31, "y1": 46, "note": "southern desert beach" },
+    { "op": "row-span", "tile": "tile:path", "y": 28, "x0": 33, "x1": 48, "unlessRegion": "sand" },
+    { "op": "col-span", "tile": "tile:path", "x": 48, "y0": 12, "y1": 28, "unlessRegion": "sand" },
+    { "op": "row-span", "tile": "tile:path", "y": 12, "x0": 48, "x1": 63 },
+    { "op": "row-span", "tile": "tile:path", "y": 24, "x0": 65, "x1": 94 },
+    { "op": "col-span", "tile": "tile:path", "x": 80, "y0": 10, "y1": 24 },
+    { "op": "row-span", "tile": "tile:path", "y": 10, "x0": 80, "x1": 94 },
+    { "op": "set", "tile": "tile:water", "at": [32, 28], "note": "the broken bridge crossing — repaired to tile:wood-bridge by quest:broken-bridge" }
+  ],
+  "playerSpawn": { "x": 80, "y": 190 },
+  "entities": [
+    { "ref": "char:woodcutter", "x": 256, "y": 180, "dir": -1 },
+    { "ref": "char:gwydion", "x": 200, "y": 320, "dir": 1 },
+    { "spawnRule": "unchosen-companions", "positions": [{ "x": 128, "y": 120 }, { "x": 96, "y": 250 }], "note": "the two roster classes the player did not pick appear as NPCs" },
+    { "ref": "prop:chest", "x": 160, "y": 140, "contents": "Gold" },
+    { "ref": "prop:chest", "x": 740, "y": 350, "contents": "HPUp" },
+    { "ref": "prop:castle", "tileAt": [80, 9], "note": "castle keep at the gate transition — absent from prototype rendering, added here" },
+    { "enemy": "forest-orc", "x": 410, "y": 160 },
+    { "enemy": "forest-orc", "x": 440, "y": 260 },
+    { "enemy": "orc-scout", "x": 480, "y": 100 },
+    { "enemy": "forest-shaman", "x": 340, "y": 380 },
+    { "enemy": "desert-wyrm", "x": 680, "y": 640 }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:castle-gate-entry",
+      "zone": { "x0": 1270, "y0": 150, "x1": 1300, "y1": 176 },
+      "requiresFlag": "flag:has-dungeon-key",
+      "effects": [{ "loadMap": "map:castle-dungeon" }, { "sfx": "interact" }]
+    },
+    {
+      "id": "trigger:locked-gate",
+      "kind": "conditional-solid",
+      "tiles": [[64, 24], [64, 25]],
+      "solidUnlessFlag": "flag:has-dungeon-key",
+      "indicator": { "drawOps": [
+        { "op": "rect", "color": "#ff3355", "x": 0, "y": 0, "w": 4, "h": 32 },
+        { "op": "rect", "color": "@W", "x": 1, "y": 12, "w": 2, "h": 8 }
+      ], "atTile": [64, 24] }
+    }
+  ],
+  "onEnter": [{ "dialogue": "dlgbank:narrator", "slot": "intro", "once": true }]
+}

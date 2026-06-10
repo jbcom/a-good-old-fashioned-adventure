@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/flags.schema.json",
+  "title": "World flag registry",
+  "type": "object",
+  "required": ["kind", "flags"],
+  "properties": {
+    "kind": { "const": "flags" },
+    "flags": {
+      "type": "object",
+      "propertyNames": { "pattern": "^flag:[a-z0-9-]+$" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["default", "description"],
+        "properties": {
+          "default": { "type": "boolean" },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  }
+}

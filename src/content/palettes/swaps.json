@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/palette.schema.json",
+  "kind": "palette-swaps",
+  "base": "palette:base",
+  "swaps": {
+    "palette:knight": {},
+    "palette:rogue": { "S": "#323c39", "s": "#14181a", "R": "#a124db", "r": "#4d1070", "W": "#e89eff" },
+    "palette:ranger": { "S": "#2c6114", "s": "#142a07", "R": "#ffcd94", "r": "#a88f00" },
+    "palette:wizard": { "S": "#00d2f7", "s": "#1a6fa8", "R": "#ffffff", "r": "#b2bec7" },
+    "palette:princess": {},
+    "palette:woodcutter": { "S": "#946629", "s": "#4a2511", "R": "#6fe014", "r": "#2c6114" },
+    "palette:orc": { "X": "#141013", "S": "#8a2323", "s": "#4d1010", "F": "#2c6114", "f": "#142a07" },
+    "palette:wyrm": { "X": "#141013", "e": "#a88f00", "E": "#f7e214", "T": "#df7126", "Y": "#e03d50" },
+    "palette:boss": { "S": "#140d2e", "s": "#080414", "R": "#76428a", "r": "#48206b" },
+    "palette:skeleton": { "S": "#eef0f2", "s": "#99aab8", "R": "#141013", "r": "#141013", "F": "#eef0f2", "f": "#99aab8" }
+  }
+}

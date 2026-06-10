@@ -1,0 +1,17 @@
+{
+  "$schema": "../../schemas/config.schema.json",
+  "tileSize": 16,
+  "maxTimestep": 0.1,
+  "camera": {
+    "followLerp": 0.12,
+    "shakeDecay": 0.9
+  },
+  "render": {
+    "minScale": 3,
+    "referenceWidth": 240,
+    "imageSmoothing": false,
+    "backgroundColor": "#141013",
+    "entityShadow": { "color": "rgba(20, 16, 19, 0.45)", "height": 3, "widthPad": 2 }
+  },
+  "playerBounds": { "edgeX": 8, "edgeTop": 16, "edgeBottom": 8 }
+}

@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/config.schema.json",
+  "title": "Engine/config tunables file",
+  "description": "Loose envelope for src/config/*.json. Each config file is a flat object of named tunable groups; specific shapes are owned by the loader types in src/lib (once scaffolded).",
+  "type": "object",
+  "minProperties": 1
+}

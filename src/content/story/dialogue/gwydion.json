@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:gwydion",
+  "kind": "dialogue-bank",
+  "speaker": "char:gwydion",
+  "slots": [
+    { "when": { "quest": "quest:dungeon-key", "stageIn": ["seek-the-wyrm", "claim-the-key"] }, "node": "hint" },
+    { "default": true, "node": "hint" }
+  ],
+  "nodes": {
+    "hint": {
+      "lines": [
+        "Brave one, the Dungeon Gate demands a Golden Key. Hunt down the colossal Sandwyrm deep in the southern shore!"
+      ],
+      "emits": "dlg:gwydion.hint"
+    }
+  }
+}

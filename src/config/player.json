@@ -1,0 +1,18 @@
+{
+  "$schema": "../../schemas/config.schema.json",
+  "baseStats": {
+    "hp": 100,
+    "maxHp": 100,
+    "level": 1,
+    "xp": 0,
+    "nextXp": 50
+  },
+  "movement": {
+    "speed": 72,
+    "hitbox": { "w": 10, "h": 10 }
+  },
+  "iframes": {
+    "onProjectileHit": 0.4,
+    "onTouchHit": 0.5
+  }
+}
