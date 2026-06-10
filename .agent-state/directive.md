@@ -49,7 +49,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S3.3 Sim systems: clock, seeded RNG, movement+tile collision, camera follow/shake; unit tests
 - [x] S3.4 Event bus (enemy:defeated, item:acquired, dlg:*, zone:entered); quest engine as reducer over events; dialogue slot resolver; unit tests for full quest chain logic
 - [x] S3.5 Combat: melee swing, projectiles, damage/knockback/iframes, drops; unit tests
-- [ ] S3.6 Yuka enemy behaviors: replace prototype AI states with yuka steering/FSM (patrol, chase/seek, flee-kite for shaman, boss charge+spread); validate behavior in browser test
+- [x] S3.6 Yuka enemy behaviors: yuka steering (patrol, chase/seek, flee-kite for shaman, boss charge+spread); validated in deterministic 60Hz unit sims; live browser validation folds into the S5.6 playthrough test
 
 ### S4 Presentation
 - [ ] S4.1 Sprite atlas baker: (grid × palette) → offscreen canvas; palette swap correctness test (pixel-compare screenshots)
@@ -80,6 +80,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [ ] S7.3 Open PR, babysit to green, squash-merge; verify deployed/built app runs
 
 ## Learnings log (forward sweeps append here)
+- yuka FleeBehavior defaults panicDistance=10 — silently inert beyond it; always set panicDistance explicitly when kiting.
 - 2026-06-10: prior session's deep-research workflow + reviewer died on session exit — background work must be treated as lost across session boundaries; redo in-queue (S2.1).
 - S2 learnings now binding: fixed camera yaw (Octopath constraint, verified); integer-scale + letterbox presentation for Android fractional DPR (2.625 Pixel-class); NearestFilter+no-mipmaps+SRGB on every texture; low-virtual-res render + integer upscale; HUD/UI is React DOM, never canvas. pixi.js evaluated and REMOVED — do not reintroduce.
 - Sprite normal/height maps can be computed procedurally at atlas-bake time from pixel grids (research: external tools exist but we own the grids) — lighting polish option for S4.2.

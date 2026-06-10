@@ -8,6 +8,7 @@ import { drainEvents } from "./events";
 import { reduceEvent } from "./quests";
 import { updateCamera } from "./systems/camera";
 import { combatStep } from "./systems/combat";
+import { enemyAIStep } from "./systems/enemyAI";
 import { moveEntities } from "./systems/movement";
 import { Clock, CombatTimers, HitFlash } from "./traits";
 import { rngFor } from "./worldRng";
@@ -37,6 +38,7 @@ export function step(world: World, dt: number = SIM_DT): void {
   const clock = world.get(Clock);
   if (clock) world.set(Clock, { t: clock.t + dt, dt });
   tickTimers(world, dt);
+  enemyAIStep(world, dt);
   moveEntities(world, dt);
   combatStep(world, dt);
   for (const event of drainEvents(world)) reduceEvent(world, event);
