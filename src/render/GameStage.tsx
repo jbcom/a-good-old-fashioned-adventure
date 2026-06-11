@@ -25,6 +25,7 @@ import {
   CombatTimers,
   Facing,
   HitFlash,
+  InspectionPulse,
   IsPickup,
   IsPlayer,
   MapRuntime,
@@ -36,7 +37,7 @@ import {
 } from "../sim/traits";
 import { flashCanvas, propCanvas, spriteCanvas, tileCanvas } from "./atlas";
 import { createDioramaMaterial, setDioramaTexture } from "./materials";
-import { fadeOut, playMotion, releaseMotion } from "./motion";
+import { channelsOf, fadeOut, playMotion, releaseMotion, restartMotion } from "./motion";
 
 const TILE = 16;
 const PROJECTILE_COLORS: Record<string, string> = {
@@ -116,6 +117,7 @@ function disposeGroundMesh(mesh: Mesh): void {
 class SceneSync {
   private meshes = new Map<number, TrackedMesh>();
   private ground: GroundTrack | null = null;
+  private inspectionSerials = new Map<number, number>();
 
   sync(world: World, scene: Scene, camera: PerspectiveCamera): void {
     this.syncGround(world, scene);
@@ -202,7 +204,16 @@ class SceneSync {
       const canvas = propCanvas(ref.propId, ref.state);
       const id = entity as unknown as number;
       const tracked = this.billboard(canvas, `${ref.propId}|${ref.state}`, id, scene);
-      tracked.mesh.position.set(t.x, canvas.height / 2, t.y);
+      const pulse = entity.get(InspectionPulse);
+      const previousSerial = this.inspectionSerials.get(id) ?? 0;
+      if (pulse && pulse.serial !== previousSerial) {
+        restartMotion(id, pulse.anim);
+        this.inspectionSerials.set(id, pulse.serial);
+      }
+      const channels = pulse ? channelsOf(id) : null;
+      tracked.mesh.position.set(t.x, canvas.height / 2 - (channels?.translateY ?? 0), t.y);
+      const material = tracked.mesh.material as ShaderMaterial;
+      if (material.uniforms.uAlpha) material.uniforms.uAlpha.value = channels?.alpha ?? 1;
       seen.add(id);
     }
 
@@ -258,6 +269,7 @@ class SceneSync {
         tracked.mesh.geometry.dispose();
         (tracked.mesh.material as ShaderMaterial).dispose();
         releaseMotion(id);
+        this.inspectionSerials.delete(id);
         this.meshes.delete(id);
       }
     }

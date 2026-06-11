@@ -45,6 +45,7 @@ import {
   Facing,
   FlagState,
   Health,
+  InspectionPulse,
   Interactable,
   Inventory,
   IsEnemy,
@@ -80,6 +81,7 @@ interface ReadablePropHit {
     once: boolean;
     used: boolean;
     sfx: string;
+    feedbackAnim: string;
     dialogueBank: string;
     dialogueSlot: string;
   };
@@ -113,6 +115,12 @@ interface UiSnapshot {
     grid: string[][];
   };
   explored: Set<string>;
+}
+
+interface InspectionFeedbackState {
+  pulses: number;
+  lastProp: string;
+  lastAnim: string;
 }
 
 interface InputState {
@@ -163,6 +171,11 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   questLines: [],
   runtime: { cols: 0, rows: 0, grid: [] },
   explored: new Set(),
+};
+const EMPTY_INSPECTION_FEEDBACK: InspectionFeedbackState = {
+  pulses: 0,
+  lastProp: "",
+  lastAnim: "",
 };
 
 const keyMap: Record<string, Direction | "a" | "b" | "pause" | undefined> = {};
@@ -920,6 +933,8 @@ export function App({
   const [panelOpen, setPanelOpen] = useState(false);
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(DEFAULT_SETTINGS.muted);
+  const [inspectionFeedback, setInspectionFeedback] =
+    useState<InspectionFeedbackState>(EMPTY_INSPECTION_FEEDBACK);
   const [deviceProfile, setDeviceProfile] = useState<DeviceProfile>(() =>
     classifyDeviceProfile({ platform: "web", model: "browser" }, readViewport()),
   );
@@ -1252,6 +1267,21 @@ export function App({
           slot: propDialogue.interaction.dialogueSlot,
         };
       }
+      if (propDialogue.interaction.feedbackAnim) {
+        const currentPulse = propDialogue.entity.get(InspectionPulse);
+        const nextPulse = {
+          anim: propDialogue.interaction.feedbackAnim,
+          serial: (currentPulse?.serial ?? 0) + 1,
+        };
+        if (currentPulse) propDialogue.entity.set(InspectionPulse, nextPulse);
+        else propDialogue.entity.add(InspectionPulse(nextPulse));
+        const propId = propDialogue.entity.get(PropRef)?.propId ?? "";
+        setInspectionFeedback((current) => ({
+          pulses: current.pulses + 1,
+          lastProp: propId,
+          lastAnim: propDialogue.interaction.feedbackAnim,
+        }));
+      }
       if (propDialogue.interaction.once) {
         propDialogue.entity.set(Interactable, { ...propDialogue.interaction, used: true });
       }
@@ -1392,9 +1422,15 @@ export function App({
       "data-paused": String(paused),
       "data-muted": String(muted),
       "data-device-profile": deviceProfile,
+      "data-sfx-played": String(audioDebug.sfxPlayed),
+      "data-inspection-pulses": String(inspectionFeedback.pulses),
+      "data-last-inspection-prop": inspectionFeedback.lastProp,
+      "data-last-inspection-anim": inspectionFeedback.lastAnim,
     }),
     [
+      audioDebug.sfxPlayed,
       deviceProfile,
+      inspectionFeedback,
       mode,
       muted,
       paused,

@@ -8,7 +8,8 @@
   "interaction": {
     "verb": "read",
     "method": "action-button",
-    "sfx": "interact",
+    "sfx": "inspect",
+    "feedback": { "anim": "anim:inspect-pulse" },
     "dialogue": { "bank": "dlgbank:sunken-cart-ledger", "slot": "ledger" }
   },
   "states": {

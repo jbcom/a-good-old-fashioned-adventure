@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it } from "vitest";
-import { channelsOf, playMotion, releaseMotion } from "../../src/render/motion";
+import { channelsOf, playMotion, releaseMotion, restartMotion } from "../../src/render/motion";
 
 const TEST_ID = 999_001;
 
@@ -51,5 +51,18 @@ describe("anim:* content drives anime.js channels in a real browser", () => {
     // a restart would snap back to 0 immediately; equal object + continuing is enough
     expect(channelsOf(TEST_ID)).toBe(a);
     expect(typeof mid).toBe("number");
+  });
+
+  it("restarts one-shot inspection pulses for repeated readable prop actions", async () => {
+    const channels = restartMotion(TEST_ID, "anim:inspect-pulse");
+    await settle(100);
+    expect(channels.translateY).toBeLessThan(-1);
+    await settle(360);
+    expect(channels.translateY).toBeGreaterThanOrEqual(-0.1);
+
+    const replayed = restartMotion(TEST_ID, "anim:inspect-pulse");
+    expect(replayed).toBe(channels);
+    await settle(100);
+    expect(channels.translateY).toBeLessThan(-1);
   });
 });

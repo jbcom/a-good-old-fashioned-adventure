@@ -91,7 +91,8 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S8.9 Tavern notice-board questlet: turn the new tavern social space into a small content-authored errand chain with visible board reading, NPC follow-up dialogue, and browser validation through planner actions
 - [x] S8.10 Readable world affordances: add at least two non-tavern readable props along the main route with quest/log consequences, planner validation, screenshots, and full playthrough reads so world detail keeps becoming playable
 - [x] S8.11 Route consequence pass: make at least one route-readable clue alter a later encounter, shop line, or NPC branch so inspection changes later play, not only quest completion
-- [ ] S8.12 Audio/animation affordance pass: give readable prop interactions audible/animated feedback beyond dialogue so inspection feels like a game action
+- [x] S8.12 Audio/animation affordance pass: give readable prop interactions audible/animated feedback beyond dialogue so inspection feels like a game action
+- [ ] S8.13 Storybook density pass: add another playable lived-in micro-space with richer prop pixel detail, at least one named NPC or shop/social verb, mobile evidence, and full-governor validation so the game stops reading as corridors plus isolated boxes
 
 ## Learnings log (forward sweeps append here)
 - yuka FleeBehavior defaults panicDistance=10 — silently inert beyond it; always set panicDistance explicitly when kiting.
@@ -140,3 +141,4 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - 2026-06-11 S8.9/S8.11 interaction correction: prop dialogue should be content-authored interaction metadata and drained through the existing Outbox/dialogue path. A-button arbitration must compare readable-prop and NPC distances overall: the board reads when the player is closest to it, but a closer person cannot be masked by a sign.
 - 2026-06-11 S8.10 playthrough correction: adding optional reads to the full journey can change later combat positioning. After route-side inspections, steer the player back onto the proven road lane before enemy fights, and collect spawned key items with a visible movement sweep rather than a single stale coordinate.
 - 2026-06-11 S8.11 consequence correction: readable prop flags should influence later dialogue through ordinary dialogue slots and existing quest events. Preserve the quest's emitted event when branching flavor, otherwise a content branch can accidentally fork the runtime graph.
+- 2026-06-11 S8.12 affordance correction: readable props now require authored `sfx` plus `feedback.anim`; one-shot AnimeJS object animations should use direct `properties` arrays and omit `loop` unless looping is intended, otherwise replayable prop pulses silently stay at rest.

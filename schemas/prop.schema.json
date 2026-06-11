@@ -29,6 +29,14 @@
         "method": { "enum": ["melee-swing", "action-button", "touch"] },
         "sfx": { "type": "string" },
         "once": { "type": "boolean" },
+        "feedback": {
+          "type": "object",
+          "required": ["anim"],
+          "properties": {
+            "anim": { "type": "string", "pattern": "^anim:[a-z0-9-]+$" }
+          },
+          "additionalProperties": false
+        },
         "dialogue": {
           "type": "object",
           "required": ["bank", "slot"],

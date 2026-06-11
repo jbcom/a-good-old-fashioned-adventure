@@ -48,6 +48,10 @@ function shell() {
     enemies: Number(el.dataset.enemies ?? 0),
     projectiles: Number(el.dataset.projectiles ?? 0),
     hp: Number(el.dataset.hp ?? 0),
+    inspectionPulses: Number(el.dataset.inspectionPulses ?? 0),
+    lastInspectionProp: el.dataset.lastInspectionProp ?? "",
+    lastInspectionAnim: el.dataset.lastInspectionAnim ?? "",
+    sfxPlayed: Number(el.dataset.sfxPlayed ?? 0),
   };
 }
 
@@ -320,7 +324,16 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await walkToOrMap(input, 864, 304, "map:oldwood-forest", 24);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:oldwood-forest");
   await walkTo(input, 150, 292, 20);
+  const waystoneFeedbackBefore = shell();
   await pressA(input);
+  await expect
+    .poll(() => shell().inspectionPulses, { timeout: 2_000 })
+    .toBeGreaterThan(waystoneFeedbackBefore.inspectionPulses);
+  await expect
+    .poll(() => shell().sfxPlayed, { timeout: 2_000 })
+    .toBeGreaterThan(waystoneFeedbackBefore.sfxPlayed);
+  expect(shell().lastInspectionProp).toBe("prop:mossy-waystone");
+  expect(shell().lastInspectionAnim).toBe("anim:inspect-pulse");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Mossy Waystone");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keep east");
   await pressA(input);

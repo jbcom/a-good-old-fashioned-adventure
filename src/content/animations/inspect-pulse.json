@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../schemas/animation.schema.json",
+  "id": "anim:inspect-pulse",
+  "kind": "animation",
+  "engine": "animejs",
+  "target": "spriteOffset",
+  "properties": { "translateY": [0, -7, 0] },
+  "duration": 360,
+  "easing": "easeInOutSine",
+  "loop": false,
+  "description": "Readable prop inspection pulse: a small storybook lift and settle when A reads a sign, marker, board, or ledger."
+}

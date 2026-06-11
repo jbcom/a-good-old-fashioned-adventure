@@ -41,10 +41,9 @@ function rigFor(id: number): Rig {
   return rig;
 }
 
-/** Start (or keep) the named content animation on an entity's channels. */
-export function playMotion(id: number, animId: string | null): MotionChannels {
+function startMotion(id: number, animId: string | null, restart: boolean): MotionChannels {
   const rig = rigFor(id);
-  if (rig.currentAnim === animId) return rig.channels;
+  if (!restart && rig.currentAnim === animId) return rig.channels;
 
   rig.instance?.cancel();
   rig.instance = null;
@@ -53,15 +52,29 @@ export function playMotion(id: number, animId: string | null): MotionChannels {
 
   if (animId && animId !== "anim:idle") {
     const def = getAnimation(animId);
-    const keyframes = (def.keyframes ?? [def.properties ?? {}]) as Record<string, number>[];
-    rig.instance = animate(rig.channels, {
-      keyframes,
+    const options: Parameters<typeof animate>[1] = {
       duration: def.duration,
       ease: EASE_MAP[def.easing ?? "linear"] ?? "linear",
-      loop: def.loop === true ? true : (def.loop ?? false),
-    });
+    };
+    if (def.keyframes) {
+      options.keyframes = def.keyframes as Record<string, number>[];
+    } else {
+      Object.assign(options, def.properties ?? {});
+    }
+    if (def.loop === true || typeof def.loop === "number") options.loop = def.loop;
+    rig.instance = animate(rig.channels, options);
   }
   return rig.channels;
+}
+
+/** Start (or keep) the named content animation on an entity's channels. */
+export function playMotion(id: number, animId: string | null): MotionChannels {
+  return startMotion(id, animId, false);
+}
+
+/** Force a one-shot content animation to replay on existing channels. */
+export function restartMotion(id: number, animId: string | null): MotionChannels {
+  return startMotion(id, animId, true);
 }
 
 export function channelsOf(id: number): MotionChannels {

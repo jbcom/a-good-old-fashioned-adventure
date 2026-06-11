@@ -41,6 +41,7 @@ export interface PropDef {
     method?: string;
     sfx?: string;
     once?: boolean;
+    feedback?: { anim: string };
     dialogue?: { bank: string; slot: string };
   };
   states: Record<string, PropState>;

@@ -37,9 +37,11 @@ export const Interactable = trait({
   once: false,
   used: false,
   sfx: "",
+  feedbackAnim: "",
   dialogueBank: "",
   dialogueSlot: "",
 });
+export const InspectionPulse = trait({ anim: "", serial: 0 });
 
 export const Level = trait({ level: 1, xp: 0, nextXp: 50 });
 export const CombatTimers = trait({ attack: 0, dash: 0, dashCooldown: 0, iframes: 0 });

@@ -429,6 +429,24 @@ Oldwood waystone matter when the player reaches the Hermit:
 3. Update the full public-control playthrough to read the waystone, then prove
    the Hermit reacts to that prior inspection.
 
+## Sixteenth Content-Depth Slice
+
+Readable objects should answer the player's button press with more than text.
+The affordance pass turns inspection into a visible and audible action:
+
+1. Extend prop `interaction` content with `feedback.anim`, an `anim:*`
+   reference consumed by the renderer when the prop is inspected.
+2. Add a short manuscript-style inspection pulse animation for readable props;
+   it should read as storybook emphasis, not neon UI or CRT effects.
+3. Keep the existing content-authored SFX path for readable props and verify
+   that A-button inspection increments the ToneJS SFX debug counter.
+4. Prove the pulse through browser tests driven by the player governor: walk to
+   route readables, press A, assert the prop reports a fresh feedback pulse, and
+   capture desktop/phone evidence from the headed browser.
+5. Fold the feedback check into the full public-control playthrough at the
+   waystone read so the start-to-finish journey validates inspection as a game
+   action, not only dialogue.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

@@ -46,6 +46,16 @@ function near(x: number, y: number, tolerance: number) {
   };
 }
 
+function shellFeedback() {
+  const el = page.getByTestId("game-shell").element() as HTMLElement;
+  return {
+    inspectionPulses: Number(el.dataset.inspectionPulses ?? 0),
+    lastProp: el.dataset.lastInspectionProp ?? "",
+    lastAnim: el.dataset.lastInspectionAnim ?? "",
+    sfxPlayed: Number(el.dataset.sfxPlayed ?? 0),
+  };
+}
+
 it("reads the Oldwood waystone through the player governor", async () => {
   await page.viewport(1280, 720);
   await wait(100);
@@ -77,6 +87,7 @@ it("reads the Oldwood waystone through the player governor", async () => {
   });
   await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Read the mossy waystone");
 
+  const feedbackBefore = shellFeedback();
   const plan: GovernorPlanStep[] = [
     {
       id: "read-oldwood-waystone",
@@ -103,6 +114,14 @@ it("reads the Oldwood waystone through the player governor", async () => {
     },
   ];
   await governor.runPlan(plan, { maxSteps: 8 });
+  await expect
+    .poll(() => shellFeedback().inspectionPulses)
+    .toBeGreaterThan(feedbackBefore.inspectionPulses);
+  await expect.poll(() => shellFeedback().sfxPlayed).toBeGreaterThan(feedbackBefore.sfxPlayed);
+  expect(shellFeedback()).toMatchObject({
+    lastProp: "prop:mossy-waystone",
+    lastAnim: "anim:inspect-pulse",
+  });
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Mossy Waystone");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keep east");
   const desktopPath = await page.screenshot({
@@ -141,6 +160,7 @@ it("reads the Sunken Road cart ledger through the player governor", async () => 
   await expect.poll(() => governor.perceive().mapName).toBe("Sunken Road");
   await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Read the splintered cart");
 
+  const feedbackBefore = shellFeedback();
   const plan: GovernorPlanStep[] = [
     {
       id: "read-sunken-cart",
@@ -167,6 +187,14 @@ it("reads the Sunken Road cart ledger through the player governor", async () => 
     },
   ];
   await governor.runPlan(plan, { maxSteps: 8 });
+  await expect
+    .poll(() => shellFeedback().inspectionPulses)
+    .toBeGreaterThan(feedbackBefore.inspectionPulses);
+  await expect.poll(() => shellFeedback().sfxPlayed).toBeGreaterThan(feedbackBefore.sfxPlayed);
+  expect(shellFeedback()).toMatchObject({
+    lastProp: "prop:broken-cart",
+    lastAnim: "anim:inspect-pulse",
+  });
   await expect
     .element(page.getByTestId("dialogue-box"))
     .toHaveTextContent("Splintered Cart Ledger");

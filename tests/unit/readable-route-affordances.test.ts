@@ -1,7 +1,13 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { characters, dialogueBanks, getProp, getQuest } from "../../src/lib/content/registry";
+import {
+  animations,
+  characters,
+  dialogueBanks,
+  getProp,
+  getQuest,
+} from "../../src/lib/content/registry";
 import { emitDialogueSeen, resolveDialogue, resolveDialogueSlot } from "../../src/sim/dialogue";
 import { pushEvent } from "../../src/sim/events";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
@@ -55,8 +61,10 @@ describe("S8.10 readable route affordances", () => {
   it("documents the non-tavern readable route slice", () => {
     const worldDoc = doc("docs/WORLD.md");
     expect(worldDoc).toContain("Fourteenth Content-Depth Slice");
+    expect(worldDoc).toContain("Sixteenth Content-Depth Slice");
     expect(worldDoc).toContain("quest:oldwood-waystone");
     expect(worldDoc).toContain("quest:sunken-cart-ledger");
+    expect(doc("docs/CONTENT-ARCHITECTURE.md")).toContain("feedback.anim");
   });
 
   it("registers readable prop metadata, voices, quests, and flags", () => {
@@ -68,7 +76,14 @@ describe("S8.10 readable route affordances", () => {
         bank: contract.bankId,
         slot: contract.slot,
       });
+      expect(getProp(contract.propId).interaction?.sfx).toBe("inspect");
+      expect(getProp(contract.propId).interaction?.feedback?.anim).toBe("anim:inspect-pulse");
     }
+    expect(getProp("prop:hearth-song-board").interaction?.sfx).toBe("inspect");
+    expect(getProp("prop:hearth-song-board").interaction?.feedback?.anim).toBe(
+      "anim:inspect-pulse",
+    );
+    expect(animations.has("anim:inspect-pulse")).toBe(true);
   });
 
   it("advances each route-readable quest when the prop dialogue is read", () => {

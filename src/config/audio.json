@@ -37,6 +37,15 @@
       "gain": [{ "t": 0, "v": 0.08 }, { "t": 0.2, "v": 0.01, "ramp": "exp" }],
       "duration": 0.2
     },
+    "inspect": {
+      "osc": "triangle",
+      "arpeggio": {
+        "notes": [329.63, 392.0, 523.25],
+        "stepTime": 0.055,
+        "noteGain": 0.045,
+        "noteDecay": 0.13
+      }
+    },
     "pickup": {
       "osc": "sine",
       "freq": [{ "t": 0, "v": 330 }, { "t": 0.08, "v": 440 }],
