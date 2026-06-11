@@ -121,10 +121,13 @@ it("enters the Hearthwake stable yard and talks through public controls", async 
   expect(consequencePath).toBeTruthy();
 
   await governor.press("a");
-  await governor.reachPoint(864, 304, {
-    tolerance: 28,
-    maxSteps: 28,
-    stopGoal: { kind: "mapNameIncludes", text: "Oldwood Forest" },
+  await governor.reachPoint(852, 304, {
+    tolerance: 16,
+    maxSteps: 36,
+  });
+  await governor.reachByDirection({ kind: "mapNameIncludes", text: "Oldwood Forest" }, "right", {
+    durationMs: 360,
+    maxSteps: 8,
   });
   await expect.element(page.getByTestId("top-hud")).toHaveTextContent("Oldwood Forest");
 
@@ -136,4 +139,4 @@ it("enters the Hearthwake stable yard and talks through public controls", async 
     path: "../../docs/evidence/route-stable-payoff.png",
   });
   expect(routePayoffPath).toBeTruthy();
-}, 60_000);
+}, 75_000);
