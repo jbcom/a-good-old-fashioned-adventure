@@ -70,6 +70,15 @@
       "dialogue": "dlgbank:tobin-bell",
       "note": "Notice-board keeper whose advice reinforces the old-fashioned adventure tone."
     },
+    "char:tamsin-hearth": {
+      "name": "Tamsin Hearth",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:baker",
+      "portraitColor": "#b88958",
+      "dialogue": "dlgbank:tamsin-hearth",
+      "note": "Village baker who points the opening road toward ordinary Hearthwake life."
+    },
     "char:hermit": {
       "name": "Oldwood Hermit",
       "role": "npc",

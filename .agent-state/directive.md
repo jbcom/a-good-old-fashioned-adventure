@@ -85,6 +85,8 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S8.3 Desert ruins: add the planned ruin interior off Sunken Road with a readable landmark loop, props, NPC/story signal, and route validation
 - [x] S8.4 Hearthwake market density: thicken the starting village with market-day props, named townsfolk dialogue, public-control browser validation, and desktop/phone evidence
 - [x] S8.5 Yuka NPC walking loops: add content-authored market NPC patrol points interpreted by Yuka steering, with deterministic sim proof and browser regression
+- [x] S8.6 Hearthwake livelihood: add domestic storybook props, another named townsperson, public-control dialogue validation, and fresh desktop/phone evidence so the opening village reads as lived-in
+- [ ] S8.7 Road-shape polish: reduce cross-path emptiness in the first exterior routes with bends, clearings, landmark prop clusters, and public-control route/evidence validation
 
 ## Learnings log (forward sweeps append here)
 - yuka FleeBehavior defaults panicDistance=10 — silently inert beyond it; always set panicDistance explicitly when kiting.
@@ -126,3 +128,4 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - 2026-06-11 S8.3 ruins-depth correction: portal browser tests should pursue map/dialogue goals, not stale cross-map coordinates. The first valid ruins screenshot still read like a tile grid, so authored mosaic tiles, columns, canopies, NPC story text, and desktop/phone evidence are required before accepting optional interiors.
 - 2026-06-11 S8.4 village-density correction: desktop screenshots can hide phone emptiness. Market props must be placed around the actual interaction point, then recaptured in a phone viewport so the first-town route reads as an inhabited place on small screens.
 - 2026-06-11 S8.5 NPC-motion correction: village life now starts from map-authored patrol points. NPC loops should attach `NpcPatrol`, `Speed`, and `MoveIntent` in factories, then run through Yuka steering before the shared movement system so browser controls and collision keep one authority.
+- 2026-06-11 S8.6 livelihood correction: small domestic props only count when the browser screenshot reads as ordinary life in the playable lane. Vitest browser screenshots resolve paths relative to `tests/browser`, so committed evidence paths need `../../docs/evidence/...`.

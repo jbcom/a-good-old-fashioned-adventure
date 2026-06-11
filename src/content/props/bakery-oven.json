@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:bakery-oven",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 18 },
+  "anchor": { "x": 8, "y": 18 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "................",
+        ".....XXXXXX.....",
+        "...XXCCCCCCXX...",
+        "..XCCcCCCCcCCX..",
+        ".XCCCCCCCCCCCCX.",
+        ".XCCcCCDDCCcCCX.",
+        "XCCCCDDBBDDCCCCX",
+        "XCCCDDBBBBBBDCCX",
+        "XCCCDDBRRBBDDCCX",
+        "XCCCDBROORBDDCCX",
+        "XCCCCDRYYRDCCCCX",
+        ".XCCCCCbbCCCCCX.",
+        "..XCCCCCCCCCCX..",
+        "...XXXXXXXXXX...",
+        "....XBBBBBBX....",
+        "....XXbbbbXX....",
+        "................",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "C", "c", "D", "B", "b", "R", "O", "Y"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:tamsin-hearth",
+  "kind": "dialogue-bank",
+  "speaker": "char:tamsin-hearth",
+  "slots": [{ "default": true, "node": "morning-bread" }],
+  "nodes": {
+    "morning-bread": {
+      "lines": [
+        "The bakery oven is only quiet when the road is loud. That is how Hearthwake knows an adventure is leaving.",
+        "If you pass my laundry line, mind the blue sheet. It points east on purpose, for travellers who forget where courage begins."
+      ],
+      "emits": "dlg:tamsin-hearth.morning-bread"
+    }
+  }
+}

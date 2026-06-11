@@ -22,13 +22,13 @@ import {
 describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
     expect(tiles.size).toBe(16);
-    expect(props.size).toBe(29);
+    expect(props.size).toBe(33);
     expect(sprites.size).toBe(3);
     expect(animations.size).toBe(6);
     expect(maps.size).toBe(15);
     expect(quests.size).toBe(8);
-    expect(dialogueBanks.size).toBe(16);
-    expect(characters.size).toBe(19);
+    expect(dialogueBanks.size).toBe(17);
+    expect(characters.size).toBe(20);
     expect(items.size).toBe(8);
     expect(flags.size).toBe(10);
     expect(shops.size).toBe(1);

@@ -72,6 +72,25 @@
     { "ref": "prop:broadleaf-tree", "x": 116, "y": 240, "note": "village green shade" },
     { "ref": "prop:broadleaf-tree", "x": 372, "y": 238, "note": "central road shade" },
     { "ref": "prop:broadleaf-tree", "x": 568, "y": 244, "note": "roadside tree" },
+    {
+      "ref": "prop:vine-trellis",
+      "x": 236,
+      "y": 248,
+      "note": "storybook vine arch beside the house road"
+    },
+    {
+      "ref": "prop:bakery-oven",
+      "x": 252,
+      "y": 292,
+      "note": "morning bread oven on the village lane"
+    },
+    {
+      "ref": "prop:laundry-line",
+      "x": 180,
+      "y": 320,
+      "note": "blue-sheet laundry line pointing east"
+    },
+    { "ref": "prop:seed-crates", "x": 284, "y": 330, "note": "seed crates for the market gardens" },
     { "ref": "prop:well", "x": 320, "y": 296, "note": "village well" },
     { "ref": "prop:well", "x": 364, "y": 296, "note": "market well" },
     { "ref": "prop:market-stall", "x": 336, "y": 286, "note": "ribbon and cake stall" },
@@ -91,6 +110,7 @@
       "dir": -1,
       "note": "Page Pip by the village road well"
     },
+    { "ref": "char:tamsin-hearth", "x": 252, "y": 324, "dir": 1 },
     { "ref": "char:mara-cress", "x": 340, "y": 324, "dir": 1 },
     {
       "ref": "char:tobin-bell",

@@ -323,6 +323,24 @@ adds authored walking loops without changing the player's public controls:
 4. Unit-test deterministic NPC patrol movement and keep the headed market
    browser test green.
 
+## Tenth Content-Depth Slice
+
+Hearthwake still needs ordinary life around the road so the first screen reads
+as a storybook place, not a junction with buildings. The livelihood slice adds
+small domestic set dressing and another town voice:
+
+1. Add authored village props for a vine trellis, bakery oven, laundry line, and
+   seed crates. These must use outlined pixel grids with several channels so
+   they read as objects, not flat color signs.
+2. Place the props around the existing house, shop, tavern, and market roads
+   without blocking the east-road playthrough route or the market dialogue test.
+3. Add a named Hearthwake NPC whose dialogue points at the new village details
+   and reinforces the old-fashioned errand tone.
+4. Add unit coverage that proves the doc, prop ids, character, dialogue bank,
+   and village placements all exist as content.
+5. Add headed browser validation that walks to the new townsperson through
+   public controls, presses A, and captures a screenshot of the denser village.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map
