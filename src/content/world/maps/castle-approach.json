@@ -62,11 +62,36 @@
     { "ref": "prop:signpost", "x": 108, "y": 274, "note": "last warning sign" },
     { "ref": "prop:barrel", "x": 646, "y": 326, "note": "abandoned supply barrel" },
     { "ref": "prop:barrel", "x": 780, "y": 282, "note": "guard post barrel" },
+    { "ref": "prop:castle-lantern", "x": 884, "y": 246, "note": "left gate lantern" },
     { "ref": "prop:castle-gatehouse", "x": 930, "y": 176, "note": "distant castle gatehouse" },
+    { "ref": "prop:castle-lantern", "x": 984, "y": 246, "note": "right gate lantern" },
     { "ref": "char:gwydion", "x": 520, "y": 264, "dir": 1 },
     { "enemy": "gate-sentry", "x": 880, "y": 430 },
     { "enemy": "banner-knight", "x": 1010, "y": 252 }
   ],
+  "composition": {
+    "routeWindows": [
+      {
+        "label": "exposed road after the desert",
+        "zone": { "x0": 1, "y0": 14, "x1": 25, "y1": 23 },
+        "majorAnchors": ["prop:signpost"],
+        "minorProps": ["prop:signpost"],
+        "openReason": "A deliberately exposed arrival road between the desert and castle, giving the approach a lonely travel beat."
+      },
+      {
+        "label": "Gwydion's guarded approach warning",
+        "zone": { "x0": 26, "y0": 14, "x1": 50, "y1": 23 },
+        "majorAnchors": ["char:gwydion"],
+        "minorProps": ["prop:barrel", "prop:barrel"]
+      },
+      {
+        "label": "gatehouse and banner knight threshold",
+        "zone": { "x0": 50, "y0": 5, "x1": 70, "y1": 23 },
+        "majorAnchors": ["prop:castle-gatehouse", "enemy:banner-knight"],
+        "minorProps": ["prop:castle-lantern", "prop:castle-lantern"]
+      }
+    ]
+  },
   "triggers": [
     {
       "id": "trigger:west-road",

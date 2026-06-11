@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:oldwood-thorncutters-lantern",
+  "kind": "quest",
+  "title": "The Thorncutter's Lantern",
+  "act": 2,
+  "startOn": { "enterMap": "map:oldwood-forest" },
+  "start": "greet-thorncutter",
+  "stages": [
+    {
+      "id": "greet-thorncutter",
+      "log": "Thank Hester Briarhook for keeping the upper Oldwood arch trimmed.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:oldwood-thorncutter.lantern:accepted" },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:oldwood-thorncutter-greeted" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

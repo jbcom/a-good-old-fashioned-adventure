@@ -75,6 +75,12 @@
     { "ref": "prop:sandstone-arch", "x": 512, "y": 286, "note": "fallen arch above the old road" },
     { "ref": "prop:broken-cart", "x": 560, "y": 346, "note": "broken supply cache" },
     {
+      "ref": "prop:sand-sail-wreck",
+      "x": 640,
+      "y": 230,
+      "note": "upper-band sail silhouette above the courier road"
+    },
+    {
       "ref": "prop:shade-cloth-rig",
       "x": 654,
       "y": 344,
@@ -109,9 +115,37 @@
       "note": "Celia Knotwell paces the shaded warning layby"
     },
     { "ref": "prop:castle", "x": 700, "y": 252, "note": "distant ruin silhouette" },
+    {
+      "ref": "prop:sunken-pillar-shadow",
+      "x": 790,
+      "y": 244,
+      "note": "upper-band broken pillars before the castle road"
+    },
     { "ref": "prop:barrel", "x": 760, "y": 338, "note": "last caravan barrel before the castle" },
     { "enemy": "desert-wyrm", "x": 360, "y": 304 }
   ],
+  "composition": {
+    "routeWindows": [
+      {
+        "label": "wash and sandwyrm wreck",
+        "zone": { "x0": 1, "y0": 8, "x1": 26, "y1": 23 },
+        "majorAnchors": ["enemy:desert-wyrm", "prop:broken-cart"],
+        "minorProps": ["prop:signpost", "prop:stump", "prop:sandstone-arch"]
+      },
+      {
+        "label": "courier layby and upper sail wreck",
+        "zone": { "x0": 26, "y0": 13, "x1": 45, "y1": 23 },
+        "majorAnchors": ["char:sunken-courier", "prop:shade-cloth-rig", "prop:sand-sail-wreck"],
+        "minorProps": ["prop:water-jar-stand", "prop:wind-ribbon-cairn", "prop:broken-cart"]
+      },
+      {
+        "label": "broken pillars before the castle road",
+        "zone": { "x0": 40, "y0": 13, "x1": 54, "y1": 23 },
+        "majorAnchors": ["prop:sunken-pillar-shadow", "prop:castle"],
+        "minorProps": ["prop:barrel", "prop:wind-ribbon-cairn", "prop:water-jar-stand"]
+      }
+    ]
+  },
   "triggers": [
     {
       "id": "trigger:west-road",

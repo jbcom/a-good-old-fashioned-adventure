@@ -28,6 +28,7 @@ describe("createGameWorld", () => {
       "flag:morning-errands-done": false,
       "flag:oldwood-oath-sworn": false,
       "flag:oldwood-roadward-mark": false,
+      "flag:oldwood-thorncutter-greeted": false,
       "flag:oldwood-waystone-read": false,
       "flag:ruin-mural-read": false,
       "flag:shop-sample-claimed": false,

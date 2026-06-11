@@ -123,6 +123,14 @@ export interface MapTrigger {
   indicator?: { drawOps: DrawOp[]; atTile: [number, number] };
 }
 
+export interface MapCompositionWindow {
+  label: string;
+  zone: { x0: number; y0: number; x1: number; y1: number };
+  majorAnchors: string[];
+  minorProps: string[];
+  openReason?: string;
+}
+
 export interface MapDef {
   id: string;
   kind: "map";
@@ -134,6 +142,7 @@ export interface MapDef {
   playerSpawn: { x: number; y: number };
   spawns: Record<string, { x: number; y: number }>;
   entities: MapEntitySpawn[];
+  composition?: { routeWindows?: MapCompositionWindow[] };
   triggers?: MapTrigger[];
   onEnter?: { dialogue: string; slot: string; once?: boolean }[];
 }

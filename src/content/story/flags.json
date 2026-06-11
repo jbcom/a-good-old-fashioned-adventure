@@ -38,6 +38,10 @@
       "default": false,
       "description": "The Oldwood roadward has tied Oswin's blue oat-string into the first forest bend."
     },
+    "flag:oldwood-thorncutter-greeted": {
+      "default": false,
+      "description": "The player has thanked Hester Briarhook for keeping Oldwood's upper hazel arch trimmed."
+    },
     "flag:oldwood-waystone-read": {
       "default": false,
       "description": "The player has read the mossy waystone at the first Oldwood bend."

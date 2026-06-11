@@ -228,6 +228,31 @@ async function collectDungeonKeyFromWyrm(input: ReturnType<typeof userEvent.setu
   );
 }
 
+async function talkToOldwoodThorncutter(input: ReturnType<typeof userEvent.setup>) {
+  const meetPoints = [
+    [508, 288],
+    [540, 288],
+    [552, 312],
+    [492, 312],
+  ] as const;
+  for (const [x, y] of meetPoints) {
+    await walkTo(input, x, y, 16);
+    await pressA(input);
+    await wait(120);
+    if (textOf("dialogue-box").includes("Hester Briarhook")) {
+      await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("hazel arch");
+      await pressA(input);
+      await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("Hester Briarhook");
+      return;
+    }
+  }
+  throw new Error(
+    `Hester Briarhook dialogue did not open; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; dialogue=${textOf(
+      "dialogue-box",
+    )}; quest=${textOf("quest-log")}`,
+  );
+}
+
 async function talkToSunkenCourier(input: ReturnType<typeof userEvent.setup>) {
   const meetPoints = [
     [690, 336],
@@ -400,6 +425,7 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Mossy Waystone");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keep east");
   await pressA(input);
+  await talkToOldwoodThorncutter(input);
   await walkTo(input, 304, 292, 22);
   await pressA(input);
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oldwood Roadward");

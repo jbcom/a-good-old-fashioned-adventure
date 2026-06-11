@@ -106,6 +106,29 @@
     { "enemy": "thorn-shaman", "x": 900, "y": 450 },
     { "enemy": "forest-shaman", "x": 840, "y": 398 }
   ],
+  "composition": {
+    "routeWindows": [
+      {
+        "label": "fern-mender lower track",
+        "zone": { "x0": 1, "y0": 14, "x1": 24, "y1": 23 },
+        "majorAnchors": ["char:fern-mender", "prop:fern-mender-cart"],
+        "minorProps": ["prop:glowcap-ring", "prop:stump", "prop:broadleaf-tree"]
+      },
+      {
+        "label": "old oak and lost page trail",
+        "zone": { "x0": 25, "y0": 13, "x1": 48, "y1": 23 },
+        "majorAnchors": ["prop:broadleaf-tree", "enemy:orc-scout"],
+        "minorProps": ["prop:fallen-log", "prop:mossy-waystone", "prop:bramble-hedge"]
+      },
+      {
+        "label": "last lantern before Sunken Road",
+        "zone": { "x0": 49, "y0": 15, "x1": 66, "y1": 25 },
+        "majorAnchors": ["prop:forest-lantern-post", "enemy:forest-shaman"],
+        "minorProps": ["prop:stump", "prop:forest-lantern-post"],
+        "openReason": "The trees thin so the player feels the road leaving forest cover before the Sunken Road threshold."
+      }
+    ]
+  },
   "triggers": [
     {
       "id": "trigger:old-oak",

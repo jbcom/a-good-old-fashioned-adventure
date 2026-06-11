@@ -32,6 +32,26 @@
       "y0": 11,
       "y1": 24,
       "note": "north-south deer track"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 17,
+      "x0": 30,
+      "x1": 38,
+      "note": "upper hazel pocket for thorncutter silhouette"
+    },
+    {
+      "op": "set",
+      "tile": "tile:path",
+      "at": [29, 18],
+      "note": "upper hazel pocket step"
+    },
+    {
+      "op": "set",
+      "tile": "tile:path",
+      "at": [39, 18],
+      "note": "upper hazel pocket step"
     }
   ],
   "playerSpawn": { "x": 48, "y": 304 },
@@ -74,7 +94,35 @@
       "y": 252,
       "note": "bramble hedge before the raider clearing"
     },
+    {
+      "ref": "prop:hazel-arch",
+      "x": 520,
+      "y": 270,
+      "note": "upper Oldwood hazel arch silhouette"
+    },
+    {
+      "ref": "prop:thorncutters-bundle",
+      "x": 560,
+      "y": 318,
+      "note": "trimmed thorn bundle in the player depth band"
+    },
     { "ref": "prop:broadleaf-tree", "x": 560, "y": 238, "note": "deep canopy" },
+    {
+      "ref": "char:oldwood-thorncutter",
+      "x": 508,
+      "y": 288,
+      "dir": 1,
+      "patrol": {
+        "points": [
+          { "x": 492, "y": 288 },
+          { "x": 552, "y": 288 },
+          { "x": 552, "y": 312 },
+          { "x": 492, "y": 312 }
+        ],
+        "speed": 21
+      },
+      "note": "Hester Briarhook tends the upper hazel pocket"
+    },
     {
       "ref": "prop:forest-lantern-post",
       "x": 880,
@@ -94,6 +142,29 @@
     { "enemy": "forest-orc", "x": 620, "y": 390 },
     { "enemy": "thorn-shaman", "x": 760, "y": 156 }
   ],
+  "composition": {
+    "routeWindows": [
+      {
+        "label": "first bend roadward introduction",
+        "zone": { "x0": 1, "y0": 15, "x1": 22, "y1": 23 },
+        "majorAnchors": ["char:oldwood-roadward", "prop:mossy-waystone"],
+        "minorProps": ["prop:signpost", "prop:oat-string-post", "prop:fallen-log"]
+      },
+      {
+        "label": "hermit and thorncutter hazel pocket",
+        "zone": { "x0": 22, "y0": 13, "x1": 43, "y1": 23 },
+        "majorAnchors": ["char:hermit", "char:oldwood-thorncutter", "prop:hazel-arch"],
+        "minorProps": ["prop:bramble-hedge", "prop:thorncutters-bundle", "prop:broadleaf-tree"]
+      },
+      {
+        "label": "quiet lantern walk toward Deep Forest",
+        "zone": { "x0": 44, "y0": 15, "x1": 62, "y1": 23 },
+        "majorAnchors": ["prop:forest-lantern-post"],
+        "minorProps": ["prop:forest-lantern-post"],
+        "openReason": "A short breath after the first Oldwood fights, using the lone lantern as a threshold before Deep Forest."
+      }
+    ]
+  },
   "triggers": [
     {
       "id": "trigger:west-road",

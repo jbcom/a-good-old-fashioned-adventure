@@ -625,6 +625,31 @@ warning onward to the castle:
    desktop/phone browser evidence and expand the full public-control
    playthrough so the player meets the courier before the castle.
 
+## Twenty-Fifth Content-Depth Slice
+
+The route-art silhouette pass reduces the remaining empty upper bands visible
+in Oldwood and Sunken Road screenshots. It adds authored silhouettes that sit
+above the player lane without stealing control space, and it pairs the Oldwood
+art pass with a moving social encounter so the route gains a verb instead of
+another passive marker:
+
+1. Add `char:oldwood-thorncutter`, a named moving NPC on
+   `map:oldwood-forest`, with a content-authored Yuka patrol around the upper
+   hazel pocket and dialogue bank `dlgbank:oldwood-thorncutter`.
+2. Add `prop:hazel-arch`, `prop:thorncutters-bundle`,
+   `prop:sand-sail-wreck`, and `prop:sunken-pillar-shadow`, each with outlined
+   pixel grids and at least five visible recolor channels.
+3. Shape the Oldwood upper road with smaller non-rectangular path pockets and
+   place the Sunken Road silhouettes in the upper band shown by desktop
+   screenshots, leaving the direct public-control route passable.
+4. Add `quest:oldwood-thorncutters-lantern`, started on
+   `map:oldwood-forest`, that completes through the thorncutter dialogue and
+   sets `flag:oldwood-thorncutter-greeted`.
+5. Add unit coverage for docs, prop richness, map placement, Yuka movement, and
+   quest/flag reduction; add headed browser evidence and expand the
+   public-control playthrough so the Oldwood encounter is part of the main
+   journey.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map
@@ -641,5 +666,9 @@ slice must add at least one meaningful player-facing verb or story signal:
 - Road maps may keep a direct route for the player governor, but the tile plan
   should imply bends, clearings, landmarks, and branches that can hold future
   quests.
+- Mandatory exterior maps must declare `composition.routeWindows` per
+  `docs/CONTENT-COMPOSITION.md`. Repeated grass, sand, leaf, or road carpets
+  are not acceptable unless the window has an explicit travel or threshold
+  reason plus visual punctuation.
 - Every route expansion should add browser validation through real movement
   and A/B input before claiming depth.

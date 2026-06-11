@@ -145,6 +145,15 @@
       "dialogue": "dlgbank:oldwood-roadward",
       "note": "Oldwood roadward who turns Oswin's stable service into a first-road favor."
     },
+    "char:oldwood-thorncutter": {
+      "name": "Hester Briarhook",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:oldwood-thorncutter",
+      "portraitColor": "#4a5f2d",
+      "dialogue": "dlgbank:oldwood-thorncutter",
+      "note": "Moving Oldwood thorncutter who makes the upper hazel pocket feel tended."
+    },
     "char:lost-page": {
       "name": "Lost Page Rowan",
       "role": "npc",

@@ -258,6 +258,28 @@
     },
     { "ref": "prop:chest", "x": 712, "y": 270, "contents": "Gold" }
   ],
+  "composition": {
+    "routeWindows": [
+      {
+        "label": "village green and house road",
+        "zone": { "x0": 1, "y0": 5, "x1": 22, "y1": 24 },
+        "majorAnchors": ["prop:cottage-facade", "char:woodcutter"],
+        "minorProps": ["prop:broadleaf-tree", "prop:vine-trellis", "prop:bakery-oven"]
+      },
+      {
+        "label": "market wells and shopfront",
+        "zone": { "x0": 18, "y0": 12, "x1": 40, "y1": 23 },
+        "majorAnchors": ["char:mara-cress", "prop:market-stall"],
+        "minorProps": ["prop:well", "prop:flower-cart", "prop:notice-board"]
+      },
+      {
+        "label": "doorstep and east road services",
+        "zone": { "x0": 32, "y0": 13, "x1": 54, "y1": 23 },
+        "majorAnchors": ["char:page", "char:road-cart-trader"],
+        "minorProps": ["prop:village-letter-basket", "prop:stoop-lantern", "prop:road-goods-cart"]
+      }
+    ]
+  },
   "triggers": [
     {
       "id": "trigger:enter-house",
