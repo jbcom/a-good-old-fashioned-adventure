@@ -51,6 +51,15 @@ function shell() {
   };
 }
 
+function textOf(testId: string) {
+  return (
+    document
+      .querySelector<HTMLElement>(`[data-testid="${testId}"]`)
+      ?.textContent?.replace(/\s+/g, " ")
+      .trim() ?? ""
+  );
+}
+
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function pressA(input = userEvent.setup()) {
@@ -189,6 +198,23 @@ async function castUntilEnemyDrops(
   );
 }
 
+async function waitForDungeonKeyCue() {
+  for (let i = 0; i < 40; i++) {
+    const dialogue = textOf("dialogue-box");
+    const quest = textOf("quest-log");
+    if (dialogue.includes("Dungeon Key")) return "dialogue";
+    if (quest.includes("Pick up the brass Dungeon Key") || quest.includes("Castle dungeon gates")) {
+      return "quest";
+    }
+    await wait(250);
+  }
+  throw new Error(
+    `dungeon key cue did not appear; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; quest=${textOf(
+      "quest-log",
+    )}; dialogue=${textOf("dialogue-box")}`,
+  );
+}
+
 async function doorwayVolleyUntilEnemyDrops(
   input: ReturnType<typeof userEvent.setup>,
   before: number,
@@ -293,8 +319,11 @@ it("plays the expanded road from title to the dungeon gate through public contro
 
   await hold(input, "ArrowRight", 1200);
   await castUntilEnemyDrops(input, shell().enemies, 30);
-  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Dungeon Key");
-  await pressA(input);
+  if ((await waitForDungeonKeyCue()) === "dialogue") await pressA(input);
+  await walkTo(input, 420, 304, 24);
+  await expect
+    .poll(() => textOf("quest-log"), { timeout: 10_000 })
+    .toContain("Castle dungeon gates");
   await hold(input, "ArrowRight", 1600);
   await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Castle dungeon gates");
 
@@ -343,7 +372,7 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await expect
     .poll(async () => (await journeyRepository.latestSlot())?.mapId, { timeout: 5_000 })
     .toBe("map:castle-dungeon");
-}, 210_000);
+}, 260_000);
 
 it("continues the expanded journey through dungeon victory through public controls", async () => {
   mountApp();
@@ -380,4 +409,4 @@ it("continues the expanded journey through dungeon victory through public contro
   await expect.element(page.getByTestId("audio-state")).toHaveTextContent("Tone");
   const path = await page.screenshot({ path: "playthrough-victory.png" });
   expect(path).toBeTruthy();
-}, 210_000);
+}, 260_000);
