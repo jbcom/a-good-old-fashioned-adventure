@@ -307,6 +307,16 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oswin Hayward");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("saddle-bells");
   await pressA(input);
+  await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("Oswin's Feed Pail");
+  await pressA(input);
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 8");
+  await expect.element(page.getByTestId("shop-inventory-item:oat-bundle")).toHaveTextContent("x1");
+  await input.keyboard("k");
+  await wait(90);
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 10");
+  await expect.element(page.getByTestId("shop-inventory-item:oat-bundle")).toHaveTextContent("x0");
+  await userEvent.click(page.getByTestId("shop-close"));
+  await wait(100);
   await walkToOrMap(input, 224, 292, "map:village", 28);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:village");
 

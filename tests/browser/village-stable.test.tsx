@@ -76,10 +76,38 @@ it("enters the Hearthwake stable yard and talks through public controls", async 
   await governor.press("a");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oswin Hayward");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("saddle-bells");
+  await governor.press("a");
+
+  await expect.element(page.getByTestId("shop-panel")).toBeVisible();
+  await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("Oswin's Feed Pail");
+  await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("A Buy");
+  await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("B Sell");
+
+  const serviceDesktopPath = await page.screenshot({
+    path: "../../docs/evidence/village-stable-service.png",
+  });
+  expect(serviceDesktopPath).toBeTruthy();
+
+  await governor.press("a");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 8");
+  await expect.element(page.getByTestId("shop-inventory-item:oat-bundle")).toHaveTextContent("x1");
+
+  await governor.press("b");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 10");
+  await expect.element(page.getByTestId("shop-inventory-item:oat-bundle")).toHaveTextContent("x0");
 
   await page.viewport(390, 844);
   await wait(250);
   const phonePath = await page.screenshot({ path: "../../docs/evidence/village-stable-phone.png" });
   expect(phonePath).toBeTruthy();
   await page.viewport(1280, 720);
+  await governor.click("shop-close");
+  expect(document.querySelector('[data-testid="shop-panel"]')).toBeNull();
+
+  await governor.reachPoint(224, 292, {
+    tolerance: 28,
+    maxSteps: 24,
+    stopGoal: { kind: "mapNameIncludes", text: "Hearthwake Village" },
+  });
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("Hearthwake Village");
 });

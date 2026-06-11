@@ -93,7 +93,8 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S8.11 Route consequence pass: make at least one route-readable clue alter a later encounter, shop line, or NPC branch so inspection changes later play, not only quest completion
 - [x] S8.12 Audio/animation affordance pass: give readable prop interactions audible/animated feedback beyond dialogue so inspection feels like a game action
 - [x] S8.13 Storybook density pass: add another playable lived-in micro-space with richer prop pixel detail, at least one named NPC or shop/social verb, mobile evidence, and full-governor validation so the game stops reading as corridors plus isolated boxes
-- [ ] S8.14 Hearthwake service loop: add a second content-authored counter interaction outside Brindle's shop, with one new item/currency effect, named NPC dialogue, browser validation buying/selling through public A/B controls, and full playthrough coverage so village services become verbs instead of set dressing
+- [x] S8.14 Hearthwake service loop: add a second content-authored counter interaction outside Brindle's shop, with one new item/currency effect, named NPC dialogue, browser validation buying/selling through public A/B controls, and full playthrough coverage so village services become verbs instead of set dressing
+- [ ] S8.15 Service consequence loop: make a stable or village service interaction change a later route or NPC response through flags, quests, or dialogue branches, with headed browser and full-route validation so buying/selling feeds story state instead of remaining a detached menu
 
 ## Learnings log (forward sweeps append here)
 - yuka FleeBehavior defaults panicDistance=10 — silently inert beyond it; always set panicDistance explicitly when kiting.
@@ -145,3 +146,4 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - 2026-06-11 S8.12 affordance correction: readable props now require authored `sfx` plus `feedback.anim`; one-shot AnimeJS object animations should use direct `properties` arrays and omit `loop` unless looping is intended, otherwise replayable prop pulses silently stay at rest.
 - 2026-06-11 S8.12 CI correction: final-dungeon browser steering should let the combat helper own its own doorway lane. Do not require a strict pre-walk coordinate immediately before a helper that already recenters under enemy pressure.
 - 2026-06-11 S8.13 stable-density correction: optional interiors need props at the player's depth band, not only far upstage. Capture at least one screenshot before dialogue panels cover the room, then still prove the A-button social verb in headed browser.
+- 2026-06-11 S8.14 service-loop correction: second counters should reuse the generic `shop:*` content path and still appear in the full public-control playthrough. Browser evidence should show the service UI in the actual map context, then close the public panel before route traversal continues.

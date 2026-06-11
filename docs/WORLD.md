@@ -471,6 +471,26 @@ opening hub has more than cross paths, quest boxes, and static facades:
    captures desktop plus phone evidence with the phone HUD still leaving most of
    the viewport to gameplay.
 
+## Eighteenth Content-Depth Slice
+
+Village services should become verbs, not only scenery or one-off dialogue. The
+stable-service slice reuses the content-authored shop counter outside Brindle's
+room so Hearthwake has a second place where A/B input changes inventory and gold:
+
+1. Add `shop:oswin-stable-counter`, kept by `char:oswin-hayward`, with authored
+   listings for stable goods and the same A-buy/B-sell public control contract
+   as Brindle's counter.
+2. Add at least one stable-specific item to `src/content/story/items.json` so
+   the service does not feel like a reskinned cake shelf.
+3. Change Oswin's dialogue so the stable greeting opens the counter after the
+   player advances the line, preserving the named social verb and turning it into
+   a service interaction.
+4. Add unit coverage for the shop, item, dialogue `opensShop`, and generic
+   buy/sell reducer path using the new counter.
+5. Add headed browser validation that reaches Oswin through public movement,
+   opens the counter, buys with A, sells with B, closes the public panel, and
+   returns to the village route.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

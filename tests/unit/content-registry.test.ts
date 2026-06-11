@@ -29,9 +29,9 @@ describe("registries are fully populated", () => {
     expect(quests.size).toBe(11);
     expect(dialogueBanks.size).toBe(22);
     expect(characters.size).toBe(25);
-    expect(items.size).toBe(8);
+    expect(items.size).toBe(9);
     expect(flags.size).toBe(13);
-    expect(shops.size).toBe(1);
+    expect(shops.size).toBe(2);
   });
 
   it("typed lookups resolve real content", () => {
@@ -40,6 +40,7 @@ describe("registries are fully populated", () => {
     expect(getMap("map:overworld").size).toEqual({ cols: 96, rows: 48 });
     expect(getQuest("quest:broken-bridge").start).toBe("find-woodcutter");
     expect(getShop("shop:brindle-counter").listings).toHaveLength(2);
+    expect(getShop("shop:oswin-stable-counter").listings).toHaveLength(2);
     expect(getDialogueBank("dlgbank:woodcutter").nodes.request.emits).toBe(
       "dlg:woodcutter.request",
     );

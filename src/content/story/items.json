@@ -20,6 +20,12 @@
       "onPickup": [{ "heal": 25 }],
       "floater": { "text": "Travel Cake", "color": "#cfa153" }
     },
+    "item:oat-bundle": {
+      "name": "Oat Bundle",
+      "pickup": { "color": "#f7e214", "anim": "anim:pickup-bob", "sfx": "pickup" },
+      "onPickup": [{ "heal": 10 }],
+      "floater": { "text": "Oat Bundle", "color": "#f7e214" }
+    },
     "item:mending-plaster": {
       "name": "Mending Plaster",
       "pickup": { "color": "#ffcd94", "anim": "anim:pickup-bob", "sfx": "pickup" },

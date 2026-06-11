@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../schemas/shop.schema.json",
+  "id": "shop:oswin-stable-counter",
+  "kind": "shop",
+  "name": "Oswin's Feed Pail",
+  "keeper": "char:oswin-hayward",
+  "currency": "item:gold",
+  "buySfx": "coin",
+  "sellSfx": "coin",
+  "denySfx": "interact",
+  "listings": [
+    {
+      "id": "oat-bundle",
+      "item": "item:oat-bundle",
+      "label": "Oat Bundle",
+      "description": "Sweet oats tied in blue string for a steady mile.",
+      "buyPrice": 4,
+      "sellPrice": 2
+    },
+    {
+      "id": "mending-plaster",
+      "item": "item:mending-plaster",
+      "label": "Mending Plaster",
+      "description": "Stable linen and hedge-herb paste, packed for road scrapes.",
+      "buyPrice": 8,
+      "sellPrice": 4
+    }
+  ]
+}
