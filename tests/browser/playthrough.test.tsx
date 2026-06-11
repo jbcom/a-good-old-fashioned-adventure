@@ -358,9 +358,17 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Mossy Waystone");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keep east");
   await pressA(input);
+  await walkTo(input, 304, 292, 22);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oldwood Roadward");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("blue oat-string");
+  expect(await page.screenshot({ path: "playthrough-route-stable-payoff.png" })).toBeTruthy();
+  await pressA(input);
+  await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("blue oat-string");
   await walkTo(input, 392, 292, 20);
   await pressA(input);
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oldwood Hermit");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("roadward");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("waystone");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("drive two raiders");
   await pressA(input);

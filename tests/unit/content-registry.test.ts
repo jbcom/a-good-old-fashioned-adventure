@@ -22,15 +22,15 @@ import {
 describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
     expect(tiles.size).toBe(17);
-    expect(props.size).toBe(45);
+    expect(props.size).toBe(47);
     expect(sprites.size).toBe(3);
     expect(animations.size).toBe(7);
     expect(maps.size).toBe(16);
-    expect(quests.size).toBe(12);
-    expect(dialogueBanks.size).toBe(22);
-    expect(characters.size).toBe(25);
+    expect(quests.size).toBe(13);
+    expect(dialogueBanks.size).toBe(23);
+    expect(characters.size).toBe(26);
     expect(items.size).toBe(9);
-    expect(flags.size).toBe(14);
+    expect(flags.size).toBe(15);
     expect(shops.size).toBe(2);
   });
 
@@ -40,6 +40,7 @@ describe("registries are fully populated", () => {
     expect(getMap("map:overworld").size).toEqual({ cols: 96, rows: 48 });
     expect(getQuest("quest:broken-bridge").start).toBe("find-woodcutter");
     expect(getQuest("quest:stable-oat-kindness").start).toBe("buy-oats");
+    expect(getQuest("quest:oldwood-oat-token").start).toBe("wait-for-stable-service");
     expect(getShop("shop:brindle-counter").listings).toHaveLength(2);
     expect(getShop("shop:oswin-stable-counter").listings).toHaveLength(2);
     expect(getDialogueBank("dlgbank:woodcutter").nodes.request.emits).toBe(

@@ -9,6 +9,14 @@
       "when": {
         "quest": "quest:oldwood-oath",
         "stage": "find-hermit",
+        "flag": "flag:oldwood-roadward-mark"
+      },
+      "node": "oath-after-roadward"
+    },
+    {
+      "when": {
+        "quest": "quest:oldwood-oath",
+        "stage": "find-hermit",
         "flag": "flag:oldwood-waystone-read"
       },
       "node": "oath-after-waystone"
@@ -24,6 +32,14 @@
       "lines": [
         "Oldwood hears soft feet and loud hearts. The raiders hear only coins.",
         "Swear the little oath: spare the saplings, mark the stumps, and drive two raiders from the road."
+      ],
+      "choices": [{ "id": "accepted", "text": "Take the oath." }],
+      "emits": "dlg:hermit.oath"
+    },
+    "oath-after-roadward": {
+      "lines": [
+        "The roadward has tied your blue knot before the waystone. Good; Oldwood likes manners before sword-noise.",
+        "Swear the little oath with both signs awake: spare the saplings, mark the stumps, and drive two raiders from the road."
       ],
       "choices": [{ "id": "accepted", "text": "Take the oath." }],
       "emits": "dlg:hermit.oath"

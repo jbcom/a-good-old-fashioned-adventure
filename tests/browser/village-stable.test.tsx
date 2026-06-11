@@ -119,4 +119,21 @@ it("enters the Hearthwake stable yard and talks through public controls", async 
     path: "../../docs/evidence/village-stable-consequence.png",
   });
   expect(consequencePath).toBeTruthy();
-});
+
+  await governor.press("a");
+  await governor.reachPoint(864, 304, {
+    tolerance: 28,
+    maxSteps: 28,
+    stopGoal: { kind: "mapNameIncludes", text: "Oldwood Forest" },
+  });
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("Oldwood Forest");
+
+  await governor.reachPoint(304, 292, { tolerance: 24, maxSteps: 36 });
+  await governor.press("a");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oldwood Roadward");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("blue oat-string");
+  const routePayoffPath = await page.screenshot({
+    path: "../../docs/evidence/route-stable-payoff.png",
+  });
+  expect(routePayoffPath).toBeTruthy();
+}, 60_000);

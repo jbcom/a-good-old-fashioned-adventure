@@ -120,6 +120,15 @@
       "dialogue": "dlgbank:hermit",
       "note": "Forest quest NPC for the Oldwood oath and raider counter."
     },
+    "char:oldwood-roadward": {
+      "name": "Mabli Greenmantle",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:roadward",
+      "portraitColor": "#5f6f38",
+      "dialogue": "dlgbank:oldwood-roadward",
+      "note": "Oldwood roadward who turns Oswin's stable service into a first-road favor."
+    },
     "char:lost-page": {
       "name": "Lost Page Rowan",
       "role": "npc",

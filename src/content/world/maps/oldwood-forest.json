@@ -50,6 +50,18 @@
     },
     { "ref": "prop:broadleaf-tree", "x": 210, "y": 246, "note": "oldwood canopy" },
     {
+      "ref": "prop:oat-string-post",
+      "x": 300,
+      "y": 268,
+      "note": "bend post for Oswin's blue oat-string"
+    },
+    {
+      "ref": "prop:roadward-stool",
+      "x": 322,
+      "y": 326,
+      "note": "roadward stool, ledger, and folded cloth"
+    },
+    {
       "ref": "prop:fallen-log",
       "x": 278,
       "y": 334,
@@ -70,6 +82,13 @@
       "note": "last lantern before Deep Forest"
     },
     { "ref": "char:woodcutter", "x": 250, "y": 262, "dir": 1 },
+    {
+      "ref": "char:oldwood-roadward",
+      "x": 304,
+      "y": 292,
+      "dir": -1,
+      "note": "stable-service route payoff at the first bend"
+    },
     { "ref": "char:hermit", "x": 392, "y": 292, "dir": -1, "note": "Oldwood oath keeper" },
     { "enemy": "oldwood-raider", "x": 470, "y": 210 },
     { "enemy": "forest-orc", "x": 620, "y": 390 },

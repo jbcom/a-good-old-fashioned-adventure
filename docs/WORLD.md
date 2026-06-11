@@ -510,6 +510,27 @@ makes Oswin's oat purchase matter after the counter closes:
 5. Expand headed browser validation so the stable service purchase is followed
    by a later Page Pip response in the full public-control playthrough.
 
+## Twentieth Content-Depth Slice
+
+The stable consequence must echo outside Hearthwake and make the first road feel
+more authored than a path with obstacles:
+
+1. Add an Oldwood roadward scene beside the first forest bend: a named NPC,
+   `char:oldwood-roadward`, plus at least two outlined route props with visible
+   blue oat-string, stool, ledger, cloth, or lantern details.
+2. Add `quest:oldwood-oat-token`, a quiet auto-start route-reward quest that
+   opens only after the player buys `oat-bundle` from
+   `shop:oswin-stable-counter`. Its visible stage asks the player to show
+   Oswin's blue oat-string to the Oldwood roadward.
+3. Make the roadward dialogue branch from the opened quest, complete the reward
+   on `dlg:oldwood-roadward.oat-token:accepted`, set
+   `flag:oldwood-roadward-mark`, and play an authored service payoff sound.
+4. Add a Hermit branch for `flag:oldwood-roadward-mark` while preserving the
+   existing `dlg:hermit.oath` event and "drive two raiders" quest edge.
+5. Expand headed browser validation and the full public-control playthrough so
+   the player buys the stable service, reaches Oldwood, receives the roadward
+   response, and sees the Hermit acknowledge the road mark.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

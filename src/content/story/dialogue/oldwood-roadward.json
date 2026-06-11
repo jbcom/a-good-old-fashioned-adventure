@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:oldwood-roadward",
+  "kind": "dialogue-bank",
+  "speaker": "char:oldwood-roadward",
+  "slots": [
+    { "when": { "flag": "flag:oldwood-roadward-mark" }, "node": "after" },
+    {
+      "when": { "quest": "quest:oldwood-oat-token", "stage": "find-roadward" },
+      "node": "oat-token"
+    },
+    { "default": true, "node": "plain-road" }
+  ],
+  "nodes": {
+    "oat-token": {
+      "lines": [
+        "I am the Oldwood Roadward, and Oswin's blue oat-string is already tied to your pack. That is a small good sign on a road that likes large arguments.",
+        "Let me knot it to the bend-post. If the forest forgets your name, it may still remember your manners."
+      ],
+      "choices": [{ "id": "accepted", "text": "Let the roadward mark it." }],
+      "emits": "dlg:oldwood-roadward.oat-token"
+    },
+    "after": {
+      "lines": [
+        "The blue knot is speaking for you at the bend. Walk politely; Oldwood likes a traveler who arrives already introduced."
+      ],
+      "emits": "dlg:oldwood-roadward.after"
+    },
+    "plain-road": {
+      "lines": [
+        "I am Mabli Greenmantle, roadward of the first bend. Hearthwake sends most feet east, but only some remember to greet the road."
+      ],
+      "emits": "dlg:oldwood-roadward.plain"
+    }
+  }
+}

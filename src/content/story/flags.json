@@ -30,6 +30,10 @@
       "default": false,
       "description": "The Oldwood Hermit's road oath has been carried past the first forest raiders."
     },
+    "flag:oldwood-roadward-mark": {
+      "default": false,
+      "description": "The Oldwood roadward has tied Oswin's blue oat-string into the first forest bend."
+    },
     "flag:oldwood-waystone-read": {
       "default": false,
       "description": "The player has read the mossy waystone at the first Oldwood bend."
