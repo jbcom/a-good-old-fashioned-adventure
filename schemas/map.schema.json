@@ -86,6 +86,24 @@
           "y": { "type": "number" },
           "tileAt": { "$ref": "#/$defs/tileCoord" },
           "dir": { "enum": [1, -1] },
+          "patrol": {
+            "type": "object",
+            "required": ["points"],
+            "properties": {
+              "points": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "object",
+                  "required": ["x", "y"],
+                  "properties": { "x": { "type": "number" }, "y": { "type": "number" } },
+                  "additionalProperties": false
+                }
+              },
+              "speed": { "type": "number", "minimum": 1 }
+            },
+            "additionalProperties": false
+          },
           "contents": { "type": "string" },
           "positions": { "type": "array", "items": { "type": "object", "required": ["x", "y"] } },
           "note": { "type": "string" }

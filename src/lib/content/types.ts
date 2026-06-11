@@ -95,6 +95,7 @@ export interface MapEntitySpawn {
   y?: number;
   tileAt?: [number, number];
   dir?: 1 | -1;
+  patrol?: { points: { x: number; y: number }[]; speed?: number };
   contents?: string;
   positions?: { x: number; y: number }[];
   note?: string;

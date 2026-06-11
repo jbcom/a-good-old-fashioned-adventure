@@ -19,6 +19,11 @@ export const MoveIntent = trait({ x: 0, y: 0 });
 export const AimDirection = trait({ x: 1, y: 0 });
 export const SpriteRef = trait({ spriteId: "", paletteId: "" });
 export const PropRef = trait({ propId: "", state: "default" });
+export const NpcPatrol = trait(() => ({
+  points: [] as { x: number; y: number }[],
+  targetIndex: 0,
+  speed: 0,
+}));
 
 export const IsPlayer = trait({ classId: "" });
 export const IsNpc = trait({ charId: "" });

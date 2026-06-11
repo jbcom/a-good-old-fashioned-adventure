@@ -28,6 +28,7 @@ import {
   LootContainer,
   MapRuntime,
   MoveIntent,
+  NpcPatrol,
   Outbox,
   PlayerGold,
   Projectile,
@@ -85,9 +86,10 @@ export function spawnNpc(
   x: number,
   y: number,
   dir: 1 | -1 = 1,
+  patrol?: { points: { x: number; y: number }[]; speed?: number },
 ): Entity {
   const character = getCharacter(charId);
-  return world.spawn(
+  const entity = world.spawn(
     IsNpc({ charId }),
     Transform({ x, y }),
     Facing({ dir }),
@@ -97,6 +99,18 @@ export function spawnNpc(
       paletteId: character.palette ?? "palette:base",
     }),
   );
+  if (patrol?.points.length) {
+    entity.add(
+      NpcPatrol({
+        points: patrol.points,
+        targetIndex: patrol.points.length > 1 ? 1 : 0,
+        speed: patrol.speed ?? 22,
+      }),
+      Speed({ value: patrol.speed ?? 22 }),
+      MoveIntent({ x: 0, y: 0 }),
+    );
+  }
+  return entity;
 }
 
 export function spawnEnemy(world: World, archetypeId: string, x: number, y: number): Entity {
@@ -208,7 +222,14 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
       continue;
     }
     if (spawn.ref?.startsWith("char:")) {
-      spawnNpc(world, spawn.ref, spawn.x as number, spawn.y as number, spawn.dir ?? 1);
+      spawnNpc(
+        world,
+        spawn.ref,
+        spawn.x as number,
+        spawn.y as number,
+        spawn.dir ?? 1,
+        spawn.patrol,
+      );
       continue;
     }
     if (spawn.ref === "prop:chest") {

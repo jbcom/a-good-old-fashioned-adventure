@@ -92,7 +92,21 @@
       "note": "Page Pip by the village road well"
     },
     { "ref": "char:mara-cress", "x": 340, "y": 324, "dir": 1 },
-    { "ref": "char:tobin-bell", "x": 520, "y": 324, "dir": -1 },
+    {
+      "ref": "char:tobin-bell",
+      "x": 520,
+      "y": 324,
+      "dir": -1,
+      "patrol": {
+        "speed": 28,
+        "points": [
+          { "x": 520, "y": 324 },
+          { "x": 560, "y": 324 },
+          { "x": 560, "y": 292 },
+          { "x": 520, "y": 292 }
+        ]
+      }
+    },
     { "ref": "prop:chest", "x": 712, "y": 270, "contents": "Gold" }
   ],
   "triggers": [

@@ -310,6 +310,19 @@ road pulls east:
 5. Capture desktop and phone screenshots of the market cluster before accepting
    the slice, with mobile still preserving the gameplay-area budget.
 
+## Ninth Content-Depth Slice
+
+Market density should not stop at static props. The first-town NPC motion slice
+adds authored walking loops without changing the player's public controls:
+
+1. Extend map entity content with optional NPC patrol points and a speed.
+2. Interpret those patrol points through a Yuka-backed NPC steering system,
+   feeding the same `MoveIntent`/movement pipeline as enemies and the player.
+3. Give Tobin Bell a short market-board loop while leaving Mara Cress stationary
+   for the A-button dialogue browser route.
+4. Unit-test deterministic NPC patrol movement and keep the headed market
+   browser test green.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map
