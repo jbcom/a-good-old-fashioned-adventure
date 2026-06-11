@@ -22,15 +22,15 @@ import {
 describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
     expect(tiles.size).toBe(17);
-    expect(props.size).toBe(52);
+    expect(props.size).toBe(55);
     expect(sprites.size).toBe(3);
     expect(animations.size).toBe(7);
     expect(maps.size).toBe(16);
-    expect(quests.size).toBe(14);
-    expect(dialogueBanks.size).toBe(25);
-    expect(characters.size).toBe(28);
+    expect(quests.size).toBe(15);
+    expect(dialogueBanks.size).toBe(26);
+    expect(characters.size).toBe(29);
     expect(items.size).toBe(10);
-    expect(flags.size).toBe(16);
+    expect(flags.size).toBe(17);
     expect(shops.size).toBe(3);
   });
 
@@ -42,6 +42,7 @@ describe("registries are fully populated", () => {
     expect(getQuest("quest:stable-oat-kindness").start).toBe("buy-oats");
     expect(getQuest("quest:oldwood-oat-token").start).toBe("wait-for-stable-service");
     expect(getQuest("quest:deep-forest-fern-light").start).toBe("greet-fern-mender");
+    expect(getQuest("quest:village-letter-basket").start).toBe("read-letter");
     expect(getShop("shop:brindle-counter").listings).toHaveLength(2);
     expect(getShop("shop:oswin-stable-counter").listings).toHaveLength(2);
     expect(getShop("shop:road-cart-counter").listings).toHaveLength(2);

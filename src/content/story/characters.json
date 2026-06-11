@@ -113,6 +113,13 @@
       "dialogue": "dlgbank:hearth-song-board",
       "note": "Readable tavern notice board that starts the Unfurled Vine's small song questlet."
     },
+    "char:village-letter-basket": {
+      "name": "Doorstep Letter",
+      "role": "voice",
+      "portraitColor": "#b07a2c",
+      "dialogue": "dlgbank:village-letter-basket",
+      "note": "Readable Hearthwake letter-basket that changes Page Pip's morning errand line."
+    },
     "char:oldwood-waystone": {
       "name": "Mossy Waystone",
       "role": "voice",

@@ -9,6 +9,14 @@
       "when": {
         "quest": "quest:morning-errands",
         "stage": "find-page",
+        "flag": "flag:village-letter-basket-read"
+      },
+      "node": "errand-after-letter"
+    },
+    {
+      "when": {
+        "quest": "quest:morning-errands",
+        "stage": "find-page",
         "flag": "flag:stable-oats-bought"
       },
       "node": "errand-after-oats"
@@ -30,6 +38,14 @@
     "errand-after-oats": {
       "lines": [
         "Good morning, brave legs. I smell Oswin's oats on your pack, which means the stable has already blessed your feet.",
+        "Keeper Brindle still keeps the road-cake ledger. Ask him for the road word, then bring it back before the bell forgets what hour it is."
+      ],
+      "choices": [{ "id": "accepted", "text": "Take Page Pip's errand." }],
+      "emits": "dlg:page.errand"
+    },
+    "errand-after-letter": {
+      "lines": [
+        "Good morning, brave legs. You read the letter-basket, then; excellent. That means the road has already been reminded of its manners.",
         "Keeper Brindle still keeps the road-cake ledger. Ask him for the road word, then bring it back before the bell forgets what hour it is."
       ],
       "choices": [{ "id": "accepted", "text": "Take Page Pip's errand." }],

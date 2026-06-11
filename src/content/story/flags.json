@@ -65,6 +65,10 @@
     "flag:tavern-song-learned": {
       "default": false,
       "description": "Merrin has explained the hearth-song board's errand verse to the player."
+    },
+    "flag:village-letter-basket-read": {
+      "default": false,
+      "description": "The player has read the doorstep letter-basket note beside Hearthwake's shop road."
     }
   }
 }

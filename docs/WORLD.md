@@ -578,6 +578,28 @@ roadside commerce scene:
    evidence and expand the full public-control playthrough so the player buys
    and sells at the road-cart before leaving Hearthwake.
 
+## Twenty-Third Content-Depth Slice
+
+The village street should keep shrinking from a big cross into small lived-in
+thresholds. The next route-composition pass adds a non-shop interaction that
+changes a later social line:
+
+1. Add `prop:village-letter-basket`, `prop:stoop-lantern`, and
+   `prop:dooryard-flower-stand` to `map:village`, placed around the shop/Page
+   approach so the road has doorstep scale in the player's depth band.
+2. Add `char:village-letter-basket` and `dlgbank:village-letter-basket`; the
+   letter-basket is readable with A, plays `inspect`, pulses with
+   `anim:inspect-pulse`, and emits `dlg:village-letter-basket.note:seen`.
+3. Add `quest:village-letter-basket`, started on `map:village`, that completes
+   when the letter is read and sets `flag:village-letter-basket-read`.
+4. Add a Page Pip branch for `quest:morning-errands` + `find-page` +
+   `flag:village-letter-basket-read` so the non-shop inspection changes a later
+   village line while preserving the original `dlg:page.errand` quest event.
+5. Add unit coverage for prop richness, map placement, quest/flag reduction, and
+   the Page branch; add headed desktop/phone evidence and extend the full
+   public-control playthrough so the player reads the basket before talking to
+   Page Pip.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

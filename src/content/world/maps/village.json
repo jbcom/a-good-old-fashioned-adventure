@@ -48,6 +48,15 @@
       "note": "shopfront road-cart paving pocket"
     },
     {
+      "op": "region",
+      "tile": "tile:village-cobble",
+      "x0": 37,
+      "x1": 40,
+      "y0": 14,
+      "y1": 17,
+      "note": "letter-basket stoop pocket"
+    },
+    {
       "op": "set",
       "tile": "tile:village-cobble",
       "at": [34, 19],
@@ -70,6 +79,30 @@
       "tile": "tile:village-cobble",
       "at": [37, 18],
       "note": "shopfront staggered cobble"
+    },
+    {
+      "op": "set",
+      "tile": "tile:village-cobble",
+      "at": [38, 18],
+      "note": "letter-basket stoop staggered cobble"
+    },
+    {
+      "op": "set",
+      "tile": "tile:village-cobble",
+      "at": [39, 18],
+      "note": "letter-basket stoop staggered cobble"
+    },
+    {
+      "op": "set",
+      "tile": "tile:village-cobble",
+      "at": [40, 18],
+      "note": "letter-basket stoop staggered cobble"
+    },
+    {
+      "op": "set",
+      "tile": "tile:village-cobble",
+      "at": [41, 17],
+      "note": "letter-basket stoop staggered cobble"
     },
     {
       "op": "region",
@@ -159,6 +192,24 @@
       "x": 504,
       "y": 300,
       "note": "chalked ribbon prices by the shopfront"
+    },
+    {
+      "ref": "prop:village-letter-basket",
+      "x": 600,
+      "y": 268,
+      "note": "readable doorstep letter-basket before Page Pip"
+    },
+    {
+      "ref": "prop:stoop-lantern",
+      "x": 632,
+      "y": 262,
+      "note": "lit doorstep scale near Page's road"
+    },
+    {
+      "ref": "prop:dooryard-flower-stand",
+      "x": 664,
+      "y": 292,
+      "note": "dooryard flowers softening the east village lane"
     },
     { "ref": "prop:barrel", "x": 604, "y": 282, "note": "shop supply barrel behind the road cart" },
     { "ref": "prop:barrel", "x": 760, "y": 288, "note": "tavern roadside barrel" },

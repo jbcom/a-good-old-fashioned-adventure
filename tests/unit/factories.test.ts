@@ -34,6 +34,7 @@ describe("createGameWorld", () => {
       "flag:stable-oats-bought": false,
       "flag:sunken-cart-read": false,
       "flag:tavern-song-learned": false,
+      "flag:village-letter-basket-read": false,
     });
     expect(world.get(MapRuntime)?.mapId).toBe("");
   });

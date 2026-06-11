@@ -340,10 +340,22 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await userEvent.click(page.getByTestId("shop-close"));
   await wait(100);
 
+  await walkTo(input, 600, 268, 16);
+  const letterFeedbackBefore = shell();
+  await pressA(input);
+  await expect
+    .poll(() => shell().inspectionPulses, { timeout: 2_000 })
+    .toBeGreaterThan(letterFeedbackBefore.inspectionPulses);
+  expect(shell().lastInspectionProp).toBe("prop:village-letter-basket");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Doorstep Letter");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("letter-basket");
+  await pressA(input);
+  await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("letter-basket");
+
   await walkTo(input, 620, 304, 24);
   await pressA(input);
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Page Pip");
-  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oswin's oats");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("letter-basket");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keeper Brindle");
   await pressA(input);
 

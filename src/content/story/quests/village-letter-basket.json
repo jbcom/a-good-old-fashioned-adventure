@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:village-letter-basket",
+  "kind": "quest",
+  "title": "The Doorstep Letter",
+  "act": 1,
+  "startOn": { "enterMap": "map:village" },
+  "start": "read-letter",
+  "stages": [
+    {
+      "id": "read-letter",
+      "log": "Read the letter-basket note beside Hearthwake's shop road.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:village-letter-basket.note:seen" },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:village-letter-basket-read" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

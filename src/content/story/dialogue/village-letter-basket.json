@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:village-letter-basket",
+  "kind": "dialogue-bank",
+  "speaker": "char:village-letter-basket",
+  "slots": [{ "id": "note", "node": "note" }],
+  "nodes": {
+    "note": {
+      "lines": [
+        "A doorstep letter rests in the village letter-basket, folded around a pressed marigold.",
+        "Page Pip has written: If the morning road forgets its manners, remind it that Hearthwake keeps names, cakes, and courage in order."
+      ],
+      "emits": "dlg:village-letter-basket.note"
+    }
+  }
+}
