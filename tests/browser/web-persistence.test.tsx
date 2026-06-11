@@ -62,11 +62,31 @@ it("persists a web save through Capacitor SQLite and restores it from Continue",
     .poll(
       async () => {
         const slot = await getSaveRepository().latestSlot();
-        return slot ? `${slot.classId}:${slot.mapId}` : "";
+        if (!slot) return "";
+        const snapshot = JSON.parse(slot.snapshotJson) as {
+          coins?: number;
+          gold?: number;
+          roses?: number;
+          rescueCount?: number;
+          purchasedUpgradeIds?: string[];
+          unlockedClassIds?: string[];
+          unlockedRoutePackIds?: string[];
+        };
+        return [
+          slot.classId,
+          slot.mapId,
+          snapshot.coins,
+          snapshot.gold,
+          snapshot.roses,
+          snapshot.rescueCount,
+          snapshot.purchasedUpgradeIds?.join(","),
+          snapshot.unlockedClassIds?.join(","),
+          snapshot.unlockedRoutePackIds?.join(","),
+        ].join(":");
       },
       { timeout: 10_000 },
     )
-    .toBe("knight:map:village");
+    .toBe("knight:map:village:12:12:0:0:upgrade:first-vow:knight:");
 
   root?.unmount();
   root = undefined;
@@ -83,4 +103,9 @@ it("persists a web save through Capacitor SQLite and restores it from Continue",
   const shell = page.getByTestId("game-shell").element() as HTMLElement;
   expect(shell.dataset.classId).toBe("knight");
   expect(shell.dataset.mapId).toBe("map:village");
+  expect(shell.dataset.coins).toBe("12");
+  expect(shell.dataset.roses).toBe("0");
+  expect(shell.dataset.rescueCount).toBe("0");
+  expect(shell.dataset.purchasedUpgrades).toContain("upgrade:first-vow");
+  expect(shell.dataset.unlockedClasses).toBe("knight");
 });

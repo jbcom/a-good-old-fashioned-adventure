@@ -77,13 +77,13 @@ it("shows and trades at the Hearthwake road-cart storefront through public contr
   await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("B Sell");
 
   await governor.press("a");
-  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 10");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 10");
   await expect
     .element(page.getByTestId("shop-inventory-item:wayfarer-ribbon"))
     .toHaveTextContent("x1");
 
   await governor.press("b");
-  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 11");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 11");
   await expect
     .element(page.getByTestId("shop-inventory-item:wayfarer-ribbon"))
     .toHaveTextContent("x0");

@@ -86,10 +86,10 @@ it("buys and sells at Brindle's counter through public movement and A/B input", 
     .toHaveAttribute("aria-selected", "true");
 
   await governor.press("a");
-  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 6");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 6");
   await expect.element(page.getByTestId("shop-inventory-item:travel-cake")).toHaveTextContent("x1");
 
   await governor.press("b");
-  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 9");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 9");
   await expect.element(page.getByTestId("shop-inventory-item:travel-cake")).toHaveTextContent("x0");
 });

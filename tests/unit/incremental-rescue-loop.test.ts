@@ -56,6 +56,7 @@ describe("incremental rescue loop contract", () => {
     expect(persistenceDoc).toContain("coins");
     expect(persistenceDoc).toContain("roses");
     expect(persistenceDoc).toContain("purchased upgrade node ids");
+    expect(persistenceDoc).toContain("Continue restores the same incremental fields");
     expect(playerGovernorDoc).toContain("results panel with coins and roses");
     expect(playerGovernorDoc).toContain("buy a connected node with A");
     expect(playerGovernorDoc).toContain("second-run proof");

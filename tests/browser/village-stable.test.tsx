@@ -89,11 +89,11 @@ it("enters the Hearthwake stable yard and talks through public controls", async 
   expect(serviceDesktopPath).toBeTruthy();
 
   await governor.press("a");
-  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 8");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 8");
   await expect.element(page.getByTestId("shop-inventory-item:oat-bundle")).toHaveTextContent("x1");
 
   await governor.press("b");
-  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 10");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 10");
   await expect.element(page.getByTestId("shop-inventory-item:oat-bundle")).toHaveTextContent("x0");
 
   await page.viewport(390, 844);

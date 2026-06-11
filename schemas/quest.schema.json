@@ -98,6 +98,7 @@
         "startQuest": { "type": "string", "pattern": "^quest:[a-z0-9-]+$" },
         "startDialogue": { "type": "object", "required": ["bank", "slot"] },
         "loadMap": { "type": "string", "pattern": "^map:[a-z0-9-]+$" },
+        "grantRunReward": { "type": "string" },
         "sfx": { "type": "string" },
         "endGame": { "enum": ["victory", "gameover"] }
       }

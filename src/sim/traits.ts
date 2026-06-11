@@ -89,6 +89,42 @@ export interface GameEvent {
 
 export const EventQueue = trait(() => ({ events: [] as GameEvent[] }));
 
+export interface IncrementalLastRun {
+  result: "victory" | "gameover";
+  coinsEarned: number;
+  rosesEarned: number;
+  rescuedPrincess: boolean;
+  routePackId: string;
+}
+
+export interface IncrementalProgressState {
+  coins: number;
+  roses: number;
+  rescueCount: number;
+  purchasedUpgradeIds: string[];
+  unlockedClassIds: string[];
+  unlockedRoutePackIds: string[];
+  currentRunCoinsEarned: number;
+  currentRunRosesEarned: number;
+  activeRoutePackId: string;
+  lastRun: IncrementalLastRun | null;
+}
+
+export const IncrementalProgress = trait(
+  (): IncrementalProgressState => ({
+    coins: 0,
+    roses: 0,
+    rescueCount: 0,
+    purchasedUpgradeIds: [],
+    unlockedClassIds: [],
+    unlockedRoutePackIds: [],
+    currentRunCoinsEarned: 0,
+    currentRunRosesEarned: 0,
+    activeRoutePackId: "baseline",
+    lastRun: null,
+  }),
+);
+
 export interface MapLoadRequest {
   mapId: string;
   spawnId?: string;

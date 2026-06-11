@@ -9,7 +9,15 @@ import { pushEvent } from "../../src/sim/events";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import { autoStartQuests, questLogLines, startQuest } from "../../src/sim/quests";
 import { step } from "../../src/sim/tick";
-import { FlagState, Health, IsPickup, MapRuntime, Outbox, QuestLog } from "../../src/sim/traits";
+import {
+  FlagState,
+  Health,
+  IncrementalProgress,
+  IsPickup,
+  MapRuntime,
+  Outbox,
+  QuestLog,
+} from "../../src/sim/traits";
 
 function bootedWorld() {
   const world = createGameWorld(11);
@@ -141,6 +149,11 @@ describe("the full original journey, reduced through the quest engine", () => {
     expect(log?.completed).toContain("quest:rescue-amber");
     expect(world.get(Outbox)?.endGame).toBe("victory");
     expect(world.get(Outbox)?.sfx).toContain("victory");
+    expect(world.get(IncrementalProgress)).toMatchObject({
+      roses: 3,
+      rescueCount: 1,
+      lastRun: { result: "victory", rescuedPrincess: true },
+    });
   });
 
   it("counters ignore non-matching archetypes", () => {

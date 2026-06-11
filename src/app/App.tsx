@@ -36,6 +36,11 @@ import {
 } from "../sim/dialogue";
 import { pushEvent } from "../sim/events";
 import { createGameWorld, instantiateMap } from "../sim/factories";
+import {
+  restoreIncrementalProgress,
+  sanitizeIncrementalProgress,
+  syncProgressCoinsFromPlayer,
+} from "../sim/incrementalProgress";
 import { applyEffects, autoStartQuests, questLogLines } from "../sim/quests";
 import { buyShopListing, type ShopTransactionResult, sellShopListing } from "../sim/shop";
 import { playerAbility, playerAttack } from "../sim/systems/combat";
@@ -45,6 +50,7 @@ import {
   Facing,
   FlagState,
   Health,
+  type IncrementalProgressState,
   InspectionPulse,
   Interactable,
   Inventory,
@@ -103,6 +109,7 @@ interface UiSnapshot {
   xp: number;
   nextXp: number;
   gold: number;
+  incrementalProgress: IncrementalProgressState;
   inventory: Record<string, number>;
   playerX: number;
   playerY: number;
@@ -144,6 +151,7 @@ interface StartOptions {
   hp?: number;
   maxHp?: number;
   gold?: number;
+  incrementalProgress?: IncrementalProgressState;
   inventory?: Record<string, number>;
 }
 
@@ -163,6 +171,7 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   xp: 0,
   nextXp: 1,
   gold: 0,
+  incrementalProgress: sanitizeIncrementalProgress({}, 0),
   inventory: {},
   playerX: 0,
   playerY: 0,
@@ -225,11 +234,41 @@ function cleanInventory(input: unknown): Record<string, number> {
   return out;
 }
 
-function parseSavedSnapshot(json: string): Pick<StartOptions, "gold" | "inventory"> {
+function numeric(input: unknown): number | undefined {
+  const value = Number(input);
+  return Number.isFinite(value) ? value : undefined;
+}
+
+function parseSavedSnapshot(
+  json: string,
+): Pick<StartOptions, "gold" | "incrementalProgress" | "inventory"> {
   try {
-    const parsed = JSON.parse(json) as { gold?: unknown; inventory?: unknown };
+    const parsed = JSON.parse(json) as {
+      coins?: unknown;
+      gold?: unknown;
+      incrementalProgress?: unknown;
+      inventory?: unknown;
+    };
+    const hasIncrementalPayload =
+      parsed.incrementalProgress !== undefined ||
+      parsed.coins !== undefined ||
+      parsed.gold !== undefined ||
+      "roses" in parsed ||
+      "rescueCount" in parsed ||
+      "purchasedUpgradeIds" in parsed ||
+      "unlockedClassIds" in parsed ||
+      "unlockedRoutePackIds" in parsed;
+    const coins = numeric(parsed.coins) ?? numeric(parsed.gold);
+    if (!hasIncrementalPayload) {
+      return { inventory: cleanInventory(parsed.inventory) };
+    }
+    const incrementalProgress = sanitizeIncrementalProgress(
+      parsed.incrementalProgress ?? parsed,
+      coins ?? 0,
+    );
     return {
-      gold: Number.isFinite(Number(parsed.gold)) ? Number(parsed.gold) : undefined,
+      gold: incrementalProgress.coins,
+      incrementalProgress,
       inventory: cleanInventory(parsed.inventory),
     };
   } catch {
@@ -289,6 +328,7 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
   const health = player?.get(Health);
   const level = player?.get(Level);
   const gold = player?.get(PlayerGold);
+  const incrementalProgress = syncProgressCoinsFromPlayer(world);
   const inventory = player?.get(Inventory);
   const transform = player?.get(Transform);
   const mapId = runtime?.mapId ?? "";
@@ -302,6 +342,13 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     xp: level?.xp ?? 0,
     nextXp: level?.nextXp ?? 1,
     gold: gold?.value ?? 0,
+    incrementalProgress: {
+      ...incrementalProgress,
+      purchasedUpgradeIds: [...incrementalProgress.purchasedUpgradeIds],
+      unlockedClassIds: [...incrementalProgress.unlockedClassIds],
+      unlockedRoutePackIds: [...incrementalProgress.unlockedRoutePackIds],
+      lastRun: incrementalProgress.lastRun ? { ...incrementalProgress.lastRun } : null,
+    },
     inventory: { ...(inventory?.items ?? {}) },
     playerX: transform?.x ?? 0,
     playerY: transform?.y ?? 0,
@@ -335,7 +382,18 @@ function saveRowFromSnapshot(current: UiSnapshot) {
       mapId: current.mapId,
       playerX: current.playerX,
       playerY: current.playerY,
-      gold: current.gold,
+      coins: current.incrementalProgress.coins,
+      gold: current.incrementalProgress.coins,
+      roses: current.incrementalProgress.roses,
+      rescueCount: current.incrementalProgress.rescueCount,
+      purchasedUpgradeIds: current.incrementalProgress.purchasedUpgradeIds,
+      unlockedClassIds: current.incrementalProgress.unlockedClassIds,
+      unlockedRoutePackIds: current.incrementalProgress.unlockedRoutePackIds,
+      currentRunCoinsEarned: current.incrementalProgress.currentRunCoinsEarned,
+      currentRunRosesEarned: current.incrementalProgress.currentRunRosesEarned,
+      activeRoutePackId: current.incrementalProgress.activeRoutePackId,
+      lastRun: current.incrementalProgress.lastRun,
+      incrementalProgress: current.incrementalProgress,
       inventory: current.inventory,
       questLines: current.questLines,
     }),
@@ -631,7 +689,8 @@ function Hud({
           max={snapshot.nextXp}
           value={snapshot.xp}
         />
-        <span>G {snapshot.gold}</span>
+        <span>C {snapshot.incrementalProgress.coins}</span>
+        <span>R {snapshot.incrementalProgress.roses}</span>
         <span className="map-token">{snapshot.mapName}</span>
         <button
           className="hud-menu"
@@ -816,8 +875,8 @@ function ShopPanel({
                 <p>{listing.description}</p>
               </div>
               <div className="shop-prices">
-                <span>Buy {listing.buyPrice}g</span>
-                <span>Sell {listing.sellPrice}g</span>
+                <span>Buy {listing.buyPrice}c</span>
+                <span>Sell {listing.sellPrice}c</span>
                 <span data-testid={`shop-inventory-${listing.item}`}>x{owned}</span>
               </div>
             </div>
@@ -842,7 +901,7 @@ function ShopPanel({
           B Sell
         </button>
         <p className="shop-status" data-testid="shop-status">
-          {shopState.message || `${snapshot.gold} gold in purse.`}
+          {shopState.message || `${snapshot.incrementalProgress.coins} coins in purse.`}
         </p>
       </footer>
     </section>
@@ -1093,6 +1152,9 @@ export function App({
       if (player && options.inventory !== undefined) {
         player.set(Inventory, { items: options.inventory });
       }
+      if (options.incrementalProgress) {
+        restoreIncrementalProgress(nextWorld, options.incrementalProgress, options.gold ?? 0);
+      }
       refreshSnapshot(nextWorld, { persist: true });
     },
     [audioDebug, loadMap, refreshSnapshot, selectedClass],
@@ -1110,6 +1172,7 @@ export function App({
       hp: latestSave.hp,
       maxHp: latestSave.maxHp,
       gold: saved.gold,
+      incrementalProgress: saved.incrementalProgress,
       inventory: saved.inventory,
     });
   }, [latestSave, startGame]);
@@ -1173,7 +1236,7 @@ export function App({
       current
         ? {
             ...current,
-            message: result.ok ? `${result.message} ${result.gold} gold left.` : result.message,
+            message: result.ok ? `${result.message} ${result.gold} coins left.` : result.message,
           }
         : current,
     );
@@ -1417,7 +1480,13 @@ export function App({
       "data-enemies": String(snapshot.enemies),
       "data-projectiles": String(snapshot.projectiles),
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
-      "data-gold": String(snapshot.gold),
+      "data-gold": String(snapshot.incrementalProgress.coins),
+      "data-coins": String(snapshot.incrementalProgress.coins),
+      "data-roses": String(snapshot.incrementalProgress.roses),
+      "data-rescue-count": String(snapshot.incrementalProgress.rescueCount),
+      "data-purchased-upgrades": snapshot.incrementalProgress.purchasedUpgradeIds.join(","),
+      "data-unlocked-classes": snapshot.incrementalProgress.unlockedClassIds.join(","),
+      "data-unlocked-route-packs": snapshot.incrementalProgress.unlockedRoutePackIds.join(","),
       "data-inventory": JSON.stringify(snapshot.inventory),
       "data-paused": String(paused),
       "data-muted": String(muted),
@@ -1437,7 +1506,7 @@ export function App({
       snapshot.classId,
       snapshot.enemies,
       snapshot.hp,
-      snapshot.gold,
+      snapshot.incrementalProgress,
       snapshot.inventory,
       snapshot.mapId,
       snapshot.playerX,

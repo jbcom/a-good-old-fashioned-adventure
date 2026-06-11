@@ -53,7 +53,7 @@ contract.
 ## Incremental Progression Snapshot
 
 The S9 incremental pivot extends the snapshot payload before it changes the SQL
-column shape. The next runtime slice should persist:
+column shape. The current runtime persists:
 
 - coins, using the existing shop/economy balance as the common currency during
   the migration away from the older `PlayerGold` name.
@@ -70,3 +70,8 @@ This keeps the Drizzle table stable while the save contract grows through
 the upgrade web needs indexed account-level progression. Any such migration must
 keep existing web/mobile saves readable and must be validated with the live
 headed web persistence check, not only `MemorySaveRepository`.
+
+The browser persistence gate now asserts this shape with the production
+`CapacitorSaveRepository`: New Game writes coins/roses/upgrade state, reload
+enables Continue, and Continue restores the same incremental fields onto the
+game shell.

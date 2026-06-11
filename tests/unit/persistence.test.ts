@@ -60,6 +60,15 @@ describe("save persistence architecture", () => {
 
   it("can upsert and read save metadata through the repository contract", async () => {
     const repository = new MemorySaveRepository();
+    const snapshotJson = JSON.stringify({
+      coins: 15,
+      gold: 15,
+      roses: 3,
+      rescueCount: 1,
+      purchasedUpgradeIds: ["upgrade:first-vow"],
+      unlockedClassIds: ["knight"],
+      unlockedRoutePackIds: ["oldwood"],
+    });
     await repository.upsertSlot({
       id: 1,
       classId: "wizard",
@@ -70,7 +79,7 @@ describe("save persistence architecture", () => {
       hp: 18,
       maxHp: 24,
       questSummary: "Cross the bridge",
-      snapshotJson: "{}",
+      snapshotJson,
       updatedAt: new Date("2026-06-11T02:30:00Z"),
     });
     await repository.recordEvent({
@@ -85,6 +94,7 @@ describe("save persistence architecture", () => {
       playerX: 128,
       playerY: 256,
       level: 2,
+      snapshotJson,
     });
   });
 

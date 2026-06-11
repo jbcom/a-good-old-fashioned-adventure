@@ -6,6 +6,7 @@
 import { createWorld, type Entity, type World } from "koota";
 import { classes, enemies, player as playerConfig } from "../lib/config";
 import { flags, getCharacter, getMap, getProp } from "../lib/content/registry";
+import { initialIncrementalProgress } from "./incrementalProgress";
 import { buildGrid } from "./mapgen";
 import {
   AimDirection,
@@ -17,6 +18,7 @@ import {
   FlagState,
   Health,
   Hitbox,
+  IncrementalProgress,
   Interactable,
   Inventory,
   IsEnemy,
@@ -52,6 +54,7 @@ export function createGameWorld(seed = 1): World {
     Clock({ t: 0, dt: 0 }),
     CameraState({ x: 0, y: 0, shake: 0 }),
     EventQueue({ events: [] }),
+    IncrementalProgress(initialIncrementalProgress(playerConfig.baseStats.gold ?? 0)),
     QuestLog({ active: {}, completed: [] }),
     Outbox({ sfx: [], dialogue: null, mapLoad: null, endGame: null }),
   );

@@ -131,9 +131,12 @@ the authored map content stays in `src/content/world/maps`.
   conditions — `dialogueEvent`, `counterDone` (kill/collect counters),
   `itemAcquired`, `enemyDefeated`, `enterZone`, `flag` — and carry `effects`
   (`setFlag`, `setTile`, `spawnItem`, `startQuest`, `startDialogue`,
-  `loadMap`, `endGame`, …). "A→B→C and beyond" is just more stages and more
-  edges; branches are multiple `advance` entries on one stage; optional
-  content hangs off `hints`. Chaining acts = `startQuest` effects.
+  `loadMap`, `grantRunReward`, `endGame`, …). "A→B→C and beyond" is just more
+  stages and more edges; branches are multiple `advance` entries on one stage;
+  optional content hangs off `hints`. Chaining acts = `startQuest` effects.
+  Rescue-loop payouts stay data-driven: princess rescue grants roses through a
+  quest effect, while repeatable enemy coins are reduced from `enemy:defeated`
+  events.
 - `dialogue/*.json` — **dialogue banks with slots**. A bank holds every node
   a speaker can say. `slots` map game state → node: evaluated top-down,
   first match wins, `default` last; a slot with an `id` is directly

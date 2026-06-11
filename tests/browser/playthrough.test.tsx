@@ -447,11 +447,11 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await pressA(input);
   await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("Oswin's Feed Pail");
   await pressA(input);
-  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 8");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 8");
   await expect.element(page.getByTestId("shop-inventory-item:oat-bundle")).toHaveTextContent("x1");
   await input.keyboard("k");
   await wait(90);
-  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 10");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 10");
   await expect.element(page.getByTestId("shop-inventory-item:oat-bundle")).toHaveTextContent("x0");
   await userEvent.click(page.getByTestId("shop-close"));
   await wait(100);
@@ -465,13 +465,13 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await pressA(input);
   await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("Penny's Road Cart");
   await pressA(input);
-  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 8");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 8");
   await expect
     .element(page.getByTestId("shop-inventory-item:wayfarer-ribbon"))
     .toHaveTextContent("x1");
   await input.keyboard("k");
   await wait(90);
-  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 9");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 9");
   await expect
     .element(page.getByTestId("shop-inventory-item:wayfarer-ribbon"))
     .toHaveTextContent("x0");

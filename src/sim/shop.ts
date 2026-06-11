@@ -90,7 +90,7 @@ export function buyShopListing(
       listing,
       gold.value,
       owned,
-      `Need ${listing.buyPrice} gold for ${listing.label}.`,
+      `Need ${listing.buyPrice} coins for ${listing.label}.`,
     );
   }
 
