@@ -43,8 +43,8 @@ a single top line:
   from the top-right menu button. They are not persistent gameplay chrome.
 - The slideout also owns pause/resume, mute, and retire-run controls; those
   controls must never obscure the world unless the player explicitly pauses.
-- Capacitor builds should swap the breakpoint heuristic for `@capacitor/device`
-  form-factor detection once Android scaffolding lands.
+- Capacitor builds use the platform/device profile defined in
+  `docs/PLATFORM.md`; CSS breakpoints remain the browser fallback.
 
 ## Controls
 

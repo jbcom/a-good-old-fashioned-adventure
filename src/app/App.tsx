@@ -21,6 +21,12 @@ import {
   loadSettings,
   saveSettings,
 } from "../persistence/settings";
+import {
+  classifyDeviceProfile,
+  type DeviceProfile,
+  readViewport,
+  resolveDeviceProfile,
+} from "../platform/deviceProfile";
 import { GameStage } from "../render/GameStage";
 import {
   emitDialogueChoice,
@@ -724,6 +730,9 @@ export function App({
   const [panelOpen, setPanelOpen] = useState(false);
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(DEFAULT_SETTINGS.muted);
+  const [deviceProfile, setDeviceProfile] = useState<DeviceProfile>(() =>
+    classifyDeviceProfile({ platform: "web", model: "browser" }, readViewport()),
+  );
   const pausePanelRef = usePanelEntrance(paused && mode === "playing" ? "pause-open" : "pause");
   const endPanelRef = usePanelEntrance(mode === "victory" || mode === "gameover" ? mode : "end");
   const [audioDebug, setAudioDebug] = useState<AudioDebugState>({
@@ -744,6 +753,16 @@ export function App({
     audioRef.current = createToneAudioEngine();
     setAudioDebug(audioRef.current.debugState());
     return () => audioRef.current?.dispose();
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    void resolveDeviceProfile().then((profile) => {
+      if (active) setDeviceProfile(profile);
+    });
+    return () => {
+      active = false;
+    };
   }, []);
 
   useEffect(() => {
@@ -1066,8 +1085,10 @@ export function App({
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
       "data-paused": String(paused),
       "data-muted": String(muted),
+      "data-device-profile": deviceProfile,
     }),
     [
+      deviceProfile,
       mode,
       muted,
       paused,

@@ -43,6 +43,7 @@ function shell() {
     mode: el.dataset.mode ?? "",
     paused: el.dataset.paused === "true",
     muted: el.dataset.muted === "true",
+    deviceProfile: el.dataset.deviceProfile ?? "",
     x: Number(el.dataset.playerX ?? 0),
   };
 }
@@ -90,6 +91,7 @@ it("pauses and resumes without advancing movement", async () => {
 
 it("keeps the mobile-first HUD below the 20% chrome budget", async () => {
   await startRun();
+  expect(["desktop", "tablet", "phone"]).toContain(shell().deviceProfile);
   const hud = page.getByTestId("top-hud").element() as HTMLElement;
   const hudRect = hud.getBoundingClientRect();
   const viewportHeight = window.innerHeight;

@@ -46,7 +46,10 @@ describe("save persistence architecture", () => {
     const dependabot = readFileSync(resolve(process.cwd(), ".github/dependabot.yml"), "utf8");
     for (const dependencyName of [
       "@capacitor-community/sqlite",
+      "@capacitor/android",
+      "@capacitor/cli",
       "@capacitor/core",
+      "@capacitor/device",
       "@capacitor/preferences",
       "jeep-sqlite",
       "sql.js",

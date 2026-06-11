@@ -75,7 +75,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S6.6 Playthrough test extended to full expanded journey, start → victory
 
 ### S7 Ship
-- [ ] S7.1 Capacitor android scaffold; `pnpm cap:sync` green; mobile-first check (safe areas, touch)
+- [x] S7.1 Capacitor android scaffold; `pnpm cap:sync` green; mobile-first check (safe areas, touch)
 - [ ] S7.2 CI (ci.yml: lint+typecheck+unit+browser headless-GPU+build; APK in ci.yml), release-please, dependabot, standard-repo docs (AGENTS.md, STANDARDS.md, CHANGELOG.md, TESTING.md, DEPLOYMENT.md, STATE.md)
 - [ ] S7.3 Open PR, babysit to green, squash-merge; verify deployed/built app runs
 
@@ -102,3 +102,5 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - 2026-06-11 S6.6 visual correction: foreground ruin props in the 2.5D camera can magnify into black slabs. Keep large silhouettes upstage from the key-fight lane and read Sunken Road screenshots before accepting desert/castle visuals.
 - 2026-06-11 browser-gate correction: a single aggregate browser invocation can hang after many headed specs. `pnpm test:browser` intentionally splits core browser specs from the long journey specs while still using the Vitest browser Playwright project and GPU-headed Chromium.
 - 2026-06-11 visual screenshot correction: the castle approach tile first read like a modern lane-marked road and then like a black slab. Screenshot reading is mandatory because passing pixel/render tests do not prove the art direction is correct.
+- 2026-06-11 S7.1 Android correction: `pnpm cap:sync` is necessary but not enough when the native scaffold changes. Run `./gradlew :app:assembleDebug`; Capacitor BridgeActivity themes need an explicit `androidx.appcompat:appcompat-resources` dependency in the app module on this generated Gradle stack.
+- 2026-06-11 S7.1 mobile-profile correction: CSS breakpoints are only the fallback. The app shell exposes `data-device-profile` from `@capacitor/device` plus viewport measurements, and phone screenshots must show HP as percentage with bars hidden while controls remain overlays.

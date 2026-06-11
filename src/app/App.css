@@ -405,11 +405,12 @@
 
 .top-hud {
   position: absolute;
-  top: 0;
+  top: env(safe-area-inset-top, 0);
   left: 0;
   right: 0;
   min-height: 36px;
-  padding: 6px 8px;
+  padding: 6px calc(8px + env(safe-area-inset-right, 0)) 6px
+    calc(8px + env(safe-area-inset-left, 0));
   display: flex;
   align-items: center;
   gap: 10px;
@@ -475,9 +476,9 @@
 
 .side-panel {
   position: absolute;
-  top: 44px;
-  right: 8px;
-  bottom: 92px;
+  top: calc(44px + env(safe-area-inset-top, 0));
+  right: max(8px, env(safe-area-inset-right, 0));
+  bottom: calc(92px + env(safe-area-inset-bottom, 0));
   width: min(330px, calc(100vw - 24px));
   padding: 14px;
   pointer-events: auto;
@@ -531,7 +532,7 @@
 .dialogue-box {
   position: absolute;
   left: 50%;
-  bottom: 18px;
+  bottom: calc(18px + env(safe-area-inset-bottom, 0));
   width: min(760px, calc(100vw - 32px));
   transform: translateX(-50%);
   padding: 14px 16px;
@@ -553,8 +554,8 @@
 
 .dpad {
   position: absolute;
-  left: 18px;
-  bottom: 18px;
+  left: calc(18px + env(safe-area-inset-left, 0));
+  bottom: calc(18px + env(safe-area-inset-bottom, 0));
   display: grid;
   grid-template-columns: repeat(3, 44px);
   grid-template-rows: repeat(3, 44px);
@@ -589,8 +590,8 @@
 
 .face-buttons {
   position: absolute;
-  right: 20px;
-  bottom: 22px;
+  right: calc(20px + env(safe-area-inset-right, 0));
+  bottom: calc(22px + env(safe-area-inset-bottom, 0));
   display: flex;
   gap: 14px;
   align-items: flex-end;
@@ -648,4 +649,17 @@
   .map-token {
     max-width: 28vw;
   }
+}
+
+.game-shell[data-device-profile="phone"] .wide-meter {
+  display: none;
+}
+
+.game-shell[data-device-profile="tablet"] .wide-meter,
+.game-shell[data-device-profile="desktop"] .wide-meter {
+  display: block;
+}
+
+.game-shell[data-device-profile="phone"] .top-hud {
+  min-height: 34px;
 }

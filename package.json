@@ -17,11 +17,15 @@
     "test:browser": "pnpm test:browser:core && pnpm test:browser:journey",
     "test:browser:core": "vitest run --project browser tests/browser/atlas.test.ts tests/browser/game-stage.test.tsx tests/browser/landing.test.tsx tests/browser/menu.test.tsx tests/browser/motion.test.ts tests/browser/smoke.test.tsx tests/browser/sqlite-web.test.ts tests/browser/stage.test.tsx tests/browser/web-persistence.test.tsx tests/browser/interiors.test.tsx tests/browser/shop.test.tsx tests/browser/questline-depth.test.tsx",
     "test:browser:journey": "vitest run --project browser tests/browser/playthrough.test.tsx tests/browser/exterior-route.test.tsx",
-    "test:all": "pnpm test && pnpm test:browser"
+    "test:all": "pnpm test && pnpm test:browser",
+    "cap:sync": "pnpm build && cap sync android",
+    "cap:run:android": "pnpm cap:sync && cap run android"
   },
   "dependencies": {
     "@capacitor-community/sqlite": "8.1.0",
+    "@capacitor/android": "8.4.0",
     "@capacitor/core": "8.4.0",
+    "@capacitor/device": "8.0.2",
     "@capacitor/preferences": "8.0.1",
     "@react-three/fiber": "^9.6.1",
     "ajv": "^8.20.0",
@@ -38,6 +42,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.16",
+    "@capacitor/cli": "8.4.0",
     "@types/node": "^25.9.3",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",

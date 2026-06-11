@@ -9,7 +9,8 @@ domain: technical
 
 Layered: **content** (JSON, schema-validated) → **sim** (pure TS, Koota
 ECS, deterministic) → **presentation** (r3f world stage, DOM UI, ToneJS
-audio, AnimeJS motion) → **shell** (Vite web, Capacitor Android).
+audio, AnimeJS motion) → **shell** (Vite web, Capacitor Android; see
+`docs/PLATFORM.md`).
 
 ```
 src/config/    tunables (read-only data)
@@ -94,3 +95,11 @@ into state (see CONTENT-ARCHITECTURE.md §story).
 Capacitor/SQLite web save stack is intentionally pinned and excluded from
 Dependabot piecemeal upgrades because `jeep-sqlite` and `sql.js` wasm must
 match exactly.
+
+## Platform
+
+`docs/PLATFORM.md` is binding. Capacitor Android is a committed platform target,
+not a local afterthought. `pnpm cap:sync` builds the Vite bundle, copies it into
+Android, and keeps native plugin metadata current. UI density uses
+`@capacitor/device` plus viewport measurements so phones preserve the 80%+
+gameplay-area rule without hiding tablet/foldable readouts.
