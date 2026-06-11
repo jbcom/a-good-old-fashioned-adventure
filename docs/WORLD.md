@@ -18,7 +18,7 @@ content contract.
 
 | Region | Map ids | Role | Tone |
 | --- | --- | --- | --- |
-| Hearthwake Village | `map:village`, `map:village-house`, `map:village-shop`, `map:village-tavern` | opening hub, tutorial NPCs, save/load mental model | warm vellum, chimney smoke, gentle tune |
+| Hearthwake Village | `map:village`, `map:village-house`, `map:village-shop`, `map:village-tavern`, `map:village-stable` | opening hub, tutorial NPCs, save/load mental model, optional lived-in micro-spaces | warm vellum, chimney smoke, gentle tune |
 | Oldwood Forest | `map:oldwood-forest`, `map:deep-forest` | first combat and branching errand chain | green canopy, rustling percussion, cautious patrols |
 | Sunken Road Desert | `map:sunken-road`, `map:desert-ruins` | key hunt, ranged enemies, environmental gates | ochre, low strings, mirage shimmer |
 | Castle Approach | `map:castle-approach`, `map:castle-yard` | escalation, guarded gate, exterior siege props | dusk brass, drums, tighter paths |
@@ -46,6 +46,7 @@ flowchart LR
   House["map:village-house"]
   Shop["map:village-shop"]
   Tavern["map:village-tavern"]
+  Stable["map:village-stable"]
   Forest["map:oldwood-forest"]
   DeepForest["map:deep-forest"]
   Desert["map:sunken-road"]
@@ -60,6 +61,7 @@ flowchart LR
   Village <--> House
   Village <--> Shop
   Village <--> Tavern
+  Village <--> Stable
   Village <--> Forest
   Forest <--> DeepForest
   DeepForest <--> Desert
@@ -446,6 +448,28 @@ The affordance pass turns inspection into a visible and audible action:
 5. Fold the feedback check into the full public-control playthrough at the
    waystone read so the start-to-finish journey validates inspection as a game
    action, not only dialogue.
+
+## Seventeenth Content-Depth Slice
+
+Hearthwake must feel like a village that existed before the player arrived. The
+stable-yard slice adds an optional working space beside the main route so the
+opening hub has more than cross paths, quest boxes, and static facades:
+
+1. Add `map:village-stable` as a compact reversible interior off
+   `map:village`, with an entry spawn and a `from-stable` village return spawn
+   outside the outbound trigger.
+2. Add a Hearthwake Stable facade plus authored tack, hay, oat-bin, and stall
+   props. Each prop must use outlined pixel grids with at least five visible
+   channels so the scene reads as old-fashioned craft rather than flat color.
+3. Add a named stablehand NPC with dialogue about saddle-bells, oats, and the
+   eastern road. The stable must have a social verb, not just scenery.
+4. Keep the player governor's direct village-to-Oldwood route passable while
+   adding the stable as a short optional detour to the full public-control
+   playthrough.
+5. Add headed browser validation that enters the stable through real movement
+   controls, presses A near the stablehand, verifies visible dialogue, and
+   captures desktop plus phone evidence with the phone HUD still leaving most of
+   the viewport to gameplay.
 
 ## Content Depth Bar
 

@@ -1,0 +1,65 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:village-stable",
+  "kind": "map",
+  "name": "Hearthwake Stable Yard",
+  "size": { "cols": 28, "rows": 20 },
+  "baseTile": "tile:village-cobble",
+  "bgmTheme": "interior",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    { "op": "row-span", "tile": "tile:path", "y": 17, "x0": 11, "x1": 17 },
+    {
+      "op": "region",
+      "tile": "tile:wood-bridge",
+      "x0": 3,
+      "x1": 24,
+      "y0": 4,
+      "y1": 7,
+      "note": "stable stalls and working rails"
+    },
+    {
+      "op": "region",
+      "tile": "tile:path",
+      "x0": 4,
+      "x1": 24,
+      "y0": 8,
+      "y1": 15,
+      "note": "brushed yard floor"
+    },
+    { "op": "row-span", "tile": "tile:wood-bridge", "y": 11, "x0": 4, "x1": 23 }
+  ],
+  "playerSpawn": { "x": 224, "y": 256 },
+  "spawns": {
+    "default": { "x": 224, "y": 256 },
+    "entry": { "x": 224, "y": 256 }
+  },
+  "entities": [
+    { "ref": "prop:stable-stall", "x": 120, "y": 132, "note": "left stall with brushed straw" },
+    { "ref": "prop:stable-stall", "x": 328, "y": 132, "note": "right stall with warm boards" },
+    { "ref": "prop:tack-rack", "x": 208, "y": 120, "note": "saddle-bells and mended tack" },
+    { "ref": "prop:hay-bale", "x": 88, "y": 188, "note": "stacked sweet hay" },
+    { "ref": "prop:hay-bale", "x": 360, "y": 188, "note": "roadside feed bundle" },
+    { "ref": "prop:oat-bin", "x": 260, "y": 202, "note": "full oat-bin by the yard lane" },
+    { "ref": "prop:hay-bale", "x": 160, "y": 224, "note": "low bale beside the hand-brushed path" },
+    {
+      "ref": "prop:tack-rack",
+      "x": 248,
+      "y": 186,
+      "note": "second rack of reins and saddle-bells"
+    },
+    { "ref": "prop:oat-bin", "x": 304, "y": 226, "note": "open feed bin near the stablehand" },
+    { "ref": "char:oswin-hayward", "x": 208, "y": 160, "dir": -1 }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:return-village",
+      "kind": "portal",
+      "label": "Stable Door to Hearthwake",
+      "toMap": "map:village",
+      "toSpawn": "from-stable",
+      "sfx": "interact",
+      "zone": { "x0": 176, "y0": 272, "x1": 272, "y1": 318 }
+    }
+  ]
+}

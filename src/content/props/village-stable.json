@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:village-stable",
+  "kind": "prop",
+  "grid": { "w": 24, "h": 24 },
+  "anchor": { "x": 12, "y": 24 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "........................",
+        "......XXXXXXXXXXXX......",
+        ".....XDDDDDDDDDDDDX.....",
+        "....XDBBBBBBBBBBDDX.....",
+        "....XDBBbbbbbbbbBBDX....",
+        "...XDBBbbbbbbbbbbBBDX...",
+        "...XDDDCCCCCCCCCCDDDX...",
+        "..XDDDCCGGGGGGGGCCDDDX..",
+        "..XDDDCCGggggggGCCDDDX..",
+        "..XDDDCCGgLLLLgGCCDDDX..",
+        "..XDDDCCGgLLLLgGCCDDDX..",
+        "..XDDDCCGggggggGCCDDDX..",
+        "..XDDDCCGGGGGGGGCCDDDX..",
+        "..XDDDbbXXXXXXXXbbDDDX..",
+        "..XDDDbXBDBDBDBDXbDDDX..",
+        "..XDDDbXBbBbBbBDXbDDDX..",
+        "..XDDDbXBBBBBBBDXbDDDX..",
+        "..XDDDbXBBBBBBBDXbDDDX..",
+        "..XDDDDDDDDDDDDDDDDDDX..",
+        "XXXXXXXXXXXXXXXXXXXXXXXX",
+        "........................",
+        "........................",
+        "........................",
+        "........................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "D", "B", "b", "C", "G", "g", "L"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

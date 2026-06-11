@@ -54,6 +54,11 @@ const requiredVillageProps = [
   "prop:tavern-bench",
   "prop:hearth-song-board",
   "prop:story-quilt",
+  "prop:village-stable",
+  "prop:hay-bale",
+  "prop:tack-rack",
+  "prop:oat-bin",
+  "prop:stable-stall",
 ];
 
 function colorsInOps(ops: DrawOp[]): Set<string> {
@@ -120,6 +125,7 @@ describe("authored pixel-art richness", () => {
         "prop:market-stall",
         "prop:notice-board",
         "prop:flower-cart",
+        "prop:village-stable",
       ]),
     );
 
@@ -133,6 +139,14 @@ describe("authored pixel-art richness", () => {
         "prop:tavern-bench",
         "prop:hearth-song-board",
         "prop:story-quilt",
+      ]),
+    );
+    expect([...propRefs(getMap("map:village-stable"))]).toEqual(
+      expect.arrayContaining([
+        "prop:hay-bale",
+        "prop:tack-rack",
+        "prop:oat-bin",
+        "prop:stable-stall",
       ]),
     );
   });

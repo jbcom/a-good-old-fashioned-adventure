@@ -9,6 +9,7 @@ const plannedMaps = [
   "map:village-house",
   "map:village-shop",
   "map:village-tavern",
+  "map:village-stable",
   "map:oldwood-forest",
   "map:deep-forest",
   "map:sunken-road",
@@ -131,7 +132,12 @@ describe("S6 world plan content", () => {
     expect(themes.interior.length).toBeGreaterThan(8);
     expect(themes["sunken-road"].length).toBeGreaterThan(8);
     expect(map("map:village").bgmTheme).toBe("village");
-    for (const id of ["map:village-house", "map:village-shop", "map:village-tavern"]) {
+    for (const id of [
+      "map:village-house",
+      "map:village-shop",
+      "map:village-tavern",
+      "map:village-stable",
+    ]) {
       expect(map(id).bgmTheme, id).toBe("interior");
     }
   });
@@ -143,6 +149,7 @@ describe("S6 world plan content", () => {
     expect(villagePortals.map((portal) => portal.toMap).sort()).toEqual([
       "map:village-house",
       "map:village-shop",
+      "map:village-stable",
       "map:village-tavern",
     ]);
 

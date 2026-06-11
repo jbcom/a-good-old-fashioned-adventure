@@ -79,6 +79,15 @@
       "dialogue": "dlgbank:tamsin-hearth",
       "note": "Village baker who points the opening road toward ordinary Hearthwake life."
     },
+    "char:oswin-hayward": {
+      "name": "Oswin Hayward",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:stablehand",
+      "portraitColor": "#7f4f2f",
+      "dialogue": "dlgbank:oswin-hayward",
+      "note": "Stablehand who turns Hearthwake's lower lane into a social working yard."
+    },
     "char:merrin-underbough": {
       "name": "Merrin Underbough",
       "role": "npc",

@@ -300,6 +300,16 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await expect.element(page.getByTestId("world-stage-shell")).toBeVisible();
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:village");
 
+  await walkToOrMap(input, 112, 416, "map:village-stable", 24);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:village-stable");
+  await walkTo(input, 208, 160, 20);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oswin Hayward");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("saddle-bells");
+  await pressA(input);
+  await walkToOrMap(input, 224, 292, "map:village", 28);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:village");
+
   await walkTo(input, 620, 304, 24);
   await pressA(input);
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Page Pip");

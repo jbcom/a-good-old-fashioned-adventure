@@ -55,6 +55,15 @@
       "y0": 18,
       "y1": 22,
       "note": "market-day cobbles around the wells"
+    },
+    {
+      "op": "region",
+      "tile": "tile:village-cobble",
+      "x0": 3,
+      "x1": 11,
+      "y0": 22,
+      "y1": 30,
+      "note": "stable-yard cobbles on the lower lane"
     }
   ],
   "playerSpawn": { "x": 96, "y": 272 },
@@ -63,12 +72,14 @@
     "from-house": { "x": 192, "y": 300 },
     "from-shop": { "x": 448, "y": 300 },
     "from-tavern": { "x": 704, "y": 300 },
+    "from-stable": { "x": 112, "y": 472 },
     "from-forest": { "x": 800, "y": 304 }
   },
   "entities": [
     { "ref": "prop:cottage-facade", "x": 192, "y": 176, "note": "woodcutter cottage facade" },
     { "ref": "prop:village-shop", "x": 448, "y": 176, "note": "keeper's shop facade" },
     { "ref": "prop:village-tavern", "x": 704, "y": 176, "note": "unfurled vine facade" },
+    { "ref": "prop:village-stable", "x": 112, "y": 400, "note": "Hearthwake stable facade" },
     { "ref": "prop:broadleaf-tree", "x": 116, "y": 240, "note": "village green shade" },
     { "ref": "prop:broadleaf-tree", "x": 372, "y": 238, "note": "central road shade" },
     { "ref": "prop:broadleaf-tree", "x": 568, "y": 244, "note": "roadside tree" },
@@ -156,6 +167,15 @@
       "toSpawn": "entry",
       "sfx": "interact",
       "zone": { "x0": 672, "y0": 176, "x1": 736, "y1": 244 }
+    },
+    {
+      "id": "trigger:enter-stable",
+      "kind": "portal",
+      "label": "Hearthwake Stable Yard",
+      "toMap": "map:village-stable",
+      "toSpawn": "entry",
+      "sfx": "interact",
+      "zone": { "x0": 72, "y0": 384, "x1": 152, "y1": 448 }
     },
     {
       "id": "trigger:east-road",
