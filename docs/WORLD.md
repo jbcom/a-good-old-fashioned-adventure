@@ -416,6 +416,19 @@ that prove the detail is playable:
    resume each route, walk to the readable prop, press A, assert visible
    dialogue/log changes, and capture desktop plus phone evidence.
 
+## Fifteenth Content-Depth Slice
+
+Readable clues should change later play. The first consequence pass makes the
+Oldwood waystone matter when the player reaches the Hermit:
+
+1. Add a flag-gated Hermit dialogue branch for
+   `flag:oldwood-waystone-read` while `quest:oldwood-oath` is still at
+   `find-hermit`.
+2. Keep the same accepted choice event (`dlg:hermit.oath:accepted`) so the
+   quest graph remains data-driven and the full route still advances.
+3. Update the full public-control playthrough to read the waystone, then prove
+   the Hermit reacts to that prior inspection.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

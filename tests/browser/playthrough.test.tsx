@@ -327,6 +327,7 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await walkTo(input, 392, 292, 20);
   await pressA(input);
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oldwood Hermit");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("waystone");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("drive two raiders");
   await pressA(input);
 

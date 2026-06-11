@@ -2,7 +2,7 @@ import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 import { characters, dialogueBanks, getProp, getQuest } from "../../src/lib/content/registry";
-import { emitDialogueSeen, resolveDialogueSlot } from "../../src/sim/dialogue";
+import { emitDialogueSeen, resolveDialogue, resolveDialogueSlot } from "../../src/sim/dialogue";
 import { pushEvent } from "../../src/sim/events";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import { autoStartQuests } from "../../src/sim/quests";
@@ -83,5 +83,17 @@ describe("S8.10 readable route affordances", () => {
       expect(world.get(QuestLog)?.completed, contract.questId).toContain(contract.questId);
       expect(world.get(FlagState)?.values[contract.flagId], contract.flagId).toBe(true);
     }
+  });
+
+  it("lets the Oldwood waystone alter the later Hermit oath branch", () => {
+    const world = bootMap("map:oldwood-forest");
+    const readable = resolveDialogueSlot("dlgbank:oldwood-waystone", "riddle");
+    emitDialogueSeen(world, readable.node);
+    step(world, 0);
+
+    const hermit = resolveDialogue(world, "dlgbank:hermit");
+    expect(hermit.nodeKey).toBe("oath-after-waystone");
+    expect(hermit.node.lines.join(" ")).toContain("waystone");
+    expect(hermit.node.choices?.[0]?.id).toBe("accepted");
   });
 });
