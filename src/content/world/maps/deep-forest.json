@@ -36,8 +36,32 @@
   "entities": [
     { "ref": "prop:broadleaf-tree", "x": 180, "y": 236, "note": "thicker canopy" },
     { "ref": "prop:stump", "x": 308, "y": 336, "note": "mossy stump" },
+    {
+      "ref": "prop:fallen-log",
+      "x": 432,
+      "y": 336,
+      "note": "fallen log at the upper-to-lower path shift"
+    },
+    {
+      "ref": "prop:mossy-waystone",
+      "x": 520,
+      "y": 286,
+      "note": "leaning waystone before the old oak"
+    },
     { "ref": "prop:broadleaf-tree", "x": 620, "y": 248, "note": "old oak" },
+    {
+      "ref": "prop:bramble-hedge",
+      "x": 708,
+      "y": 292,
+      "note": "bramble hedge near the companion trail"
+    },
     { "ref": "prop:stump", "x": 820, "y": 330, "note": "fallen marker" },
+    {
+      "ref": "prop:forest-lantern-post",
+      "x": 936,
+      "y": 274,
+      "note": "last lantern before the Sunken Road"
+    },
     {
       "ref": "char:lost-page",
       "x": 296,

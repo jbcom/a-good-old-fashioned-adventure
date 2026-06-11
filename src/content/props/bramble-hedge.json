@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:bramble-hedge",
+  "kind": "prop",
+  "grid": { "w": 24, "h": 16 },
+  "anchor": { "x": 12, "y": 16 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "........................",
+        "....E..EE....E..EE......",
+        "...EeXEeeE..EeXEeeE.....",
+        "..EeeXXeeE.EeeXXeeE.....",
+        ".EeeXBBXeeEeeXBBXeeE....",
+        ".EeXbRRbXeeeXbRRbXeE....",
+        "..EeeXXeeEEEeeXXeeE.....",
+        "...EeXEeeE..EeXEeeE.....",
+        "....EeeE....EeeE........",
+        "...XBBBBX..XBBBBX.......",
+        "..XbBEEBbXXbBEEBbX......",
+        "...XBBBBX..XBBBBX.......",
+        "....XXXX....XXXX........",
+        "........................",
+        "........................",
+        "........................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "E", "e", "B", "b", "R"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

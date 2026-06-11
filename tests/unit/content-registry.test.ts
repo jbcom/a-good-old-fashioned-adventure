@@ -22,7 +22,7 @@ import {
 describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
     expect(tiles.size).toBe(16);
-    expect(props.size).toBe(33);
+    expect(props.size).toBe(37);
     expect(sprites.size).toBe(3);
     expect(animations.size).toBe(6);
     expect(maps.size).toBe(15);

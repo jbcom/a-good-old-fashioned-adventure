@@ -42,9 +42,33 @@
   },
   "entities": [
     { "ref": "prop:signpost", "x": 92, "y": 274, "note": "points back to Hearthwake" },
+    {
+      "ref": "prop:mossy-waystone",
+      "x": 150,
+      "y": 292,
+      "note": "old mile marker at the first bend"
+    },
     { "ref": "prop:broadleaf-tree", "x": 210, "y": 246, "note": "oldwood canopy" },
+    {
+      "ref": "prop:fallen-log",
+      "x": 278,
+      "y": 334,
+      "note": "fallen log shaping the lower clearing"
+    },
     { "ref": "prop:stump", "x": 340, "y": 328, "note": "cut stump near the road" },
+    {
+      "ref": "prop:bramble-hedge",
+      "x": 430,
+      "y": 252,
+      "note": "bramble hedge before the raider clearing"
+    },
     { "ref": "prop:broadleaf-tree", "x": 560, "y": 238, "note": "deep canopy" },
+    {
+      "ref": "prop:forest-lantern-post",
+      "x": 880,
+      "y": 276,
+      "note": "last lantern before Deep Forest"
+    },
     { "ref": "char:woodcutter", "x": 250, "y": 262, "dir": 1 },
     { "ref": "char:hermit", "x": 392, "y": 292, "dir": -1, "note": "Oldwood oath keeper" },
     { "enemy": "oldwood-raider", "x": 470, "y": 210 },

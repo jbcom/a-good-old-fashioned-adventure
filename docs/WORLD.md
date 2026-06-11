@@ -341,6 +341,23 @@ small domestic set dressing and another town voice:
 5. Add headed browser validation that walks to the new townsperson through
    public controls, presses A, and captures a screenshot of the denser village.
 
+## Eleventh Content-Depth Slice
+
+The first exterior road must feel like Oldwood, not a straight hallway with a
+forest texture. The road-shape polish slice adds landmark clusters around the
+existing route while preserving the proven public-control traversal:
+
+1. Add authored forest props for a mossy waystone, fallen log, bramble hedge,
+   and lantern post. Each prop needs outlined pixel detail and at least five
+   recolor channels.
+2. Place the landmarks around `map:oldwood-forest` and `map:deep-forest` so
+   the player sees bends, clearings, and roadside history before combat starts.
+3. Keep the direct route passable for the player governor and the full
+   start-to-victory playthrough.
+4. Add unit coverage for the doc, prop ids, and map placements.
+5. Add headed browser validation that enters Oldwood through public controls,
+   walks to the first landmark cluster, and captures desktop and phone evidence.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map
