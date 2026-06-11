@@ -105,3 +105,24 @@ describe("vite capacitor/sqlite configuration", () => {
     expect(config.build?.target).toBe("es2022");
   });
 });
+
+describe("vitest browser configuration", () => {
+  it("serializes browser spec files so public-control tests do not share the page", async () => {
+    const { default: vitestConfig } = await import("../../vitest.config");
+    const browserProject = (vitestConfig.test?.projects ?? [])
+      .map((project) =>
+        typeof project === "string"
+          ? null
+          : (project as {
+              test?: {
+                name?: string;
+                fileParallelism?: boolean;
+                browser?: { fileParallelism?: boolean };
+              };
+            }),
+      )
+      .find((project) => project?.test?.name === "browser");
+    expect(browserProject?.test?.fileParallelism).toBe(false);
+    expect(browserProject?.test?.browser?.fileParallelism).toBe(false);
+  });
+});

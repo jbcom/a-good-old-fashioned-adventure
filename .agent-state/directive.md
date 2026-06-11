@@ -76,7 +76,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 
 ### S7 Ship
 - [x] S7.1 Capacitor android scaffold; `pnpm cap:sync` green; mobile-first check (safe areas, touch)
-- [x] S7.2 CI (ci.yml: lint+typecheck+unit+browser headless-GPU+build; APK in ci.yml), release-please, dependabot, standard-repo docs (AGENTS.md, STANDARDS.md, CHANGELOG.md, TESTING.md, DEPLOYMENT.md, STATE.md)
+- [x] S7.2 CI (ci.yml: lint+typecheck+unit+browser headed-GPU+build; APK in ci.yml), release-please, dependabot, standard-repo docs (AGENTS.md, STANDARDS.md, CHANGELOG.md, TESTING.md, DEPLOYMENT.md, STATE.md)
 - [ ] S7.3 Open PR, babysit to green, squash-merge; verify deployed/built app runs
 
 ## Learnings log (forward sweeps append here)
@@ -105,3 +105,4 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - 2026-06-11 S7.1 Android correction: `pnpm cap:sync` is necessary but not enough when the native scaffold changes. Run `./gradlew :app:assembleDebug`; Capacitor BridgeActivity themes need an explicit `androidx.appcompat:appcompat-resources` dependency in the app module on this generated Gradle stack.
 - 2026-06-11 S7.1 mobile-profile correction: CSS breakpoints are only the fallback. The app shell exposes `data-device-profile` from `@capacitor/device` plus viewport measurements, and phone screenshots must show HP as percentage with bars hidden while controls remain overlays.
 - 2026-06-11 S7.2 ship-pipeline correction: CI must preserve the split headed-browser command contract (`pnpm test:browser`) and build/upload a debug APK after `pnpm cap:sync`; release-please uses manifest mode so changelog/package version state stays explicit.
+- 2026-06-11 S7.3 CI correction: Ubuntu CI exposes Chromium SwiftShader even with GPU flags, which violates the renderer proof. Browser CI runs on macOS with headed Chromium and `fileParallelism: false` so specs do not share a page concurrently.

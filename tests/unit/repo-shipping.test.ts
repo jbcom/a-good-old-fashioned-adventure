@@ -42,6 +42,9 @@ describe("CI and release automation", () => {
       expect(workflow).toContain(command);
     }
     expect(workflow).toContain("CI: true");
+    expect(workflow).toContain("runs-on: macos-latest");
+    expect(workflow).toContain('VITEST_BROWSER_HEADLESS: "false"');
+    expect(workflow).toContain("pnpm exec playwright install chromium");
     expect(workflow).toContain("actions/upload-artifact");
     expect(workflow).toContain("android/app/build/outputs/apk/debug/*.apk");
   });

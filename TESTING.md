@@ -16,8 +16,10 @@ cd android && ./gradlew :app:assembleDebug
 `pnpm test:browser` intentionally runs the Vitest browser project in two
 groups: core UI/persistence/visual specs first, then the long player journey.
 The browser provider is Playwright Chromium with GPU flags. Local runs are
-headed; CI sets `CI=true`, which makes the same project run headless with GPU
-flags still enabled.
+headed; CI runs the browser job on macOS with `VITEST_BROWSER_HEADLESS=false`
+so the WebGL renderer test does not silently accept a Linux SwiftShader
+fallback. Browser spec files are serialized because they share the public page
+and must not collide.
 
 ## Playthrough Rule
 

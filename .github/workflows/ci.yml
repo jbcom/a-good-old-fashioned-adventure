@@ -16,7 +16,9 @@ env:
 jobs:
   verify:
     name: Web, Content, and Browser Gates
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
+    env:
+      VITEST_BROWSER_HEADLESS: "false"
     steps:
       - uses: actions/checkout@v6
       - uses: pnpm/action-setup@v4
@@ -27,7 +29,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec playwright install --with-deps chromium
+      - run: pnpm exec playwright install chromium
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm test
