@@ -27,8 +27,8 @@
       "label": "Castle Approach",
       "tier": 3,
       "threat": 6,
-      "maps": ["map:castle-approach"],
-      "archetypes": ["gate-sentry", "banner-knight"]
+      "maps": ["map:sunken-road", "map:castle-approach"],
+      "archetypes": ["desert-wyrm", "gate-sentry", "banner-knight"]
     },
     {
       "id": "region:dungeon",

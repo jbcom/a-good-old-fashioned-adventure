@@ -66,6 +66,10 @@ it("travels the S6 exterior road from village to castle approach through public 
     durationMs: 850,
     maxSteps: 22,
   });
+  await governor.reachByDirection({ kind: "mapNameIncludes", text: "Sunken Road" }, "right", {
+    durationMs: 850,
+    maxSteps: 24,
+  });
   await governor.reachByDirection({ kind: "mapNameIncludes", text: "Castle Approach" }, "right", {
     durationMs: 850,
     maxSteps: 24,

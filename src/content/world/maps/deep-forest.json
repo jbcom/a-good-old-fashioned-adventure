@@ -74,8 +74,8 @@
     {
       "id": "trigger:east-road",
       "kind": "portal",
-      "label": "Road to the Castle Approach",
-      "toMap": "map:castle-approach",
+      "label": "Road to the Sunken Road",
+      "toMap": "map:sunken-road",
       "toSpawn": "from-forest",
       "sfx": "interact",
       "zone": { "x0": 1052, "y0": 276, "x1": 1088, "y1": 332 }

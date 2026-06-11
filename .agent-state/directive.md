@@ -72,7 +72,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S6.3 New exterior maps (village, deep forest, castle approach) with new tiles/props as content JSON
 - [x] S6.4 Expanded questline: 6+ quests using multi-midpoint graphs (fetch, escort-lite, multi-counter, branch); new NPCs + dialogue banks
 - [x] S6.5 New enemy archetypes + yuka behaviors per region; difficulty curve in config
-- [ ] S6.6 Playthrough test extended to full expanded journey, start → victory
+- [x] S6.6 Playthrough test extended to full expanded journey, start → victory
 
 ### S7 Ship
 - [ ] S7.1 Capacitor android scaffold; `pnpm cap:sync` green; mobile-first check (safe areas, touch)
@@ -98,5 +98,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - 2026-06-11 shop interaction correction: shops cannot be chest rooms. The first keeper interaction is a stateful dialogue-driven travel-cake heal through quest effects; later economy work must stay content-driven, not hard-coded UI.
 - 2026-06-11 S6.4 quest-depth correction: quest depth means authored midpoint graphs plus public-control browser proof for the NPC touchpoints. Morning errands, Oldwood oath, and Lost Page Rowan now exercise dialogue choices, counters, zone events, quest flags, and reachable NPC placement.
 - 2026-06-11 S6.5 enemy-depth correction: new enemies must change regional behavior, not just stats. Ambush and guard are generic Yuka interpreter modes; region-specific names, palettes, ranges, placements, and threat ordering stay in JSON.
+- 2026-06-11 S6.6 playthrough correction: the expanded journey is long enough that one browser spec can kill the runner before diagnostics flush. Split the journey into road-to-dungeon and Continue-to-victory specs joined by the app's real save repository; both specs still use public keyboard controls only.
+- 2026-06-11 S6.6 visual correction: foreground ruin props in the 2.5D camera can magnify into black slabs. Keep large silhouettes upstage from the key-fight lane and read Sunken Road screenshots before accepting desert/castle visuals.
 - 2026-06-11 browser-gate correction: a single aggregate browser invocation can hang after many headed specs. `pnpm test:browser` intentionally splits core browser specs from the long journey specs while still using the Vitest browser Playwright project and GPU-headed Chromium.
 - 2026-06-11 visual screenshot correction: the castle approach tile first read like a modern lane-marked road and then like a black slab. Screenshot reading is mandatory because passing pixel/render tests do not prove the art direction is correct.

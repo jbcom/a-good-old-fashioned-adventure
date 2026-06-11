@@ -9,7 +9,7 @@
   "stages": [
     {
       "id": "seek-the-wyrm",
-      "log": "Collect the Golden Dungeon Key from the Sandwyrm on the Sand Beach",
+      "log": "Collect the Golden Dungeon Key from the Sandwyrm on the Sunken Road",
       "hints": [
         {
           "dialogueEvent": "dlg:gwydion.hint:seen",
@@ -39,6 +39,12 @@
         {
           "when": {
             "enterZone": { "map": "map:overworld", "trigger": "trigger:castle-gate-entry" }
+          },
+          "to": "done"
+        },
+        {
+          "when": {
+            "enterZone": { "map": "map:castle-approach", "trigger": "trigger:castle-gate-entry" }
           },
           "to": "done"
         }

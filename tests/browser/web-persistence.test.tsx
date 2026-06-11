@@ -66,7 +66,7 @@ it("persists a web save through Capacitor SQLite and restores it from Continue",
       },
       { timeout: 10_000 },
     )
-    .toBe("knight:map:overworld");
+    .toBe("knight:map:village");
 
   root?.unmount();
   root = undefined;
@@ -82,5 +82,5 @@ it("persists a web save through Capacitor SQLite and restores it from Continue",
   await expect.element(page.getByTestId("world-stage-shell")).toBeVisible();
   const shell = page.getByTestId("game-shell").element() as HTMLElement;
   expect(shell.dataset.classId).toBe("knight");
-  expect(shell.dataset.mapId).toBe("map:overworld");
+  expect(shell.dataset.mapId).toBe("map:village");
 });

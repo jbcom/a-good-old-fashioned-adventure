@@ -208,6 +208,27 @@ Enemy AI remains config-first. Code may add general Yuka behavior interpreters
 such as `ambush` and `guard`, but individual placement, palette, hitbox, speed,
 range, cooldown, and projectile data live in JSON.
 
+## Fifth S6 Slice
+
+The expanded playthrough slice replaces the original two-map proof with a
+single start-to-victory journey through the authored road:
+
+1. New Game starts in `map:village`, not the legacy `map:overworld`.
+2. The required route is Hearthwake Village, Oldwood Forest, Deep Forest,
+   Sunken Road, Castle Approach, and Obsidian Throne Dungeon.
+3. `quest:oldwood-oath` starts the key hunt after the player carries the oath
+   beneath the east bough; the legacy bridge quest remains playable in
+   `map:overworld` but no longer gates the main expanded route.
+4. `map:sunken-road` owns the Sandwyrm key fight around a broken caravan wash:
+   shallow water, broken stone footings, sandstone ruin teeth, and wrecked cart
+   props make it a story landmark rather than another straight corridor.
+   Deep Forest routes into Sunken Road, and Sunken Road routes into Castle
+   Approach.
+5. Castle Approach owns the key-gated dungeon portal. `quest:dungeon-key` can
+   complete from the Castle Approach gate as well as the legacy overworld gate.
+6. `tests/browser/playthrough.test.tsx` must prove the full route through real
+   keyboard A/B and directional input only, including the final victory screen.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

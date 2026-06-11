@@ -29,6 +29,8 @@ const requiredVillageProps = [
   "prop:well",
   "prop:table",
   "prop:barrel",
+  "prop:broken-cart",
+  "prop:sandstone-arch",
 ];
 
 function colorsInOps(ops: DrawOp[]): Set<string> {
@@ -106,6 +108,9 @@ describe("authored pixel-art richness", () => {
     );
     expect([...propRefs(getMap("map:deep-forest"))]).toEqual(
       expect.arrayContaining(["prop:stump", "prop:broadleaf-tree"]),
+    );
+    expect([...propRefs(getMap("map:sunken-road"))]).toEqual(
+      expect.arrayContaining(["prop:sandstone-arch", "prop:broken-cart", "prop:barrel"]),
     );
     expect([...propRefs(getMap("map:castle-approach"))]).toEqual(
       expect.arrayContaining(["prop:castle-gatehouse", "prop:barrel"]),

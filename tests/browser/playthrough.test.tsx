@@ -8,6 +8,7 @@ import { MemorySaveRepository } from "../../src/persistence/saveRepository";
 let container: HTMLDivElement | undefined;
 let root: Root | undefined;
 let originalBodyStyle = "";
+const journeyRepository = new MemorySaveRepository();
 
 afterEach(() => {
   root?.unmount();
@@ -30,7 +31,7 @@ function mountApp() {
   root = createRoot(container);
   root.render(
     <StrictMode>
-      <App saveRepository={new MemorySaveRepository()} />
+      <App saveRepository={journeyRepository} />
     </StrictMode>,
   );
 }
@@ -54,14 +55,14 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function pressA(input = userEvent.setup()) {
   await input.keyboard("j");
-  await wait(120);
+  await wait(90);
 }
 
 async function hold(input: ReturnType<typeof userEvent.setup>, key: string, ms: number) {
   await input.keyboard(`{${key}>}`);
   await wait(ms);
   await input.keyboard(`{/${key}}`);
-  await wait(80);
+  await wait(45);
 }
 
 async function walkTo(
@@ -70,8 +71,13 @@ async function walkTo(
   targetY: number,
   tolerance = 18,
 ) {
-  for (let i = 0; i < 90; i++) {
+  for (let i = 0; i < 55; i++) {
     const pos = shell();
+    if (pos.mode !== "playing") {
+      throw new Error(
+        `walk left play mode=${pos.mode}; target=${targetX},${targetY}; map=${pos.mapId}; x=${pos.x}; y=${pos.y}; hp=${pos.hp}; enemies=${pos.enemies}`,
+      );
+    }
     const dx = targetX - pos.x;
     const dy = targetY - pos.y;
     if (Math.abs(dx) <= tolerance && Math.abs(dy) <= tolerance) return;
@@ -103,8 +109,13 @@ async function walkToOrMap(
   mapId: string,
   tolerance = 18,
 ) {
-  for (let i = 0; i < 90; i++) {
+  for (let i = 0; i < 55; i++) {
     const pos = shell();
+    if (pos.mode !== "playing") {
+      throw new Error(
+        `walk-to-map left play mode=${pos.mode}; target=${targetX},${targetY}; wanted=${mapId}; map=${pos.mapId}; x=${pos.x}; y=${pos.y}; hp=${pos.hp}; enemies=${pos.enemies}`,
+      );
+    }
     if (pos.mapId === mapId) return;
     const dx = targetX - pos.x;
     const dy = targetY - pos.y;
@@ -133,6 +144,28 @@ async function walkToOrMap(
   );
 }
 
+async function holdRightUntilMap(
+  input: ReturnType<typeof userEvent.setup>,
+  mapId: string,
+  maxSteps: number,
+  durationMs = 700,
+) {
+  for (let i = 0; i < maxSteps; i++) {
+    const pos = shell();
+    if (pos.mode !== "playing") {
+      throw new Error(
+        `hold-right left play mode=${pos.mode}; wanted=${mapId}; map=${pos.mapId}; x=${pos.x}; y=${pos.y}; hp=${pos.hp}; enemies=${pos.enemies}`,
+      );
+    }
+    if (pos.mapId === mapId) return;
+    await hold(input, "ArrowRight", durationMs);
+  }
+  const pos = shell();
+  throw new Error(
+    `failed to hold right into ${mapId}; ended at ${pos.x},${pos.y}; map=${pos.mapId}; hp=${pos.hp}`,
+  );
+}
+
 async function castUntilEnemyDrops(
   input: ReturnType<typeof userEvent.setup>,
   before: number,
@@ -141,7 +174,7 @@ async function castUntilEnemyDrops(
   await hold(input, "ArrowRight", 90);
   for (let i = 0; i < attempts; i++) {
     await pressA(input);
-    await wait(430);
+    await wait(340);
     const state = shell();
     if (state.enemies < before) return;
     if (state.mode !== "playing") {
@@ -170,39 +203,7 @@ async function defeatAt(
   await walkTo(input, corpseX, corpseY, 24);
 }
 
-async function defeatIfQuestStillNeedsOrcs(
-  input: ReturnType<typeof userEvent.setup>,
-  standX: number,
-  standY: number,
-  corpseX: number,
-  corpseY: number,
-  casts: number,
-) {
-  if (questText().includes("Return to the Woodcutter")) return;
-  await defeatAt(input, standX, standY, corpseX, corpseY, casts);
-}
-
-function questText() {
-  return page.getByTestId("quest-log").element().textContent ?? "";
-}
-
-async function walkRightUntilQuestContains(
-  input: ReturnType<typeof userEvent.setup>,
-  text: string,
-  attempts: number,
-) {
-  for (let i = 0; i < attempts; i++) {
-    if (questText().includes(text)) return;
-    await hold(input, "ArrowRight", 450);
-    await wait(100);
-  }
-  const state = shell();
-  throw new Error(
-    `quest text never reached "${text}"; got "${questText()}"; x=${state.x}; y=${state.y}; hp=${state.hp}`,
-  );
-}
-
-it("plays the original journey from title to victory through public controls", async () => {
+it("plays the expanded road from title to the dungeon gate through public controls", async () => {
   mountApp();
   const input = userEvent.setup();
 
@@ -211,42 +212,80 @@ it("plays the original journey from title to victory through public controls", a
   await expect.element(page.getByTestId("title-screen")).toBeVisible();
   await input.keyboard("{ArrowRight}");
   await wait(80);
-  await input.keyboard("{ArrowRight}");
-  await wait(80);
   await input.keyboard("j");
   await expect.element(page.getByTestId("world-stage-shell")).toBeVisible();
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:village");
+
+  await walkTo(input, 620, 304, 24);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Page Pip");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keeper Brindle");
+  await pressA(input);
+
+  await walkToOrMap(input, 448, 220, "map:village-shop", 24);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:village-shop");
+  await walkTo(input, 192, 160, 20);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keeper Brindle");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("travel cake");
+  await pressA(input);
+
+  await walkToOrMap(input, 192, 250, "map:village", 24);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:village");
+  await walkTo(input, 620, 304, 24);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("proper morning");
+  await pressA(input);
+
+  await walkToOrMap(input, 864, 304, "map:oldwood-forest", 24);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:oldwood-forest");
+  await walkTo(input, 392, 292, 20);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oldwood Hermit");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("drive two raiders");
+  await pressA(input);
+
+  await defeatAt(input, 330, 190, 470, 210, 12);
+  await defeatAt(input, 480, 390, 620, 390, 12);
+  await expect
+    .element(page.getByTestId("quest-log"))
+    .toHaveTextContent("Return to the Oldwood Hermit");
+  await walkTo(input, 392, 292, 20);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("branches are quieter");
+  await pressA(input);
+
+  await walkToOrMap(input, 1000, 304, "map:deep-forest", 24);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:deep-forest");
+  await walkToOrMap(input, 1068, 304, "map:sunken-road", 24);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:sunken-road");
+  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Sunken Road");
+
+  await hold(input, "ArrowRight", 1200);
+  await castUntilEnemyDrops(input, shell().enemies, 30);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Dungeon Key");
+  await pressA(input);
+  await hold(input, "ArrowRight", 1600);
+  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Castle dungeon gates");
+
+  await holdRightUntilMap(input, "map:castle-approach", 10);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-approach");
+  await walkToOrMap(input, 930, 210, "map:castle-dungeon", 28);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-dungeon");
   await expect.element(page.getByTestId("dialogue-box")).toBeVisible();
   await pressA(input);
 
-  await walkTo(input, 256, 180);
-  await pressA(input);
-  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Forest Orcs");
-  await pressA(input);
-  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Defeat Forest Orcs");
+  await expect
+    .poll(async () => (await journeyRepository.latestSlot())?.mapId, { timeout: 5_000 })
+    .toBe("map:castle-dungeon");
+}, 210_000);
 
-  await defeatIfQuestStillNeedsOrcs(input, 305, 160, 410, 160, 10);
-  await defeatIfQuestStillNeedsOrcs(input, 270, 260, 440, 260, 10);
-  await defeatIfQuestStillNeedsOrcs(input, 310, 100, 480, 100, 10);
-  await defeatIfQuestStillNeedsOrcs(input, 205, 380, 340, 380, 24);
-  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Return to the Woodcutter");
+it("continues the expanded journey through dungeon victory through public controls", async () => {
+  mountApp();
+  const input = userEvent.setup();
 
-  await walkTo(input, 256, 180);
-  await pressA(input);
-  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("repaired");
-  await pressA(input);
-  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Golden Dungeon Key");
-
-  await walkTo(input, 500, 458, 8);
-  await walkTo(input, 540, 458, 8);
-  await walkTo(input, 575, 640, 22);
-  await castUntilEnemyDrops(input, shell().enemies, 18);
-  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Dungeon Key");
-  await pressA(input);
-  await walkTo(input, 680, 640, 6);
-  await walkRightUntilQuestContains(input, "Castle dungeon gates", 18);
-
-  await walkTo(input, 1040, 392, 22);
-  await walkToOrMap(input, 1282, 164, "map:castle-dungeon", 24);
+  await expect.element(page.getByTestId("landing-screen")).toBeVisible();
+  await userEvent.click(page.getByTestId("continue-button"));
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-dungeon");
   await expect.element(page.getByTestId("dialogue-box")).toBeVisible();
   await pressA(input);
@@ -274,4 +313,4 @@ it("plays the original journey from title to victory through public controls", a
   await expect.element(page.getByTestId("audio-state")).toHaveTextContent("Tone");
   const path = await page.screenshot({ path: "playthrough-victory.png" });
   expect(path).toBeTruthy();
-}, 300_000);
+}, 210_000);

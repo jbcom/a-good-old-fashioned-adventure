@@ -803,7 +803,7 @@ export function App({
   const startGame = useCallback(
     (options: StartOptions = {}) => {
       const classId = options.classId ?? selectedClass;
-      const mapId = options.mapId ?? "map:overworld";
+      const mapId = options.mapId ?? "map:village";
       const nextWorld = createGameWorld(19);
       autoStartQuests(nextWorld);
       setWorld(nextWorld);

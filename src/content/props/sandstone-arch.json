@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:sandstone-arch",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 16 },
+  "solid": true,
+  "states": {
+    "default": {
+      "rows": [
+        "..L.............",
+        "..LL............",
+        ".XCCX....X......",
+        ".XcCX...XcX.....",
+        ".XCCXXXXXCCX....",
+        ".XcCCCCCCcX.....",
+        ".XCCCCCCCCX.....",
+        ".XcCCYYYYcX.....",
+        ".XCCYbbYCCX.....",
+        ".XcCYBBYcX......",
+        ".XCCYbbYX.......",
+        ".XCCCCCCX.......",
+        ".XXXXXX.........",
+        "................",
+        "................",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "C", "c", "L", "Y", "b", "B"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "Solid", "DepthSorted"] }
+}

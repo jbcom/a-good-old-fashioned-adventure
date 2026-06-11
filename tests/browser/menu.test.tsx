@@ -63,9 +63,6 @@ async function startRun() {
   expectErrantStorybookChrome("title-panel");
   await input.keyboard("j");
   await expect.element(page.getByTestId("world-stage-shell")).toBeVisible();
-  await expect.element(page.getByTestId("dialogue-box")).toBeVisible();
-  await input.keyboard("j");
-  await wait(160);
   return input;
 }
 

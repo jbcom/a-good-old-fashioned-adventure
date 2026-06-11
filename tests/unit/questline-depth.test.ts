@@ -11,7 +11,7 @@ import {
 import { emitDialogueChoice, emitDialogueSeen, resolveDialogue } from "../../src/sim/dialogue";
 import { pushEvent } from "../../src/sim/events";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
-import { autoStartQuests } from "../../src/sim/quests";
+import { autoStartQuests, startQuest } from "../../src/sim/quests";
 import { step } from "../../src/sim/tick";
 import { FlagState, QuestLog } from "../../src/sim/traits";
 
@@ -131,6 +131,27 @@ describe("S6.4 quest runtime", () => {
     step(world);
     expect(world.get(QuestLog)?.completed).toContain("quest:oldwood-oath");
     expect(world.get(FlagState)?.values["flag:oldwood-oath-sworn"]).toBe(true);
+    expect(activeStage(world, "quest:dungeon-key")).toBe("seek-the-wyrm");
+  });
+
+  it("completes the key quest from the Castle Approach gate", () => {
+    const world = bootOnMap("map:castle-approach");
+    startQuest(world, "quest:dungeon-key");
+    pushEvent(world, { type: "enemy:defeated", archetypeId: "desert-wyrm", x: 620, y: 304 });
+    step(world);
+    expect(activeStage(world, "quest:dungeon-key")).toBe("claim-the-key");
+
+    pushEvent(world, { type: "item:acquired", itemId: "item:dungeon-key" });
+    step(world);
+    expect(activeStage(world, "quest:dungeon-key")).toBe("to-the-gate");
+
+    pushEvent(world, {
+      type: "zone:entered",
+      mapId: "map:castle-approach",
+      triggerId: "trigger:castle-gate-entry",
+    });
+    step(world);
+    expect(world.get(QuestLog)?.completed).toContain("quest:dungeon-key");
   });
 
   it("runs Lost Page Rowan as an escort-lite landmark route", () => {

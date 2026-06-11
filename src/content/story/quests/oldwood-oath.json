@@ -54,7 +54,11 @@
             "enterZone": { "map": "map:oldwood-forest", "trigger": "trigger:east-road" }
           },
           "to": "done",
-          "effects": [{ "setFlag": "flag:oldwood-oath-sworn" }, { "sfx": "interact" }]
+          "effects": [
+            { "setFlag": "flag:oldwood-oath-sworn" },
+            { "startQuest": "quest:dungeon-key" },
+            { "sfx": "interact" }
+          ]
         }
       ]
     },

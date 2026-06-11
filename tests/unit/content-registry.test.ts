@@ -20,10 +20,10 @@ import {
 describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
     expect(tiles.size).toBe(12);
-    expect(props.size).toBe(12);
+    expect(props.size).toBe(14);
     expect(sprites.size).toBe(3);
     expect(animations.size).toBe(6);
-    expect(maps.size).toBe(9);
+    expect(maps.size).toBe(10);
     expect(quests.size).toBe(7);
     expect(dialogueBanks.size).toBe(11);
     expect(characters.size).toBe(14);

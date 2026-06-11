@@ -4,6 +4,7 @@ import dungeonDef from "../../src/content/world/maps/castle-dungeon.json";
 import deepForestDef from "../../src/content/world/maps/deep-forest.json";
 import oldwoodDef from "../../src/content/world/maps/oldwood-forest.json";
 import overworldDef from "../../src/content/world/maps/overworld.json";
+import sunkenRoadDef from "../../src/content/world/maps/sunken-road.json";
 import { buildGrid, type MapGenInput } from "../../src/sim/mapgen";
 
 // Expectations mirror the prototype's buildGrids() output (kingdom_quest_rpg.tsx).
@@ -77,6 +78,7 @@ describe("dungeon generation", () => {
 describe("S6 exterior route generation", () => {
   const oldwood = buildGrid(oldwoodDef as MapGenInput);
   const deepForest = buildGrid(deepForestDef as MapGenInput);
+  const sunkenRoad = buildGrid(sunkenRoadDef as MapGenInput);
   const castleApproach = buildGrid(castleApproachDef as MapGenInput);
 
   it("lays readable road corridors through forest maps", () => {
@@ -93,5 +95,14 @@ describe("S6 exterior route generation", () => {
     expect(castleApproach[19][70]).toBe("tile:castle-road");
     expect(castleApproach[14][61]).toBe("tile:stone-floor");
     expect(castleApproach[6][63]).toBe("tile:mountain");
+  });
+
+  it("lays the Sunken Road as a desert threshold with old stone and wash", () => {
+    expect(sunkenRoad[19][4]).toBe("tile:path");
+    expect(sunkenRoad[19][52]).toBe("tile:path");
+    expect(sunkenRoad[18][42]).toBe("tile:castle-road");
+    expect(sunkenRoad[19][22]).toBe("tile:path");
+    expect(sunkenRoad[10][18]).toBe("tile:water");
+    expect(sunkenRoad[18][30]).toBe("tile:castle-road");
   });
 });

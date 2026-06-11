@@ -55,7 +55,7 @@
   "playerSpawn": { "x": 48, "y": 304 },
   "spawns": {
     "default": { "x": 48, "y": 304 },
-    "from-forest": { "x": 48, "y": 304 }
+    "from-sunken-road": { "x": 48, "y": 304 }
   },
   "entities": [
     { "ref": "prop:signpost", "x": 108, "y": 274, "note": "last warning sign" },
@@ -63,18 +63,28 @@
     { "ref": "prop:barrel", "x": 780, "y": 282, "note": "guard post barrel" },
     { "ref": "prop:castle-gatehouse", "x": 930, "y": 176, "note": "distant castle gatehouse" },
     { "ref": "char:gwydion", "x": 520, "y": 264, "dir": 1 },
-    { "enemy": "gate-sentry", "x": 880, "y": 382 },
-    { "enemy": "banner-knight", "x": 930, "y": 236 }
+    { "enemy": "gate-sentry", "x": 880, "y": 430 },
+    { "enemy": "banner-knight", "x": 1010, "y": 252 }
   ],
   "triggers": [
     {
       "id": "trigger:west-road",
       "kind": "portal",
-      "label": "Road back into Deep Forest",
-      "toMap": "map:deep-forest",
+      "label": "Road back to the Sunken Road",
+      "toMap": "map:sunken-road",
       "toSpawn": "from-approach",
       "sfx": "interact",
       "zone": { "x0": 0, "y0": 276, "x1": 28, "y1": 332 }
+    },
+    {
+      "id": "trigger:castle-gate-entry",
+      "kind": "portal",
+      "label": "Castle Dungeon Gate",
+      "toMap": "map:castle-dungeon",
+      "toSpawn": "entry",
+      "requiresFlag": "flag:has-dungeon-key",
+      "sfx": "interact",
+      "zone": { "x0": 902, "y0": 148, "x1": 970, "y1": 232 }
     }
   ]
 }

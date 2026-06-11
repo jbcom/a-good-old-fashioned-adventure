@@ -132,6 +132,31 @@ it("renders the authored castle approach road landmarks", async () => {
   expect(path).toBeTruthy();
 });
 
+it("renders the authored Sunken Road crossing and key-fight landmark", async () => {
+  const world = createGameWorld(3);
+  instantiateMap(world, "map:sunken-road", { classId: "ranger" });
+  world.queryFirst(IsPlayer)?.set(Transform, { x: 500, y: 304 });
+  world.set(CameraState, { x: 500, y: 304, shake: 0 });
+  for (let i = 0; i < 30; i++) step(world);
+
+  container = mountStageContainer();
+  root = createRoot(container);
+  root.render(
+    <StrictMode>
+      <GameStage world={world} />
+    </StrictMode>,
+  );
+
+  await expect
+    .poll(() => container?.querySelector<HTMLCanvasElement>("canvas[data-ready='1']"), {
+      timeout: 10_000,
+    })
+    .toBeTruthy();
+  await new Promise((resolve) => setTimeout(resolve, 600));
+  const path = await page.screenshot({ path: "game-stage-sunken-road.png" });
+  expect(path).toBeTruthy();
+});
+
 it("renders the S6 castle approach exterior staging", async () => {
   const world = createGameWorld(3);
   instantiateMap(world, "map:castle-approach", { classId: "knight" });
