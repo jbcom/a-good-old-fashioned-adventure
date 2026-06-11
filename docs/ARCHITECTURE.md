@@ -25,6 +25,12 @@ src/ui/        React DOM: landing, HUD, dialogue, menus, minimap, virtual pad
 src/app/       composition root
 ```
 
+`src/config/incremental.json` is the product loop contract. It owns currencies,
+run anchors, class unlock nodes, route-pack unlocks, and the upgrade-web graph
+described in `docs/INCREMENTAL-RESCUE-LOOP.md`. Runtime code reads that config
+through `src/lib/config.ts`; tests enforce graph connectivity and currency
+rarity before UI or sim code can rely on it.
+
 ## Renderer (decision record, 2026-06-10)
 
 **Chosen: three.js via @react-three/fiber as the sole world renderer,

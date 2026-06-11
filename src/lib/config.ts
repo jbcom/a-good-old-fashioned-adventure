@@ -8,6 +8,7 @@ import combatJson from "../config/combat.json";
 import dropsJson from "../config/drops.json";
 import enemiesJson from "../config/enemies.json";
 import engineJson from "../config/engine.json";
+import incrementalJson from "../config/incremental.json";
 import playerJson from "../config/player.json";
 import progressionJson from "../config/progression.json";
 import uiJson from "../config/ui.json";
@@ -49,6 +50,65 @@ export interface ClassDef {
   palette: string;
   attack: ClassAttack;
   ability: ClassAbility;
+}
+
+export type IncrementalCurrencyId = "coins" | "roses";
+
+export interface IncrementalCurrencyDef {
+  label: string;
+  shortLabel: string;
+  relativeVolume: "common" | "rare";
+  rarityRatioAgainstCoins?: number;
+  primarySources: string[];
+  spendRoles: string[];
+  hudPriority: number;
+}
+
+export interface IncrementalUpgradeNode {
+  id: string;
+  label: string;
+  category: "route" | "enemy" | "class" | "ability" | "map" | "relic";
+  cost: Partial<Record<IncrementalCurrencyId, number>>;
+  prerequisites: string[];
+  unlocks: string[];
+  classId?: string;
+  routePack?: string;
+  enemyFamily?: string;
+  ability?: string;
+}
+
+export interface IncrementalConfig {
+  loop: {
+    id: string;
+    name: string;
+    startClass: string;
+    routeShape: "south-to-north";
+    playerAnchor: "south";
+    princessAnchor: "north";
+    guardian: "dragon";
+    coreRunRequiresCastleInterior: boolean;
+    resultsMode: "upgrade-web";
+    targetGameplayAreaPercentPhone: number;
+  };
+  currencies: Record<IncrementalCurrencyId, IncrementalCurrencyDef>;
+  runRewards: Record<
+    string,
+    { currency: IncrementalCurrencyId; base?: number; eliteBonus?: number; perSegment?: number }
+  >;
+  upgradeWeb: {
+    root: string;
+    nodes: IncrementalUpgradeNode[];
+  };
+  classes: {
+    starting: string;
+    unlockable: string[];
+  };
+  routePacks: {
+    id: string;
+    label: string;
+    maps: string[];
+    role: string;
+  }[];
 }
 
 export interface EnemyArchetype {
@@ -95,10 +155,12 @@ export const engine = engineJson;
 export const player = playerJson;
 export const classes = classesJson as unknown as {
   roster: string[];
+  companionRoster?: string[];
   classes: Record<string, ClassDef>;
 };
 export const combat = combatJson;
 export const progression = progressionJson;
+export const incremental = incrementalJson as unknown as IncrementalConfig;
 export const drops = dropsJson;
 export const enemies = enemiesJson as unknown as {
   aiDefaults: { aggroRange: number; deaggroRange: number; patrolRange: number };

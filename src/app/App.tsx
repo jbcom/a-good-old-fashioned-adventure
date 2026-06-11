@@ -483,7 +483,7 @@ function TitleScreen({
     <section className="title-screen" data-testid="title-screen">
       <div className="title-panel" data-testid="title-panel" ref={panelRef}>
         <h1>A GOOD OLD FASHIONED ADVENTURE</h1>
-        <p className="dialogue-line">Choose your class. Press A to begin.</p>
+        <p className="dialogue-line">Begin as a knight. New callings wait in the upgrade web.</p>
         <div className="class-row">
           {classes.roster.map((classId) => (
             <button

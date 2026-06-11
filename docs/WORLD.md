@@ -7,12 +7,27 @@ domain: design
 
 # World Plan
 
-The expanded journey is a storybook road that starts in a village, crosses
-forest and desert thresholds, reaches a castle approach, descends into interior
-castle spaces, and ends in the dungeon already proven by the vertical slice.
-Every new region is content-first: maps live in `src/content/world/maps`,
-dialogue and quests live in `src/content/story`, and code only interprets the
-content contract.
+The world content now serves the incremental rescue loop defined in
+`docs/INCREMENTAL-RESCUE-LOOP.md`. The expanded journey is a source library of
+storybook roads, interiors, NPCs, props, enemies, and route consequences that
+can be unlocked into repeated princess-rescue runs. Every region remains
+content-first: maps live in `src/content/world/maps`, dialogue and quests live
+in `src/content/story`, and code only interprets the content contract.
+
+## Incremental Positioning
+
+The baseline run is one bottom-to-top rescue route: player south, princess
+north, dragon as guardian, then a between-run upgrade web. The existing long
+route is not discarded; it is recast as unlockable route packs:
+
+- Hearthwake Village becomes the warm opening-route modifier, economy source,
+  and service cluster.
+- Oldwood and Deep Forest become branching path pressure, safe-passage
+  objectives, and rose-awarding road mastery.
+- Sunken Road and Desert Ruins become optional hazard/shortcut packs.
+- Castle Approach becomes the siege-threshold route pack.
+- Castle interiors become rose-gated side loops or late-run route mutations
+  rather than mandatory navigation before every rescue.
 
 ## Region Map
 

@@ -1,0 +1,197 @@
+{
+  "$schema": "../../schemas/config.schema.json",
+  "loop": {
+    "id": "princess-rescue",
+    "name": "Princess Rescue",
+    "startClass": "knight",
+    "routeShape": "south-to-north",
+    "playerAnchor": "south",
+    "princessAnchor": "north",
+    "guardian": "dragon",
+    "coreRunRequiresCastleInterior": false,
+    "resultsMode": "upgrade-web",
+    "targetGameplayAreaPercentPhone": 80
+  },
+  "currencies": {
+    "coins": {
+      "label": "Coins",
+      "shortLabel": "C",
+      "relativeVolume": "common",
+      "primarySources": ["enemy-defeated", "road-skirmish", "repeatable-route"],
+      "spendRoles": ["route-tools", "enemy-variety", "class-access", "practical-upgrades"],
+      "hudPriority": 1
+    },
+    "roses": {
+      "label": "Roses",
+      "shortLabel": "R",
+      "relativeVolume": "rare",
+      "rarityRatioAgainstCoins": 0.18,
+      "primarySources": ["princess-rescued", "objective-mastered", "road-mastered"],
+      "spendRoles": ["class-defining-abilities", "princess-boons", "map-mutations"],
+      "hudPriority": 2
+    }
+  },
+  "runRewards": {
+    "enemyDefeated": { "currency": "coins", "base": 3, "eliteBonus": 7 },
+    "roadTravelled": { "currency": "coins", "perSegment": 2 },
+    "objectiveCleared": { "currency": "roses", "base": 1 },
+    "princessRescued": { "currency": "roses", "base": 3 }
+  },
+  "upgradeWeb": {
+    "root": "upgrade:first-vow",
+    "nodes": [
+      {
+        "id": "upgrade:first-vow",
+        "label": "First Vow",
+        "category": "relic",
+        "cost": {},
+        "prerequisites": [],
+        "unlocks": ["upgrade:oldwood-bend", "upgrade:ranger-trail", "upgrade:dragon-wake"]
+      },
+      {
+        "id": "upgrade:oldwood-bend",
+        "label": "Oldwood Bend",
+        "category": "route",
+        "cost": { "coins": 35 },
+        "prerequisites": ["upgrade:first-vow"],
+        "routePack": "oldwood",
+        "unlocks": ["upgrade:thornwood-mastered", "upgrade:rogue-shortcut"]
+      },
+      {
+        "id": "upgrade:ranger-trail",
+        "label": "Ranger Trail",
+        "category": "class",
+        "cost": { "coins": 50 },
+        "prerequisites": ["upgrade:first-vow"],
+        "classId": "ranger",
+        "unlocks": ["upgrade:ranger-leap-rose"]
+      },
+      {
+        "id": "upgrade:dragon-wake",
+        "label": "Dragon Wake",
+        "category": "enemy",
+        "cost": { "coins": 40 },
+        "prerequisites": ["upgrade:first-vow"],
+        "enemyFamily": "dragon",
+        "unlocks": ["upgrade:sorcerer-cinder"]
+      },
+      {
+        "id": "upgrade:thornwood-mastered",
+        "label": "Thornwood Mastered",
+        "category": "map",
+        "cost": { "coins": 80 },
+        "prerequisites": ["upgrade:oldwood-bend"],
+        "routePack": "deep-forest",
+        "unlocks": ["upgrade:bard-road-song"]
+      },
+      {
+        "id": "upgrade:rogue-shortcut",
+        "label": "Rogue Shortcut",
+        "category": "class",
+        "cost": { "coins": 90 },
+        "prerequisites": ["upgrade:oldwood-bend"],
+        "classId": "rogue",
+        "unlocks": ["upgrade:sunken-shortcut"]
+      },
+      {
+        "id": "upgrade:ranger-leap-rose",
+        "label": "Princess-Fletched Leap",
+        "category": "ability",
+        "cost": { "roses": 3 },
+        "prerequisites": ["upgrade:ranger-trail"],
+        "classId": "ranger",
+        "ability": "leap",
+        "unlocks": []
+      },
+      {
+        "id": "upgrade:sorcerer-cinder",
+        "label": "Sorcerer Cinder",
+        "category": "class",
+        "cost": { "coins": 120, "roses": 3 },
+        "prerequisites": ["upgrade:dragon-wake"],
+        "classId": "sorcerer",
+        "unlocks": ["upgrade:castle-candle-loop"]
+      },
+      {
+        "id": "upgrade:bard-road-song",
+        "label": "Bard's Road Song",
+        "category": "class",
+        "cost": { "coins": 110, "roses": 2 },
+        "prerequisites": ["upgrade:thornwood-mastered"],
+        "classId": "bard",
+        "unlocks": ["upgrade:princess-boon"]
+      },
+      {
+        "id": "upgrade:sunken-shortcut",
+        "label": "Sunken Road Shortcut",
+        "category": "route",
+        "cost": { "coins": 130 },
+        "prerequisites": ["upgrade:rogue-shortcut"],
+        "routePack": "sunken-road",
+        "unlocks": ["upgrade:castle-approach-siege"]
+      },
+      {
+        "id": "upgrade:castle-approach-siege",
+        "label": "Siege Approach",
+        "category": "map",
+        "cost": { "coins": 170, "roses": 4 },
+        "prerequisites": ["upgrade:sunken-shortcut"],
+        "routePack": "castle-approach",
+        "unlocks": []
+      },
+      {
+        "id": "upgrade:castle-candle-loop",
+        "label": "Candlelit Castle Loop",
+        "category": "route",
+        "cost": { "roses": 5 },
+        "prerequisites": ["upgrade:sorcerer-cinder"],
+        "routePack": "castle-interior",
+        "unlocks": []
+      },
+      {
+        "id": "upgrade:princess-boon",
+        "label": "Princess Boon",
+        "category": "relic",
+        "cost": { "roses": 4 },
+        "prerequisites": ["upgrade:bard-road-song"],
+        "unlocks": []
+      }
+    ]
+  },
+  "classes": {
+    "starting": "knight",
+    "unlockable": ["ranger", "rogue", "bard", "sorcerer"]
+  },
+  "routePacks": [
+    {
+      "id": "oldwood",
+      "label": "Oldwood Bend",
+      "maps": ["map:oldwood-forest"],
+      "role": "first branching road with forest pressure and safe-passage objectives"
+    },
+    {
+      "id": "deep-forest",
+      "label": "Thornwood Dusk",
+      "maps": ["map:deep-forest"],
+      "role": "rose-awarding road mastery and inhabited woodland scenes"
+    },
+    {
+      "id": "sunken-road",
+      "label": "Sunken Road",
+      "maps": ["map:sunken-road", "map:desert-ruins"],
+      "role": "hazard shortcut, desert silhouettes, and optional ruin objectives"
+    },
+    {
+      "id": "castle-approach",
+      "label": "Siege Approach",
+      "maps": ["map:castle-approach", "map:castle-yard"],
+      "role": "threshold pressure before the dragon rescue"
+    },
+    {
+      "id": "castle-interior",
+      "label": "Candlelit Castle Loop",
+      "maps": ["map:castle-hall", "map:castle-library", "map:castle-armory"],
+      "role": "rose-gated side loop with scribe and heraldic objectives"
+    }
+  ]
+}

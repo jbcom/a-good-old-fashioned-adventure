@@ -163,8 +163,8 @@ export function playerAttack(world: World): void {
   sfx(world, "slash");
   const reach = attack.reach ?? 28;
   const swing: Box = {
-    x: transform.x + aim.x * reach - reach / 2,
-    y: transform.y + aim.y * reach + combat.hitboxes.swingVerticalOffset,
+    x: transform.x + aim.x * (reach / 2) - reach / 2,
+    y: transform.y + aim.y * (reach / 2) + combat.hitboxes.swingVerticalOffset,
     w: reach,
     h: combat.hitboxes.swingHeight,
   };

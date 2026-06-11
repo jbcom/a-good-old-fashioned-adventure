@@ -56,7 +56,7 @@ describe("spawnPlayer", () => {
 
   it("rejects unknown classes", () => {
     const world = createGameWorld();
-    expect(() => spawnPlayer(world, "bard", 0, 0)).toThrow(/unknown class/);
+    expect(() => spawnPlayer(world, "minstrel", 0, 0)).toThrow(/unknown class/);
   });
 });
 

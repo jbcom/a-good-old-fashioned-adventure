@@ -13,6 +13,8 @@
     },
     "palette:ranger": { "S": "#2c6114", "s": "#142a07", "R": "#ffcd94", "r": "#a88f00" },
     "palette:wizard": { "S": "#00d2f7", "s": "#1a6fa8", "R": "#ffffff", "r": "#b2bec7" },
+    "palette:bard": { "S": "#7f4f2f", "s": "#3b2416", "R": "#f1d385", "r": "#b07a2c" },
+    "palette:sorcerer": { "S": "#5b211c", "s": "#24100d", "R": "#f1d385", "r": "#c04e32" },
     "palette:princess": {},
     "palette:woodcutter": { "S": "#946629", "s": "#4a2511", "R": "#6fe014", "r": "#2c6114" },
     "palette:keeper": { "S": "#cfa153", "s": "#946629", "R": "#87e0f2", "r": "#1a6fa8" },

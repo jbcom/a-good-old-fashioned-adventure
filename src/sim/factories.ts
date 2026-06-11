@@ -227,7 +227,8 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
 
   for (const spawn of def.entities) {
     if (spawn.spawnRule === "unchosen-companions") {
-      const others = classes.roster.filter((c) => c !== opts.classId);
+      const companionRoster = classes.companionRoster ?? classes.roster;
+      const others = companionRoster.filter((c) => c !== opts.classId);
       for (const [i, pos] of (spawn.positions ?? []).entries()) {
         const companion = others[i];
         if (companion) spawnNpc(world, `char:companion-${companion}`, pos.x, pos.y);

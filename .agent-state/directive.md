@@ -105,6 +105,13 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S8.23 Composition-driven route revision: use the new route-window rules to add another gameplay verb and stronger tile/prop variation to the weakest declared open stretches, with no rule exceptions unless the map states a clear travel or threshold purpose
 - [ ] S8.24 Composition budget tuning pass: tighten `composition.routeWindows` thresholds after another screenshot sweep, reduce any remaining openReason reliance, and add at least one more authored route verb where a declared window still leans on travel emptiness
 
+### S9 Incremental rescue pivot
+- [ ] S9.1 Pillar docs and config contract: define the mobile incremental princess-rescue loop, coins/roses economy, spiderweb upgrade graph, class unlocks, and route-pack positioning before runtime changes
+- [ ] S9.2 Upgrade-web data model: persist coins, roses, rescue count, unlocked classes, unlocked route packs, and purchased upgrade nodes through Drizzle/Capacitor SQLite plus web validation
+- [ ] S9.3 Results and upgrade UI: turn princess rescue into a results panel and between-run spiderweb upgrade screen with public A/B and directional input validation
+- [ ] S9.4 Rescue-route runtime slice: build the bottom-to-top core rescue map with knight start, princess top anchor, dragon guard, compact mobile HUD currencies, and playthrough coverage
+- [ ] S9.5 Second-run proof: extend the player governor to rescue, spend a connected upgrade, start another run, and observe the unlocked route/class/enemy change through public controls
+
 ## Learnings log (forward sweeps append here)
 - yuka FleeBehavior defaults panicDistance=10 — silently inert beyond it; always set panicDistance explicitly when kiting.
 - 2026-06-10: prior session's deep-research workflow + reviewer died on session exit — background work must be treated as lost across session boundaries; redo in-queue (S2.1).
@@ -164,3 +171,4 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - 2026-06-11 S8.20 encounter correction: route encounters should recover the main lane after optional layby movement. The courier detour proved that public-control playthroughs need explicit steering back into portal y-bands, and screenshots still show upper-band Sunken Road emptiness that must be reduced with authored silhouettes, not UI chrome.
 - 2026-06-11 S8.21/S8.22 composition correction: visual variety is now a testable content contract. Mandatory exterior maps declare route windows with tile-dominance caps, major anchors, minor prop cadence, and explicit `openReason` text for sparse travel/threshold stretches; new maps should fail tests before they become repeated grass, sand, or leaf carpets.
 - 2026-06-11 S8.23 composition revision correction: do not leave first-impression route windows as justified emptiness when a small playable verb will do. Castle Approach's west window now replaces its openReason exception with Aveline Dustcoat, cloak/kettle props, a staggered road pocket, and a Gwydion payoff while preserving the existing hint event.
+- 2026-06-11 S9 pivot correction: the product loop is now the princess rescue itself. Existing bespoke maps, props, NPCs, shops, interiors, and encounters should become unlockable route packs and upgrade-web branches around a repeatable bottom-to-top rescue run with coins from enemies and rarer roses from princess/objective mastery.

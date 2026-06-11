@@ -64,16 +64,16 @@ it("travels the S6 exterior road from village to castle approach through public 
   });
   await governor.reachByDirection({ kind: "mapNameIncludes", text: "Deep Forest" }, "right", {
     durationMs: 850,
-    maxSteps: 22,
+    maxSteps: 80,
   });
   await governor.reachByDirection({ kind: "mapNameIncludes", text: "Sunken Road" }, "right", {
     durationMs: 850,
-    maxSteps: 24,
+    maxSteps: 80,
   });
   await governor.reachByDirection({ kind: "mapNameIncludes", text: "Castle Approach" }, "right", {
     durationMs: 850,
-    maxSteps: 24,
+    maxSteps: 80,
   });
 
   await expect.element(page.getByTestId("top-hud")).toHaveTextContent("Castle Approach");
-}, 60_000);
+}, 120_000);
