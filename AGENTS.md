@@ -18,18 +18,16 @@ spec in `docs/CONTENT-ARCHITECTURE.md`). Code interprets content, never
 embeds it. The original prototype is `kingdom_quest_rpg.tsx` (reference
 only — it does not run; see decisions table in the spec).
 
-Repo is pre-scaffold — no `package.json` yet. Next work unit: scaffold the
-arcade-game dialect (pnpm + Vite + TS + Capacitor + Biome + Playwright +
-release-please) plus the content loader (Koota traits + React bindings +
-ajv validation), then verify and fill in the real commands below.
+The repo is scaffolded and in continuous build-out on `feat/content-architecture`.
 
-- **Run:** _not scaffolded yet — will be `pnpm dev` once package.json exists_
-- **Test:** _not scaffolded yet — will be `pnpm test` / `pnpm test:browser` / `pnpm test:e2e`_
-- **Build:** _not scaffolded yet — will be `pnpm build`_
-- **Deploy:** _not scaffolded yet — Android via `pnpm cap:sync` + `pnpm cap:run:android`_
+- **Run:** `pnpm dev`
+- **Test:** `pnpm lint` / `pnpm typecheck` / `pnpm test` / `pnpm test:browser`
+- **Build:** `pnpm build`
+- **Android:** `pnpm cap:sync`; native compile check is `cd android && ./gradlew :app:assembleDebug`
+- **Release:** release-please manages `CHANGELOG.md`, `package.json`, and `.release-please-manifest.json`
 
 ## Notes
 
-- `.agent-state/directive.md` seeded with Status: RELEASED — flip to ACTIVE to start a continuous work session.
-- `.Codex/gates.json` seeded with the arcade-game defaults (sim-purity bans, visual/audio coverage rules, `pnpm cap:sync` evidence). Adjust globs once the real `src/` layout exists.
-- Git repo initialized on `main` 2026-06-10; no remote yet.
+- `.agent-state/directive.md` is ACTIVE and is the durable work queue.
+- `.claude/gates.json` enforces visual/audio/sim and Capacitor evidence rules.
+- Browser validation is not optional: `tests/browser/playthrough.test.tsx` drives the public player journey through real keyboard controls.

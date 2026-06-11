@@ -1,37 +1,45 @@
-# A Good Old Fashioned Adventure
+# A Good Old-Fashioned Adventure
 
-A 16-bit-styled action RPG for web and Android (Capacitor), built on a fully
-data-driven content pipeline: every tile, prop, sprite, palette, quest, and
-line of dialogue is declarative JSON that compiles into
-[Koota](https://github.com/pmndrs/koota) ECS traits and React bindings, with
-[anime.js](https://animejs.com)-driven pixel-sprite animation.
+A storybook action RPG for web and Android. The game presents 16-bit pixel
+designs inside an HD-2D/r3f diorama stage, with React DOM UI, ToneJS audio,
+AnimeJS motion, Yuka enemy behaviors, and Capacitor Android packaging.
 
-The original single-file prototype lives at `kingdom_quest_rpg.tsx` and is
-being decomposed into:
+The original single-file prototype remains at `kingdom_quest_rpg.tsx` as
+reference-only history. The current game is data-driven:
 
 | Directory | What lives there |
-|-----------|------------------|
-| `src/config/` | Numeric tunables — movement, combat, progression, AI, audio synth recipes, UI theme |
-| `src/content/palettes/` | The master palette and recolor swaps (knight/ranger/wizard are palette swaps of one hero model) |
-| `src/content/sprites/` | Recolorable pixel-sprite character models (generation instructions, not baked images) |
-| `src/content/tiles/` | Tile primitives as declarative draw-op layers |
-| `src/content/props/` | Foreground prop primitives (chests, castle, etc.) |
-| `src/content/animations/` | Named anime.js timeline specs (idle-bob, hit-flash, …) |
-| `src/content/world/` | Map definitions: size, generation ops, spawn tables, trigger zones |
-| `src/content/story/` | Cast registry, flags, items, quest graphs, dialogue banks with slot assignment |
-| `schemas/` | JSON Schema for every content kind |
-| `docs/` | Architecture and content-format specs |
+| --- | --- |
+| `src/config/` | Numeric tunables: movement, combat, progression, AI, audio, UI |
+| `src/content/` | Tiles, props, sprites, palettes, animations, maps, story, dialogue |
+| `schemas/` | JSON Schema for config and content files |
+| `src/sim/` | Pure Koota/Yuka simulation systems |
+| `src/render/` | r3f/three.js world stage and pixel atlas pipeline |
+| `src/persistence/` | Drizzle schema, Capacitor SQLite saves, Preferences settings |
+| `docs/` | Pillar docs for architecture, design, world, platform, testing |
 
-Start with [`docs/CONTENT-ARCHITECTURE.md`](docs/CONTENT-ARCHITECTURE.md) —
-it explains the ID system, the quest-graph format (A→…midpoints…→Z with
-dialogue and item triggers), and how dialogue slots are assigned at
-story-writing time without touching code.
+## Commands
 
-## Status
+- `pnpm dev` - Vite dev server.
+- `pnpm lint` - Biome check.
+- `pnpm typecheck` - TypeScript check.
+- `pnpm test` - unit/content/sim/platform tests.
+- `pnpm test:browser` - headed Vitest browser suite with GPU flags locally.
+- `pnpm build` - production Vite build.
+- `pnpm cap:sync` - build web assets and sync Capacitor Android.
+- `cd android && ./gradlew :app:assembleDebug` - native debug APK build.
 
-Pre-scaffold: the content architecture and config decomposition land first;
-the Vite + TypeScript + Capacitor build, the Koota runtime, and the React
-bindings follow.
+## Core Docs
+
+Start with:
+
+- `docs/ARCHITECTURE.md`
+- `docs/CONTENT-ARCHITECTURE.md`
+- `docs/DESIGN.md`
+- `docs/WORLD.md`
+- `docs/PLATFORM.md`
+- `TESTING.md`
+
+The active long-running build directive is `.agent-state/directive.md`.
 
 ## License
 
