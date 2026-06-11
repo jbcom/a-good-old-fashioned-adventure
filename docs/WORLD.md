@@ -531,6 +531,28 @@ more authored than a path with obstacles:
    the player buys the stable service, reaches Oldwood, receives the roadward
    response, and sees the Hermit acknowledge the road mark.
 
+## Twenty-First Content-Depth Slice
+
+Deep Forest must stop reading as a pass-through lane between Oldwood and the
+desert. The next visual-story density pass adds a working road-life scene on the
+mandatory route:
+
+1. Add `char:fern-mender`, a named moving NPC on the Deep Forest lower track,
+   with a content-authored Yuka patrol loop and dialogue bank
+   `dlgbank:fern-mender`.
+2. Add at least two bespoke Deep Forest props, `prop:fern-mender-cart` and
+   `prop:glowcap-ring`, with outlined pixel grids and five or more visible
+   recolor channels each so the scene reads as hand-authored set dressing.
+3. Add `quest:deep-forest-fern-light`, a short route questlet that starts on
+   `map:deep-forest`, asks the player to speak with Linnet Fernwise, completes
+   on `dlg:fern-mender.start:accepted`, and sets
+   `flag:fern-mender-greeted`.
+4. Add unit coverage for prop richness, map placement, the patrol trait/Yuka
+   movement, dialogue/quest reduction, and registry counts.
+5. Add headed browser validation with desktop and phone evidence, then expand
+   the full public-control playthrough so the player stops at the fern-mender
+   before crossing into Sunken Road.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

@@ -35,6 +35,18 @@
   },
   "entities": [
     { "ref": "prop:broadleaf-tree", "x": 180, "y": 236, "note": "thicker canopy" },
+    {
+      "ref": "prop:fern-mender-cart",
+      "x": 222,
+      "y": 354,
+      "note": "Linnet's fern-lamp cart beside the lower track"
+    },
+    {
+      "ref": "prop:glowcap-ring",
+      "x": 278,
+      "y": 338,
+      "note": "glowcap ring marking the route rhyme"
+    },
     { "ref": "prop:stump", "x": 308, "y": 336, "note": "mossy stump" },
     {
       "ref": "prop:fallen-log",
@@ -68,6 +80,22 @@
       "y": 274,
       "dir": 1,
       "note": "Lost Page Rowan near the upper animal track"
+    },
+    {
+      "ref": "char:fern-mender",
+      "x": 220,
+      "y": 320,
+      "dir": 1,
+      "patrol": {
+        "points": [
+          { "x": 220, "y": 320 },
+          { "x": 284, "y": 320 },
+          { "x": 284, "y": 348 },
+          { "x": 220, "y": 348 }
+        ],
+        "speed": 22
+      },
+      "note": "moving road-life scene on the lower track"
     },
     {
       "spawnRule": "unchosen-companions",

@@ -22,6 +22,7 @@ describe("createGameWorld", () => {
       "flag:castle-armory-seen": false,
       "flag:castle-letters-cleared": false,
       "flag:castle-library-read": false,
+      "flag:fern-mender-greeted": false,
       "flag:has-dungeon-key": false,
       "flag:lost-page-guided": false,
       "flag:morning-errands-done": false,

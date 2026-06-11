@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:fern-mender",
+  "kind": "dialogue-bank",
+  "speaker": "char:fern-mender",
+  "slots": [
+    { "when": { "flag": "flag:fern-mender-greeted" }, "node": "after" },
+    {
+      "when": { "quest": "quest:deep-forest-fern-light", "stage": "greet-fern-mender" },
+      "node": "start"
+    },
+    { "default": true, "node": "passing" }
+  ],
+  "nodes": {
+    "start": {
+      "lines": [
+        "I am Linnet Fernwise, mender of fern-lamps and little road courtesies. These glowcaps are not stars, but they do their best.",
+        "When the lower track turns shy, count two fern-lamps, then walk where the moss is brightest."
+      ],
+      "choices": [{ "id": "accepted", "text": "Remember the fern-lamps." }],
+      "emits": "dlg:fern-mender.start"
+    },
+    "after": {
+      "lines": [
+        "Two fern-lamps, bright moss, then east. If a road gives you a rhyme, it is only being polite."
+      ],
+      "emits": "dlg:fern-mender.after"
+    },
+    "passing": {
+      "lines": [
+        "Mind the cart wheel. It squeaks in Old Speech and refuses to translate for strangers."
+      ],
+      "emits": "dlg:fern-mender.passing"
+    }
+  }
+}

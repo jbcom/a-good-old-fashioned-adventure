@@ -18,6 +18,10 @@
       "default": false,
       "description": "The player has read the castle library archive page about the dungeon seal."
     },
+    "flag:fern-mender-greeted": {
+      "default": false,
+      "description": "Linnet Fernwise has taught the player why the Deep Forest lower track keeps fern-lamps lit."
+    },
     "flag:has-dungeon-key": {
       "default": false,
       "description": "Player holds the brass dungeon key dropped by the Desert Wyrm; unlocks the castle gate."

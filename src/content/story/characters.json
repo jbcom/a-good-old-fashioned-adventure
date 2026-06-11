@@ -138,6 +138,15 @@
       "dialogue": "dlgbank:lost-page",
       "note": "Escort-lite Deep Forest NPC guided by landmark zones."
     },
+    "char:fern-mender": {
+      "name": "Linnet Fernwise",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:fern-mender",
+      "portraitColor": "#4f7f45",
+      "dialogue": "dlgbank:fern-mender",
+      "note": "Deep Forest mender whose walking loop and fern-lamp work make the lower track feel inhabited."
+    },
     "char:desert-pilgrim": {
       "name": "Pilgrim Safra",
       "role": "npc",

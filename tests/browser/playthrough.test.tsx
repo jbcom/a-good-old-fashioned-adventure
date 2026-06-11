@@ -385,6 +385,12 @@ it("plays the expanded road from title to the dungeon gate through public contro
 
   await walkToOrMap(input, 1000, 304, "map:deep-forest", 24);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:deep-forest");
+  await walkTo(input, 236, 320, 22);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Linnet Fernwise");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("fern-lamps");
+  await pressA(input);
+  await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("Linnet Fernwise");
   await walkToOrMap(input, 1068, 304, "map:sunken-road", 24);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:sunken-road");
   await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Sunken Road");
