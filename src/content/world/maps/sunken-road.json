@@ -41,6 +41,22 @@
       "y0": 18,
       "y1": 20,
       "note": "broken stone footing around the sandwyrm crossing"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 21,
+      "x0": 39,
+      "x1": 48,
+      "note": "shaded courier layby below the old road"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 22,
+      "x0": 41,
+      "x1": 46,
+      "note": "shaded courier layby lower tread"
     }
   ],
   "playerSpawn": { "x": 48, "y": 304 },
@@ -58,6 +74,40 @@
     { "ref": "prop:barrel", "x": 420, "y": 260, "note": "half-buried caravan barrel" },
     { "ref": "prop:sandstone-arch", "x": 512, "y": 286, "note": "fallen arch above the old road" },
     { "ref": "prop:broken-cart", "x": 560, "y": 346, "note": "broken supply cache" },
+    {
+      "ref": "prop:shade-cloth-rig",
+      "x": 654,
+      "y": 344,
+      "note": "courier shade rig in the player's lower lane"
+    },
+    {
+      "ref": "prop:water-jar-stand",
+      "x": 704,
+      "y": 354,
+      "note": "water jars beside Celia's courier stop"
+    },
+    {
+      "ref": "prop:wind-ribbon-cairn",
+      "x": 744,
+      "y": 334,
+      "note": "ribbon cairn marking the layby warning"
+    },
+    {
+      "ref": "char:sunken-courier",
+      "x": 690,
+      "y": 336,
+      "dir": -1,
+      "patrol": {
+        "points": [
+          { "x": 656, "y": 336 },
+          { "x": 732, "y": 336 },
+          { "x": 732, "y": 360 },
+          { "x": 656, "y": 360 }
+        ],
+        "speed": 24
+      },
+      "note": "Celia Knotwell paces the shaded warning layby"
+    },
     { "ref": "prop:castle", "x": 700, "y": 252, "note": "distant ruin silhouette" },
     { "ref": "prop:barrel", "x": 760, "y": 338, "note": "last caravan barrel before the castle" },
     { "enemy": "desert-wyrm", "x": 360, "y": 304 }

@@ -33,6 +33,7 @@ describe("createGameWorld", () => {
       "flag:shop-sample-claimed": false,
       "flag:stable-oats-bought": false,
       "flag:sunken-cart-read": false,
+      "flag:sunken-courier-warned": false,
       "flag:tavern-song-learned": false,
       "flag:village-letter-basket-read": false,
     });

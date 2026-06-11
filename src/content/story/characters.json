@@ -172,6 +172,15 @@
       "dialogue": "dlgbank:desert-pilgrim",
       "note": "Desert ruins guide who turns the mural into a readable landmark loop."
     },
+    "char:sunken-courier": {
+      "name": "Celia Knotwell",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:sunken-courier",
+      "portraitColor": "#8f7657",
+      "dialogue": "dlgbank:sunken-courier",
+      "note": "Moving Sunken Road courier who turns the shaded layby into a route encounter."
+    },
     "char:sunken-cart-ledger": {
       "name": "Splintered Cart Ledger",
       "role": "voice",

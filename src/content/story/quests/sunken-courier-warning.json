@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:sunken-courier-warning",
+  "kind": "quest",
+  "title": "The Courier's Ribbon",
+  "act": 3,
+  "startOn": { "enterMap": "map:sunken-road" },
+  "start": "take-warning",
+  "stages": [
+    {
+      "id": "take-warning",
+      "log": "Take Celia Knotwell's road warning from the shaded Sunken Road layby.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:sunken-courier.warning:accepted" },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:sunken-courier-warned" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

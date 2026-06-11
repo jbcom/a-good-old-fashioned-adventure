@@ -5,6 +5,14 @@
   "speaker": "char:castle-scribe",
   "slots": [
     { "when": { "flag": "flag:castle-letters-cleared" }, "node": "after" },
+    {
+      "when": {
+        "quest": "quest:castle-letters",
+        "stage": "find-scribe",
+        "flag": "flag:sunken-courier-warned"
+      },
+      "node": "briefing-with-courier"
+    },
     { "when": { "quest": "quest:castle-letters", "stage": "find-scribe" }, "node": "briefing" },
     { "when": { "quest": "quest:castle-letters", "stage": "report-scribe" }, "node": "report" },
     {
@@ -21,6 +29,14 @@
       "lines": [
         "Castle Scribe Elowen, at your service and only slightly buried in dust.",
         "The library keeps the old seal-name; the armory keeps the banner that proves it. Bring me both truths before the dungeon stair."
+      ],
+      "choices": [{ "id": "search", "text": "Search the library and armory." }],
+      "emits": "dlg:castle-scribe.briefing"
+    },
+    "briefing-with-courier": {
+      "lines": [
+        "Castle Scribe Elowen, at your service. Celia Knotwell's ribbon-word arrived on your boots before her cart could manage it.",
+        "If the Sunken Road is shedding stones, we shall answer with ink and thread: library seal-name, armory banner, then the dungeon stair."
       ],
       "choices": [{ "id": "search", "text": "Search the library and armory." }],
       "emits": "dlg:castle-scribe.briefing"

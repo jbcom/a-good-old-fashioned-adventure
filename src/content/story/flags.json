@@ -46,6 +46,10 @@
       "default": false,
       "description": "The player has read Pilgrim Safra's Sunken Road mural inside the desert ruins."
     },
+    "flag:sunken-courier-warned": {
+      "default": false,
+      "description": "The player has accepted Celia Knotwell's warning from the shaded Sunken Road layby."
+    },
     "flag:lost-page-guided": {
       "default": false,
       "description": "Lost Page Rowan has been guided from the Deep Forest oak back toward the old road."

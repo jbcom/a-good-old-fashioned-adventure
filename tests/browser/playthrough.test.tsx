@@ -157,28 +157,6 @@ async function walkToOrMap(
   );
 }
 
-async function holdRightUntilMap(
-  input: ReturnType<typeof userEvent.setup>,
-  mapId: string,
-  maxSteps: number,
-  durationMs = 700,
-) {
-  for (let i = 0; i < maxSteps; i++) {
-    const pos = shell();
-    if (pos.mode !== "playing") {
-      throw new Error(
-        `hold-right left play mode=${pos.mode}; wanted=${mapId}; map=${pos.mapId}; x=${pos.x}; y=${pos.y}; hp=${pos.hp}; enemies=${pos.enemies}`,
-      );
-    }
-    if (pos.mapId === mapId) return;
-    await hold(input, "ArrowRight", durationMs);
-  }
-  const pos = shell();
-  throw new Error(
-    `failed to hold right into ${mapId}; ended at ${pos.x},${pos.y}; map=${pos.mapId}; hp=${pos.hp}`,
-  );
-}
-
 async function castUntilEnemyDrops(
   input: ReturnType<typeof userEvent.setup>,
   before: number,
@@ -247,6 +225,31 @@ async function collectDungeonKeyFromWyrm(input: ReturnType<typeof userEvent.setu
     `dungeon key was not collected after corpse sweep; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; quest=${textOf(
       "quest-log",
     )}`,
+  );
+}
+
+async function talkToSunkenCourier(input: ReturnType<typeof userEvent.setup>) {
+  const meetPoints = [
+    [690, 336],
+    [720, 336],
+    [732, 360],
+    [656, 360],
+  ] as const;
+  for (const [x, y] of meetPoints) {
+    await walkTo(input, x, y, 16);
+    await pressA(input);
+    await wait(120);
+    if (textOf("dialogue-box").includes("Celia Knotwell")) {
+      await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("ribbon-word");
+      await pressA(input);
+      await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("Celia Knotwell");
+      return;
+    }
+  }
+  throw new Error(
+    `Celia Knotwell dialogue did not open; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; dialogue=${textOf(
+      "dialogue-box",
+    )}; quest=${textOf("quest-log")}`,
   );
 }
 
@@ -449,10 +452,8 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await expect
     .poll(() => textOf("quest-log"), { timeout: 10_000 })
     .toContain("Castle dungeon gates");
-  await hold(input, "ArrowRight", 1600);
-  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Castle dungeon gates");
-
-  await holdRightUntilMap(input, "map:castle-approach", 10);
+  await talkToSunkenCourier(input);
+  await walkToOrMap(input, 868, 304, "map:castle-approach", 20);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-approach");
   await walkToOrMap(input, 930, 210, "map:castle-yard", 28);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-yard");
@@ -464,6 +465,7 @@ it("plays the expanded road from title to the dungeon gate through public contro
   expect(await page.screenshot({ path: "playthrough-castle-hall.png" })).toBeTruthy();
   await pressA(input);
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Castle Scribe");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Celia Knotwell");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("library");
   await pressA(input);
   await expect.element(page.getByTestId("quest-log")).toHaveTextContent("library archive");

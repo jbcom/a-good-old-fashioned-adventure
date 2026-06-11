@@ -1,0 +1,36 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:sunken-courier",
+  "kind": "dialogue-bank",
+  "speaker": "char:sunken-courier",
+  "slots": [
+    { "when": { "flag": "flag:sunken-courier-warned" }, "node": "after" },
+    {
+      "when": { "quest": "quest:sunken-courier-warning", "stage": "take-warning" },
+      "node": "warning"
+    },
+    { "default": true, "node": "road-work" }
+  ],
+  "nodes": {
+    "warning": {
+      "lines": [
+        "Celia Knotwell, road courier, currently outpaced by sand and bad manners.",
+        "Carry this ribbon-word to the castle scribe: the Sunken Road is shedding its old stones into the wash."
+      ],
+      "choices": [{ "id": "accepted", "text": "Carry the courier's warning." }],
+      "emits": "dlg:sunken-courier.warning"
+    },
+    "after": {
+      "lines": [
+        "The shade is holding, the jars are full, and your feet are quicker than my cart. That is enough good news for one road."
+      ],
+      "emits": "dlg:sunken-courier.after"
+    },
+    "road-work": {
+      "lines": [
+        "Mind the ribbon cairn, traveler. It marks where the road still remembers being dry."
+      ],
+      "emits": "dlg:sunken-courier.road-work"
+    }
+  }
+}

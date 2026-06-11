@@ -600,6 +600,31 @@ changes a later social line:
    public-control playthrough so the player reads the basket before talking to
    Page Pip.
 
+## Twenty-Fourth Content-Depth Slice
+
+Sunken Road still risks reading as a straight boss lane with caravan dressing.
+The route-encounter variety pass adds a working road encounter after the wash,
+where the player meets a moving courier in a shaded layby before carrying the
+warning onward to the castle:
+
+1. Add `char:sunken-courier`, a named moving NPC on `map:sunken-road`, with a
+   content-authored Yuka patrol around a low shade rig and water stand.
+2. Add `prop:shade-cloth-rig`, `prop:water-jar-stand`, and
+   `prop:wind-ribbon-cairn`, each using outlined pixel grids with at least five
+   visible recolor channels so the layby reads as a hand-authored route stop
+   instead of another flat colored box.
+3. Add `quest:sunken-courier-warning`, started on `map:sunken-road`, that asks
+   the player to speak with the courier, completes on
+   `dlg:sunken-courier.warning:accepted`, sets
+   `flag:sunken-courier-warned`, and plays a route-interaction sound.
+4. Add a `flag:sunken-courier-warned` castle-scribe briefing branch that still
+   emits `dlg:castle-scribe.briefing` so the required castle-letter quest
+   remains on the same graph edge.
+5. Add unit coverage for documentation, prop richness, map placement, Yuka
+   movement, quest/flag reduction, and the later scribe payoff; add headed
+   desktop/phone browser evidence and expand the full public-control
+   playthrough so the player meets the courier before the castle.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map
