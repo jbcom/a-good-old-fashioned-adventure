@@ -179,13 +179,43 @@ async function castUntilEnemyDrops(
     if (state.enemies < before) return;
     if (state.mode !== "playing") {
       throw new Error(
-        `combat left play mode=${state.mode}; class=${state.classId}; hp=${state.hp}; enemies=${state.enemies}`,
+        `combat left play mode=${state.mode}; class=${state.classId}; x=${state.x}; y=${state.y}; hp=${state.hp}; enemies=${state.enemies}; projectiles=${state.projectiles}`,
       );
     }
   }
   const state = shell();
   throw new Error(
     `enemy count did not drop from ${before}; class=${state.classId}; hp=${state.hp}; enemies=${state.enemies}; projectiles=${state.projectiles}`,
+  );
+}
+
+async function doorwayVolleyUntilEnemyDrops(
+  input: ReturnType<typeof userEvent.setup>,
+  before: number,
+  attempts: number,
+) {
+  for (let i = 0; i < attempts; i++) {
+    const pos = shell();
+    if (pos.mode !== "playing") {
+      throw new Error(
+        `doorway volley left play mode=${pos.mode}; class=${pos.classId}; x=${pos.x}; y=${pos.y}; hp=${pos.hp}; enemies=${pos.enemies}; projectiles=${pos.projectiles}`,
+      );
+    }
+    if (pos.x < 445) await hold(input, "ArrowRight", 120);
+    else if (pos.x > 470) await hold(input, "ArrowLeft", 120);
+    if (pos.y < 240) await hold(input, "ArrowDown", 100);
+    else if (pos.y > 260) await hold(input, "ArrowUp", 100);
+
+    await hold(input, "ArrowRight", 80);
+    await pressA(input);
+    await wait(320);
+
+    const state = shell();
+    if (state.enemies < before) return;
+  }
+  const state = shell();
+  throw new Error(
+    `enemy count did not drop from doorway volley ${before}; class=${state.classId}; x=${state.x}; y=${state.y}; hp=${state.hp}; enemies=${state.enemies}; projectiles=${state.projectiles}`,
   );
 }
 
@@ -334,8 +364,10 @@ it("continues the expanded journey through dungeon victory through public contro
     await castUntilEnemyDrops(input, shell().enemies, 18);
   }
   await walkTo(input, 305, 300, 12);
+  await walkTo(input, 500, 300, 12);
   await walkTo(input, 500, 250, 12);
-  await castUntilEnemyDrops(input, shell().enemies, 34);
+  await walkTo(input, 455, 250, 12);
+  await doorwayVolleyUntilEnemyDrops(input, shell().enemies, 48);
   await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Free Princess Amber");
   await userEvent.click(page.getByTestId("hud-menu"));
   await expect.element(page.getByTestId("minimap")).toBeVisible();
