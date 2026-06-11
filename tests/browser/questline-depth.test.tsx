@@ -70,7 +70,7 @@ it("talks to Page Pip through public movement and A-button input", async () => {
   });
   await expect.poll(() => governor.perceive().mapName).toBe("Hearthwake Village");
 
-  await governor.hold("right", 280);
+  await governor.reachPoint(620, 304, { tolerance: 18, maxSteps: 24 });
   await governor.press("a");
 
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Page Pip");
@@ -88,7 +88,7 @@ it("talks to the Oldwood Hermit through public movement and A-button input", asy
   });
   await expect.poll(() => governor.perceive().mapName).toBe("Oldwood Forest");
 
-  await governor.hold("right", 340);
+  await governor.reachPoint(392, 292, { tolerance: 18, maxSteps: 24 });
   await governor.press("a");
 
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oldwood Hermit");
