@@ -99,6 +99,10 @@ interface InputState {
   right: boolean;
 }
 
+function emptyInput(): InputState {
+  return { up: false, down: false, left: false, right: false };
+}
+
 interface StartOptions {
   classId?: string;
   mapId?: string;
@@ -742,7 +746,7 @@ export function App({
     theme: "",
     sfxPlayed: 0,
   });
-  const inputRef = useRef<InputState>({ up: false, down: false, left: false, right: false });
+  const inputRef = useRef<InputState>(emptyInput());
   const snapshotRef = useRef<UiSnapshot>(EMPTY_SNAPSHOT);
   const audioRef = useRef<ToneAudioEngine | null>(null);
   const mapIntroSeenRef = useRef(new Set<string>());
@@ -806,7 +810,7 @@ export function App({
 
   const loadMap = useCallback(
     (nextWorld: World, mapId: string, classId: string, spawnId?: string) => {
-      inputRef.current = { up: false, down: false, left: false, right: false };
+      inputRef.current = emptyInput();
       instantiateMap(nextWorld, mapId, { classId, spawnId });
       zoneEnteredRef.current.clear();
       audioRef.current?.setTheme(getMap(mapId).bgmTheme);
@@ -868,6 +872,7 @@ export function App({
   }, [latestSave, startGame]);
 
   const resumeGame = useCallback(() => {
+    inputRef.current = emptyInput();
     setPaused(false);
     setPanelOpen(false);
   }, []);
@@ -875,6 +880,7 @@ export function App({
   const togglePause = useCallback(() => {
     if (mode !== "playing") return;
     setPanelOpen(false);
+    inputRef.current = emptyInput();
     setPaused((value) => !value);
   }, [mode]);
 
@@ -1007,9 +1013,16 @@ export function App({
     [clearOutbox, dialogue, mode, paused, world],
   );
 
-  const setDirection = useCallback((dir: Direction, pressed: boolean) => {
-    inputRef.current[dir] = pressed;
-  }, []);
+  const setDirection = useCallback(
+    (dir: Direction, pressed: boolean) => {
+      if (paused && pressed) {
+        inputRef.current[dir] = false;
+        return;
+      }
+      inputRef.current[dir] = pressed;
+    },
+    [paused],
+  );
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {

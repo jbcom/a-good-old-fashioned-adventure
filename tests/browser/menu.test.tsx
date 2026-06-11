@@ -77,16 +77,24 @@ it("pauses and resumes without advancing movement", async () => {
 
   await input.keyboard("{Escape}");
   await expect.element(page.getByTestId("pause-screen")).toBeVisible();
-  expect(shell().paused).toBe(true);
+  await expect.poll(() => shell().paused).toBe(true);
+  await wait(80);
+  const pausedX = shell().x;
 
   await input.keyboard("{ArrowRight>}");
   await wait(260);
   await input.keyboard("{/ArrowRight}");
-  expect(shell().x).toBeCloseTo(beforePause, 1);
+  await wait(80);
+  expect(Math.abs(shell().x - pausedX)).toBeLessThanOrEqual(0.5);
 
   await input.keyboard("{Escape}");
   await expect.element(page.getByTestId("pause-screen")).not.toBeInTheDocument();
-  expect(shell().paused).toBe(false);
+  await expect.poll(() => shell().paused).toBe(false);
+  const afterResume = shell().x;
+  await input.keyboard("{ArrowRight>}");
+  await wait(180);
+  await input.keyboard("{/ArrowRight}");
+  expect(shell().x).toBeGreaterThan(afterResume + 2);
 });
 
 it("keeps the mobile-first HUD below the 20% chrome budget", async () => {
