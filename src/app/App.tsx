@@ -83,6 +83,12 @@ interface ReadablePropHit {
     dialogueBank: string;
     dialogueSlot: string;
   };
+  dist: number;
+}
+
+interface NpcDialogueHit {
+  dialogue: DialogueState;
+  dist: number;
 }
 
 interface UiSnapshot {
@@ -324,7 +330,7 @@ function saveRowFromSnapshot(current: UiSnapshot) {
   };
 }
 
-function nearestDialogue(world: World): DialogueState | null {
+function nearestDialogue(world: World): NpcDialogueHit | null {
   const player = playerOf(world);
   const pt = player?.get(Transform);
   if (!pt) return null;
@@ -341,10 +347,13 @@ function nearestDialogue(world: World): DialogueState | null {
   if (!best) return null;
   const npc = best.entity.get(IsNpc);
   if (!npc) return null;
-  return dialogueFromResolved(
-    world,
-    resolveDialogue(world, getCharacter(npc.charId).dialogue as string),
-  );
+  return {
+    dialogue: dialogueFromResolved(
+      world,
+      resolveDialogue(world, getCharacter(npc.charId).dialogue as string),
+    ),
+    dist: best.dist,
+  };
 }
 
 function nearestReadableProp(world: World): ReadablePropHit | null {
@@ -1229,6 +1238,11 @@ export function App({
       return;
     }
     const propDialogue = nearestReadableProp(world);
+    const npcDialogue = nearestDialogue(world);
+    if (npcDialogue && (!propDialogue || npcDialogue.dist <= propDialogue.dist)) {
+      setDialogue(npcDialogue.dialogue);
+      return;
+    }
     if (propDialogue) {
       const outbox = world.get(Outbox);
       if (outbox) {
@@ -1242,11 +1256,6 @@ export function App({
         propDialogue.entity.set(Interactable, { ...propDialogue.interaction, used: true });
       }
       clearOutbox(world);
-      return;
-    }
-    const npcDialogue = nearestDialogue(world);
-    if (npcDialogue) {
-      setDialogue(npcDialogue);
       return;
     }
     aimAtNearestEnemy(world);
