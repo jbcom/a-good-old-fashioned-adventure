@@ -85,33 +85,43 @@ export function createToneAudioEngine(): ToneAudioEngine {
   let muted = false;
   let theme = "";
   let sfxPlayed = 0;
-  let bgmLoop: Tone.Loop | null = null;
+  let bgmTimer: number | null = null;
   let bgmIndex = 0;
+  let disposed = false;
 
   function stopLoop() {
-    bgmLoop?.dispose();
-    bgmLoop = null;
+    if (bgmTimer !== null) window.clearInterval(bgmTimer);
+    bgmTimer = null;
     bgmIndex = 0;
+  }
+
+  function playBgmStep(notes: number[]) {
+    if (disposed || !notes.length) return;
+    const note = notes[bgmIndex % notes.length];
+    bgmIndex += 1;
+    bgmSynth.triggerAttackRelease(note, audio.bgm.noteDuration, Tone.now() + 0.02);
+  }
+
+  function startLoop() {
+    if (disposed || !ready || bgmTimer !== null) return;
+    const notes = audio.bgm.themes[theme as keyof typeof audio.bgm.themes];
+    if (!notes?.length) return;
+    playBgmStep(notes);
+    bgmTimer = window.setInterval(() => playBgmStep(notes), audio.bgm.stepMs);
   }
 
   return {
     async resumeFromGesture() {
       await Tone.start();
+      if (disposed) return;
       ready = true;
-      if (theme && Tone.Transport.state !== "started") Tone.Transport.start();
+      startLoop();
     },
     setTheme(nextTheme: string) {
-      if (theme === nextTheme && bgmLoop) return;
+      if (theme === nextTheme && bgmTimer !== null) return;
       stopLoop();
       theme = nextTheme;
-      const notes = audio.bgm.themes[nextTheme as keyof typeof audio.bgm.themes];
-      if (!notes?.length) return;
-      bgmLoop = new Tone.Loop((time) => {
-        const note = notes[bgmIndex % notes.length];
-        bgmIndex += 1;
-        bgmSynth.triggerAttackRelease(note, audio.bgm.noteDuration, time);
-      }, audio.bgm.stepMs / 1000).start(0);
-      if (ready && Tone.Transport.state !== "started") Tone.Transport.start();
+      startLoop();
     },
     playSfx(id: string) {
       if (muted) return;
@@ -178,6 +188,7 @@ export function createToneAudioEngine(): ToneAudioEngine {
       };
     },
     dispose() {
+      disposed = true;
       stopLoop();
       bgmSynth.dispose();
       output.dispose();
