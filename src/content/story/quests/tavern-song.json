@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:tavern-song",
+  "kind": "quest",
+  "title": "The Hearth-Song Before the Road",
+  "act": 1,
+  "startOn": { "enterMap": "map:village-tavern" },
+  "start": "read-board",
+  "stages": [
+    {
+      "id": "read-board",
+      "log": "Read the hearth-song board.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:hearth-song-board.verse:seen" },
+          "to": "ask-merrin",
+          "effects": [{ "sfx": "interact" }]
+        }
+      ]
+    },
+    {
+      "id": "ask-merrin",
+      "log": "Ask Merrin what the road verse means.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:merrin-underbough.song:seen" },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:tavern-song-learned" }, { "sfx": "pickup" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

@@ -28,6 +28,7 @@ describe("createGameWorld", () => {
       "flag:oldwood-oath-sworn": false,
       "flag:ruin-mural-read": false,
       "flag:shop-sample-claimed": false,
+      "flag:tavern-song-learned": false,
     });
     expect(world.get(MapRuntime)?.mapId).toBe("");
   });

@@ -8,7 +8,7 @@ import {
 } from "../audio/toneEngine";
 import ui from "../config/ui.json";
 import { classes, engine } from "../lib/config";
-import { getCharacter, getDialogueBank, getMap, getShop } from "../lib/content/registry";
+import { getCharacter, getDialogueBank, getMap, getProp, getShop } from "../lib/content/registry";
 import type { DialogueNode, MapDef } from "../lib/content/types";
 import {
   getSaveRepository,
@@ -45,6 +45,7 @@ import {
   Facing,
   FlagState,
   Health,
+  Interactable,
   Inventory,
   IsEnemy,
   IsNpc,
@@ -55,6 +56,7 @@ import {
   Outbox,
   PlayerGold,
   Projectile,
+  PropRef,
   QuestLog,
   Transform,
 } from "../sim/traits";
@@ -69,6 +71,18 @@ interface DialogueState {
   node: DialogueNode;
   speaker: string;
   lines: string[];
+}
+
+interface ReadablePropHit {
+  entity: Entity;
+  interaction: {
+    verb: string;
+    once: boolean;
+    used: boolean;
+    sfx: string;
+    dialogueBank: string;
+    dialogueSlot: string;
+  };
 }
 
 interface UiSnapshot {
@@ -331,6 +345,26 @@ function nearestDialogue(world: World): DialogueState | null {
     world,
     resolveDialogue(world, getCharacter(npc.charId).dialogue as string),
   );
+}
+
+function nearestReadableProp(world: World): ReadablePropHit | null {
+  const player = playerOf(world);
+  const pt = player?.get(Transform);
+  if (!pt) return null;
+  let best: (ReadablePropHit & { dist: number }) | null = null;
+  for (const entity of world.query(PropRef, Interactable, Transform)) {
+    const propRef = entity.get(PropRef);
+    const interaction = entity.get(Interactable);
+    const t = entity.get(Transform);
+    if (!propRef || !interaction || !t) continue;
+    if (!interaction.dialogueBank || !interaction.dialogueSlot) continue;
+    if (interaction.once && interaction.used) continue;
+    const prop = getProp(propRef.propId);
+    if (!prop.interaction?.dialogue) continue;
+    const dist = Math.hypot(t.x - pt.x, t.y - pt.y);
+    if (dist < 34 && (!best || dist < best.dist)) best = { entity, interaction, dist };
+  }
+  return best;
 }
 
 function aimAtNearestEnemy(world: World, maxDistance = 340) {
@@ -1192,6 +1226,22 @@ export function App({
     }
     if (dialogue) {
       advanceDialogue();
+      return;
+    }
+    const propDialogue = nearestReadableProp(world);
+    if (propDialogue) {
+      const outbox = world.get(Outbox);
+      if (outbox) {
+        if (propDialogue.interaction.sfx) outbox.sfx.push(propDialogue.interaction.sfx);
+        outbox.dialogue = {
+          bank: propDialogue.interaction.dialogueBank,
+          slot: propDialogue.interaction.dialogueSlot,
+        };
+      }
+      if (propDialogue.interaction.once) {
+        propDialogue.entity.set(Interactable, { ...propDialogue.interaction, used: true });
+      }
+      clearOutbox(world);
       return;
     }
     const npcDialogue = nearestDialogue(world);

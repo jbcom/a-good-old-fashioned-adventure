@@ -79,8 +79,9 @@ Tiles are flat 16×16 background cells: `solid` + a list of declarative
 `drawOps` (`fill`/`rect`/`triangle`/`repeat-rect`, colors literal or
 `@K` palette refs, optional `animate` ref for shimmer effects). Props are
 foreground objects that y-sort with characters: pixel-grid `states`
-(`closed`/`open`/…), optional `interaction` (verb + method + sfx), `solid`
-flag. The shared op vocabulary lives in `schemas/draw-ops.schema.json`.
+(`closed`/`open`/…), optional `interaction` (verb + method + sfx, and
+optionally a dialogue bank/slot for readable props), `solid` flag. The shared
+op vocabulary lives in `schemas/draw-ops.schema.json`.
 
 ### `src/content/shops/` — counters and prices
 

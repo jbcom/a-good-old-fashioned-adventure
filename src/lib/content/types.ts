@@ -36,7 +36,13 @@ export interface PropDef {
   grid: { w: number; h: number };
   anchor: { x: number; y: number };
   solid: boolean;
-  interaction?: { verb: string; method?: string; sfx?: string; once?: boolean };
+  interaction?: {
+    verb: string;
+    method?: string;
+    sfx?: string;
+    once?: boolean;
+    dialogue?: { bank: string; slot: string };
+  };
   states: Record<string, PropState>;
   recolorChannels?: string[];
   defaultPalette: string;

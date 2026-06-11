@@ -379,6 +379,23 @@ interaction acts:
    governor plan into the tavern through public controls, talks to the tavern
    NPC, and captures desktop plus phone evidence.
 
+## Thirteenth Content-Depth Slice
+
+The tavern should become playable story, not just scenery. The notice-board
+questlet slice turns the hearth-song board into a readable prop and uses the
+quest graph to send the player back to Merrin:
+
+1. Extend prop interaction content so a prop can request a dialogue bank/slot
+   through the same dialogue outbox used by NPCs and quest effects.
+2. Make `prop:hearth-song-board` readable with A, emitting a dialogue event
+   from a dedicated board voice.
+3. Add `quest:tavern-song` as a short start-on-enter quest: read the board,
+   ask Merrin what the verse means, then set a completion flag.
+4. Add Merrin dialogue slots for the questlet stage and after-state so the
+   tavern reacts to the board being read.
+5. Add planner-driven browser validation that enters the tavern, reads the
+   board, talks to Merrin, and verifies the quest log changes through public UI.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

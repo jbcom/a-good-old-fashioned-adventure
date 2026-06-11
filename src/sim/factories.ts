@@ -138,6 +138,9 @@ export function spawnChest(world: World, x: number, y: number, contents: string)
       verb: prop.interaction?.verb ?? "open",
       once: prop.interaction?.once ?? true,
       used: false,
+      sfx: prop.interaction?.sfx ?? "chest",
+      dialogueBank: "",
+      dialogueSlot: "",
     }),
   );
 }
@@ -146,6 +149,18 @@ export function spawnProp(world: World, propId: string, x: number, y: number): E
   const prop = getProp(propId);
   const entity = world.spawn(PropRef({ propId, state: "default" }), Transform({ x, y }));
   if (prop.solid) entity.add(IsSolid);
+  if (prop.interaction) {
+    entity.add(
+      Interactable({
+        verb: prop.interaction.verb,
+        once: prop.interaction.once ?? false,
+        used: false,
+        sfx: prop.interaction.sfx ?? "",
+        dialogueBank: prop.interaction.dialogue?.bank ?? "",
+        dialogueSlot: prop.interaction.dialogue?.slot ?? "",
+      }),
+    );
+  }
   return entity;
 }
 

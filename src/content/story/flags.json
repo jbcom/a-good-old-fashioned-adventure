@@ -41,6 +41,10 @@
     "flag:shop-sample-claimed": {
       "default": false,
       "description": "Hearthwake shopkeeper has already given the player the one-time travel cake sample."
+    },
+    "flag:tavern-song-learned": {
+      "default": false,
+      "description": "Merrin has explained the hearth-song board's errand verse to the player."
     }
   }
 }

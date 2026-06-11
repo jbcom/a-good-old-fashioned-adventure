@@ -28,7 +28,16 @@
         "verb": { "type": "string" },
         "method": { "enum": ["melee-swing", "action-button", "touch"] },
         "sfx": { "type": "string" },
-        "once": { "type": "boolean" }
+        "once": { "type": "boolean" },
+        "dialogue": {
+          "type": "object",
+          "required": ["bank", "slot"],
+          "properties": {
+            "bank": { "type": "string", "pattern": "^dlgbank:[a-z0-9-]+$" },
+            "slot": { "type": "string" }
+          },
+          "additionalProperties": false
+        }
       }
     },
     "states": {

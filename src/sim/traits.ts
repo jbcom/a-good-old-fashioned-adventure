@@ -32,7 +32,14 @@ export const IsPickup = trait({ itemId: "", value: 0 });
 export const IsSolid = trait();
 
 export const LootContainer = trait({ contents: "", opened: false });
-export const Interactable = trait({ verb: "", once: false, used: false });
+export const Interactable = trait({
+  verb: "",
+  once: false,
+  used: false,
+  sfx: "",
+  dialogueBank: "",
+  dialogueSlot: "",
+});
 
 export const Level = trait({ level: 1, xp: 0, nextXp: 50 });
 export const CombatTimers = trait({ attack: 0, dash: 0, dashCooldown: 0, iframes: 0 });

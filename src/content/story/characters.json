@@ -88,6 +88,13 @@
       "dialogue": "dlgbank:merrin-underbough",
       "note": "Unfurled Vine keeper who ties the tavern hearth, song-board, and story-quilt to the road."
     },
+    "char:hearth-song-board": {
+      "name": "Hearth-Song Board",
+      "role": "voice",
+      "portraitColor": "#cfa153",
+      "dialogue": "dlgbank:hearth-song-board",
+      "note": "Readable tavern notice board that starts the Unfurled Vine's small song questlet."
+    },
     "char:hermit": {
       "name": "Oldwood Hermit",
       "role": "npc",
