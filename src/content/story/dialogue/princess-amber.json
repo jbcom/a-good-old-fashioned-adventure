@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:princess-amber",
+  "kind": "dialogue-bank",
+  "speaker": "char:princess-amber",
+  "slots": [
+    { "when": { "quest": "quest:rescue-amber", "stage": "reach-amber" }, "node": "rescued" },
+    { "default": true, "node": "captive" }
+  ],
+  "nodes": {
+    "rescued": {
+      "lines": ["My hero! The Dark Shadow Warlord has been vaporized! Our kingdom is saved!"],
+      "emits": "dlg:princess-amber.rescued"
+    },
+    "captive": {
+      "lines": ["Help! The Warlord's shadow chains me to this cell!"],
+      "emits": "dlg:princess-amber.captive"
+    }
+  }
+}

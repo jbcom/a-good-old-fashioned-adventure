@@ -1,0 +1,32 @@
+{
+  "$schema": "../../schemas/config.schema.json",
+  "damage": {
+    "melee": { "base": 10, "perLevel": 4 },
+    "arrow": { "base": 8, "perLevel": 3 },
+    "magicBolt": { "base": 8, "perLevel": 3 },
+    "enemyTouch": 10,
+    "enemyProjectile": 15
+  },
+  "knockback": {
+    "enemyOnHit": 10,
+    "enemyOffShield": 18
+  },
+  "hitboxes": {
+    "swingHeight": 24,
+    "swingVerticalOffset": -12,
+    "projectileHitRadius": 12,
+    "playerProjectileHitRadius": 10,
+    "touchRadius": 12
+  },
+  "screenShake": {
+    "onEnemyHit": 5,
+    "onPlayerProjectileHit": 5,
+    "onPlayerTouchHit": 6,
+    "onChestOpen": 4
+  },
+  "feedback": {
+    "enemyHitFlashDuration": 0.2,
+    "damageTextLife": 0.6,
+    "damageTextRiseSpeed": -20
+  }
+}

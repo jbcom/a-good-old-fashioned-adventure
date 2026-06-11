@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:shopkeeper",
+  "kind": "dialogue-bank",
+  "speaker": "char:shopkeeper",
+  "slots": [
+    { "when": { "flag": "flag:shop-sample-claimed" }, "node": "after-sample" },
+    { "when": { "quest": "quest:village-shop-sample", "stage": "offer" }, "node": "sample" },
+    { "default": true, "node": "browse" }
+  ],
+  "nodes": {
+    "sample": {
+      "lines": [
+        "Step in, traveler. A proper road begins with bread in the pocket and a little courage under the ribs.",
+        "Take this travel cake. No coin today; tell the trees I keep fair measure."
+      ],
+      "choices": [{ "id": "accepted", "text": "Accept the travel cake." }],
+      "emits": "dlg:shopkeeper.sample"
+    },
+    "after-sample": {
+      "lines": [
+        "That cake should keep your knees from knocking until Oldwood. Come back when we have prices, shelves, and gossip worth paying for."
+      ],
+      "emits": "dlg:shopkeeper.after-sample"
+    },
+    "browse": {
+      "lines": [
+        "Barrels are full, shelves are named, and the till is honest. The real shop counter comes next."
+      ],
+      "emits": "dlg:shopkeeper.browse"
+    }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:mountain",
+  "kind": "tile",
+  "solid": true,
+  "layers": [
+    { "op": "fill", "color": "@c" },
+    { "op": "triangle", "color": "@C", "points": [[8, 2], [15, 15], [1, 15]] },
+    { "op": "triangle", "color": "@W", "points": [[8, 2], [10, 6], [6, 6]] },
+    { "op": "triangle", "color": "#3c3c4a", "points": [[8, 7], [14, 15], [8, 15]] }
+  ],
+  "koota": { "traits": ["Tile", "Solid"] }
+}

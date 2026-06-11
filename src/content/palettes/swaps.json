@@ -1,0 +1,86 @@
+{
+  "$schema": "../../../schemas/palette.schema.json",
+  "kind": "palette-swaps",
+  "base": "palette:base",
+  "swaps": {
+    "palette:knight": {},
+    "palette:rogue": {
+      "S": "#323c39",
+      "s": "#14181a",
+      "R": "#a124db",
+      "r": "#4d1070",
+      "W": "#e89eff"
+    },
+    "palette:ranger": { "S": "#2c6114", "s": "#142a07", "R": "#ffcd94", "r": "#a88f00" },
+    "palette:wizard": { "S": "#00d2f7", "s": "#1a6fa8", "R": "#ffffff", "r": "#b2bec7" },
+    "palette:princess": {},
+    "palette:woodcutter": { "S": "#946629", "s": "#4a2511", "R": "#6fe014", "r": "#2c6114" },
+    "palette:keeper": { "S": "#cfa153", "s": "#946629", "R": "#87e0f2", "r": "#1a6fa8" },
+    "palette:page": { "S": "#7f4f2f", "s": "#3b2416", "R": "#f1d385", "r": "#cfa153" },
+    "palette:hermit": { "S": "#6f7f3f", "s": "#2f3a1d", "R": "#c9b36a", "r": "#7f6f36" },
+    "palette:lost-page": { "S": "#9f5d57", "s": "#4f2a2a", "R": "#eed7a1", "r": "#b88958" },
+    "palette:orc": {
+      "X": "#141013",
+      "S": "#8a2323",
+      "s": "#4d1010",
+      "F": "#2c6114",
+      "f": "#142a07"
+    },
+    "palette:raider": {
+      "X": "#141013",
+      "S": "#6f4b2f",
+      "s": "#342016",
+      "F": "#496b32",
+      "f": "#20351b",
+      "T": "#b88958"
+    },
+    "palette:thorn-shaman": {
+      "X": "#141013",
+      "S": "#4f3f2f",
+      "s": "#241b16",
+      "F": "#2c6114",
+      "f": "#142a07",
+      "E": "#c9b36a"
+    },
+    "palette:bramble": {
+      "X": "#141013",
+      "S": "#3b2416",
+      "s": "#1b100a",
+      "F": "#5b8a3c",
+      "f": "#273b1a",
+      "Y": "#d0894b"
+    },
+    "palette:wyrm": {
+      "X": "#141013",
+      "e": "#a88f00",
+      "E": "#f7e214",
+      "T": "#df7126",
+      "Y": "#e03d50"
+    },
+    "palette:boss": { "S": "#140d2e", "s": "#080414", "R": "#76428a", "r": "#48206b" },
+    "palette:skeleton": {
+      "S": "#eef0f2",
+      "s": "#99aab8",
+      "R": "#141013",
+      "r": "#141013",
+      "F": "#eef0f2",
+      "f": "#99aab8"
+    },
+    "palette:sentry": {
+      "S": "#c0b08a",
+      "s": "#5d5140",
+      "R": "#425663",
+      "r": "#1f2b34",
+      "F": "#eed7a1",
+      "f": "#b88958"
+    },
+    "palette:banner-knight": {
+      "S": "#d7caa8",
+      "s": "#6d604a",
+      "R": "#8a2f2f",
+      "r": "#421616",
+      "F": "#eed7a1",
+      "f": "#b88958"
+    }
+  }
+}

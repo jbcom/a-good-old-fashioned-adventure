@@ -1,0 +1,67 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:oldwood-oath",
+  "kind": "quest",
+  "title": "The Oldwood Oath",
+  "act": 2,
+  "startOn": { "enterMap": "map:oldwood-forest" },
+  "start": "find-hermit",
+  "stages": [
+    {
+      "id": "find-hermit",
+      "log": "Find the Oldwood Hermit near the stump track.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:hermit.oath:accepted" },
+          "to": "clear-raiders",
+          "effects": [{ "sfx": "interact" }]
+        }
+      ]
+    },
+    {
+      "id": "clear-raiders",
+      "log": "Drive back Oldwood raiders ({raiders}/2).",
+      "counters": {
+        "raiders": {
+          "event": "enemy:defeated",
+          "match": { "archetypes": ["forest-orc", "oldwood-raider", "orc-scout", "thorn-shaman"] },
+          "target": 2
+        }
+      },
+      "advance": [
+        {
+          "when": { "counterDone": "raiders" },
+          "to": "return-hermit"
+        }
+      ]
+    },
+    {
+      "id": "return-hermit",
+      "log": "Return to the Oldwood Hermit.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:hermit.return:seen" },
+          "to": "carry-oath"
+        }
+      ]
+    },
+    {
+      "id": "carry-oath",
+      "log": "Carry the oath beneath the east bough.",
+      "advance": [
+        {
+          "when": {
+            "enterZone": { "map": "map:oldwood-forest", "trigger": "trigger:east-road" }
+          },
+          "to": "done",
+          "effects": [
+            { "setFlag": "flag:oldwood-oath-sworn" },
+            { "startQuest": "quest:dungeon-key" },
+            { "sfx": "interact" }
+          ]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

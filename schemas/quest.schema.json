@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/quest.schema.json",
+  "title": "Quest graph",
+  "description": "A quest is a directed graph of stages. 'start' names the entry stage; any number of midpoint stages follow; stages with terminal:true end the quest. Edges live in stage.advance[]: each has a trigger condition ('when') and optional effects.",
+  "type": "object",
+  "required": ["id", "kind", "title", "start", "stages"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^quest:[a-z0-9-]+$" },
+    "kind": { "const": "quest" },
+    "title": { "type": "string" },
+    "act": { "type": "integer", "minimum": 1 },
+    "autoStart": { "type": "boolean" },
+    "startOn": {
+      "type": "object",
+      "properties": { "enterMap": { "type": "string", "pattern": "^map:[a-z0-9-]+$" } }
+    },
+    "start": { "type": "string" },
+    "stages": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "log": {
+            "type": "string",
+            "description": "Quest-log line; {counterName} and {quest:id.counter} interpolate live values."
+          },
+          "terminal": { "type": "boolean" },
+          "counters": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "required": ["event", "target"],
+              "properties": {
+                "event": { "type": "string" },
+                "match": { "type": "object" },
+                "target": { "type": "integer", "minimum": 1 }
+              }
+            }
+          },
+          "hints": { "type": "array", "items": { "type": "object" } },
+          "advance": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["when", "to"],
+              "properties": {
+                "when": { "$ref": "#/$defs/condition" },
+                "to": { "type": "string" },
+                "effects": { "type": "array", "items": { "$ref": "#/$defs/effect" } }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "condition": {
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "dialogueEvent": {
+          "type": "string",
+          "description": "Fires when a dialogue node emits, optionally suffixed ':<choiceId>' or ':seen'."
+        },
+        "counterDone": { "type": "string" },
+        "enemyDefeated": { "type": "string" },
+        "itemAcquired": { "type": "string", "pattern": "^item:[a-z0-9-]+$" },
+        "enterZone": { "type": "object", "required": ["map", "trigger"] },
+        "flag": { "type": "string", "pattern": "^flag:[a-z0-9-]+$" }
+      }
+    },
+    "effect": {
+      "type": "object",
+      "minProperties": 1,
+      "properties": {
+        "setFlag": { "type": "string", "pattern": "^flag:[a-z0-9-]+$" },
+        "clearFlag": { "type": "string", "pattern": "^flag:[a-z0-9-]+$" },
+        "healPlayer": { "type": "number" },
+        "setTile": { "type": "object", "required": ["map", "at", "tile"] },
+        "spawnItem": { "type": "object", "required": ["item", "at"] },
+        "giveItem": { "type": "string", "pattern": "^item:[a-z0-9-]+$" },
+        "startQuest": { "type": "string", "pattern": "^quest:[a-z0-9-]+$" },
+        "startDialogue": { "type": "object", "required": ["bank", "slot"] },
+        "loadMap": { "type": "string", "pattern": "^map:[a-z0-9-]+$" },
+        "sfx": { "type": "string" },
+        "endGame": { "enum": ["victory", "gameover"] }
+      }
+    }
+  }
+}

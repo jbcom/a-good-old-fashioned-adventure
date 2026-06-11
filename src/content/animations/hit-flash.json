@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../schemas/animation.schema.json",
+  "id": "anim:hit-flash",
+  "kind": "animation",
+  "engine": "animejs",
+  "target": "spriteTint",
+  "keyframes": [{ "tint": "#ffffff", "tintAlpha": 1 }, { "tintAlpha": 0 }],
+  "duration": 200,
+  "easing": "linear",
+  "loop": false,
+  "description": "White damage flash over the sprite for 0.2s after taking a hit."
+}

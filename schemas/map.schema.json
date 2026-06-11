@@ -1,0 +1,124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/map.schema.json",
+  "title": "Map definition",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "name",
+    "size",
+    "baseTile",
+    "bgmTheme",
+    "generation",
+    "playerSpawn",
+    "spawns",
+    "entities"
+  ],
+  "properties": {
+    "id": { "type": "string", "pattern": "^map:[a-z0-9-]+$" },
+    "kind": { "const": "map" },
+    "name": { "type": "string" },
+    "size": {
+      "type": "object",
+      "required": ["cols", "rows"],
+      "properties": {
+        "cols": { "type": "integer", "minimum": 1 },
+        "rows": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "baseTile": { "$ref": "#/$defs/tileRef" },
+    "bgmTheme": { "type": "string" },
+    "generation": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["op", "tile"],
+        "properties": {
+          "op": { "enum": ["border", "col", "row", "col-span", "row-span", "region", "set"] },
+          "tile": { "$ref": "#/$defs/tileRef" },
+          "x": { "type": "integer" },
+          "y": { "type": "integer" },
+          "x0": { "type": "integer" },
+          "x1": { "type": "integer" },
+          "y0": { "type": "integer" },
+          "y1": { "type": "integer" },
+          "at": { "$ref": "#/$defs/tileCoord" },
+          "exceptRows": { "type": "array", "items": { "type": "integer" } },
+          "exceptCols": { "type": "array", "items": { "type": "integer" } },
+          "unlessRegion": { "type": "string" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "playerSpawn": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+    },
+    "spawns": {
+      "type": "object",
+      "required": ["default"],
+      "patternProperties": {
+        "^[a-z0-9-]+$": {
+          "type": "object",
+          "required": ["x", "y"],
+          "properties": { "x": { "type": "number" }, "y": { "type": "number" } },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "oneOf": [
+          { "required": ["ref"] },
+          { "required": ["enemy"] },
+          { "required": ["spawnRule"] }
+        ],
+        "properties": {
+          "ref": { "type": "string", "pattern": "^(char|prop):[a-z0-9-]+$" },
+          "enemy": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "spawnRule": { "type": "string" },
+          "x": { "type": "number" },
+          "y": { "type": "number" },
+          "tileAt": { "$ref": "#/$defs/tileCoord" },
+          "dir": { "enum": [1, -1] },
+          "contents": { "type": "string" },
+          "positions": { "type": "array", "items": { "type": "object", "required": ["x", "y"] } },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "triggers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^trigger:[a-z0-9-]+$" },
+          "kind": { "type": "string" },
+          "label": { "type": "string" },
+          "toMap": { "$ref": "#/$defs/mapRef" },
+          "toSpawn": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "sfx": { "type": "string" },
+          "zone": { "type": "object", "required": ["x0", "y0", "x1", "y1"] },
+          "tiles": { "type": "array", "items": { "$ref": "#/$defs/tileCoord" } },
+          "requiresFlag": { "$ref": "#/$defs/flagRef" },
+          "solidUnlessFlag": { "$ref": "#/$defs/flagRef" },
+          "effects": { "type": "array", "items": { "type": "object" } },
+          "indicator": { "type": "object" }
+        }
+      }
+    },
+    "onEnter": { "type": "array", "items": { "type": "object" } }
+  },
+  "$defs": {
+    "tileRef": { "type": "string", "pattern": "^tile:[a-z0-9-]+$" },
+    "flagRef": { "type": "string", "pattern": "^flag:[a-z0-9-]+$" },
+    "mapRef": { "type": "string", "pattern": "^map:[a-z0-9-]+$" },
+    "tileCoord": { "type": "array", "items": { "type": "integer" }, "minItems": 2, "maxItems": 2 }
+  }
+}

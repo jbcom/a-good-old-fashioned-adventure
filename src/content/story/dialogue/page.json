@@ -1,0 +1,48 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:page",
+  "kind": "dialogue-bank",
+  "speaker": "char:page",
+  "slots": [
+    { "when": { "flag": "flag:morning-errands-done" }, "node": "after" },
+    { "when": { "quest": "quest:morning-errands", "stage": "find-page" }, "node": "errand" },
+    { "when": { "quest": "quest:morning-errands", "stage": "fetch-cake" }, "node": "waiting" },
+    { "when": { "quest": "quest:morning-errands", "stage": "return-page" }, "node": "report" },
+    { "default": true, "node": "ledger" }
+  ],
+  "nodes": {
+    "errand": {
+      "lines": [
+        "Good morning, brave legs. Keeper Brindle keeps the village road-cake ledger, and I have spilled ink on the important page.",
+        "Ask him for the road word, then bring it back before the bell forgets what hour it is."
+      ],
+      "choices": [{ "id": "accepted", "text": "Take Page Pip's errand." }],
+      "emits": "dlg:page.errand"
+    },
+    "waiting": {
+      "lines": [
+        "Keeper Brindle will know which cake is meant for wandering. I shall stand here looking useful until you return."
+      ],
+      "emits": "dlg:page.waiting"
+    },
+    "report": {
+      "lines": [
+        "Bread in pocket, road word remembered, courage accounted for. That is a proper morning.",
+        "Tell Oldwood we are not afraid of its shadows, only politely suspicious."
+      ],
+      "emits": "dlg:page.report"
+    },
+    "after": {
+      "lines": [
+        "The ledger is dry, the cake is counted, and the road has your name written neatly in the margin."
+      ],
+      "emits": "dlg:page.after"
+    },
+    "ledger": {
+      "lines": [
+        "I keep the village ledger because the village keeps wandering off into adventures."
+      ],
+      "emits": "dlg:page.ledger"
+    }
+  }
+}

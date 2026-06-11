@@ -1,0 +1,84 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:sunken-road",
+  "kind": "map",
+  "name": "Sunken Road",
+  "size": { "cols": 56, "rows": 38 },
+  "baseTile": "tile:sand",
+  "bgmTheme": "sunken-road",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain" },
+    { "op": "row-span", "tile": "tile:path", "y": 19, "x0": 1, "x1": 54 },
+    {
+      "op": "row-span",
+      "tile": "tile:castle-road",
+      "y": 18,
+      "x0": 28,
+      "x1": 52,
+      "note": "older stone peeking through the sand"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:castle-road",
+      "y": 20,
+      "x0": 34,
+      "x1": 54,
+      "note": "sunken road lower lip"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water",
+      "x0": 14,
+      "x1": 21,
+      "y0": 8,
+      "y1": 11,
+      "note": "shallow roadside wash below the old aqueduct"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:castle-road",
+      "x": 30,
+      "y0": 18,
+      "y1": 20,
+      "note": "broken stone footing around the sandwyrm crossing"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 304 },
+  "spawns": {
+    "default": { "x": 48, "y": 304 },
+    "from-forest": { "x": 48, "y": 304 },
+    "from-approach": { "x": 832, "y": 304 }
+  },
+  "entities": [
+    { "ref": "prop:signpost", "x": 108, "y": 274, "note": "last Oldwood marker" },
+    { "ref": "prop:broken-cart", "x": 230, "y": 336, "note": "cart splintered at the wash" },
+    { "ref": "prop:sandstone-arch", "x": 440, "y": 286, "note": "first ruin tooth above the road" },
+    { "ref": "prop:stump", "x": 316, "y": 360, "note": "bleached roadside stump" },
+    { "ref": "prop:barrel", "x": 420, "y": 260, "note": "half-buried caravan barrel" },
+    { "ref": "prop:sandstone-arch", "x": 512, "y": 286, "note": "fallen arch above the old road" },
+    { "ref": "prop:broken-cart", "x": 560, "y": 346, "note": "broken supply cache" },
+    { "ref": "prop:castle", "x": 700, "y": 252, "note": "distant ruin silhouette" },
+    { "ref": "prop:barrel", "x": 760, "y": 338, "note": "last caravan barrel before the castle" },
+    { "enemy": "desert-wyrm", "x": 360, "y": 304 }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:west-road",
+      "kind": "portal",
+      "label": "Path back to Deep Forest",
+      "toMap": "map:deep-forest",
+      "toSpawn": "from-approach",
+      "sfx": "interact",
+      "zone": { "x0": 0, "y0": 276, "x1": 28, "y1": 332 }
+    },
+    {
+      "id": "trigger:east-road",
+      "kind": "portal",
+      "label": "Road to the Castle Approach",
+      "toMap": "map:castle-approach",
+      "toSpawn": "from-sunken-road",
+      "sfx": "interact",
+      "zone": { "x0": 860, "y0": 276, "x1": 896, "y1": 332 }
+    }
+  ]
+}

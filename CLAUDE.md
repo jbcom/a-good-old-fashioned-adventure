@@ -12,9 +12,16 @@ TypeScript adventure game shipped to Android via Capacitor (arcade-cabinet diale
 
 ## Repo-specific
 
-Repo is pre-scaffold — no `package.json` yet. First work unit: scaffold the
+Content-first architecture: ALL tunables live in `src/config/*.json`, all
+assets/world/story in `src/content/**/*.json` (validated by `schemas/`,
+spec in `docs/CONTENT-ARCHITECTURE.md`). Code interprets content, never
+embeds it. The original prototype is `kingdom_quest_rpg.tsx` (reference
+only — it does not run; see decisions table in the spec).
+
+Repo is pre-scaffold — no `package.json` yet. Next work unit: scaffold the
 arcade-game dialect (pnpm + Vite + TS + Capacitor + Biome + Playwright +
-release-please), then verify and fill in the real commands below.
+release-please) plus the content loader (Koota traits + React bindings +
+ajv validation), then verify and fill in the real commands below.
 
 - **Run:** _not scaffolded yet — will be `pnpm dev` once package.json exists_
 - **Test:** _not scaffolded yet — will be `pnpm test` / `pnpm test:browser` / `pnpm test:e2e`_

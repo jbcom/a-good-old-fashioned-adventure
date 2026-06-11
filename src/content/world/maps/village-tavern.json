@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:village-tavern",
+  "kind": "map",
+  "name": "The Unfurled Vine",
+  "size": { "cols": 28, "rows": 20 },
+  "baseTile": "tile:stone-floor",
+  "bgmTheme": "interior",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    { "op": "row-span", "tile": "tile:path", "y": 17, "x0": 11, "x1": 17 },
+    { "op": "row-span", "tile": "tile:wood-bridge", "y": 6, "x0": 5, "x1": 22 },
+    { "op": "row-span", "tile": "tile:wood-bridge", "y": 12, "x0": 5, "x1": 22 }
+  ],
+  "playerSpawn": { "x": 224, "y": 256 },
+  "spawns": {
+    "default": { "x": 224, "y": 256 },
+    "entry": { "x": 224, "y": 256 }
+  },
+  "entities": [
+    { "ref": "prop:table", "x": 148, "y": 150, "note": "left tavern table" },
+    { "ref": "prop:table", "x": 276, "y": 150, "note": "right tavern table" },
+    { "ref": "prop:barrel", "x": 356, "y": 184, "note": "ale barrel" },
+    {
+      "spawnRule": "unchosen-companions",
+      "positions": [{ "x": 160, "y": 110 }, { "x": 288, "y": 110 }]
+    },
+    { "ref": "prop:chest", "x": 352, "y": 224, "contents": "Gold" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:return-village",
+      "kind": "portal",
+      "label": "Door to Hearthwake",
+      "toMap": "map:village",
+      "toSpawn": "from-tavern",
+      "sfx": "interact",
+      "zone": { "x0": 176, "y0": 272, "x1": 272, "y1": 318 }
+    }
+  ]
+}

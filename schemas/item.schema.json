@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/item.schema.json",
+  "title": "Item registry",
+  "type": "object",
+  "required": ["kind", "items"],
+  "properties": {
+    "kind": { "const": "items" },
+    "items": {
+      "type": "object",
+      "propertyNames": { "pattern": "^item:[a-z0-9-]+$" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name", "onPickup"],
+        "properties": {
+          "name": { "type": "string" },
+          "pickup": {
+            "type": "object",
+            "properties": {
+              "color": { "type": "string" },
+              "anim": { "type": "string", "pattern": "^anim:[a-z0-9-]+$" },
+              "sfx": { "type": "string" }
+            }
+          },
+          "onPickup": { "type": "array", "items": { "type": "object" }, "minItems": 1 },
+          "floater": {
+            "type": "object",
+            "required": ["text", "color"],
+            "properties": { "text": { "type": "string" }, "color": { "type": "string" } }
+          }
+        }
+      }
+    }
+  }
+}

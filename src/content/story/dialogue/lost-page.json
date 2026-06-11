@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:lost-page",
+  "kind": "dialogue-bank",
+  "speaker": "char:lost-page",
+  "slots": [
+    { "when": { "flag": "flag:lost-page-guided" }, "node": "safe" },
+    { "when": { "quest": "quest:lost-page", "stage": "find-rowan" }, "node": "lost" },
+    { "when": { "quest": "quest:lost-page", "stage": "old-oak" }, "node": "oak" },
+    { "when": { "quest": "quest:lost-page", "stage": "west-road" }, "node": "west" },
+    { "default": true, "node": "reading" }
+  ],
+  "nodes": {
+    "lost": {
+      "lines": [
+        "I am not lost in the heroic sense. I am misplaced by trees that keep moving when I blink.",
+        "Guide me to the old oak, then back toward the west road, and I shall stop giving speeches to mushrooms."
+      ],
+      "choices": [{ "id": "guide", "text": "Guide Rowan by the road." }],
+      "emits": "dlg:lost-page.start"
+    },
+    "oak": {
+      "lines": ["The old oak leans like a librarian. I can almost read the way home from here."],
+      "emits": "dlg:lost-page.oak"
+    },
+    "west": {
+      "lines": [
+        "There is the west road. Page Pip will pretend not to worry, which is how I know he did."
+      ],
+      "emits": "dlg:lost-page.west"
+    },
+    "safe": {
+      "lines": ["My next errand is indoors, near walls with the decency to stay put."],
+      "emits": "dlg:lost-page.safe"
+    },
+    "reading": {
+      "lines": ["This leaf looks like a map if one has already given up."],
+      "emits": "dlg:lost-page.reading"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schemas/sprite.schema.json",
+  "id": "sprite:princess",
+  "kind": "character-sprite",
+  "description": "16x16 gowned figure. Princess Amber by default; Mage Gwydion is the wizard palette swap of this grid.",
+  "grid": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 16 },
+  "rows": [
+    "................",
+    "......XGGX......",
+    ".....XGRRGX.....",
+    "....XGGGGGGX....",
+    "....XGFFFFGX....",
+    "...XGFFXFFXX....",
+    "...XGFfFFFfX....",
+    "....XGFFFFGX....",
+    ".....GXFFXG.....",
+    ".....XPPPPX.....",
+    "....XXpPPpXX....",
+    "....XPPPPPPX....",
+    "...XXpPPPPpXX...",
+    "...XPPPPPPPPX...",
+    "...XXXXXXXXXX...",
+    "................"
+  ],
+  "recolorChannels": ["G", "R", "F", "f", "P", "p", "X"],
+  "defaultPalette": "palette:base",
+  "facing": { "method": "mirror-x", "defaultDir": 1 },
+  "animations": {
+    "idle": "anim:idle",
+    "walk": "anim:walk-bob",
+    "hurt": "anim:hit-flash"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

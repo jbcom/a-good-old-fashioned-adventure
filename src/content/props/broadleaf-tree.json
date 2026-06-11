@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:broadleaf-tree",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 16 },
+  "solid": true,
+  "states": {
+    "default": {
+      "rows": [
+        "................",
+        "......eE........",
+        "....eEEEEe......",
+        "...eEETEEEe.....",
+        "..eEETTTEEe.....",
+        ".eEEETTTEEEe....",
+        ".eEETEEEETe.....",
+        "..eEEETEEEe.....",
+        "...eEETEEe......",
+        ".....XbbX.......",
+        ".....XBBX.......",
+        ".....XbbX.......",
+        "....XXbbXX......",
+        "...XbbBBbbX.....",
+        "....XbbbbX......",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "E", "e", "T", "b", "B"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "Solid", "DepthSorted"] }
+}

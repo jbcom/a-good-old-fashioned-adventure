@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:sand",
+  "kind": "tile",
+  "solid": false,
+  "layers": [
+    { "op": "fill", "color": "@d" },
+    { "op": "rect", "color": "@D", "x": 1, "y": 4, "w": 7, "h": 1 },
+    { "op": "rect", "color": "@B", "x": 9, "y": 11, "w": 5, "h": 1 },
+    { "op": "rect", "color": "@W", "x": 5, "y": 7, "w": 1, "h": 1 },
+    { "op": "rect", "color": "@D", "x": 13, "y": 2, "w": 1, "h": 1 }
+  ],
+  "koota": { "traits": ["Tile"] }
+}

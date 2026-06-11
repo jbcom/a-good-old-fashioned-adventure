@@ -1,10 +1,10 @@
 {
   "coverage_rules": [
     {
-      "when_changed": ["src/render/**", "src/ui/**"],
-      "require_changed": ["tests/visual/**", "tests/harness/**"],
+      "when_changed": ["src/render/**", "src/ui/**", "src/spikes/**"],
+      "require_changed": ["tests/browser/**", "tests/harness/**"],
       "or_explicit_skip": "// no-visual-impact: <≥10 word reason>",
-      "block_message": "Render/UI change without visual test update."
+      "block_message": "Render/UI change without browser test update."
     },
     {
       "when_changed": ["src/audio/**"],
@@ -17,9 +17,9 @@
       "block_message": "Sim/engine change without unit or browser test."
     },
     {
-      "when_changed": ["src/render/**", "src/ui/**"],
-      "require_run": "pnpm test:browser --reporter=line",
-      "evidence_pattern": "Tests:\\s+\\d+\\s+passed",
+      "when_changed": ["src/render/**", "src/ui/**", "src/spikes/**"],
+      "require_run": "pnpm test:browser",
+      "evidence_pattern": "Tests\\s+\\d+\\s+passed",
       "block_message": "Render/UI change requires real-browser test pass."
     },
     {
@@ -30,12 +30,25 @@
     }
   ],
   "ban_patterns": [
-    { "pattern": "Math\\.random\\(\\)", "globs": ["src/sim/**", "src/engine/**", "src/systems/**"], "message": "Use createRng(seed) facade — determinism." },
-    { "pattern": "performance\\.now\\(\\)", "globs": ["src/sim/**", "src/engine/**"], "message": "Use engine clock facade — determinism." }
+    {
+      "pattern": "Math\\.random\\(\\)",
+      "globs": ["src/sim/**", "src/engine/**", "src/systems/**"],
+      "message": "Use createRng(seed) facade — determinism."
+    },
+    {
+      "pattern": "performance\\.now\\(\\)",
+      "globs": ["src/sim/**", "src/engine/**"],
+      "message": "Use engine clock facade — determinism."
+    }
   ],
   "forbidden_bash": [
-    "--no-verify", "git push --force(?!-with-lease)", "--admin",
-    "yarn ", "npm install", "package-lock\\.json", "yarn\\.lock"
+    "--no-verify",
+    "git push --force(?!-with-lease)",
+    "--admin",
+    "yarn ",
+    "npm install",
+    "package-lock\\.json",
+    "yarn\\.lock"
   ],
   "max_lines_warn": 600
 }

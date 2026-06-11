@@ -1,0 +1,84 @@
+{
+  "$schema": "../../schemas/config.schema.json",
+  "roster": ["knight", "ranger", "wizard"],
+  "classes": {
+    "knight": {
+      "sprite": "sprite:hero",
+      "palette": "palette:knight",
+      "attack": { "kind": "melee", "reach": 28, "arcHeight": 24, "cooldown": 0.32 },
+      "ability": {
+        "kind": "shield",
+        "label": "SHIELD",
+        "hold": true,
+        "moveSpeedMultiplier": 0.4,
+        "deflectsProjectiles": true,
+        "contactKnockback": 18,
+        "sfx": "shield"
+      }
+    },
+    "ranger": {
+      "sprite": "sprite:hero",
+      "palette": "palette:ranger",
+      "attack": {
+        "kind": "projectile",
+        "projectile": "arrow",
+        "speed": 180,
+        "life": 2.0,
+        "muzzleOffset": { "x": 10, "y": -6 },
+        "cooldown": 0.32
+      },
+      "ability": {
+        "kind": "leap",
+        "label": "LEAP",
+        "backwardDistance": 45,
+        "spreadAngles": [-0.15, 0, 0.15],
+        "spreadSpeed": 140,
+        "spreadLife": 1.5,
+        "cooldown": 1.0,
+        "iframes": 0.25,
+        "dashDuration": 0.25,
+        "sfx": "dash"
+      }
+    },
+    "wizard": {
+      "sprite": "sprite:hero",
+      "palette": "palette:wizard",
+      "attack": {
+        "kind": "projectile",
+        "projectile": "magic-bolt",
+        "speed": 160,
+        "life": 2.0,
+        "muzzleOffset": { "x": 10, "y": -6 },
+        "cooldown": 0.4
+      },
+      "ability": {
+        "kind": "blink",
+        "label": "BLINK",
+        "forwardDistance": 48,
+        "dashSpeedMultiplier": 2.8,
+        "cooldown": 0.8,
+        "iframes": 0.3,
+        "dashDuration": 0.2,
+        "trailParticles": 4,
+        "sfx": "dash"
+      }
+    },
+    "rogue": {
+      "playable": false,
+      "sprite": "sprite:hero",
+      "palette": "palette:rogue",
+      "attack": { "kind": "melee", "reach": 18, "arcHeight": 24, "cooldown": 0.16 },
+      "ability": {
+        "kind": "blink",
+        "label": "CLOAK",
+        "forwardDistance": 48,
+        "dashSpeedMultiplier": 2.8,
+        "cooldown": 0.8,
+        "iframes": 0.3,
+        "dashDuration": 0.2,
+        "trailParticles": 4,
+        "sfx": "dash"
+      }
+    }
+  }
+}

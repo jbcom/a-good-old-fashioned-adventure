@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:village-tavern",
+  "kind": "prop",
+  "grid": { "w": 24, "h": 24 },
+  "anchor": { "x": 12, "y": 24 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "........................",
+        ".........XX.............",
+        "........XbbX............",
+        ".......XbbbbX...........",
+        "......XbbbbbbX..........",
+        ".....XbbbbbbbbX.........",
+        "....XbbbbbbbbbbX........",
+        "...XrrrrrrrrrrrrX.......",
+        "..XrrrrrrrrrrrrrrX......",
+        ".XDDDDDDDDDDDDDDX.......",
+        "XDDDGDDGGDDGDDDDX.......",
+        "XDDDXLLLLLLXDDDDX.......",
+        "XDDDXLLLLLLXDDDDX.......",
+        "XDDDDDDXXDDDDDDDX.......",
+        "XDDDDDXbbbXDDDDDX.......",
+        "XDDDDDXbGbXDDDDDX.......",
+        "XDDDDDXbbbXDDDDDX.......",
+        "XDDDDDDDDDDDDDDDX.......",
+        "XXXXXXXXXXXXXXXXXXXXXXXX",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "b", "r", "D", "G", "L", "g"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

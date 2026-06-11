@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:narrator",
+  "kind": "dialogue-bank",
+  "speaker": "char:narrator",
+  "portraitOverride": "Wizard",
+  "slots": [{ "id": "intro", "node": "intro" }],
+  "nodes": {
+    "intro": {
+      "lines": [
+        "Welcome brave voyager! Talk to the local Woodcutter to start clearing your passage to the Castle dungeon Keep."
+      ],
+      "emits": "dlg:narrator.intro"
+    }
+  }
+}

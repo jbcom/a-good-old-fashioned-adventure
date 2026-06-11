@@ -1,0 +1,53 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:castle-dungeon",
+  "kind": "map",
+  "name": "Obsidian Throne Dungeon",
+  "size": { "cols": 48, "rows": 32 },
+  "baseTile": "tile:stone-floor",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "col-span",
+      "tile": "tile:prison-bars",
+      "x": 16,
+      "y0": 5,
+      "y1": 27,
+      "exceptRows": [14, 15, 16, 17, 18],
+      "note": "cell block bars; rows 14-18 form a readable playable doorway"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 32,
+      "y0": 5,
+      "y1": 27,
+      "exceptRows": [14, 15, 16, 17, 18]
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-wall",
+      "y": 16,
+      "x0": 9,
+      "x1": 39,
+      "exceptCols": [14, 15, 16, 17, 18, 30, 31, 32, 33, 34]
+    }
+  ],
+  "playerSpawn": { "x": 80, "y": 250 },
+  "spawns": {
+    "default": { "x": 80, "y": 250 },
+    "entry": { "x": 80, "y": 250 }
+  },
+  "entities": [
+    { "ref": "prop:chest", "x": 200, "y": 100, "contents": "Gold" },
+    { "ref": "prop:chest", "x": 220, "y": 400, "contents": "AttackUp" },
+    { "enemy": "crypt-skeleton", "x": 240, "y": 160 },
+    { "enemy": "crypt-skeleton", "x": 380, "y": 300 },
+    { "enemy": "crypt-sentry", "x": 420, "y": 100 },
+    { "enemy": "shadow-warlord", "x": 680, "y": 250 },
+    { "ref": "char:princess-amber", "x": 740, "y": 250, "dir": -1 }
+  ],
+  "triggers": [],
+  "onEnter": [{ "dialogue": "dlgbank:dungeon-guard", "slot": "taunt", "once": true }]
+}

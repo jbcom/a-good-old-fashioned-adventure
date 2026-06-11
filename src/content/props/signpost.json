@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:signpost",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 16 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "................",
+        "................",
+        "...XXXXXXXX.....",
+        "..XDDDDDDDX.....",
+        "...XGDDGDX......",
+        ".....XbX........",
+        ".....XbX........",
+        ".....XBX........",
+        ".....XbX........",
+        ".....XBX........",
+        ".....XbX........",
+        ".....XBX........",
+        "....XXbXX.......",
+        "...XbbBbbX......",
+        "....XXXXX.......",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "D", "G", "b", "B"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

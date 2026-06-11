@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:castle",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 16 },
+  "solid": true,
+  "states": {
+    "default": {
+      "rows": [
+        "...L........L...",
+        "...LL......LL...",
+        "..LLLL....LLLL..",
+        "..XCCX....XCCX..",
+        "..XCCXXXXXXCCX..",
+        "..XcCXcCCcXcCX..",
+        "..XCCXCCCCXCCX..",
+        "..XYYXcCCcXYYX..",
+        "..XCCXCCCCXCCX..",
+        "..XcCXcCCcXcCX..",
+        "..XCCXXbbXXCCX..",
+        "..XcCXbBBbXcCX..",
+        "..XCCXbBBbXCCX..",
+        "..XXXXXXXXXXXX..",
+        "................",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["C", "c", "L", "Y", "b", "B", "X"],
+  "defaultPalette": "palette:base",
+  "koota": {
+    "traits": ["Transform", "Sprite", "Solid", "DepthSorted"]
+  }
+}

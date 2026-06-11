@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:village-shop-sample",
+  "kind": "quest",
+  "title": "Keeper Brindle's Travel Cake",
+  "act": 1,
+  "autoStart": true,
+  "start": "offer",
+  "stages": [
+    {
+      "id": "offer",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:shopkeeper.sample:accepted" },
+          "to": "done",
+          "effects": [
+            { "healPlayer": 25 },
+            { "setFlag": "flag:shop-sample-claimed" },
+            { "sfx": "pickup" }
+          ]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

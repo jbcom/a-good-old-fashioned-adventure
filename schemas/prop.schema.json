@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/prop.schema.json",
+  "title": "Foreground prop primitive",
+  "type": "object",
+  "required": ["id", "kind", "grid", "anchor", "solid", "states", "defaultPalette", "koota"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^prop:[a-z0-9-]+$" },
+    "kind": { "const": "prop" },
+    "grid": {
+      "type": "object",
+      "required": ["w", "h"],
+      "properties": {
+        "w": { "type": "integer", "minimum": 1 },
+        "h": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+    },
+    "solid": { "type": "boolean" },
+    "interaction": {
+      "type": "object",
+      "required": ["verb"],
+      "properties": {
+        "verb": { "type": "string" },
+        "method": { "enum": ["melee-swing", "action-button", "touch"] },
+        "sfx": { "type": "string" },
+        "once": { "type": "boolean" }
+      }
+    },
+    "states": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "oneOf": [
+          {
+            "required": ["rows"],
+            "properties": { "rows": { "type": "array", "items": { "type": "string" } } }
+          },
+          {
+            "required": ["drawOps"],
+            "properties": { "drawOps": { "$ref": "./draw-ops.schema.json#/$defs/opList" } }
+          }
+        ]
+      }
+    },
+    "recolorChannels": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1, "maxLength": 1 }
+    },
+    "defaultPalette": { "type": "string", "pattern": "^palette:[a-z0-9-]+$" },
+    "koota": {
+      "type": "object",
+      "required": ["traits"],
+      "properties": { "traits": { "type": "array", "items": { "type": "string" } } }
+    }
+  }
+}

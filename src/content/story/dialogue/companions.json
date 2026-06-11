@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:companions",
+  "kind": "dialogue-bank",
+  "speaker": "by-character",
+  "slots": [{ "default": true, "node": "rally" }],
+  "nodes": {
+    "rally": {
+      "lines": ["Onward! Reclaim our castles and cleanse the blight!"],
+      "emits": "dlg:companions.rally"
+    }
+  }
+}

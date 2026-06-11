@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:barrel",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 16 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "................",
+        "................",
+        ".....XXXX.......",
+        "....XbBBbX......",
+        "...XBBDBBX......",
+        "...XBBDBBX......",
+        "...XbbGbbX......",
+        "...XBBDBBX......",
+        "...XBBDBBX......",
+        "...XbbGbbX......",
+        "....XbBBbX......",
+        ".....XXXX.......",
+        "................",
+        "................",
+        "................",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "b", "B", "D", "G"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

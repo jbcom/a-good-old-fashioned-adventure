@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../schemas/animation.schema.json",
+  "id": "anim:pickup-bob",
+  "kind": "animation",
+  "engine": "animejs",
+  "target": "spriteOffset",
+  "keyframes": [{ "translateY": -3 }, { "translateY": 3 }, { "translateY": -3 }],
+  "duration": 942,
+  "easing": "easeInOutSine",
+  "loop": true,
+  "description": "Floating loot hover: sin(t/150ms) * 3px (full period 2*pi*150ms ≈ 942ms)."
+}

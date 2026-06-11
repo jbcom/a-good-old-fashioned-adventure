@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/palette.schema.json",
+  "title": "Palette / palette-swaps",
+  "oneOf": [
+    {
+      "type": "object",
+      "required": ["id", "kind", "colors"],
+      "properties": {
+        "id": { "$ref": "#/$defs/paletteId" },
+        "kind": { "const": "palette" },
+        "colors": {
+          "type": "object",
+          "propertyNames": { "type": "string", "minLength": 1, "maxLength": 1 },
+          "additionalProperties": {
+            "type": "object",
+            "required": ["hex"],
+            "properties": {
+              "hex": { "$ref": "#/$defs/cssColor" },
+              "name": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "required": ["kind", "base", "swaps"],
+      "properties": {
+        "kind": { "const": "palette-swaps" },
+        "base": { "$ref": "#/$defs/paletteId" },
+        "swaps": {
+          "type": "object",
+          "propertyNames": { "pattern": "^palette:[a-z0-9-]+$" },
+          "additionalProperties": {
+            "type": "object",
+            "propertyNames": { "minLength": 1, "maxLength": 1 },
+            "additionalProperties": { "$ref": "#/$defs/cssColor" }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "paletteId": { "type": "string", "pattern": "^palette:[a-z0-9-]+$" },
+    "cssColor": { "type": "string", "pattern": "^(#[0-9a-fA-F]{6}|transparent)$" }
+  }
+}

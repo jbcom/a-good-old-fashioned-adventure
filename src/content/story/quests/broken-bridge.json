@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:broken-bridge",
+  "kind": "quest",
+  "title": "The Broken Bridge",
+  "act": 1,
+  "autoStart": true,
+  "start": "find-woodcutter",
+  "stages": [
+    {
+      "id": "find-woodcutter",
+      "log": "Find & talk to the Woodcutter",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:woodcutter.request:accepted" },
+          "to": "cull-orcs"
+        }
+      ]
+    },
+    {
+      "id": "cull-orcs",
+      "log": "Defeat Forest Orcs ({orcsKilled}/4)",
+      "counters": {
+        "orcsKilled": {
+          "event": "enemy:defeated",
+          "match": { "archetypes": ["forest-orc", "orc-scout", "forest-shaman"] },
+          "target": 4
+        }
+      },
+      "advance": [{ "when": { "counterDone": "orcsKilled" }, "to": "report-back" }]
+    },
+    {
+      "id": "report-back",
+      "log": "Return to the Woodcutter",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:woodcutter.repaired:seen" },
+          "to": "done",
+          "effects": [
+            { "setFlag": "flag:bridge-fixed" },
+            { "setTile": { "map": "map:overworld", "at": [32, 27], "tile": "tile:wood-bridge" } },
+            { "setTile": { "map": "map:overworld", "at": [32, 28], "tile": "tile:wood-bridge" } },
+            { "setTile": { "map": "map:overworld", "at": [32, 29], "tile": "tile:wood-bridge" } },
+            { "startQuest": "quest:dungeon-key" }
+          ]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true, "log": "The bridge is repaired" }
+  ]
+}

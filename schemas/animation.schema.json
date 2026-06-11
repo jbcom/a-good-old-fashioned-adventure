@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/animation.schema.json",
+  "title": "Named anime.js timeline spec",
+  "type": "object",
+  "required": ["id", "kind", "engine", "target", "duration"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^anim:[a-z0-9-]+$" },
+    "kind": { "const": "animation" },
+    "engine": { "const": "animejs" },
+    "target": {
+      "enum": ["spriteOffset", "spriteTint", "spriteAlpha", "spriteScale", "layerOffset"],
+      "description": "Logical animatable channel; the React binding maps it onto the rendered sprite/layer."
+    },
+    "properties": { "type": "object" },
+    "keyframes": { "type": "array", "items": { "type": "object" }, "minItems": 1 },
+    "duration": { "type": "number", "exclusiveMinimum": 0 },
+    "easing": { "type": "string" },
+    "loop": { "type": ["boolean", "integer"] },
+    "direction": { "enum": ["normal", "reverse", "alternate"] },
+    "description": { "type": "string" }
+  },
+  "anyOf": [{ "required": ["properties"] }, { "required": ["keyframes"] }]
+}

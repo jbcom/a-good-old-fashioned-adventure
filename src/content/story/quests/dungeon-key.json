@@ -1,0 +1,55 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:dungeon-key",
+  "kind": "quest",
+  "title": "Key of the Sandwyrm",
+  "act": 1,
+  "autoStart": false,
+  "start": "seek-the-wyrm",
+  "stages": [
+    {
+      "id": "seek-the-wyrm",
+      "log": "Collect the Golden Dungeon Key from the Sandwyrm on the Sunken Road",
+      "hints": [
+        {
+          "dialogueEvent": "dlg:gwydion.hint:seen",
+          "note": "optional midpoint — Gwydion points at the southern shore; not required to advance"
+        }
+      ],
+      "advance": [
+        {
+          "when": { "enemyDefeated": "desert-wyrm" },
+          "to": "claim-the-key",
+          "effects": [
+            { "spawnItem": { "item": "item:dungeon-key", "at": "defeated-enemy" } },
+            { "startDialogue": { "bank": "dlgbank:spellbook", "slot": "key-recovered" } }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "claim-the-key",
+      "log": "Pick up the brass Dungeon Key",
+      "advance": [{ "when": { "itemAcquired": "item:dungeon-key" }, "to": "to-the-gate" }]
+    },
+    {
+      "id": "to-the-gate",
+      "log": "Unlock the Castle dungeon gates to the Northeast",
+      "advance": [
+        {
+          "when": {
+            "enterZone": { "map": "map:overworld", "trigger": "trigger:castle-gate-entry" }
+          },
+          "to": "done"
+        },
+        {
+          "when": {
+            "enterZone": { "map": "map:castle-approach", "trigger": "trigger:castle-gate-entry" }
+          },
+          "to": "done"
+        }
+      ]
+    },
+    { "id": "done", "terminal": true, "log": "The castle gate stands open" }
+  ]
+}
