@@ -20,6 +20,10 @@ describe("createGameWorld", () => {
     expect(world.get(FlagState)?.values).toEqual({
       "flag:bridge-fixed": false,
       "flag:has-dungeon-key": false,
+      "flag:lost-page-guided": false,
+      "flag:morning-errands-done": false,
+      "flag:oldwood-oath-sworn": false,
+      "flag:shop-sample-claimed": false,
     });
     expect(world.get(MapRuntime)?.mapId).toBe("");
   });
@@ -101,5 +105,28 @@ describe("instantiateMap — transition preserves the player", () => {
     expect(npcs).toEqual(["char:princess-amber"]);
     expect([...world.query(IsEnemy)]).toHaveLength(4);
     expect(world.get(MapRuntime)?.mapId).toBe("map:castle-dungeon");
+  });
+});
+
+describe("instantiateMap — named spawns", () => {
+  it("moves the persistent player to a requested portal spawn", () => {
+    const world = createGameWorld();
+    instantiateMap(world, "map:village", { classId: "wizard" });
+    const player = world.queryFirst(IsPlayer);
+    player?.set(Health, { hp: 44, maxHp: 100 });
+
+    instantiateMap(world, "map:village-house", { classId: "wizard", spawnId: "entry" });
+
+    expect(world.get(MapRuntime)?.mapId).toBe("map:village-house");
+    expect(world.queryFirst(IsPlayer)).toBe(player);
+    expect(player?.get(Transform)).toMatchObject({ x: 192, y: 180 });
+    expect(player?.get(Health)).toMatchObject({ hp: 44, maxHp: 100 });
+  });
+
+  it("fails loud when content references an unknown spawn", () => {
+    const world = createGameWorld();
+    expect(() =>
+      instantiateMap(world, "map:village-house", { classId: "knight", spawnId: "loft" }),
+    ).toThrow(/unknown spawn loft/);
   });
 });

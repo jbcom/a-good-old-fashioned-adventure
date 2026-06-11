@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
+import castleApproachDef from "../../src/content/world/maps/castle-approach.json";
 import dungeonDef from "../../src/content/world/maps/castle-dungeon.json";
+import deepForestDef from "../../src/content/world/maps/deep-forest.json";
+import oldwoodDef from "../../src/content/world/maps/oldwood-forest.json";
 import overworldDef from "../../src/content/world/maps/overworld.json";
 import { buildGrid, type MapGenInput } from "../../src/sim/mapgen";
 
@@ -54,9 +57,41 @@ describe("dungeon generation", () => {
     expect(grid[16][20]).toBe("tile:stone-wall");
   });
 
-  it("places prison bars with a doorway at row 16", () => {
+  it("places prison bars with playable five-tile doorways", () => {
     expect(grid[10][16]).toBe("tile:prison-bars");
     expect(grid[16][16]).toBe("tile:stone-floor");
     expect(grid[16][32]).toBe("tile:stone-floor");
+    expect(grid[14][16]).toBe("tile:stone-floor");
+    expect(grid[15][16]).toBe("tile:stone-floor");
+    expect(grid[17][16]).toBe("tile:stone-floor");
+    expect(grid[18][16]).toBe("tile:stone-floor");
+    expect(grid[16][14]).toBe("tile:stone-floor");
+    expect(grid[16][15]).toBe("tile:stone-floor");
+    expect(grid[16][17]).toBe("tile:stone-floor");
+    expect(grid[16][18]).toBe("tile:stone-floor");
+    expect(grid[15][32]).toBe("tile:stone-floor");
+    expect(grid[17][32]).toBe("tile:stone-floor");
+  });
+});
+
+describe("S6 exterior route generation", () => {
+  const oldwood = buildGrid(oldwoodDef as MapGenInput);
+  const deepForest = buildGrid(deepForestDef as MapGenInput);
+  const castleApproach = buildGrid(castleApproachDef as MapGenInput);
+
+  it("lays readable road corridors through forest maps", () => {
+    expect(oldwood[19][4]).toBe("tile:path");
+    expect(oldwood[19][60]).toBe("tile:path");
+    expect(oldwood[8][26]).toBe("tile:leaf-litter");
+    expect(deepForest[19][4]).toBe("tile:path");
+    expect(deepForest[19][64]).toBe("tile:path");
+    expect(deepForest[12][44]).toBe("tile:leaf-litter");
+  });
+
+  it("stages the castle approach with a stone road and gate apron", () => {
+    expect(castleApproach[19][4]).toBe("tile:castle-road");
+    expect(castleApproach[19][70]).toBe("tile:castle-road");
+    expect(castleApproach[14][61]).toBe("tile:stone-floor");
+    expect(castleApproach[6][63]).toBe("tile:mountain");
   });
 });

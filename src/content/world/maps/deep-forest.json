@@ -1,0 +1,82 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:deep-forest",
+  "kind": "map",
+  "name": "Deep Forest",
+  "size": { "cols": 68, "rows": 38 },
+  "baseTile": "tile:leaf-litter",
+  "bgmTheme": "deep-forest",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain" },
+    { "op": "row-span", "tile": "tile:path", "y": 19, "x0": 1, "x1": 66 },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 17,
+      "x0": 12,
+      "x1": 30,
+      "note": "upper animal track"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 21,
+      "x0": 38,
+      "x1": 57,
+      "note": "lower animal track"
+    },
+    { "op": "col-span", "tile": "tile:path", "x": 46, "y0": 13, "y1": 25, "note": "hermit track" }
+  ],
+  "playerSpawn": { "x": 48, "y": 304 },
+  "spawns": {
+    "default": { "x": 48, "y": 304 },
+    "from-oldwood": { "x": 48, "y": 304 },
+    "from-approach": { "x": 1024, "y": 304 }
+  },
+  "entities": [
+    { "ref": "prop:broadleaf-tree", "x": 180, "y": 236, "note": "thicker canopy" },
+    { "ref": "prop:stump", "x": 308, "y": 336, "note": "mossy stump" },
+    { "ref": "prop:broadleaf-tree", "x": 620, "y": 248, "note": "old oak" },
+    { "ref": "prop:stump", "x": 820, "y": 330, "note": "fallen marker" },
+    {
+      "ref": "char:lost-page",
+      "x": 296,
+      "y": 274,
+      "dir": 1,
+      "note": "Lost Page Rowan near the upper animal track"
+    },
+    {
+      "spawnRule": "unchosen-companions",
+      "positions": [{ "x": 260, "y": 260 }, { "x": 730, "y": 258 }]
+    },
+    { "enemy": "orc-scout", "x": 500, "y": 220 },
+    { "enemy": "forest-shaman", "x": 840, "y": 398 }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:old-oak",
+      "kind": "landmark",
+      "label": "The Leaning Old Oak",
+      "sfx": "interact",
+      "zone": { "x0": 596, "y0": 232, "x1": 662, "y1": 320 }
+    },
+    {
+      "id": "trigger:west-road",
+      "kind": "portal",
+      "label": "Path back to Oldwood",
+      "toMap": "map:oldwood-forest",
+      "toSpawn": "from-deep",
+      "sfx": "interact",
+      "zone": { "x0": 0, "y0": 276, "x1": 28, "y1": 332 }
+    },
+    {
+      "id": "trigger:east-road",
+      "kind": "portal",
+      "label": "Road to the Castle Approach",
+      "toMap": "map:castle-approach",
+      "toSpawn": "from-forest",
+      "sfx": "interact",
+      "zone": { "x0": 1052, "y0": 276, "x1": 1088, "y1": 332 }
+    }
+  ]
+}

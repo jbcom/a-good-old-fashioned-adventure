@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:village-shop",
+  "kind": "prop",
+  "grid": { "w": 24, "h": 24 },
+  "anchor": { "x": 12, "y": 24 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "........................",
+        "......XXXXXXXXXX........",
+        ".....XGGGGGGGGGX........",
+        "....XGgggggggGGX........",
+        "...XbbbbbbbbbbbbX.......",
+        "..XbBDBDBDBDBDBbX.......",
+        ".XbBDBDBDBDBDBDbX.......",
+        "XDDDDDDDDDDDDDDDX.......",
+        "XDDLLDDDDDDDLLDDX.......",
+        "XDDLLDDGXGDDLLDDX.......",
+        "XDDDDDDGXGDDDDDDX.......",
+        "XDDDDDDbbbDDDDDDX.......",
+        "XDDDDDXbbbXDDDDDX.......",
+        "XDDDDDXbGbXDDDDDX.......",
+        "XDDDDDXbbbXDDDDDX.......",
+        "XDDDCCCCCCCCCDDDX.......",
+        "XDDDCDCDCDCDCDDDX.......",
+        "XDDDDDDDDDDDDDDDX.......",
+        "XXXXXXXXXXXXXXXXXXXXXXXX",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "G", "g", "b", "B", "D", "L", "C"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

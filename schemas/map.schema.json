@@ -12,6 +12,7 @@
     "bgmTheme",
     "generation",
     "playerSpawn",
+    "spawns",
     "entities"
   ],
   "properties": {
@@ -55,6 +56,19 @@
       "required": ["x", "y"],
       "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
     },
+    "spawns": {
+      "type": "object",
+      "required": ["default"],
+      "patternProperties": {
+        "^[a-z0-9-]+$": {
+          "type": "object",
+          "required": ["x", "y"],
+          "properties": { "x": { "type": "number" }, "y": { "type": "number" } },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
     "entities": {
       "type": "array",
       "items": {
@@ -86,6 +100,10 @@
         "properties": {
           "id": { "type": "string", "pattern": "^trigger:[a-z0-9-]+$" },
           "kind": { "type": "string" },
+          "label": { "type": "string" },
+          "toMap": { "$ref": "#/$defs/mapRef" },
+          "toSpawn": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "sfx": { "type": "string" },
           "zone": { "type": "object", "required": ["x0", "y0", "x1", "y1"] },
           "tiles": { "type": "array", "items": { "$ref": "#/$defs/tileCoord" } },
           "requiresFlag": { "$ref": "#/$defs/flagRef" },
@@ -100,6 +118,7 @@
   "$defs": {
     "tileRef": { "type": "string", "pattern": "^tile:[a-z0-9-]+$" },
     "flagRef": { "type": "string", "pattern": "^flag:[a-z0-9-]+$" },
+    "mapRef": { "type": "string", "pattern": "^map:[a-z0-9-]+$" },
     "tileCoord": { "type": "array", "items": { "type": "integer" }, "minItems": 2, "maxItems": 2 }
   }
 }

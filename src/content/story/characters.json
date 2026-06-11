@@ -25,6 +25,42 @@
       "portraitColor": "#00d2f7",
       "dialogue": "dlgbank:gwydion"
     },
+    "char:shopkeeper": {
+      "name": "Keeper Brindle",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:keeper",
+      "portraitColor": "#cfa153",
+      "dialogue": "dlgbank:shopkeeper",
+      "note": "First village shop interaction; later slices replace the sample with a fuller economy."
+    },
+    "char:page": {
+      "name": "Page Pip",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:page",
+      "portraitColor": "#7f4f2f",
+      "dialogue": "dlgbank:page",
+      "note": "Village errand-giver who ties the green, shop, and first road together."
+    },
+    "char:hermit": {
+      "name": "Oldwood Hermit",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:hermit",
+      "portraitColor": "#6f7f3f",
+      "dialogue": "dlgbank:hermit",
+      "note": "Forest quest NPC for the Oldwood oath and raider counter."
+    },
+    "char:lost-page": {
+      "name": "Lost Page Rowan",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:lost-page",
+      "portraitColor": "#9f5d57",
+      "dialogue": "dlgbank:lost-page",
+      "note": "Escort-lite Deep Forest NPC guided by landmark zones."
+    },
     "char:princess-amber": {
       "name": "Princess Amber",
       "role": "npc",

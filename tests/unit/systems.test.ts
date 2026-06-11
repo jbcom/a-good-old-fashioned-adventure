@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { player as playerConfig } from "../../src/lib/config";
 import { collides, isSolidTileAt } from "../../src/sim/collision";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import { createRng } from "../../src/sim/rng";
@@ -52,7 +53,7 @@ describe("movement", () => {
     player.set(MoveIntent, { x: -1, y: 0 });
     step(world);
     const t = player.get(Transform);
-    expect(t?.x).toBeCloseTo(80 - 72 * SIM_DT, 5);
+    expect(t?.x).toBeCloseTo(80 - playerConfig.movement.speed * SIM_DT, 5);
     expect(t?.y).toBe(190);
   });
 
@@ -61,7 +62,7 @@ describe("movement", () => {
     player.set(MoveIntent, { x: 1, y: 1 });
     step(world);
     const t = player.get(Transform);
-    const per = (72 * SIM_DT) / Math.SQRT2;
+    const per = (playerConfig.movement.speed * SIM_DT) / Math.SQRT2;
     expect(t?.x).toBeCloseTo(80 + per, 5);
     expect(t?.y).toBeCloseTo(190 + per, 5);
   });

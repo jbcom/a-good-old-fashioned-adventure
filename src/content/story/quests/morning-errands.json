@@ -1,0 +1,48 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:morning-errands",
+  "kind": "quest",
+  "title": "Morning Errands of Hearthwake",
+  "act": 1,
+  "startOn": { "enterMap": "map:village" },
+  "start": "find-page",
+  "stages": [
+    {
+      "id": "find-page",
+      "log": "Find Page Pip by the village well.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:page.errand:accepted" },
+          "to": "fetch-cake",
+          "effects": [{ "sfx": "interact" }]
+        }
+      ]
+    },
+    {
+      "id": "fetch-cake",
+      "log": "Ask Keeper Brindle for a road cake.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:shopkeeper.sample:accepted" },
+          "to": "return-page"
+        },
+        {
+          "when": { "dialogueEvent": "dlg:shopkeeper.after-sample:seen" },
+          "to": "return-page"
+        }
+      ]
+    },
+    {
+      "id": "return-page",
+      "log": "Bring Keeper Brindle's word back to Page Pip.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:page.report:seen" },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:morning-errands-done" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

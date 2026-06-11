@@ -2,6 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { afterEach, expect, it } from "vitest";
 import { App } from "../../src/app/App";
+import { MemorySaveRepository } from "../../src/persistence/saveRepository";
 
 let container: HTMLDivElement | undefined;
 
@@ -15,10 +16,10 @@ it("boots the app shell in a real browser", async () => {
   document.body.appendChild(container);
   createRoot(container).render(
     <StrictMode>
-      <App />
+      <App saveRepository={new MemorySaveRepository()} />
     </StrictMode>,
   );
-  await expect.poll(() => container?.textContent).toContain("A GOOD OLD FASHIONED ADVENTURE");
+  await expect.poll(() => container?.textContent).toContain("A Good Old-Fashioned Adventure");
 });
 
 it("runs with GPU-backed WebGL2 (not software fallback)", () => {

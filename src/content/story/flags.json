@@ -9,6 +9,22 @@
     "flag:has-dungeon-key": {
       "default": false,
       "description": "Player holds the brass dungeon key dropped by the Desert Wyrm; unlocks the castle gate."
+    },
+    "flag:morning-errands-done": {
+      "default": false,
+      "description": "Page Pip's morning errand has been carried from the village green to the shop and back."
+    },
+    "flag:oldwood-oath-sworn": {
+      "default": false,
+      "description": "The Oldwood Hermit's road oath has been carried past the first forest raiders."
+    },
+    "flag:lost-page-guided": {
+      "default": false,
+      "description": "Lost Page Rowan has been guided from the Deep Forest oak back toward the old road."
+    },
+    "flag:shop-sample-claimed": {
+      "default": false,
+      "description": "Hearthwake shopkeeper has already given the player the one-time travel cake sample."
     }
   }
 }

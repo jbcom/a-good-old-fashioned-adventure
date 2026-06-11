@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:leaf-litter",
+  "kind": "tile",
+  "solid": false,
+  "layers": [
+    { "op": "fill", "color": "@e" },
+    { "op": "rect", "color": "@E", "x": 1, "y": 2, "w": 5, "h": 1 },
+    { "op": "rect", "color": "@T", "x": 8, "y": 5, "w": 3, "h": 1 },
+    { "op": "rect", "color": "@D", "x": 4, "y": 10, "w": 6, "h": 1 },
+    { "op": "rect", "color": "@b", "x": 12, "y": 12, "w": 2, "h": 1 },
+    { "op": "rect", "color": "#142a07", "x": 2, "y": 14, "w": 1, "h": 1 }
+  ],
+  "koota": { "traits": ["Tile"] }
+}

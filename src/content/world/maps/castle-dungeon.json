@@ -14,20 +14,31 @@
       "x": 16,
       "y0": 5,
       "y1": 27,
-      "exceptRows": [16],
-      "note": "cell block bars; row 16 is the doorway"
+      "exceptRows": [14, 15, 16, 17, 18],
+      "note": "cell block bars; rows 14-18 form a readable playable doorway"
     },
-    { "op": "col-span", "tile": "tile:stone-wall", "x": 32, "y0": 5, "y1": 27, "exceptRows": [16] },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 32,
+      "y0": 5,
+      "y1": 27,
+      "exceptRows": [14, 15, 16, 17, 18]
+    },
     {
       "op": "row-span",
       "tile": "tile:stone-wall",
       "y": 16,
       "x0": 9,
       "x1": 39,
-      "exceptCols": [16, 32]
+      "exceptCols": [14, 15, 16, 17, 18, 30, 31, 32, 33, 34]
     }
   ],
   "playerSpawn": { "x": 80, "y": 250 },
+  "spawns": {
+    "default": { "x": 80, "y": 250 },
+    "entry": { "x": 80, "y": 250 }
+  },
   "entities": [
     { "ref": "prop:chest", "x": 200, "y": 100, "contents": "Gold" },
     { "ref": "prop:chest", "x": 220, "y": 400, "contents": "AttackUp" },

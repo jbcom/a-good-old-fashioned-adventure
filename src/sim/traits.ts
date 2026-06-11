@@ -16,6 +16,7 @@ export const Hitbox = trait({ w: 10, h: 10 });
 export const Health = trait({ hp: 1, maxHp: 1 });
 export const Speed = trait({ value: 0 });
 export const MoveIntent = trait({ x: 0, y: 0 });
+export const AimDirection = trait({ x: 1, y: 0 });
 export const SpriteRef = trait({ spriteId: "", paletteId: "" });
 export const PropRef = trait({ propId: "", state: "default" });
 
@@ -64,6 +65,11 @@ export interface GameEvent {
 
 export const EventQueue = trait(() => ({ events: [] as GameEvent[] }));
 
+export interface MapLoadRequest {
+  mapId: string;
+  spawnId?: string;
+}
+
 export interface ActiveQuest {
   stage: string;
   counters: Record<string, number>;
@@ -81,6 +87,6 @@ export const QuestLog = trait(() => ({
 export const Outbox = trait(() => ({
   sfx: [] as string[],
   dialogue: null as { bank: string; slot?: string } | null,
-  mapLoad: null as string | null,
+  mapLoad: null as MapLoadRequest | null,
   endGame: null as "victory" | "gameover" | null,
 }));

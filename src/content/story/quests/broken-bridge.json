@@ -38,7 +38,9 @@
           "to": "done",
           "effects": [
             { "setFlag": "flag:bridge-fixed" },
+            { "setTile": { "map": "map:overworld", "at": [32, 27], "tile": "tile:wood-bridge" } },
             { "setTile": { "map": "map:overworld", "at": [32, 28], "tile": "tile:wood-bridge" } },
+            { "setTile": { "map": "map:overworld", "at": [32, 29], "tile": "tile:wood-bridge" } },
             { "startQuest": "quest:dungeon-key" }
           ]
         }

@@ -1,0 +1,50 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:hermit",
+  "kind": "dialogue-bank",
+  "speaker": "char:hermit",
+  "slots": [
+    { "when": { "flag": "flag:oldwood-oath-sworn" }, "node": "after" },
+    { "when": { "quest": "quest:oldwood-oath", "stage": "find-hermit" }, "node": "oath" },
+    { "when": { "quest": "quest:oldwood-oath", "stage": "clear-raiders" }, "node": "raiders" },
+    { "when": { "quest": "quest:oldwood-oath", "stage": "return-hermit" }, "node": "return" },
+    { "when": { "quest": "quest:oldwood-oath", "stage": "carry-oath" }, "node": "east-bough" },
+    { "default": true, "node": "murmur" }
+  ],
+  "nodes": {
+    "oath": {
+      "lines": [
+        "Oldwood hears soft feet and loud hearts. The raiders hear only coins.",
+        "Swear the little oath: spare the saplings, mark the stumps, and drive two raiders from the road."
+      ],
+      "choices": [{ "id": "accepted", "text": "Take the oath." }],
+      "emits": "dlg:hermit.oath"
+    },
+    "raiders": {
+      "lines": [
+        "Two raiders trouble the moss-road. Count them by courage, not by noise: {quest:oldwood-oath.raiders}/2."
+      ],
+      "emits": "dlg:hermit.raiders"
+    },
+    "return": {
+      "lines": [
+        "The branches are quieter. Good. Carry the oath under the east bough, and the old road will remember you kindly."
+      ],
+      "emits": "dlg:hermit.return"
+    },
+    "east-bough": {
+      "lines": ["East now. Do not bow to the trees; they grow proud enough without encouragement."],
+      "emits": "dlg:hermit.east-bough"
+    },
+    "after": {
+      "lines": [
+        "The oath sits well on your shoulders. Mind the deeper forest; it has pockets where pages and promises fall out."
+      ],
+      "emits": "dlg:hermit.after"
+    },
+    "murmur": {
+      "lines": ["A road is a story told by feet. Some feet lie. Yours have not yet."],
+      "emits": "dlg:hermit.murmur"
+    }
+  }
+}

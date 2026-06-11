@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:well",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 16 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "................",
+        ".....bbbb.......",
+        "....bBBBBb......",
+        "...bBbbbbBb.....",
+        "...XCCCCCCX.....",
+        "...XcCLLLCcX....",
+        "...XcCLLLCcX....",
+        "...XCCCCCCX.....",
+        "...XXcCCcXX.....",
+        "....XbbbbX......",
+        "....XbBBbX......",
+        "....XbbbbX......",
+        ".....XXXX.......",
+        "................",
+        "................",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "b", "B", "C", "c", "L"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

@@ -1,0 +1,44 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:village-shop",
+  "kind": "map",
+  "name": "Hearthwake Shop",
+  "size": { "cols": 24, "rows": 18 },
+  "baseTile": "tile:stone-floor",
+  "bgmTheme": "interior",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    { "op": "row-span", "tile": "tile:path", "y": 15, "x0": 9, "x1": 15 },
+    {
+      "op": "row-span",
+      "tile": "tile:wood-bridge",
+      "y": 6,
+      "x0": 4,
+      "x1": 19,
+      "note": "counter plank"
+    }
+  ],
+  "playerSpawn": { "x": 192, "y": 224 },
+  "spawns": {
+    "default": { "x": 192, "y": 224 },
+    "entry": { "x": 192, "y": 224 }
+  },
+  "entities": [
+    { "ref": "prop:table", "x": 128, "y": 132, "note": "display counter" },
+    { "ref": "prop:barrel", "x": 260, "y": 160, "note": "supply barrel" },
+    { "ref": "char:shopkeeper", "x": 192, "y": 132, "dir": -1 },
+    { "ref": "char:gwydion", "x": 192, "y": 116, "dir": -1 },
+    { "ref": "prop:chest", "x": 92, "y": 92, "contents": "HPUp" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:return-village",
+      "kind": "portal",
+      "label": "Door to Hearthwake",
+      "toMap": "map:village",
+      "toSpawn": "from-shop",
+      "sfx": "interact",
+      "zone": { "x0": 144, "y0": 232, "x1": 248, "y1": 286 }
+    }
+  ]
+}

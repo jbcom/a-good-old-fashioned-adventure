@@ -7,6 +7,7 @@
 import { Canvas } from "@react-three/fiber";
 import { useMemo } from "react";
 import { CanvasTexture, NearestFilter, type PerspectiveCamera, SRGBColorSpace } from "three";
+import { createDioramaMaterial } from "./materials";
 
 export function pixelTexture(canvas: HTMLCanvasElement): CanvasTexture {
   const texture = new CanvasTexture(canvas);
@@ -48,16 +49,18 @@ function Ground({
   worldH: number;
 }) {
   const texture = useMemo(() => pixelTexture(canvas), [canvas]);
+  const material = useMemo(() => createDioramaMaterial(texture, { role: "ground" }), [texture]);
   return (
     <mesh rotation={[-Math.PI / 2, 0, 0]} position={[worldW / 2, 0, worldH / 2]}>
       <planeGeometry args={[worldW, worldH]} />
-      <meshBasicMaterial map={texture} toneMapped={false} />
+      <primitive attach="material" object={material} />
     </mesh>
   );
 }
 
 function Billboard({ actor }: { actor: StageActor }) {
   const texture = useMemo(() => pixelTexture(actor.canvas), [actor]);
+  const material = useMemo(() => createDioramaMaterial(texture, { role: "sprite" }), [texture]);
   const w = actor.canvas.width;
   const h = actor.canvas.height;
   return (
@@ -67,7 +70,7 @@ function Billboard({ actor }: { actor: StageActor }) {
       scale={[actor.flip ? -1 : 1, 1, 1]}
     >
       <planeGeometry args={[w, h]} />
-      <meshBasicMaterial map={texture} transparent alphaTest={0.5} toneMapped={false} />
+      <primitive attach="material" object={material} />
     </mesh>
   );
 }

@@ -8,6 +8,7 @@ import { classes, enemies, player as playerConfig } from "../lib/config";
 import { flags, getCharacter, getMap, getProp } from "../lib/content/registry";
 import { buildGrid } from "./mapgen";
 import {
+  AimDirection,
   CameraState,
   Clock,
   CombatTimers,
@@ -68,6 +69,7 @@ export function spawnPlayer(world: World, classId: string, x: number, y: number)
     Level({ level: base.level, xp: base.xp, nextXp: base.nextXp }),
     Speed({ value: playerConfig.movement.speed }),
     MoveIntent({ x: 0, y: 0 }),
+    AimDirection({ x: 1, y: 0 }),
     CombatTimers({ attack: 0, dash: 0, dashCooldown: 0, iframes: 0 }),
     ShieldState({ active: false }),
     PlayerGold({ value: 0 }),
@@ -152,6 +154,7 @@ export function spawnProjectile(world: World, spec: ProjectileSpawn): Entity {
 
 export interface InstantiateOptions {
   classId: string;
+  spawnId?: string;
 }
 
 const TILE = 16;
@@ -177,7 +180,10 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
     rev: 0,
   });
 
-  const { x, y } = def.playerSpawn;
+  const spawnId = opts.spawnId ?? "default";
+  const spawn = def.spawns[spawnId];
+  if (!spawn) throw new Error(`${mapId}: unknown spawn ${spawnId}`);
+  const { x, y } = spawn;
   if (existingPlayer) {
     existingPlayer.set(Transform, { x, y });
     existingPlayer.set(MoveIntent, { x: 0, y: 0 });

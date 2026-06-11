@@ -9,7 +9,7 @@ import { pushEvent } from "../../src/sim/events";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import { autoStartQuests, questLogLines, startQuest } from "../../src/sim/quests";
 import { step } from "../../src/sim/tick";
-import { FlagState, IsPickup, MapRuntime, Outbox, QuestLog } from "../../src/sim/traits";
+import { FlagState, Health, IsPickup, MapRuntime, Outbox, QuestLog } from "../../src/sim/traits";
 
 function bootedWorld() {
   const world = createGameWorld(11);
@@ -33,6 +33,28 @@ describe("dialogue slot resolution", () => {
 
   it("addressable slots resolve only by direct invocation", () => {
     expect(resolveDialogueSlot("dlgbank:narrator", "intro").nodeKey).toBe("intro");
+  });
+});
+
+describe("stateful shop interaction", () => {
+  it("lets the shopkeeper heal the player once through dialogue-driven quest effects", () => {
+    const world = createGameWorld(13);
+    instantiateMap(world, "map:village-shop", { classId: "knight" });
+    autoStartQuests(world);
+    const player = world.queryFirst(Health);
+    player?.set(Health, { hp: 50, maxHp: 100 });
+
+    const offer = resolveDialogue(world, "dlgbank:shopkeeper");
+    expect(offer.nodeKey).toBe("sample");
+    emitDialogueChoice(world, offer.node, "accepted");
+    step(world);
+
+    expect(player?.get(Health)).toMatchObject({ hp: 75, maxHp: 100 });
+    expect(world.get(FlagState)?.values["flag:shop-sample-claimed"]).toBe(true);
+    expect(world.get(QuestLog)?.completed).toContain("quest:village-shop-sample");
+    expect(world.get(Outbox)?.sfx).toContain("pickup");
+
+    expect(resolveDialogue(world, "dlgbank:shopkeeper").nodeKey).toBe("after-sample");
   });
 });
 
@@ -63,7 +85,9 @@ describe("the full original journey, reduced through the quest engine", () => {
     emitDialogueSeen(world, repaired.node);
     step(world);
     expect(flags()["flag:bridge-fixed"]).toBe(true);
+    expect(world.get(MapRuntime)?.grid[27][32]).toBe("tile:wood-bridge");
     expect(world.get(MapRuntime)?.grid[28][32]).toBe("tile:wood-bridge");
+    expect(world.get(MapRuntime)?.grid[29][32]).toBe("tile:wood-bridge");
     expect(log?.completed).toContain("quest:broken-bridge");
     expect(log?.active["quest:dungeon-key"].stage).toBe("seek-the-wyrm");
 

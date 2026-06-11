@@ -8,7 +8,15 @@ import type { World } from "koota";
 import { getQuest, quests } from "../lib/content/registry";
 import type { QuestCondition, QuestStage } from "../lib/content/types";
 import { spawnPickup } from "./factories";
-import { FlagState, type GameEvent, MapRuntime, Outbox, QuestLog } from "./traits";
+import {
+  FlagState,
+  type GameEvent,
+  Health,
+  IsPlayer,
+  MapRuntime,
+  Outbox,
+  QuestLog,
+} from "./traits";
 
 export function startQuest(world: World, questId: string): void {
   const quest = getQuest(questId);
@@ -84,6 +92,16 @@ export function applyEffects(
       const flags = world.get(FlagState);
       if (flags) flags.values[effect.clearFlag] = false;
     }
+    if (typeof effect.healPlayer === "number") {
+      const player = world.queryFirst(IsPlayer);
+      const health = player?.get(Health);
+      if (player && health) {
+        player.set(Health, {
+          hp: Math.min(health.maxHp, health.hp + effect.healPlayer),
+          maxHp: health.maxHp,
+        });
+      }
+    }
     if (effect.setTile) {
       const { map, at, tile } = effect.setTile as {
         map: string;
@@ -109,7 +127,11 @@ export function applyEffects(
       outbox.dialogue = { bank, slot };
     }
     if (typeof effect.loadMap === "string" && outbox) {
-      outbox.mapLoad = effect.loadMap;
+      outbox.mapLoad = { mapId: effect.loadMap };
+    }
+    if (effect.loadMap && typeof effect.loadMap === "object" && outbox) {
+      const { mapId, spawnId } = effect.loadMap as { mapId: string; spawnId?: string };
+      outbox.mapLoad = { mapId, spawnId };
     }
     if (typeof effect.sfx === "string" && outbox) {
       outbox.sfx.push(effect.sfx);

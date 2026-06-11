@@ -1,6 +1,6 @@
 ---
 title: Architecture
-updated: 2026-06-10
+updated: 2026-06-11
 status: current
 domain: technical
 ---
@@ -19,7 +19,8 @@ src/sim/       pure simulation: mapgen, movement, collision, combat, quests,
                no performance.now (clock facade).
 src/render/    pixel rasterization, atlases, the r3f world stage
 src/audio/     ToneJS engine built from config/audio.json recipes
-src/ui/        React DOM: HUD, dialogue, menus, minimap, virtual pad
+src/persistence/ Drizzle schema, Capacitor SQLite save repository, Preferences settings
+src/ui/        React DOM: landing, HUD, dialogue, menus, minimap, virtual pad
 src/app/       composition root
 ```
 
@@ -78,5 +79,18 @@ into state (see CONTENT-ARCHITECTURE.md §story).
   **playthrough test** drives the real app purely through synthetic
   input (keyboard/pointer on the virtual pad) and must traverse the full
   current player journey; it grows with every feature.
+- `tests/harness/playerGovernor*.ts` — a test-side GOAP player governor
+  documented in `docs/PLAYER-GOVERNOR.md`. It perceives public UI, presses
+  real player controls, and never writes sim state.
 - Visual changes are screenshot-validated (taken AND read) before commit;
   evidence lives in `docs/evidence/`.
+
+## Persistence
+
+`docs/PERSISTENCE.md` is binding. Drizzle owns the SQLite schema and
+`@capacitor-community/sqlite` executes runtime saves. The web build uses
+`jeep-sqlite` with `public/assets/sql-wasm.wasm`, copied by
+`scripts/copy-sql-wasm.mjs`; settings use `@capacitor/preferences`. The
+Capacitor/SQLite web save stack is intentionally pinned and excluded from
+Dependabot piecemeal upgrades because `jeep-sqlite` and `sql.js` wasm must
+match exactly.

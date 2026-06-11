@@ -3,6 +3,13 @@
   "id": "tile:path",
   "kind": "tile",
   "solid": false,
-  "layers": [{ "op": "fill", "color": "@B" }],
+  "layers": [
+    { "op": "fill", "color": "@B" },
+    { "op": "rect", "color": "@D", "x": 0, "y": 0, "w": 16, "h": 2 },
+    { "op": "rect", "color": "@b", "x": 0, "y": 14, "w": 16, "h": 1 },
+    { "op": "rect", "color": "@g", "x": 3, "y": 5, "w": 2, "h": 1 },
+    { "op": "rect", "color": "@C", "x": 10, "y": 9, "w": 2, "h": 1 },
+    { "op": "rect", "color": "@d", "x": 6, "y": 12, "w": 4, "h": 1 }
+  ],
   "koota": { "traits": ["Tile"] }
 }

@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:village-house",
+  "kind": "map",
+  "name": "Cottage Interior",
+  "size": { "cols": 24, "rows": 18 },
+  "baseTile": "tile:stone-floor",
+  "bgmTheme": "interior",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    { "op": "row-span", "tile": "tile:path", "y": 15, "x0": 9, "x1": 15, "note": "door mat" }
+  ],
+  "playerSpawn": { "x": 192, "y": 180 },
+  "spawns": {
+    "default": { "x": 192, "y": 180 },
+    "entry": { "x": 192, "y": 180 }
+  },
+  "entities": [
+    { "ref": "prop:table", "x": 208, "y": 136, "note": "woodcutter's work table" },
+    { "ref": "prop:barrel", "x": 264, "y": 172, "note": "stacked kindling barrel" },
+    { "ref": "char:woodcutter", "x": 142, "y": 124, "dir": 1 },
+    { "ref": "prop:chest", "x": 248, "y": 96, "contents": "Gold" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:return-village",
+      "kind": "portal",
+      "label": "Door to Hearthwake",
+      "toMap": "map:village",
+      "toSpawn": "from-house",
+      "sfx": "interact",
+      "zone": { "x0": 144, "y0": 232, "x1": 248, "y1": 286 }
+    }
+  ]
+}

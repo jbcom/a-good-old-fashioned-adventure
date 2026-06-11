@@ -1,0 +1,121 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:village",
+  "kind": "map",
+  "name": "Hearthwake Village",
+  "size": { "cols": 56, "rows": 34 },
+  "baseTile": "tile:grass",
+  "bgmTheme": "village",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain" },
+    { "op": "row-span", "tile": "tile:path", "y": 17, "x0": 2, "x1": 53 },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 19,
+      "x0": 44,
+      "x1": 55,
+      "note": "east road toward Oldwood Forest"
+    },
+    { "op": "col-span", "tile": "tile:path", "x": 12, "y0": 6, "y1": 27 },
+    { "op": "col-span", "tile": "tile:path", "x": 28, "y0": 6, "y1": 27 },
+    { "op": "col-span", "tile": "tile:path", "x": 44, "y0": 6, "y1": 27 },
+    {
+      "op": "region",
+      "tile": "tile:village-cobble",
+      "x0": 7,
+      "x1": 17,
+      "y0": 5,
+      "y1": 11,
+      "note": "woodcutter house footprint"
+    },
+    {
+      "op": "region",
+      "tile": "tile:village-cobble",
+      "x0": 23,
+      "x1": 33,
+      "y0": 5,
+      "y1": 11,
+      "note": "shop footprint"
+    },
+    {
+      "op": "region",
+      "tile": "tile:village-cobble",
+      "x0": 39,
+      "x1": 49,
+      "y0": 5,
+      "y1": 11,
+      "note": "tavern footprint"
+    }
+  ],
+  "playerSpawn": { "x": 96, "y": 272 },
+  "spawns": {
+    "default": { "x": 96, "y": 272 },
+    "from-house": { "x": 192, "y": 300 },
+    "from-shop": { "x": 448, "y": 300 },
+    "from-tavern": { "x": 704, "y": 300 },
+    "from-forest": { "x": 800, "y": 304 }
+  },
+  "entities": [
+    { "ref": "prop:cottage-facade", "x": 192, "y": 176, "note": "woodcutter cottage facade" },
+    { "ref": "prop:village-shop", "x": 448, "y": 176, "note": "keeper's shop facade" },
+    { "ref": "prop:village-tavern", "x": 704, "y": 176, "note": "unfurled vine facade" },
+    { "ref": "prop:broadleaf-tree", "x": 116, "y": 240, "note": "village green shade" },
+    { "ref": "prop:broadleaf-tree", "x": 372, "y": 238, "note": "central road shade" },
+    { "ref": "prop:broadleaf-tree", "x": 568, "y": 244, "note": "roadside tree" },
+    { "ref": "prop:well", "x": 320, "y": 296, "note": "village well" },
+    { "ref": "prop:well", "x": 364, "y": 296, "note": "market well" },
+    { "ref": "prop:signpost", "x": 392, "y": 254, "note": "forest and shop signpost" },
+    { "ref": "prop:barrel", "x": 536, "y": 298, "note": "shop supply barrel" },
+    { "ref": "prop:barrel", "x": 760, "y": 288, "note": "tavern roadside barrel" },
+    { "ref": "prop:signpost", "x": 808, "y": 272, "note": "east road sign" },
+    { "ref": "char:woodcutter", "x": 184, "y": 260, "dir": -1 },
+    { "ref": "char:gwydion", "x": 456, "y": 260, "dir": 1 },
+    {
+      "ref": "char:page",
+      "x": 632,
+      "y": 304,
+      "dir": -1,
+      "note": "Page Pip by the village road well"
+    },
+    { "ref": "prop:chest", "x": 712, "y": 270, "contents": "Gold" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:enter-house",
+      "kind": "portal",
+      "label": "Woodcutter's House",
+      "toMap": "map:village-house",
+      "toSpawn": "entry",
+      "sfx": "interact",
+      "zone": { "x0": 154, "y0": 176, "x1": 224, "y1": 244 }
+    },
+    {
+      "id": "trigger:enter-shop",
+      "kind": "portal",
+      "label": "Village Shop",
+      "toMap": "map:village-shop",
+      "toSpawn": "entry",
+      "sfx": "interact",
+      "zone": { "x0": 416, "y0": 176, "x1": 480, "y1": 244 }
+    },
+    {
+      "id": "trigger:enter-tavern",
+      "kind": "portal",
+      "label": "Tavern",
+      "toMap": "map:village-tavern",
+      "toSpawn": "entry",
+      "sfx": "interact",
+      "zone": { "x0": 672, "y0": 176, "x1": 736, "y1": 244 }
+    },
+    {
+      "id": "trigger:east-road",
+      "kind": "portal",
+      "label": "East Road to Oldwood",
+      "toMap": "map:oldwood-forest",
+      "toSpawn": "from-village",
+      "sfx": "interact",
+      "zone": { "x0": 838, "y0": 276, "x1": 894, "y1": 332 }
+    }
+  ]
+}

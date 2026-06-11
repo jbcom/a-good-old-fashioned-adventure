@@ -38,10 +38,14 @@
       "op": "set",
       "tile": "tile:water",
       "at": [32, 28],
-      "note": "the broken bridge crossing — repaired to tile:wood-bridge by quest:broken-bridge"
+      "note": "the broken bridge center — repaired with neighboring rows by quest:broken-bridge"
     }
   ],
   "playerSpawn": { "x": 80, "y": 190 },
+  "spawns": {
+    "default": { "x": 80, "y": 190 },
+    "castle-return": { "x": 1260, "y": 178 }
+  },
   "entities": [
     { "ref": "char:woodcutter", "x": 256, "y": 180, "dir": -1 },
     { "ref": "char:gwydion", "x": 200, "y": 320, "dir": 1 },

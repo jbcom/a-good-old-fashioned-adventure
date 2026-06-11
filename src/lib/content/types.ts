@@ -103,6 +103,10 @@ export interface MapEntitySpawn {
 export interface MapTrigger {
   id: string;
   kind?: string;
+  label?: string;
+  toMap?: string;
+  toSpawn?: string;
+  sfx?: string;
   zone?: { x0: number; y0: number; x1: number; y1: number };
   tiles?: [number, number][];
   requiresFlag?: string;
@@ -120,6 +124,7 @@ export interface MapDef {
   bgmTheme: string;
   generation: GenOp[];
   playerSpawn: { x: number; y: number };
+  spawns: Record<string, { x: number; y: number }>;
   entities: MapEntitySpawn[];
   triggers?: MapTrigger[];
   onEnter?: { dialogue: string; slot: string; once?: boolean }[];

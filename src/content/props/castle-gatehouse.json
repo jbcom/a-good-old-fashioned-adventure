@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:castle-gatehouse",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 16 },
+  "solid": true,
+  "states": {
+    "default": {
+      "rows": [
+        "..L........L....",
+        "..LL......LL....",
+        ".XCCX....XCCX...",
+        ".XcCX....XcCX...",
+        ".XCCXXXXXXCCX...",
+        ".XcCCCCCCCCcX...",
+        ".XCCCCCCCCCCX...",
+        ".XcCCYYYYCCcX...",
+        ".XCCCYYYYCCCX...",
+        ".XcCCYbbYCCcX...",
+        ".XCCCYBBYCCCX...",
+        ".XcCCYBBYCCcX...",
+        ".XCCCYbbYCCCX...",
+        ".XCCCCCCCCCCX...",
+        ".XXXXXXXXXXXX...",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "C", "c", "L", "Y", "b", "B"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "Solid", "DepthSorted"] }
+}

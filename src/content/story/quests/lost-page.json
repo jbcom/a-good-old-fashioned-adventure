@@ -1,0 +1,44 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:lost-page",
+  "kind": "quest",
+  "title": "Lost Page in the Deep Forest",
+  "act": 2,
+  "startOn": { "enterMap": "map:deep-forest" },
+  "start": "find-rowan",
+  "stages": [
+    {
+      "id": "find-rowan",
+      "log": "Find the lost page near the upper forest track.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:lost-page.start:guide" },
+          "to": "old-oak",
+          "effects": [{ "sfx": "interact" }]
+        }
+      ]
+    },
+    {
+      "id": "old-oak",
+      "log": "Guide Rowan to the old oak.",
+      "advance": [
+        {
+          "when": { "enterZone": { "map": "map:deep-forest", "trigger": "trigger:old-oak" } },
+          "to": "west-road"
+        }
+      ]
+    },
+    {
+      "id": "west-road",
+      "log": "Guide Rowan back toward the west road.",
+      "advance": [
+        {
+          "when": { "enterZone": { "map": "map:deep-forest", "trigger": "trigger:west-road" } },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:lost-page-guided" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

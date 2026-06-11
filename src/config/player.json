@@ -8,7 +8,7 @@
     "nextXp": 50
   },
   "movement": {
-    "speed": 72,
+    "speed": 112,
     "hitbox": { "w": 10, "h": 10 }
   },
   "iframes": {

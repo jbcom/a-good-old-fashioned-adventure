@@ -7,6 +7,7 @@ import type { World } from "koota";
 import { classes, engine } from "../../lib/config";
 import { collides } from "../collision";
 import {
+  AimDirection,
   CombatTimers,
   Facing,
   Hitbox,
@@ -69,6 +70,7 @@ export function moveEntities(world: World, dt: number): void {
     }
 
     entity.set(Transform, { x, y });
+    if (playerTag) entity.set(AimDirection, { x: ix, y: iy });
     if (ix > 0) entity.set(Facing, { dir: 1 });
     else if (ix < 0) entity.set(Facing, { dir: -1 });
   }

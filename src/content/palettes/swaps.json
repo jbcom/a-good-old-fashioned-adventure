@@ -15,6 +15,10 @@
     "palette:wizard": { "S": "#00d2f7", "s": "#1a6fa8", "R": "#ffffff", "r": "#b2bec7" },
     "palette:princess": {},
     "palette:woodcutter": { "S": "#946629", "s": "#4a2511", "R": "#6fe014", "r": "#2c6114" },
+    "palette:keeper": { "S": "#cfa153", "s": "#946629", "R": "#87e0f2", "r": "#1a6fa8" },
+    "palette:page": { "S": "#7f4f2f", "s": "#3b2416", "R": "#f1d385", "r": "#cfa153" },
+    "palette:hermit": { "S": "#6f7f3f", "s": "#2f3a1d", "R": "#c9b36a", "r": "#7f6f36" },
+    "palette:lost-page": { "S": "#9f5d57", "s": "#4f2a2a", "R": "#eed7a1", "r": "#b88958" },
     "palette:orc": {
       "X": "#141013",
       "S": "#8a2323",

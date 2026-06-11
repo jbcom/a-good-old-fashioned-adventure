@@ -1,33 +1,54 @@
 {
   "$schema": "../../schemas/config.schema.json",
-  "font": { "family": "Press Start 2P", "fallback": "monospace" },
+  "language": {
+    "id": "errant-storybook",
+    "name": "Errant Storybook",
+    "summary": "knights-errant in an old illustrated tale; vellum, ink, rubric, ivy, and aged brass over an FF7-era HD-2D stage"
+  },
+  "typography": {
+    "display": {
+      "family": "\"IM Fell English SC\", \"EB Garamond\", Georgia, serif"
+    },
+    "body": {
+      "family": "\"EB Garamond\", Georgia, \"Times New Roman\", serif"
+    },
+    "numeric": {
+      "family": "\"Alegreya Sans\", \"Trebuchet MS\", system-ui, sans-serif"
+    }
+  },
+  "font": {
+    "family": "\"IM Fell English SC\", \"EB Garamond\", Georgia, serif",
+    "fallback": "Georgia, serif"
+  },
   "theme": {
-    "background": "#141013",
-    "panel": "#1b1c2c",
-    "panelBorder": "#c2c1e8",
-    "shell": "#333c57",
-    "textPrimary": "#ffffff",
-    "textBody": "#b2bec7",
-    "textMuted": "#646985",
-    "accentGold": "#f7e214",
-    "accentGreen": "#6fe014",
-    "accentGreenDark": "#2c6114",
-    "accentRed": "#e03d50",
-    "accentRedDark": "#901e38",
-    "accentBlue": "#00d2f7",
-    "accentPink": "#ff8cb0",
-    "hpBar": "#e03d50",
-    "xpBar": "#6fe014"
+    "background": "#17110b",
+    "panel": "rgba(241, 224, 185, 0.88)",
+    "panelStrong": "rgba(249, 236, 202, 0.96)",
+    "panelSoft": "rgba(92, 64, 42, 0.22)",
+    "panelBorder": "#8a5f32",
+    "panelEdge": "#3d2a1b",
+    "shell": "#3b2918",
+    "textPrimary": "#25180f",
+    "textBody": "#4e3925",
+    "textMuted": "#7a654c",
+    "accentGold": "#b07a2c",
+    "accentGreen": "#315f3b",
+    "accentGreenDark": "#1e3d2a",
+    "accentRed": "#9f2f28",
+    "accentRedDark": "#5b211c",
+    "accentBlue": "#496f86",
+    "accentPink": "#a86569",
+    "hpBar": "#9f2f28",
+    "xpBar": "#315f3b"
   },
   "floaterColors": {
     "damage": "#ff3355",
-    "xp": "#6fe014",
-    "heal": "#e03d50",
-    "gold": "#f7e214",
-    "maxHp": "#ff8cb0",
-    "attack": "#00d2f7"
+    "xp": "#315f3b",
+    "heal": "#9f2f28",
+    "gold": "#b07a2c",
+    "maxHp": "#a86569",
+    "attack": "#496f86"
   },
-  "crt": { "defaultOn": true, "scanlineHeight": 4 },
   "controls": {
     "keyboard": {
       "up": ["ArrowUp", "w"],

@@ -11,6 +11,7 @@ import { collides } from "../collision";
 import { pushEvent } from "../events";
 import { spawnPickup, spawnProjectile } from "../factories";
 import {
+  AimDirection,
   CameraState,
   CombatTimers,
   Facing,
@@ -59,6 +60,14 @@ function entityBox(entity: Entity): Box | undefined {
   const h = entity.get(Hitbox);
   if (!t || !h) return undefined;
   return { x: t.x - h.w / 2, y: t.y - h.h, w: h.w, h: h.h };
+}
+
+function normalizedAim(player: Entity): { x: number; y: number } {
+  const facing = player.get(Facing)?.dir ?? 1;
+  const aim = player.get(AimDirection) ?? { x: facing, y: 0 };
+  const len = Math.hypot(aim.x, aim.y);
+  if (len < 1e-6) return { x: facing, y: 0 };
+  return { x: aim.x / len, y: aim.y / len };
 }
 
 export function meleeDamage(level: number): number {
@@ -135,15 +144,16 @@ export function playerAttack(world: World): void {
   if (timers.attack > 0) return;
 
   player.set(CombatTimers, { ...timers, attack: attack.cooldown });
+  const aim = normalizedAim(player);
 
   if (attack.kind === "projectile") {
     sfx(world, "magic");
     spawnProjectile(world, {
       type: attack.projectile ?? "arrow",
-      x: transform.x + facing.dir * (attack.muzzleOffset?.x ?? 10),
-      y: transform.y + (attack.muzzleOffset?.y ?? -6),
-      vx: facing.dir * (attack.speed ?? 160),
-      vy: 0,
+      x: transform.x + aim.x * (attack.muzzleOffset?.x ?? 10),
+      y: transform.y + aim.y * (attack.muzzleOffset?.x ?? 10) + (attack.muzzleOffset?.y ?? -6),
+      vx: aim.x * (attack.speed ?? 160),
+      vy: aim.y * (attack.speed ?? 160),
       life: attack.life ?? 2,
       fromPlayer: true,
     });
@@ -153,8 +163,8 @@ export function playerAttack(world: World): void {
   sfx(world, "slash");
   const reach = attack.reach ?? 28;
   const swing: Box = {
-    x: transform.x + (facing.dir === 1 ? 2 : -reach - 2),
-    y: transform.y + combat.hitboxes.swingVerticalOffset,
+    x: transform.x + aim.x * reach - reach / 2,
+    y: transform.y + aim.y * reach + combat.hitboxes.swingVerticalOffset,
     w: reach,
     h: combat.hitboxes.swingHeight,
   };

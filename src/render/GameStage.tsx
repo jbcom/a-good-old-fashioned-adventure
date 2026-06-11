@@ -10,11 +10,11 @@ import { useMemo } from "react";
 import {
   CanvasTexture,
   Mesh,
-  MeshBasicMaterial,
   NearestFilter,
   type PerspectiveCamera,
   PlaneGeometry,
   type Scene,
+  type ShaderMaterial,
   SRGBColorSpace,
 } from "three";
 import { engine } from "../lib/config";
@@ -34,6 +34,7 @@ import {
   Transform,
 } from "../sim/traits";
 import { flashCanvas, propCanvas, spriteCanvas, tileCanvas } from "./atlas";
+import { createDioramaMaterial, setDioramaTexture } from "./materials";
 import { fadeOut, playMotion, releaseMotion } from "./motion";
 
 const TILE = 16;
@@ -46,6 +47,7 @@ const PROJECTILE_COLORS: Record<string, string> = {
 };
 
 const textures = new WeakMap<HTMLCanvasElement, CanvasTexture>();
+const solidCanvases = new Map<string, HTMLCanvasElement>();
 
 function textureFor(canvas: HTMLCanvasElement): CanvasTexture {
   let texture = textures.get(canvas);
@@ -58,6 +60,21 @@ function textureFor(canvas: HTMLCanvasElement): CanvasTexture {
     textures.set(canvas, texture);
   }
   return texture;
+}
+
+function solidCanvas(color: string, width: number, height: number): HTMLCanvasElement {
+  const key = `${color}|${width}x${height}`;
+  const cached = solidCanvases.get(key);
+  if (cached) return cached;
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  if (!ctx) throw new Error("2d context unavailable");
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, width, height);
+  solidCanvases.set(key, canvas);
+  return canvas;
 }
 
 function composeGround(world: World): HTMLCanvasElement {
@@ -107,11 +124,12 @@ class SceneSync {
     if (this.ground) {
       scene.remove(this.ground.mesh);
       this.ground.mesh.geometry.dispose();
+      (this.ground.mesh.material as ShaderMaterial).dispose();
     }
     const canvas = composeGround(world);
     const mesh = new Mesh(
       new PlaneGeometry(canvas.width, canvas.height),
-      new MeshBasicMaterial({ map: textureFor(canvas), toneMapped: false }),
+      createDioramaMaterial(textureFor(canvas), { role: "ground" }),
     );
     mesh.rotation.x = -Math.PI / 2;
     mesh.position.set(canvas.width / 2, 0, canvas.height / 2);
@@ -129,20 +147,14 @@ class SceneSync {
     if (!tracked) {
       const mesh = new Mesh(
         new PlaneGeometry(canvasEl.width, canvasEl.height),
-        new MeshBasicMaterial({
-          map: textureFor(canvasEl),
-          transparent: true,
-          alphaTest: 0.5,
-          toneMapped: false,
-        }),
+        createDioramaMaterial(textureFor(canvasEl), { role: "sprite" }),
       );
       mesh.rotation.x = engine.stage.billboardTilt;
       scene.add(mesh);
       tracked = { mesh, textureKey };
       this.meshes.set(id, tracked);
     } else if (tracked.textureKey !== textureKey) {
-      (tracked.mesh.material as MeshBasicMaterial).map = textureFor(canvasEl);
-      (tracked.mesh.material as MeshBasicMaterial).needsUpdate = true;
+      setDioramaTexture(tracked.mesh.material as ShaderMaterial, textureFor(canvasEl));
       tracked.textureKey = textureKey;
     }
     return tracked;
@@ -195,9 +207,10 @@ class SceneSync {
       let tracked = this.meshes.get(id);
       if (!tracked) {
         const color = getItem(info.itemId).pickup?.color ?? "#ffffff";
+        const canvas = solidCanvas(color, 6, 6);
         const mesh = new Mesh(
           new PlaneGeometry(6, 6),
-          new MeshBasicMaterial({ color, toneMapped: false }),
+          createDioramaMaterial(textureFor(canvas), { role: "spark" }),
         );
         mesh.rotation.x = engine.stage.billboardTilt;
         scene.add(mesh);
@@ -217,12 +230,11 @@ class SceneSync {
       const id = entity as unknown as number;
       let tracked = this.meshes.get(id);
       if (!tracked) {
+        const color = PROJECTILE_COLORS[p.type] ?? "#ffffff";
+        const canvas = solidCanvas(color, p.type === "arrow" ? 6 : 4, p.type === "arrow" ? 2 : 4);
         const mesh = new Mesh(
           new PlaneGeometry(p.type === "arrow" ? 6 : 4, p.type === "arrow" ? 2 : 4),
-          new MeshBasicMaterial({
-            color: PROJECTILE_COLORS[p.type] ?? "#ffffff",
-            toneMapped: false,
-          }),
+          createDioramaMaterial(textureFor(canvas), { role: "spark" }),
         );
         mesh.rotation.x = engine.stage.billboardTilt;
         scene.add(mesh);
@@ -237,6 +249,7 @@ class SceneSync {
       if (!seen.has(id)) {
         scene.remove(tracked.mesh);
         tracked.mesh.geometry.dispose();
+        (tracked.mesh.material as ShaderMaterial).dispose();
         releaseMotion(id);
         this.meshes.delete(id);
       }
@@ -261,11 +274,9 @@ class SceneSync {
     const trail = getAnimation("anim:trail-fade");
     const startAlpha = ((trail.keyframes?.[0] as { alpha?: number })?.alpha ?? 0.4) as number;
     for (let i = 0; i < 4; i++) {
-      const material = new MeshBasicMaterial({
-        map: textureFor(canvas),
-        transparent: true,
-        opacity: startAlpha,
-        toneMapped: false,
+      const material = createDioramaMaterial(textureFor(canvas), {
+        role: "sprite",
+        alpha: startAlpha,
       });
       const ghost = new Mesh(new PlaneGeometry(canvas.width, canvas.height), material);
       ghost.rotation.x = engine.stage.billboardTilt;
@@ -273,8 +284,8 @@ class SceneSync {
       ghost.position.set(t.x - dir * (i + 1) * 12, canvas.height / 2, t.y);
       scene.add(ghost);
       fadeOut(
-        material as unknown as Record<string, unknown>,
-        "opacity",
+        material.uniforms.uAlpha as unknown as Record<string, unknown>,
+        "value",
         startAlpha,
         trail.duration + i * 40,
         () => {
