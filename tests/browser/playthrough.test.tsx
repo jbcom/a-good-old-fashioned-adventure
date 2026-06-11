@@ -334,8 +334,8 @@ it("continues the expanded journey through dungeon victory through public contro
     await castUntilEnemyDrops(input, shell().enemies, 18);
   }
   await walkTo(input, 305, 300, 12);
-  await walkTo(input, 510, 300, 12);
-  await castUntilEnemyDrops(input, shell().enemies, 24);
+  await walkTo(input, 500, 250, 12);
+  await castUntilEnemyDrops(input, shell().enemies, 34);
   await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Free Princess Amber");
   await userEvent.click(page.getByTestId("hud-menu"));
   await expect.element(page.getByTestId("minimap")).toBeVisible();
