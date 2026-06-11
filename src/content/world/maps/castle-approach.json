@@ -55,7 +55,8 @@
   "playerSpawn": { "x": 48, "y": 304 },
   "spawns": {
     "default": { "x": 48, "y": 304 },
-    "from-sunken-road": { "x": 48, "y": 304 }
+    "from-sunken-road": { "x": 48, "y": 304 },
+    "from-yard": { "x": 842, "y": 304 }
   },
   "entities": [
     { "ref": "prop:signpost", "x": 108, "y": 274, "note": "last warning sign" },
@@ -80,7 +81,7 @@
       "id": "trigger:castle-gate-entry",
       "kind": "portal",
       "label": "Castle Dungeon Gate",
-      "toMap": "map:castle-dungeon",
+      "toMap": "map:castle-yard",
       "toSpawn": "entry",
       "requiresFlag": "flag:has-dungeon-key",
       "sfx": "interact",

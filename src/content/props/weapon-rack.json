@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:weapon-rack",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 16 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "................",
+        "..X..X..X..X....",
+        "..S..C..S..C....",
+        "..S..C..S..C....",
+        "..s..c..s..c....",
+        "..X..X..X..X....",
+        ".XbbbbbbbbbbX...",
+        ".XbBDBBDBBbbX...",
+        ".XbXXXXXXXXbX...",
+        ".XbYGGYGGYbbX...",
+        ".XbbbbbbbbbbX...",
+        "..XXXXXXXXXXXX..",
+        "................",
+        "................",
+        "................",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "S", "s", "C", "c", "b", "B", "D", "Y", "G"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

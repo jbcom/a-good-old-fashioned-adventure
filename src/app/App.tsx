@@ -249,6 +249,28 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
   return base;
 }
 
+function saveRowFromSnapshot(current: UiSnapshot) {
+  return {
+    id: 1,
+    classId: current.classId,
+    mapId: current.mapId,
+    playerX: Math.round(current.playerX),
+    playerY: Math.round(current.playerY),
+    level: current.level,
+    hp: Math.max(0, Math.ceil(current.hp)),
+    maxHp: current.maxHp,
+    questSummary: current.questLines[0] ?? "The road begins.",
+    snapshotJson: JSON.stringify({
+      classId: current.classId,
+      mapId: current.mapId,
+      playerX: current.playerX,
+      playerY: current.playerY,
+      questLines: current.questLines,
+    }),
+    updatedAt: new Date(),
+  };
+}
+
 function nearestDialogue(world: World): DialogueState | null {
   const player = playerOf(world);
   const pt = player?.get(Transform);
@@ -803,11 +825,41 @@ export function App({
     snapshotRef.current = snapshot;
   }, [snapshot]);
 
-  const refreshSnapshot = useCallback((nextWorld: World) => {
-    setSnapshot(readSnapshot(nextWorld, exploredRef.current));
-    const audio = audioRef.current;
-    if (audio) setAudioDebug(audio.debugState());
+  const persistSave = useCallback((current: UiSnapshot) => {
+    if (!current.mapId) return;
+    const row = saveRowFromSnapshot(current);
+    void repositoryRef.current
+      .upsertSlot(row)
+      .then(() => {
+        setLatestSave({
+          id: row.id,
+          classId: row.classId,
+          mapId: row.mapId,
+          playerX: row.playerX,
+          playerY: row.playerY,
+          level: row.level,
+          hp: row.hp,
+          maxHp: row.maxHp,
+          questSummary: row.questSummary,
+          updatedAt: row.updatedAt.getTime(),
+        });
+      })
+      .catch(() => {
+        // App saves are opportunistic and may finish after a browser/HMR teardown closes SQLite.
+      });
   }, []);
+
+  const refreshSnapshot = useCallback(
+    (nextWorld: World, options: { persist?: boolean } = {}) => {
+      const nextSnapshot = readSnapshot(nextWorld, exploredRef.current);
+      snapshotRef.current = nextSnapshot;
+      setSnapshot(nextSnapshot);
+      const audio = audioRef.current;
+      if (audio) setAudioDebug(audio.debugState());
+      if (options.persist) persistSave(nextSnapshot);
+    },
+    [persistSave],
+  );
 
   const loadMap = useCallback(
     (nextWorld: World, mapId: string, classId: string, spawnId?: string) => {
@@ -819,7 +871,7 @@ export function App({
       step(nextWorld, 0);
       const intro = openMapIntro(nextWorld, mapId, mapIntroSeenRef.current);
       if (intro) setDialogue(intro);
-      refreshSnapshot(nextWorld);
+      refreshSnapshot(nextWorld, { persist: true });
     },
     [refreshSnapshot],
   );
@@ -854,7 +906,7 @@ export function App({
           nextXp: currentLevel?.nextXp ?? 50,
         });
       }
-      refreshSnapshot(nextWorld);
+      refreshSnapshot(nextWorld, { persist: true });
     },
     [audioDebug, loadMap, refreshSnapshot, selectedClass],
   );
@@ -964,45 +1016,12 @@ export function App({
     if (mode !== "playing" || !world) return;
     const save = () => {
       const current = snapshotRef.current;
-      if (!current.mapId) return;
-      const row = {
-        id: 1,
-        classId: current.classId,
-        mapId: current.mapId,
-        playerX: Math.round(current.playerX),
-        playerY: Math.round(current.playerY),
-        level: current.level,
-        hp: Math.max(0, Math.ceil(current.hp)),
-        maxHp: current.maxHp,
-        questSummary: current.questLines[0] ?? "The road begins.",
-        snapshotJson: JSON.stringify({
-          classId: current.classId,
-          mapId: current.mapId,
-          playerX: current.playerX,
-          playerY: current.playerY,
-          questLines: current.questLines,
-        }),
-        updatedAt: new Date(),
-      };
-      void repositoryRef.current.upsertSlot(row).then(() => {
-        setLatestSave({
-          id: row.id,
-          classId: row.classId,
-          mapId: row.mapId,
-          playerX: row.playerX,
-          playerY: row.playerY,
-          level: row.level,
-          hp: row.hp,
-          maxHp: row.maxHp,
-          questSummary: row.questSummary,
-          updatedAt: row.updatedAt.getTime(),
-        });
-      });
+      persistSave(current);
     };
     save();
     const timer = window.setInterval(save, AUTO_SAVE_INTERVAL_MS);
     return () => window.clearInterval(timer);
-  }, [mode, world]);
+  }, [mode, persistSave, world]);
 
   const setB = useCallback(
     (pressed: boolean) => {

@@ -1,0 +1,47 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:castle-scribe",
+  "kind": "dialogue-bank",
+  "speaker": "char:castle-scribe",
+  "slots": [
+    { "when": { "flag": "flag:castle-letters-cleared" }, "node": "after" },
+    { "when": { "quest": "quest:castle-letters", "stage": "find-scribe" }, "node": "briefing" },
+    { "when": { "quest": "quest:castle-letters", "stage": "report-scribe" }, "node": "report" },
+    {
+      "when": {
+        "quest": "quest:castle-letters",
+        "stageIn": ["read-library", "inspect-armory"]
+      },
+      "node": "working"
+    },
+    { "default": true, "node": "after" }
+  ],
+  "nodes": {
+    "briefing": {
+      "lines": [
+        "Castle Scribe Elowen, at your service and only slightly buried in dust.",
+        "The library keeps the old seal-name; the armory keeps the banner that proves it. Bring me both truths before the dungeon stair."
+      ],
+      "choices": [{ "id": "search", "text": "Search the library and armory." }],
+      "emits": "dlg:castle-scribe.briefing"
+    },
+    "working": {
+      "lines": [
+        "A castle remembers in pairs: ink in the library, thread in the armory. One without the other is merely gossip."
+      ],
+      "emits": "dlg:castle-scribe.working"
+    },
+    "report": {
+      "lines": [
+        "The seal is remembered: sun over thorn, gold over ash. The stair will answer if you carry the key with a steady hand."
+      ],
+      "emits": "dlg:castle-scribe.report"
+    },
+    "after": {
+      "lines": [
+        "The seal is remembered, and I have written your name small but legible beside it."
+      ],
+      "emits": "dlg:castle-scribe.after"
+    }
+  }
+}

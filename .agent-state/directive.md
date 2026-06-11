@@ -4,7 +4,7 @@
 **Owner:** Claude (mandated by jbogaty)
 **Mandate:** "using a long-running local branch, improving and expanding your own prompt with each loop iteration, until the game is fully built. Use your own best judgement, fully autonomously, docs > tests > code, and make sure vitest browser plugin is being used with GPU-enabled headed browser tests, not just unit tests. The entire player journey start to finish needs to be fully validated as you work by constantly expanding a playthrough test that uses actual button presses (A/B / directional etc...) to emulate what the player would do. ToneJS, AnimeJS, and either r3f or pixijs depending on whether you can make 2.5D extrapolation work and VALIDATE IT with screenshots and establish it to be of the highest calibre of quality, otherwise stick with 2D. YOU are responsible for all validation of all research and all library decisions. Sounds, animation, are what are necessary. I also want you to add yukajs for enemy behaviors and make sure you add DEPTH and LENGTH to the game, with interior maps, exterior maps, a minimap, and a properly designed HUD, UI/UX"
 
-**Branch:** `feat/content-architecture` (the long-running branch; forward commits only; PR opened once at the end).
+**Branch:** `codex/castle-interior-depth` (current milestone branch from merged `main`; forward commits only).
 
 ## What CONTINUOUS means
 1. Never stop for status reports the user didn't ask for.
@@ -77,7 +77,12 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 ### S7 Ship
 - [x] S7.1 Capacitor android scaffold; `pnpm cap:sync` green; mobile-first check (safe areas, touch)
 - [x] S7.2 CI (ci.yml: lint+typecheck+unit+browser headed-GPU+build; APK in ci.yml), release-please, dependabot, standard-repo docs (AGENTS.md, STANDARDS.md, CHANGELOG.md, TESTING.md, DEPLOYMENT.md, STATE.md)
-- [ ] S7.3 Open PR, babysit to green, squash-merge; verify deployed/built app runs
+- [x] S7.3 Open PR, babysit to green, squash-merge; verify deployed/built app runs
+
+### S8 Content depth and polish
+- [x] S8.1 Castle-interior wing: key gate routes through castle yard, hall, library, and armory before the dungeon; `quest:castle-letters` adds scribe dialogue plus room verbs; headed playthrough captures hall/library screenshots
+- [ ] S8.2 Shop economy: replace the one-time sample-only shop with content-driven prices, buy/sell verbs, inventory state, and browser validation through public controls
+- [ ] S8.3 Desert ruins: add the planned ruin interior off Sunken Road with a readable landmark loop, props, NPC/story signal, and route validation
 
 ## Learnings log (forward sweeps append here)
 - yuka FleeBehavior defaults panicDistance=10 — silently inert beyond it; always set panicDistance explicitly when kiting.
@@ -112,3 +117,5 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - 2026-06-11 S7.3 pause correction: pause must synchronously clear directional input before React state commits, paused direction keydowns must not arm movement for the next frame, and browser specs should capture the settled paused position before proving zero paused movement plus resumed movement.
 - 2026-06-11 S7.3 review correction: do not admin-bypass green PRs when rulesets require review-thread resolution. Address actionable bot threads as product/security fixes, rerun local gates, push, then resolve the now-addressed threads before squash merge.
 - 2026-06-11 S7.3 review-blocker correction: the current merge-blocking fixes cover production logging, Android backup, feature-branch CI triggers, leap collision, ground texture disposal, SQLite HMR, autosave cadence, and pooled Tone SFX.
+- 2026-06-11 S8.1 castle-interior correction: the key gate must not teleport from road to final dungeon. Route depth now requires authored castle yard/hall/library/armory maps, a scribe quest, room-specific verbs, and screenshots read from the passing headed playthrough.
+- 2026-06-11 save-boundary correction: interval autosave alone can leave Continue behind the live map after a long route. Map loads now persist immediately from the refreshed snapshot so split browser journeys resume from the actual current room.

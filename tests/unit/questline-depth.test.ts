@@ -37,6 +37,7 @@ describe("S6.4 questline depth contract", () => {
     expect(worldDoc).toContain("quest:lost-page");
     expect(worldDoc).toContain("char:page");
     expect(worldDoc).toContain("char:hermit");
+    expect(worldDoc).toContain("quest:castle-letters");
   });
 
   it("has at least seven authored quests with multiple midpoint graphs", () => {
@@ -61,13 +62,17 @@ describe("S6.4 questline depth contract", () => {
     expect(dialogueBanks.has("dlgbank:page")).toBe(true);
     expect(dialogueBanks.has("dlgbank:hermit")).toBe(true);
     expect(dialogueBanks.has("dlgbank:lost-page")).toBe(true);
+    expect(characters.get("char:castle-scribe")?.dialogue).toBe("dlgbank:castle-scribe");
+    expect(dialogueBanks.has("dlgbank:castle-scribe")).toBe(true);
 
     const villageRefs = getMap("map:village").entities.map((entity) => entity.ref);
     const oldwoodRefs = getMap("map:oldwood-forest").entities.map((entity) => entity.ref);
     const deepForestRefs = getMap("map:deep-forest").entities.map((entity) => entity.ref);
+    const hallRefs = getMap("map:castle-hall").entities.map((entity) => entity.ref);
     expect(villageRefs).toContain("char:page");
     expect(oldwoodRefs).toContain("char:hermit");
     expect(deepForestRefs).toContain("char:lost-page");
+    expect(hallRefs).toContain("char:castle-scribe");
   });
 
   it("keeps the village errands off the original overworld boot log", () => {
@@ -180,5 +185,42 @@ describe("S6.4 quest runtime", () => {
     step(world);
     expect(world.get(QuestLog)?.completed).toContain("quest:lost-page");
     expect(world.get(FlagState)?.values["flag:lost-page-guided"]).toBe(true);
+  });
+
+  it("runs castle letters through scribe dialogue plus library and armory room verbs", () => {
+    const world = bootOnMap("map:castle-yard");
+
+    expect(activeStage(world, "quest:castle-letters")).toBe("find-scribe");
+    instantiateMap(world, "map:castle-hall", { classId: "ranger" });
+    const brief = resolveDialogue(world, "dlgbank:castle-scribe");
+    expect(brief.nodeKey).toBe("briefing");
+    emitDialogueChoice(world, brief.node, "search");
+    step(world);
+    expect(activeStage(world, "quest:castle-letters")).toBe("read-library");
+
+    pushEvent(world, {
+      type: "zone:entered",
+      mapId: "map:castle-library",
+      triggerId: "trigger:library-archive",
+    });
+    step(world);
+    expect(activeStage(world, "quest:castle-letters")).toBe("inspect-armory");
+    expect(world.get(FlagState)?.values["flag:castle-library-read"]).toBe(true);
+
+    pushEvent(world, {
+      type: "zone:entered",
+      mapId: "map:castle-armory",
+      triggerId: "trigger:armory-standard",
+    });
+    step(world);
+    expect(activeStage(world, "quest:castle-letters")).toBe("report-scribe");
+    expect(world.get(FlagState)?.values["flag:castle-armory-seen"]).toBe(true);
+
+    const report = resolveDialogue(world, "dlgbank:castle-scribe");
+    expect(report.nodeKey).toBe("report");
+    emitDialogueSeen(world, report.node);
+    step(world);
+    expect(world.get(QuestLog)?.completed).toContain("quest:castle-letters");
+    expect(world.get(FlagState)?.values["flag:castle-letters-cleared"]).toBe(true);
   });
 });

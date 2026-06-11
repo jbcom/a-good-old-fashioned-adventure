@@ -61,6 +61,15 @@
       "dialogue": "dlgbank:lost-page",
       "note": "Escort-lite Deep Forest NPC guided by landmark zones."
     },
+    "char:castle-scribe": {
+      "name": "Castle Scribe Elowen",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:scribe",
+      "portraitColor": "#cfa153",
+      "dialogue": "dlgbank:castle-scribe",
+      "note": "Castle hall NPC who turns the library and armory into required room verbs before the dungeon."
+    },
     "char:princess-amber": {
       "name": "Princess Amber",
       "role": "npc",

@@ -16,6 +16,7 @@ const requiredDetailedTiles = [
   "tile:stone-floor",
   "tile:stone-wall",
   "tile:wood-bridge",
+  "tile:royal-rug",
 ];
 
 const requiredVillageProps = [
@@ -31,6 +32,12 @@ const requiredVillageProps = [
   "prop:barrel",
   "prop:broken-cart",
   "prop:sandstone-arch",
+  "prop:castle-banner",
+  "prop:castle-shelf",
+  "prop:castle-lantern",
+  "prop:weapon-rack",
+  "prop:throne-door",
+  "prop:scribe-desk",
 ];
 
 function colorsInOps(ops: DrawOp[]): Set<string> {
@@ -114,6 +121,26 @@ describe("authored pixel-art richness", () => {
     );
     expect([...propRefs(getMap("map:castle-approach"))]).toEqual(
       expect.arrayContaining(["prop:castle-gatehouse", "prop:barrel"]),
+    );
+  });
+
+  it("places authored room props into the castle yard and interior wing", () => {
+    expect([...propRefs(getMap("map:castle-yard"))]).toEqual(
+      expect.arrayContaining(["prop:castle-banner", "prop:castle-lantern", "prop:barrel"]),
+    );
+    expect([...propRefs(getMap("map:castle-hall"))]).toEqual(
+      expect.arrayContaining([
+        "prop:castle-banner",
+        "prop:castle-lantern",
+        "prop:scribe-desk",
+        "prop:throne-door",
+      ]),
+    );
+    expect([...propRefs(getMap("map:castle-library"))]).toEqual(
+      expect.arrayContaining(["prop:castle-shelf", "prop:castle-lantern", "prop:table"]),
+    );
+    expect([...propRefs(getMap("map:castle-armory"))]).toEqual(
+      expect.arrayContaining(["prop:weapon-rack", "prop:castle-banner", "prop:barrel"]),
     );
   });
 });

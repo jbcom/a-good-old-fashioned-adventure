@@ -1,0 +1,51 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:castle-library",
+  "kind": "map",
+  "name": "Castle Library",
+  "size": { "cols": 32, "rows": 24 },
+  "baseTile": "tile:stone-floor",
+  "bgmTheme": "interior",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    { "op": "row-span", "tile": "tile:castle-road", "y": 14, "x0": 4, "x1": 27 },
+    { "op": "col-span", "tile": "tile:castle-road", "x": 20, "y0": 6, "y1": 21 },
+    {
+      "op": "region",
+      "tile": "tile:village-cobble",
+      "x0": 14,
+      "x1": 25,
+      "y0": 5,
+      "y1": 10,
+      "note": "archive reading rug"
+    }
+  ],
+  "playerSpawn": { "x": 320, "y": 236 },
+  "spawns": {
+    "default": { "x": 320, "y": 236 },
+    "entry": { "x": 320, "y": 236 }
+  },
+  "entities": [
+    { "ref": "prop:castle-shelf", "x": 170, "y": 160, "note": "western shelf of family books" },
+    { "ref": "prop:castle-shelf", "x": 330, "y": 160, "note": "archive shelf with seal records" },
+    { "ref": "prop:castle-lantern", "x": 250, "y": 156, "note": "archive lantern" },
+    { "ref": "prop:table", "x": 318, "y": 230, "note": "reading table" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:hall-return",
+      "kind": "portal",
+      "label": "Door back to Castle Hall",
+      "toMap": "map:castle-hall",
+      "toSpawn": "from-library",
+      "sfx": "interact",
+      "zone": { "x0": 280, "y0": 326, "x1": 360, "y1": 384 }
+    },
+    {
+      "id": "trigger:library-archive",
+      "kind": "story-zone",
+      "label": "Sealed archive lectern",
+      "zone": { "x0": 256, "y0": 96, "x1": 384, "y1": 168 }
+    }
+  ]
+}

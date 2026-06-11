@@ -6,6 +6,18 @@
       "default": false,
       "description": "Woodcutter has repaired the river bridge at overworld tile [32,28]."
     },
+    "flag:castle-armory-seen": {
+      "default": false,
+      "description": "The player has inspected the old armory standard that names the true dungeon seal."
+    },
+    "flag:castle-letters-cleared": {
+      "default": false,
+      "description": "Castle Scribe Elowen has confirmed the library and armory signs point to the dungeon stair."
+    },
+    "flag:castle-library-read": {
+      "default": false,
+      "description": "The player has read the castle library archive page about the dungeon seal."
+    },
     "flag:has-dungeon-key": {
       "default": false,
       "description": "Player holds the brass dungeon key dropped by the Desert Wyrm; unlocks the castle gate."

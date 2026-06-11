@@ -270,7 +270,42 @@ it("plays the expanded road from title to the dungeon gate through public contro
 
   await holdRightUntilMap(input, "map:castle-approach", 10);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-approach");
-  await walkToOrMap(input, 930, 210, "map:castle-dungeon", 28);
+  await walkToOrMap(input, 930, 210, "map:castle-yard", 28);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-yard");
+  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("castle scribe");
+
+  await walkToOrMap(input, 744, 272, "map:castle-hall", 28);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-hall");
+  await walkTo(input, 220, 272, 20);
+  expect(await page.screenshot({ path: "playthrough-castle-hall.png" })).toBeTruthy();
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Castle Scribe");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("library");
+  await pressA(input);
+  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("library archive");
+
+  await walkToOrMap(input, 320, 118, "map:castle-library", 26);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-library");
+  expect(await page.screenshot({ path: "playthrough-castle-library.png" })).toBeTruthy();
+  await walkTo(input, 320, 132, 20);
+  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("armory standard");
+  await walkToOrMap(input, 320, 350, "map:castle-hall", 26);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-hall");
+
+  await walkToOrMap(input, 500, 430, "map:castle-armory", 26);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-armory");
+  await walkTo(input, 256, 232, 20);
+  await expect
+    .element(page.getByTestId("quest-log"))
+    .toHaveTextContent("Return to the castle scribe");
+  await walkToOrMap(input, 256, 40, "map:castle-hall", 26);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-hall");
+
+  await walkTo(input, 220, 272, 20);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("seal is remembered");
+  await pressA(input);
+  await walkToOrMap(input, 860, 272, "map:castle-dungeon", 28);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-dungeon");
   await expect.element(page.getByTestId("dialogue-box")).toBeVisible();
   await pressA(input);

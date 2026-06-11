@@ -96,6 +96,16 @@ describe("save persistence architecture", () => {
     expect(source).toContain("isExistingConnectionError");
     expect(source).toContain("if (!isExistingConnectionError(error)) throw error");
   });
+
+  it("serializes SQLite writes so immediate saves cannot overlap web transactions", () => {
+    const source = readFileSync(
+      resolve(process.cwd(), "src/persistence/saveRepository.ts"),
+      "utf8",
+    );
+    expect(source).toContain("private writeQueue: Promise<void>");
+    expect(source).toContain("private enqueueWrite");
+    expect(source).toContain("await this.writeQueue");
+  });
 });
 
 describe("vite capacitor/sqlite configuration", () => {

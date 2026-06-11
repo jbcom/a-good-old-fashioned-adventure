@@ -19,16 +19,16 @@ import {
 
 describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
-    expect(tiles.size).toBe(12);
-    expect(props.size).toBe(14);
+    expect(tiles.size).toBe(13);
+    expect(props.size).toBe(20);
     expect(sprites.size).toBe(3);
     expect(animations.size).toBe(6);
-    expect(maps.size).toBe(10);
-    expect(quests.size).toBe(7);
-    expect(dialogueBanks.size).toBe(11);
-    expect(characters.size).toBe(14);
+    expect(maps.size).toBe(14);
+    expect(quests.size).toBe(8);
+    expect(dialogueBanks.size).toBe(12);
+    expect(characters.size).toBe(15);
     expect(items.size).toBe(6);
-    expect(flags.size).toBe(6);
+    expect(flags.size).toBe(9);
   });
 
   it("typed lookups resolve real content", () => {

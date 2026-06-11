@@ -19,6 +19,9 @@ describe("createGameWorld", () => {
     const world = createGameWorld(42);
     expect(world.get(FlagState)?.values).toEqual({
       "flag:bridge-fixed": false,
+      "flag:castle-armory-seen": false,
+      "flag:castle-letters-cleared": false,
+      "flag:castle-library-read": false,
       "flag:has-dungeon-key": false,
       "flag:lost-page-guided": false,
       "flag:morning-errands-done": false,

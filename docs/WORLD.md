@@ -22,7 +22,7 @@ content contract.
 | Oldwood Forest | `map:oldwood-forest`, `map:deep-forest` | first combat and branching errand chain | green canopy, rustling percussion, cautious patrols |
 | Sunken Road Desert | `map:sunken-road`, `map:desert-ruins` | key hunt, ranged enemies, environmental gates | ochre, low strings, mirage shimmer |
 | Castle Approach | `map:castle-approach`, `map:castle-yard` | escalation, guarded gate, exterior siege props | dusk brass, drums, tighter paths |
-| Castle Interior | `map:castle-hall`, `map:castle-library`, `map:castle-armory` | exploration, dialogue reveals, locked wings | candlelit stone, echoing arpeggios |
+| Castle Interior | `map:castle-hall`, `map:castle-library`, `map:castle-armory` | exploration, dialogue reveals, heraldic room verbs | candlelit stone, echoing arpeggios |
 | Dungeon | `map:castle-dungeon` | final combat, rescue, victory | cold stone, low drones, boss pressure |
 
 ## Portal Graph
@@ -84,7 +84,7 @@ storybook middle.
 | 2 | `quest:oldwood-oath` | oldwood forest, deep forest | multi-counter combat and NPC report chain |
 | 2 | `quest:lost-page` | tavern, deep forest, library clue | branch between ranger trail and wizard clue |
 | 3 | `quest:dungeon-key` | sunken road, desert ruins | existing key hunt expanded with a ruin interior |
-| 3 | `quest:castle-letters` | castle approach, yard, hall | guarded-gate dialogue and evidence collection |
+| 3 | `quest:castle-letters` | castle approach, yard, hall, library, armory | guarded-gate dialogue and heraldic evidence collection |
 | 4 | `quest:rescue-amber` | castle hall, armory/library, dungeon | final rescue and victory |
 
 The playthrough test grows with each act. It must use only player controls:
@@ -224,10 +224,37 @@ single start-to-victory journey through the authored road:
    props make it a story landmark rather than another straight corridor.
    Deep Forest routes into Sunken Road, and Sunken Road routes into Castle
    Approach.
-5. Castle Approach owns the key-gated dungeon portal. `quest:dungeon-key` can
-   complete from the Castle Approach gate as well as the legacy overworld gate.
+5. Castle Approach owns the key-gated castle entry portal. `quest:dungeon-key`
+   can complete from the Castle Approach gate as well as the legacy overworld
+   gate, then the route must pass through the castle yard and hall before the
+   dungeon.
 6. `tests/browser/playthrough.test.tsx` must prove the full route through real
    keyboard A/B and directional input only, including the final victory screen.
+
+## Sixth S6 Slice
+
+The castle-interior slice turns the key gate into a short authored dungeon
+approach instead of a single teleport from road to final room:
+
+1. Add `map:castle-yard`, `map:castle-hall`, `map:castle-library`, and
+   `map:castle-armory` with reversible portals, named spawns, and no hidden
+   spawn-inside-door loops.
+2. Change `map:castle-approach` so the key-gated `trigger:castle-gate-entry`
+   leads to `map:castle-yard`; `map:castle-hall` then owns the final portal
+   into `map:castle-dungeon`.
+3. Add a castle scribe NPC and `quest:castle-letters`: the player speaks with
+   the scribe, visits the library archive, visits the armory standard, returns
+   to the scribe, and receives the visible all-clear before entering the
+   dungeon.
+4. Add authored castle props for banners, shelves, lanterns, weapon racks, and
+   throne doors. These must use outlined pixel grids with at least five visible
+   channels; flat rectangles do not count.
+5. Expand the headed browser playthrough so the main journey reaches the
+   dungeon only after entering the yard, hall, library, and armory through
+   real directional input and A-button dialogue.
+6. Read fresh screenshots for the castle approach/hall route before accepting
+   the slice, because the 2.5D camera can magnify large wall props into unreadable
+   slabs.
 
 ## Content Depth Bar
 
