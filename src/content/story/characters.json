@@ -43,6 +43,15 @@
       "dialogue": "dlgbank:threadseller",
       "note": "Shop regular who gives Hearthwake's counter a lived-in story signal."
     },
+    "char:road-cart-trader": {
+      "name": "Penny Cartwright",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:road-cart-trader",
+      "portraitColor": "#b07a2c",
+      "dialogue": "dlgbank:road-cart-trader",
+      "note": "Moving Hearthwake road-cart trader who turns the shopfront street into a working storefront."
+    },
     "char:page": {
       "name": "Page Pip",
       "role": "npc",

@@ -17,6 +17,7 @@
     "palette:woodcutter": { "S": "#946629", "s": "#4a2511", "R": "#6fe014", "r": "#2c6114" },
     "palette:keeper": { "S": "#cfa153", "s": "#946629", "R": "#87e0f2", "r": "#1a6fa8" },
     "palette:threadseller": { "S": "#a86569", "s": "#5b2b2f", "R": "#f1d385", "r": "#b88958" },
+    "palette:road-cart-trader": { "S": "#6f4a2f", "s": "#2b1811", "R": "#d8a96a", "r": "#8c5634" },
     "palette:page": { "S": "#7f4f2f", "s": "#3b2416", "R": "#f1d385", "r": "#cfa153" },
     "palette:hermit": { "S": "#6f7f3f", "s": "#2f3a1d", "R": "#c9b36a", "r": "#7f6f36" },
     "palette:roadward": { "S": "#5f6f38", "s": "#29331a", "R": "#87e0f2", "r": "#1a6fa8" },

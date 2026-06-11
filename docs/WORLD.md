@@ -553,6 +553,31 @@ mandatory route:
    the full public-control playthrough so the player stops at the fern-mender
    before crossing into Sunken Road.
 
+## Twenty-Second Content-Depth Slice
+
+Hearthwake still has too much straight-path geometry around the first shop, and
+the player should meet working storefront life before stepping into another box.
+The next shop-and-street depth pass turns the outside of Brindle's shop into a
+roadside commerce scene:
+
+1. Add `prop:shop-awning`, `prop:road-goods-cart`, and
+   `prop:chalk-price-board` to `map:village`, each with outlined pixel grids and
+   five or more visible recolor channels so the shopfront reads as authored
+   merchandise rather than flat color blocks.
+2. Add `char:road-cart-trader`, a named moving trader whose content-authored
+   Yuka patrol loops around the shopfront and market road without blocking the
+   east-road path.
+3. Add `shop:road-cart-counter`, opened from `dlgbank:road-cart-trader`, with a
+   cheap `item:wayfarer-ribbon` listing so A-buy/B-sell storefront verbs happen
+   outside an interior room during the actual journey.
+4. Break up the shop crossroad with extra cobble/set tiles and road-cart props
+   placed in the player's depth band while preserving all existing village
+   portals and the east-road route.
+5. Add unit coverage for prop richness, map placement, Yuka movement, dialogue
+   `opensShop`, and the generic shop reducer; add headed desktop/phone browser
+   evidence and expand the full public-control playthrough so the player buys
+   and sells at the road-cart before leaving Hearthwake.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

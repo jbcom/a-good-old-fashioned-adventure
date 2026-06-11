@@ -320,6 +320,26 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await walkToOrMap(input, 224, 292, "map:village", 28);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:village");
 
+  await walkTo(input, 528, 260, 16);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Penny Cartwright");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("wayfarer ribbon");
+  await pressA(input);
+  await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("Penny's Road Cart");
+  await pressA(input);
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 8");
+  await expect
+    .element(page.getByTestId("shop-inventory-item:wayfarer-ribbon"))
+    .toHaveTextContent("x1");
+  await input.keyboard("k");
+  await wait(90);
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("G 9");
+  await expect
+    .element(page.getByTestId("shop-inventory-item:wayfarer-ribbon"))
+    .toHaveTextContent("x0");
+  await userEvent.click(page.getByTestId("shop-close"));
+  await wait(100);
+
   await walkTo(input, 620, 304, 24);
   await pressA(input);
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Page Pip");

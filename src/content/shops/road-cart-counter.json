@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../schemas/shop.schema.json",
+  "id": "shop:road-cart-counter",
+  "kind": "shop",
+  "name": "Penny's Road Cart",
+  "keeper": "char:road-cart-trader",
+  "currency": "item:gold",
+  "buySfx": "coin",
+  "sellSfx": "coin",
+  "denySfx": "interact",
+  "listings": [
+    {
+      "id": "wayfarer-ribbon",
+      "item": "item:wayfarer-ribbon",
+      "label": "Wayfarer Ribbon",
+      "description": "A little copper-gold road ribbon tied for boots, packs, and brave pockets.",
+      "buyPrice": 2,
+      "sellPrice": 1
+    },
+    {
+      "id": "mending-plaster",
+      "item": "item:mending-plaster",
+      "label": "Mending Plaster",
+      "description": "Hedge-herb linen cut small enough for a quick road-cart trade.",
+      "buyPrice": 8,
+      "sellPrice": 4
+    }
+  ]
+}

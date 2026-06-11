@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:road-cart-trader",
+  "kind": "dialogue-bank",
+  "speaker": "char:road-cart-trader",
+  "slots": [{ "default": true, "node": "morning-counter" }],
+  "nodes": {
+    "morning-counter": {
+      "lines": [
+        "Penny Cartwright, at your service. The wayfarer ribbon is not magic, but a boot walks neater when it has been wished well.",
+        "Road-cart prices are small enough for a pocket and plain enough for a morning. A buys, B sells, and I keep the chalk honest."
+      ],
+      "opensShop": "shop:road-cart-counter",
+      "emits": "dlg:road-cart-trader.morning-counter"
+    }
+  }
+}

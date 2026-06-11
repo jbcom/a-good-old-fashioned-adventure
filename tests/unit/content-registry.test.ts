@@ -22,16 +22,16 @@ import {
 describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
     expect(tiles.size).toBe(17);
-    expect(props.size).toBe(49);
+    expect(props.size).toBe(52);
     expect(sprites.size).toBe(3);
     expect(animations.size).toBe(7);
     expect(maps.size).toBe(16);
     expect(quests.size).toBe(14);
-    expect(dialogueBanks.size).toBe(24);
-    expect(characters.size).toBe(27);
-    expect(items.size).toBe(9);
+    expect(dialogueBanks.size).toBe(25);
+    expect(characters.size).toBe(28);
+    expect(items.size).toBe(10);
     expect(flags.size).toBe(16);
-    expect(shops.size).toBe(2);
+    expect(shops.size).toBe(3);
   });
 
   it("typed lookups resolve real content", () => {
@@ -44,6 +44,7 @@ describe("registries are fully populated", () => {
     expect(getQuest("quest:deep-forest-fern-light").start).toBe("greet-fern-mender");
     expect(getShop("shop:brindle-counter").listings).toHaveLength(2);
     expect(getShop("shop:oswin-stable-counter").listings).toHaveLength(2);
+    expect(getShop("shop:road-cart-counter").listings).toHaveLength(2);
     expect(getDialogueBank("dlgbank:woodcutter").nodes.request.emits).toBe(
       "dlg:woodcutter.request",
     );

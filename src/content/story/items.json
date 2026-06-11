@@ -32,6 +32,12 @@
       "onPickup": [{ "heal": 15 }],
       "floater": { "text": "Mending Plaster", "color": "#ffcd94" }
     },
+    "item:wayfarer-ribbon": {
+      "name": "Wayfarer Ribbon",
+      "pickup": { "color": "#d8a96a", "anim": "anim:pickup-bob", "sfx": "pickup" },
+      "onPickup": [{ "heal": 5 }],
+      "floater": { "text": "Wayfarer Ribbon", "color": "#d8a96a" }
+    },
     "item:dungeon-key": {
       "name": "Brass Dungeon Key",
       "pickup": { "color": "#f7e214", "anim": "anim:pickup-bob", "sfx": "pickup" },

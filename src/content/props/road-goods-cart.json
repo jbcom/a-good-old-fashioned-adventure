@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:road-goods-cart",
+  "kind": "prop",
+  "grid": { "w": 24, "h": 18 },
+  "anchor": { "x": 12, "y": 18 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "........................",
+        ".....XXXXXXXXXXXXXX.....",
+        "....XRRRCCGGCCRRRX......",
+        "...XRRccGGLLGGccRRX.....",
+        "...XBBBBBBBBBBBBBBX.....",
+        "...XBTTTTEEEECCCCBX.....",
+        "...XBTttTEeeECccCBX.....",
+        "....XBBBBBBBBBBBBX......",
+        ".....XbbX....XbbX.......",
+        "....XXbX......XbXX......",
+        "...XbbX........XbbX.....",
+        "....XX..........XX......",
+        ".....G..G..G..G.........",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "R", "C", "c", "G", "L", "B", "b", "T", "t", "E", "e"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

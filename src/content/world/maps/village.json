@@ -41,6 +41,39 @@
     {
       "op": "region",
       "tile": "tile:village-cobble",
+      "x0": 28,
+      "x1": 36,
+      "y0": 14,
+      "y1": 18,
+      "note": "shopfront road-cart paving pocket"
+    },
+    {
+      "op": "set",
+      "tile": "tile:village-cobble",
+      "at": [34, 19],
+      "note": "shopfront staggered cobble"
+    },
+    {
+      "op": "set",
+      "tile": "tile:village-cobble",
+      "at": [35, 19],
+      "note": "shopfront staggered cobble"
+    },
+    {
+      "op": "set",
+      "tile": "tile:village-cobble",
+      "at": [36, 18],
+      "note": "shopfront staggered cobble"
+    },
+    {
+      "op": "set",
+      "tile": "tile:village-cobble",
+      "at": [37, 18],
+      "note": "shopfront staggered cobble"
+    },
+    {
+      "op": "region",
+      "tile": "tile:village-cobble",
       "x0": 39,
       "x1": 49,
       "y0": 5,
@@ -78,6 +111,12 @@
   "entities": [
     { "ref": "prop:cottage-facade", "x": 192, "y": 176, "note": "woodcutter cottage facade" },
     { "ref": "prop:village-shop", "x": 448, "y": 176, "note": "keeper's shop facade" },
+    {
+      "ref": "prop:shop-awning",
+      "x": 448,
+      "y": 236,
+      "note": "striped awning over Brindle's shopfront"
+    },
     { "ref": "prop:village-tavern", "x": 704, "y": 176, "note": "unfurled vine facade" },
     { "ref": "prop:village-stable", "x": 112, "y": 400, "note": "Hearthwake stable facade" },
     { "ref": "prop:broadleaf-tree", "x": 116, "y": 240, "note": "village green shade" },
@@ -109,11 +148,39 @@
     { "ref": "prop:notice-board", "x": 300, "y": 322, "note": "market notice-board" },
     { "ref": "prop:market-stall", "x": 584, "y": 306, "note": "east-road travel stall" },
     { "ref": "prop:signpost", "x": 392, "y": 254, "note": "forest and shop signpost" },
-    { "ref": "prop:barrel", "x": 536, "y": 298, "note": "shop supply barrel" },
+    {
+      "ref": "prop:road-goods-cart",
+      "x": 548,
+      "y": 300,
+      "note": "Penny's road-cart storefront goods"
+    },
+    {
+      "ref": "prop:chalk-price-board",
+      "x": 504,
+      "y": 300,
+      "note": "chalked ribbon prices by the shopfront"
+    },
+    { "ref": "prop:barrel", "x": 604, "y": 282, "note": "shop supply barrel behind the road cart" },
     { "ref": "prop:barrel", "x": 760, "y": 288, "note": "tavern roadside barrel" },
     { "ref": "prop:signpost", "x": 808, "y": 272, "note": "east road sign" },
     { "ref": "char:woodcutter", "x": 184, "y": 260, "dir": -1 },
     { "ref": "char:gwydion", "x": 456, "y": 260, "dir": 1 },
+    {
+      "ref": "char:road-cart-trader",
+      "x": 512,
+      "y": 248,
+      "dir": 1,
+      "patrol": {
+        "speed": 24,
+        "points": [
+          { "x": 512, "y": 248 },
+          { "x": 544, "y": 248 },
+          { "x": 544, "y": 272 },
+          { "x": 512, "y": 272 }
+        ]
+      },
+      "note": "moving road-cart trader around the shopfront paving pocket"
+    },
     {
       "ref": "char:page",
       "x": 632,
