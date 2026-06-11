@@ -57,6 +57,11 @@ function ensureJeepSqliteElement() {
   jeepDefined = true;
 }
 
+function isExistingConnectionError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return /already|exist|connection/i.test(message);
+}
+
 export class CapacitorSaveRepository implements SaveRepository {
   private initialized = false;
 
@@ -67,12 +72,17 @@ export class CapacitorSaveRepository implements SaveRepository {
       await customElements.whenDefined("jeep-sqlite");
       await CapacitorSQLite.initWebStore();
     }
-    await CapacitorSQLite.createConnection({
-      database: SAVE_DB_NAME,
-      version: SAVE_DB_VERSION,
-      encrypted: false,
-      mode: "no-encryption",
-    });
+    try {
+      await CapacitorSQLite.createConnection({
+        database: SAVE_DB_NAME,
+        version: SAVE_DB_VERSION,
+        encrypted: false,
+        mode: "no-encryption",
+      });
+    } catch (error) {
+      // Vite HMR can recreate this repository while the native/web connection still exists.
+      if (!isExistingConnectionError(error)) throw error;
+    }
     await CapacitorSQLite.open({ database: SAVE_DB_NAME });
     for (const statement of SAVE_MIGRATIONS) {
       await CapacitorSQLite.execute({ database: SAVE_DB_NAME, statements: statement });

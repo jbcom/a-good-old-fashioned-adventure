@@ -16,6 +16,7 @@ import {
   type Scene,
   type ShaderMaterial,
   SRGBColorSpace,
+  type Texture,
 } from "three";
 import { engine } from "../lib/config";
 import { getAnimation, getItem, getSprite } from "../lib/content/registry";
@@ -105,6 +106,13 @@ interface GroundTrack {
   mesh: Mesh;
 }
 
+function disposeGroundMesh(mesh: Mesh): void {
+  mesh.geometry.dispose();
+  const material = mesh.material as ShaderMaterial;
+  (material.uniforms.uMap?.value as Texture | undefined)?.dispose();
+  material.dispose();
+}
+
 class SceneSync {
   private meshes = new Map<number, TrackedMesh>();
   private ground: GroundTrack | null = null;
@@ -123,8 +131,7 @@ class SceneSync {
     }
     if (this.ground) {
       scene.remove(this.ground.mesh);
-      this.ground.mesh.geometry.dispose();
-      (this.ground.mesh.material as ShaderMaterial).dispose();
+      disposeGroundMesh(this.ground.mesh);
     }
     const canvas = composeGround(world);
     const mesh = new Mesh(

@@ -365,10 +365,11 @@ export function playerAbility(world: World, pressed: boolean): void {
   });
 
   if (ability.kind === "leap") {
-    player.set(Transform, {
-      ...transform,
-      x: transform.x - facing.dir * (ability.backwardDistance ?? 45),
-    });
+    const targetX = transform.x - facing.dir * (ability.backwardDistance ?? 45);
+    const hitbox = player.get(Hitbox);
+    if (hitbox && !collides(world, targetX, transform.y, hitbox.w, hitbox.h)) {
+      player.set(Transform, { ...transform, x: targetX });
+    }
     for (const angle of ability.spreadAngles ?? []) {
       spawnProjectile(world, {
         type: "arrow",

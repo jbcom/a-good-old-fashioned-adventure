@@ -59,5 +59,8 @@
       "actionB": ["k", "Shift"]
     },
     "touch": { "dpad": true, "faceButtons": ["B", "A"] }
+  },
+  "persistence": {
+    "autosaveIntervalMs": 15000
   }
 }

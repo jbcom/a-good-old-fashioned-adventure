@@ -87,6 +87,15 @@ describe("save persistence architecture", () => {
       level: 2,
     });
   });
+
+  it("keeps SQLite web connection initialization HMR-safe without hiding other failures", () => {
+    const source = readFileSync(
+      resolve(process.cwd(), "src/persistence/saveRepository.ts"),
+      "utf8",
+    );
+    expect(source).toContain("isExistingConnectionError");
+    expect(source).toContain("if (!isExistingConnectionError(error)) throw error");
+  });
 });
 
 describe("vite capacitor/sqlite configuration", () => {
@@ -103,6 +112,18 @@ describe("vite capacitor/sqlite configuration", () => {
     expect(config.optimizeDeps?.include).toContain("jeep-sqlite/loader");
     expect(config.optimizeDeps?.exclude).toContain("sql.js");
     expect(config.build?.target).toBe("es2022");
+  });
+});
+
+describe("Capacitor SQLite repository resilience", () => {
+  it("tolerates an existing SQLite connection during Vite HMR", () => {
+    const source = readFileSync(
+      resolve(process.cwd(), "src/persistence/saveRepository.ts"),
+      "utf8",
+    );
+
+    expect(source).toContain("await CapacitorSQLite.createConnection");
+    expect(source).toContain("Vite HMR can recreate this repository");
   });
 });
 

@@ -7,6 +7,9 @@ describe("Tone audio engine", () => {
 
     expect(source).not.toContain("Tone.Transport");
     expect(source).not.toContain("new Tone.Loop");
+    expect(source).not.toContain("window.setTimeout(() => synth.dispose");
+    expect(source).toContain("SFX_POOL_SIZE");
+    expect(source).toContain("triggerPooledSfxNote");
     expect(source).toContain("window.setInterval");
   });
 });

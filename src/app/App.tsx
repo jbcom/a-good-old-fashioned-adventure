@@ -134,6 +134,7 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
 };
 
 const keyMap: Record<string, Direction | "a" | "b" | "pause" | undefined> = {};
+const AUTO_SAVE_INTERVAL_MS = ui.persistence.autosaveIntervalMs;
 for (const key of ui.controls.keyboard.up) keyMap[key] = "up";
 for (const key of ui.controls.keyboard.down) keyMap[key] = "down";
 for (const key of ui.controls.keyboard.left) keyMap[key] = "left";
@@ -999,7 +1000,7 @@ export function App({
       });
     };
     save();
-    const timer = window.setInterval(save, 1500);
+    const timer = window.setInterval(save, AUTO_SAVE_INTERVAL_MS);
     return () => window.clearInterval(timer);
   }, [mode, world]);
 

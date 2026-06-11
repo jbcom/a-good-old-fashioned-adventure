@@ -44,6 +44,7 @@ describe("CI and release automation", () => {
     expect(workflow).toContain("CI: true");
     expect(workflow).toContain("runs-on: macos-latest");
     expect(workflow).toContain('VITEST_BROWSER_HEADLESS: "false"');
+    expect(workflow).not.toContain("feat/content-architecture");
     expect(workflow).toContain("pnpm exec playwright install chromium");
     expect(workflow).toContain("actions/upload-artifact");
     expect(workflow).toContain("android/app/build/outputs/apk/debug/*.apk");
@@ -57,6 +58,13 @@ describe("CI and release automation", () => {
       expect(script).toContain("--browser.fileParallelism=false");
       expect(script).toContain("--no-file-parallelism");
     }
+  });
+
+  it("keeps review-driven runtime safeguards in config and renderer code", () => {
+    expect(read("src/config/ui.json")).toContain("autosaveIntervalMs");
+    expect(read("src/app/App.tsx")).toContain("ui.persistence.autosaveIntervalMs");
+    expect(read("src/render/GameStage.tsx")).toContain("disposeGroundMesh");
+    expect(read("src/render/GameStage.tsx")).toContain("uniforms.uMap");
   });
 
   it("configures release-please in manifest mode for package and changelog updates", () => {

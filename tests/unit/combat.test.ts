@@ -10,6 +10,7 @@ import { applyItemPickup, playerAbility, playerAttack } from "../../src/sim/syst
 import { step } from "../../src/sim/tick";
 import {
   CombatTimers,
+  Facing,
   FlagState,
   Health,
   IsEnemy,
@@ -83,6 +84,16 @@ describe("projectile classes", () => {
     expect([...world.query(Projectile)]).toHaveLength(3);
     expect(player.get(CombatTimers)?.iframes).toBeCloseTo(0.25, 5);
     expect(player.get(Transform)?.x).toBe(200 - 45);
+  });
+
+  it("ranger leap cannot move through solid boundaries", () => {
+    const { world, player } = arena("ranger");
+    player.set(Transform, { x: 20, y: 200 });
+    player.set(Facing, { dir: 1 });
+    playerAbility(world, true);
+
+    expect([...world.query(Projectile)]).toHaveLength(3);
+    expect(player.get(Transform)?.x).toBe(20);
   });
 });
 

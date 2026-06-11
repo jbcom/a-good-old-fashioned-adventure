@@ -42,21 +42,20 @@ export interface ToneAudioEngine {
   dispose(): void;
 }
 
-function scheduleSynthNote(
-  output: Tone.Volume,
-  osc: string,
-  freq: number,
-  gain: number,
-  duration: number,
-  at: number,
-) {
+const SFX_POOL_SIZE = 8;
+
+interface PooledSynth {
+  synth: Tone.Synth;
+  busyUntil: number;
+}
+
+function createPooledSynth(output: Tone.Volume, osc: string): PooledSynth {
   const synth = new Tone.Synth({
     oscillator: { type: osc as never },
-    envelope: { attack: 0.002, decay: duration * 0.45, sustain: 0, release: duration * 0.55 },
-    volume: Tone.gainToDb(Math.max(0.0001, gain)),
+    envelope: { attack: 0.002, decay: 0.08, sustain: 0, release: 0.12 },
+    volume: Tone.gainToDb(0.0001),
   }).connect(output);
-  synth.triggerAttackRelease(freq, duration, at);
-  window.setTimeout(() => synth.dispose(), Math.ceil((at - Tone.now() + duration + 0.5) * 1000));
+  return { synth, busyUntil: 0 };
 }
 
 function scheduleRamp(
@@ -88,6 +87,7 @@ export function createToneAudioEngine(): ToneAudioEngine {
   let bgmTimer: number | null = null;
   let bgmIndex = 0;
   let disposed = false;
+  const sfxPools = new Map<string, PooledSynth[]>();
 
   function stopLoop() {
     if (bgmTimer !== null) window.clearInterval(bgmTimer);
@@ -108,6 +108,28 @@ export function createToneAudioEngine(): ToneAudioEngine {
     if (!notes?.length) return;
     playBgmStep(notes);
     bgmTimer = window.setInterval(() => playBgmStep(notes), audio.bgm.stepMs);
+  }
+
+  function triggerPooledSfxNote(
+    osc: string,
+    freq: number,
+    gain: number,
+    duration: number,
+    at: number,
+  ) {
+    let pool = sfxPools.get(osc);
+    if (!pool) {
+      pool = Array.from({ length: SFX_POOL_SIZE }, () => createPooledSynth(output, osc));
+      sfxPools.set(osc, pool);
+    }
+    const now = Tone.now();
+    const voice =
+      pool.find((entry) => entry.busyUntil <= now) ??
+      pool.reduce((oldest, entry) => (entry.busyUntil < oldest.busyUntil ? entry : oldest));
+    const safeAt = Math.max(at, voice.busyUntil + 0.001);
+    voice.synth.volume.value = Tone.gainToDb(Math.max(0.0001, gain));
+    voice.synth.triggerAttackRelease(freq, duration, safeAt);
+    voice.busyUntil = safeAt + duration + 0.05;
   }
 
   return {
@@ -131,8 +153,7 @@ export function createToneAudioEngine(): ToneAudioEngine {
       const now = Tone.now();
       if (recipe.arpeggio) {
         recipe.arpeggio.notes.forEach((note, i) => {
-          scheduleSynthNote(
-            output,
+          triggerPooledSfxNote(
             recipe.osc,
             note,
             recipe.arpeggio?.noteGain ?? 0.05,
@@ -146,8 +167,7 @@ export function createToneAudioEngine(): ToneAudioEngine {
         let offset = 0;
         recipe.sequence.notes.forEach((note, i) => {
           const duration = recipe.sequence?.durations[i] ?? 0.12;
-          scheduleSynthNote(
-            output,
+          triggerPooledSfxNote(
             recipe.osc,
             note,
             recipe.sequence?.noteGain ?? 0.05,
@@ -190,6 +210,9 @@ export function createToneAudioEngine(): ToneAudioEngine {
     dispose() {
       disposed = true;
       stopLoop();
+      for (const pool of sfxPools.values()) {
+        for (const voice of pool) voice.synth.dispose();
+      }
       bgmSynth.dispose();
       output.dispose();
     },

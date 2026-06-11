@@ -5,7 +5,7 @@ const config: CapacitorConfig = {
   appName: "A Good Old-Fashioned Adventure",
   webDir: "dist",
   backgroundColor: "#17110b",
-  loggingBehavior: "debug",
+  loggingBehavior: process.env.NODE_ENV === "production" ? "none" : "debug",
   android: {
     path: "android",
     backgroundColor: "#17110b",

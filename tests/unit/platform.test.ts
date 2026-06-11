@@ -36,6 +36,17 @@ describe("Capacitor Android platform contract", () => {
     expect(appGradle).toContain("androidx.appcompat:appcompat:$androidxAppCompatVersion");
     expect(appGradle).toContain("androidx.appcompat:appcompat-resources:$androidxAppCompatVersion");
   });
+
+  it("keeps production Android logging and backup surfaces closed", () => {
+    const capacitorSource = readFileSync(resolve(process.cwd(), "capacitor.config.ts"), "utf8");
+    const manifest = readFileSync(
+      resolve(process.cwd(), "android/app/src/main/AndroidManifest.xml"),
+      "utf8",
+    );
+    expect(capacitorSource).toContain('process.env.NODE_ENV === "production" ? "none" : "debug"');
+    expect(capacitorConfig.android?.webContentsDebuggingEnabled).toBe(false);
+    expect(manifest).toContain('android:allowBackup="false"');
+  });
 });
 
 describe("Capacitor device profile", () => {
