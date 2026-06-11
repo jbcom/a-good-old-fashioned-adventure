@@ -58,7 +58,7 @@ it("buys and sells at Brindle's counter through public movement and A/B input", 
   await governor.click("continue-button");
   await expect.poll(() => governor.perceive().mapName).toBe("Hearthwake Shop");
 
-  await governor.reachPoint(192, 160, { tolerance: 20 });
+  await governor.reachPoint(192, 148, { tolerance: 10, maxSteps: 60 });
   await governor.press("a");
 
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keeper Brindle");
