@@ -14,8 +14,9 @@ Branch: `feat/content-architecture`
 - Browser playthrough validates the expanded journey through public controls.
 - Capacitor Android scaffold, SQLite/Preferences/Device plugins, web SQLite
   wasm copy, `cap:sync`, and debug APK assemble are green locally.
+- CI, release-please manifest mode, Dependabot pinned-stack ignores, and
+  standard repo docs are scaffolded.
 
 ## Active Queue
 
-See `.agent-state/directive.md`. S7.2 owns CI, release-please, and standard repo
-docs. S7.3 owns PR creation, green checks, and merge.
+See `.agent-state/directive.md`. S7.3 owns PR creation, green checks, and merge.
