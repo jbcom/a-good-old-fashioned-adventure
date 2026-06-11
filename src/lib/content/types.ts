@@ -147,6 +147,27 @@ export interface ItemDef {
   floater?: { text: string; color: string };
 }
 
+export interface ShopListingDef {
+  id: string;
+  item: string;
+  label: string;
+  description: string;
+  buyPrice: number;
+  sellPrice: number;
+}
+
+export interface ShopDef {
+  id: string;
+  kind: "shop";
+  name: string;
+  keeper: string;
+  currency: string;
+  buySfx?: string;
+  sellSfx?: string;
+  denySfx?: string;
+  listings: ShopListingDef[];
+}
+
 export interface FlagDef {
   default: boolean;
   description: string;
@@ -208,6 +229,7 @@ export interface DialogueSlot {
 
 export interface DialogueNode {
   lines: string[];
+  opensShop?: string;
   choices?: { id: string; text: string; goto?: string }[];
   emits: string;
 }

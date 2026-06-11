@@ -14,6 +14,18 @@
       "onPickup": [{ "heal": 20 }],
       "floater": { "text": "+{value} HP", "color": "#e03d50" }
     },
+    "item:travel-cake": {
+      "name": "Travel Cake",
+      "pickup": { "color": "#cfa153", "anim": "anim:pickup-bob", "sfx": "pickup" },
+      "onPickup": [{ "heal": 25 }],
+      "floater": { "text": "Travel Cake", "color": "#cfa153" }
+    },
+    "item:mending-plaster": {
+      "name": "Mending Plaster",
+      "pickup": { "color": "#ffcd94", "anim": "anim:pickup-bob", "sfx": "pickup" },
+      "onPickup": [{ "heal": 15 }],
+      "floater": { "text": "Mending Plaster", "color": "#ffcd94" }
+    },
     "item:dungeon-key": {
       "name": "Brass Dungeon Key",
       "pickup": { "color": "#f7e214", "anim": "anim:pickup-bob", "sfx": "pickup" },

@@ -60,7 +60,7 @@ describe("referential integrity", () => {
   }
 
   const refPattern =
-    /"(tile|palette|anim|sprite|prop|char|item|flag|quest|map|dlgbank):[a-z0-9.-]+"/g;
+    /"(tile|palette|anim|sprite|prop|char|item|flag|quest|map|dlgbank|shop):[a-z0-9.-]+"/g;
 
   for (const [path, doc] of Object.entries(contentModules)) {
     it(`${path} has no dangling references`, () => {

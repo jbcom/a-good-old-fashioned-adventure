@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:shop-floor",
+  "kind": "tile",
+  "solid": false,
+  "layers": [
+    { "op": "fill", "color": "#6b4323" },
+    { "op": "rect", "color": "#3d2414", "x": 0, "y": 0, "w": 16, "h": 1 },
+    { "op": "rect", "color": "#3d2414", "x": 0, "y": 8, "w": 16, "h": 1 },
+    { "op": "rect", "color": "#946629", "x": 0, "y": 1, "w": 16, "h": 2 },
+    {
+      "op": "repeat-rect",
+      "color": "#cfa153",
+      "x": 2,
+      "y": 2,
+      "w": 1,
+      "h": 4,
+      "stepX": 6,
+      "count": 3
+    },
+    {
+      "op": "repeat-rect",
+      "color": "#4a2511",
+      "x": 5,
+      "y": 10,
+      "w": 2,
+      "h": 1,
+      "stepX": 5,
+      "count": 3
+    }
+  ],
+  "koota": { "traits": ["Tile"] }
+}

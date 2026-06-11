@@ -14,6 +14,7 @@ import type {
   MapDef,
   PropDef,
   QuestDef,
+  ShopDef,
   SpriteDef,
   TileDef,
 } from "./types";
@@ -64,6 +65,10 @@ export const dialogueBanks = byId(
   ),
 );
 
+export const shops = byId(
+  glob<ShopDef>(import.meta.glob("/src/content/shops/*.json", { eager: true, import: "default" })),
+);
+
 import castFile from "../../content/story/characters.json";
 import flagsFile from "../../content/story/flags.json";
 import itemsFile from "../../content/story/items.json";
@@ -91,6 +96,7 @@ export const getAnimation = (id: string) => lookup(animations, id, "animation");
 export const getMap = (id: string) => lookup(maps, id, "map");
 export const getQuest = (id: string) => lookup(quests, id, "quest");
 export const getDialogueBank = (id: string) => lookup(dialogueBanks, id, "dialogue bank");
+export const getShop = (id: string) => lookup(shops, id, "shop");
 export const getCharacter = (id: string) => lookup(characters, id, "character");
 export const getItem = (id: string) => lookup(items, id, "item");
 export const getFlag = (id: string) => lookup(flags, id, "flag");

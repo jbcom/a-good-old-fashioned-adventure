@@ -392,7 +392,8 @@
 }
 
 .dialogue-box,
-.side-panel {
+.side-panel,
+.shop-panel {
   border: 1px solid var(--frame);
   border-radius: 4px;
   background:
@@ -539,6 +540,113 @@
   z-index: 10;
 }
 
+.shop-panel {
+  position: absolute;
+  right: max(18px, env(safe-area-inset-right, 0));
+  bottom: calc(96px + env(safe-area-inset-bottom, 0));
+  width: min(440px, calc(100vw - 36px));
+  max-height: min(58vh, 430px);
+  padding: 12px;
+  z-index: 11;
+  pointer-events: auto;
+  overflow: auto;
+}
+
+.shop-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.shop-header .manuscript-kicker {
+  margin-bottom: 2px;
+  font-size: 14px;
+}
+
+.shop-header h2 {
+  margin: 0;
+  color: var(--danger-dark);
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  letter-spacing: 0;
+}
+
+.shop-close {
+  width: 32px;
+  height: 30px;
+  border: 1px solid var(--frame);
+  border-radius: 4px;
+  background: rgba(249, 236, 202, 0.76);
+  color: var(--danger-dark);
+  font-family: var(--font-numeric);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.shop-list {
+  display: grid;
+  gap: 7px;
+}
+
+.shop-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid rgba(138, 95, 50, 0.34);
+  background: rgba(249, 236, 202, 0.38);
+}
+
+.shop-row[aria-selected="true"] {
+  border-color: var(--danger);
+  box-shadow: inset 0 0 0 1px rgba(159, 47, 40, 0.35);
+  background: rgba(255, 244, 208, 0.62);
+}
+
+.shop-row strong {
+  display: block;
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 17px;
+  font-weight: 400;
+}
+
+.shop-row p {
+  margin: 2px 0 0;
+  color: var(--body);
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.shop-prices {
+  display: grid;
+  align-content: start;
+  gap: 3px;
+  color: var(--muted);
+  font-family: var(--font-numeric);
+  font-size: 11px;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.shop-footer {
+  display: grid;
+  grid-template-columns: 84px 84px minmax(0, 1fr);
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.shop-status {
+  margin: 0;
+  color: var(--body);
+  font-size: 13px;
+  line-height: 1.25;
+}
+
 .choice-row {
   display: flex;
   gap: 10px;
@@ -648,6 +756,23 @@
 
   .map-token {
     max-width: 28vw;
+  }
+
+  .shop-panel {
+    left: 50%;
+    right: auto;
+    bottom: calc(88px + env(safe-area-inset-bottom, 0));
+    width: min(430px, calc(100vw - 28px));
+    max-height: 40vh;
+    transform: translateX(-50%);
+  }
+
+  .shop-footer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .shop-status {
+    grid-column: 1 / -1;
   }
 }
 

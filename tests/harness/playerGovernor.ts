@@ -118,7 +118,7 @@ export class PlayerGovernor {
 
   async press(button: string): Promise<void> {
     const key = keyByButton[button] ?? button;
-    await this.input.keyboard(key);
+    await this.input.keyboard(key.startsWith("Arrow") ? `{${key}}` : key);
     await wait(100);
   }
 

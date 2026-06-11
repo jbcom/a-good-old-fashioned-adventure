@@ -14,6 +14,7 @@ const requiredDetailedTiles = [
   "tile:sand",
   "tile:village-cobble",
   "tile:stone-floor",
+  "tile:shop-floor",
   "tile:stone-wall",
   "tile:wood-bridge",
   "tile:royal-rug",
@@ -38,6 +39,8 @@ const requiredVillageProps = [
   "prop:weapon-rack",
   "prop:throne-door",
   "prop:scribe-desk",
+  "prop:shop-shelf",
+  "prop:shop-ledger",
 ];
 
 function colorsInOps(ops: DrawOp[]): Set<string> {
@@ -105,7 +108,9 @@ describe("authored pixel-art richness", () => {
     );
 
     expect([...propRefs(getMap("map:village-house"))]).toContain("prop:table");
-    expect([...propRefs(getMap("map:village-shop"))]).toContain("prop:barrel");
+    expect([...propRefs(getMap("map:village-shop"))]).toEqual(
+      expect.arrayContaining(["prop:barrel", "prop:shop-shelf", "prop:shop-ledger"]),
+    );
     expect([...propRefs(getMap("map:village-tavern"))]).toContain("prop:table");
   });
 

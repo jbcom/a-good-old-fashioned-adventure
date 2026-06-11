@@ -54,6 +54,9 @@ Keyboard and touch write into one input state consumed by the app runtime:
 - A: talk, confirm dialogue, melee/projectile attack.
 - B: hold class ability; wizard blink and ranger leap fire on press, knight
   shield remains active while held.
+- Shop counter: up/down changes the selected listing, A buys one item, and B
+  sells one owned copy of the selected item. The counter pauses movement but
+  keeps the world visible behind it.
 - Pause: Escape / P / slideout pause button.
 
 The browser playthrough must use these public controls. It may observe DOM HUD
@@ -93,6 +96,8 @@ content rewrite must keep that specificity and raise it:
   real place.
 - Shops, taverns, and cottages need at least one NPC or object interaction.
   A labeled room with a chest is not enough adventure content.
+- Shop rooms need visible merchandise, counter props, and a talkable customer
+  or keeper line before the economy UI can count as finished content.
 - Props should use pixel rows or layered draw ops with outlines, highlights,
   and role colors. Flat CSS rectangles and anonymous filler props do not count.
 - Palette swaps are allowed for classes and monsters, but important places and

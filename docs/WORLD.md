@@ -90,6 +90,26 @@ storybook middle.
 The playthrough test grows with each act. It must use only player controls:
 keyboard A/B and directional input or the virtual pad/buttons.
 
+## Hearthwake Shop Economy
+
+Keeper Brindle's shop is an NPC counter, not a chest room. Its first sample
+cake remains a one-time story kindness, but the post-sample interaction opens a
+content-authored counter:
+
+- Shop files live in `src/content/shops/*.json` and own the keeper, display
+  name, listings, buy prices, sell prices, and transaction SFX.
+- Listings point at `item:*` ids. Items remain the semantic inventory entries;
+  the shop only prices and presents them.
+- The player owns an inventory trait and gold trait. A buys the selected
+  listing, B sells one owned copy of the selected listing, and up/down changes
+  selection. React displays the counter; the sim owns all gold/inventory
+  mutation.
+- The shop room must include authored shelf/counter props and at least one
+  additional talkable villager so the interior reads as a lived place rather
+  than a colored box.
+- Browser validation must enter the shop through public controls, speak with
+  Brindle, open the counter, buy, sell, and observe gold/inventory changes.
+
 ## Map Contracts
 
 - Exterior maps are larger than interiors and may include enemy spawn tables.
@@ -263,7 +283,8 @@ slice must add at least one meaningful player-facing verb or story signal:
 
 - Shops are NPC interactions first, not treasure boxes. The first keeper
   interaction gives a one-time travel-cake heal through the quest/effect
-  pipeline; later slices can replace this with inventory and prices.
+  pipeline, then the shop opens a content-driven buy/sell counter with player
+  inventory and visible gold changes.
 - Exterior maps should read as places: signage, stumps, trees, gatehouses,
   barrels, and NPCs placed around roads, not only long cross-shaped paths.
 - Road maps may keep a direct route for the player governor, but the tile plan

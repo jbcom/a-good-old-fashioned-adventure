@@ -7,28 +7,31 @@ import {
   getDialogueBank,
   getMap,
   getQuest,
+  getShop,
   getSprite,
   getTile,
   items,
   maps,
   props,
   quests,
+  shops,
   sprites,
   tiles,
 } from "../../src/lib/content/registry";
 
 describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
-    expect(tiles.size).toBe(13);
-    expect(props.size).toBe(20);
+    expect(tiles.size).toBe(14);
+    expect(props.size).toBe(22);
     expect(sprites.size).toBe(3);
     expect(animations.size).toBe(6);
     expect(maps.size).toBe(14);
     expect(quests.size).toBe(8);
-    expect(dialogueBanks.size).toBe(12);
-    expect(characters.size).toBe(15);
-    expect(items.size).toBe(6);
+    expect(dialogueBanks.size).toBe(13);
+    expect(characters.size).toBe(16);
+    expect(items.size).toBe(8);
     expect(flags.size).toBe(9);
+    expect(shops.size).toBe(1);
   });
 
   it("typed lookups resolve real content", () => {
@@ -36,6 +39,7 @@ describe("registries are fully populated", () => {
     expect(getSprite("sprite:hero").rows).toHaveLength(16);
     expect(getMap("map:overworld").size).toEqual({ cols: 96, rows: 48 });
     expect(getQuest("quest:broken-bridge").start).toBe("find-woodcutter");
+    expect(getShop("shop:brindle-counter").listings).toHaveLength(2);
     expect(getDialogueBank("dlgbank:woodcutter").nodes.request.emits).toBe(
       "dlg:woodcutter.request",
     );

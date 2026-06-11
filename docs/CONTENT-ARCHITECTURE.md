@@ -82,6 +82,15 @@ foreground objects that y-sort with characters: pixel-grid `states`
 (`closed`/`open`/…), optional `interaction` (verb + method + sfx), `solid`
 flag. The shared op vocabulary lives in `schemas/draw-ops.schema.json`.
 
+### `src/content/shops/` — counters and prices
+
+A shop file owns its `shop:*` id, keeper character, display name, listing ids,
+item refs, buy prices, sell prices, and transaction SFX. The shop layer never
+stores inventory directly; it prices `item:*` definitions and the sim mutates
+the player's `Inventory` and `PlayerGold` traits. Dialogue nodes may reference
+`opensShop: "shop:*"` so writers can decide when a counter appears without
+hard-coding React behavior.
+
 ### `src/content/animations/` — anime.js timelines
 
 Named, reusable timeline specs targeting logical channels (`spriteOffset`,

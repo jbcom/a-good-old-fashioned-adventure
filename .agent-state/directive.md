@@ -81,7 +81,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 
 ### S8 Content depth and polish
 - [x] S8.1 Castle-interior wing: key gate routes through castle yard, hall, library, and armory before the dungeon; `quest:castle-letters` adds scribe dialogue plus room verbs; headed playthrough captures hall/library screenshots
-- [ ] S8.2 Shop economy: replace the one-time sample-only shop with content-driven prices, buy/sell verbs, inventory state, and browser validation through public controls
+- [x] S8.2 Shop economy: replace the one-time sample-only shop with content-driven prices, buy/sell verbs, inventory state, and browser validation through public controls
 - [ ] S8.3 Desert ruins: add the planned ruin interior off Sunken Road with a readable landmark loop, props, NPC/story signal, and route validation
 
 ## Learnings log (forward sweeps append here)
@@ -119,3 +119,5 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - 2026-06-11 S7.3 review-blocker correction: the current merge-blocking fixes cover production logging, Android backup, feature-branch CI triggers, leap collision, ground texture disposal, SQLite HMR, autosave cadence, and pooled Tone SFX.
 - 2026-06-11 S8.1 castle-interior correction: the key gate must not teleport from road to final dungeon. Route depth now requires authored castle yard/hall/library/armory maps, a scribe quest, room-specific verbs, and screenshots read from the passing headed playthrough.
 - 2026-06-11 save-boundary correction: interval autosave alone can leave Continue behind the live map after a long route. Map loads now persist immediately from the refreshed snapshot so split browser journeys resume from the actual current room.
+- 2026-06-11 S8.2 shop-economy correction: Brindle's shop now opens from dialogue into a content-authored `shop:*` counter; A buys, B sells, up/down selects, and player gold/inventory live in sim traits plus save snapshots.
+- 2026-06-11 S8.2 shop-visual correction: the first valid shop screenshot still read as a dark stone box. Screenshot reading forced `tile:shop-floor`, shelf/ledger props, and phone evidence before accepting the economy slice.

@@ -32,7 +32,16 @@
       "palette": "palette:keeper",
       "portraitColor": "#cfa153",
       "dialogue": "dlgbank:shopkeeper",
-      "note": "First village shop interaction; later slices replace the sample with a fuller economy."
+      "note": "Village shopkeeper whose first kindness leads into the content-authored counter economy."
+    },
+    "char:threadseller": {
+      "name": "Nell Threadseller",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:threadseller",
+      "portraitColor": "#a86569",
+      "dialogue": "dlgbank:threadseller",
+      "note": "Shop regular who gives Hearthwake's counter a lived-in story signal."
     },
     "char:page": {
       "name": "Page Pip",

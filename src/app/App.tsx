@@ -8,7 +8,7 @@ import {
 } from "../audio/toneEngine";
 import ui from "../config/ui.json";
 import { classes, engine } from "../lib/config";
-import { getCharacter, getDialogueBank, getMap } from "../lib/content/registry";
+import { getCharacter, getDialogueBank, getMap, getShop } from "../lib/content/registry";
 import type { DialogueNode, MapDef } from "../lib/content/types";
 import {
   getSaveRepository,
@@ -37,6 +37,7 @@ import {
 import { pushEvent } from "../sim/events";
 import { createGameWorld, instantiateMap } from "../sim/factories";
 import { applyEffects, autoStartQuests, questLogLines } from "../sim/quests";
+import { buyShopListing, type ShopTransactionResult, sellShopListing } from "../sim/shop";
 import { playerAbility, playerAttack } from "../sim/systems/combat";
 import { SIM_DT, step } from "../sim/tick";
 import {
@@ -44,6 +45,7 @@ import {
   Facing,
   FlagState,
   Health,
+  Inventory,
   IsEnemy,
   IsNpc,
   IsPlayer,
@@ -79,6 +81,7 @@ interface UiSnapshot {
   xp: number;
   nextXp: number;
   gold: number;
+  inventory: Record<string, number>;
   playerX: number;
   playerY: number;
   enemies: number;
@@ -112,6 +115,14 @@ interface StartOptions {
   level?: number;
   hp?: number;
   maxHp?: number;
+  gold?: number;
+  inventory?: Record<string, number>;
+}
+
+interface ShopState {
+  shopId: string;
+  selectedIndex: number;
+  message: string;
 }
 
 const EMPTY_SNAPSHOT: UiSnapshot = {
@@ -124,6 +135,7 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   xp: 0,
   nextXp: 1,
   gold: 0,
+  inventory: {},
   playerX: 0,
   playerY: 0,
   enemies: 0,
@@ -167,6 +179,29 @@ function interpolateLine(world: World, line: string): string {
     }
     return token;
   });
+}
+
+function cleanInventory(input: unknown): Record<string, number> {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return {};
+  const out: Record<string, number> = {};
+  for (const [itemId, value] of Object.entries(input)) {
+    if (!itemId.startsWith("item:")) continue;
+    const count = Number(value);
+    if (Number.isFinite(count) && count > 0) out[itemId] = Math.floor(count);
+  }
+  return out;
+}
+
+function parseSavedSnapshot(json: string): Pick<StartOptions, "gold" | "inventory"> {
+  try {
+    const parsed = JSON.parse(json) as { gold?: unknown; inventory?: unknown };
+    return {
+      gold: Number.isFinite(Number(parsed.gold)) ? Number(parsed.gold) : undefined,
+      inventory: cleanInventory(parsed.inventory),
+    };
+  } catch {
+    return {};
+  }
 }
 
 function dialogueFromResolved(
@@ -221,6 +256,7 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
   const health = player?.get(Health);
   const level = player?.get(Level);
   const gold = player?.get(PlayerGold);
+  const inventory = player?.get(Inventory);
   const transform = player?.get(Transform);
   const mapId = runtime?.mapId ?? "";
   const base: UiSnapshot = {
@@ -233,6 +269,7 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     xp: level?.xp ?? 0,
     nextXp: level?.nextXp ?? 1,
     gold: gold?.value ?? 0,
+    inventory: { ...(inventory?.items ?? {}) },
     playerX: transform?.x ?? 0,
     playerY: transform?.y ?? 0,
     enemies: [...world.query(IsEnemy)].length,
@@ -265,6 +302,8 @@ function saveRowFromSnapshot(current: UiSnapshot) {
       mapId: current.mapId,
       playerX: current.playerX,
       playerY: current.playerY,
+      gold: current.gold,
+      inventory: current.inventory,
       questLines: current.questLines,
     }),
     updatedAt: new Date(),
@@ -619,6 +658,7 @@ function Minimap({ snapshot }: { snapshot: UiSnapshot }) {
       "tile:castle-road": "#4b526d",
       "tile:wood-bridge": "#a66a2c",
       "tile:stone-floor": ui.theme.textMuted,
+      "tile:shop-floor": "#946629",
       "tile:village-cobble": "#cfa153",
       "tile:stone-wall": ui.theme.shell,
       "tile:prison-bars": ui.theme.panelBorder,
@@ -670,6 +710,83 @@ function DialogueBox({ dialogue, onAdvance }: { dialogue: DialogueState; onAdvan
           {dialogue.node.choices?.[0]?.text ?? "A CONTINUE"}
         </button>
       </div>
+    </section>
+  );
+}
+
+function ShopPanel({
+  shopState,
+  snapshot,
+  onBuy,
+  onSell,
+  onClose,
+}: {
+  shopState: ShopState;
+  snapshot: UiSnapshot;
+  onBuy: () => void;
+  onSell: () => void;
+  onClose: () => void;
+}) {
+  const shop = getShop(shopState.shopId);
+  const keeper = getCharacter(shop.keeper).name;
+  const selectedIndex = Math.min(shopState.selectedIndex, shop.listings.length - 1);
+  return (
+    <section className="shop-panel" data-testid="shop-panel">
+      <header className="shop-header">
+        <div>
+          <p className="manuscript-kicker">{keeper}</p>
+          <h2>{shop.name}</h2>
+        </div>
+        <button className="shop-close" data-testid="shop-close" type="button" onClick={onClose}>
+          x
+        </button>
+      </header>
+      <div className="shop-list" role="listbox" aria-label={shop.name}>
+        {shop.listings.map((listing, index) => {
+          const owned = snapshot.inventory[listing.item] ?? 0;
+          return (
+            <div
+              className="shop-row"
+              data-testid={`shop-row-${listing.id}`}
+              aria-selected={selectedIndex === index}
+              key={listing.id}
+              role="option"
+              tabIndex={selectedIndex === index ? 0 : -1}
+            >
+              <div>
+                <strong>{listing.label}</strong>
+                <p>{listing.description}</p>
+              </div>
+              <div className="shop-prices">
+                <span>Buy {listing.buyPrice}g</span>
+                <span>Sell {listing.sellPrice}g</span>
+                <span data-testid={`shop-inventory-${listing.item}`}>x{owned}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <footer className="shop-footer">
+        <button
+          className="menu-button compact"
+          data-testid="shop-buy"
+          type="button"
+          onClick={onBuy}
+        >
+          A Buy
+        </button>
+        <button
+          className="menu-button compact"
+          data-testid="shop-sell"
+          type="button"
+          onClick={onSell}
+        >
+          B Sell
+        </button>
+        <p className="shop-status" data-testid="shop-status">
+          {shopState.message || `${snapshot.gold} gold in purse.`}
+        </p>
+      </footer>
     </section>
   );
 }
@@ -754,6 +871,7 @@ export function App({
   const [world, setWorld] = useState<World | null>(null);
   const [snapshot, setSnapshot] = useState<UiSnapshot>(EMPTY_SNAPSHOT);
   const [dialogue, setDialogue] = useState<DialogueState | null>(null);
+  const [shopState, setShopState] = useState<ShopState | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(DEFAULT_SETTINGS.muted);
@@ -841,6 +959,7 @@ export function App({
           hp: row.hp,
           maxHp: row.maxHp,
           questSummary: row.questSummary,
+          snapshotJson: row.snapshotJson,
           updatedAt: row.updatedAt.getTime(),
         });
       })
@@ -864,6 +983,7 @@ export function App({
   const loadMap = useCallback(
     (nextWorld: World, mapId: string, classId: string, spawnId?: string) => {
       inputRef.current = emptyInput();
+      setShopState(null);
       instantiateMap(nextWorld, mapId, { classId, spawnId });
       zoneEnteredRef.current.clear();
       audioRef.current?.setTheme(getMap(mapId).bgmTheme);
@@ -886,6 +1006,7 @@ export function App({
       setMode("playing");
       setPaused(false);
       setPanelOpen(false);
+      setShopState(null);
       void audioRef.current?.resumeFromGesture().then(() => {
         audioRef.current?.setTheme(getMap(mapId).bgmTheme);
         setAudioDebug(audioRef.current?.debugState() ?? audioDebug);
@@ -906,6 +1027,12 @@ export function App({
           nextXp: currentLevel?.nextXp ?? 50,
         });
       }
+      if (player && options.gold !== undefined) {
+        player.set(PlayerGold, { value: options.gold });
+      }
+      if (player && options.inventory !== undefined) {
+        player.set(Inventory, { items: options.inventory });
+      }
       refreshSnapshot(nextWorld, { persist: true });
     },
     [audioDebug, loadMap, refreshSnapshot, selectedClass],
@@ -913,6 +1040,7 @@ export function App({
 
   const continueGame = useCallback(() => {
     if (!latestSave) return;
+    const saved = parseSavedSnapshot(latestSave.snapshotJson);
     startGame({
       classId: latestSave.classId,
       mapId: latestSave.mapId,
@@ -921,6 +1049,8 @@ export function App({
       level: latestSave.level,
       hp: latestSave.hp,
       maxHp: latestSave.maxHp,
+      gold: saved.gold,
+      inventory: saved.inventory,
     });
   }, [latestSave, startGame]);
 
@@ -928,17 +1058,20 @@ export function App({
     inputRef.current = emptyInput();
     setPaused(false);
     setPanelOpen(false);
+    setShopState(null);
   }, []);
 
   const togglePause = useCallback(() => {
     if (mode !== "playing") return;
     setPanelOpen(false);
+    setShopState(null);
     inputRef.current = emptyInput();
     setPaused((value) => !value);
   }, [mode]);
 
   const retireRun = useCallback(() => {
     setPanelOpen(false);
+    setShopState(null);
     setPaused(false);
     setMode("gameover");
   }, []);
@@ -975,15 +1108,68 @@ export function App({
     [loadMap, refreshSnapshot, selectedClass],
   );
 
+  const updateShopFromResult = useCallback((result: ShopTransactionResult) => {
+    setShopState((current) =>
+      current
+        ? {
+            ...current,
+            message: result.ok ? `${result.message} ${result.gold} gold left.` : result.message,
+          }
+        : current,
+    );
+  }, []);
+
+  const selectedShopListing = useCallback(() => {
+    if (!shopState) return null;
+    const shop = getShop(shopState.shopId);
+    const index = Math.min(shopState.selectedIndex, shop.listings.length - 1);
+    const listing = shop.listings[index];
+    return listing ? { shopId: shop.id, listingId: listing.id } : null;
+  }, [shopState]);
+
+  const handleShopBuy = useCallback(() => {
+    if (!world) return;
+    const selected = selectedShopListing();
+    if (!selected) return;
+    const result = buyShopListing(world, selected.shopId, selected.listingId);
+    updateShopFromResult(result);
+    clearOutbox(world);
+    refreshSnapshot(world, { persist: true });
+  }, [clearOutbox, refreshSnapshot, selectedShopListing, updateShopFromResult, world]);
+
+  const handleShopSell = useCallback(() => {
+    if (!world) return;
+    const selected = selectedShopListing();
+    if (!selected) return;
+    const result = sellShopListing(world, selected.shopId, selected.listingId);
+    updateShopFromResult(result);
+    clearOutbox(world);
+    refreshSnapshot(world, { persist: true });
+  }, [clearOutbox, refreshSnapshot, selectedShopListing, updateShopFromResult, world]);
+
+  const moveShopSelection = useCallback((delta: number) => {
+    setShopState((current) => {
+      if (!current) return current;
+      const count = getShop(current.shopId).listings.length;
+      return {
+        ...current,
+        selectedIndex: (current.selectedIndex + delta + count) % count,
+        message: current.message,
+      };
+    });
+  }, []);
+
   const advanceDialogue = useCallback(() => {
     if (!world || !dialogue) return;
     void audioRef.current?.resumeFromGesture();
+    const opensShop = dialogue.node.opensShop;
     const choice = dialogue.node.choices?.[0];
     if (choice) emitDialogueChoice(world, dialogue.node, choice.id);
     else emitDialogueSeen(world, dialogue.node);
     setDialogue(null);
     step(world, 0);
     clearOutbox(world);
+    if (opensShop) setShopState({ shopId: opensShop, selectedIndex: 0, message: "" });
   }, [clearOutbox, dialogue, world]);
 
   const pressA = useCallback(() => {
@@ -998,6 +1184,10 @@ export function App({
     }
     if (!world) return;
     void audioRef.current?.resumeFromGesture();
+    if (shopState) {
+      handleShopBuy();
+      return;
+    }
     if (dialogue) {
       advanceDialogue();
       return;
@@ -1010,7 +1200,17 @@ export function App({
     aimAtNearestEnemy(world);
     playerAttack(world);
     clearOutbox(world);
-  }, [advanceDialogue, clearOutbox, dialogue, mode, paused, startGame, world]);
+  }, [
+    advanceDialogue,
+    clearOutbox,
+    dialogue,
+    handleShopBuy,
+    mode,
+    paused,
+    shopState,
+    startGame,
+    world,
+  ]);
 
   useEffect(() => {
     if (mode !== "playing" || !world) return;
@@ -1027,21 +1227,31 @@ export function App({
     (pressed: boolean) => {
       if (!world || mode !== "playing" || dialogue || paused) return;
       void audioRef.current?.resumeFromGesture();
+      if (shopState) {
+        if (pressed) handleShopSell();
+        return;
+      }
       playerAbility(world, pressed);
       clearOutbox(world);
     },
-    [clearOutbox, dialogue, mode, paused, world],
+    [clearOutbox, dialogue, handleShopSell, mode, paused, shopState, world],
   );
 
   const setDirection = useCallback(
     (dir: Direction, pressed: boolean) => {
+      if (shopState) {
+        inputRef.current[dir] = false;
+        if (pressed && dir === "up") moveShopSelection(-1);
+        if (pressed && dir === "down") moveShopSelection(1);
+        return;
+      }
       if (paused && pressed) {
         inputRef.current[dir] = false;
         return;
       }
       inputRef.current[dir] = pressed;
     },
-    [paused],
+    [moveShopSelection, paused, shopState],
   );
 
   useEffect(() => {
@@ -1087,7 +1297,7 @@ export function App({
     const frame = (now: number) => {
       const dt = Math.min(engine.maxTimestep, (now - last) / 1000);
       last = now;
-      if (!dialogue && !paused) {
+      if (!dialogue && !paused && !shopState) {
         acc += dt;
         while (acc >= SIM_DT) {
           applyInputToWorld(world, inputRef.current);
@@ -1104,7 +1314,7 @@ export function App({
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [clearOutbox, dialogue, mode, paused, refreshSnapshot, world]);
+  }, [clearOutbox, dialogue, mode, paused, refreshSnapshot, shopState, world]);
 
   const shellDataset = useMemo(
     () => ({
@@ -1116,6 +1326,8 @@ export function App({
       "data-enemies": String(snapshot.enemies),
       "data-projectiles": String(snapshot.projectiles),
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
+      "data-gold": String(snapshot.gold),
+      "data-inventory": JSON.stringify(snapshot.inventory),
       "data-paused": String(paused),
       "data-muted": String(muted),
       "data-device-profile": deviceProfile,
@@ -1128,6 +1340,8 @@ export function App({
       snapshot.classId,
       snapshot.enemies,
       snapshot.hp,
+      snapshot.gold,
+      snapshot.inventory,
       snapshot.mapId,
       snapshot.playerX,
       snapshot.playerY,
@@ -1200,6 +1414,15 @@ export function App({
         </>
       )}
       {dialogue && <DialogueBox dialogue={dialogue} onAdvance={advanceDialogue} />}
+      {shopState && mode === "playing" && (
+        <ShopPanel
+          shopState={shopState}
+          snapshot={snapshot}
+          onBuy={handleShopBuy}
+          onSell={handleShopSell}
+          onClose={() => setShopState(null)}
+        />
+      )}
       {paused && mode === "playing" && (
         <section className="pause-screen" data-testid="pause-screen">
           <div className="pause-panel" data-testid="pause-panel" ref={pausePanelRef}>

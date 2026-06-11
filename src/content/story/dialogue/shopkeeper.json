@@ -19,14 +19,16 @@
     },
     "after-sample": {
       "lines": [
-        "That cake should keep your knees from knocking until Oldwood. Come back when we have prices, shelves, and gossip worth paying for."
+        "That cake should keep your knees from knocking until Oldwood. Prices are chalked now: A buys, B sells, and I count fair."
       ],
+      "opensShop": "shop:brindle-counter",
       "emits": "dlg:shopkeeper.after-sample"
     },
     "browse": {
       "lines": [
-        "Barrels are full, shelves are named, and the till is honest. The real shop counter comes next."
+        "Barrels are full, shelves are named, and the till is honest. Choose what the road can carry."
       ],
+      "opensShop": "shop:brindle-counter",
       "emits": "dlg:shopkeeper.browse"
     }
   }

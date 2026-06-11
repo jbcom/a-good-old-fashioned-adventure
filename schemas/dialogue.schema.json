@@ -41,6 +41,7 @@
         "required": ["lines", "emits"],
         "properties": {
           "lines": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+          "opensShop": { "type": "string", "pattern": "^shop:[a-z0-9-]+$" },
           "choices": {
             "type": "array",
             "items": {

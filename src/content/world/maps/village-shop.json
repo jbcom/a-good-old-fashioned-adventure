@@ -4,7 +4,7 @@
   "kind": "map",
   "name": "Hearthwake Shop",
   "size": { "cols": 24, "rows": 18 },
-  "baseTile": "tile:stone-floor",
+  "baseTile": "tile:shop-floor",
   "bgmTheme": "interior",
   "generation": [
     { "op": "border", "tile": "tile:stone-wall" },
@@ -24,9 +24,13 @@
     "entry": { "x": 192, "y": 224 }
   },
   "entities": [
+    { "ref": "prop:shop-shelf", "x": 72, "y": 132, "note": "left shelf of travel goods" },
+    { "ref": "prop:shop-shelf", "x": 312, "y": 132, "note": "right shelf of herbs and thread" },
     { "ref": "prop:table", "x": 128, "y": 132, "note": "display counter" },
+    { "ref": "prop:shop-ledger", "x": 192, "y": 152, "note": "visible price ledger" },
     { "ref": "prop:barrel", "x": 260, "y": 160, "note": "supply barrel" },
     { "ref": "char:shopkeeper", "x": 192, "y": 132, "dir": -1 },
+    { "ref": "char:threadseller", "x": 104, "y": 176, "dir": 1 },
     { "ref": "char:gwydion", "x": 192, "y": 116, "dir": -1 },
     { "ref": "prop:chest", "x": 92, "y": 92, "contents": "HPUp" }
   ],

@@ -17,6 +17,7 @@ export interface SaveSlotSummary {
   hp: number;
   maxHp: number;
   questSummary: string;
+  snapshotJson: string;
   updatedAt: number;
 }
 
@@ -38,6 +39,7 @@ function toSummary(row: SqlRow): SaveSlotSummary {
     hp: Number(row.hp),
     maxHp: Number(row.max_hp),
     questSummary: String(row.quest_summary),
+    snapshotJson: String(row.snapshot_json ?? "{}"),
     updatedAt: Number(row.updated_at),
   };
 }
@@ -111,7 +113,7 @@ export class CapacitorSaveRepository implements SaveRepository {
     const result = await CapacitorSQLite.query({
       database: SAVE_DB_NAME,
       statement:
-        "SELECT id, class_id, map_id, player_x, player_y, level, hp, max_hp, quest_summary, updated_at FROM save_slots ORDER BY updated_at DESC LIMIT 1",
+        "SELECT id, class_id, map_id, player_x, player_y, level, hp, max_hp, quest_summary, snapshot_json, updated_at FROM save_slots ORDER BY updated_at DESC LIMIT 1",
     });
     return queryRows(result).map(toSummary)[0] ?? null;
   }
@@ -195,6 +197,7 @@ export class MemorySaveRepository implements SaveRepository {
           hp: latest.hp,
           maxHp: latest.maxHp,
           questSummary: latest.questSummary,
+          snapshotJson: latest.snapshotJson,
           updatedAt: latest.updatedAt.getTime(),
         }
       : null;

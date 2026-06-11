@@ -5,7 +5,8 @@
     "maxHp": 100,
     "level": 1,
     "xp": 0,
-    "nextXp": 50
+    "nextXp": 50,
+    "gold": 12
   },
   "movement": {
     "speed": 144,

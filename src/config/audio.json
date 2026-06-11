@@ -43,6 +43,12 @@
       "gain": [{ "t": 0, "v": 0.08 }, { "t": 0.15, "v": 0.01, "ramp": "exp" }],
       "duration": 0.15
     },
+    "coin": {
+      "osc": "triangle",
+      "freq": [{ "t": 0, "v": 523.25 }, { "t": 0.06, "v": 783.99 }],
+      "gain": [{ "t": 0, "v": 0.07 }, { "t": 0.18, "v": 0.01, "ramp": "exp" }],
+      "duration": 0.18
+    },
     "levelUp": {
       "osc": "triangle",
       "arpeggio": {
