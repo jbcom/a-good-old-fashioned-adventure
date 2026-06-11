@@ -18,6 +18,7 @@ describe("createGameWorld", () => {
   it("seeds world resources including flag defaults", () => {
     const world = createGameWorld(42);
     expect(world.get(FlagState)?.values).toEqual({
+      "flag:approach-pilgrim-warned": false,
       "flag:bridge-fixed": false,
       "flag:castle-armory-seen": false,
       "flag:castle-letters-cleared": false,

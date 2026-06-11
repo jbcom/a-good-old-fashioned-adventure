@@ -50,6 +50,26 @@
       "y0": 5,
       "y1": 8,
       "note": "castle cliff silhouette"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:castle-road",
+      "y": 18,
+      "x0": 8,
+      "x1": 18,
+      "note": "wayside pilgrim road pocket"
+    },
+    {
+      "op": "set",
+      "tile": "tile:castle-road",
+      "at": [18, 20],
+      "note": "wayside pilgrim road pocket"
+    },
+    {
+      "op": "set",
+      "tile": "tile:castle-road",
+      "at": [19, 20],
+      "note": "wayside pilgrim road pocket"
     }
   ],
   "playerSpawn": { "x": 48, "y": 304 },
@@ -60,11 +80,39 @@
   },
   "entities": [
     { "ref": "prop:signpost", "x": 108, "y": 274, "note": "last warning sign" },
+    {
+      "ref": "prop:wayside-cloak-stand",
+      "x": 190,
+      "y": 292,
+      "note": "Aveline's cloak stand on the west approach"
+    },
+    {
+      "ref": "prop:pilgrim-kettle",
+      "x": 242,
+      "y": 326,
+      "note": "last warm kettle before castle stone"
+    },
     { "ref": "prop:barrel", "x": 646, "y": 326, "note": "abandoned supply barrel" },
     { "ref": "prop:barrel", "x": 780, "y": 282, "note": "guard post barrel" },
     { "ref": "prop:castle-lantern", "x": 884, "y": 246, "note": "left gate lantern" },
     { "ref": "prop:castle-gatehouse", "x": 930, "y": 176, "note": "distant castle gatehouse" },
     { "ref": "prop:castle-lantern", "x": 984, "y": 246, "note": "right gate lantern" },
+    {
+      "ref": "char:approach-pilgrim",
+      "x": 220,
+      "y": 304,
+      "dir": 1,
+      "patrol": {
+        "points": [
+          { "x": 198, "y": 304 },
+          { "x": 260, "y": 304 },
+          { "x": 260, "y": 328 },
+          { "x": 198, "y": 328 }
+        ],
+        "speed": 22
+      },
+      "note": "Aveline Dustcoat paces the west approach wayside"
+    },
     { "ref": "char:gwydion", "x": 520, "y": 264, "dir": 1 },
     { "enemy": "gate-sentry", "x": 880, "y": 430 },
     { "enemy": "banner-knight", "x": 1010, "y": 252 }
@@ -72,11 +120,10 @@
   "composition": {
     "routeWindows": [
       {
-        "label": "exposed road after the desert",
+        "label": "Aveline's west approach wayside",
         "zone": { "x0": 1, "y0": 14, "x1": 25, "y1": 23 },
-        "majorAnchors": ["prop:signpost"],
-        "minorProps": ["prop:signpost"],
-        "openReason": "A deliberately exposed arrival road between the desert and castle, giving the approach a lonely travel beat."
+        "majorAnchors": ["char:approach-pilgrim", "prop:wayside-cloak-stand"],
+        "minorProps": ["prop:signpost", "prop:pilgrim-kettle"]
       },
       {
         "label": "Gwydion's guarded approach warning",

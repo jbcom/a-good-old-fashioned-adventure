@@ -2,6 +2,10 @@
   "$schema": "../../../schemas/flags.schema.json",
   "kind": "flags",
   "flags": {
+    "flag:approach-pilgrim-warned": {
+      "default": false,
+      "description": "The player has heard Aveline Dustcoat's Castle Approach warning."
+    },
     "flag:bridge-fixed": {
       "default": false,
       "description": "Woodcutter has repaired the river bridge at overworld tile [32,28]."

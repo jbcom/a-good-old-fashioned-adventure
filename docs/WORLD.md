@@ -650,6 +650,27 @@ another passive marker:
    public-control playthrough so the Oldwood encounter is part of the main
    journey.
 
+## Twenty-Sixth Content-Depth Slice
+
+The first Castle Approach route window should stop relying on an open-space
+exception. The composition-driven route revision turns that exposed arrival
+road into a small working wayside encounter:
+
+1. Add `char:approach-pilgrim`, a named moving NPC near the western Castle
+   Approach road, with dialogue bank `dlgbank:approach-pilgrim`.
+2. Add `prop:wayside-cloak-stand` and `prop:pilgrim-kettle`, each using
+   outlined pixel grids with at least five visible recolor channels.
+3. Add a small non-rectangular west-road tile pocket so the first approach
+   window has visible surface variation before the gate.
+4. Add `quest:approach-pilgrim-warning`, started on `map:castle-approach`, that
+   completes through the pilgrim dialogue and sets
+   `flag:approach-pilgrim-warned`.
+5. Make Gwydion acknowledge that warning through a flag-gated dialogue branch
+   while preserving the existing `dlg:gwydion.hint` event.
+6. Update `composition.routeWindows` so the west approach no longer needs
+   `openReason`, then prove the route with unit tests, headed browser evidence,
+   and the public-control playthrough.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

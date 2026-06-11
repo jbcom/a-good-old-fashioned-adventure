@@ -278,6 +278,31 @@ async function talkToSunkenCourier(input: ReturnType<typeof userEvent.setup>) {
   );
 }
 
+async function talkToApproachPilgrim(input: ReturnType<typeof userEvent.setup>) {
+  const meetPoints = [
+    [220, 304],
+    [252, 304],
+    [260, 328],
+    [198, 328],
+  ] as const;
+  for (const [x, y] of meetPoints) {
+    await walkTo(input, x, y, 16);
+    await pressA(input);
+    await wait(120);
+    if (textOf("dialogue-box").includes("Aveline Dustcoat")) {
+      await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("gate wind");
+      await pressA(input);
+      await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("Aveline Dustcoat");
+      return;
+    }
+  }
+  throw new Error(
+    `Aveline Dustcoat dialogue did not open; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; dialogue=${textOf(
+      "dialogue-box",
+    )}; quest=${textOf("quest-log")}`,
+  );
+}
+
 async function doorwayVolleyUntilEnemyDrops(
   input: ReturnType<typeof userEvent.setup>,
   before: number,
@@ -481,6 +506,12 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await talkToSunkenCourier(input);
   await walkToOrMap(input, 868, 304, "map:castle-approach", 20);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-approach");
+  await talkToApproachPilgrim(input);
+  await walkTo(input, 520, 264, 24);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Mage Gwydion");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Aveline");
+  await pressA(input);
   await walkToOrMap(input, 930, 210, "map:castle-yard", 28);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-yard");
   await expect.element(page.getByTestId("quest-log")).toHaveTextContent("castle scribe");

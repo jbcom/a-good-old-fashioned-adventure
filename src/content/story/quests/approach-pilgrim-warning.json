@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:approach-pilgrim-warning",
+  "kind": "quest",
+  "title": "The Last Warm Kettle",
+  "act": 3,
+  "startOn": { "enterMap": "map:castle-approach" },
+  "start": "take-warning",
+  "stages": [
+    {
+      "id": "take-warning",
+      "log": "Hear Aveline Dustcoat's warning on the Castle Approach.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:approach-pilgrim.warning:accepted" },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:approach-pilgrim-warned" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

@@ -5,15 +5,31 @@
   "speaker": "char:gwydion",
   "slots": [
     {
+      "when": {
+        "quest": "quest:dungeon-key",
+        "stageIn": ["seek-the-wyrm", "claim-the-key"],
+        "flag": "flag:approach-pilgrim-warned"
+      },
+      "node": "hint-after-pilgrim"
+    },
+    {
       "when": { "quest": "quest:dungeon-key", "stageIn": ["seek-the-wyrm", "claim-the-key"] },
       "node": "hint"
     },
+    { "when": { "flag": "flag:approach-pilgrim-warned" }, "node": "hint-after-pilgrim" },
     { "default": true, "node": "hint" }
   ],
   "nodes": {
     "hint": {
       "lines": [
         "Brave one, the Dungeon Gate demands a Golden Key. Hunt down the colossal Sandwyrm deep in the southern shore!"
+      ],
+      "emits": "dlg:gwydion.hint"
+    },
+    "hint-after-pilgrim": {
+      "lines": [
+        "Aveline's kettle-warning reached me before the banners did. Good: then you already know the gate wind is mean.",
+        "The Dungeon Gate still demands the Golden Key. Hunt down the colossal Sandwyrm, then return with your cloak fastened."
       ],
       "emits": "dlg:gwydion.hint"
     }

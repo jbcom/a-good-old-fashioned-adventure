@@ -206,6 +206,15 @@
       "dialogue": "dlgbank:castle-scribe",
       "note": "Castle hall NPC who turns the library and armory into required room verbs before the dungeon."
     },
+    "char:approach-pilgrim": {
+      "name": "Aveline Dustcoat",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:approach-pilgrim",
+      "portraitColor": "#6d604a",
+      "dialogue": "dlgbank:approach-pilgrim",
+      "note": "Moving Castle Approach pilgrim who replaces the empty west-road exception with a playable warning."
+    },
     "char:princess-amber": {
       "name": "Princess Amber",
       "role": "npc",
