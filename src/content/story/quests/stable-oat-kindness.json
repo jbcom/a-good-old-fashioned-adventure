@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:stable-oat-kindness",
+  "kind": "quest",
+  "title": "Oswin's Road Oats",
+  "act": 1,
+  "autoStart": true,
+  "start": "buy-oats",
+  "stages": [
+    {
+      "id": "buy-oats",
+      "log": "Buy Oswin's oat bundle from the stable counter.",
+      "advance": [
+        {
+          "when": {
+            "shopTransaction": {
+              "verb": "buy",
+              "shop": "shop:oswin-stable-counter",
+              "listing": "oat-bundle"
+            }
+          },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:stable-oats-bought" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

@@ -67,9 +67,18 @@ export const Clock = trait({ t: 0, dt: 0 });
 export const CameraState = trait({ x: 0, y: 0, shake: 0 });
 
 export interface GameEvent {
-  type: "enemy:defeated" | "item:acquired" | "dlg" | "zone:entered" | "map:entered";
+  type:
+    | "enemy:defeated"
+    | "item:acquired"
+    | "dlg"
+    | "zone:entered"
+    | "map:entered"
+    | "shop:buy"
+    | "shop:sell";
   archetypeId?: string;
   itemId?: string;
+  shopId?: string;
+  listingId?: string;
   /** Full dialogue event string, e.g. "dlg:woodcutter.request:accepted". */
   event?: string;
   mapId?: string;

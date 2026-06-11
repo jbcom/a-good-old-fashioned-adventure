@@ -70,6 +70,17 @@
         "counterDone": { "type": "string" },
         "enemyDefeated": { "type": "string" },
         "itemAcquired": { "type": "string", "pattern": "^item:[a-z0-9-]+$" },
+        "shopTransaction": {
+          "type": "object",
+          "required": ["verb"],
+          "properties": {
+            "verb": { "enum": ["buy", "sell"] },
+            "shop": { "type": "string", "pattern": "^shop:[a-z0-9-]+$" },
+            "listing": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+            "item": { "type": "string", "pattern": "^item:[a-z0-9-]+$" }
+          },
+          "additionalProperties": false
+        },
         "enterZone": { "type": "object", "required": ["map", "trigger"] },
         "flag": { "type": "string", "pattern": "^flag:[a-z0-9-]+$" }
       }

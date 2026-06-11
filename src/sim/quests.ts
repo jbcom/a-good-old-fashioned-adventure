@@ -60,6 +60,15 @@ function conditionMet(
   if (condition.itemAcquired) {
     return event.type === "item:acquired" && event.itemId === condition.itemAcquired;
   }
+  if (condition.shopTransaction) {
+    const { verb, shop, listing, item } = condition.shopTransaction;
+    return (
+      event.type === `shop:${verb}` &&
+      (!shop || event.shopId === shop) &&
+      (!listing || event.listingId === listing) &&
+      (!item || event.itemId === item)
+    );
+  }
   if (condition.enterZone) {
     return (
       event.type === "zone:entered" &&

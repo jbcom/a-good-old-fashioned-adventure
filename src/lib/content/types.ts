@@ -192,6 +192,7 @@ export interface QuestCondition {
   counterDone?: string;
   enemyDefeated?: string;
   itemAcquired?: string;
+  shopTransaction?: { verb: "buy" | "sell"; shop?: string; listing?: string; item?: string };
   enterZone?: { map: string; trigger: string };
   flag?: string;
 }

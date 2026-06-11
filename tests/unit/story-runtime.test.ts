@@ -65,12 +65,22 @@ describe("the full original journey, reduced through the quest engine", () => {
     const flags = () => world.get(FlagState)?.values ?? {};
 
     // Act 1: accept the woodcutter's request
-    expect(questLogLines(world)).toEqual(["Find & talk to the Woodcutter"]);
+    expect(questLogLines(world)).toEqual(
+      expect.arrayContaining([
+        "Find & talk to the Woodcutter",
+        "Buy Oswin's oat bundle from the stable counter.",
+      ]),
+    );
     const request = resolveDialogue(world, "dlgbank:woodcutter");
     emitDialogueChoice(world, request.node, "accepted");
     step(world);
     expect(log?.active["quest:broken-bridge"].stage).toBe("cull-orcs");
-    expect(questLogLines(world)).toEqual(["Defeat Forest Orcs (0/4)"]);
+    expect(questLogLines(world)).toEqual(
+      expect.arrayContaining([
+        "Defeat Forest Orcs (0/4)",
+        "Buy Oswin's oat bundle from the stable counter.",
+      ]),
+    );
 
     // Cull the four forest-family enemies
     for (const archetypeId of ["forest-orc", "forest-orc", "orc-scout", "forest-shaman"]) {

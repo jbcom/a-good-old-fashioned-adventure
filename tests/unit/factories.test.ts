@@ -29,6 +29,7 @@ describe("createGameWorld", () => {
       "flag:oldwood-waystone-read": false,
       "flag:ruin-mural-read": false,
       "flag:shop-sample-claimed": false,
+      "flag:stable-oats-bought": false,
       "flag:sunken-cart-read": false,
       "flag:tavern-song-learned": false,
     });

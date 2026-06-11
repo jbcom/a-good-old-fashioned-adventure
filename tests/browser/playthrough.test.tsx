@@ -323,6 +323,7 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await walkTo(input, 620, 304, 24);
   await pressA(input);
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Page Pip");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oswin's oats");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keeper Brindle");
   await pressA(input);
 

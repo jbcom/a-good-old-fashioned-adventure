@@ -26,11 +26,11 @@ describe("registries are fully populated", () => {
     expect(sprites.size).toBe(3);
     expect(animations.size).toBe(7);
     expect(maps.size).toBe(16);
-    expect(quests.size).toBe(11);
+    expect(quests.size).toBe(12);
     expect(dialogueBanks.size).toBe(22);
     expect(characters.size).toBe(25);
     expect(items.size).toBe(9);
-    expect(flags.size).toBe(13);
+    expect(flags.size).toBe(14);
     expect(shops.size).toBe(2);
   });
 
@@ -39,6 +39,7 @@ describe("registries are fully populated", () => {
     expect(getSprite("sprite:hero").rows).toHaveLength(16);
     expect(getMap("map:overworld").size).toEqual({ cols: 96, rows: 48 });
     expect(getQuest("quest:broken-bridge").start).toBe("find-woodcutter");
+    expect(getQuest("quest:stable-oat-kindness").start).toBe("buy-oats");
     expect(getShop("shop:brindle-counter").listings).toHaveLength(2);
     expect(getShop("shop:oswin-stable-counter").listings).toHaveLength(2);
     expect(getDialogueBank("dlgbank:woodcutter").nodes.request.emits).toBe(

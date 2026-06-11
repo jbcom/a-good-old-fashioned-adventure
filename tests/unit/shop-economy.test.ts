@@ -7,11 +7,15 @@ import {
   getDialogueBank,
   getItem,
   getMap,
+  getQuest,
   getShop,
 } from "../../src/lib/content/registry";
+import { resolveDialogue } from "../../src/sim/dialogue";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
+import { startQuest } from "../../src/sim/quests";
 import { buyShopListing, sellShopListing } from "../../src/sim/shop";
-import { Inventory, IsPlayer, Outbox, PlayerGold } from "../../src/sim/traits";
+import { step } from "../../src/sim/tick";
+import { FlagState, Inventory, IsPlayer, Outbox, PlayerGold, QuestLog } from "../../src/sim/traits";
 
 function docs(path: string): string {
   return readFileSync(resolve(process.cwd(), path), "utf8");
@@ -79,6 +83,27 @@ describe("S8.14 stable service loop contract", () => {
     expect(getDialogueBank("dlgbank:oswin-hayward").nodes["morning-stable"].opensShop).toBe(
       "shop:oswin-stable-counter",
     );
+  });
+});
+
+describe("S8.15 stable service consequence contract", () => {
+  it("documents shop transaction events, the oat quest, and the later Page branch", () => {
+    expect(docs("docs/WORLD.md")).toContain("Nineteenth Content-Depth Slice");
+    expect(docs("docs/WORLD.md")).toContain("shop:buy");
+    expect(docs("docs/WORLD.md")).toContain("quest:stable-oat-kindness");
+    expect(docs("docs/WORLD.md")).toContain("Page Pip dialogue branch");
+  });
+
+  it("registers the oat-kindness quest as a shop-driven service consequence", () => {
+    const quest = getQuest("quest:stable-oat-kindness");
+    expect(quest.autoStart).toBe(true);
+    expect(quest.stages[0]?.advance?.[0]?.when).toEqual({
+      shopTransaction: {
+        verb: "buy",
+        shop: "shop:oswin-stable-counter",
+        listing: "oat-bundle",
+      },
+    });
   });
 });
 
@@ -154,5 +179,22 @@ describe("shop runtime", () => {
     });
     expect(player.get(PlayerGold)?.value).toBe(10);
     expect(player.get(Inventory)?.items["item:oat-bundle"]).toBeUndefined();
+  });
+
+  it("lets a stable shop purchase advance a quest and alter Page Pip's later branch", () => {
+    const { world } = playerState("map:village-stable");
+    startQuest(world, "quest:stable-oat-kindness");
+    startQuest(world, "quest:morning-errands");
+
+    buyShopListing(world, "shop:oswin-stable-counter", "oat-bundle");
+    step(world, 0);
+
+    expect(world.get(QuestLog)?.completed).toContain("quest:stable-oat-kindness");
+    expect(world.get(FlagState)?.values["flag:stable-oats-bought"]).toBe(true);
+
+    const page = resolveDialogue(world, "dlgbank:page");
+    expect(page.nodeKey).toBe("errand-after-oats");
+    expect(page.node.lines.join(" ")).toContain("Oswin's oats");
+    expect(page.node.emits).toBe("dlg:page.errand");
   });
 });

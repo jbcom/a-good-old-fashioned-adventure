@@ -491,6 +491,25 @@ room so Hearthwake has a second place where A/B input changes inventory and gold
    opens the counter, buys with A, sells with B, closes the public panel, and
    returns to the village route.
 
+## Nineteenth Content-Depth Slice
+
+Service verbs must leave story fingerprints. The first service-consequence pass
+makes Oswin's oat purchase matter after the counter closes:
+
+1. Emit generic `shop:buy` and `shop:sell` events from the shop reducer with the
+   shop id, listing id, and item id so quests can listen to service verbs without
+   bespoke UI code.
+2. Add `quest:stable-oat-kindness`, an auto-start quest that completes when the
+   player buys `oat-bundle` from `shop:oswin-stable-counter` and sets
+   `flag:stable-oats-bought`.
+3. Add a Page Pip dialogue branch for `flag:stable-oats-bought` during
+   `quest:morning-errands/find-page`. The branch must still emit
+   `dlg:page.errand` so the existing morning errand route remains data-driven.
+4. Add reducer coverage that proves a shop transaction can advance a quest and a
+   dialogue slot can react to the resulting flag.
+5. Expand headed browser validation so the stable service purchase is followed
+   by a later Page Pip response in the full public-control playthrough.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

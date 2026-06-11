@@ -46,6 +46,10 @@
       "default": false,
       "description": "Hearthwake shopkeeper has already given the player the one-time travel cake sample."
     },
+    "flag:stable-oats-bought": {
+      "default": false,
+      "description": "The player has bought Oswin's oat bundle, giving Hearthwake's stable service a later story echo."
+    },
     "flag:sunken-cart-read": {
       "default": false,
       "description": "The player has read a splintered Sunken Road cart ledger."

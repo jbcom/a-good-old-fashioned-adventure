@@ -1,6 +1,7 @@
 import type { Entity, World } from "koota";
 import { getShop } from "../lib/content/registry";
 import type { ShopDef, ShopListingDef } from "../lib/content/types";
+import { pushEvent } from "./events";
 import { Inventory, IsPlayer, Outbox, PlayerGold } from "./traits";
 
 export interface ShopTransactionResult {
@@ -98,6 +99,12 @@ export function buyShopListing(
   player.set(PlayerGold, { value: nextGold });
   setCount(player, listing.item, nextCount);
   emitSfx(world, shop.buySfx ?? "pickup");
+  pushEvent(world, {
+    type: "shop:buy",
+    shopId: shop.id,
+    listingId: listing.id,
+    itemId: listing.item,
+  });
   return result(true, "buy", shop, listing, nextGold, nextCount, `Bought ${listing.label}.`);
 }
 
@@ -123,5 +130,11 @@ export function sellShopListing(
   player.set(PlayerGold, { value: nextGold });
   setCount(player, listing.item, nextCount);
   emitSfx(world, shop.sellSfx ?? "pickup");
+  pushEvent(world, {
+    type: "shop:sell",
+    shopId: shop.id,
+    listingId: listing.id,
+    itemId: listing.item,
+  });
   return result(true, "sell", shop, listing, nextGold, nextCount, `Sold ${listing.label}.`);
 }

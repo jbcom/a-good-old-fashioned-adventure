@@ -110,4 +110,13 @@ it("enters the Hearthwake stable yard and talks through public controls", async 
     stopGoal: { kind: "mapNameIncludes", text: "Hearthwake Village" },
   });
   await expect.element(page.getByTestId("top-hud")).toHaveTextContent("Hearthwake Village");
+
+  await governor.reachPoint(620, 304, { tolerance: 24, maxSteps: 36 });
+  await governor.press("a");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Page Pip");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oswin's oats");
+  const consequencePath = await page.screenshot({
+    path: "../../docs/evidence/village-stable-consequence.png",
+  });
+  expect(consequencePath).toBeTruthy();
 });
