@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:sunken-cart-ledger",
+  "kind": "quest",
+  "title": "The Splintered Cart Ledger",
+  "act": 2,
+  "startOn": { "enterMap": "map:sunken-road" },
+  "start": "read-cart",
+  "stages": [
+    {
+      "id": "read-cart",
+      "log": "Read the splintered cart ledger by the wash.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:sunken-cart-ledger.ledger:seen" },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:sunken-cart-read" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

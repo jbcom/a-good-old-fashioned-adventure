@@ -215,6 +215,30 @@ async function waitForDungeonKeyCue() {
   );
 }
 
+async function collectDungeonKeyFromWyrm(input: ReturnType<typeof userEvent.setup>) {
+  const searchPoints = [
+    [360, 304],
+    [360, 336],
+    [400, 304],
+    [400, 336],
+    [420, 304],
+    [460, 304],
+    [500, 304],
+    [540, 304],
+    [540, 336],
+  ] as const;
+  for (const [x, y] of searchPoints) {
+    await walkTo(input, x, y, 12);
+    await wait(180);
+    if (textOf("quest-log").includes("Castle dungeon gates")) return;
+  }
+  throw new Error(
+    `dungeon key was not collected after corpse sweep; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; quest=${textOf(
+      "quest-log",
+    )}`,
+  );
+}
+
 async function doorwayVolleyUntilEnemyDrops(
   input: ReturnType<typeof userEvent.setup>,
   before: number,
@@ -295,6 +319,11 @@ it("plays the expanded road from title to the dungeon gate through public contro
 
   await walkToOrMap(input, 864, 304, "map:oldwood-forest", 24);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:oldwood-forest");
+  await walkTo(input, 150, 292, 20);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Mossy Waystone");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keep east");
+  await pressA(input);
   await walkTo(input, 392, 292, 20);
   await pressA(input);
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oldwood Hermit");
@@ -316,11 +345,19 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await walkToOrMap(input, 1068, 304, "map:sunken-road", 24);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:sunken-road");
   await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Sunken Road");
+  await walkTo(input, 230, 336, 22);
+  await pressA(input);
+  await expect
+    .element(page.getByTestId("dialogue-box"))
+    .toHaveTextContent("Splintered Cart Ledger");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("water took the wheels");
+  await pressA(input);
+  await walkTo(input, 92, 304, 20);
 
   await hold(input, "ArrowRight", 1200);
   await castUntilEnemyDrops(input, shell().enemies, 30);
   if ((await waitForDungeonKeyCue()) === "dialogue") await pressA(input);
-  await walkTo(input, 420, 304, 24);
+  await collectDungeonKeyFromWyrm(input);
   await expect
     .poll(() => textOf("quest-log"), { timeout: 10_000 })
     .toContain("Castle dungeon gates");

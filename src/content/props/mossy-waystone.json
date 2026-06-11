@@ -5,6 +5,12 @@
   "grid": { "w": 16, "h": 18 },
   "anchor": { "x": 8, "y": 18 },
   "solid": false,
+  "interaction": {
+    "verb": "read",
+    "method": "action-button",
+    "sfx": "interact",
+    "dialogue": { "bank": "dlgbank:oldwood-waystone", "slot": "riddle" }
+  },
   "states": {
     "default": {
       "rows": [

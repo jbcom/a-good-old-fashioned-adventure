@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:oldwood-waystone",
+  "kind": "quest",
+  "title": "The Waystone's Road Riddle",
+  "act": 1,
+  "startOn": { "enterMap": "map:oldwood-forest" },
+  "start": "read-marker",
+  "stages": [
+    {
+      "id": "read-marker",
+      "log": "Read the mossy waystone at Oldwood's first bend.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:oldwood-waystone.riddle:seen" },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:oldwood-waystone-read" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

@@ -396,6 +396,26 @@ quest graph to send the player back to Merrin:
 5. Add planner-driven browser validation that enters the tavern, reads the
    board, talks to Merrin, and verifies the quest log changes through public UI.
 
+## Fourteenth Content-Depth Slice
+
+Readable props should not stay confined to interiors. The main road needs
+landmarks the player can inspect while traveling, with quest-log consequences
+that prove the detail is playable:
+
+1. Make the Oldwood mossy waystone readable with A and a dedicated voice bank.
+   The `quest:oldwood-waystone` log starts on Oldwood entry and completes when
+   the marker is read.
+2. Make the Sunken Road broken cart readable with A and a dedicated voice bank.
+   The `quest:sunken-cart-ledger` log starts on Sunken Road entry and completes
+   when a cart is read.
+3. Keep both interactions content-authored through prop `interaction.dialogue`;
+   no bespoke React UI or private sim calls.
+4. Add unit coverage for docs, prop metadata, dialogue banks, quests, flags,
+   and quest runtime progression.
+5. Add headed browser validation that uses the player governor to enter or
+   resume each route, walk to the readable prop, press A, assert visible
+   dialogue/log changes, and capture desktop plus phone evidence.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

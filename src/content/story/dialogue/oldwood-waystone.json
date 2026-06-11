@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:oldwood-waystone",
+  "kind": "dialogue-bank",
+  "speaker": "char:oldwood-waystone",
+  "slots": [{ "id": "riddle", "node": "riddle" }, { "default": true, "node": "riddle" }],
+  "nodes": {
+    "riddle": {
+      "lines": [
+        "Keep east by the bent root, kind traveler. The straightest path is where axes go, not where stories return.",
+        "Three moss marks mean Hearthwake behind you; one lantern ahead means the deep road is listening."
+      ],
+      "emits": "dlg:oldwood-waystone.riddle"
+    }
+  }
+}

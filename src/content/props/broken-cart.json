@@ -5,6 +5,12 @@
   "grid": { "w": 16, "h": 16 },
   "anchor": { "x": 8, "y": 16 },
   "solid": false,
+  "interaction": {
+    "verb": "read",
+    "method": "action-button",
+    "sfx": "interact",
+    "dialogue": { "bank": "dlgbank:sunken-cart-ledger", "slot": "ledger" }
+  },
   "states": {
     "default": {
       "rows": [

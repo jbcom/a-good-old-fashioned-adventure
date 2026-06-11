@@ -95,6 +95,13 @@
       "dialogue": "dlgbank:hearth-song-board",
       "note": "Readable tavern notice board that starts the Unfurled Vine's small song questlet."
     },
+    "char:oldwood-waystone": {
+      "name": "Mossy Waystone",
+      "role": "voice",
+      "portraitColor": "#6f7f3f",
+      "dialogue": "dlgbank:oldwood-waystone",
+      "note": "Readable Oldwood mile marker that teaches the road's bend before the raiders."
+    },
     "char:hermit": {
       "name": "Oldwood Hermit",
       "role": "npc",
@@ -121,6 +128,13 @@
       "portraitColor": "#b88958",
       "dialogue": "dlgbank:desert-pilgrim",
       "note": "Desert ruins guide who turns the mural into a readable landmark loop."
+    },
+    "char:sunken-cart-ledger": {
+      "name": "Splintered Cart Ledger",
+      "role": "voice",
+      "portraitColor": "#b88958",
+      "dialogue": "dlgbank:sunken-cart-ledger",
+      "note": "Readable Sunken Road caravan wreck that makes the wash into playable history."
     },
     "char:castle-scribe": {
       "name": "Castle Scribe Elowen",
