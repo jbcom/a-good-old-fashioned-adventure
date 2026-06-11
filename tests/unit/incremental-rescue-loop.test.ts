@@ -7,6 +7,14 @@ import { maps } from "../../src/lib/content/registry";
 const loopDoc = readFileSync(resolve(process.cwd(), "docs/INCREMENTAL-RESCUE-LOOP.md"), "utf8");
 const designDoc = readFileSync(resolve(process.cwd(), "docs/DESIGN.md"), "utf8");
 const worldDoc = readFileSync(resolve(process.cwd(), "docs/WORLD.md"), "utf8");
+const agentsDoc = readFileSync(resolve(process.cwd(), "AGENTS.md"), "utf8");
+const claudeDoc = readFileSync(resolve(process.cwd(), "CLAUDE.md"), "utf8");
+const contentArchitectureDoc = readFileSync(
+  resolve(process.cwd(), "docs/CONTENT-ARCHITECTURE.md"),
+  "utf8",
+);
+const persistenceDoc = readFileSync(resolve(process.cwd(), "docs/PERSISTENCE.md"), "utf8");
+const playerGovernorDoc = readFileSync(resolve(process.cwd(), "docs/PLAYER-GOVERNOR.md"), "utf8");
 
 function upgradeIds() {
   return new Set(incremental.upgradeWeb.nodes.map((node) => node.id));
@@ -30,6 +38,27 @@ describe("incremental rescue loop contract", () => {
     expect(worldDoc).toContain("Incremental Positioning");
     expect(worldDoc).toContain("unlockable route packs");
     expect(worldDoc).toContain("Castle interiors become rose-gated side loops");
+  });
+
+  it("keeps agent handoff docs pointed at the incremental pivot", () => {
+    expect(agentsDoc).toContain("mobile incremental storybook rescue game");
+    expect(agentsDoc).toContain("south-to-north princess rescue route");
+    expect(agentsDoc).toContain("connected spiderweb");
+    expect(agentsDoc).toContain("Work order remains docs > tests > code");
+    expect(claudeDoc).toContain("Use `AGENTS.md` as the authoritative repository instruction file");
+    expect(claudeDoc).toContain("docs/INCREMENTAL-RESCUE-LOOP.md");
+    expect(claudeDoc).not.toContain("pre-scaffold");
+  });
+
+  it("documents persistence and validation obligations for second-run progression", () => {
+    expect(contentArchitectureDoc).toContain("incremental");
+    expect(contentArchitectureDoc).toContain("route-pack material");
+    expect(persistenceDoc).toContain("coins");
+    expect(persistenceDoc).toContain("roses");
+    expect(persistenceDoc).toContain("purchased upgrade node ids");
+    expect(playerGovernorDoc).toContain("results panel with coins and roses");
+    expect(playerGovernorDoc).toContain("buy a connected node with A");
+    expect(playerGovernorDoc).toContain("second-run proof");
   });
 
   it("defines the rescue run anchors and mobile gameplay-area target in config", () => {

@@ -44,9 +44,12 @@ maintain.
 `engine` (tile size, camera, render scale), `player` (base stats, i-frames),
 `classes` (per-class attack + B-ability), `combat` (damage formulas,
 knockback, shake), `progression` (XP curve, level-up), `drops` (loot tables,
-chest contents), `enemies` (archetype stats + AI params), `audio` (synth
-recipes for SFX, BGM note tables), `ui` (theme tokens, controls). All numbers
-were extracted verbatim from the prototype.
+chest contents), `enemies` (archetype stats + AI params), `incremental`
+(rescue-loop anchors, coins/roses, upgrade web, class unlocks, route packs),
+`audio` (synth recipes for SFX, BGM note tables), `ui` (theme tokens,
+controls). Prototype-derived numbers remain source material, but the current
+product contract is the incremental rescue loop in
+`docs/INCREMENTAL-RESCUE-LOOP.md`.
 
 ### `src/content/palettes/` — recolorability
 
@@ -89,9 +92,11 @@ for inspected props), `solid` flag. The shared op vocabulary lives in
 A shop file owns its `shop:*` id, keeper character, display name, listing ids,
 item refs, buy prices, sell prices, and transaction SFX. The shop layer never
 stores inventory directly; it prices `item:*` definitions and the sim mutates
-the player's `Inventory` and `PlayerGold` traits. Dialogue nodes may reference
-`opensShop: "shop:*"` so writers can decide when a counter appears without
-hard-coding React behavior.
+the player's `Inventory` plus common-currency trait. The current implementation
+still names that trait `PlayerGold`; S9 economy work should present and persist
+it as coins unless and until the internal trait is renamed. Dialogue nodes may
+reference `opensShop: "shop:*"` so writers can decide when a counter appears
+without hard-coding React behavior.
 
 ### `src/content/animations/` — anime.js timelines
 
@@ -108,6 +113,13 @@ procedural loops, made declarative) + `playerSpawn` + an entity spawn table
 conditional-solid gates keyed on flags) + `onEnter` actions. The
 `unchosen-companions` spawn rule reproduces the prototype's "your two
 unpicked classes appear as NPCs" behavior.
+
+After the incremental pivot, maps are not assumed to be one mandatory linear
+campaign. The baseline runtime route is a south-to-north princess rescue, and
+existing maps are reusable route-pack material. A route pack may include a
+village beat, forest branch, hazard shortcut, castle threshold, or rose-gated
+interior side loop; unlock data lives in `src/config/incremental.json`, while
+the authored map content stays in `src/content/world/maps`.
 
 ### `src/content/story/` — the narrative layer
 

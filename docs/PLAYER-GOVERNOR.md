@@ -72,4 +72,21 @@ This makes the playthrough closer to an AI-vs-AI exercise:
 
 Every expansion slice should add at least one governor capability or goal that
 matches the new player journey depth: interiors, exterior roads, combat
-encounters, minimap use, quest routing, shops, and final victory.
+encounters, minimap use, quest routing, shops, princess rescue, results, upgrade
+purchase, and second-run proof.
+
+## Incremental Rescue Acceptance
+
+For S9, the long journey governor needs to prove the dopamine loop rather than
+only proving a linear campaign endpoint:
+
+1. Start from the landing page and choose the knight with public controls.
+2. Complete a south-to-north rescue route with A/B/directional input.
+3. Defeat the dragon guardian through normal combat controls.
+4. Rescue the princess and observe the results panel with coins and roses.
+5. Enter the upgrade web, buy a connected node with A, and leave with B.
+6. Start the next run and observe the unlocked route, class, enemy, or map
+   mutation through player-facing state.
+
+The governor may use shell diagnostics for route steering while the minimap is
+still coarse, but every accepted milestone must be visible to a player.

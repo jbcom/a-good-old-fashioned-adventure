@@ -43,9 +43,30 @@ Current save slot data:
 - level
 - HP/max HP
 - quest summary
-- JSON snapshot payload for later expansion
+- JSON snapshot payload for incremental progression
 
 The repository boundary is `src/persistence/saveRepository.ts`. Production uses
 Capacitor SQLite. Most browser tests inject `MemorySaveRepository` so
 playthroughs stay deterministic while still exercising the same app-level save
 contract.
+
+## Incremental Progression Snapshot
+
+The S9 incremental pivot extends the snapshot payload before it changes the SQL
+column shape. The next runtime slice should persist:
+
+- coins, using the existing shop/economy balance as the common currency during
+  the migration away from the older `PlayerGold` name.
+- roses, the rarer princess/objective currency.
+- rescue count.
+- purchased upgrade node ids, always including the root `upgrade:first-vow`.
+- unlocked class ids, initially only `knight`.
+- unlocked route-pack ids.
+- last completed run summary, including earned coins, earned roses, rescued
+  princess state, and selected route pack.
+
+This keeps the Drizzle table stable while the save contract grows through
+`snapshotJson`. A later migration can promote high-query fields into columns if
+the upgrade web needs indexed account-level progression. Any such migration must
+keep existing web/mobile saves readable and must be validated with the live
+headed web persistence check, not only `MemorySaveRepository`.

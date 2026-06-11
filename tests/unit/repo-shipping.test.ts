@@ -20,6 +20,10 @@ describe("shipping repository documents", () => {
       expect(statSync(resolve(process.cwd(), path)).isFile()).toBe(true);
     }
     expect(read("AGENTS.md")).not.toContain("pre-scaffold");
+    expect(read("CLAUDE.md")).not.toContain("pre-scaffold");
+    expect(read("CLAUDE.md")).toContain(
+      "Use `AGENTS.md` as the authoritative repository instruction file",
+    );
     expect(read("README.md")).toContain("pnpm test:browser");
     expect(read("TESTING.md")).toContain("./gradlew :app:assembleDebug");
     expect(read("DEPLOYMENT.md")).toContain("release-please");
