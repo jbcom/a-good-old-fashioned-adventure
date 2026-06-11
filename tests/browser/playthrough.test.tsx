@@ -230,6 +230,13 @@ async function collectDungeonKeyFromWyrm(input: ReturnType<typeof userEvent.setu
     [500, 304],
     [540, 304],
     [540, 336],
+    [580, 336],
+    [620, 336],
+    [620, 368],
+    [580, 368],
+    [540, 368],
+    [500, 368],
+    [460, 368],
   ] as const;
   for (const [x, y] of searchPoints) {
     await walkTo(input, x, y, 12);
