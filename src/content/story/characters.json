@@ -52,6 +52,24 @@
       "dialogue": "dlgbank:page",
       "note": "Village errand-giver who ties the green, shop, and first road together."
     },
+    "char:mara-cress": {
+      "name": "Mara Cress",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:market-mender",
+      "portraitColor": "#9f5d57",
+      "dialogue": "dlgbank:mara-cress",
+      "note": "Market mender who makes Hearthwake feel inhabited before the road opens."
+    },
+    "char:tobin-bell": {
+      "name": "Tobin Bell",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:bellwarden",
+      "portraitColor": "#6d604a",
+      "dialogue": "dlgbank:tobin-bell",
+      "note": "Notice-board keeper whose advice reinforces the old-fashioned adventure tone."
+    },
     "char:hermit": {
       "name": "Oldwood Hermit",
       "role": "npc",

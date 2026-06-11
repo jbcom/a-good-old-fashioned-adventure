@@ -294,6 +294,22 @@ interior instead of a background suggestion:
 5. Capture fresh desktop and phone screenshots of the ruin interior before
    accepting the slice.
 
+## Eighth Content-Depth Slice
+
+Hearthwake Village is the player's first proof that the game is an adventure,
+not a corridor. The market-day slice thickens the starting village before the
+road pulls east:
+
+1. Add a small market cluster to `map:village` using authored stall, board, and
+   flower-cart props placed around the well and road.
+2. Add named townsfolk with dialogue banks so the village has more voices than
+   the required quest NPCs.
+3. Keep the east-road route readable and passable for the player governor.
+4. Add a headed browser test that starts from a save, walks to a market
+   townsperson through public controls, presses A, and reads the dialogue.
+5. Capture desktop and phone screenshots of the market cluster before accepting
+   the slice, with mobile still preserving the gameplay-area budget.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

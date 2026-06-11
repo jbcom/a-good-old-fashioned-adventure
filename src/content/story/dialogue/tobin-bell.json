@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:tobin-bell",
+  "kind": "dialogue-bank",
+  "speaker": "char:tobin-bell",
+  "slots": [{ "default": true, "node": "notice" }],
+  "nodes": {
+    "notice": {
+      "lines": [
+        "The notice-board has three rules: mend what you break, thank whoever mends you, and do not trust a road that looks too straight.",
+        "Hearthwake keeps its courage in public, where everyone can borrow a little."
+      ],
+      "emits": "dlg:tobin-bell.notice"
+    }
+  }
+}

@@ -47,6 +47,9 @@ const requiredVillageProps = [
   "prop:desert-shrine",
   "prop:ruin-column",
   "prop:pilgrim-canopy",
+  "prop:market-stall",
+  "prop:notice-board",
+  "prop:flower-cart",
 ];
 
 function colorsInOps(ops: DrawOp[]): Set<string> {
@@ -110,6 +113,9 @@ describe("authored pixel-art richness", () => {
         "prop:broadleaf-tree",
         "prop:well",
         "prop:barrel",
+        "prop:market-stall",
+        "prop:notice-board",
+        "prop:flower-cart",
       ]),
     );
 

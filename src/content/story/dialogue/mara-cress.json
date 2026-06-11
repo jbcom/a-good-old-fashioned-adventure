@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:mara-cress",
+  "kind": "dialogue-bank",
+  "speaker": "char:mara-cress",
+  "slots": [{ "default": true, "node": "morning-stall" }],
+  "nodes": {
+    "morning-stall": {
+      "lines": [
+        "Mind the market stall, road-friend. Every ribbon here has already survived one foolish errand.",
+        "Take the red one for courage, the green for boots, and the gold only if you mean to come home with a story."
+      ],
+      "emits": "dlg:mara-cress.morning-stall"
+    }
+  }
+}
