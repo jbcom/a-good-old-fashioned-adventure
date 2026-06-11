@@ -49,6 +49,16 @@ describe("CI and release automation", () => {
     expect(workflow).toContain("android/app/build/outputs/apk/debug/*.apk");
   });
 
+  it("runs browser groups with CLI-level serialization flags", () => {
+    const pkg = JSON.parse(read("package.json")) as {
+      scripts: Record<string, string>;
+    };
+    for (const script of [pkg.scripts["test:browser:core"], pkg.scripts["test:browser:journey"]]) {
+      expect(script).toContain("--browser.fileParallelism=false");
+      expect(script).toContain("--no-file-parallelism");
+    }
+  });
+
   it("configures release-please in manifest mode for package and changelog updates", () => {
     const workflow = read(".github/workflows/release-please.yml");
     const config = JSON.parse(read("release-please-config.json"));

@@ -18,6 +18,10 @@ interface DirectionOptions extends PursueOptions {
   durationMs?: number;
 }
 
+interface PointOptions extends PursueOptions {
+  tolerance?: number;
+}
+
 const keyByButton: Record<string, string> = {
   up: "ArrowUp",
   down: "ArrowDown",
@@ -176,6 +180,47 @@ export class PlayerGovernor {
         },
       ],
       { maxSteps: options.maxSteps },
+    );
+  }
+
+  async reachPoint(
+    targetX: number,
+    targetY: number,
+    options: PointOptions = {},
+  ): Promise<PlayerPerception> {
+    const tolerance = options.tolerance ?? 18;
+    const maxSteps = options.maxSteps ?? 40;
+    const history: string[] = [];
+
+    for (let step = 0; step < maxSteps; step++) {
+      const perception = this.perceive();
+      const x = perception.diagnostics?.x ?? 0;
+      const y = perception.diagnostics?.y ?? 0;
+      const dx = targetX - x;
+      const dy = targetY - y;
+      if (perception.mode !== "playing") {
+        throw new Error(
+          `player governor left play mode while walking to ${targetX},${targetY}: ${describePerception(
+            perception,
+          )}`,
+        );
+      }
+      if (Math.abs(dx) <= tolerance && Math.abs(dy) <= tolerance) return perception;
+      history.push(describePerception(perception));
+      if (Math.abs(dx) > tolerance) {
+        await this.hold(dx > 0 ? "right" : "left", Math.min(700, Math.max(100, Math.abs(dx) * 8)));
+      }
+      if (Math.abs(dy) > tolerance) {
+        await this.hold(dy > 0 ? "down" : "up", Math.min(700, Math.max(100, Math.abs(dy) * 8)));
+      }
+    }
+
+    const finalPerception = this.perceive();
+    history.push(describePerception(finalPerception));
+    throw new Error(
+      `player governor failed to reach ${targetX},${targetY}\n${history
+        .map((entry, index) => `${index + 1}. ${entry}`)
+        .join("\n")}`,
     );
   }
 }

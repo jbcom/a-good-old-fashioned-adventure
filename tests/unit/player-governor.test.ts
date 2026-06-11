@@ -14,7 +14,7 @@ describe("player-governor contract", () => {
   it("documents a public-input validation player instead of private sim control", () => {
     expect(doc).toContain("test-side player governor");
     expect(doc).toContain("directional input, A, B");
-    expect(doc).toContain("Shell `data-*` state may be used for failure diagnostics");
+    expect(doc).toContain("Shell `data-*` state may be used for route steering");
     expect(doc).toContain("never writes sim state");
     expect(doc).toContain("AI-vs-AI");
   });

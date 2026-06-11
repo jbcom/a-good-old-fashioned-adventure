@@ -19,8 +19,9 @@ through the same controls and signals a player receives.
 - The governor may perceive only public player-facing state: title/landing
   screens, HUD map text, dialogue text, quest text when the quest panel is
   open, minimap pixels, and visible buttons.
-- Shell `data-*` state may be used for failure diagnostics, but it must not be
-  the planning source for success.
+- Shell `data-*` state may be used for route steering and failure diagnostics
+  while minimap vision is still coarse, but success must be asserted through
+  player-facing state such as map labels, dialogue, HUD text, and screens.
 - The governor never writes sim state, never teleports, never invokes content
   factories, and never calls production combat, dialogue, or movement systems
   directly.
@@ -43,6 +44,13 @@ goal, choose the cheapest available action, execute it through real input, and
 perceive again. More advanced route planning can add action effects and
 map/minimap inference without changing the central rule: the governor is a
 player, not a backdoor.
+
+For close-range NPC interactions, browser specs should prefer coordinate
+steering through `reachPoint` over fixed-duration holds. The helper reads the
+shell coordinates to decide which directional button to hold, but it still
+moves only through public controls and still verifies the outcome with visible
+dialogue text. This prevents tiny authored spaces, such as shop counters with
+two nearby speakers, from becoming timing-dependent in headed CI.
 
 ## AI vs AI Validation
 

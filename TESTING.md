@@ -19,7 +19,9 @@ The browser provider is Playwright Chromium with GPU flags. Local runs are
 headed; CI runs the browser job on macOS with `VITEST_BROWSER_HEADLESS=false`
 so the WebGL renderer test does not silently accept a Linux SwiftShader
 fallback. Browser spec files are serialized because they share the public page
-and must not collide.
+and must not collide; both browser script groups pass
+`--browser.fileParallelism=false --no-file-parallelism` so CI uses the same
+single-page discipline as local headed runs.
 
 ## Playthrough Rule
 

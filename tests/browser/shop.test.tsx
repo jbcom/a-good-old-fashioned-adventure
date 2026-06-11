@@ -58,7 +58,7 @@ it("talks to the shopkeeper through public movement and A-button input", async (
   await governor.click("continue-button");
   await expect.poll(() => governor.perceive().mapName).toBe("Hearthwake Shop");
 
-  await governor.hold("up", 430);
+  await governor.reachPoint(192, 160, { tolerance: 20 });
   await governor.press("a");
 
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keeper Brindle");
