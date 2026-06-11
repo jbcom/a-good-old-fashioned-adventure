@@ -24,6 +24,12 @@
     "palette:market-mender": { "S": "#8a2f2f", "s": "#421616", "R": "#eed7a1", "r": "#b88958" },
     "palette:bellwarden": { "S": "#6d604a", "s": "#3b2416", "R": "#c9b36a", "r": "#7f6f36" },
     "palette:baker": { "S": "#b88958", "s": "#5d3a26", "R": "#eed7a1", "r": "#cfa153" },
+    "palette:tavern-keeper": {
+      "S": "#7f4f2f",
+      "s": "#3b2416",
+      "R": "#c9b36a",
+      "r": "#7f6f36"
+    },
     "palette:scribe": { "S": "#5d5140", "s": "#2b2722", "R": "#f1d385", "r": "#cfa153" },
     "palette:orc": {
       "X": "#141013",

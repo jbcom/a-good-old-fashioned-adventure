@@ -87,7 +87,8 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S8.5 Yuka NPC walking loops: add content-authored market NPC patrol points interpreted by Yuka steering, with deterministic sim proof and browser regression
 - [x] S8.6 Hearthwake livelihood: add domestic storybook props, another named townsperson, public-control dialogue validation, and fresh desktop/phone evidence so the opening village reads as lived-in
 - [x] S8.7 Road-shape polish: reduce cross-path emptiness in the first exterior routes with bends, clearings, landmark prop clusters, and public-control route/evidence validation
-- [ ] S8.8 Player GOAP governor: expand the browser playthrough governor from point steering into goal/action planning over visible perception and actual A/B/directional input
+- [x] S8.8 Player GOAP governor: expand the browser playthrough governor from point steering into goal/action planning over visible perception and actual A/B/directional input, validated through a planned Unfurled Vine tavern route with authored social content
+- [ ] S8.9 Tavern notice-board questlet: turn the new tavern social space into a small content-authored errand chain with visible board reading, NPC follow-up dialogue, and browser validation through planner actions
 
 ## Learnings log (forward sweeps append here)
 - yuka FleeBehavior defaults panicDistance=10 — silently inert beyond it; always set panicDistance explicitly when kiting.
@@ -131,3 +132,5 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - 2026-06-11 S8.5 NPC-motion correction: village life now starts from map-authored patrol points. NPC loops should attach `NpcPatrol`, `Speed`, and `MoveIntent` in factories, then run through Yuka steering before the shared movement system so browser controls and collision keep one authority.
 - 2026-06-11 S8.6 livelihood correction: small domestic props only count when the browser screenshot reads as ordinary life in the playable lane. Vitest browser screenshots resolve paths relative to `tests/browser`, so committed evidence paths need `../../docs/evidence/...`.
 - 2026-06-11 S8.7 road-shape correction: phone evidence can crop out the very landmark desktop proves. For exterior polish, choose the evidence stop point so mobile shows at least one new prop while desktop shows the wider bend/clearing context.
+- 2026-06-11 S8.8 player-governor correction: a reach-point action can cross a portal before reaching its source-map coordinate. Planner reach actions must stop as soon as the visible step goal is satisfied, otherwise they chase stale coordinates inside the destination map.
+- 2026-06-11 S8.8 tavern-visual correction: interior social spaces need their own floor vocabulary. Reusing stone-floor made The Unfurled Vine read like a dark box even after NPCs/props were present; screenshot reading forced a warm tavern-floor tile before accepting the slice.

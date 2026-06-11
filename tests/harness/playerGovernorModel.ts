@@ -24,13 +24,40 @@ export type GovernorGoal =
   | { kind: "questIncludes"; text: string }
   | { kind: "buttonVisible"; id: string };
 
-export interface GovernorAction {
+interface GovernorActionBase {
   id: string;
-  kind: "hold" | "press" | "click";
-  button: "up" | "down" | "left" | "right" | "a" | "b" | string;
-  durationMs?: number;
   cost: number;
   when?: (perception: PlayerPerception) => boolean;
+}
+
+export type GovernorAction =
+  | (GovernorActionBase & {
+      kind: "hold";
+      button: "up" | "down" | "left" | "right";
+      durationMs?: number;
+    })
+  | (GovernorActionBase & {
+      kind: "press" | "click";
+      button: "a" | "b" | string;
+    })
+  | (GovernorActionBase & {
+      kind: "reachPoint";
+      x: number;
+      y: number;
+      tolerance?: number;
+      maxSteps?: number;
+    });
+
+export interface GovernorPlanStep {
+  id: string;
+  goal: GovernorGoal;
+  actions: GovernorAction[];
+  maxSteps?: number;
+}
+
+export interface GovernorPlanDecision {
+  step: GovernorPlanStep;
+  action: GovernorAction;
 }
 
 function includesText(value: string, needle: string): boolean {
@@ -62,4 +89,13 @@ export function chooseGovernorAction(
   const [chosen] = available.sort((a, b) => a.cost - b.cost || a.id.localeCompare(b.id));
   if (!chosen) throw new Error("player governor has no available action");
   return chosen;
+}
+
+export function chooseGovernorPlanAction(
+  perception: PlayerPerception,
+  plan: GovernorPlanStep[],
+): GovernorPlanDecision | null {
+  const step = plan.find((candidate) => !goalSatisfied(candidate.goal, perception));
+  if (!step) return null;
+  return { step, action: chooseGovernorAction(perception, step.actions) };
 }

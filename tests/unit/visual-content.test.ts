@@ -15,6 +15,7 @@ const requiredDetailedTiles = [
   "tile:village-cobble",
   "tile:stone-floor",
   "tile:shop-floor",
+  "tile:tavern-floor",
   "tile:ruin-floor",
   "tile:ruin-mosaic",
   "tile:stone-wall",
@@ -50,6 +51,9 @@ const requiredVillageProps = [
   "prop:market-stall",
   "prop:notice-board",
   "prop:flower-cart",
+  "prop:tavern-bench",
+  "prop:hearth-song-board",
+  "prop:story-quilt",
 ];
 
 function colorsInOps(ops: DrawOp[]): Set<string> {
@@ -123,7 +127,14 @@ describe("authored pixel-art richness", () => {
     expect([...propRefs(getMap("map:village-shop"))]).toEqual(
       expect.arrayContaining(["prop:barrel", "prop:shop-shelf", "prop:shop-ledger"]),
     );
-    expect([...propRefs(getMap("map:village-tavern"))]).toContain("prop:table");
+    expect([...propRefs(getMap("map:village-tavern"))]).toEqual(
+      expect.arrayContaining([
+        "prop:table",
+        "prop:tavern-bench",
+        "prop:hearth-song-board",
+        "prop:story-quilt",
+      ]),
+    );
   });
 
   it("places road storytelling props into the exterior route", () => {

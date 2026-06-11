@@ -79,6 +79,15 @@
       "dialogue": "dlgbank:tamsin-hearth",
       "note": "Village baker who points the opening road toward ordinary Hearthwake life."
     },
+    "char:merrin-underbough": {
+      "name": "Merrin Underbough",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:tavern-keeper",
+      "portraitColor": "#7f4f2f",
+      "dialogue": "dlgbank:merrin-underbough",
+      "note": "Unfurled Vine keeper who ties the tavern hearth, song-board, and story-quilt to the road."
+    },
     "char:hermit": {
       "name": "Oldwood Hermit",
       "role": "npc",

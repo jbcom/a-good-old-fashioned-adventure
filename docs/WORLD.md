@@ -358,6 +358,27 @@ existing route while preserving the proven public-control traversal:
 5. Add headed browser validation that enters Oldwood through public controls,
    walks to the first landmark cluster, and captures desktop and phone evidence.
 
+## Twelfth Content-Depth Slice
+
+The player governor needs to plan against authored affordances, not only
+coordinates. The tavern-governor slice makes `map:village-tavern` a social
+interior with enough visible state for a goal/action loop to choose route and
+interaction acts:
+
+1. Add an Unfurled Vine tavern cluster with benches, hearth-song detail, and a
+   story-quilt prop so the room reads as a gathering place instead of a dark
+   rectangle with tables.
+2. Add a named tavern NPC whose dialogue points at the room details and gives a
+   storybook reason for the road to begin in public life.
+3. Expand the test-side player governor with a small planner over public
+   perception and content-authored action descriptors: enter a map, walk to an
+   affordance point, press A, and verify visible dialogue.
+4. Add unit coverage for the new planner contract plus tavern content ids,
+   placements, character, and dialogue.
+5. Add headed browser validation that starts from a real save, lets the
+   governor plan into the tavern through public controls, talks to the tavern
+   NPC, and captures desktop plus phone evidence.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

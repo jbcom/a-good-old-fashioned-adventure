@@ -45,6 +45,15 @@ perceive again. More advanced route planning can add action effects and
 map/minimap inference without changing the central rule: the governor is a
 player, not a backdoor.
 
+The expanded governor keeps the planner explicit. A test may declare an
+`AdventurePlan` with named goals such as "enter the tavern" and "talk to the
+keeper of song"; each step supplies one or more public actions. The runner
+perceives before every step, skips already-satisfied goals, chooses the cheapest
+available action, and records the public state history on failure. This is
+still deliberately modest GOAP: it is enough to prove that content-authored
+affordances can be reached and used without private sim mutation, while leaving
+enemy/NPC intelligence inside Yuka-backed runtime systems.
+
 For close-range NPC interactions, browser specs should prefer coordinate
 steering through `reachPoint` over fixed-duration holds. The helper reads the
 shell coordinates to decide which directional button to hold, but it still
