@@ -5,6 +5,40 @@
     "deaggroRange": 120,
     "patrolRange": 40
   },
+  "difficultyCurve": [
+    {
+      "id": "region:oldwood",
+      "label": "Oldwood Forest",
+      "tier": 1,
+      "threat": 2,
+      "maps": ["map:oldwood-forest"],
+      "archetypes": ["forest-orc", "oldwood-raider", "thorn-shaman"]
+    },
+    {
+      "id": "region:deep-forest",
+      "label": "Deep Forest",
+      "tier": 2,
+      "threat": 4,
+      "maps": ["map:deep-forest"],
+      "archetypes": ["orc-scout", "thorn-shaman", "bramble-stalker"]
+    },
+    {
+      "id": "region:castle-approach",
+      "label": "Castle Approach",
+      "tier": 3,
+      "threat": 6,
+      "maps": ["map:castle-approach"],
+      "archetypes": ["gate-sentry", "banner-knight"]
+    },
+    {
+      "id": "region:dungeon",
+      "label": "Obsidian Throne Dungeon",
+      "tier": 4,
+      "threat": 9,
+      "maps": ["map:castle-dungeon"],
+      "archetypes": ["crypt-skeleton", "crypt-sentry", "shadow-warlord"]
+    }
+  ],
   "archetypes": {
     "forest-orc": {
       "name": "Forest Orc",
@@ -12,6 +46,15 @@
       "palette": "palette:orc",
       "hp": 20,
       "speed": 32,
+      "hitbox": { "w": 12, "h": 12 },
+      "behavior": "patrol"
+    },
+    "oldwood-raider": {
+      "name": "Oldwood Raider",
+      "sprite": "sprite:dragon",
+      "palette": "palette:raider",
+      "hp": 24,
+      "speed": 36,
       "hitbox": { "w": 12, "h": 12 },
       "behavior": "patrol"
     },
@@ -38,6 +81,35 @@
         "cooldown": 2.4,
         "projectile": { "type": "magmaball", "speed": 60, "life": 3.0 },
         "sfx": "magic"
+      }
+    },
+    "thorn-shaman": {
+      "name": "Thorn Shaman",
+      "sprite": "sprite:dragon",
+      "palette": "palette:thorn-shaman",
+      "hp": 28,
+      "speed": 22,
+      "hitbox": { "w": 12, "h": 12 },
+      "behavior": "caster",
+      "caster": {
+        "attackRange": 132,
+        "keepDistance": 64,
+        "cooldown": 2.2,
+        "projectile": { "type": "thornbolt", "speed": 68, "life": 2.8 },
+        "sfx": "magic"
+      }
+    },
+    "bramble-stalker": {
+      "name": "Bramble Stalker",
+      "sprite": "sprite:dragon",
+      "palette": "palette:bramble",
+      "hp": 34,
+      "speed": 54,
+      "hitbox": { "w": 12, "h": 12 },
+      "behavior": "ambush",
+      "ambush": {
+        "triggerRange": 76,
+        "deaggroRange": 150
       }
     },
     "desert-wyrm": {
@@ -74,6 +146,34 @@
       "hitbox": { "w": 12, "h": 12 },
       "behavior": "chase",
       "relentless": true
+    },
+    "gate-sentry": {
+      "name": "Gate Sentry",
+      "sprite": "sprite:hero",
+      "palette": "palette:sentry",
+      "hp": 55,
+      "speed": 38,
+      "hitbox": { "w": 12, "h": 12 },
+      "behavior": "guard",
+      "guard": {
+        "aggroRange": 110,
+        "deaggroRange": 140,
+        "leashRange": 96
+      }
+    },
+    "banner-knight": {
+      "name": "Banner Knight",
+      "sprite": "sprite:hero",
+      "palette": "palette:banner-knight",
+      "hp": 70,
+      "speed": 34,
+      "hitbox": { "w": 14, "h": 14 },
+      "behavior": "guard",
+      "guard": {
+        "aggroRange": 100,
+        "deaggroRange": 140,
+        "leashRange": 104
+      }
     },
     "shadow-warlord": {
       "name": "Shadow Warlord",

@@ -236,8 +236,8 @@ it("plays the original journey from title to victory through public controls", a
   await pressA(input);
   await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Golden Dungeon Key");
 
-  await walkTo(input, 500, 462, 3);
-  await walkTo(input, 540, 462, 3);
+  await walkTo(input, 500, 458, 8);
+  await walkTo(input, 540, 458, 8);
   await walkTo(input, 575, 640, 22);
   await castUntilEnemyDrops(input, shell().enemies, 18);
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Dungeon Key");

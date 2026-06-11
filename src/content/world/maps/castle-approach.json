@@ -63,7 +63,8 @@
     { "ref": "prop:barrel", "x": 780, "y": 282, "note": "guard post barrel" },
     { "ref": "prop:castle-gatehouse", "x": 930, "y": 176, "note": "distant castle gatehouse" },
     { "ref": "char:gwydion", "x": 520, "y": 264, "dir": 1 },
-    { "enemy": "crypt-sentry", "x": 880, "y": 382 }
+    { "enemy": "gate-sentry", "x": 880, "y": 382 },
+    { "enemy": "banner-knight", "x": 930, "y": 236 }
   ],
   "triggers": [
     {

@@ -58,8 +58,17 @@ export interface EnemyArchetype {
   hp: number;
   speed: number;
   hitbox: { w: number; h: number };
-  behavior: "patrol" | "chase" | "caster" | "turret" | "boss";
+  behavior: "patrol" | "chase" | "caster" | "turret" | "boss" | "ambush" | "guard";
   relentless?: boolean;
+  ambush?: {
+    triggerRange: number;
+    deaggroRange: number;
+  };
+  guard?: {
+    aggroRange: number;
+    deaggroRange: number;
+    leashRange: number;
+  };
   caster?: {
     attackRange: number;
     keepDistance: number;
@@ -93,6 +102,14 @@ export const progression = progressionJson;
 export const drops = dropsJson;
 export const enemies = enemiesJson as unknown as {
   aiDefaults: { aggroRange: number; deaggroRange: number; patrolRange: number };
+  difficultyCurve: {
+    id: string;
+    label: string;
+    tier: number;
+    threat: number;
+    maps: string[];
+    archetypes: string[];
+  }[];
   archetypes: Record<string, EnemyArchetype>;
 };
 export const audio = audioJson;

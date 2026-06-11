@@ -50,6 +50,8 @@
       "positions": [{ "x": 260, "y": 260 }, { "x": 730, "y": 258 }]
     },
     { "enemy": "orc-scout", "x": 500, "y": 220 },
+    { "enemy": "bramble-stalker", "x": 680, "y": 184 },
+    { "enemy": "thorn-shaman", "x": 900, "y": 450 },
     { "enemy": "forest-shaman", "x": 840, "y": 398 }
   ],
   "triggers": [

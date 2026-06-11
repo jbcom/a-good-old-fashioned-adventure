@@ -24,7 +24,7 @@
       "counters": {
         "raiders": {
           "event": "enemy:defeated",
-          "match": { "archetypes": ["forest-orc", "orc-scout"] },
+          "match": { "archetypes": ["forest-orc", "oldwood-raider", "orc-scout", "thorn-shaman"] },
           "target": 2
         }
       },

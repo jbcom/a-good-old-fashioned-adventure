@@ -3,7 +3,8 @@
  * configs (src/config/enemies.json) drive ranges, cooldowns, and
  * projectiles. Behaviors: patrol (oscillate + aggro), chase (yuka Seek,
  * deaggro unless relentless), caster (kite: yuka Flee inside
- * keepDistance + ranged cast), turret (stationary cast), boss (Seek +
+ * keepDistance + ranged cast), turret (stationary cast), ambush (held
+ * until trigger, then Seek), guard (post leash + return), boss (Seek +
  * spread volley). Deterministic: steering depends only on positions.
  */
 import type { Entity, World } from "koota";
@@ -16,8 +17,9 @@ interface EnemyAi {
   vehicle: Vehicle;
   seek: SeekBehavior;
   flee: FleeBehavior;
-  mode: "patrol" | "chase" | "hold";
+  mode: "patrol" | "chase" | "hold" | "return";
   origX: number;
+  origY: number;
   patrolDir: 1 | -1;
   castCooldown: number;
 }
@@ -40,7 +42,16 @@ function aiFor(world: World, enemy: Entity, x: number, y: number): EnemyAi {
     flee.active = false;
     vehicle.steering.add(seek);
     vehicle.steering.add(flee);
-    ai = { vehicle, seek, flee, mode: "patrol", origX: x, patrolDir: 1, castCooldown: 0 };
+    ai = {
+      vehicle,
+      seek,
+      flee,
+      mode: "patrol",
+      origX: x,
+      origY: y,
+      patrolDir: 1,
+      castCooldown: 0,
+    };
     perWorld.set(enemy, ai);
   }
   return ai;
@@ -75,6 +86,25 @@ function castAt(
       fromPlayer: false,
     });
   }
+}
+
+function seekTo(ai: EnemyAi, target: { x: number; y: number }): true {
+  ai.seek.active = true;
+  ai.seek.target.set(target.x, target.y, 0);
+  return true;
+}
+
+function returnToPost(
+  ai: EnemyAi,
+  transform: { x: number; y: number },
+  settleDistance = 2,
+): boolean {
+  const homeDist = Math.hypot(transform.x - ai.origX, transform.y - ai.origY);
+  if (homeDist <= settleDistance) {
+    ai.mode = "hold";
+    return false;
+  }
+  return seekTo(ai, { x: ai.origX, y: ai.origY });
 }
 
 export function enemyAIStep(world: World, dt: number): void {
@@ -157,13 +187,44 @@ export function enemyAIStep(world: World, dt: number): void {
         }
         break;
       }
+      case "ambush": {
+        const spec = archetype.ambush;
+        if (!spec) break;
+        if (ai.mode !== "chase" && ai.mode !== "return" && dist < spec.triggerRange) {
+          ai.mode = "chase";
+        }
+        if (ai.mode === "chase" && dist > spec.deaggroRange) {
+          ai.mode = "return";
+        }
+        if (ai.mode === "chase") {
+          useSteering = seekTo(ai, playerPos);
+        } else if (ai.mode === "return") {
+          useSteering = returnToPost(ai, transform);
+        }
+        break;
+      }
+      case "guard": {
+        const spec = archetype.guard;
+        if (!spec) break;
+        const postDist = Math.hypot(transform.x - ai.origX, transform.y - ai.origY);
+        if (ai.mode !== "chase" && dist < spec.aggroRange && postDist <= spec.leashRange) {
+          ai.mode = "chase";
+        }
+        if (ai.mode === "chase" && (dist > spec.deaggroRange || postDist > spec.leashRange)) {
+          ai.mode = "return";
+        }
+        if (ai.mode === "chase") {
+          useSteering = seekTo(ai, playerPos);
+        } else if (ai.mode === "return") {
+          useSteering = returnToPost(ai, transform);
+        }
+        break;
+      }
       case "boss": {
         const spec = archetype.boss;
         if (!spec) break;
         if (dist < spec.aggroRange) {
-          ai.seek.active = true;
-          ai.seek.target.set(playerPos.x, playerPos.y, 0);
-          useSteering = true;
+          useSteering = seekTo(ai, playerPos);
           if (ai.castCooldown <= 0) {
             ai.castCooldown = spec.cooldown;
             castAt(world, transform, playerPos, spec.projectile, spec.sfx, spec.spreadAngles);

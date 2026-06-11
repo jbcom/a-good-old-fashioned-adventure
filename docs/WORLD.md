@@ -179,6 +179,35 @@ with named people and midpoint objectives:
 5. Validate the slice through both reducer tests and headed browser tests that
    use the player governor's real A-button and directional controls.
 
+## Fourth S6 Slice
+
+The enemy-depth slice makes each region play differently without breaking the
+storybook road readability on phone screens:
+
+1. Add a JSON difficulty curve in `src/config/enemies.json` that orders
+   region pressure from Oldwood patrols through castle sentries and the final
+   dungeon. The curve owns region ids, map ids, tier, threat score, and the
+   enemy archetypes expected on each map.
+2. Oldwood Forest uses readable patrol pressure: `oldwood-raider` guards
+   clearings with normal patrol aggro while `thorn-shaman` adds slow ranged
+   denial near the edges of the road.
+3. Deep Forest introduces ambush behavior: `bramble-stalker` waits until the
+   player enters its trigger range, then uses Yuka seek steering as a sudden
+   close-range chase. This makes the deeper woods feel different from the
+   opening forest without filling the direct route with unavoidable damage.
+4. Castle Approach introduces guarded-leash behavior: `gate-sentry` and
+   `banner-knight` commit near their posts, then return to the gate instead of
+   chasing across the whole map. This keeps the approach tense while preserving
+   the player-governed route test.
+5. Dungeon enemies remain relentless and boss-led. Their curve entry must be
+   stronger than the approach entry and must keep the existing proven victory
+   encounter intact until S6.6 expands the end-to-end journey through the new
+   route.
+
+Enemy AI remains config-first. Code may add general Yuka behavior interpreters
+such as `ambush` and `guard`, but individual placement, palette, hitbox, speed,
+range, cooldown, and projectile data live in JSON.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

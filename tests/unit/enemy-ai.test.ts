@@ -101,6 +101,42 @@ describe("turret (desert wyrm)", () => {
   });
 });
 
+describe("ambush behavior (bramble stalker)", () => {
+  it("holds still until the player crosses its trigger range, then seeks", () => {
+    const { world, player } = scenario({ x: 480, y: 250 });
+    const stalker = spawnEnemy(world, "bramble-stalker", 200, 250);
+
+    seconds(world, 0.5);
+    expect(stalker.get(Transform)).toMatchObject({ x: 200, y: 250 });
+
+    player.set(Transform, { x: 270, y: 250 });
+    seconds(world, 0.5);
+    const t = stalker.get(Transform);
+    expect((t?.x ?? 0) - 200).toBeGreaterThan(10);
+  });
+});
+
+describe("guard leash behavior (gate sentry)", () => {
+  it("commits near its post and returns instead of chasing across the map", () => {
+    const { world, player } = scenario({ x: 520, y: 250 });
+    const sentry = spawnEnemy(world, "gate-sentry", 200, 250);
+
+    seconds(world, 0.5);
+    expect(sentry.get(Transform)).toMatchObject({ x: 200, y: 250 });
+
+    player.set(Transform, { x: 285, y: 250 });
+    seconds(world, 0.75);
+    const committedX = sentry.get(Transform)?.x ?? 0;
+    expect(committedX).toBeGreaterThan(220);
+
+    player.set(Transform, { x: 650, y: 250 });
+    seconds(world, 1);
+    const returnedX = sentry.get(Transform)?.x ?? 0;
+    expect(returnedX).toBeLessThan(committedX - 8);
+    expect(Math.abs(returnedX - 200)).toBeLessThan(18);
+  });
+});
+
 describe("boss (shadow warlord)", () => {
   it("charges and fires a 3-bolt spread on its cooldown", () => {
     const { world } = scenario({ x: 330, y: 200 });

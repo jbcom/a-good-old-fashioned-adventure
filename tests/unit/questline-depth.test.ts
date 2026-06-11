@@ -111,7 +111,7 @@ describe("S6.4 quest runtime", () => {
     step(world);
     expect(activeStage(world, "quest:oldwood-oath")).toBe("clear-raiders");
 
-    for (const archetypeId of ["forest-orc", "orc-scout"]) {
+    for (const archetypeId of ["oldwood-raider", "orc-scout"]) {
       pushEvent(world, { type: "enemy:defeated", archetypeId, x: 480, y: 280 });
       step(world);
     }
