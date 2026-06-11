@@ -12,6 +12,7 @@ const plannedMaps = [
   "map:oldwood-forest",
   "map:deep-forest",
   "map:sunken-road",
+  "map:desert-ruins",
   "map:castle-approach",
   "map:castle-yard",
   "map:castle-hall",
@@ -103,6 +104,15 @@ describe("S6 world plan content", () => {
     expect(worldDoc).toContain("real directional input and A-button dialogue");
   });
 
+  it("documents the desert-ruins landmark loop before content implementation", () => {
+    const worldDoc = readFileSync(resolve(process.cwd(), "docs/WORLD.md"), "utf8");
+    expect(worldDoc).toContain("Seventh S6 Slice");
+    expect(worldDoc).toContain("map:desert-ruins");
+    expect(worldDoc).toContain("desert pilgrim");
+    expect(worldDoc).toContain("mural trigger");
+    expect(worldDoc).toContain("public directional input and A-button dialogue");
+  });
+
   it("seeds the first village interior map set", () => {
     for (const id of plannedMaps) expect(maps.has(id), id).toBe(true);
   });
@@ -171,6 +181,21 @@ describe("S6 world plan content", () => {
       expect(inbound, `${to} should return to ${from}`).toBeTruthy();
       expect(map(from).spawns?.[inbound?.toSpawn as string], `${from} return spawn`).toBeTruthy();
     }
+  });
+
+  it("connects Sunken Road to the optional Desert Ruins loop", () => {
+    const outbound = portals("map:sunken-road").find(
+      (portal) => portal.toMap === "map:desert-ruins",
+    );
+    expect(outbound?.id).toBe("trigger:enter-ruins");
+    expect(outbound?.toSpawn).toBe("entry");
+    expect(map("map:desert-ruins").spawns?.entry).toBeTruthy();
+
+    const inbound = portals("map:desert-ruins").find(
+      (portal) => portal.toMap === "map:sunken-road",
+    );
+    expect(inbound?.toSpawn).toBe("from-ruins");
+    expect(map("map:sunken-road").spawns?.["from-ruins"]).toBeTruthy();
   });
 
   it("connects Castle Approach to the castle yard through a key-gated portal", () => {

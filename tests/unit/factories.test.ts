@@ -26,6 +26,7 @@ describe("createGameWorld", () => {
       "flag:lost-page-guided": false,
       "flag:morning-errands-done": false,
       "flag:oldwood-oath-sworn": false,
+      "flag:ruin-mural-read": false,
       "flag:shop-sample-claimed": false,
     });
     expect(world.get(MapRuntime)?.mapId).toBe("");

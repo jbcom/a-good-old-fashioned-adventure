@@ -659,6 +659,8 @@ function Minimap({ snapshot }: { snapshot: UiSnapshot }) {
       "tile:wood-bridge": "#a66a2c",
       "tile:stone-floor": ui.theme.textMuted,
       "tile:shop-floor": "#946629",
+      "tile:ruin-floor": "#8f7657",
+      "tile:ruin-mosaic": "#8a6d3f",
       "tile:village-cobble": "#cfa153",
       "tile:stone-wall": ui.theme.shell,
       "tile:prison-bars": ui.theme.panelBorder,

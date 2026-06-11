@@ -47,6 +47,7 @@
   "spawns": {
     "default": { "x": 48, "y": 304 },
     "from-forest": { "x": 48, "y": 304 },
+    "from-ruins": { "x": 512, "y": 336 },
     "from-approach": { "x": 832, "y": 304 }
   },
   "entities": [
@@ -70,6 +71,15 @@
       "toSpawn": "from-approach",
       "sfx": "interact",
       "zone": { "x0": 0, "y0": 276, "x1": 28, "y1": 332 }
+    },
+    {
+      "id": "trigger:enter-ruins",
+      "kind": "portal",
+      "label": "Door to Desert Ruins",
+      "toMap": "map:desert-ruins",
+      "toSpawn": "entry",
+      "sfx": "interact",
+      "zone": { "x0": 488, "y0": 236, "x1": 536, "y1": 292 }
     },
     {
       "id": "trigger:east-road",

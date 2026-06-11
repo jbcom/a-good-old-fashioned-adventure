@@ -82,7 +82,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 ### S8 Content depth and polish
 - [x] S8.1 Castle-interior wing: key gate routes through castle yard, hall, library, and armory before the dungeon; `quest:castle-letters` adds scribe dialogue plus room verbs; headed playthrough captures hall/library screenshots
 - [x] S8.2 Shop economy: replace the one-time sample-only shop with content-driven prices, buy/sell verbs, inventory state, and browser validation through public controls
-- [ ] S8.3 Desert ruins: add the planned ruin interior off Sunken Road with a readable landmark loop, props, NPC/story signal, and route validation
+- [x] S8.3 Desert ruins: add the planned ruin interior off Sunken Road with a readable landmark loop, props, NPC/story signal, and route validation
 
 ## Learnings log (forward sweeps append here)
 - yuka FleeBehavior defaults panicDistance=10 — silently inert beyond it; always set panicDistance explicitly when kiting.
@@ -121,3 +121,4 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - 2026-06-11 save-boundary correction: interval autosave alone can leave Continue behind the live map after a long route. Map loads now persist immediately from the refreshed snapshot so split browser journeys resume from the actual current room.
 - 2026-06-11 S8.2 shop-economy correction: Brindle's shop now opens from dialogue into a content-authored `shop:*` counter; A buys, B sells, up/down selects, and player gold/inventory live in sim traits plus save snapshots.
 - 2026-06-11 S8.2 shop-visual correction: the first valid shop screenshot still read as a dark stone box. Screenshot reading forced `tile:shop-floor`, shelf/ledger props, and phone evidence before accepting the economy slice.
+- 2026-06-11 S8.3 ruins-depth correction: portal browser tests should pursue map/dialogue goals, not stale cross-map coordinates. The first valid ruins screenshot still read like a tile grid, so authored mosaic tiles, columns, canopies, NPC story text, and desktop/phone evidence are required before accepting optional interiors.

@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:ruin-column",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 24 },
+  "anchor": { "x": 8, "y": 24 },
+  "solid": true,
+  "states": {
+    "default": {
+      "rows": [
+        "................",
+        "......XXXX......",
+        ".....XCCCCX.....",
+        "....XCCDDCCX....",
+        "....XCDGGDCX....",
+        ".....XCDDCX.....",
+        "......XCCX......",
+        ".....XXccXX.....",
+        ".....XCCCCX.....",
+        ".....XcCCcX.....",
+        ".....XCCCCX.....",
+        ".....XcCCcX.....",
+        ".....XCCCCX.....",
+        ".....XcCCcX.....",
+        ".....XCCCCX.....",
+        ".....XcCCcX.....",
+        ".....XCCCCX.....",
+        "....XXcCCcXX....",
+        "...XCCCDDCCCX...",
+        "..XCCCCCCCCCCX..",
+        "..XccCCCCCCccX..",
+        "...XXXXXXXXXX...",
+        "................",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "C", "c", "D", "G"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "Solid", "DepthSorted"] }
+}

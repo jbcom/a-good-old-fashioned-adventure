@@ -276,6 +276,24 @@ approach instead of a single teleport from road to final room:
    the slice, because the 2.5D camera can magnify large wall props into unreadable
    slabs.
 
+## Seventh S6 Slice
+
+The desert-ruins slice turns the Sunken Road landmark into an explorable
+interior instead of a background suggestion:
+
+1. Add `map:desert-ruins` as a reversible interior off `map:sunken-road` with
+   a named `from-ruins` return spawn that lands outside the entry trigger.
+2. Use authored ruin-floor, mural, shrine, and arch content so the room reads
+   as old road history rather than another rectangular box.
+3. Add a desert pilgrim NPC and mural trigger. The player can enter the ruin,
+   walk to the mural, receive a short lore dialogue, and return to Sunken Road
+   through public directional input and A-button dialogue.
+4. Keep the main victory route direct: the Sunken Road east-road trigger still
+   reaches Castle Approach, and the ruins are a readable landmark loop rather
+   than a required detour for the current key quest.
+5. Capture fresh desktop and phone screenshots of the ruin interior before
+   accepting the slice.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map
@@ -287,6 +305,8 @@ slice must add at least one meaningful player-facing verb or story signal:
   inventory and visible gold changes.
 - Exterior maps should read as places: signage, stumps, trees, gatehouses,
   barrels, and NPCs placed around roads, not only long cross-shaped paths.
+- Optional interiors off the main road need a clear reason to exist: a landmark
+  prop, a talkable person or readable object, and a reversible exit.
 - Road maps may keep a direct route for the player governor, but the tile plan
   should imply bends, clearings, landmarks, and branches that can hold future
   quests.

@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:desert-shrine",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 16 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "................",
+        "......XX........",
+        ".....XGGX.......",
+        "....XGDDGX......",
+        "...XGDBDGX......",
+        "..XGDBLBDGX.....",
+        "..XGDBaBDGX.....",
+        "...XGDBDGX......",
+        "....XGDDGX......",
+        "...XBBBBBBX.....",
+        "..XBDDDDDDBX....",
+        "..XBBBBBBBBX....",
+        "...XXXXXXXX.....",
+        "................",
+        "................",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "G", "D", "B", "L", "a"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

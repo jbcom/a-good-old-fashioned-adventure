@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:ruin-mural",
+  "kind": "prop",
+  "grid": { "w": 24, "h": 24 },
+  "anchor": { "x": 12, "y": 24 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "........................",
+        "....XXXXXXXXXXXXXXXX....",
+        "...XDDDDDDDDDDDDDDX.....",
+        "..XDBBBBBBBBBBBBBBDX....",
+        "..XDBGGgGBBGBBgGGBDX....",
+        "..XDBGDDBBBBDDGGBBDX....",
+        "..XDBGBBXXXXBBGBBBDX....",
+        "..XDBGBXLLLLXBGGBBDX....",
+        "..XDBGBXLaLLXBGGBBDX....",
+        "..XDBGBXLLLLXBGGBBDX....",
+        "..XDBGBBXXXXBBGBBBDX....",
+        "..XDBGGDBBBBDGGGBBDX....",
+        "..XDBBBBBBBBBBBBBBDX....",
+        "...XDDDDDDDDDDDDDDX.....",
+        "....XXXXXXXXXXXXXXXX....",
+        ".......XbX....XbX.......",
+        ".......XbX....XbX.......",
+        ".......XGX....XGX.......",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "D", "B", "G", "g", "L", "a", "b"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

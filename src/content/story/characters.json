@@ -70,6 +70,15 @@
       "dialogue": "dlgbank:lost-page",
       "note": "Escort-lite Deep Forest NPC guided by landmark zones."
     },
+    "char:desert-pilgrim": {
+      "name": "Pilgrim Safra",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:desert-pilgrim",
+      "portraitColor": "#b88958",
+      "dialogue": "dlgbank:desert-pilgrim",
+      "note": "Desert ruins guide who turns the mural into a readable landmark loop."
+    },
     "char:castle-scribe": {
       "name": "Castle Scribe Elowen",
       "role": "npc",
