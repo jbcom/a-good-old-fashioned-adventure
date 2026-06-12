@@ -310,7 +310,7 @@ export function combatStep(world: World, dt: number): void {
     const t = projectile.get(Transform);
     if (!p || !t) continue;
     // streak: each bolt sheds fading ghosts of itself along its flight
-    const trail = p.trail - dt;
+    let trail = p.trail - dt;
     if (trail <= 0) {
       const trailSprite = combat.projectileSprites[p.type as keyof typeof combat.projectileSprites];
       if (trailSprite) {
@@ -324,9 +324,7 @@ export function combatStep(world: World, dt: number): void {
           y: t.y,
         });
       }
-      projectile.set(Projectile, { ...p, trail: 1 / combat.feedback.projectileTrailHz });
-    } else {
-      projectile.set(Projectile, { ...p, trail });
+      trail = 1 / combat.feedback.projectileTrailHz;
     }
     const life = p.life - dt;
     if (life <= 0) {
@@ -336,7 +334,7 @@ export function combatStep(world: World, dt: number): void {
     const x = t.x + p.vx * dt;
     const y = t.y + p.vy * dt;
     projectile.set(Transform, { x, y });
-    projectile.set(Projectile, { ...p, life });
+    projectile.set(Projectile, { ...p, life, trail });
 
     if (p.fromPlayer) {
       const level = player?.get(Level);

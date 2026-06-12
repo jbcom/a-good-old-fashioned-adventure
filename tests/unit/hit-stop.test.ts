@@ -3,7 +3,15 @@ import { combat } from "../../src/lib/config";
 import { createGameWorld, instantiateMap, spawnProjectile } from "../../src/sim/factories";
 import { playerAttack } from "../../src/sim/systems/combat";
 import { step } from "../../src/sim/tick";
-import { Clock, FxBurst, HitStop, IsEnemy, IsPlayer, Transform } from "../../src/sim/traits";
+import {
+  Clock,
+  FxBurst,
+  FxStats,
+  HitStop,
+  IsEnemy,
+  IsPlayer,
+  Transform,
+} from "../../src/sim/traits";
 
 function bootBesideOrc() {
   const world = createGameWorld(81);
@@ -61,5 +69,30 @@ describe("S12.4 hit-stop and impact", () => {
     expect(trails.length).toBeGreaterThan(0);
     expect(trails[0]?.spriteId).toBe("sprite:proj-shadowbolt");
     expect(trails[0]?.total).toBe(combat.feedback.projectileTrailDuration);
+  });
+
+  it("sheds ghosts at projectileTrailHz, not every frame", () => {
+    const world = createGameWorld(84);
+    instantiateMap(world, "map:rescue-route", { classId: "knight" });
+    const before = world.get(FxStats)?.spawned ?? 0;
+    spawnProjectile(world, {
+      type: "shadowbolt",
+      x: 300,
+      y: 300,
+      vx: 80,
+      vy: 0,
+      life: 1,
+      fromPlayer: false,
+    });
+
+    const seconds = 0.5;
+    const frames = Math.round(seconds * 60);
+    for (let i = 0; i < frames; i++) step(world, 1 / 60);
+
+    const shed = (world.get(FxStats)?.spawned ?? 0) - before;
+    const expected = Math.floor(seconds * combat.feedback.projectileTrailHz);
+    // a per-frame reset bug would shed ~30 ghosts here instead of ~9
+    expect(shed).toBeGreaterThanOrEqual(expected - 1);
+    expect(shed).toBeLessThanOrEqual(expected + 1);
   });
 });
