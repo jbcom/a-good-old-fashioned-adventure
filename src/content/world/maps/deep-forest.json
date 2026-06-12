@@ -174,7 +174,13 @@
     { "enemy": "orc-scout", "x": 500, "y": 220 },
     { "enemy": "bramble-stalker", "x": 680, "y": 184 },
     { "enemy": "thorn-shaman", "x": 900, "y": 450 },
-    { "enemy": "forest-shaman", "x": 840, "y": 398 }
+    { "enemy": "forest-shaman", "x": 840, "y": 398 },
+    {
+      "enemy": "glowcap-matron",
+      "x": 560,
+      "y": 480,
+      "note": "Deep Forest miniboss in the southern glowcap hollow"
+    }
   ],
   "composition": {
     "routeWindows": [

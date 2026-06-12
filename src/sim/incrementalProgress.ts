@@ -1,6 +1,6 @@
 import type { World } from "koota";
 import type { IncrementalUpgradeNode } from "../lib/config";
-import { incremental } from "../lib/config";
+import { enemies, incremental } from "../lib/config";
 import { IncrementalProgress, type IncrementalProgressState, IsPlayer, PlayerGold } from "./traits";
 
 function integer(value: unknown, fallback = 0): number {
@@ -72,6 +72,14 @@ function knownRoutePackIds(): Set<string> {
   return new Set(incremental.routePacks.map((pack) => pack.id));
 }
 
+function knownMinibossIds(): Set<string> {
+  return new Set(
+    Object.entries(enemies.archetypes)
+      .filter(([, archetype]) => archetype.miniboss)
+      .map(([id]) => id),
+  );
+}
+
 function sanitizeIdList(input: unknown, allowed: Set<string>): string[] {
   if (!Array.isArray(input)) return [];
   const result: string[] = [];
@@ -89,6 +97,7 @@ export function initialIncrementalProgress(startingCoins = 0): IncrementalProgre
     rescueCount: 0,
     purchasedUpgradeIds: [incremental.upgradeGraph.root],
     upgradeRanks: {},
+    defeatedMinibossIds: [],
     unlockedClassIds: [incremental.classes.starting],
     unlockedRoutePackIds: [],
     currentRunCoinsEarned: 0,
@@ -123,6 +132,7 @@ export function sanitizeIncrementalProgress(
     rescueCount: integer(data.rescueCount),
     purchasedUpgradeIds,
     upgradeRanks: sanitizeUpgradeRanks(data.upgradeRanks, purchasedUpgradeIds),
+    defeatedMinibossIds: sanitizeIdList(data.defeatedMinibossIds, knownMinibossIds()),
     unlockedClassIds: unlockedClassIds.includes(incremental.classes.starting)
       ? unlockedClassIds
       : [incremental.classes.starting, ...unlockedClassIds],
@@ -239,8 +249,26 @@ export function grantRunReward(world: World, rewardId: string): void {
   });
 }
 
-export function applyIncrementalEventReward(world: World, eventType: string): void {
-  if (eventType === "enemy:defeated") grantRunReward(world, "enemyDefeated");
+export function applyIncrementalEventReward(
+  world: World,
+  eventType: string,
+  archetypeId?: string,
+): void {
+  if (eventType !== "enemy:defeated") return;
+  grantRunReward(world, "enemyDefeated");
+  if (!archetypeId || !enemies.archetypes[archetypeId]?.miniboss) return;
+
+  // minibosses always pay a purse; the FIRST clean clear pays a rose
+  grantRunReward(world, "minibossDefeated");
+  const progress = currentProgress(world);
+  if (!progress.defeatedMinibossIds.includes(archetypeId)) {
+    grantRunReward(world, "objectiveCleared");
+    const next = currentProgress(world);
+    setProgress(world, {
+      ...next,
+      defeatedMinibossIds: [...next.defeatedMinibossIds, archetypeId],
+    });
+  }
 }
 
 /**

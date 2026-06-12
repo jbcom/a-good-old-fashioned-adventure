@@ -124,6 +124,7 @@ export interface EnemyArchetype {
   speed: number;
   hitbox: { w: number; h: number };
   behavior: "patrol" | "chase" | "caster" | "turret" | "boss" | "ambush" | "guard";
+  miniboss?: boolean;
   relentless?: boolean;
   ambush?: {
     triggerRange: number;

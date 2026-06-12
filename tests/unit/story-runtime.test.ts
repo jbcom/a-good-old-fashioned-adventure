@@ -150,10 +150,12 @@ describe("the full original journey, reduced through the quest engine", () => {
     expect(world.get(Outbox)?.endGame).toBe("victory");
     expect(world.get(Outbox)?.sfx).toContain("victory");
     expect(world.get(IncrementalProgress)).toMatchObject({
-      roses: 3,
+      // 3 rescue roses plus the desert wyrm's first clean-clear rose
+      roses: 4,
       rescueCount: 1,
       lastRun: { result: "victory", rescuedPrincess: true },
     });
+    expect(world.get(IncrementalProgress)?.defeatedMinibossIds).toContain("desert-wyrm");
   });
 
   it("counters ignore non-matching archetypes", () => {

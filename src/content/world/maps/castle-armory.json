@@ -30,7 +30,13 @@
     { "ref": "prop:weapon-rack", "x": 340, "y": 214, "note": "shield hooks and blunt lances" },
     { "ref": "prop:castle-banner", "x": 256, "y": 238, "note": "armory standard" },
     { "ref": "prop:castle-lantern", "x": 116, "y": 150, "note": "low oil lantern" },
-    { "ref": "prop:barrel", "x": 402, "y": 260, "note": "quiver barrel" }
+    { "ref": "prop:barrel", "x": 402, "y": 260, "note": "quiver barrel" },
+    {
+      "enemy": "armory-sentinel",
+      "x": 88,
+      "y": 330,
+      "note": "Castle Interior miniboss: hollow armor waking in the corner"
+    }
   ],
   "triggers": [
     {

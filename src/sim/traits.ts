@@ -127,6 +127,7 @@ export interface IncrementalProgressState {
   rescueCount: number;
   purchasedUpgradeIds: string[];
   upgradeRanks: Record<string, number>;
+  defeatedMinibossIds: string[];
   unlockedClassIds: string[];
   unlockedRoutePackIds: string[];
   currentRunCoinsEarned: number;
@@ -142,6 +143,7 @@ export const IncrementalProgress = trait(
     rescueCount: 0,
     purchasedUpgradeIds: [],
     upgradeRanks: {},
+    defeatedMinibossIds: [],
     unlockedClassIds: [],
     unlockedRoutePackIds: [],
     currentRunCoinsEarned: 0,

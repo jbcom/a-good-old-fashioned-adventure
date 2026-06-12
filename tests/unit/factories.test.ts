@@ -67,7 +67,10 @@ describe("spawnEnemy", () => {
     const world = createGameWorld();
     const wyrm = spawnEnemy(world, "desert-wyrm", 680, 640);
     expect(wyrm.get(Health)).toMatchObject({ hp: 80, maxHp: 80 });
-    expect(wyrm.get(SpriteRef)?.paletteId).toBe("palette:wyrm");
+    expect(wyrm.get(SpriteRef)).toMatchObject({
+      spriteId: "sprite:boss-desert-wyrm",
+      paletteId: "palette:base",
+    });
   });
 });
 

@@ -42,6 +42,23 @@ remains fully playable as the route-pack library; browser journey coverage
 seeds it from a save slot instead of New Game. S9.5 then proves a second run
 visibly changes after a purchased upgrade.
 
+### Miniboss Ladder
+
+Every route pack fields a named miniboss with a bespoke `.pix` design and an
+authored placement; the dragon stays the final guardian. Every clear pays a
+significant coin purse (`runRewards.minibossDefeated`); the FIRST clean clear
+of each miniboss deterministically pays a rose and is remembered in
+`defeatedMinibossIds` — repeat clears pay coins only, so rose pacing never
+depends on luck.
+
+| Route pack | Miniboss | Placement |
+| --- | --- | --- |
+| oldwood | Bramble Tyrant (`bramble-tyrant`) | upper thicket off the Oldwood road |
+| deep-forest | Glowcap Matron (`glowcap-matron`) | southern glowcap hollow |
+| sunken-road | Desert Wyrm (`desert-wyrm`) | the sandwyrm wash |
+| castle-approach | Banner Knight (`banner-knight`) | the guarded gate road |
+| castle-interior | Armory Sentinel (`armory-sentinel`) | the armory's dark corner |
+
 ### Rescue Route Map Contract
 
 `map:rescue-route` is 26x64 tiles (416x1024 px, ~2-3.5 minutes with fights at
