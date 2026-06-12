@@ -34,9 +34,10 @@ describe("S8.7 road-shape polish", () => {
     expect(oldwoodRefs).toEqual(
       expect.arrayContaining(["prop:mossy-waystone", "prop:fallen-log", "prop:bramble-hedge"]),
     );
+    // deep forest swapped the shared waystone for its own root-marker flora
     expect(deepRefs).toEqual(
       expect.arrayContaining([
-        "prop:mossy-waystone",
+        "prop:threshold-root-marker",
         "prop:bramble-hedge",
         "prop:forest-lantern-post",
       ]),

@@ -86,6 +86,19 @@ For the current mandatory route, prefer authored ordinary windows over
 - major silhouette props that sit in the player's depth band.
 - minor prop cadence that breaks the repeated tile read.
 
+## Map Experience Differentiation
+
+Every map — indoor or outdoor — must read as its own experience, with the
+landscape broken by authored features: clearings, water crossings, worn
+floors, light pools, distinct furniture and flora vocabularies. This is
+enforced statistically and deterministically: pairwise map distance combines
+the semantic tile distribution with the authored feature cast, every pair of
+maps must clear a floor (0.35), and every map's median distance against the
+whole set must stay high (0.75). When two maps drift too close (the two
+forests once did), the fix is authored differentiating features — Deep Forest
+got its Thornwood stream, plank crossing, and glowcap flora — never a looser
+threshold. Per-map screenshots live in `docs/evidence/maps/`.
+
 ## Enforcement
 
 `tests/unit/content-composition.test.ts` evaluates the generated tile grid and

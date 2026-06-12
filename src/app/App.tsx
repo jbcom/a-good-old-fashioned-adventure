@@ -1238,6 +1238,23 @@ export function App({
   const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [world, setWorld] = useState<World | null>(null);
+  const worldRef = useRef<World | null>(null);
+
+  // koota caps live worlds at 16: every run replaces the world, so the old
+  // one must be destroyed or long sessions crash
+  const adoptWorld = useCallback((nextWorld: World) => {
+    if (worldRef.current && worldRef.current !== nextWorld) worldRef.current.destroy();
+    worldRef.current = nextWorld;
+    setWorld(nextWorld);
+  }, []);
+
+  useEffect(
+    () => () => {
+      worldRef.current?.destroy();
+      worldRef.current = null;
+    },
+    [],
+  );
   const [snapshot, setSnapshot] = useState<UiSnapshot>(EMPTY_SNAPSHOT);
   const [dialogue, setDialogue] = useState<DialogueState | null>(null);
   const [shopState, setShopState] = useState<ShopState | null>(null);
@@ -1375,7 +1392,7 @@ export function App({
       const mapId = options.mapId ?? incremental.loop.startMap;
       const nextWorld = createGameWorld(19);
       autoStartQuests(nextWorld);
-      setWorld(nextWorld);
+      adoptWorld(nextWorld);
       setMode("playing");
       setPaused(false);
       setPanelOpen(false);
@@ -1414,7 +1431,7 @@ export function App({
       }
       refreshSnapshot(nextWorld, { persist: true });
     },
-    [audioDebug, loadMap, refreshSnapshot, selectedClass],
+    [adoptWorld, audioDebug, loadMap, refreshSnapshot, selectedClass],
   );
 
   const continueGame = useCallback(() => {
