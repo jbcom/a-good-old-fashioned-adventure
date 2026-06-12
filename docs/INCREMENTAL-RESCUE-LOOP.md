@@ -76,12 +76,79 @@ Upgrade node categories:
 - **Relic:** account-wide conveniences that compress repeated play without
   skipping the rescue.
 
-The graph spends mostly coins near the root and asks for roses at
-branch-defining moments. The class economy is fixed: **new character classes
-unlock with roses**, and **every class owns its own coin-funded upgrade
-track** — its own branch of the DAG growing out of the class node. Buying into a new identity is
-a story moment paid with the rare currency; deepening an identity you already
-own is steady coin work that every run funds, finished or not.
+### Roses open nodes; coins fill the edges
+
+The currency split maps onto the graph structure itself (user decision
+2026-06-11):
+
+- **Rose nodes are the majors** — the special branching-off points of the DAG.
+  A new character class, a new map or route pack, a new boss or enemy family,
+  a princess relocation: each is a rose-priced node that opens a whole new
+  branch. Rose nodes are deliberately sparse; buying one is a story moment.
+- **Coin steps are the connectors** — the incremental, multi-rank upgrades
+  clustered between and around the majors. A coin upgrade is not one purchase
+  but a ranked track (`1/3`, `2/5`, ...): extra health, more enemies handled
+  at once, damage, run conveniences. Each rank costs coins and the cost grows
+  per rank, so every run's banked coins always have somewhere meaningful to
+  go.
+- **Natural progression flows** fall out of the pairing: each rose major
+  unlocks its own cluster of coin-ranked upgrades that deepen what the major
+  introduced — unlock the ranger with roses, then rank up the ranger's craft
+  with coins; unlock a new map with roses, then rank up your readiness for its
+  miniboss with coins. Topping out a coin cluster is the signpost that the
+  next rose major is near.
+
+The class economy follows directly: **new character classes unlock with
+roses**, and **every class (knight included) owns its own coin-funded ranked
+track** — its own branch of the DAG growing out of the class node. Buying
+into a new identity is a story moment paid with the rare currency; deepening
+an identity you already own is steady coin work that every run funds,
+finished or not.
+
+### Five tracks in a ring
+
+The DAG organizes into five named tracks arranged in a ring around the root
+vow (user brainstorm 2026-06-11, structured by the agent). Each track is a
+sub-graph with one entry node; three entries start owned, one is the root
+itself, and one is locked:
+
+| Track | Entry node | Starts | Contents |
+| --- | --- | --- | --- |
+| Characters | the Knight | owned | rose majors unlock classes; coin ranks deepen each class |
+| Encounters | first trash family | owned | adversarial coin ranks (counts, density); rose majors add families and boss phases |
+| Roads | first outdoor route | owned | outdoor map majors branching map to map, each with its miniboss |
+| Castle | castle gate | **locked, rose major** | indoor room-graph placed on the deepest unlocked outdoor map as the final destination; richest rewards; princess/dragon relocation lives here |
+| Vows | the First Vow (root) | owned | relics, princess boons, achievement-fed conveniences |
+
+Branching out keeps working the same inside every track — map nodes connect
+onward to more map nodes, room nodes to more rooms. The castle track is the
+late-game spine: once unlocked, its room graph grows into the big final
+castle whose benefits outweigh any outdoor route, and each deeper castle
+unlock can move the princess and dragon further in.
+
+### Adversarial incrementals
+
+Some coin ranks are a positive for the enemy and against the player — and the
+player buys them anyway, because the risk pays. Ranking up an enemy family's
+count (one more orc on the route maps per rank) makes every run harder, but
+every extra orc is more coins per run. Adversarial ranks are the loop's
+self-balancing throttle: the player chooses when to raise the danger in
+exchange for income, instead of the game imposing a difficulty curve.
+
+### Bosses are placed; trash is fodder
+
+Enemy content splits into two deliberately different species:
+
+- **Bosses and minibosses are bespoke.** Each has its own hand-authored pixel
+  art design in the native `.pix` sheets and a specific, authored placement on
+  its map — the sandwyrm at the wash, the gatehouse knight, the dragon at the
+  summit. Rose majors are what touch bosses: a new boss, a new boss phase, a
+  relocated guardian.
+- **Trash mobs are the coin engine.** Random encounters and map-fill fodder
+  earn coins and behave like roguelike modifiers — their count, density, and
+  variety are governed by coin-ranked (often adversarial) upgrades, not by
+  authored placement. Trash exists to make travel pay; bosses exist to make
+  arrival matter.
 
 ## Run Ladder and Minibosses
 
@@ -137,6 +204,30 @@ Examples:
   navigation before every princess rescue.
 - Named road characters become recurring run modifiers with dialogue branches
   keyed by upgrade and rescue count.
+
+## Agent Design Contributions (2026-06-11)
+
+Gaps identified by paper-playtesting the loop, owned by the agent rather than
+waiting for the user to call them out:
+
+- **Death is a story beat, not a game over.** The knight is carried back to
+  Hearthwake; the results panel narrates the death payout in storybook voice
+  ("The road kept your coins safe: 36 banked"). The death screen must read as
+  a chapter ending, never a punishment, or the death-pays-out economy stays
+  emotionally invisible.
+- **Run length budget.** A baseline rescue run fits a phone session: two to
+  five minutes bottom-to-top, growing only modestly with unlocked depth. Route
+  length is a designed budget, not an accident of map count.
+- **Deterministic rose pity.** The first clean clear of each miniboss always
+  pays a rose; repeat clears pay coins. Rose pacing must never starve a player
+  through bad luck — predictable mastery payouts replace RNG.
+- **Next-vow signpost.** The results panel names the cheapest affordable next
+  node ("Next vow: Knight's Vigor — 10C") so the DAG teaches itself and every
+  run ends pointing somewhere.
+- **Currencies must feel different.** ToneJS gives each currency its own
+  motif (coin chime, rose bloom phrase) and the HUD counter pulses via AnimeJS
+  when a reward banks — especially on death, where the payout is the
+  consolation.
 
 ## Mobile UX
 
