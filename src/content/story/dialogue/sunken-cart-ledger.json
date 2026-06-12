@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:sunken-cart-ledger",
+  "kind": "dialogue-bank",
+  "speaker": "char:sunken-cart-ledger",
+  "slots": [{ "id": "ledger", "node": "ledger" }, { "default": true, "node": "ledger" }],
+  "nodes": {
+    "ledger": {
+      "lines": [
+        "The water took the wheels at noon. We paid the road in barrels, buttons, and one brass key rumor.",
+        "If the castle shadow points east, count the broken arches before trusting the sand."
+      ],
+      "emits": "dlg:sunken-cart-ledger.ledger"
+    }
+  }
+}

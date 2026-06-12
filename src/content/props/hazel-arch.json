@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:hazel-arch",
+  "kind": "prop",
+  "grid": { "w": 24, "h": 18 },
+  "anchor": { "x": 12, "y": 18 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "........................",
+        "........FFFFF...........",
+        "......FFfffFFF..........",
+        "....FFffLLLLffFF........",
+        "...FFffLLGGLLffFF.......",
+        "..FFffLLGGGGLLffFF......",
+        "..FffLLGGTGGLLffF.......",
+        "...FfLLGTTTTGLLfF.......",
+        "....XTTX......XTTX......",
+        "....XttX......XttX......",
+        "....XTTX..RR..XTTX......",
+        "....XttX..rr..XttX......",
+        ".....XX........XX.......",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................"
+      ]
+    }
+  },
+  "recolorChannels": ["F", "f", "L", "G", "T", "X", "t", "R", "r"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

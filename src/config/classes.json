@@ -1,16 +1,17 @@
 {
   "$schema": "../../schemas/config.schema.json",
-  "roster": ["knight", "ranger", "wizard"],
+  "roster": ["knight"],
+  "companionRoster": ["knight", "ranger", "wizard"],
   "classes": {
     "knight": {
       "sprite": "sprite:hero",
       "palette": "palette:knight",
-      "attack": { "kind": "melee", "reach": 28, "arcHeight": 24, "cooldown": 0.32 },
+      "attack": { "kind": "melee", "reach": 42, "arcHeight": 24, "cooldown": 0.32 },
       "ability": {
         "kind": "shield",
         "label": "SHIELD",
         "hold": true,
-        "moveSpeedMultiplier": 0.4,
+        "moveSpeedMultiplier": 0.65,
         "deflectsProjectiles": true,
         "contactKnockback": 18,
         "sfx": "shield"
@@ -77,6 +78,52 @@
         "iframes": 0.3,
         "dashDuration": 0.2,
         "trailParticles": 4,
+        "sfx": "dash"
+      }
+    },
+    "bard": {
+      "playable": false,
+      "sprite": "sprite:hero",
+      "palette": "palette:bard",
+      "attack": {
+        "kind": "projectile",
+        "projectile": "song-note",
+        "speed": 140,
+        "life": 1.8,
+        "muzzleOffset": { "x": 10, "y": -6 },
+        "cooldown": 0.48
+      },
+      "ability": {
+        "kind": "shield",
+        "label": "SONG",
+        "hold": true,
+        "moveSpeedMultiplier": 0.7,
+        "deflectsProjectiles": true,
+        "contactKnockback": 10,
+        "sfx": "shield"
+      }
+    },
+    "sorcerer": {
+      "playable": false,
+      "sprite": "sprite:hero",
+      "palette": "palette:sorcerer",
+      "attack": {
+        "kind": "projectile",
+        "projectile": "cinder-bolt",
+        "speed": 150,
+        "life": 2.2,
+        "muzzleOffset": { "x": 10, "y": -6 },
+        "cooldown": 0.5
+      },
+      "ability": {
+        "kind": "blink",
+        "label": "CINDER",
+        "forwardDistance": 54,
+        "dashSpeedMultiplier": 2.4,
+        "cooldown": 1.1,
+        "iframes": 0.25,
+        "dashDuration": 0.22,
+        "trailParticles": 5,
         "sfx": "dash"
       }
     }

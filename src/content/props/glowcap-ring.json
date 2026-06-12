@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:glowcap-ring",
+  "kind": "prop",
+  "grid": { "w": 24, "h": 16 },
+  "anchor": { "x": 12, "y": 16 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "........................",
+        "....EE......LL......EE..",
+        "...EXXE....XGGX....EXXE.",
+        "..EeXXeE..XGggGX..EeXXe.",
+        "...EeeE....XGGX....EeeE.",
+        "....BB......XX......BB..",
+        "...XBBX....XBBX....XBBX.",
+        "..XbBBbX..XbBBbX..XbBBb.",
+        "...XBBX....XBBX....XBBX.",
+        "....XX......XX......XX..",
+        "......EE........EE......",
+        ".....EXXE......EXXE.....",
+        "......ee........ee......",
+        "........................",
+        "........................",
+        "........................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "E", "e", "L", "G", "g", "B", "b"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

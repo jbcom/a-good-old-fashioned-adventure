@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:desert-pilgrim",
+  "kind": "dialogue-bank",
+  "speaker": "char:desert-pilgrim",
+  "slots": [{ "id": "mural", "node": "mural" }, { "default": true, "node": "greeting" }],
+  "nodes": {
+    "greeting": {
+      "lines": ["Soft steps, traveler. The ruin keeps the old road's memory better than any map."],
+      "emits": "dlg:desert-pilgrim.greeting"
+    },
+    "mural": {
+      "lines": [
+        "See the sunken road in the mural: carts above, water below, and the castle shadow waiting at the eastern rim."
+      ],
+      "emits": "dlg:desert-pilgrim.mural"
+    }
+  }
+}

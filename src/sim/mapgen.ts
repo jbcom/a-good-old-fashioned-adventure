@@ -28,13 +28,41 @@ export interface GenOp {
   note?: string;
 }
 
+import type { TerrainVariantRule } from "../lib/content/types";
+
+export type { TerrainVariantRule } from "../lib/content/types";
+
 export interface MapGenInput {
   size: { cols: number; rows: number };
   baseTile: string;
   generation: GenOp[];
+  terrainVariants?: TerrainVariantRule[];
 }
 
 const localName = (tileId: string) => tileId.split(":")[1] ?? tileId;
+
+function chunkHash(x: number, y: number, seed: number): number {
+  let value = seed ^ Math.imul(x + 0x9e3779b9, 0x85ebca6b) ^ Math.imul(y + 0xc2b2ae35, 0x27d4eb2f);
+  value ^= value >>> 16;
+  value = Math.imul(value, 0x7feb352d);
+  value ^= value >>> 15;
+  return value >>> 0;
+}
+
+function applyTerrainVariants(grid: string[][], rules: TerrainVariantRule[]): void {
+  if (!rules.length) return;
+  const byBase = new Map(rules.map((rule) => [rule.baseTile, rule]));
+  for (let y = 0; y < grid.length; y++) {
+    for (let x = 0; x < (grid[y]?.length ?? 0); x++) {
+      const rule = byBase.get(grid[y][x]);
+      if (!rule) continue;
+      const chunkX = Math.floor(x / rule.chunk.w);
+      const chunkY = Math.floor(y / rule.chunk.h);
+      const index = chunkHash(chunkX, chunkY, rule.seed) % rule.variants.length;
+      grid[y][x] = rule.variants[index];
+    }
+  }
+}
 
 export function buildGrid(def: MapGenInput): string[][] {
   const { cols, rows } = def.size;
@@ -96,5 +124,6 @@ export function buildGrid(def: MapGenInput): string[][] {
       }
     }
   }
+  applyTerrainVariants(grid, def.terrainVariants ?? []);
   return grid;
 }

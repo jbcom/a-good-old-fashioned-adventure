@@ -14,8 +14,13 @@ const requiredDetailedTiles = [
   "tile:sand",
   "tile:village-cobble",
   "tile:stone-floor",
+  "tile:shop-floor",
+  "tile:tavern-floor",
+  "tile:ruin-floor",
+  "tile:ruin-mosaic",
   "tile:stone-wall",
   "tile:wood-bridge",
+  "tile:royal-rug",
 ];
 
 const requiredVillageProps = [
@@ -31,10 +36,61 @@ const requiredVillageProps = [
   "prop:barrel",
   "prop:broken-cart",
   "prop:sandstone-arch",
+  "prop:castle-banner",
+  "prop:castle-shelf",
+  "prop:castle-lantern",
+  "prop:weapon-rack",
+  "prop:throne-door",
+  "prop:scribe-desk",
+  "prop:shop-shelf",
+  "prop:shop-ledger",
+  "prop:ruin-mural",
+  "prop:desert-shrine",
+  "prop:ruin-column",
+  "prop:pilgrim-canopy",
+  "prop:market-stall",
+  "prop:notice-board",
+  "prop:flower-cart",
+  "prop:tavern-bench",
+  "prop:hearth-song-board",
+  "prop:story-quilt",
+  "prop:village-stable",
+  "prop:hay-bale",
+  "prop:tack-rack",
+  "prop:oat-bin",
+  "prop:stable-stall",
 ];
 
 function colorsInOps(ops: DrawOp[]): Set<string> {
   return new Set(ops.map((op) => op.color));
+}
+
+function tileColors(tile: TileDef): Set<string> {
+  if (tile.rows) return nonTransparentChannels(tile.rows);
+  return colorsInOps(tile.layers ?? []);
+}
+
+function tileSignature(tile: TileDef): string {
+  if (tile.rows) return tile.rows.join("\n");
+  return JSON.stringify(
+    (tile.layers ?? []).map((op) => ({
+      op: op.op,
+      color: op.color,
+      x: op.x,
+      y: op.y,
+      w: op.w,
+      h: op.h,
+      points: op.points,
+      stepX: op.stepX,
+      stepY: op.stepY,
+      count: op.count,
+    })),
+  );
+}
+
+function tileDetailScore(tile: TileDef): number {
+  if (tile.rows) return new Set(tile.rows).size;
+  return tile.layers?.length ?? 0;
 }
 
 function stateRows(prop: PropDef): string[] {
@@ -68,8 +124,36 @@ describe("authored pixel-art richness", () => {
     for (const id of requiredDetailedTiles) {
       const tile = tiles.get(id) as TileDef | undefined;
       expect(tile, id).toBeTruthy();
-      expect(tile?.layers.length, id).toBeGreaterThanOrEqual(4);
-      expect(colorsInOps(tile?.layers ?? []).size, id).toBeGreaterThanOrEqual(3);
+      expect(tileDetailScore(tile as TileDef), id).toBeGreaterThanOrEqual(4);
+      expect(tileColors(tile as TileDef).size, id).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it("keeps terrain-family variants as deliberate pixel designs, not duplicate flat fills", () => {
+    const variantFamilies = new Map<string, TileDef[]>();
+    for (const tile of tiles.values()) {
+      const base = tile.variantOf ?? tile.id;
+      const family = variantFamilies.get(base) ?? [];
+      family.push(tile);
+      variantFamilies.set(base, family);
+    }
+
+    for (const id of [
+      "tile:grass",
+      "tile:path",
+      "tile:leaf-litter",
+      "tile:sand",
+      "tile:castle-road",
+      "tile:village-cobble",
+    ]) {
+      const family = variantFamilies.get(id) ?? [];
+      expect(family.length, id).toBeGreaterThanOrEqual(4);
+      expect(family.length, id).toBeLessThanOrEqual(8);
+      expect(new Set(family.map((tile) => tileSignature(tile))).size, id).toBe(family.length);
+      for (const tile of family) {
+        expect(tileDetailScore(tile), tile.id).toBeGreaterThanOrEqual(6);
+        expect(tileColors(tile).size, tile.id).toBeGreaterThanOrEqual(3);
+      }
     }
   });
 
@@ -94,12 +178,33 @@ describe("authored pixel-art richness", () => {
         "prop:broadleaf-tree",
         "prop:well",
         "prop:barrel",
+        "prop:market-stall",
+        "prop:notice-board",
+        "prop:flower-cart",
+        "prop:village-stable",
       ]),
     );
 
     expect([...propRefs(getMap("map:village-house"))]).toContain("prop:table");
-    expect([...propRefs(getMap("map:village-shop"))]).toContain("prop:barrel");
-    expect([...propRefs(getMap("map:village-tavern"))]).toContain("prop:table");
+    expect([...propRefs(getMap("map:village-shop"))]).toEqual(
+      expect.arrayContaining(["prop:barrel", "prop:shop-shelf", "prop:shop-ledger"]),
+    );
+    expect([...propRefs(getMap("map:village-tavern"))]).toEqual(
+      expect.arrayContaining([
+        "prop:table",
+        "prop:tavern-bench",
+        "prop:hearth-song-board",
+        "prop:story-quilt",
+      ]),
+    );
+    expect([...propRefs(getMap("map:village-stable"))]).toEqual(
+      expect.arrayContaining([
+        "prop:hay-bale",
+        "prop:tack-rack",
+        "prop:oat-bin",
+        "prop:stable-stall",
+      ]),
+    );
   });
 
   it("places road storytelling props into the exterior route", () => {
@@ -107,13 +212,42 @@ describe("authored pixel-art richness", () => {
       expect.arrayContaining(["prop:signpost", "prop:stump", "prop:broadleaf-tree"]),
     );
     expect([...propRefs(getMap("map:deep-forest"))]).toEqual(
-      expect.arrayContaining(["prop:stump", "prop:broadleaf-tree"]),
+      expect.arrayContaining(["prop:glowcap-ring", "prop:broadleaf-tree"]),
     );
     expect([...propRefs(getMap("map:sunken-road"))]).toEqual(
       expect.arrayContaining(["prop:sandstone-arch", "prop:broken-cart", "prop:barrel"]),
     );
+    expect([...propRefs(getMap("map:desert-ruins"))]).toEqual(
+      expect.arrayContaining([
+        "prop:sandstone-arch",
+        "prop:ruin-mural",
+        "prop:desert-shrine",
+        "prop:ruin-column",
+        "prop:pilgrim-canopy",
+      ]),
+    );
     expect([...propRefs(getMap("map:castle-approach"))]).toEqual(
       expect.arrayContaining(["prop:castle-gatehouse", "prop:barrel"]),
+    );
+  });
+
+  it("places authored room props into the castle yard and interior wing", () => {
+    expect([...propRefs(getMap("map:castle-yard"))]).toEqual(
+      expect.arrayContaining(["prop:castle-banner", "prop:castle-lantern", "prop:barrel"]),
+    );
+    expect([...propRefs(getMap("map:castle-hall"))]).toEqual(
+      expect.arrayContaining([
+        "prop:castle-banner",
+        "prop:castle-lantern",
+        "prop:scribe-desk",
+        "prop:throne-door",
+      ]),
+    );
+    expect([...propRefs(getMap("map:castle-library"))]).toEqual(
+      expect.arrayContaining(["prop:castle-shelf", "prop:castle-lantern", "prop:table"]),
+    );
+    expect([...propRefs(getMap("map:castle-armory"))]).toEqual(
+      expect.arrayContaining(["prop:weapon-rack", "prop:castle-banner", "prop:barrel"]),
     );
   });
 });

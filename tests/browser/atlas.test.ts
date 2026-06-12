@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import basePalette from "../../src/content/palettes/base.json";
 import swaps from "../../src/content/palettes/swaps.json";
-import heroSprite from "../../src/content/sprites/hero.json";
+import { getSprite } from "../../src/lib/content/registry";
 import { propCanvas, spriteCanvas, tileCanvas } from "../../src/render/atlas";
 
 /** Real-browser pixel readback: palette swaps must recolor EXACTLY the
@@ -25,7 +25,7 @@ describe("palette swap correctness (pixel compare)", () => {
   it("ranger swap recolors only S/s/R/r channels of the hero grid", () => {
     const knight = pixelsOf(spriteCanvas("sprite:hero", "palette:knight"));
     const ranger = pixelsOf(spriteCanvas("sprite:hero", "palette:ranger"));
-    const rows = heroSprite.rows;
+    const rows = getSprite("sprite:hero").rows;
     const swap = swaps.swaps["palette:ranger"] as Record<string, string>;
     const swappedChannels = new Set(Object.keys(swap));
 
@@ -53,7 +53,7 @@ describe("palette swap correctness (pixel compare)", () => {
 
   it("skeleton swap turns armor bone-white", () => {
     const skeleton = pixelsOf(spriteCanvas("sprite:hero", "palette:skeleton"));
-    const rows = heroSprite.rows;
+    const rows = getSprite("sprite:hero").rows;
     const bone = hexToRgb("#eef0f2");
     const y = rows.findIndex((r) => r.includes("S"));
     const x = rows[y].indexOf("S");

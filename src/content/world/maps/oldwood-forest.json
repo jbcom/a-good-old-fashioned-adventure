@@ -32,6 +32,82 @@
       "y0": 11,
       "y1": 24,
       "note": "north-south deer track"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 17,
+      "x0": 30,
+      "x1": 38,
+      "note": "upper hazel pocket for thorncutter silhouette"
+    },
+    {
+      "op": "set",
+      "tile": "tile:path",
+      "at": [29, 18],
+      "note": "upper hazel pocket step"
+    },
+    {
+      "op": "set",
+      "tile": "tile:path",
+      "at": [39, 18],
+      "note": "upper hazel pocket step"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:grass",
+      "y": 16,
+      "x0": 46,
+      "x1": 55,
+      "note": "mossy side verge by the last lantern"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:grass",
+      "y": 22,
+      "x0": 52,
+      "x1": 60,
+      "note": "lower verge breaking the quiet threshold carpet"
+    }
+  ],
+  "terrainVariants": [
+    {
+      "baseTile": "tile:leaf-litter",
+      "variants": [
+        "tile:leaf-litter",
+        "tile:leaf-litter-vein",
+        "tile:leaf-litter-roots",
+        "tile:leaf-litter-glowcap"
+      ],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 201,
+      "note": "Oldwood leaf pockets with roots and small fungus reads"
+    },
+    {
+      "baseTile": "tile:path",
+      "variants": ["tile:path", "tile:path-ruts", "tile:path-pebbles", "tile:path-moss"],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 202,
+      "note": "forest road ruts and mossed edges"
+    },
+    {
+      "baseTile": "tile:grass",
+      "variants": ["tile:grass", "tile:grass-tufts", "tile:grass-flowers", "tile:grass-roots"],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 205,
+      "note": "mossy side-verge pockets by the last lantern"
+    },
+    {
+      "baseTile": "tile:mountain",
+      "variants": [
+        "tile:mountain",
+        "tile:mountain-crag",
+        "tile:mountain-scree",
+        "tile:mountain-ledge"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 505,
+      "note": "old ridge wall with crags and ledges"
     }
   ],
   "playerSpawn": { "x": 48, "y": 304 },
@@ -42,15 +118,142 @@
   },
   "entities": [
     { "ref": "prop:signpost", "x": 92, "y": 274, "note": "points back to Hearthwake" },
+    {
+      "ref": "prop:mossy-waystone",
+      "x": 150,
+      "y": 292,
+      "note": "old mile marker at the first bend"
+    },
     { "ref": "prop:broadleaf-tree", "x": 210, "y": 246, "note": "oldwood canopy" },
+    {
+      "ref": "prop:oat-string-post",
+      "x": 300,
+      "y": 268,
+      "note": "bend post for Oswin's blue oat-string"
+    },
+    {
+      "ref": "prop:roadward-stool",
+      "x": 322,
+      "y": 326,
+      "note": "roadward stool, ledger, and folded cloth"
+    },
+    {
+      "ref": "prop:fallen-log",
+      "x": 278,
+      "y": 334,
+      "note": "fallen log shaping the lower clearing"
+    },
     { "ref": "prop:stump", "x": 340, "y": 328, "note": "cut stump near the road" },
+    {
+      "ref": "prop:bramble-hedge",
+      "x": 430,
+      "y": 252,
+      "note": "bramble hedge before the raider clearing"
+    },
+    {
+      "ref": "prop:hazel-arch",
+      "x": 520,
+      "y": 270,
+      "note": "upper Oldwood hazel arch silhouette"
+    },
+    {
+      "ref": "prop:thorncutters-bundle",
+      "x": 560,
+      "y": 318,
+      "note": "trimmed thorn bundle in the player depth band"
+    },
     { "ref": "prop:broadleaf-tree", "x": 560, "y": 238, "note": "deep canopy" },
+    {
+      "ref": "char:oldwood-thorncutter",
+      "x": 508,
+      "y": 288,
+      "dir": 1,
+      "patrol": {
+        "points": [
+          { "x": 492, "y": 288 },
+          { "x": 552, "y": 288 },
+          { "x": 552, "y": 312 },
+          { "x": 492, "y": 312 }
+        ],
+        "speed": 21
+      },
+      "note": "Hester Briarhook tends the upper hazel pocket"
+    },
+    {
+      "ref": "prop:forest-lantern-post",
+      "x": 880,
+      "y": 276,
+      "note": "last lantern before Deep Forest"
+    },
+    {
+      "ref": "prop:lantern-oil-crate",
+      "x": 828,
+      "y": 318,
+      "note": "lantern keeper's oil crate in the last-lantern walk"
+    },
+    {
+      "ref": "prop:keeper-bell-stake",
+      "x": 918,
+      "y": 292,
+      "note": "small road bell beside the Oldwood threshold"
+    },
     { "ref": "char:woodcutter", "x": 250, "y": 262, "dir": 1 },
+    {
+      "ref": "char:oldwood-roadward",
+      "x": 304,
+      "y": 292,
+      "dir": -1,
+      "note": "stable-service route payoff at the first bend"
+    },
     { "ref": "char:hermit", "x": 392, "y": 292, "dir": -1, "note": "Oldwood oath keeper" },
+    {
+      "ref": "char:oldwood-lantern-keeper",
+      "x": 848,
+      "y": 300,
+      "dir": -1,
+      "patrol": {
+        "points": [
+          { "x": 832, "y": 300 },
+          { "x": 904, "y": 300 },
+          { "x": 904, "y": 324 },
+          { "x": 832, "y": 324 }
+        ],
+        "speed": 18
+      },
+      "note": "Caddoc Wick tends the last lantern before Deep Forest"
+    },
     { "enemy": "oldwood-raider", "x": 470, "y": 210 },
     { "enemy": "forest-orc", "x": 620, "y": 390 },
-    { "enemy": "thorn-shaman", "x": 760, "y": 156 }
+    { "enemy": "thorn-shaman", "x": 760, "y": 156 },
+    {
+      "enemy": "bramble-tyrant",
+      "x": 520,
+      "y": 150,
+      "note": "Oldwood miniboss holding the upper thicket off the road"
+    }
   ],
+  "composition": {
+    "routeWindows": [
+      {
+        "label": "first bend roadward introduction",
+        "zone": { "x0": 1, "y0": 15, "x1": 22, "y1": 23 },
+        "majorAnchors": ["char:oldwood-roadward", "prop:mossy-waystone"],
+        "minorProps": ["prop:signpost", "prop:oat-string-post", "prop:fallen-log"]
+      },
+      {
+        "label": "hermit and thorncutter hazel pocket",
+        "zone": { "x0": 22, "y0": 13, "x1": 43, "y1": 23 },
+        "majorAnchors": ["char:hermit", "char:oldwood-thorncutter", "prop:hazel-arch"],
+        "minorProps": ["prop:bramble-hedge", "prop:thorncutters-bundle", "prop:broadleaf-tree"]
+      },
+      {
+        "label": "quiet lantern walk toward Deep Forest",
+        "zone": { "x0": 44, "y0": 15, "x1": 62, "y1": 23 },
+        "majorAnchors": ["char:oldwood-lantern-keeper", "prop:forest-lantern-post"],
+        "minorProps": ["prop:lantern-oil-crate", "prop:keeper-bell-stake"]
+      }
+    ]
+  },
   "triggers": [
     {
       "id": "trigger:west-road",

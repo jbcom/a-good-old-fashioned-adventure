@@ -7,8 +7,15 @@ import {
   type ToneAudioEngine,
 } from "../audio/toneEngine";
 import ui from "../config/ui.json";
-import { classes, engine } from "../lib/config";
-import { getCharacter, getDialogueBank, getMap } from "../lib/content/registry";
+import { classes, engine, type IncrementalUpgradeNode, incremental } from "../lib/config";
+import {
+  getCharacter,
+  getDialogueBank,
+  getMap,
+  getProp,
+  getShop,
+  getTile,
+} from "../lib/content/registry";
 import type { DialogueNode, MapDef } from "../lib/content/types";
 import {
   getSaveRepository,
@@ -36,14 +43,31 @@ import {
 } from "../sim/dialogue";
 import { pushEvent } from "../sim/events";
 import { createGameWorld, instantiateMap } from "../sim/factories";
+import {
+  nodeRanks,
+  purchasedRank,
+  purchaseUpgradeNode,
+  rankCost,
+  restoreIncrementalProgress,
+  sanitizeIncrementalProgress,
+  syncProgressCoinsFromPlayer,
+  type UpgradePurchaseResult,
+} from "../sim/incrementalProgress";
 import { applyEffects, autoStartQuests, questLogLines } from "../sim/quests";
+import { buyShopListing, type ShopTransactionResult, sellShopListing } from "../sim/shop";
 import { playerAbility, playerAttack } from "../sim/systems/combat";
 import { SIM_DT, step } from "../sim/tick";
 import {
   AimDirection,
   Facing,
   FlagState,
+  FxStats,
   Health,
+  IncrementalProgress,
+  type IncrementalProgressState,
+  InspectionPulse,
+  Interactable,
+  Inventory,
   IsEnemy,
   IsNpc,
   IsPlayer,
@@ -53,12 +77,13 @@ import {
   Outbox,
   PlayerGold,
   Projectile,
+  PropRef,
   QuestLog,
   Transform,
 } from "../sim/traits";
 import "./App.css";
 
-type Mode = "landing" | "title" | "playing" | "victory" | "gameover";
+type Mode = "landing" | "title" | "playing" | "results" | "upgrade" | "gameover";
 type Direction = "up" | "down" | "left" | "right";
 
 interface DialogueState {
@@ -67,6 +92,25 @@ interface DialogueState {
   node: DialogueNode;
   speaker: string;
   lines: string[];
+}
+
+interface ReadablePropHit {
+  entity: Entity;
+  interaction: {
+    verb: string;
+    once: boolean;
+    used: boolean;
+    sfx: string;
+    feedbackAnim: string;
+    dialogueBank: string;
+    dialogueSlot: string;
+  };
+  dist: number;
+}
+
+interface NpcDialogueHit {
+  dialogue: DialogueState;
+  dist: number;
 }
 
 interface UiSnapshot {
@@ -79,10 +123,13 @@ interface UiSnapshot {
   xp: number;
   nextXp: number;
   gold: number;
+  incrementalProgress: IncrementalProgressState;
+  inventory: Record<string, number>;
   playerX: number;
   playerY: number;
   enemies: number;
   projectiles: number;
+  fxSpawned: number;
   questLines: string[];
   runtime: {
     cols: number;
@@ -90,6 +137,12 @@ interface UiSnapshot {
     grid: string[][];
   };
   explored: Set<string>;
+}
+
+interface InspectionFeedbackState {
+  pulses: number;
+  lastProp: string;
+  lastAnim: string;
 }
 
 interface InputState {
@@ -112,7 +165,18 @@ interface StartOptions {
   level?: number;
   hp?: number;
   maxHp?: number;
+  gold?: number;
+  incrementalProgress?: IncrementalProgressState;
+  inventory?: Record<string, number>;
 }
+
+interface ShopState {
+  shopId: string;
+  selectedIndex: number;
+  message: string;
+}
+
+type UpgradeNodeState = "purchased" | "available" | "unaffordable" | "locked";
 
 const EMPTY_SNAPSHOT: UiSnapshot = {
   mapId: "",
@@ -124,13 +188,21 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   xp: 0,
   nextXp: 1,
   gold: 0,
+  incrementalProgress: sanitizeIncrementalProgress({}, 0),
+  inventory: {},
   playerX: 0,
   playerY: 0,
   enemies: 0,
   projectiles: 0,
+  fxSpawned: 0,
   questLines: [],
   runtime: { cols: 0, rows: 0, grid: [] },
   explored: new Set(),
+};
+const EMPTY_INSPECTION_FEEDBACK: InspectionFeedbackState = {
+  pulses: 0,
+  lastProp: "",
+  lastAnim: "",
 };
 
 const keyMap: Record<string, Direction | "a" | "b" | "pause" | undefined> = {};
@@ -167,6 +239,59 @@ function interpolateLine(world: World, line: string): string {
     }
     return token;
   });
+}
+
+function cleanInventory(input: unknown): Record<string, number> {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return {};
+  const out: Record<string, number> = {};
+  for (const [itemId, value] of Object.entries(input)) {
+    if (!itemId.startsWith("item:")) continue;
+    const count = Number(value);
+    if (Number.isFinite(count) && count > 0) out[itemId] = Math.floor(count);
+  }
+  return out;
+}
+
+function numeric(input: unknown): number | undefined {
+  const value = Number(input);
+  return Number.isFinite(value) ? value : undefined;
+}
+
+function parseSavedSnapshot(
+  json: string,
+): Pick<StartOptions, "gold" | "incrementalProgress" | "inventory"> {
+  try {
+    const parsed = JSON.parse(json) as {
+      coins?: unknown;
+      gold?: unknown;
+      incrementalProgress?: unknown;
+      inventory?: unknown;
+    };
+    const hasIncrementalPayload =
+      parsed.incrementalProgress !== undefined ||
+      parsed.coins !== undefined ||
+      parsed.gold !== undefined ||
+      "roses" in parsed ||
+      "rescueCount" in parsed ||
+      "purchasedUpgradeIds" in parsed ||
+      "unlockedClassIds" in parsed ||
+      "unlockedRoutePackIds" in parsed;
+    const coins = numeric(parsed.coins) ?? numeric(parsed.gold);
+    if (!hasIncrementalPayload) {
+      return { inventory: cleanInventory(parsed.inventory) };
+    }
+    const incrementalProgress = sanitizeIncrementalProgress(
+      parsed.incrementalProgress ?? parsed,
+      coins ?? 0,
+    );
+    return {
+      gold: incrementalProgress.coins,
+      incrementalProgress,
+      inventory: cleanInventory(parsed.inventory),
+    };
+  } catch {
+    return {};
+  }
 }
 
 function dialogueFromResolved(
@@ -221,6 +346,8 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
   const health = player?.get(Health);
   const level = player?.get(Level);
   const gold = player?.get(PlayerGold);
+  const incrementalProgress = syncProgressCoinsFromPlayer(world);
+  const inventory = player?.get(Inventory);
   const transform = player?.get(Transform);
   const mapId = runtime?.mapId ?? "";
   const base: UiSnapshot = {
@@ -233,10 +360,19 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     xp: level?.xp ?? 0,
     nextXp: level?.nextXp ?? 1,
     gold: gold?.value ?? 0,
+    incrementalProgress: {
+      ...incrementalProgress,
+      purchasedUpgradeIds: [...incrementalProgress.purchasedUpgradeIds],
+      unlockedClassIds: [...incrementalProgress.unlockedClassIds],
+      unlockedRoutePackIds: [...incrementalProgress.unlockedRoutePackIds],
+      lastRun: incrementalProgress.lastRun ? { ...incrementalProgress.lastRun } : null,
+    },
+    inventory: { ...(inventory?.items ?? {}) },
     playerX: transform?.x ?? 0,
     playerY: transform?.y ?? 0,
     enemies: [...world.query(IsEnemy)].length,
     projectiles: [...world.query(Projectile)].length,
+    fxSpawned: world.get(FxStats)?.spawned ?? 0,
     questLines: questLogLines(world),
     runtime: {
       cols: runtime?.cols ?? 0,
@@ -249,7 +385,115 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
   return base;
 }
 
-function nearestDialogue(world: World): DialogueState | null {
+function saveRowFromSnapshot(current: UiSnapshot) {
+  return {
+    id: 1,
+    classId: current.classId,
+    mapId: current.mapId,
+    playerX: Math.round(current.playerX),
+    playerY: Math.round(current.playerY),
+    level: current.level,
+    hp: Math.max(0, Math.ceil(current.hp)),
+    maxHp: current.maxHp,
+    questSummary: current.questLines[0] ?? "The road begins.",
+    snapshotJson: JSON.stringify({
+      classId: current.classId,
+      mapId: current.mapId,
+      playerX: current.playerX,
+      playerY: current.playerY,
+      coins: current.incrementalProgress.coins,
+      gold: current.incrementalProgress.coins,
+      roses: current.incrementalProgress.roses,
+      rescueCount: current.incrementalProgress.rescueCount,
+      purchasedUpgradeIds: current.incrementalProgress.purchasedUpgradeIds,
+      upgradeRanks: current.incrementalProgress.upgradeRanks,
+      unlockedClassIds: current.incrementalProgress.unlockedClassIds,
+      unlockedRoutePackIds: current.incrementalProgress.unlockedRoutePackIds,
+      currentRunCoinsEarned: current.incrementalProgress.currentRunCoinsEarned,
+      currentRunRosesEarned: current.incrementalProgress.currentRunRosesEarned,
+      activeRoutePackId: current.incrementalProgress.activeRoutePackId,
+      lastRun: current.incrementalProgress.lastRun,
+      incrementalProgress: current.incrementalProgress,
+      inventory: current.inventory,
+      questLines: current.questLines,
+    }),
+    updatedAt: new Date(),
+  };
+}
+
+function upgradeTestId(nodeId: string): string {
+  return `upgrade-node-${nodeId.replace(/[^a-z0-9-]/g, "-")}`;
+}
+
+/** Nodes in ring order: vows, characters, encounters, roads, castle. */
+const RING_NODES: IncrementalUpgradeNode[] = incremental.upgradeGraph.ringOrder.flatMap((track) =>
+  incremental.upgradeGraph.nodes.filter((node) => node.track === track),
+);
+
+function upgradeNodeState(
+  progress: IncrementalProgressState,
+  node: IncrementalUpgradeNode,
+): UpgradeNodeState {
+  const ownedRanks = purchasedRank(progress, node);
+  if (ownedRanks >= nodeRanks(node)) return "purchased";
+  const reachable = node.prerequisites.every((id) => progress.purchasedUpgradeIds.includes(id));
+  if (!reachable) return "locked";
+  const price = rankCost(node, ownedRanks);
+  if (progress.coins < price.coins || progress.roses < price.roses) {
+    return "unaffordable";
+  }
+  return "available";
+}
+
+function upgradeCostLabel(
+  progress: IncrementalProgressState,
+  node: IncrementalUpgradeNode,
+): string {
+  const ownedRanks = purchasedRank(progress, node);
+  const maxRanks = nodeRanks(node);
+  if (ownedRanks >= maxRanks) {
+    return maxRanks > 1 ? `Full · ${ownedRanks}/${maxRanks}` : "Owned";
+  }
+  const price = rankCost(node, ownedRanks);
+  const costs = [price.coins ? `${price.coins}C` : "", price.roses ? `${price.roses}R` : ""].filter(
+    Boolean,
+  );
+  const cost = costs.length ? costs.join(" ") : "Root";
+  return maxRanks > 1 ? `${cost} · ${ownedRanks}/${maxRanks}` : cost;
+}
+
+function firstUpgradeableIndex(progress: IncrementalProgressState): number {
+  const available = RING_NODES.findIndex(
+    (node) => upgradeNodeState(progress, node) === "available",
+  );
+  if (available >= 0) return available;
+  const reachableUnpurchased = RING_NODES.findIndex((node) =>
+    ["unaffordable", "available"].includes(upgradeNodeState(progress, node)),
+  );
+  if (reachableUnpurchased >= 0) return reachableUnpurchased;
+  const purchased = RING_NODES.findIndex(
+    (node) => upgradeNodeState(progress, node) === "purchased",
+  );
+  return Math.max(0, purchased);
+}
+
+/** The cheapest currently-affordable next node — the signpost on results. */
+function nextVow(progress: IncrementalProgressState): IncrementalUpgradeNode | null {
+  let best: IncrementalUpgradeNode | null = null;
+  let bestPrice = Number.POSITIVE_INFINITY;
+  for (const node of RING_NODES) {
+    if (upgradeNodeState(progress, node) !== "available") continue;
+    const price = rankCost(node, purchasedRank(progress, node));
+    const weight = price.coins + price.roses * 20;
+    if (weight < bestPrice) {
+      bestPrice = weight;
+      best = node;
+    }
+  }
+  return best;
+}
+
+function nearestDialogue(world: World): NpcDialogueHit | null {
   const player = playerOf(world);
   const pt = player?.get(Transform);
   if (!pt) return null;
@@ -266,10 +510,33 @@ function nearestDialogue(world: World): DialogueState | null {
   if (!best) return null;
   const npc = best.entity.get(IsNpc);
   if (!npc) return null;
-  return dialogueFromResolved(
-    world,
-    resolveDialogue(world, getCharacter(npc.charId).dialogue as string),
-  );
+  return {
+    dialogue: dialogueFromResolved(
+      world,
+      resolveDialogue(world, getCharacter(npc.charId).dialogue as string),
+    ),
+    dist: best.dist,
+  };
+}
+
+function nearestReadableProp(world: World): ReadablePropHit | null {
+  const player = playerOf(world);
+  const pt = player?.get(Transform);
+  if (!pt) return null;
+  let best: (ReadablePropHit & { dist: number }) | null = null;
+  for (const entity of world.query(PropRef, Interactable, Transform)) {
+    const propRef = entity.get(PropRef);
+    const interaction = entity.get(Interactable);
+    const t = entity.get(Transform);
+    if (!propRef || !interaction || !t) continue;
+    if (!interaction.dialogueBank || !interaction.dialogueSlot) continue;
+    if (interaction.once && interaction.used) continue;
+    const prop = getProp(propRef.propId);
+    if (!prop.interaction?.dialogue) continue;
+    const dist = Math.hypot(t.x - pt.x, t.y - pt.y);
+    if (dist < 34 && (!best || dist < best.dist)) best = { entity, interaction, dist };
+  }
+  return best;
 }
 
 function aimAtNearestEnemy(world: World, maxDistance = 340) {
@@ -311,9 +578,11 @@ function handleZoneTriggers(world: World, entered: Set<string>) {
   if (!runtime || !pt || !runtime.mapId) return;
   const map = getMap(runtime.mapId);
   const flags = world.get(FlagState)?.values ?? {};
+  const unlockedPacks = world.get(IncrementalProgress)?.unlockedRoutePackIds ?? [];
   for (const trigger of map.triggers ?? []) {
     if (!trigger.zone) continue;
     if (trigger.requiresFlag && !flags[trigger.requiresFlag]) continue;
+    if (trigger.requiresRoutePack && !unlockedPacks.includes(trigger.requiresRoutePack)) continue;
     if (!insideZone(map, pt.x, pt.y, trigger.id)) continue;
     const key = `${runtime.mapId}:${trigger.id}`;
     if (entered.has(key)) continue;
@@ -330,6 +599,31 @@ function handleZoneTriggers(world: World, entered: Set<string>) {
       applyEffects(world, trigger.effects ?? []);
     }
   }
+}
+
+function CurrencyToken({ label, value, testId }: { label: string; value: number; testId: string }) {
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const last = useRef(value);
+  useEffect(() => {
+    const token = ref.current;
+    if (value > last.current && token) {
+      const animation = animate(token, {
+        scale: [1, 1.3, 1],
+        duration: 420,
+        ease: "outBack",
+      });
+      last.current = value;
+      return () => {
+        animation.cancel();
+      };
+    }
+    last.current = value;
+  }, [value]);
+  return (
+    <span ref={ref} className="currency-token" data-testid={testId}>
+      {label} {value}
+    </span>
+  );
 }
 
 function usePanelEntrance(signature: string) {
@@ -366,7 +660,7 @@ function TitleScreen({
     <section className="title-screen" data-testid="title-screen">
       <div className="title-panel" data-testid="title-panel" ref={panelRef}>
         <h1>A GOOD OLD FASHIONED ADVENTURE</h1>
-        <p className="dialogue-line">Choose your class. Press A to begin.</p>
+        <p className="dialogue-line">Begin as a knight. New callings wait in the upgrade graph.</p>
         <div className="class-row">
           {classes.roster.map((classId) => (
             <button
@@ -514,7 +808,8 @@ function Hud({
           max={snapshot.nextXp}
           value={snapshot.xp}
         />
-        <span>G {snapshot.gold}</span>
+        <CurrencyToken label="C" value={snapshot.incrementalProgress.coins} testId="hud-coins" />
+        <CurrencyToken label="R" value={snapshot.incrementalProgress.roses} testId="hud-roses" />
         <span className="map-token">{snapshot.mapName}</span>
         <button
           className="hud-menu"
@@ -597,6 +892,9 @@ function Minimap({ snapshot }: { snapshot: UiSnapshot }) {
       "tile:castle-road": "#4b526d",
       "tile:wood-bridge": "#a66a2c",
       "tile:stone-floor": ui.theme.textMuted,
+      "tile:shop-floor": "#946629",
+      "tile:ruin-floor": "#8f7657",
+      "tile:ruin-mosaic": "#8a6d3f",
       "tile:village-cobble": "#cfa153",
       "tile:stone-wall": ui.theme.shell,
       "tile:prison-bars": ui.theme.panelBorder,
@@ -604,9 +902,9 @@ function Minimap({ snapshot }: { snapshot: UiSnapshot }) {
     for (let y = 0; y < snapshot.runtime.rows; y++) {
       for (let x = 0; x < snapshot.runtime.cols; x++) {
         const explored = snapshot.explored.has(`${x},${y}`);
-        ctx.fillStyle = explored
-          ? (colors[snapshot.runtime.grid[y][x]] ?? ui.theme.textBody)
-          : ui.theme.background;
+        const tile = getTile(snapshot.runtime.grid[y][x]);
+        const colorTile = tile.variantOf ?? tile.id;
+        ctx.fillStyle = explored ? (colors[colorTile] ?? ui.theme.textBody) : ui.theme.background;
         ctx.fillRect(Math.floor(x * sx), Math.floor(y * sy), Math.ceil(sx), Math.ceil(sy));
       }
     }
@@ -647,6 +945,216 @@ function DialogueBox({ dialogue, onAdvance }: { dialogue: DialogueState; onAdvan
         <button className="menu-button" type="button" onClick={onAdvance}>
           {dialogue.node.choices?.[0]?.text ?? "A CONTINUE"}
         </button>
+      </div>
+    </section>
+  );
+}
+
+function ShopPanel({
+  shopState,
+  snapshot,
+  onBuy,
+  onSell,
+  onClose,
+}: {
+  shopState: ShopState;
+  snapshot: UiSnapshot;
+  onBuy: () => void;
+  onSell: () => void;
+  onClose: () => void;
+}) {
+  const shop = getShop(shopState.shopId);
+  const keeper = getCharacter(shop.keeper).name;
+  const selectedIndex = Math.min(shopState.selectedIndex, shop.listings.length - 1);
+  return (
+    <section className="shop-panel" data-testid="shop-panel">
+      <header className="shop-header">
+        <div>
+          <p className="manuscript-kicker">{keeper}</p>
+          <h2>{shop.name}</h2>
+        </div>
+        <button className="shop-close" data-testid="shop-close" type="button" onClick={onClose}>
+          x
+        </button>
+      </header>
+      <div className="shop-list" role="listbox" aria-label={shop.name}>
+        {shop.listings.map((listing, index) => {
+          const owned = snapshot.inventory[listing.item] ?? 0;
+          return (
+            <div
+              className="shop-row"
+              data-testid={`shop-row-${listing.id}`}
+              aria-selected={selectedIndex === index}
+              key={listing.id}
+              role="option"
+              tabIndex={selectedIndex === index ? 0 : -1}
+            >
+              <div>
+                <strong>{listing.label}</strong>
+                <p>{listing.description}</p>
+              </div>
+              <div className="shop-prices">
+                <span>Buy {listing.buyPrice}c</span>
+                <span>Sell {listing.sellPrice}c</span>
+                <span data-testid={`shop-inventory-${listing.item}`}>x{owned}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+      <footer className="shop-footer">
+        <button
+          className="menu-button compact"
+          data-testid="shop-buy"
+          type="button"
+          onClick={onBuy}
+        >
+          A Buy
+        </button>
+        <button
+          className="menu-button compact"
+          data-testid="shop-sell"
+          type="button"
+          onClick={onSell}
+        >
+          B Sell
+        </button>
+        <p className="shop-status" data-testid="shop-status">
+          {shopState.message || `${snapshot.incrementalProgress.coins} coins in purse.`}
+        </p>
+      </footer>
+    </section>
+  );
+}
+
+function ResultsPanel({
+  snapshot,
+  onOpenUpgrade,
+  onStartRun,
+}: {
+  snapshot: UiSnapshot;
+  onOpenUpgrade: () => void;
+  onStartRun: () => void;
+}) {
+  const panelRef = usePanelEntrance("results");
+  const run = snapshot.incrementalProgress.lastRun;
+  return (
+    <section className="results-screen" data-testid="results-screen">
+      <div className="results-panel" data-testid="results-panel" ref={panelRef}>
+        <p className="manuscript-kicker">Princess Rescued</p>
+        <h1>Run Complete</h1>
+        <p className="dialogue-line">
+          The road folds back into the book. Spend the spoils, then tell the tale again.
+        </p>
+        <div className="result-ledger" data-testid="result-ledger">
+          <span>
+            Earned {run?.coinsEarned ?? snapshot.incrementalProgress.currentRunCoinsEarned}C
+          </span>
+          <span>
+            Earned {run?.rosesEarned ?? snapshot.incrementalProgress.currentRunRosesEarned}R
+          </span>
+          <span>Total {snapshot.incrementalProgress.coins}C</span>
+          <span>Total {snapshot.incrementalProgress.roses}R</span>
+          <span>Rescues {snapshot.incrementalProgress.rescueCount}</span>
+        </div>
+        {nextVow(snapshot.incrementalProgress) && (
+          <p className="dialogue-line" data-testid="next-vow">
+            Next vow: {nextVow(snapshot.incrementalProgress)?.label} —{" "}
+            {upgradeCostLabel(
+              snapshot.incrementalProgress,
+              nextVow(snapshot.incrementalProgress) as IncrementalUpgradeNode,
+            )}
+          </p>
+        )}
+        <div className="result-actions">
+          <button
+            className="menu-button"
+            data-testid="open-upgrade-graph"
+            type="button"
+            onClick={onOpenUpgrade}
+          >
+            A Upgrade Graph
+          </button>
+          <button
+            className="menu-button"
+            data-testid="result-new-run"
+            type="button"
+            onClick={onStartRun}
+          >
+            New Run
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function UpgradeWebPanel({
+  snapshot,
+  selectedIndex,
+  message,
+  onSelect,
+  onBuy,
+  onBack,
+}: {
+  snapshot: UiSnapshot;
+  selectedIndex: number;
+  message: string;
+  onSelect: (index: number) => void;
+  onBuy: () => void;
+  onBack: () => void;
+}) {
+  const panelRef = usePanelEntrance("upgrade-graph");
+  const selectedNode = RING_NODES[selectedIndex] ?? RING_NODES[0];
+  return (
+    <section className="upgrade-screen" data-testid="upgrade-screen">
+      <div className="upgrade-panel" data-testid="upgrade-panel" ref={panelRef}>
+        <p className="manuscript-kicker">The Vow Graph</p>
+        <h1>Upgrade Graph</h1>
+        <div className="upgrade-purse" data-testid="upgrade-purse">
+          <span>{snapshot.incrementalProgress.coins} Coins</span>
+          <span>{snapshot.incrementalProgress.roses} Roses</span>
+        </div>
+        <div className="upgrade-graph-list" role="listbox" aria-label="Upgrade Graph">
+          {incremental.upgradeGraph.ringOrder.map((track) => (
+            <div className="upgrade-track" data-testid={`upgrade-track-${track}`} key={track}>
+              <h2 className="upgrade-track-label">{track}</h2>
+              {RING_NODES.map((node, index) => {
+                if (node.track !== track) return null;
+                const state = upgradeNodeState(snapshot.incrementalProgress, node);
+                return (
+                  <button
+                    className="upgrade-node"
+                    data-state={state}
+                    data-testid={upgradeTestId(node.id)}
+                    type="button"
+                    key={node.id}
+                    aria-pressed={selectedIndex === index}
+                    onClick={() => onSelect(index)}
+                  >
+                    <span className="upgrade-node-label">{node.label}</span>
+                    <span>{node.category}</span>
+                    <span>{upgradeCostLabel(snapshot.incrementalProgress, node)}</span>
+                    <span>{state}</span>
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+        <div className="upgrade-detail" data-testid="upgrade-detail">
+          <strong>{selectedNode.label}</strong>
+          <span>{upgradeCostLabel(snapshot.incrementalProgress, selectedNode)}</span>
+          <p>{message || "Up/down chooses a vow. A buys. B returns to results."}</p>
+        </div>
+        <div className="result-actions">
+          <button className="menu-button" data-testid="upgrade-buy" type="button" onClick={onBuy}>
+            A Buy
+          </button>
+          <button className="menu-button" data-testid="upgrade-back" type="button" onClick={onBack}>
+            B Back
+          </button>
+        </div>
       </div>
     </section>
   );
@@ -730,16 +1238,38 @@ export function App({
   const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [world, setWorld] = useState<World | null>(null);
+  const worldRef = useRef<World | null>(null);
+
+  // koota caps live worlds at 16: every run replaces the world, so the old
+  // one must be destroyed or long sessions crash
+  const adoptWorld = useCallback((nextWorld: World) => {
+    if (worldRef.current && worldRef.current !== nextWorld) worldRef.current.destroy();
+    worldRef.current = nextWorld;
+    setWorld(nextWorld);
+  }, []);
+
+  useEffect(
+    () => () => {
+      worldRef.current?.destroy();
+      worldRef.current = null;
+    },
+    [],
+  );
   const [snapshot, setSnapshot] = useState<UiSnapshot>(EMPTY_SNAPSHOT);
   const [dialogue, setDialogue] = useState<DialogueState | null>(null);
+  const [shopState, setShopState] = useState<ShopState | null>(null);
+  const [selectedUpgradeIndex, setSelectedUpgradeIndex] = useState(0);
+  const [upgradeMessage, setUpgradeMessage] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(DEFAULT_SETTINGS.muted);
+  const [inspectionFeedback, setInspectionFeedback] =
+    useState<InspectionFeedbackState>(EMPTY_INSPECTION_FEEDBACK);
   const [deviceProfile, setDeviceProfile] = useState<DeviceProfile>(() =>
     classifyDeviceProfile({ platform: "web", model: "browser" }, readViewport()),
   );
   const pausePanelRef = usePanelEntrance(paused && mode === "playing" ? "pause-open" : "pause");
-  const endPanelRef = usePanelEntrance(mode === "victory" || mode === "gameover" ? mode : "end");
+  const endPanelRef = usePanelEntrance(mode === "gameover" ? mode : "end");
   const [audioDebug, setAudioDebug] = useState<AudioDebugState>({
     label: "Tone",
     ready: false,
@@ -803,15 +1333,47 @@ export function App({
     snapshotRef.current = snapshot;
   }, [snapshot]);
 
-  const refreshSnapshot = useCallback((nextWorld: World) => {
-    setSnapshot(readSnapshot(nextWorld, exploredRef.current));
-    const audio = audioRef.current;
-    if (audio) setAudioDebug(audio.debugState());
+  const persistSave = useCallback((current: UiSnapshot) => {
+    if (!current.mapId) return;
+    const row = saveRowFromSnapshot(current);
+    void repositoryRef.current
+      .upsertSlot(row)
+      .then(() => {
+        setLatestSave({
+          id: row.id,
+          classId: row.classId,
+          mapId: row.mapId,
+          playerX: row.playerX,
+          playerY: row.playerY,
+          level: row.level,
+          hp: row.hp,
+          maxHp: row.maxHp,
+          questSummary: row.questSummary,
+          snapshotJson: row.snapshotJson,
+          updatedAt: row.updatedAt.getTime(),
+        });
+      })
+      .catch(() => {
+        // App saves are opportunistic and may finish after a browser/HMR teardown closes SQLite.
+      });
   }, []);
+
+  const refreshSnapshot = useCallback(
+    (nextWorld: World, options: { persist?: boolean } = {}) => {
+      const nextSnapshot = readSnapshot(nextWorld, exploredRef.current);
+      snapshotRef.current = nextSnapshot;
+      setSnapshot(nextSnapshot);
+      const audio = audioRef.current;
+      if (audio) setAudioDebug(audio.debugState());
+      if (options.persist) persistSave(nextSnapshot);
+    },
+    [persistSave],
+  );
 
   const loadMap = useCallback(
     (nextWorld: World, mapId: string, classId: string, spawnId?: string) => {
       inputRef.current = emptyInput();
+      setShopState(null);
       instantiateMap(nextWorld, mapId, { classId, spawnId });
       zoneEnteredRef.current.clear();
       audioRef.current?.setTheme(getMap(mapId).bgmTheme);
@@ -819,7 +1381,7 @@ export function App({
       step(nextWorld, 0);
       const intro = openMapIntro(nextWorld, mapId, mapIntroSeenRef.current);
       if (intro) setDialogue(intro);
-      refreshSnapshot(nextWorld);
+      refreshSnapshot(nextWorld, { persist: true });
     },
     [refreshSnapshot],
   );
@@ -827,17 +1389,24 @@ export function App({
   const startGame = useCallback(
     (options: StartOptions = {}) => {
       const classId = options.classId ?? selectedClass;
-      const mapId = options.mapId ?? "map:village";
+      const mapId = options.mapId ?? incremental.loop.startMap;
       const nextWorld = createGameWorld(19);
       autoStartQuests(nextWorld);
-      setWorld(nextWorld);
+      adoptWorld(nextWorld);
       setMode("playing");
       setPaused(false);
       setPanelOpen(false);
+      setShopState(null);
+      setUpgradeMessage("");
       void audioRef.current?.resumeFromGesture().then(() => {
         audioRef.current?.setTheme(getMap(mapId).bgmTheme);
         setAudioDebug(audioRef.current?.debugState() ?? audioDebug);
       });
+      if (options.incrementalProgress) {
+        // restore before spawning so rank effects (e.g. Knight's Vigor max HP)
+        // shape the new run's player
+        restoreIncrementalProgress(nextWorld, options.incrementalProgress, options.gold ?? 0);
+      }
       loadMap(nextWorld, mapId, classId, options.spawnId);
       const player = playerOf(nextWorld);
       if (player && options.playerX !== undefined && options.playerY !== undefined) {
@@ -854,13 +1423,20 @@ export function App({
           nextXp: currentLevel?.nextXp ?? 50,
         });
       }
-      refreshSnapshot(nextWorld);
+      if (player && options.gold !== undefined) {
+        player.set(PlayerGold, { value: options.gold });
+      }
+      if (player && options.inventory !== undefined) {
+        player.set(Inventory, { items: options.inventory });
+      }
+      refreshSnapshot(nextWorld, { persist: true });
     },
-    [audioDebug, loadMap, refreshSnapshot, selectedClass],
+    [adoptWorld, audioDebug, loadMap, refreshSnapshot, selectedClass],
   );
 
   const continueGame = useCallback(() => {
     if (!latestSave) return;
+    const saved = parseSavedSnapshot(latestSave.snapshotJson);
     startGame({
       classId: latestSave.classId,
       mapId: latestSave.mapId,
@@ -869,6 +1445,9 @@ export function App({
       level: latestSave.level,
       hp: latestSave.hp,
       maxHp: latestSave.maxHp,
+      gold: saved.gold,
+      incrementalProgress: saved.incrementalProgress,
+      inventory: saved.inventory,
     });
   }, [latestSave, startGame]);
 
@@ -876,20 +1455,46 @@ export function App({
     inputRef.current = emptyInput();
     setPaused(false);
     setPanelOpen(false);
+    setShopState(null);
   }, []);
 
   const togglePause = useCallback(() => {
     if (mode !== "playing") return;
     setPanelOpen(false);
+    setShopState(null);
     inputRef.current = emptyInput();
     setPaused((value) => !value);
   }, [mode]);
 
   const retireRun = useCallback(() => {
     setPanelOpen(false);
+    setShopState(null);
     setPaused(false);
     setMode("gameover");
   }, []);
+
+  const openUpgradeGraph = useCallback(() => {
+    const current = snapshotRef.current.incrementalProgress;
+    setSelectedUpgradeIndex(firstUpgradeableIndex(current));
+    setUpgradeMessage("");
+    setPanelOpen(false);
+    setPaused(false);
+    setMode("upgrade");
+  }, []);
+
+  const startNextRun = useCallback(() => {
+    const current = snapshotRef.current;
+    startGame({
+      classId: current.classId || "knight",
+      gold: current.incrementalProgress.coins,
+      inventory: current.inventory,
+      incrementalProgress: {
+        ...current.incrementalProgress,
+        currentRunCoinsEarned: 0,
+        currentRunRosesEarned: 0,
+      },
+    });
+  }, [startGame]);
 
   const clearOutbox = useCallback(
     (activeWorld: World) => {
@@ -916,22 +1521,96 @@ export function App({
       if (endGame) {
         setPanelOpen(false);
         setPaused(false);
-        setMode(endGame);
+        setMode(endGame === "victory" ? "results" : "gameover");
       }
-      refreshSnapshot(activeWorld);
+      refreshSnapshot(activeWorld, { persist: !!endGame });
     },
     [loadMap, refreshSnapshot, selectedClass],
   );
 
+  const updateShopFromResult = useCallback((result: ShopTransactionResult) => {
+    setShopState((current) =>
+      current
+        ? {
+            ...current,
+            message: result.ok ? `${result.message} ${result.gold} coins left.` : result.message,
+          }
+        : current,
+    );
+  }, []);
+
+  const selectedShopListing = useCallback(() => {
+    if (!shopState) return null;
+    const shop = getShop(shopState.shopId);
+    const index = Math.min(shopState.selectedIndex, shop.listings.length - 1);
+    const listing = shop.listings[index];
+    return listing ? { shopId: shop.id, listingId: listing.id } : null;
+  }, [shopState]);
+
+  const handleShopBuy = useCallback(() => {
+    if (!world) return;
+    const selected = selectedShopListing();
+    if (!selected) return;
+    const result = buyShopListing(world, selected.shopId, selected.listingId);
+    updateShopFromResult(result);
+    clearOutbox(world);
+    refreshSnapshot(world, { persist: true });
+  }, [clearOutbox, refreshSnapshot, selectedShopListing, updateShopFromResult, world]);
+
+  const handleShopSell = useCallback(() => {
+    if (!world) return;
+    const selected = selectedShopListing();
+    if (!selected) return;
+    const result = sellShopListing(world, selected.shopId, selected.listingId);
+    updateShopFromResult(result);
+    clearOutbox(world);
+    refreshSnapshot(world, { persist: true });
+  }, [clearOutbox, refreshSnapshot, selectedShopListing, updateShopFromResult, world]);
+
+  const moveShopSelection = useCallback((delta: number) => {
+    setShopState((current) => {
+      if (!current) return current;
+      const count = getShop(current.shopId).listings.length;
+      return {
+        ...current,
+        selectedIndex: (current.selectedIndex + delta + count) % count,
+        message: current.message,
+      };
+    });
+  }, []);
+
+  const moveUpgradeSelection = useCallback((delta: number) => {
+    setSelectedUpgradeIndex((current) => {
+      const count = RING_NODES.length;
+      return (current + delta + count) % count;
+    });
+  }, []);
+
+  const handleUpgradeBuy = useCallback((): UpgradePurchaseResult | null => {
+    if (!world) return null;
+    const node = RING_NODES[selectedUpgradeIndex];
+    if (!node) return null;
+    const result = purchaseUpgradeNode(world, node.id);
+    setUpgradeMessage(result.message);
+    if (result.ok) {
+      const progress = world.get(IncrementalProgress);
+      if (progress) setSelectedUpgradeIndex(firstUpgradeableIndex(progress));
+    }
+    refreshSnapshot(world, { persist: true });
+    return result;
+  }, [refreshSnapshot, selectedUpgradeIndex, world]);
+
   const advanceDialogue = useCallback(() => {
     if (!world || !dialogue) return;
     void audioRef.current?.resumeFromGesture();
+    const opensShop = dialogue.node.opensShop;
     const choice = dialogue.node.choices?.[0];
     if (choice) emitDialogueChoice(world, dialogue.node, choice.id);
     else emitDialogueSeen(world, dialogue.node);
     setDialogue(null);
     step(world, 0);
     clearOutbox(world);
+    if (opensShop) setShopState({ shopId: opensShop, selectedIndex: 0, message: "" });
   }, [clearOutbox, dialogue, world]);
 
   const pressA = useCallback(() => {
@@ -940,89 +1619,137 @@ export function App({
       setMode("title");
       return;
     }
-    if (mode === "title" || mode === "victory" || mode === "gameover") {
+    if (mode === "results") {
+      openUpgradeGraph();
+      return;
+    }
+    if (mode === "upgrade") {
+      handleUpgradeBuy();
+      return;
+    }
+    if (mode === "gameover") {
+      // death pays out: the next run keeps the banked wallet
+      startNextRun();
+      return;
+    }
+    if (mode === "title") {
       startGame();
       return;
     }
     if (!world) return;
     void audioRef.current?.resumeFromGesture();
+    if (shopState) {
+      handleShopBuy();
+      return;
+    }
     if (dialogue) {
       advanceDialogue();
       return;
     }
+    const propDialogue = nearestReadableProp(world);
     const npcDialogue = nearestDialogue(world);
-    if (npcDialogue) {
-      setDialogue(npcDialogue);
+    if (npcDialogue && (!propDialogue || npcDialogue.dist <= propDialogue.dist)) {
+      setDialogue(npcDialogue.dialogue);
+      return;
+    }
+    if (propDialogue) {
+      const outbox = world.get(Outbox);
+      if (outbox) {
+        if (propDialogue.interaction.sfx) outbox.sfx.push(propDialogue.interaction.sfx);
+        outbox.dialogue = {
+          bank: propDialogue.interaction.dialogueBank,
+          slot: propDialogue.interaction.dialogueSlot,
+        };
+      }
+      if (propDialogue.interaction.feedbackAnim) {
+        const currentPulse = propDialogue.entity.get(InspectionPulse);
+        const nextPulse = {
+          anim: propDialogue.interaction.feedbackAnim,
+          serial: (currentPulse?.serial ?? 0) + 1,
+        };
+        if (currentPulse) propDialogue.entity.set(InspectionPulse, nextPulse);
+        else propDialogue.entity.add(InspectionPulse(nextPulse));
+        const propId = propDialogue.entity.get(PropRef)?.propId ?? "";
+        setInspectionFeedback((current) => ({
+          pulses: current.pulses + 1,
+          lastProp: propId,
+          lastAnim: propDialogue.interaction.feedbackAnim,
+        }));
+      }
+      if (propDialogue.interaction.once) {
+        propDialogue.entity.set(Interactable, { ...propDialogue.interaction, used: true });
+      }
+      clearOutbox(world);
       return;
     }
     aimAtNearestEnemy(world);
     playerAttack(world);
     clearOutbox(world);
-  }, [advanceDialogue, clearOutbox, dialogue, mode, paused, startGame, world]);
+  }, [
+    advanceDialogue,
+    clearOutbox,
+    dialogue,
+    handleShopBuy,
+    handleUpgradeBuy,
+    mode,
+    openUpgradeGraph,
+    paused,
+    shopState,
+    startGame,
+    startNextRun,
+    world,
+  ]);
 
   useEffect(() => {
     if (mode !== "playing" || !world) return;
     const save = () => {
       const current = snapshotRef.current;
-      if (!current.mapId) return;
-      const row = {
-        id: 1,
-        classId: current.classId,
-        mapId: current.mapId,
-        playerX: Math.round(current.playerX),
-        playerY: Math.round(current.playerY),
-        level: current.level,
-        hp: Math.max(0, Math.ceil(current.hp)),
-        maxHp: current.maxHp,
-        questSummary: current.questLines[0] ?? "The road begins.",
-        snapshotJson: JSON.stringify({
-          classId: current.classId,
-          mapId: current.mapId,
-          playerX: current.playerX,
-          playerY: current.playerY,
-          questLines: current.questLines,
-        }),
-        updatedAt: new Date(),
-      };
-      void repositoryRef.current.upsertSlot(row).then(() => {
-        setLatestSave({
-          id: row.id,
-          classId: row.classId,
-          mapId: row.mapId,
-          playerX: row.playerX,
-          playerY: row.playerY,
-          level: row.level,
-          hp: row.hp,
-          maxHp: row.maxHp,
-          questSummary: row.questSummary,
-          updatedAt: row.updatedAt.getTime(),
-        });
-      });
+      persistSave(current);
     };
     save();
     const timer = window.setInterval(save, AUTO_SAVE_INTERVAL_MS);
     return () => window.clearInterval(timer);
-  }, [mode, world]);
+  }, [mode, persistSave, world]);
 
   const setB = useCallback(
     (pressed: boolean) => {
+      if (mode === "upgrade") {
+        if (pressed) setMode("results");
+        return;
+      }
       if (!world || mode !== "playing" || dialogue || paused) return;
       void audioRef.current?.resumeFromGesture();
+      if (shopState) {
+        if (pressed) handleShopSell();
+        return;
+      }
       playerAbility(world, pressed);
       clearOutbox(world);
     },
-    [clearOutbox, dialogue, mode, paused, world],
+    [clearOutbox, dialogue, handleShopSell, mode, paused, shopState, world],
   );
 
   const setDirection = useCallback(
     (dir: Direction, pressed: boolean) => {
+      if (mode === "upgrade") {
+        inputRef.current[dir] = false;
+        if (pressed && dir === "up") moveUpgradeSelection(-1);
+        if (pressed && dir === "down") moveUpgradeSelection(1);
+        return;
+      }
+      if (shopState) {
+        inputRef.current[dir] = false;
+        if (pressed && dir === "up") moveShopSelection(-1);
+        if (pressed && dir === "down") moveShopSelection(1);
+        return;
+      }
       if (paused && pressed) {
         inputRef.current[dir] = false;
         return;
       }
       inputRef.current[dir] = pressed;
     },
-    [paused],
+    [mode, moveShopSelection, moveUpgradeSelection, paused, shopState],
   );
 
   useEffect(() => {
@@ -1068,7 +1795,7 @@ export function App({
     const frame = (now: number) => {
       const dt = Math.min(engine.maxTimestep, (now - last) / 1000);
       last = now;
-      if (!dialogue && !paused) {
+      if (!dialogue && !paused && !shopState && mode === "playing") {
         acc += dt;
         while (acc >= SIM_DT) {
           applyInputToWorld(world, inputRef.current);
@@ -1085,7 +1812,7 @@ export function App({
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [clearOutbox, dialogue, mode, paused, refreshSnapshot, world]);
+  }, [clearOutbox, dialogue, mode, paused, refreshSnapshot, shopState, world]);
 
   const shellDataset = useMemo(
     () => ({
@@ -1096,23 +1823,46 @@ export function App({
       "data-player-y": snapshot.playerY.toFixed(1),
       "data-enemies": String(snapshot.enemies),
       "data-projectiles": String(snapshot.projectiles),
+      "data-fx-spawned": String(snapshot.fxSpawned),
+      "data-max-hp": String(snapshot.maxHp),
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
+      "data-gold": String(snapshot.incrementalProgress.coins),
+      "data-coins": String(snapshot.incrementalProgress.coins),
+      "data-roses": String(snapshot.incrementalProgress.roses),
+      "data-rescue-count": String(snapshot.incrementalProgress.rescueCount),
+      "data-purchased-upgrades": snapshot.incrementalProgress.purchasedUpgradeIds.join(","),
+      "data-unlocked-classes": snapshot.incrementalProgress.unlockedClassIds.join(","),
+      "data-unlocked-route-packs": snapshot.incrementalProgress.unlockedRoutePackIds.join(","),
+      "data-selected-upgrade":
+        RING_NODES[selectedUpgradeIndex]?.id ?? incremental.upgradeGraph.root,
+      "data-inventory": JSON.stringify(snapshot.inventory),
       "data-paused": String(paused),
       "data-muted": String(muted),
       "data-device-profile": deviceProfile,
+      "data-sfx-played": String(audioDebug.sfxPlayed),
+      "data-inspection-pulses": String(inspectionFeedback.pulses),
+      "data-last-inspection-prop": inspectionFeedback.lastProp,
+      "data-last-inspection-anim": inspectionFeedback.lastAnim,
     }),
     [
+      audioDebug.sfxPlayed,
       deviceProfile,
+      inspectionFeedback,
       mode,
       muted,
       paused,
       snapshot.classId,
       snapshot.enemies,
+      snapshot.fxSpawned,
       snapshot.hp,
+      snapshot.incrementalProgress,
+      snapshot.inventory,
       snapshot.mapId,
+      snapshot.maxHp,
       snapshot.playerX,
       snapshot.playerY,
       snapshot.projectiles,
+      selectedUpgradeIndex,
     ],
   );
 
@@ -1181,6 +1931,35 @@ export function App({
         </>
       )}
       {dialogue && <DialogueBox dialogue={dialogue} onAdvance={advanceDialogue} />}
+      {shopState && mode === "playing" && (
+        <ShopPanel
+          shopState={shopState}
+          snapshot={snapshot}
+          onBuy={handleShopBuy}
+          onSell={handleShopSell}
+          onClose={() => setShopState(null)}
+        />
+      )}
+      {mode === "results" && (
+        <ResultsPanel
+          snapshot={snapshot}
+          onOpenUpgrade={openUpgradeGraph}
+          onStartRun={startNextRun}
+        />
+      )}
+      {mode === "upgrade" && (
+        <UpgradeWebPanel
+          snapshot={snapshot}
+          selectedIndex={selectedUpgradeIndex}
+          message={upgradeMessage}
+          onSelect={(index) => {
+            setSelectedUpgradeIndex(index);
+            setUpgradeMessage("");
+          }}
+          onBuy={handleUpgradeBuy}
+          onBack={() => setMode("results")}
+        />
+      )}
       {paused && mode === "playing" && (
         <section className="pause-screen" data-testid="pause-screen">
           <div className="pause-panel" data-testid="pause-panel" ref={pausePanelRef}>
@@ -1196,18 +1975,24 @@ export function App({
           </div>
         </section>
       )}
-      {(mode === "victory" || mode === "gameover") && (
-        <section
-          className="end-screen"
-          data-testid={mode === "victory" ? "victory-screen" : "gameover-screen"}
-        >
+      {mode === "gameover" && (
+        <section className="end-screen" data-testid="gameover-screen">
           <div className="end-panel" data-testid="end-panel" ref={endPanelRef}>
-            <h1>{mode === "victory" ? "VICTORY" : "GAME OVER"}</h1>
+            <p className="manuscript-kicker">Chapter's End</p>
+            <h1>Carried Back to Hearthwake</h1>
             <p className="dialogue-line">
-              {mode === "victory" ? "The kingdom is saved." : "The old road claims another hero."}
+              The road kept your coins safe:{" "}
+              {snapshot.incrementalProgress.lastRun?.coinsEarned ??
+                snapshot.incrementalProgress.currentRunCoinsEarned}
+              C banked, {snapshot.incrementalProgress.coins}C in the purse. The tale turns its page.
             </p>
-            <button className="menu-button" type="button" onClick={() => startGame()}>
-              A NEW RUN
+            {nextVow(snapshot.incrementalProgress) && (
+              <p className="dialogue-line" data-testid="next-vow">
+                Next vow: {nextVow(snapshot.incrementalProgress)?.label}
+              </p>
+            )}
+            <button className="menu-button" type="button" onClick={startNextRun}>
+              A NEXT CHAPTER
             </button>
           </div>
         </section>

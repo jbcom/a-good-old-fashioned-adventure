@@ -10,6 +10,7 @@ import { updateCamera } from "./systems/camera";
 import { combatStep } from "./systems/combat";
 import { enemyAIStep } from "./systems/enemyAI";
 import { moveEntities } from "./systems/movement";
+import { npcAIStep } from "./systems/npcAI";
 import { Clock, CombatTimers, HitFlash } from "./traits";
 import { rngFor } from "./worldRng";
 
@@ -39,6 +40,7 @@ export function step(world: World, dt: number = SIM_DT): void {
   if (clock) world.set(Clock, { t: clock.t + dt, dt });
   tickTimers(world, dt);
   enemyAIStep(world, dt);
+  npcAIStep(world, dt);
   moveEntities(world, dt);
   combatStep(world, dt);
   for (const event of drainEvents(world)) reduceEvent(world, event);

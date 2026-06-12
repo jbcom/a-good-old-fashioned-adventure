@@ -13,12 +13,43 @@
     },
     "palette:ranger": { "S": "#2c6114", "s": "#142a07", "R": "#ffcd94", "r": "#a88f00" },
     "palette:wizard": { "S": "#00d2f7", "s": "#1a6fa8", "R": "#ffffff", "r": "#b2bec7" },
+    "palette:bard": { "S": "#7f4f2f", "s": "#3b2416", "R": "#f1d385", "r": "#b07a2c" },
+    "palette:sorcerer": { "S": "#5b211c", "s": "#24100d", "R": "#f1d385", "r": "#c04e32" },
     "palette:princess": {},
     "palette:woodcutter": { "S": "#946629", "s": "#4a2511", "R": "#6fe014", "r": "#2c6114" },
     "palette:keeper": { "S": "#cfa153", "s": "#946629", "R": "#87e0f2", "r": "#1a6fa8" },
+    "palette:threadseller": { "S": "#a86569", "s": "#5b2b2f", "R": "#f1d385", "r": "#b88958" },
+    "palette:road-cart-trader": { "S": "#6f4a2f", "s": "#2b1811", "R": "#d8a96a", "r": "#8c5634" },
     "palette:page": { "S": "#7f4f2f", "s": "#3b2416", "R": "#f1d385", "r": "#cfa153" },
     "palette:hermit": { "S": "#6f7f3f", "s": "#2f3a1d", "R": "#c9b36a", "r": "#7f6f36" },
+    "palette:roadward": { "S": "#5f6f38", "s": "#29331a", "R": "#87e0f2", "r": "#1a6fa8" },
+    "palette:oldwood-thorncutter": {
+      "S": "#4a5f2d",
+      "s": "#202d16",
+      "R": "#c9b36a",
+      "r": "#7f6f36"
+    },
     "palette:lost-page": { "S": "#9f5d57", "s": "#4f2a2a", "R": "#eed7a1", "r": "#b88958" },
+    "palette:fern-mender": { "S": "#4f7f45", "s": "#24391f", "R": "#f1d385", "r": "#7f6f36" },
+    "palette:desert-pilgrim": { "S": "#b88958", "s": "#5d3a26", "R": "#eed7a1", "r": "#8f7657" },
+    "palette:sunken-courier": { "S": "#8f7657", "s": "#4a3324", "R": "#87e0f2", "r": "#1a6fa8" },
+    "palette:approach-pilgrim": {
+      "S": "#6d604a",
+      "s": "#2b2722",
+      "R": "#c9b36a",
+      "r": "#8f7657"
+    },
+    "palette:market-mender": { "S": "#8a2f2f", "s": "#421616", "R": "#eed7a1", "r": "#b88958" },
+    "palette:bellwarden": { "S": "#6d604a", "s": "#3b2416", "R": "#c9b36a", "r": "#7f6f36" },
+    "palette:baker": { "S": "#b88958", "s": "#5d3a26", "R": "#eed7a1", "r": "#cfa153" },
+    "palette:stablehand": { "S": "#7f4f2f", "s": "#3b2416", "R": "#c9b36a", "r": "#6d604a" },
+    "palette:tavern-keeper": {
+      "S": "#7f4f2f",
+      "s": "#3b2416",
+      "R": "#c9b36a",
+      "r": "#7f6f36"
+    },
+    "palette:scribe": { "S": "#5d5140", "s": "#2b2722", "R": "#f1d385", "r": "#cfa153" },
     "palette:orc": {
       "X": "#141013",
       "S": "#8a2323",

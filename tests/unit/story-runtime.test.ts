@@ -9,7 +9,15 @@ import { pushEvent } from "../../src/sim/events";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import { autoStartQuests, questLogLines, startQuest } from "../../src/sim/quests";
 import { step } from "../../src/sim/tick";
-import { FlagState, Health, IsPickup, MapRuntime, Outbox, QuestLog } from "../../src/sim/traits";
+import {
+  FlagState,
+  Health,
+  IncrementalProgress,
+  IsPickup,
+  MapRuntime,
+  Outbox,
+  QuestLog,
+} from "../../src/sim/traits";
 
 function bootedWorld() {
   const world = createGameWorld(11);
@@ -65,12 +73,22 @@ describe("the full original journey, reduced through the quest engine", () => {
     const flags = () => world.get(FlagState)?.values ?? {};
 
     // Act 1: accept the woodcutter's request
-    expect(questLogLines(world)).toEqual(["Find & talk to the Woodcutter"]);
+    expect(questLogLines(world)).toEqual(
+      expect.arrayContaining([
+        "Find & talk to the Woodcutter",
+        "Buy Oswin's oat bundle from the stable counter.",
+      ]),
+    );
     const request = resolveDialogue(world, "dlgbank:woodcutter");
     emitDialogueChoice(world, request.node, "accepted");
     step(world);
     expect(log?.active["quest:broken-bridge"].stage).toBe("cull-orcs");
-    expect(questLogLines(world)).toEqual(["Defeat Forest Orcs (0/4)"]);
+    expect(questLogLines(world)).toEqual(
+      expect.arrayContaining([
+        "Defeat Forest Orcs (0/4)",
+        "Buy Oswin's oat bundle from the stable counter.",
+      ]),
+    );
 
     // Cull the four forest-family enemies
     for (const archetypeId of ["forest-orc", "forest-orc", "orc-scout", "forest-shaman"]) {
@@ -131,6 +149,13 @@ describe("the full original journey, reduced through the quest engine", () => {
     expect(log?.completed).toContain("quest:rescue-amber");
     expect(world.get(Outbox)?.endGame).toBe("victory");
     expect(world.get(Outbox)?.sfx).toContain("victory");
+    expect(world.get(IncrementalProgress)).toMatchObject({
+      // 3 rescue roses plus the desert wyrm's first clean-clear rose
+      roses: 4,
+      rescueCount: 1,
+      lastRun: { result: "victory", rescuedPrincess: true },
+    });
+    expect(world.get(IncrementalProgress)?.defeatedMinibossIds).toContain("desert-wyrm");
   });
 
   it("counters ignore non-matching archetypes", () => {

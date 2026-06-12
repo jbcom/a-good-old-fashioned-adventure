@@ -16,8 +16,10 @@
           "name": { "type": "string" },
           "pickup": {
             "type": "object",
+            "required": ["sprite"],
             "properties": {
               "color": { "type": "string" },
+              "sprite": { "type": "string", "pattern": "^sprite:[a-z0-9-]+$" },
               "anim": { "type": "string", "pattern": "^anim:[a-z0-9-]+$" },
               "sfx": { "type": "string" }
             }

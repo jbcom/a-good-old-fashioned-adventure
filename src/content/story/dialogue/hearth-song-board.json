@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:hearth-song-board",
+  "kind": "dialogue-bank",
+  "speaker": "char:hearth-song-board",
+  "slots": [{ "id": "verse", "node": "verse" }, { "default": true, "node": "verse" }],
+  "nodes": {
+    "verse": {
+      "lines": [
+        "When hearth is gold and morning green, ask Merrin how the road is seen.",
+        "Ask Merrin before you leave; some songs are maps wearing manners."
+      ],
+      "emits": "dlg:hearth-song-board.verse"
+    }
+  }
+}

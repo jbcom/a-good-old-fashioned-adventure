@@ -20,8 +20,10 @@ export interface DrawOp {
 export interface TileDef {
   id: string;
   kind: "tile";
+  variantOf?: string;
   solid: boolean;
-  layers: DrawOp[];
+  layers?: DrawOp[];
+  rows?: string[];
   koota: { traits: string[] };
 }
 
@@ -36,7 +38,14 @@ export interface PropDef {
   grid: { w: number; h: number };
   anchor: { x: number; y: number };
   solid: boolean;
-  interaction?: { verb: string; method?: string; sfx?: string; once?: boolean };
+  interaction?: {
+    verb: string;
+    method?: string;
+    sfx?: string;
+    once?: boolean;
+    feedback?: { anim: string };
+    dialogue?: { bank: string; slot: string };
+  };
   states: Record<string, PropState>;
   recolorChannels?: string[];
   defaultPalette: string;
@@ -87,14 +96,25 @@ export interface GenOp {
   note?: string;
 }
 
+export interface TerrainVariantRule {
+  baseTile: string;
+  variants: string[];
+  chunk: { w: number; h: number };
+  seed: number;
+  note?: string;
+}
+
 export interface MapEntitySpawn {
   ref?: string;
   enemy?: string;
   spawnRule?: string;
+  requiresRoutePack?: string;
+  withoutRoutePack?: string;
   x?: number;
   y?: number;
   tileAt?: [number, number];
   dir?: 1 | -1;
+  patrol?: { points: { x: number; y: number }[]; speed?: number };
   contents?: string;
   positions?: { x: number; y: number }[];
   note?: string;
@@ -110,9 +130,18 @@ export interface MapTrigger {
   zone?: { x0: number; y0: number; x1: number; y1: number };
   tiles?: [number, number][];
   requiresFlag?: string;
+  requiresRoutePack?: string;
   solidUnlessFlag?: string;
   effects?: Record<string, unknown>[];
   indicator?: { drawOps: DrawOp[]; atTile: [number, number] };
+}
+
+export interface MapCompositionWindow {
+  label: string;
+  zone: { x0: number; y0: number; x1: number; y1: number };
+  majorAnchors: string[];
+  minorProps: string[];
+  openReason?: string;
 }
 
 export interface MapDef {
@@ -123,9 +152,11 @@ export interface MapDef {
   baseTile: string;
   bgmTheme: string;
   generation: GenOp[];
+  terrainVariants?: TerrainVariantRule[];
   playerSpawn: { x: number; y: number };
   spawns: Record<string, { x: number; y: number }>;
   entities: MapEntitySpawn[];
+  composition?: { routeWindows?: MapCompositionWindow[] };
   triggers?: MapTrigger[];
   onEnter?: { dialogue: string; slot: string; once?: boolean }[];
 }
@@ -142,9 +173,30 @@ export interface CharacterDef {
 
 export interface ItemDef {
   name: string;
-  pickup?: { color?: string; anim?: string; sfx?: string };
+  pickup?: { sprite: string; color?: string; anim?: string; sfx?: string };
   onPickup: Record<string, unknown>[];
   floater?: { text: string; color: string };
+}
+
+export interface ShopListingDef {
+  id: string;
+  item: string;
+  label: string;
+  description: string;
+  buyPrice: number;
+  sellPrice: number;
+}
+
+export interface ShopDef {
+  id: string;
+  kind: "shop";
+  name: string;
+  keeper: string;
+  currency: string;
+  buySfx?: string;
+  sellSfx?: string;
+  denySfx?: string;
+  listings: ShopListingDef[];
 }
 
 export interface FlagDef {
@@ -163,6 +215,7 @@ export interface QuestCondition {
   counterDone?: string;
   enemyDefeated?: string;
   itemAcquired?: string;
+  shopTransaction?: { verb: "buy" | "sell"; shop?: string; listing?: string; item?: string };
   enterZone?: { map: string; trigger: string };
   flag?: string;
 }
@@ -208,6 +261,7 @@ export interface DialogueSlot {
 
 export interface DialogueNode {
   lines: string[];
+  opensShop?: string;
   choices?: { id: string; text: string; goto?: string }[];
   emits: string;
 }

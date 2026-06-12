@@ -5,6 +5,8 @@
  * (tests/unit/content-integrity.test.ts); lookups here fail loud so a
  * dangling ID can never limp into gameplay.
  */
+
+import { parsePixelSheet } from "./pixelSheet";
 import type {
   AnimationDef,
   CharacterDef,
@@ -14,53 +16,99 @@ import type {
   MapDef,
   PropDef,
   QuestDef,
+  ShopDef,
   SpriteDef,
   TileDef,
 } from "./types";
 
-function byId<T extends { id: string }>(modules: Record<string, T>): Map<string, T> {
+function byId<T extends { id: string }>(defs: Iterable<T>): Map<string, T> {
   const map = new Map<string, T>();
-  for (const def of Object.values(modules)) map.set(def.id, def);
+  for (const def of defs) {
+    if (map.has(def.id)) throw new Error(`duplicate content id: ${def.id}`);
+    map.set(def.id, def);
+  }
   return map;
 }
 
 const glob = <T>(modules: Record<string, T>) => modules;
 
-export const tiles = byId(
-  glob<TileDef>(import.meta.glob("/src/content/tiles/*.json", { eager: true, import: "default" })),
+const tileModules = glob<TileDef>(
+  import.meta.glob("/src/content/tiles/*.json", { eager: true, import: "default" }),
 );
 
-export const props = byId(
-  glob<PropDef>(import.meta.glob("/src/content/props/*.json", { eager: true, import: "default" })),
+const pixelSheetModules = import.meta.glob<string>("/src/content/pixelart/**/*.pix", {
+  eager: true,
+  query: "?raw",
+  import: "default",
+});
+
+const pixelSheetTiles = Object.entries(pixelSheetModules).flatMap(
+  ([path, source]) => parsePixelSheet(source, path).tiles,
+);
+const pixelSheetProps = Object.entries(pixelSheetModules).flatMap(
+  ([path, source]) => parsePixelSheet(source, path).props,
+);
+const pixelSheetSprites = Object.entries(pixelSheetModules).flatMap(
+  ([path, source]) => parsePixelSheet(source, path).sprites,
 );
 
-export const sprites = byId(
-  glob<SpriteDef>(
-    import.meta.glob("/src/content/sprites/*.json", { eager: true, import: "default" }),
+export const tiles = byId([...Object.values(tileModules), ...pixelSheetTiles]);
+
+export const props = byId([
+  ...Object.values(
+    glob<PropDef>(
+      import.meta.glob("/src/content/props/*.json", { eager: true, import: "default" }),
+    ),
   ),
-);
+  ...pixelSheetProps,
+]);
+
+export const sprites = byId([
+  ...Object.values(
+    glob<SpriteDef>(
+      import.meta.glob("/src/content/sprites/*.json", { eager: true, import: "default" }),
+    ),
+  ),
+  ...pixelSheetSprites,
+]);
 
 export const animations = byId(
-  glob<AnimationDef>(
-    import.meta.glob("/src/content/animations/*.json", { eager: true, import: "default" }),
+  Object.values(
+    glob<AnimationDef>(
+      import.meta.glob("/src/content/animations/*.json", { eager: true, import: "default" }),
+    ),
   ),
 );
 
 export const maps = byId(
-  glob<MapDef>(
-    import.meta.glob("/src/content/world/maps/*.json", { eager: true, import: "default" }),
+  Object.values(
+    glob<MapDef>(
+      import.meta.glob("/src/content/world/maps/*.json", { eager: true, import: "default" }),
+    ),
   ),
 );
 
 export const quests = byId(
-  glob<QuestDef>(
-    import.meta.glob("/src/content/story/quests/*.json", { eager: true, import: "default" }),
+  Object.values(
+    glob<QuestDef>(
+      import.meta.glob("/src/content/story/quests/*.json", { eager: true, import: "default" }),
+    ),
   ),
 );
 
 export const dialogueBanks = byId(
-  glob<DialogueBankDef>(
-    import.meta.glob("/src/content/story/dialogue/*.json", { eager: true, import: "default" }),
+  Object.values(
+    glob<DialogueBankDef>(
+      import.meta.glob("/src/content/story/dialogue/*.json", { eager: true, import: "default" }),
+    ),
+  ),
+);
+
+export const shops = byId(
+  Object.values(
+    glob<ShopDef>(
+      import.meta.glob("/src/content/shops/*.json", { eager: true, import: "default" }),
+    ),
   ),
 );
 
@@ -91,6 +139,7 @@ export const getAnimation = (id: string) => lookup(animations, id, "animation");
 export const getMap = (id: string) => lookup(maps, id, "map");
 export const getQuest = (id: string) => lookup(quests, id, "quest");
 export const getDialogueBank = (id: string) => lookup(dialogueBanks, id, "dialogue bank");
+export const getShop = (id: string) => lookup(shops, id, "shop");
 export const getCharacter = (id: string) => lookup(characters, id, "character");
 export const getItem = (id: string) => lookup(items, id, "item");
 export const getFlag = (id: string) => lookup(flags, id, "flag");

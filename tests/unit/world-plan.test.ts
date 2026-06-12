@@ -9,10 +9,16 @@ const plannedMaps = [
   "map:village-house",
   "map:village-shop",
   "map:village-tavern",
+  "map:village-stable",
   "map:oldwood-forest",
   "map:deep-forest",
   "map:sunken-road",
+  "map:desert-ruins",
   "map:castle-approach",
+  "map:castle-yard",
+  "map:castle-hall",
+  "map:castle-library",
+  "map:castle-armory",
   "map:castle-dungeon",
 ];
 
@@ -23,12 +29,21 @@ const exteriorRoad = [
   ["map:sunken-road", "map:castle-approach"],
 ] as const;
 
+const castleInteriorRoad = [
+  ["map:castle-approach", "map:castle-yard"],
+  ["map:castle-yard", "map:castle-hall"],
+  ["map:castle-hall", "map:castle-library"],
+  ["map:castle-hall", "map:castle-armory"],
+  ["map:castle-hall", "map:castle-dungeon"],
+] as const;
+
 interface PortalTrigger {
   id: string;
   kind?: string;
   label?: string;
   toMap?: string;
   toSpawn?: string;
+  requiresFlag?: string;
   zone?: { x0: number; y0: number; x1: number; y1: number };
 }
 
@@ -75,8 +90,28 @@ describe("S6 world plan content", () => {
     expect(worldDoc).toContain("Fifth S6 Slice");
     expect(worldDoc).toContain("New Game starts in `map:village`");
     expect(worldDoc).toContain("map:sunken-road");
-    expect(worldDoc).toContain("Castle Approach owns the key-gated dungeon portal");
+    expect(worldDoc).toContain("Castle Approach owns the key-gated castle entry portal");
     expect(worldDoc).toContain("keyboard A/B and directional input only");
+  });
+
+  it("documents the castle-interior route slice before content implementation", () => {
+    const worldDoc = readFileSync(resolve(process.cwd(), "docs/WORLD.md"), "utf8");
+    expect(worldDoc).toContain("Sixth S6 Slice");
+    expect(worldDoc).toContain("map:castle-yard");
+    expect(worldDoc).toContain("map:castle-hall");
+    expect(worldDoc).toContain("map:castle-library");
+    expect(worldDoc).toContain("map:castle-armory");
+    expect(worldDoc).toContain("quest:castle-letters");
+    expect(worldDoc).toContain("real directional input and A-button dialogue");
+  });
+
+  it("documents the desert-ruins landmark loop before content implementation", () => {
+    const worldDoc = readFileSync(resolve(process.cwd(), "docs/WORLD.md"), "utf8");
+    expect(worldDoc).toContain("Seventh S6 Slice");
+    expect(worldDoc).toContain("map:desert-ruins");
+    expect(worldDoc).toContain("desert pilgrim");
+    expect(worldDoc).toContain("mural trigger");
+    expect(worldDoc).toContain("public directional input and A-button dialogue");
   });
 
   it("seeds the first village interior map set", () => {
@@ -97,7 +132,12 @@ describe("S6 world plan content", () => {
     expect(themes.interior.length).toBeGreaterThan(8);
     expect(themes["sunken-road"].length).toBeGreaterThan(8);
     expect(map("map:village").bgmTheme).toBe("village");
-    for (const id of ["map:village-house", "map:village-shop", "map:village-tavern"]) {
+    for (const id of [
+      "map:village-house",
+      "map:village-shop",
+      "map:village-tavern",
+      "map:village-stable",
+    ]) {
       expect(map(id).bgmTheme, id).toBe("interior");
     }
   });
@@ -109,6 +149,7 @@ describe("S6 world plan content", () => {
     expect(villagePortals.map((portal) => portal.toMap).sort()).toEqual([
       "map:village-house",
       "map:village-shop",
+      "map:village-stable",
       "map:village-tavern",
     ]);
 
@@ -149,13 +190,44 @@ describe("S6 world plan content", () => {
     }
   });
 
-  it("connects Castle Approach to the dungeon through a key-gated portal", () => {
+  it("connects Sunken Road to the optional Desert Ruins loop", () => {
+    const outbound = portals("map:sunken-road").find(
+      (portal) => portal.toMap === "map:desert-ruins",
+    );
+    expect(outbound?.id).toBe("trigger:enter-ruins");
+    expect(outbound?.toSpawn).toBe("entry");
+    expect(map("map:desert-ruins").spawns?.entry).toBeTruthy();
+
+    const inbound = portals("map:desert-ruins").find(
+      (portal) => portal.toMap === "map:sunken-road",
+    );
+    expect(inbound?.toSpawn).toBe("from-ruins");
+    expect(map("map:sunken-road").spawns?.["from-ruins"]).toBeTruthy();
+  });
+
+  it("connects Castle Approach to the castle yard through a key-gated portal", () => {
     const gate = portals("map:castle-approach").find(
-      (portal) => portal.toMap === "map:castle-dungeon",
+      (portal) => portal.toMap === "map:castle-yard",
     );
     expect(gate?.id).toBe("trigger:castle-gate-entry");
     expect(gate?.toSpawn).toBe("entry");
-    expect(map("map:castle-dungeon").spawns?.[gate?.toSpawn as string]).toBeTruthy();
+    expect(map("map:castle-yard").spawns?.[gate?.toSpawn as string]).toBeTruthy();
+    expect(gate?.requiresFlag).toBe("flag:has-dungeon-key");
+  });
+
+  it("connects the authored castle interiors through reversible portal triggers", () => {
+    for (const [from, to] of castleInteriorRoad) {
+      const outbound = portals(from).find((portal) => portal.toMap === to);
+      expect(outbound, `${from} should lead to ${to}`).toBeTruthy();
+      expect(outbound?.label, `${from} -> ${to}`).toBeTruthy();
+      expect(outbound?.toSpawn, `${from} -> ${to}`).toBeTruthy();
+      expect(map(to).spawns?.[outbound?.toSpawn as string], `${to} named spawn`).toBeTruthy();
+
+      if (to === "map:castle-dungeon") continue;
+      const inbound = portals(to).find((portal) => portal.toMap === from);
+      expect(inbound, `${to} should return to ${from}`).toBeTruthy();
+      expect(map(from).spawns?.[inbound?.toSpawn as string], `${from} return spawn`).toBeTruthy();
+    }
   });
 
   it("keeps return spawns outside the outbound village portal zones", () => {

@@ -2,9 +2,29 @@
   "$schema": "../../../schemas/flags.schema.json",
   "kind": "flags",
   "flags": {
+    "flag:approach-pilgrim-warned": {
+      "default": false,
+      "description": "The player has heard Aveline Dustcoat's Castle Approach warning."
+    },
     "flag:bridge-fixed": {
       "default": false,
       "description": "Woodcutter has repaired the river bridge at overworld tile [32,28]."
+    },
+    "flag:castle-armory-seen": {
+      "default": false,
+      "description": "The player has inspected the old armory standard that names the true dungeon seal."
+    },
+    "flag:castle-letters-cleared": {
+      "default": false,
+      "description": "Castle Scribe Elowen has confirmed the library and armory signs point to the dungeon stair."
+    },
+    "flag:castle-library-read": {
+      "default": false,
+      "description": "The player has read the castle library archive page about the dungeon seal."
+    },
+    "flag:fern-mender-greeted": {
+      "default": false,
+      "description": "Linnet Fernwise has taught the player why the Deep Forest lower track keeps fern-lamps lit."
     },
     "flag:has-dungeon-key": {
       "default": false,
@@ -18,6 +38,34 @@
       "default": false,
       "description": "The Oldwood Hermit's road oath has been carried past the first forest raiders."
     },
+    "flag:oldwood-roadward-mark": {
+      "default": false,
+      "description": "The Oldwood roadward has tied Oswin's blue oat-string into the first forest bend."
+    },
+    "flag:oldwood-thorncutter-greeted": {
+      "default": false,
+      "description": "The player has thanked Hester Briarhook for keeping Oldwood's upper hazel arch trimmed."
+    },
+    "flag:oldwood-lantern-kept": {
+      "default": false,
+      "description": "The player has rung Caddoc Wick's road bell at Oldwood's last lantern."
+    },
+    "flag:sunken-road-wreck-picked": {
+      "default": false,
+      "description": "The player has helped Petch Marrow lash the salvage sled at the sandwyrm wreck."
+    },
+    "flag:oldwood-waystone-read": {
+      "default": false,
+      "description": "The player has read the mossy waystone at the first Oldwood bend."
+    },
+    "flag:ruin-mural-read": {
+      "default": false,
+      "description": "The player has read Pilgrim Safra's Sunken Road mural inside the desert ruins."
+    },
+    "flag:sunken-courier-warned": {
+      "default": false,
+      "description": "The player has accepted Celia Knotwell's warning from the shaded Sunken Road layby."
+    },
     "flag:lost-page-guided": {
       "default": false,
       "description": "Lost Page Rowan has been guided from the Deep Forest oak back toward the old road."
@@ -25,6 +73,22 @@
     "flag:shop-sample-claimed": {
       "default": false,
       "description": "Hearthwake shopkeeper has already given the player the one-time travel cake sample."
+    },
+    "flag:stable-oats-bought": {
+      "default": false,
+      "description": "The player has bought Oswin's oat bundle, giving Hearthwake's stable service a later story echo."
+    },
+    "flag:sunken-cart-read": {
+      "default": false,
+      "description": "The player has read a splintered Sunken Road cart ledger."
+    },
+    "flag:tavern-song-learned": {
+      "default": false,
+      "description": "Merrin has explained the hearth-song board's errand verse to the player."
+    },
+    "flag:village-letter-basket-read": {
+      "default": false,
+      "description": "The player has read the doorstep letter-basket note beside Hearthwake's shop road."
     }
   }
 }

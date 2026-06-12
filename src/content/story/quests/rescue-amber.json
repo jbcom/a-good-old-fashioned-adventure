@@ -20,7 +20,11 @@
         {
           "when": { "dialogueEvent": "dlg:princess-amber.rescued:seen" },
           "to": "done",
-          "effects": [{ "sfx": "victory" }, { "endGame": "victory" }]
+          "effects": [
+            { "grantRunReward": "princessRescued" },
+            { "sfx": "victory" },
+            { "endGame": "victory" }
+          ]
         }
       ]
     },

@@ -60,6 +60,15 @@ describe("save persistence architecture", () => {
 
   it("can upsert and read save metadata through the repository contract", async () => {
     const repository = new MemorySaveRepository();
+    const snapshotJson = JSON.stringify({
+      coins: 15,
+      gold: 15,
+      roses: 3,
+      rescueCount: 1,
+      purchasedUpgradeIds: ["upgrade:first-vow"],
+      unlockedClassIds: ["knight"],
+      unlockedRoutePackIds: ["oldwood"],
+    });
     await repository.upsertSlot({
       id: 1,
       classId: "wizard",
@@ -70,7 +79,7 @@ describe("save persistence architecture", () => {
       hp: 18,
       maxHp: 24,
       questSummary: "Cross the bridge",
-      snapshotJson: "{}",
+      snapshotJson,
       updatedAt: new Date("2026-06-11T02:30:00Z"),
     });
     await repository.recordEvent({
@@ -85,6 +94,7 @@ describe("save persistence architecture", () => {
       playerX: 128,
       playerY: 256,
       level: 2,
+      snapshotJson,
     });
   });
 
@@ -95,6 +105,16 @@ describe("save persistence architecture", () => {
     );
     expect(source).toContain("isExistingConnectionError");
     expect(source).toContain("if (!isExistingConnectionError(error)) throw error");
+  });
+
+  it("serializes SQLite writes so immediate saves cannot overlap web transactions", () => {
+    const source = readFileSync(
+      resolve(process.cwd(), "src/persistence/saveRepository.ts"),
+      "utf8",
+    );
+    expect(source).toContain("private writeQueue: Promise<void>");
+    expect(source).toContain("private enqueueWrite");
+    expect(source).toContain("await this.writeQueue");
   });
 });
 

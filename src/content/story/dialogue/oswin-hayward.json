@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:oswin-hayward",
+  "kind": "dialogue-bank",
+  "speaker": "char:oswin-hayward",
+  "slots": [{ "default": true, "node": "morning-stable" }],
+  "nodes": {
+    "morning-stable": {
+      "lines": [
+        "Oswin Hayward keeps the saddle-bells wrapped in blue wool until a traveller has earned their noise.",
+        "The oat-bin is full, the tack-rack is mended, and the east road has been brushed from the hooves. That is as fine a beginning as any old tale gets."
+      ],
+      "opensShop": "shop:oswin-stable-counter",
+      "emits": "dlg:oswin-hayward.morning-stable"
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:castle-yard",
+  "kind": "map",
+  "name": "Castle Yard",
+  "size": { "cols": 48, "rows": 34 },
+  "baseTile": "tile:grass",
+  "bgmTheme": "castle-approach",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "region",
+      "tile": "tile:castle-road",
+      "x0": 5,
+      "x1": 43,
+      "y0": 13,
+      "y1": 20,
+      "note": "worn yard paving between gate and hall"
+    },
+    { "op": "row-span", "tile": "tile:stone-floor", "y": 16, "x0": 1, "x1": 46 },
+    { "op": "row-span", "tile": "tile:stone-floor", "y": 17, "x0": 1, "x1": 46 },
+    { "op": "row-span", "tile": "tile:stone-floor", "y": 18, "x0": 1, "x1": 46 },
+    {
+      "op": "region",
+      "tile": "tile:stone-wall",
+      "x0": 37,
+      "x1": 45,
+      "y0": 6,
+      "y1": 9,
+      "note": "hall silhouette above the yard"
+    }
+  ],
+  "playerSpawn": { "x": 96, "y": 272 },
+  "spawns": {
+    "default": { "x": 96, "y": 272 },
+    "entry": { "x": 96, "y": 272 },
+    "from-hall": { "x": 696, "y": 272 }
+  },
+  "entities": [
+    { "ref": "prop:castle-banner", "x": 236, "y": 212, "note": "weathered king's banner" },
+    { "ref": "prop:castle-banner", "x": 548, "y": 212, "note": "half-furled queen's banner" },
+    { "ref": "prop:castle-lantern", "x": 320, "y": 236, "note": "yard lantern" },
+    { "ref": "prop:castle-lantern", "x": 612, "y": 236, "note": "hall threshold lantern" },
+    { "ref": "prop:barrel", "x": 180, "y": 322, "note": "rain barrel by the gate" },
+    { "ref": "prop:barrel", "x": 660, "y": 324, "note": "supply barrel near the hall" },
+    { "enemy": "gate-sentry", "x": 560, "y": 430 }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:west-gate",
+      "kind": "portal",
+      "label": "Gate back to Castle Approach",
+      "toMap": "map:castle-approach",
+      "toSpawn": "from-yard",
+      "sfx": "interact",
+      "zone": { "x0": 0, "y0": 244, "x1": 28, "y1": 304 }
+    },
+    {
+      "id": "trigger:hall-entry",
+      "kind": "portal",
+      "label": "Great Hall Doors",
+      "toMap": "map:castle-hall",
+      "toSpawn": "entry",
+      "sfx": "interact",
+      "zone": { "x0": 726, "y0": 244, "x1": 768, "y1": 304 }
+    }
+  ]
+}

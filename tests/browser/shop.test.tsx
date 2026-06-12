@@ -36,7 +36,7 @@ function mountApp(repository: MemorySaveRepository) {
   );
 }
 
-it("talks to the shopkeeper through public movement and A-button input", async () => {
+it("buys and sells at Brindle's counter through public movement and A/B input", async () => {
   const repository = new MemorySaveRepository();
   await repository.upsertSlot({
     id: 1,
@@ -58,9 +58,38 @@ it("talks to the shopkeeper through public movement and A-button input", async (
   await governor.click("continue-button");
   await expect.poll(() => governor.perceive().mapName).toBe("Hearthwake Shop");
 
-  await governor.reachPoint(192, 160, { tolerance: 20 });
+  await governor.reachPoint(192, 148, { tolerance: 10, maxSteps: 60 });
   await governor.press("a");
 
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keeper Brindle");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("travel cake");
+
+  await governor.press("a");
+  await expect.poll(() => governor.perceive().diagnostics?.hp).toBe(75);
+
+  await governor.press("a");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Prices");
+  await governor.press("a");
+
+  await expect.element(page.getByTestId("shop-panel")).toBeVisible();
+  await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("Brindle's Counter");
+  await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("A Buy");
+  await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("B Sell");
+
+  await governor.hold("down", 80);
+  await expect
+    .element(page.getByTestId("shop-row-mending-plaster"))
+    .toHaveAttribute("aria-selected", "true");
+  await governor.hold("up", 80);
+  await expect
+    .element(page.getByTestId("shop-row-travel-cake"))
+    .toHaveAttribute("aria-selected", "true");
+
+  await governor.press("a");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 6");
+  await expect.element(page.getByTestId("shop-inventory-item:travel-cake")).toHaveTextContent("x1");
+
+  await governor.press("b");
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 9");
+  await expect.element(page.getByTestId("shop-inventory-item:travel-cake")).toHaveTextContent("x0");
 });

@@ -45,6 +45,15 @@ perceive again. More advanced route planning can add action effects and
 map/minimap inference without changing the central rule: the governor is a
 player, not a backdoor.
 
+The expanded governor keeps the planner explicit. A test may declare an
+`AdventurePlan` with named goals such as "enter the tavern" and "talk to the
+keeper of song"; each step supplies one or more public actions. The runner
+perceives before every step, skips already-satisfied goals, chooses the cheapest
+available action, and records the public state history on failure. This is
+still deliberately modest GOAP: it is enough to prove that content-authored
+affordances can be reached and used without private sim mutation, while leaving
+enemy/NPC intelligence inside Yuka-backed runtime systems.
+
 For close-range NPC interactions, browser specs should prefer coordinate
 steering through `reachPoint` over fixed-duration holds. The helper reads the
 shell coordinates to decide which directional button to hold, but it still
@@ -63,4 +72,25 @@ This makes the playthrough closer to an AI-vs-AI exercise:
 
 Every expansion slice should add at least one governor capability or goal that
 matches the new player journey depth: interiors, exterior roads, combat
-encounters, minimap use, quest routing, shops, and final victory.
+encounters, minimap use, quest routing, shops, princess rescue, results, upgrade
+purchase, and second-run proof.
+
+## Incremental Rescue Acceptance
+
+For S9, the long journey governor needs to prove the dopamine loop rather than
+only proving a linear campaign endpoint:
+
+1. Start from the landing page and choose the knight with public controls.
+2. Complete a south-to-north rescue route with A/B/directional input.
+3. Defeat the dragon guardian through normal combat controls.
+4. Rescue the princess and observe the results panel with coins and roses.
+5. Enter the upgrade graph, buy a connected node with A, and leave with B.
+6. Start the next run and observe the unlocked route, class, enemy, or map
+   mutation through player-facing state.
+
+The governor may use shell diagnostics for route steering while the minimap is
+still coarse, but every accepted milestone must be visible to a player.
+
+Current status: S9.3 proves steps 4 and 5 on the existing authored route. S9.4
+must move the runtime route itself to the compact south-to-north rescue slice.
+S9.5 must prove the second-run mutation after a purchased node.

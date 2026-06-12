@@ -49,6 +49,9 @@ it("opens on an errant storybook landing page before class select", async () => 
   expect(landingPath).toBeTruthy();
   await userEvent.click(page.getByTestId("new-game-button"));
   await expect.element(page.getByTestId("title-screen")).toBeVisible();
+  await expect.element(page.getByTestId("title-screen")).toHaveTextContent("upgrade graph");
+  await expect.element(page.getByTestId("class-knight")).toBeVisible();
+  await expect.element(page.getByTestId("class-ranger")).not.toBeInTheDocument();
   const titlePath = await page.screenshot({ path: "title-storybook.png" });
   expect(titlePath).toBeTruthy();
 });

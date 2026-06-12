@@ -1,0 +1,41 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:shop-shelf",
+  "kind": "prop",
+  "grid": { "w": 24, "h": 24 },
+  "anchor": { "x": 12, "y": 24 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "........................",
+        "...XXXXXXXXXXXXXXXXXX...",
+        "..XbbbbbbbbbbbbbbbbbbX..",
+        "..XbGBDBGBDBGBDBGBDBbX..",
+        "..XbDBGBDBGBDBGBDBGBbX..",
+        "..XbbbbbbbbbbbbbbbbbbX..",
+        "..XCCCCCCCCCCCCCCCCCCX..",
+        "..XcCcCcCcCcCcCcCcCcCX..",
+        "..XBBBBBBBBBBBBBBBBBBX..",
+        "..XBDEGBDEGBDEGBDEGBDX..",
+        "..XBBBBBBBBBBBBBBBBBBX..",
+        "..XbbbbbbbbbbbbbbbbbbX..",
+        "..XXXXXXXXXXXXXXXXXXXX..",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................",
+        "........................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "b", "B", "D", "G", "E", "C", "c"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

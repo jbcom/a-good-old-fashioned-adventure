@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:stoop-lantern",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 20 },
+  "anchor": { "x": 8, "y": 20 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "................",
+        "......XXXX......",
+        ".....XGGGGX.....",
+        ".....XGggGX.....",
+        "......XGGX......",
+        ".......XX.......",
+        "......XBBX......",
+        ".....XBCCBX.....",
+        "....XBcGGcBX....",
+        "....XBCggCBX....",
+        ".....XCCCCX.....",
+        "......XBBX......",
+        "......XbbX......",
+        ".....XXbbXX.....",
+        "....XbbbbbbX....",
+        ".....XXXXXX.....",
+        "................",
+        "................",
+        "................",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "G", "g", "B", "b", "C", "c"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

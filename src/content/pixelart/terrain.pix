@@ -1,0 +1,998 @@
+@pixel-sheet v1
+# AGOFA native pixel sheet v1. Sixteen-character rows map directly to
+# palette:base channels; metadata remains line-oriented for parser validation.
+
+@tile tile:grass
+solid false
+traits Tile
+rows
+eeeeeeeeeeeeeeee
+eeeEeeeeeeeEeeee
+eeeeeeTeeeeeeeee
+eeDDeeeeeeeeEeee
+eeeeeeeeTeeeeeee
+eeeeeEeeeeeeeEee
+eeeeeeeeeeeDDeee
+eeeeTeeeeeeeeeee
+eeeeeeeeEeeeeeee
+eeEeeeeeeeTeeeee
+eeeeeeeDDeeeeeee
+eeeeeeeeeeeeEeee
+eeeTeeeeeeeeeeee
+eeeeeeeeeeEeeeee
+eeeeeDDeeeeeeeee
+eeeeeeeeeeeeeeee
+@end
+
+@tile tile:grass-tufts
+variantOf tile:grass
+solid false
+traits Tile
+rows
+eeeeeeeeeeeeeeee
+eeeeeEeeeeeeeeee
+eeeeEEXeeeeTeeee
+eeeeEXeeeeTTeeee
+eeeeeeeeeeeeeeee
+eeeTeeeeeeeeEeee
+eeTTeeeeeeeEEXee
+eeeeeeeeeeeeEXee
+eeeeeeeeeeeeeeee
+eeeeEeeeeTeeeeee
+eeeEEXeeeTTeeeee
+eeeeXeeeeeeeeeee
+eeeeeeeeeeeeeeee
+eeTeeeeeeeEeeeee
+eTTeeeeeeEEXeeee
+eeeeeeeeeeeeeeee
+@end
+
+@tile tile:grass-flowers
+variantOf tile:grass
+solid false
+traits Tile
+rows
+eeeeeeeeeeeeeeee
+eeeeeeeEeeeeeeee
+eeePeeeEeeeTeeee
+eeeeeeeeeTTeeeee
+eeeeeeeeeeeeeeee
+eeTeeeeeeeeeePee
+eTTeeeeeeEeeeeee
+eeeeeeeeEEXeeeee
+eeeeeeeeEXeeeeee
+eeeeeeeeeeeeeeee
+eeeePeeeeeeTeeee
+eeeeeeeeeeeTTeee
+eeeeeEeeeeeeeeee
+eeeeEEXeeeeeeeee
+eeeeEXeeeePeeeee
+eeeeeeeeeeeeeeee
+@end
+
+@tile tile:grass-roots
+variantOf tile:grass
+solid false
+traits Tile
+rows
+eeeeeeeeeeeeeeee
+eeeEeeeeeeeeeeee
+eeeeEeeeeeeTeeee
+eeeeebbbeTTeeeee
+eeeeeeebbbeeeeee
+eeeeeeeeebbbeeee
+eeTeeeeeeeeebbee
+eTTeeeeeeeeeeeee
+eeeeeeeeeeeeEeee
+eeeeeeEeeeEEXeee
+eeeeeeEXeeeXeeee
+eeeeeeeXeeeeeeee
+eeeeeeeeeeeeTeee
+eeeDDeeeeeeeTTee
+eeeeeeeeeeeeeeee
+eeeeeeeeeeeeeeee
+@end
+
+@tile tile:path
+solid false
+traits Tile
+rows
+BBBBBBBBBBBBBBBB
+BBDDBBBBBBBBDDBB
+BBBBBBBBBBBBBBBB
+BBBBBbbbbBBBBBBB
+BBBBBbddBBBBBBBB
+BBBBDDBBBBBBBBBB
+BBBBBBBBBBCCBBBB
+BBbbbbBBBBCCBBBB
+BBbddBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBDDBBBBBBBBB
+BBBBBBBBBBBbbbbB
+BBCCBBBBBBBbddBB
+BBCCBBBBBBBBBBBB
+BbbbbBBBBBBDDBBB
+BBBBBBBBBBBBBBBB
+@end
+
+@tile tile:path-ruts
+variantOf tile:path
+solid false
+traits Tile
+rows
+BBBBBBBBBBBBBBBB
+BBbBBBBBBBBBBbBB
+BBbbDDDBBBBDDbbB
+BBBbbbBBBBBbbbBB
+BBBBbBBBBBBBbBBB
+BBBBBBBBBBBBBBBB
+BBDDBBbbbbBBBDDB
+BBBBBBbddBBBBBBB
+BBBBBBbbbBBBBBBB
+BBBBBBBBbBBBBBBB
+BBCCBBBBBBBBCCBB
+BBCCBBBBBBBBCCBB
+BBBBBBBBDDBBBBBB
+BBBbbBBBBBBBbbBB
+BBbbBBBBBBBBBbbB
+BBBBBBBBBBBBBBBB
+@end
+
+@tile tile:path-pebbles
+variantOf tile:path
+solid false
+traits Tile
+rows
+BBBBBBBBBBBBBBBB
+BBCBBBBDBBBBBCBB
+BBBBBbbBBBBBBBBB
+BBBBBbbBBBBCCBBB
+BBDDBBBBBBBBCCBB
+BBBBBBBBBBBBBBBB
+BBBCCBBBBbbBBBBB
+BBBCCBBBBbbBBBBB
+BBBBBBBBBBBBBDDB
+BBBBBDBBBBBBBBBB
+BBbbBBBBBBCCBBBB
+BBbbBBBBBBCCBBBB
+BBBBBBBBBBBBBBBB
+BBDDBBBBBBbbBBBB
+BBBBBCBBBBbbBBDB
+BBBBBBBBBBBBBBBB
+@end
+
+@tile tile:path-moss
+variantOf tile:path
+solid false
+traits Tile
+rows
+BBBBBBBBBBBBBBBB
+BBEEBBBBBBBBDDBB
+BBEeeeBBBBBBBBBB
+BBBBeeBBBBBBBBBB
+BBBBBBBBBBBEEBBB
+BBBBBBBBBBEeeeBB
+BBDDBBBBBBeeeBBB
+BBBBBBBbbbbBBBBB
+BBBBBBBbddBBBBBB
+BBEEBBBBBBBBBBBB
+BEeeeBBBBBBBDDBB
+BeeeBBBBBBBBBBBB
+BBBBBBCCBBBBBBBB
+BBBBBBCCBBEEBBBB
+BBbbbbBBBeeeBBBB
+BBBBBBBBBBBBBBBB
+@end
+
+@tile tile:leaf-litter
+solid false
+traits Tile
+rows
+eeeeeeeeeeeeeeee
+eeeEEDDeeeTeeeee
+eeeeDDeeeeTeeeee
+eeeeeeeeeeeeeeee
+eeTeeeeeeDDeeeee
+eTTeeeeeeeDDeeee
+eeeeeeeeeeeeeeee
+eeeeEeeeeeeebbee
+eeeEEXeeeeeeebbe
+eeeeXeeeeeeeeeee
+eeeeeeeeDDeeeeee
+eeeTeeeeDDeeeeee
+eeTTeeeeeeeeeeee
+eeeeeeeeeeeEeeee
+eeDDeeeeeeeEXeee
+eeeeeeeeeeeeeeee
+@end
+
+@tile tile:leaf-litter-vein
+variantOf tile:leaf-litter
+solid false
+traits Tile
+rows
+eeeeeeeeeeeeeeee
+eeeeeeTeeeeeeeee
+eeeeeTTTeeeeeeee
+eeeeTTbTTeeeeeee
+eeeTTbbbTTeeeeee
+eeeeTTbTTeeeeeee
+eeeeeTTTeeeeDDee
+eeeeeeTeeeeeDDee
+eeeeeeeeeeeeeeee
+eeEeeeeeeTeeeeee
+eeEXeeeeTTTeeeee
+eeeXeeeeTbbbbbee
+eeeeeeeeTTTeeeee
+eeeeeeeeTeeeeeee
+eeeeDDeeeeeeeeee
+eeeeeeeeeeeeeeee
+@end
+
+@tile tile:leaf-litter-roots
+variantOf tile:leaf-litter
+solid false
+traits Tile
+rows
+eeeeeeeeeeeeeeee
+eeEeeeeeeeeeeeee
+eeeEeeeeeeDDeeee
+eeeebbbbeDDeeeee
+eeeeeebbbbeeeeee
+eeeeeeeeeebbEeee
+eTeeeeeeeeebEXee
+eTTeeeeeeeeeeXee
+eeeeeeeeeeeeeeee
+eeeeDDeeeeTeeeee
+eeeeDDeeeTTeeeee
+eeeeeeeeeeTbbbee
+eeeeeeeeeeeebbee
+eeEeeeeeeeeeeeee
+eeEXeeeeDDeeeeee
+eeeeeeeeeeeeeeee
+@end
+
+@tile tile:leaf-litter-glowcap
+variantOf tile:leaf-litter
+solid false
+traits Tile
+rows
+eeeeeeeeeeeeeeee
+eeeTeeeeeeeTTeee
+eeTTeeeeeeTEETee
+eeeeeeeeeeeTTeee
+eeDDeeeeeeeeeeee
+eeeDDeeeeeEeeeee
+eeeeeeeeeeEXeeee
+eeeeeeeeeeeXeeee
+eeeeTTeeeeeeeeee
+eeeTEETeeeeDDeee
+eeeeTTeeeeeDDeee
+eeeeeeeeeeeeeeee
+eeTeeeeeeeeeEeee
+eTTeeeeeeeeeEXee
+eeeeeeeeeeeeXeee
+eeeeeeeeeeeeeeee
+@end
+
+@tile tile:sand
+solid false
+traits Tile
+rows
+dddddddddddddddd
+dddDddddddDDdddd
+dddddddddddddddd
+ddBBBBdddddddddd
+ddddBBBddddWdddd
+dddddddddddddddd
+ddddddddDDdddddd
+ddWdddddDddddddd
+dddddddddddddddd
+ddddBBdddddddBBB
+dddddBBddddddddB
+dddddddddddddddd
+dddDddddddWddddd
+ddddDDdddddddddd
+dddddddddddDdddd
+dddddddddddddddd
+@end
+
+@tile tile:sand-ripple
+variantOf tile:sand
+solid false
+traits Tile
+rows
+dddddddddddddddd
+ddDDDDdddddddddd
+ddddDDDDdddddddd
+dddddddddddddddd
+ddddddddDDDDdddd
+ddWddddddddDDDDd
+dddddddddddddddd
+ddddBBBddddddddd
+dddddBBBdddddddd
+dddddddddddddddd
+ddddddddddDDDDdd
+dddWddddddddDDDD
+dddddddddddddddd
+ddDDDDdddddddddd
+ddddDDDDddddWddd
+dddddddddddddddd
+@end
+
+@tile tile:sand-pebbles
+variantOf tile:sand
+solid false
+traits Tile
+rows
+dddddddddddddddd
+ddBddddDddddBddd
+dddddddddddddddd
+ddddWdddddBddddd
+ddDDdddddddddddd
+ddDDddddddddWddd
+dddddddddddddddd
+ddddddBdddDDdddd
+ddddddddddDDdddd
+dddBdddddddddddd
+ddddddddWddddddd
+ddddDdddddddBddd
+ddddDDdddddddddd
+dddddddddddddddd
+ddBdddddddWddddd
+dddddddddddddddd
+@end
+
+@tile tile:sand-roots
+variantOf tile:sand
+solid false
+traits Tile
+rows
+dddddddddddddddd
+ddddddddddddDddd
+dddBBddddddDDddd
+ddBbbBdddddddddd
+ddddbbBddddddWdd
+ddddddbbBddddddd
+ddddddddbbBddddd
+ddWdddddddbBdddd
+dddddddddddddddd
+ddddDddddddddddd
+dddDDdddBBBddddd
+dddddddBbbBddddd
+ddddddddbbBddddd
+dddddddddddddddd
+ddddWddddddDdddd
+dddddddddddddddd
+@end
+
+@tile tile:castle-road
+solid false
+traits Tile
+rows
+CCCCCCCCCCCCCCCC
+CCccCCCCCCCCWCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCcccccCCC
+CCCWCCCCCccCCCcc
+CCCCCCCCCCCCCCcc
+CCccccCCCCCCCCCC
+CCcCCcCCCCCCeCCC
+CCCCCCCCCCCCeCCC
+CCCCCCWCCCCCCCCC
+CCCccccccCCCCCCC
+CCCCCCCCCCCCCCCC
+CCbCCCCCCCCccCCC
+CCbbCCCCCCCcCCcC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+@end
+
+@tile tile:castle-road-cracked
+variantOf tile:castle-road
+solid false
+traits Tile
+rows
+CCCCCCCCCCCCCCCC
+CCCccCCCCCCWCCCC
+CCCCcCCCCCCCCCCC
+CCCCcCCCCCCCCCCC
+CCCCcccccCCCCCCC
+CCCCCCCCcCCCccCC
+CCWCCCCCcCCcCCCc
+CCCCCCCCccCccCCC
+CCCCCCCCCCCCCCCC
+CCccccCCCCCCCCCC
+CCCCCCccCCCCeCCC
+CCCCCCCccCCeeCCC
+CCCCCCCCCCCCCCCC
+CCbCCCCCCCccCCCC
+CCCbbCCCCccCCCCC
+CCCCCCCCCCCCCCCC
+@end
+
+@tile tile:castle-road-moss
+variantOf tile:castle-road
+solid false
+traits Tile
+rows
+CCCCCCCCCCCCCCCC
+CCeeCCCCCCCCWCCC
+CeTeeCCCCCCCCCCC
+CCCCCCCCcccccCCC
+CCCWCCCCCccCCCcc
+CCCCeeCCCCCCCCcc
+CCcceTeeCCCCCCCC
+CCcCCeeeCCCCCCCC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCeeCC
+CCCccccccCCeTeeC
+CCCCCCCCCCCCeeCC
+CCbCCCCCCCCccCCC
+CCbbCCeeCCCcCCcC
+CCCCCeTeeCCCCCCC
+CCCCCCCCCCCCCCCC
+@end
+
+@tile tile:castle-road-worn
+variantOf tile:castle-road
+solid false
+traits Tile
+rows
+CCCCCCCCCCCCCCCC
+CCDDCCCCCCCCWCCC
+CCDDDCCCCCCCCCCC
+CCCCDDDCCCCCCCCC
+CCCCCCDDDDCCCCCC
+CCCCCCCCDDDCCCCC
+CCccccCCCCDDDDCC
+CCcCCcCCCCCCDDCC
+CCCCCCCCCCCCCCCC
+CCCWCCCCDDCCCCCC
+CCCccccDDCCCCCCC
+CCCCCCCCCCCCCCCC
+CCbCCCCCCCCccCCC
+CCbbCCCCCCCcCCcC
+CCCCCCCCCCCCCCCC
+CCCCCCCCCCCCCCCC
+@end
+
+@tile tile:village-cobble
+solid false
+traits Tile
+rows
+DDDDDDDDDDDDDDDD
+DDCCCDDDDDDCCCDD
+DDcCcDDDDDcCcDDD
+DDDDDDDDDDDDDDDD
+DDDbbbbDDDDDDDDD
+DDDbddbDDDCCCDDD
+DDDDDDDDDcCcDDDD
+DDCCCDDDDDDDDDDD
+DDcCcDDDDDDbbbbD
+DDDDDDDDDDbddbDD
+DDDDDCCCDDDDDDDD
+DDDDDcCcDDDDCCCD
+DbbbbDDDDDDDcCcD
+DbddbDDDDDDDDDDD
+DDDDDDCCCDDDDDDD
+DDDDDDDDDDDDDDDD
+@end
+
+@tile tile:village-cobble-worn
+variantOf tile:village-cobble
+solid false
+traits Tile
+rows
+DDDDDDDDDDDDDDDD
+DDCCCDDDDDDDDDBB
+DDcCcDDDDDDDDBBD
+DDDDDDDDDDDDBBDD
+DDDbbbbDDDBBDDDD
+DDDbddbDDBBDDDDD
+DDDDDDDDBBDCCCDD
+DDCCCDDBBDDcCcDD
+DDcCcDBBDDDDDDDD
+DDDDBBDDDDDbbbbD
+DDDBBDCCDDDDBddb
+DDBBDDcCcDDDDDDD
+DBBDDDDDDDDDCCCD
+DDDDDDDDDDDDcCcD
+DDDDDDCCCDDDDDDD
+DDDDDDDDDDDDDDDD
+@end
+
+@tile tile:village-cobble-moss
+variantOf tile:village-cobble
+solid false
+traits Tile
+rows
+DDDDDDDDDDDDDDDD
+DDeeCDDDDDDCCCDD
+DeTeCDDDDDcCcDDD
+DDeeDDDDDDDDDDDD
+DDDbbbbDDDDDeeDD
+DDDbddbDDDDeTeDD
+DDDDDDDDDDDDeeDD
+DDCCCDDDDDDDDDDD
+DDcCcDDDeeDbbbbD
+DDDDDDDDeTeDbddb
+DDDDDCCDeeDDDDDD
+DDDDDcCcDDDDCCCD
+DbbbbDDDDDDDcCcD
+DbddbDDDDeeDDDDD
+DDDDDDCCDeTeDDDD
+DDDDDDDDDeeDDDDD
+@end
+
+@tile tile:village-cobble-flower
+variantOf tile:village-cobble
+solid false
+traits Tile
+rows
+DDDDDDDDDDDDDDDD
+DDCCCDDDDDDCCCDD
+DDcCcDDPDDcCcDDD
+DDDDDDDDDDDDDDDD
+DDDbbbbDDDDDDDDD
+DDDbddbDDDCCCDDD
+DDDDDDDDDcCcDDPD
+DDCCCDDDDDDDDDDD
+DDcCcDDDDDDbbbbD
+DDDDDDPDDDbddbDD
+DDDDDCCCDDDDDDDD
+DDDDDcCcDDDDCCCD
+DbbbbDDDDPDDcCcD
+DbddbDDDDDDDDDDD
+DDDDDDCCCDDDDDDD
+DDDDDDDDDDDDDDDD
+@end
+
+@tile tile:mountain
+solid true
+traits Tile,Solid
+rows
+cccccccccccccccc
+ccccccccCccccccc
+cccccccCWCcccccc
+cccccccCWCcccccc
+ccccccCWWWCccccc
+ccccccCCCCCccccc
+cccccCCCCCCCcccc
+cccccCCCcCCCcccc
+ccccCCCcccCCCccc
+ccccCCCcccCCCccc
+cccCCCcccccCCCcc
+cccCCCcccccCCCcc
+ccCCCcccccccCCCc
+ccCCCcccccccCCCc
+cCCCCCCCCCCCCCCc
+cccccccccccccccc
+@end
+
+@tile tile:mountain-crag
+variantOf tile:mountain
+solid true
+traits Tile,Solid
+rows
+cccccccccccccccc
+cccCcccccccccccc
+ccCWCcccccCCcccc
+ccCCCccccCCCCccc
+cCCCCCcccCCCCccc
+cCCcCCcccCCcCCcc
+cCCcCCccCCCcCCcc
+cCCccCCcCCccCCCc
+cCCccCCCCCcccCCc
+cCCcccCCCCcccCCc
+cCCcccccCCcccCCc
+cCCccccccCCccCCc
+cCCccccccCCccCCc
+cCCCCCCCCCCCCCCc
+cccccccccccccccc
+cccccccccccccccc
+@end
+
+@tile tile:mountain-scree
+variantOf tile:mountain
+solid true
+traits Tile,Solid
+rows
+cccccccccccccccc
+cccccccccccccccc
+ccccccCCcccccccc
+cccccCCCCccccccc
+ccCCcCCCCcccCCcc
+ccCCcccCCcccCCcc
+cccccCCccccccccc
+ccCCCcccccCCCccc
+ccCCCccCCcCCCccc
+cccccccCCccccccc
+ccccCCcccccccccc
+cccCCCCccccCCccc
+cccCCCCcccCCCCcc
+ccCCCCCCccCCCCcc
+cCCCCCCCCCCCCCCc
+cccccccccccccccc
+@end
+
+@tile tile:mountain-ledge
+variantOf tile:mountain
+solid true
+traits Tile,Solid
+rows
+cccccccccccccccc
+cCCCCCCCCCCCCCCc
+cCCCCCCCCCCCCCCc
+ccccCCccccCCcccc
+cccccccccccccccc
+cCCCCCCCCCCCCccc
+cCCCCCCCCCCCCccc
+ccccCCccccCCcccc
+cccccccccccccccc
+cccCCCCCCCCCCCCc
+cccCCCCCCCCCCCCc
+ccccCCccccCCcccc
+cccccccccccccccc
+cCCCCCCCCCCCCCCc
+cCCCCCCCCCCCCCCc
+cccccccccccccccc
+@end
+
+@tile tile:water
+solid true
+traits Tile,Solid,AnimatedTile
+rows
+llllllllllllllll
+lllllaaallllllll
+lllLLLLlllllaall
+llllllllllllllll
+lllaaallllllllll
+llLLLLLlllllllcl
+llllllllllllllll
+llllllaaalllllll
+lllllLLLLlllllll
+llllllllllllllll
+llllllllllaaalll
+llaallllllLLLLll
+llLLLLllllllllll
+llllllllllllclll
+lllllaaallllllll
+llllllllllllllll
+@end
+
+@tile tile:water-glint
+variantOf tile:water
+solid true
+traits Tile,Solid,AnimatedTile
+rows
+llllllllllllllll
+llllLWLlllllllll
+llllllllllllllll
+lllllllllllLWLll
+llllllllllllllll
+llLWLlllllllllll
+lllllllllllllcll
+llllllllLWLlllll
+llllllllllllllll
+lllaaLWLllllllll
+llllllllllllllll
+llllllllllllLWLl
+llclllllllllllll
+llllllLWLlllllll
+llllllllllalllll
+llllllllllllllll
+@end
+
+@tile tile:water-reeds
+variantOf tile:water
+solid true
+traits Tile,Solid,AnimatedTile
+rows
+llllllllllllllll
+llllElllllllllll
+llllElllllElllll
+lllaEallllElllll
+llllEllllaEallll
+llllllllllElllll
+llElllllllllllll
+llEllllllllEllll
+laEallllllaEalll
+llElllllllllElll
+lllllllEllllllll
+lllllllEllllllll
+llllllaEalllllll
+lllllllEllllllll
+llllllllllllllll
+llllllllllllllll
+@end
+
+@tile tile:water-deep
+variantOf tile:water
+solid true
+traits Tile,Solid,AnimatedTile
+rows
+llllllllllllllll
+llllllllllllllll
+lllllcllllllllll
+llllllllllllllll
+llllllllllclllll
+lllaalllllllllll
+llllllllllllllll
+llllllllllllllll
+llclllllllllllll
+llllllllllllclll
+llllllllllllllll
+llllllaallllllll
+llllllllllllllll
+lllllllllcllllll
+llllllllllllllll
+llllllllllllllll
+@end
+
+@tile tile:wood-bridge
+solid false
+traits Tile
+rows
+bbbbbbbbbbbbbbbb
+bBBBBBBBBBBBBBBb
+bBbbBbbBbbBbbBBb
+bBBDDBBBBBBBDDBb
+bBBBBbbBBBBBBBBb
+bBbbBbbBbbBbbBBb
+bBBBBBBBBBDDBBBb
+bBBDDBBBBBBBBBBb
+bBbbBbbBbbBbbBBb
+bBBBBBBbbBBBBBBb
+bBBBBBBBBBBBBDDb
+bBbbBbbBbbBbbBBb
+bBBDDBBBBBBBBBBb
+bBBBBBBBBbbBBBBb
+bbbbbbbbbbbbbbbb
+bbbbbbbbbbbbbbbb
+@end
+
+@tile tile:stone-floor
+solid false
+traits Tile
+rows
+kkkkkkkkkkkkkkkk
+kcccckkkkkkkkkkk
+kcCCckkkkcccckkk
+kcccckkkkcCCckkk
+kkkkkkkkkcccckkk
+kkkkcccckkkkkkkk
+kkkkcCCckkkkcccc
+kkkkcccckkkkcCCc
+kkkkkkkkkkkkcccc
+kcccckkkkkkkkkkk
+kcCCckkkkcccckkk
+kcccckkkkcCCckkk
+kkkkkkkkkcccckkk
+kkkkcccckkkkkkkk
+kkkkcCCckkkkcccc
+kkkkkkkkkkkkkkkk
+@end
+
+@tile tile:stone-floor-cracked
+variantOf tile:stone-floor
+solid false
+traits Tile
+rows
+kkkkkkkkkkkkkkkk
+kcccckkkkkkkkkkk
+kcCXckkkkcccckkk
+kccXckkkkcCCckkk
+kkkXkkkkkcccckkk
+kkkkcccckkkkkkkk
+kkkkcCCckkkkcccc
+kkkkccXckkkkcCXc
+kkkkkkXkkkkkccXc
+kcccckkXkkkkkkkk
+kcCCckkkkcccckkk
+kcccckkkkcXCckkk
+kkkkkkkkkccXckkk
+kkkkcccckkkXkkkk
+kkkkcCCckkkkcccc
+kkkkkkkkkkkkkkkk
+@end
+
+@tile tile:stone-floor-moss
+variantOf tile:stone-floor
+solid false
+traits Tile
+rows
+kkkkkkkkkkkkkkkk
+kcccckeekkkkkkkk
+kcCCckkekkcccckk
+kcccckkkkkcCCckk
+kkeekkkkkkcccckk
+kkkkcccckkkkkkkk
+kkkkcCCckkeecccc
+kkkkcccckkkecCCc
+kkkkkkkkkkkkcccc
+kcccckkkTkkkkkkk
+kcCCckkkkcccckkk
+kcccckkkkcCCckke
+kkkkkkkkkcccckke
+kkkkcccckkkkkkkk
+kkkkcCCckeekcccc
+kkkkkkkkkkkkkkkk
+@end
+
+@tile tile:stone-floor-worn
+variantOf tile:stone-floor
+solid false
+traits Tile
+rows
+kkkkkkkkkkkkkkkk
+kccckkkkkkkkkkkk
+kcCcckkkkccckkkk
+kkccckkkkcCcckkk
+kkkkkkkkkkccckkk
+kkkkccckkkkkkkkk
+kkkkcCcckkkkkccc
+kkkkkccckkkkcCcc
+kkkkkkkkkkkkkccc
+kkccckkkkkkkkkkk
+kcCcckkkkccckkkk
+kkccckkkkcCcckkk
+kkkkkkkkkkccckkk
+kkkkccckkkkkkkkk
+kkkkcCcckkkkkccc
+kkkkkkkkkkkkkkkk
+@end
+
+@tile tile:stone-wall
+solid true
+traits Tile,Solid
+rows
+XXXXXXXXXXXXXXXX
+XccccccXXccccccX
+XcCCCCcXXcCCCCcX
+XccccccXXccccccX
+XXXXXXXXXXXXXXXX
+XccXXccccccXXccX
+XCCXXcCCCCcXXCCX
+XccXXccccccXXccX
+XXXXXXXXXXXXXXXX
+XccccccXXccccccX
+XcCCCCcXXcCCCCcX
+XccccccXXccccccX
+XXXXXXXXXXXXXXXX
+XccXXccccccXXccX
+XCCXXcCCCCcXXCCX
+XXXXXXXXXXXXXXXX
+@end
+
+@tile tile:prison-bars
+solid true
+traits Tile,Solid
+rows
+kkkkCCCCCCCCkkkk
+kkkkCccccccCkkkk
+kkkkCccccccCkkkk
+kkkkCCkCCkCCkkkk
+kkkkCCkCCkCCkkkk
+kkkkCCkCCkCCkkkk
+kkkkCCkCCkCCkkkk
+kkkkCCkCCkCCkkkk
+kkkkCCkCCkCCkkkk
+kkkkCCkCCkCCkkkk
+kkkkCCkCCkCCkkkk
+kkkkCCkCCkCCkkkk
+kkkkCccccccCkkkk
+kkkkCccccccCkkkk
+kkkkCCCCCCCCkkkk
+kkkkkkkkkkkkkkkk
+@end
+
+@tile tile:shop-floor
+solid false
+traits Tile
+rows
+BBBBBBBBBBBBBBBB
+BBbbbbBBBBbbbbBB
+BBbddbBBBBbddbBB
+BBBBBBBBBBBBBBBB
+BBBBBBDDDDBBBBBB
+BBBBBBDbbDBBBBBB
+BBBBBBDDDDBBBBBB
+BBBBBBBBBBBBBBBB
+BBbbbbBBBBbbbbBB
+BBbddbBBBBbddbBB
+BBBBBBBBBBBBBBBB
+BBBBBBDDDDBBBBBB
+BBBBBBDbbDBBBBBB
+BBBBBBDDDDBBBBBB
+BBBBBBBBBBBBBBBB
+BBBBBBBBBBBBBBBB
+@end
+
+@tile tile:tavern-floor
+solid false
+traits Tile
+rows
+bbbbbbbbbbbbbbbb
+bBBBBbbBBBBbbBBb
+bBDDDBbBDDDBbBBb
+bBBBBbbBBBBbbBBb
+bbbbbbbbbbbbbbbb
+bBBbbBBBBbbBBBBb
+bBbbBDDDBbBDDDBb
+bBBbbBBBBbbBBBBb
+bbbbbbbbbbbbbbbb
+bBBBBbbBBBBbbBBb
+bBDDDBbBDDDBbBBb
+bBBBBbbBBBBbbBBb
+bbbbbbbbbbbbbbbb
+bBBbbBBBBbbBBBBb
+bBbbBDDDBbBDDDBb
+bbbbbbbbbbbbbbbb
+@end
+
+@tile tile:ruin-floor
+solid false
+traits Tile
+rows
+DDDDDDDDDDDDDDDD
+DDccDDDDDDccDDDD
+DDcCccDDDDcCccDD
+DDDDccDDDDDDccDD
+DDDDDDDDDDDDDDDD
+DDDDDDbbbbDDDDDD
+DDccDDbDDbDDccDD
+DDcCccbbbbDDcCcc
+DDDDccDDDDDDDDcc
+DDDDDDDDDDDDDDDD
+DDbbDDDDDDDDbbDD
+DDbDDbDDccDDbDDb
+DDbbbbDDcCccbbbb
+DDDDDDDDDDccDDDD
+DDccDDDDDDDDDDDD
+DDDDDDDDDDDDDDDD
+@end
+
+@tile tile:ruin-mosaic
+solid false
+traits Tile
+rows
+DDDDDDDDDDDDDDDD
+DDggDDDDDDPPDDDD
+DDgGggDDDDpPppDD
+DDDDggDDDDDDppDD
+DDDDDDDDDDDDDDDD
+DDPPDDDDDDggDDDD
+DDpPppDDDDgGggDD
+DDDDppDDDDDDggDD
+DDDDDDDDDDDDDDDD
+DDggDDDDDDLLDDDD
+DDgGggDDDDlLllDD
+DDDDggDDDDDDllDD
+DDDDDDDDDDDDDDDD
+DDLLDDDDDDPPDDDD
+DDlLllDDDDpPppDD
+DDDDDDDDDDDDDDDD
+@end
+
+@tile tile:royal-rug
+solid false
+traits Tile
+rows
+rrrrrrrrrrrrrrrr
+rGGGGGGGGGGGGGGr
+rGppppppppppppGr
+rGpGGGGppGGGGpGr
+rGpGrrrrrrrrGpGr
+rGpGrGGGGGGGrGpG
+rGpGrGppppGGrGpG
+rGpGrGppppGGrGpG
+rGpGrGGGGGGGrGpG
+rGpGrrrrrrrrGpGr
+rGpGGGGppGGGGpGr
+rGppppppppppppGr
+rGGGGGGGGGGGGGGr
+rrrrrrrrrrrrrrrr
+rGGGGrrrrGGGGGGr
+rrrrrrrrrrrrrrrr
+@end

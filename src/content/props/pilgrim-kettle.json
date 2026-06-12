@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:pilgrim-kettle",
+  "kind": "prop",
+  "grid": { "w": 24, "h": 18 },
+  "anchor": { "x": 12, "y": 18 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "........................",
+        ".........XXXXXX.........",
+        "........XCCCCCCX........",
+        ".......XCCWWWWCCX.......",
+        ".......XCWwwwwWCX.......",
+        "........XCCCCCCX........",
+        ".........XBBBBX.........",
+        "......XXXXBBBBXXXX......",
+        ".....XRRRRXXXXRRRRX.....",
+        ".....XRrrrXBBXrrrRX.....",
+        "......XRRRXXXXRRRX......",
+        ".......XX..YY..XX.......",
+        "..........YeeY..........",
+        "...........YY...........",
+        "........................",
+        "........................",
+        "........................",
+        "........................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "C", "W", "w", "B", "R", "r", "Y", "e"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

@@ -3,16 +3,10 @@
  * desert edge) + real palette-swapped cast, used by browser tests to
  * exercise the Stage with genuine content.
  */
-import dragonSprite from "../../src/content/sprites/dragon.json";
-import heroSprite from "../../src/content/sprites/hero.json";
-import princessSprite from "../../src/content/sprites/princess.json";
 import overworldDef from "../../src/content/world/maps/overworld.json";
-import {
-  type DrawOp,
-  rasterizeDrawOps,
-  rasterizeRows,
-  resolvePalette,
-} from "../../src/render/pixelart";
+import { getSprite } from "../../src/lib/content/registry";
+import { tileCanvas } from "../../src/render/atlas";
+import { rasterizeRows, resolvePalette } from "../../src/render/pixelart";
 import type { StageActor } from "../../src/render/Stage";
 import { buildGrid, type MapGenInput } from "../../src/sim/mapgen";
 
@@ -22,14 +16,7 @@ export const SLICE = { x0: 24, y0: 20, x1: 44, y1: 34 };
 export const SLICE_W = (SLICE.x1 - SLICE.x0 + 1) * TILE;
 export const SLICE_H = (SLICE.y1 - SLICE.y0 + 1) * TILE;
 
-const tileModules = import.meta.glob<{ id: string; layers: DrawOp[] }>(
-  "/src/content/tiles/*.json",
-  { eager: true, import: "default" },
-);
-const tilesById = new Map(Object.values(tileModules).map((t) => [t.id, t]));
-
 export function composeMapSliceCanvas(): HTMLCanvasElement {
-  const palette = resolvePalette("palette:base");
   const grid = buildGrid(overworldDef as MapGenInput);
   const canvas = document.createElement("canvas");
   canvas.width = SLICE_W;
@@ -41,20 +28,25 @@ export function composeMapSliceCanvas(): HTMLCanvasElement {
   for (let row = SLICE.y0; row <= SLICE.y1; row++) {
     for (let col = SLICE.x0; col <= SLICE.x1; col++) {
       const tileId = grid[row][col];
-      let tileCanvas = tileCache.get(tileId);
-      if (!tileCanvas) {
-        const tile = tilesById.get(tileId);
-        if (!tile) throw new Error(`unknown tile ${tileId}`);
-        tileCanvas = rasterizeDrawOps(tile.layers, palette, TILE);
-        tileCache.set(tileId, tileCanvas);
+      let tileSurface = tileCache.get(tileId);
+      if (!tileSurface) {
+        tileSurface = tileCanvasFor(tileId);
+        tileCache.set(tileId, tileSurface);
       }
-      ctx.drawImage(tileCanvas, (col - SLICE.x0) * TILE, (row - SLICE.y0) * TILE);
+      ctx.drawImage(tileSurface, (col - SLICE.x0) * TILE, (row - SLICE.y0) * TILE);
     }
   }
   return canvas;
 }
 
+function tileCanvasFor(tileId: string): HTMLCanvasElement {
+  return tileCanvas(tileId);
+}
+
 export function buildDemoActors(): StageActor[] {
+  const heroSprite = getSprite("sprite:hero");
+  const dragonSprite = getSprite("sprite:dragon");
+  const princessSprite = getSprite("sprite:princess");
   const sprite = (rows: string[], paletteId: string) =>
     rasterizeRows(rows, resolvePalette(paletteId));
   return [

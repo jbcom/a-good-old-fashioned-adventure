@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:oldwood-thorncutter",
+  "kind": "dialogue-bank",
+  "speaker": "char:oldwood-thorncutter",
+  "slots": [
+    { "when": { "flag": "flag:oldwood-thorncutter-greeted" }, "node": "after" },
+    {
+      "when": { "quest": "quest:oldwood-thorncutters-lantern", "stage": "greet-thorncutter" },
+      "node": "lantern"
+    },
+    { "default": true, "node": "plain" }
+  ],
+  "nodes": {
+    "lantern": {
+      "lines": [
+        "Hester Briarhook, thorncutter by trade and lantern-keeper by stubbornness.",
+        "Step under the hazel arch when the road narrows. I have trimmed it just enough for brave boots and honest elbows."
+      ],
+      "choices": [{ "id": "accepted", "text": "Thank the thorncutter." }],
+      "emits": "dlg:oldwood-thorncutter.lantern"
+    },
+    "after": {
+      "lines": ["The arch will not bow for hurry, but it will make room for a courteous traveler."],
+      "emits": "dlg:oldwood-thorncutter.after"
+    },
+    "plain": {
+      "lines": [
+        "Mind the upper boughs. They catch tall hats, loose tempers, and once an entire picnic basket."
+      ],
+      "emits": "dlg:oldwood-thorncutter.plain"
+    }
+  }
+}

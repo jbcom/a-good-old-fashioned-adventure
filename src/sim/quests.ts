@@ -8,6 +8,7 @@ import type { World } from "koota";
 import { getQuest, quests } from "../lib/content/registry";
 import type { QuestCondition, QuestStage } from "../lib/content/types";
 import { spawnPickup } from "./factories";
+import { applyIncrementalEventReward, grantRunReward } from "./incrementalProgress";
 import {
   FlagState,
   type GameEvent,
@@ -59,6 +60,15 @@ function conditionMet(
   }
   if (condition.itemAcquired) {
     return event.type === "item:acquired" && event.itemId === condition.itemAcquired;
+  }
+  if (condition.shopTransaction) {
+    const { verb, shop, listing, item } = condition.shopTransaction;
+    return (
+      event.type === `shop:${verb}` &&
+      (!shop || event.shopId === shop) &&
+      (!listing || event.listingId === listing) &&
+      (!item || event.itemId === item)
+    );
   }
   if (condition.enterZone) {
     return (
@@ -136,6 +146,9 @@ export function applyEffects(
     if (typeof effect.sfx === "string" && outbox) {
       outbox.sfx.push(effect.sfx);
     }
+    if (typeof effect.grantRunReward === "string") {
+      grantRunReward(world, effect.grantRunReward);
+    }
     if (typeof effect.endGame === "string" && outbox) {
       outbox.endGame = effect.endGame as "victory" | "gameover";
     }
@@ -155,6 +168,7 @@ function counterMatches(
 /** Reduce one event into every active quest. */
 export function reduceEvent(world: World, event: GameEvent): void {
   const log = world.get(QuestLog);
+  applyIncrementalEventReward(world, event.type, event.archetypeId);
   if (!log) return;
 
   // startOn: quests that begin when a map is entered

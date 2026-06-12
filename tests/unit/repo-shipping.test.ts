@@ -20,6 +20,10 @@ describe("shipping repository documents", () => {
       expect(statSync(resolve(process.cwd(), path)).isFile()).toBe(true);
     }
     expect(read("AGENTS.md")).not.toContain("pre-scaffold");
+    expect(read("CLAUDE.md")).not.toContain("pre-scaffold");
+    expect(read("CLAUDE.md")).toContain(
+      "Use `AGENTS.md` as the authoritative repository instruction file",
+    );
     expect(read("README.md")).toContain("pnpm test:browser");
     expect(read("TESTING.md")).toContain("./gradlew :app:assembleDebug");
     expect(read("DEPLOYMENT.md")).toContain("release-please");
@@ -57,6 +61,29 @@ describe("CI and release automation", () => {
     for (const script of [pkg.scripts["test:browser:core"], pkg.scripts["test:browser:journey"]]) {
       expect(script).toContain("--browser.fileParallelism=false");
       expect(script).toContain("--no-file-parallelism");
+    }
+  });
+
+  it("keeps the native pixel-art authoring pipeline checked in", () => {
+    const pkg = JSON.parse(read("package.json")) as {
+      scripts: Record<string, string>;
+    };
+    expect(pkg.scripts["author:pixelart"]).toBe("node scripts/export-pixelart.mjs");
+    expect(read("scripts/export-pixelart.mjs")).toContain(
+      "scripts/aseprite/import-pixel-sheet.lua",
+    );
+    expect(read("scripts/aseprite/import-pixel-sheet.lua")).toContain("Sprite(payload.width");
+
+    for (const basename of ["terrain", "characters", "route-props"]) {
+      expect(
+        statSync(resolve(process.cwd(), `src/content/pixelart/${basename}.pix`)).isFile(),
+      ).toBe(true);
+      expect(
+        statSync(resolve(process.cwd(), `src/content/pixelart/${basename}.aseprite`)).isFile(),
+      ).toBe(true);
+      expect(
+        statSync(resolve(process.cwd(), `src/content/pixelart/${basename}.png`)).isFile(),
+      ).toBe(true);
     }
   });
 

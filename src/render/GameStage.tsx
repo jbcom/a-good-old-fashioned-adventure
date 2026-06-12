@@ -18,13 +18,15 @@ import {
   SRGBColorSpace,
   type Texture,
 } from "three";
-import { engine } from "../lib/config";
+import { combat, engine } from "../lib/config";
 import { getAnimation, getItem, getSprite } from "../lib/content/registry";
 import {
   CameraState,
   CombatTimers,
   Facing,
+  FxBurst,
   HitFlash,
+  InspectionPulse,
   IsPickup,
   IsPlayer,
   MapRuntime,
@@ -36,19 +38,10 @@ import {
 } from "../sim/traits";
 import { flashCanvas, propCanvas, spriteCanvas, tileCanvas } from "./atlas";
 import { createDioramaMaterial, setDioramaTexture } from "./materials";
-import { fadeOut, playMotion, releaseMotion } from "./motion";
+import { channelsOf, fadeOut, playMotion, releaseMotion, restartMotion } from "./motion";
 
 const TILE = 16;
-const PROJECTILE_COLORS: Record<string, string> = {
-  arrow: "#c2c1e8",
-  "magic-bolt": "#e0f2ff",
-  magmaball: "#df7126",
-  sandball: "#cfa153",
-  shadowbolt: "#76428a",
-};
-
 const textures = new WeakMap<HTMLCanvasElement, CanvasTexture>();
-const solidCanvases = new Map<string, HTMLCanvasElement>();
 
 function textureFor(canvas: HTMLCanvasElement): CanvasTexture {
   let texture = textures.get(canvas);
@@ -61,21 +54,6 @@ function textureFor(canvas: HTMLCanvasElement): CanvasTexture {
     textures.set(canvas, texture);
   }
   return texture;
-}
-
-function solidCanvas(color: string, width: number, height: number): HTMLCanvasElement {
-  const key = `${color}|${width}x${height}`;
-  const cached = solidCanvases.get(key);
-  if (cached) return cached;
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("2d context unavailable");
-  ctx.fillStyle = color;
-  ctx.fillRect(0, 0, width, height);
-  solidCanvases.set(key, canvas);
-  return canvas;
 }
 
 function composeGround(world: World): HTMLCanvasElement {
@@ -116,6 +94,7 @@ function disposeGroundMesh(mesh: Mesh): void {
 class SceneSync {
   private meshes = new Map<number, TrackedMesh>();
   private ground: GroundTrack | null = null;
+  private inspectionSerials = new Map<number, number>();
 
   sync(world: World, scene: Scene, camera: PerspectiveCamera): void {
     this.syncGround(world, scene);
@@ -202,7 +181,16 @@ class SceneSync {
       const canvas = propCanvas(ref.propId, ref.state);
       const id = entity as unknown as number;
       const tracked = this.billboard(canvas, `${ref.propId}|${ref.state}`, id, scene);
-      tracked.mesh.position.set(t.x, canvas.height / 2, t.y);
+      const pulse = entity.get(InspectionPulse);
+      const previousSerial = this.inspectionSerials.get(id) ?? 0;
+      if (pulse && pulse.serial !== previousSerial) {
+        restartMotion(id, pulse.anim);
+        this.inspectionSerials.set(id, pulse.serial);
+      }
+      const channels = pulse ? channelsOf(id) : null;
+      tracked.mesh.position.set(t.x, canvas.height / 2 - (channels?.translateY ?? 0), t.y);
+      const material = tracked.mesh.material as ShaderMaterial;
+      if (material.uniforms.uAlpha) material.uniforms.uAlpha.value = channels?.alpha ?? 1;
       seen.add(id);
     }
 
@@ -213,10 +201,11 @@ class SceneSync {
       const id = entity as unknown as number;
       let tracked = this.meshes.get(id);
       if (!tracked) {
-        const color = getItem(info.itemId).pickup?.color ?? "#ffffff";
-        const canvas = solidCanvas(color, 6, 6);
+        const spriteId = getItem(info.itemId).pickup?.sprite;
+        if (!spriteId) throw new Error(`${info.itemId} pickup has no authored sprite`);
+        const canvas = spriteCanvas(spriteId, "palette:base");
         const mesh = new Mesh(
-          new PlaneGeometry(6, 6),
+          new PlaneGeometry(canvas.width, canvas.height),
           createDioramaMaterial(textureFor(canvas), { role: "spark" }),
         );
         mesh.rotation.x = engine.stage.billboardTilt;
@@ -237,10 +226,11 @@ class SceneSync {
       const id = entity as unknown as number;
       let tracked = this.meshes.get(id);
       if (!tracked) {
-        const color = PROJECTILE_COLORS[p.type] ?? "#ffffff";
-        const canvas = solidCanvas(color, p.type === "arrow" ? 6 : 4, p.type === "arrow" ? 2 : 4);
+        const spriteId = combat.projectileSprites[p.type as keyof typeof combat.projectileSprites];
+        if (!spriteId) throw new Error(`projectile type ${p.type} has no authored sprite`);
+        const canvas = spriteCanvas(spriteId, "palette:base");
         const mesh = new Mesh(
-          new PlaneGeometry(p.type === "arrow" ? 6 : 4, p.type === "arrow" ? 2 : 4),
+          new PlaneGeometry(canvas.width, canvas.height),
           createDioramaMaterial(textureFor(canvas), { role: "spark" }),
         );
         mesh.rotation.x = engine.stage.billboardTilt;
@@ -248,7 +238,37 @@ class SceneSync {
         tracked = { mesh, textureKey: p.type };
         this.meshes.set(id, tracked);
       }
+      if (p.type === "arrow") tracked.mesh.scale.x = p.vx >= 0 ? 1 : -1;
       tracked.mesh.position.set(t.x, 7, t.y);
+      seen.add(id);
+    }
+
+    for (const entity of world.query(Transform, FxBurst)) {
+      const t = entity.get(Transform);
+      const fx = entity.get(FxBurst);
+      if (!t || !fx || fx.total <= 0) continue;
+      const id = entity as unknown as number;
+      let tracked = this.meshes.get(id);
+      if (!tracked) {
+        const canvas =
+          fx.kind === "dissolve"
+            ? flashCanvas(fx.spriteId, fx.paletteId)
+            : spriteCanvas(fx.spriteId, fx.paletteId);
+        const mesh = new Mesh(
+          new PlaneGeometry(canvas.width, canvas.height),
+          createDioramaMaterial(textureFor(canvas), { role: "spark" }),
+        );
+        mesh.rotation.x = engine.stage.billboardTilt;
+        mesh.scale.x = fx.dir >= 0 ? 1 : -1;
+        scene.add(mesh);
+        tracked = { mesh, textureKey: `${fx.kind}|${fx.spriteId}` };
+        this.meshes.set(id, tracked);
+      }
+      const progress = 1 - fx.left / fx.total;
+      const material = tracked.mesh.material as ShaderMaterial;
+      if (material.uniforms.uAlpha) material.uniforms.uAlpha.value = fx.left / fx.total;
+      const rise = fx.kind === "dissolve" ? progress * combat.feedback.dissolveFxRise : 0;
+      tracked.mesh.position.set(t.x, 9 + rise, t.y);
       seen.add(id);
     }
 
@@ -256,8 +276,12 @@ class SceneSync {
       if (!seen.has(id)) {
         scene.remove(tracked.mesh);
         tracked.mesh.geometry.dispose();
+        // uMap textures are deliberately NOT disposed here: textureFor caches
+        // one CanvasTexture per atlas canvas, shared across meshes — bounded
+        // by the content set, not entity churn.
         (tracked.mesh.material as ShaderMaterial).dispose();
         releaseMotion(id);
+        this.inspectionSerials.delete(id);
         this.meshes.delete(id);
       }
     }

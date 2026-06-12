@@ -4,7 +4,7 @@
   "kind": "map",
   "name": "The Unfurled Vine",
   "size": { "cols": 28, "rows": 20 },
-  "baseTile": "tile:stone-floor",
+  "baseTile": "tile:tavern-floor",
   "bgmTheme": "interior",
   "generation": [
     { "op": "border", "tile": "tile:stone-wall" },
@@ -18,9 +18,19 @@
     "entry": { "x": 224, "y": 256 }
   },
   "entities": [
+    { "ref": "prop:story-quilt", "x": 96, "y": 112, "note": "stitched returns by the west wall" },
+    {
+      "ref": "prop:hearth-song-board",
+      "x": 224,
+      "y": 112,
+      "note": "posted road songs above the hearth"
+    },
     { "ref": "prop:table", "x": 148, "y": 150, "note": "left tavern table" },
     { "ref": "prop:table", "x": 276, "y": 150, "note": "right tavern table" },
+    { "ref": "prop:tavern-bench", "x": 112, "y": 184, "note": "bench under the story-quilt" },
+    { "ref": "prop:tavern-bench", "x": 304, "y": 184, "note": "bench near the companions' table" },
     { "ref": "prop:barrel", "x": 356, "y": 184, "note": "ale barrel" },
+    { "ref": "char:merrin-underbough", "x": 224, "y": 136, "dir": -1 },
     {
       "spawnRule": "unchosen-companions",
       "positions": [{ "x": 160, "y": 110 }, { "x": 288, "y": 110 }]

@@ -21,9 +21,9 @@ cabinet, and not cyberpunk glass.
 - **Old-book type, not novelty pixel font:** headings use a storybook serif
   stack; body copy stays bookish and readable; compact HUD tokens use a narrow
   humanist stack instead of arcade monospace.
-- **Diorama continuity:** pause, game over, and victory dim the world but keep
-  it visible behind the panel. The UI interrupts the scene; it does not replace
-  it.
+- **Diorama continuity:** pause, game over, results, and the between-run
+  upgrade graph dim the world but keep it visible behind the panel. The UI
+  interrupts the scene; it does not replace it.
 - **Manuscript wash:** the r3f stage uses a diorama shader pass for warm vellum
   light, brown ink shade, and subtle paper grain. This is a storybook lighting
   language, not a CRT filter.
@@ -53,3 +53,10 @@ pixel grammar, then improve it with more variety: outlines, shadow pixels,
 highlights, broken edges, signage, ivy, shelves, barrels, hearth/table shapes,
 and recognizably different building silhouettes. A map is not visually complete
 when it is mostly flat-color tile fields.
+
+Terrain families are the base unit for exterior surface craft. A family keeps
+one semantic tile id for authoring intent, then supplies four to eight concrete
+16x16 variants with distinct pixel decisions. The map generator paints variants
+in deterministic chunks so forest leaves form pockets, roads form ruts and
+stones, village cobbles show worn paths, and desert sand breaks into wind-scored
+patches.

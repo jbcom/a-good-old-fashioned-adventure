@@ -35,32 +35,206 @@
       "note": "shallow roadside wash below the old aqueduct"
     },
     {
+      "op": "region",
+      "tile": "tile:castle-road",
+      "x0": 5,
+      "x1": 8,
+      "y0": 13,
+      "y1": 15,
+      "note": "wash-buried paving slabs near the wreck"
+    },
+    {
       "op": "col-span",
       "tile": "tile:castle-road",
       "x": 30,
       "y0": 18,
       "y1": 20,
       "note": "broken stone footing around the sandwyrm crossing"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 21,
+      "x0": 39,
+      "x1": 48,
+      "note": "shaded courier layby below the old road"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 22,
+      "x0": 41,
+      "x1": 46,
+      "note": "shaded courier layby lower tread"
+    }
+  ],
+  "terrainVariants": [
+    {
+      "baseTile": "tile:sand",
+      "variants": ["tile:sand", "tile:sand-ripple", "tile:sand-pebbles", "tile:sand-roots"],
+      "chunk": { "w": 4, "h": 2 },
+      "seed": 401,
+      "note": "wind-scored desert chunks"
+    },
+    {
+      "baseTile": "tile:path",
+      "variants": ["tile:path", "tile:path-ruts", "tile:path-pebbles", "tile:path-moss"],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 400,
+      "note": "sunken footpath ruts and stones"
+    },
+    {
+      "baseTile": "tile:castle-road",
+      "variants": [
+        "tile:castle-road",
+        "tile:castle-road-cracked",
+        "tile:castle-road-moss",
+        "tile:castle-road-worn"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 400,
+      "note": "old road slabs emerging from the sand"
+    },
+    {
+      "baseTile": "tile:mountain",
+      "variants": [
+        "tile:mountain",
+        "tile:mountain-crag",
+        "tile:mountain-scree",
+        "tile:mountain-ledge"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 507,
+      "note": "wind-cut canyon rim around the wash"
+    },
+    {
+      "baseTile": "tile:water",
+      "variants": ["tile:water", "tile:water-glint", "tile:water-reeds", "tile:water-deep"],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 508,
+      "note": "roadside wash pools with reeds and glints"
     }
   ],
   "playerSpawn": { "x": 48, "y": 304 },
   "spawns": {
     "default": { "x": 48, "y": 304 },
     "from-forest": { "x": 48, "y": 304 },
+    "from-ruins": { "x": 512, "y": 336 },
     "from-approach": { "x": 832, "y": 304 }
   },
   "entities": [
     { "ref": "prop:signpost", "x": 108, "y": 274, "note": "last Oldwood marker" },
     { "ref": "prop:broken-cart", "x": 230, "y": 336, "note": "cart splintered at the wash" },
+    {
+      "ref": "char:sunken-road-wreck-picker",
+      "x": 176,
+      "y": 296,
+      "dir": -1,
+      "patrol": {
+        "points": [
+          { "x": 160, "y": 296 },
+          { "x": 216, "y": 296 },
+          { "x": 216, "y": 320 },
+          { "x": 160, "y": 320 }
+        ],
+        "speed": 18
+      },
+      "note": "Petch Marrow picks the sandwyrm wreck at the wash"
+    },
+    {
+      "ref": "prop:wyrm-rib-stake",
+      "x": 208,
+      "y": 280,
+      "note": "bleached wyrm rib staked as a salvage marker"
+    },
+    {
+      "ref": "prop:salvage-rope-coil",
+      "x": 148,
+      "y": 312,
+      "note": "picker's rope coil beside the wash path"
+    },
     { "ref": "prop:sandstone-arch", "x": 440, "y": 286, "note": "first ruin tooth above the road" },
     { "ref": "prop:stump", "x": 316, "y": 360, "note": "bleached roadside stump" },
     { "ref": "prop:barrel", "x": 420, "y": 260, "note": "half-buried caravan barrel" },
     { "ref": "prop:sandstone-arch", "x": 512, "y": 286, "note": "fallen arch above the old road" },
     { "ref": "prop:broken-cart", "x": 560, "y": 346, "note": "broken supply cache" },
+    {
+      "ref": "prop:sand-sail-wreck",
+      "x": 640,
+      "y": 230,
+      "note": "upper-band sail silhouette above the courier road"
+    },
+    {
+      "ref": "prop:shade-cloth-rig",
+      "x": 654,
+      "y": 344,
+      "note": "courier shade rig in the player's lower lane"
+    },
+    {
+      "ref": "prop:water-jar-stand",
+      "x": 704,
+      "y": 354,
+      "note": "water jars beside Celia's courier stop"
+    },
+    {
+      "ref": "prop:wind-ribbon-cairn",
+      "x": 744,
+      "y": 334,
+      "note": "ribbon cairn marking the layby warning"
+    },
+    {
+      "ref": "char:sunken-courier",
+      "x": 690,
+      "y": 336,
+      "dir": -1,
+      "patrol": {
+        "points": [
+          { "x": 656, "y": 336 },
+          { "x": 732, "y": 336 },
+          { "x": 732, "y": 360 },
+          { "x": 656, "y": 360 }
+        ],
+        "speed": 24
+      },
+      "note": "Celia Knotwell paces the shaded warning layby"
+    },
     { "ref": "prop:castle", "x": 700, "y": 252, "note": "distant ruin silhouette" },
+    {
+      "ref": "prop:sunken-pillar-shadow",
+      "x": 790,
+      "y": 244,
+      "note": "upper-band broken pillars before the castle road"
+    },
     { "ref": "prop:barrel", "x": 760, "y": 338, "note": "last caravan barrel before the castle" },
     { "enemy": "desert-wyrm", "x": 360, "y": 304 }
   ],
+  "composition": {
+    "routeWindows": [
+      {
+        "label": "wash and sandwyrm wreck",
+        "zone": { "x0": 1, "y0": 8, "x1": 26, "y1": 23 },
+        "majorAnchors": [
+          "enemy:desert-wyrm",
+          "prop:broken-cart",
+          "char:sunken-road-wreck-picker",
+          "prop:wyrm-rib-stake"
+        ],
+        "minorProps": ["prop:signpost", "prop:stump", "prop:salvage-rope-coil"]
+      },
+      {
+        "label": "courier layby and upper sail wreck",
+        "zone": { "x0": 26, "y0": 13, "x1": 45, "y1": 23 },
+        "majorAnchors": ["char:sunken-courier", "prop:shade-cloth-rig", "prop:sand-sail-wreck"],
+        "minorProps": ["prop:water-jar-stand", "prop:broken-cart"]
+      },
+      {
+        "label": "broken pillars before the castle road",
+        "zone": { "x0": 40, "y0": 13, "x1": 54, "y1": 23 },
+        "majorAnchors": ["prop:sunken-pillar-shadow", "prop:castle"],
+        "minorProps": ["prop:barrel", "prop:wind-ribbon-cairn", "prop:water-jar-stand"]
+      }
+    ]
+  },
   "triggers": [
     {
       "id": "trigger:west-road",
@@ -70,6 +244,15 @@
       "toSpawn": "from-approach",
       "sfx": "interact",
       "zone": { "x0": 0, "y0": 276, "x1": 28, "y1": 332 }
+    },
+    {
+      "id": "trigger:enter-ruins",
+      "kind": "portal",
+      "label": "Door to Desert Ruins",
+      "toMap": "map:desert-ruins",
+      "toSpawn": "entry",
+      "sfx": "interact",
+      "zone": { "x0": 488, "y0": 236, "x1": 536, "y1": 292 }
     },
     {
       "id": "trigger:east-road",

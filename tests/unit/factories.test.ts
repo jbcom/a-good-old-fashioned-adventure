@@ -18,12 +18,28 @@ describe("createGameWorld", () => {
   it("seeds world resources including flag defaults", () => {
     const world = createGameWorld(42);
     expect(world.get(FlagState)?.values).toEqual({
+      "flag:approach-pilgrim-warned": false,
       "flag:bridge-fixed": false,
+      "flag:castle-armory-seen": false,
+      "flag:castle-letters-cleared": false,
+      "flag:castle-library-read": false,
+      "flag:fern-mender-greeted": false,
       "flag:has-dungeon-key": false,
       "flag:lost-page-guided": false,
       "flag:morning-errands-done": false,
+      "flag:oldwood-lantern-kept": false,
       "flag:oldwood-oath-sworn": false,
+      "flag:oldwood-roadward-mark": false,
+      "flag:oldwood-thorncutter-greeted": false,
+      "flag:oldwood-waystone-read": false,
+      "flag:ruin-mural-read": false,
       "flag:shop-sample-claimed": false,
+      "flag:stable-oats-bought": false,
+      "flag:sunken-cart-read": false,
+      "flag:sunken-courier-warned": false,
+      "flag:sunken-road-wreck-picked": false,
+      "flag:tavern-song-learned": false,
+      "flag:village-letter-basket-read": false,
     });
     expect(world.get(MapRuntime)?.mapId).toBe("");
   });
@@ -42,7 +58,7 @@ describe("spawnPlayer", () => {
 
   it("rejects unknown classes", () => {
     const world = createGameWorld();
-    expect(() => spawnPlayer(world, "bard", 0, 0)).toThrow(/unknown class/);
+    expect(() => spawnPlayer(world, "minstrel", 0, 0)).toThrow(/unknown class/);
   });
 });
 
@@ -51,7 +67,10 @@ describe("spawnEnemy", () => {
     const world = createGameWorld();
     const wyrm = spawnEnemy(world, "desert-wyrm", 680, 640);
     expect(wyrm.get(Health)).toMatchObject({ hp: 80, maxHp: 80 });
-    expect(wyrm.get(SpriteRef)?.paletteId).toBe("palette:wyrm");
+    expect(wyrm.get(SpriteRef)).toMatchObject({
+      spriteId: "sprite:boss-desert-wyrm",
+      paletteId: "palette:base",
+    });
   });
 });
 

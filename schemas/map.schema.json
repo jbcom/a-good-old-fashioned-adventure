@@ -51,6 +51,34 @@
         }
       }
     },
+    "terrainVariants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["baseTile", "variants", "chunk", "seed"],
+        "properties": {
+          "baseTile": { "$ref": "#/$defs/tileRef" },
+          "variants": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 8,
+            "items": { "$ref": "#/$defs/tileRef" }
+          },
+          "chunk": {
+            "type": "object",
+            "required": ["w", "h"],
+            "properties": {
+              "w": { "type": "integer", "minimum": 2 },
+              "h": { "type": "integer", "minimum": 2 }
+            },
+            "additionalProperties": false
+          },
+          "seed": { "type": "integer" },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
     "playerSpawn": {
       "type": "object",
       "required": ["x", "y"],
@@ -82,15 +110,72 @@
           "ref": { "type": "string", "pattern": "^(char|prop):[a-z0-9-]+$" },
           "enemy": { "type": "string", "pattern": "^[a-z0-9-]+$" },
           "spawnRule": { "type": "string" },
+          "requiresRoutePack": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "withoutRoutePack": { "type": "string", "pattern": "^[a-z0-9-]+$" },
           "x": { "type": "number" },
           "y": { "type": "number" },
           "tileAt": { "$ref": "#/$defs/tileCoord" },
           "dir": { "enum": [1, -1] },
+          "patrol": {
+            "type": "object",
+            "required": ["points"],
+            "properties": {
+              "points": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "object",
+                  "required": ["x", "y"],
+                  "properties": { "x": { "type": "number" }, "y": { "type": "number" } },
+                  "additionalProperties": false
+                }
+              },
+              "speed": { "type": "number", "minimum": 1 }
+            },
+            "additionalProperties": false
+          },
           "contents": { "type": "string" },
           "positions": { "type": "array", "items": { "type": "object", "required": ["x", "y"] } },
           "note": { "type": "string" }
         }
       }
+    },
+    "composition": {
+      "type": "object",
+      "properties": {
+        "routeWindows": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "zone", "majorAnchors", "minorProps"],
+            "properties": {
+              "label": { "type": "string" },
+              "zone": {
+                "type": "object",
+                "required": ["x0", "y0", "x1", "y1"],
+                "properties": {
+                  "x0": { "type": "integer" },
+                  "y0": { "type": "integer" },
+                  "x1": { "type": "integer" },
+                  "y1": { "type": "integer" }
+                },
+                "additionalProperties": false
+              },
+              "majorAnchors": {
+                "type": "array",
+                "items": { "type": "string", "pattern": "^(char|prop|enemy):?[a-z0-9-]+$" }
+              },
+              "minorProps": {
+                "type": "array",
+                "items": { "type": "string", "pattern": "^prop:[a-z0-9-]+$" }
+              },
+              "openReason": { "type": "string", "minLength": 24 }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
     },
     "triggers": {
       "type": "array",
@@ -107,6 +192,7 @@
           "zone": { "type": "object", "required": ["x0", "y0", "x1", "y1"] },
           "tiles": { "type": "array", "items": { "$ref": "#/$defs/tileCoord" } },
           "requiresFlag": { "$ref": "#/$defs/flagRef" },
+          "requiresRoutePack": { "type": "string", "pattern": "^[a-z0-9-]+$" },
           "solidUnlessFlag": { "$ref": "#/$defs/flagRef" },
           "effects": { "type": "array", "items": { "type": "object" } },
           "indicator": { "type": "object" }

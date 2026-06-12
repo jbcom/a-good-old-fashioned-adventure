@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:sunken-road-wreck-picker",
+  "kind": "dialogue-bank",
+  "speaker": "char:sunken-road-wreck-picker",
+  "slots": [
+    { "when": { "flag": "flag:sunken-road-wreck-picked" }, "node": "after" },
+    {
+      "when": { "quest": "quest:sunken-road-wreck-picker", "stage": "greet-picker" },
+      "node": "salvage"
+    },
+    { "default": true, "node": "passing" }
+  ],
+  "nodes": {
+    "salvage": {
+      "lines": [
+        "Petch Marrow, wreck-picker. This wash ate a sandwyrm and half a caravan, and I mean to pick both clean before the wind reburies them.",
+        "Grab that rope end. One good lash on the rib sled and the road keeps its bones, instead of the other way round."
+      ],
+      "choices": [{ "id": "accepted", "text": "Help lash the salvage sled." }],
+      "emits": "dlg:sunken-road-wreck-picker.salvage"
+    },
+    "after": {
+      "lines": [
+        "Sled's lashed tight, thanks to you. When the castle road takes you, step where the old slabs show — the sand only pretends to be ground."
+      ],
+      "emits": "dlg:sunken-road-wreck-picker.after"
+    },
+    "passing": {
+      "lines": ["Mind the wash pools. Reeds mean shallow; glints mean the wyrm's cousins."],
+      "emits": "dlg:sunken-road-wreck-picker.passing"
+    }
+  }
+}

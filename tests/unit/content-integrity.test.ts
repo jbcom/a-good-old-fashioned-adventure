@@ -1,5 +1,6 @@
 import Ajv2020 from "ajv/dist/2020";
 import { describe, expect, it } from "vitest";
+import { parsePixelSheet } from "../../src/lib/content/pixelSheet";
 
 /**
  * The content contract (docs/CONTENT-ARCHITECTURE.md §Validation):
@@ -15,6 +16,11 @@ const schemaModules = import.meta.glob<Json>("/schemas/*.json", {
 });
 const contentModules = import.meta.glob<Json>(["/src/config/*.json", "/src/content/**/*.json"], {
   eager: true,
+  import: "default",
+});
+const pixelSheetModules = import.meta.glob<string>("/src/content/pixelart/**/*.pix", {
+  eager: true,
+  query: "?raw",
   import: "default",
 });
 
@@ -46,8 +52,27 @@ describe("schema validation", () => {
   }
 });
 
+describe("pixel-sheet validation", () => {
+  for (const [path, source] of Object.entries(pixelSheetModules)) {
+    it(`${path} parses as native pixel content`, () => {
+      expect(() => parsePixelSheet(source, path)).not.toThrow();
+      const parsed = parsePixelSheet(source, path);
+      expect(
+        parsed.tiles.length + parsed.props.length + parsed.sprites.length,
+        path,
+      ).toBeGreaterThan(0);
+    });
+  }
+});
+
 describe("referential integrity", () => {
   const declaredIds = new Set<string>();
+  for (const [path, source] of Object.entries(pixelSheetModules)) {
+    const parsed = parsePixelSheet(source, path);
+    for (const tile of parsed.tiles) declaredIds.add(tile.id);
+    for (const prop of parsed.props) declaredIds.add(prop.id);
+    for (const sprite of parsed.sprites) declaredIds.add(sprite.id);
+  }
   for (const [path, doc] of Object.entries(contentModules)) {
     if (typeof doc.id === "string") declaredIds.add(doc.id);
     if (doc.swaps) for (const k of Object.keys(doc.swaps as Json)) declaredIds.add(k);
@@ -60,7 +85,7 @@ describe("referential integrity", () => {
   }
 
   const refPattern =
-    /"(tile|palette|anim|sprite|prop|char|item|flag|quest|map|dlgbank):[a-z0-9.-]+"/g;
+    /"(tile|palette|anim|sprite|prop|char|item|flag|quest|map|dlgbank|shop):[a-z0-9.-]+"/g;
 
   for (const [path, doc] of Object.entries(contentModules)) {
     it(`${path} has no dangling references`, () => {
@@ -104,6 +129,16 @@ describe("referential integrity", () => {
       const nodes = doc.nodes as Json;
       for (const slot of doc.slots as Json[]) {
         expect(nodes, `${doc.id}: slot -> ${slot.node}`).toHaveProperty(slot.node as string);
+      }
+    }
+  });
+
+  it("pixel-sheet sprite animation refs resolve", () => {
+    for (const [path, source] of Object.entries(pixelSheetModules)) {
+      for (const sprite of parsePixelSheet(source, path).sprites) {
+        for (const animId of Object.values(sprite.animations)) {
+          expect(declaredIds, `${sprite.id} -> ${animId}`).toContain(animId);
+        }
       }
     }
   });

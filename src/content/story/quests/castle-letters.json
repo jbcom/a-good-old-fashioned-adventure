@@ -1,0 +1,60 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:castle-letters",
+  "kind": "quest",
+  "title": "The Castle Letters",
+  "act": 3,
+  "autoStart": false,
+  "startOn": { "enterMap": "map:castle-yard" },
+  "start": "find-scribe",
+  "stages": [
+    {
+      "id": "find-scribe",
+      "log": "Find the castle scribe in the hall",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:castle-scribe.briefing:search" },
+          "to": "read-library"
+        }
+      ]
+    },
+    {
+      "id": "read-library",
+      "log": "Search the library archive for the dungeon seal",
+      "advance": [
+        {
+          "when": {
+            "enterZone": { "map": "map:castle-library", "trigger": "trigger:library-archive" }
+          },
+          "to": "inspect-armory",
+          "effects": [{ "setFlag": "flag:castle-library-read" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    {
+      "id": "inspect-armory",
+      "log": "Inspect the armory standard",
+      "advance": [
+        {
+          "when": {
+            "enterZone": { "map": "map:castle-armory", "trigger": "trigger:armory-standard" }
+          },
+          "to": "report-scribe",
+          "effects": [{ "setFlag": "flag:castle-armory-seen" }, { "sfx": "pickup" }]
+        }
+      ]
+    },
+    {
+      "id": "report-scribe",
+      "log": "Return to the castle scribe",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:castle-scribe.report:seen" },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:castle-letters-cleared" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true, "log": "The dungeon stair recognizes the seal" }
+  ]
+}

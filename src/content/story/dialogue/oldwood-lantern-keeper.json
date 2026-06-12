@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:oldwood-lantern-keeper",
+  "kind": "dialogue-bank",
+  "speaker": "char:oldwood-lantern-keeper",
+  "slots": [
+    { "when": { "flag": "flag:oldwood-lantern-kept" }, "node": "after" },
+    {
+      "when": { "quest": "quest:oldwood-lantern-keeper", "stage": "greet-keeper" },
+      "node": "lantern"
+    },
+    { "default": true, "node": "passing" }
+  ],
+  "nodes": {
+    "lantern": {
+      "lines": [
+        "I am Caddoc Wick, keeper of the last lantern. If it burns low, Deep Forest pretends it never heard of roads.",
+        "Take the bell-note eastward: one ring for courage, two for courtesy, and none for hurrying."
+      ],
+      "choices": [{ "id": "accepted", "text": "Ring the road bell." }],
+      "emits": "dlg:oldwood-lantern-keeper.lantern"
+    },
+    "after": {
+      "lines": [
+        "The last lantern has heard your bell-note. Even the brambles must mind a polite traveler now."
+      ],
+      "emits": "dlg:oldwood-lantern-keeper.after"
+    },
+    "passing": {
+      "lines": ["Mind the oil crate. It leaks only when someone boasts about never slipping."],
+      "emits": "dlg:oldwood-lantern-keeper.passing"
+    }
+  }
+}

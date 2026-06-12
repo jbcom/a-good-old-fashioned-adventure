@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:oldwood-oat-token",
+  "kind": "quest",
+  "title": "The Roadward's Blue Knot",
+  "act": 1,
+  "autoStart": true,
+  "start": "wait-for-stable-service",
+  "stages": [
+    {
+      "id": "wait-for-stable-service",
+      "advance": [
+        {
+          "when": {
+            "shopTransaction": {
+              "verb": "buy",
+              "shop": "shop:oswin-stable-counter",
+              "listing": "oat-bundle"
+            }
+          },
+          "to": "find-roadward"
+        }
+      ]
+    },
+    {
+      "id": "find-roadward",
+      "log": "Show Oswin's blue oat-string to the Oldwood roadward.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:oldwood-roadward.oat-token:accepted" },
+          "to": "done",
+          "effects": [
+            { "setFlag": "flag:oldwood-roadward-mark" },
+            { "healPlayer": 8 },
+            { "sfx": "interact" }
+          ]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

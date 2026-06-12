@@ -48,13 +48,35 @@ function shell() {
     enemies: Number(el.dataset.enemies ?? 0),
     projectiles: Number(el.dataset.projectiles ?? 0),
     hp: Number(el.dataset.hp ?? 0),
+    coins: Number(el.dataset.coins ?? 0),
+    roses: Number(el.dataset.roses ?? 0),
+    purchasedUpgrades: el.dataset.purchasedUpgrades ?? "",
+    selectedUpgrade: el.dataset.selectedUpgrade ?? "",
+    inspectionPulses: Number(el.dataset.inspectionPulses ?? 0),
+    lastInspectionProp: el.dataset.lastInspectionProp ?? "",
+    lastInspectionAnim: el.dataset.lastInspectionAnim ?? "",
+    sfxPlayed: Number(el.dataset.sfxPlayed ?? 0),
   };
+}
+
+function textOf(testId: string) {
+  return (
+    document
+      .querySelector<HTMLElement>(`[data-testid="${testId}"]`)
+      ?.textContent?.replace(/\s+/g, " ")
+      .trim() ?? ""
+  );
 }
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function pressA(input = userEvent.setup()) {
   await input.keyboard("j");
+  await wait(90);
+}
+
+async function pressB(input = userEvent.setup()) {
+  await input.keyboard("k");
   await wait(90);
 }
 
@@ -144,28 +166,6 @@ async function walkToOrMap(
   );
 }
 
-async function holdRightUntilMap(
-  input: ReturnType<typeof userEvent.setup>,
-  mapId: string,
-  maxSteps: number,
-  durationMs = 700,
-) {
-  for (let i = 0; i < maxSteps; i++) {
-    const pos = shell();
-    if (pos.mode !== "playing") {
-      throw new Error(
-        `hold-right left play mode=${pos.mode}; wanted=${mapId}; map=${pos.mapId}; x=${pos.x}; y=${pos.y}; hp=${pos.hp}; enemies=${pos.enemies}`,
-      );
-    }
-    if (pos.mapId === mapId) return;
-    await hold(input, "ArrowRight", durationMs);
-  }
-  const pos = shell();
-  throw new Error(
-    `failed to hold right into ${mapId}; ended at ${pos.x},${pos.y}; map=${pos.mapId}; hp=${pos.hp}`,
-  );
-}
-
 async function castUntilEnemyDrops(
   input: ReturnType<typeof userEvent.setup>,
   before: number,
@@ -179,13 +179,269 @@ async function castUntilEnemyDrops(
     if (state.enemies < before) return;
     if (state.mode !== "playing") {
       throw new Error(
-        `combat left play mode=${state.mode}; class=${state.classId}; hp=${state.hp}; enemies=${state.enemies}`,
+        `combat left play mode=${state.mode}; class=${state.classId}; x=${state.x}; y=${state.y}; hp=${state.hp}; enemies=${state.enemies}; projectiles=${state.projectiles}`,
       );
     }
   }
   const state = shell();
   throw new Error(
     `enemy count did not drop from ${before}; class=${state.classId}; hp=${state.hp}; enemies=${state.enemies}; projectiles=${state.projectiles}`,
+  );
+}
+
+async function closeAttackUntilEnemyDrops(
+  input: ReturnType<typeof userEvent.setup>,
+  before: number,
+  targetX: number,
+  targetY: number,
+  attempts: number,
+  options: { shielded?: boolean; advanceXPerAttempt?: number } = {},
+) {
+  const advance = options.advanceXPerAttempt ?? 8;
+  let shieldHeld = false;
+  try {
+    if (options.shielded) {
+      await input.keyboard("{k>}");
+      shieldHeld = true;
+      await wait(45);
+    }
+    for (let i = 0; i < attempts; i++) {
+      const state = shell();
+      if (state.enemies < before) return;
+      if (state.mode !== "playing") {
+        throw new Error(
+          `close combat left play mode=${state.mode}; class=${state.classId}; x=${state.x}; y=${state.y}; hp=${state.hp}; enemies=${state.enemies}; projectiles=${state.projectiles}`,
+        );
+      }
+      const approachX = targetX - 24 + Math.min(i * advance, 128);
+      await walkTo(input, approachX, targetY, 20);
+      await pressA(input);
+      await wait(320);
+      if (shell().enemies < before) return;
+    }
+  } finally {
+    if (shieldHeld) {
+      await input.keyboard("{/k}");
+      await wait(55);
+    }
+  }
+  const state = shell();
+  throw new Error(
+    `enemy count did not drop from close combat ${before}; class=${state.classId}; x=${state.x}; y=${state.y}; hp=${state.hp}; enemies=${state.enemies}; projectiles=${state.projectiles}`,
+  );
+}
+
+async function attackEnemyAt(
+  input: ReturnType<typeof userEvent.setup>,
+  before: number,
+  targetX: number,
+  targetY: number,
+  attempts: number,
+  options: { shielded?: boolean; advanceXPerAttempt?: number } = {},
+) {
+  if (shell().classId === "knight") {
+    await closeAttackUntilEnemyDrops(input, before, targetX, targetY, attempts, options);
+    return;
+  }
+  await castUntilEnemyDrops(input, before, attempts);
+}
+
+async function defeatDungeonGuardianAsKnight(input: ReturnType<typeof userEvent.setup>) {
+  for (let i = 0; i < 5; i++) {
+    if (textOf("quest-log").includes("Free Princess Amber")) return;
+    await attackEnemyAt(input, shell().enemies, 580, 250, 42, {
+      shielded: true,
+      advanceXPerAttempt: 4,
+    });
+    await wait(400);
+  }
+  throw new Error(
+    `Shadow Warlord did not fall; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; hp=${shell().hp}; enemies=${shell().enemies}; quest=${textOf(
+      "quest-log",
+    )}`,
+  );
+}
+
+async function waitForDungeonKeyCue() {
+  for (let i = 0; i < 40; i++) {
+    const dialogue = textOf("dialogue-box");
+    const quest = textOf("quest-log");
+    if (dialogue.includes("Dungeon Key")) return "dialogue";
+    if (quest.includes("Pick up the brass Dungeon Key") || quest.includes("Castle dungeon gates")) {
+      return "quest";
+    }
+    await wait(250);
+  }
+  throw new Error(
+    `dungeon key cue did not appear; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; quest=${textOf(
+      "quest-log",
+    )}; dialogue=${textOf("dialogue-box")}`,
+  );
+}
+
+async function collectDungeonKeyFromWyrm(input: ReturnType<typeof userEvent.setup>) {
+  const searchPoints = [
+    [360, 304],
+    [360, 336],
+    [400, 304],
+    [400, 336],
+    [420, 304],
+    [460, 304],
+    [500, 304],
+    [540, 304],
+    [540, 336],
+    [580, 336],
+    [620, 336],
+    [620, 368],
+    [580, 368],
+    [540, 368],
+    [500, 368],
+    [460, 368],
+  ] as const;
+  for (const [x, y] of searchPoints) {
+    await walkTo(input, x, y, 12);
+    await wait(180);
+    if (textOf("quest-log").includes("Castle dungeon gates")) return;
+  }
+  throw new Error(
+    `dungeon key was not collected after corpse sweep; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; quest=${textOf(
+      "quest-log",
+    )}`,
+  );
+}
+
+async function talkToOldwoodThorncutter(input: ReturnType<typeof userEvent.setup>) {
+  const meetPoints = [
+    [508, 288],
+    [540, 288],
+    [552, 312],
+    [492, 312],
+  ] as const;
+  for (const [x, y] of meetPoints) {
+    await walkTo(input, x, y, 16);
+    await pressA(input);
+    await wait(120);
+    if (textOf("dialogue-box").includes("Hester Briarhook")) {
+      await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("hazel arch");
+      await pressA(input);
+      await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("Hester Briarhook");
+      return;
+    }
+  }
+  throw new Error(
+    `Hester Briarhook dialogue did not open; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; dialogue=${textOf(
+      "dialogue-box",
+    )}; quest=${textOf("quest-log")}`,
+  );
+}
+
+async function talkToOldwoodLanternKeeper(input: ReturnType<typeof userEvent.setup>) {
+  const meetPoints = [
+    [848, 300],
+    [884, 300],
+    [904, 324],
+    [832, 324],
+  ] as const;
+  for (const [x, y] of meetPoints) {
+    await walkTo(input, x, y, 18);
+    await pressA(input);
+    await wait(140);
+    if (textOf("dialogue-box").includes("Caddoc Wick")) {
+      await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("last lantern");
+      await pressA(input);
+      await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("Caddoc Wick");
+      return;
+    }
+  }
+  throw new Error(
+    `Caddoc Wick dialogue did not open; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; dialogue=${textOf(
+      "dialogue-box",
+    )}; quest=${textOf("quest-log")}`,
+  );
+}
+
+async function talkToSunkenCourier(input: ReturnType<typeof userEvent.setup>) {
+  const meetPoints = [
+    [656, 336],
+    [690, 336],
+    [720, 336],
+    [732, 336],
+    [732, 360],
+    [704, 360],
+    [690, 360],
+    [676, 348],
+    [656, 360],
+  ] as const;
+  for (const [x, y] of meetPoints) {
+    await walkTo(input, x, y, 12);
+    await pressA(input);
+    await wait(220);
+    if (textOf("dialogue-box").includes("Celia Knotwell")) {
+      await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("ribbon-word");
+      await pressA(input);
+      await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("Celia Knotwell");
+      return;
+    }
+  }
+  throw new Error(
+    `Celia Knotwell dialogue did not open; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; dialogue=${textOf(
+      "dialogue-box",
+    )}; quest=${textOf("quest-log")}`,
+  );
+}
+
+async function talkToApproachPilgrim(input: ReturnType<typeof userEvent.setup>) {
+  const meetPoints = [
+    [220, 304],
+    [252, 304],
+    [260, 328],
+    [198, 328],
+  ] as const;
+  for (const [x, y] of meetPoints) {
+    await walkTo(input, x, y, 16);
+    await pressA(input);
+    await wait(120);
+    if (textOf("dialogue-box").includes("Aveline Dustcoat")) {
+      await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("gate wind");
+      await pressA(input);
+      await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("Aveline Dustcoat");
+      return;
+    }
+  }
+  throw new Error(
+    `Aveline Dustcoat dialogue did not open; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; dialogue=${textOf(
+      "dialogue-box",
+    )}; quest=${textOf("quest-log")}`,
+  );
+}
+
+async function doorwayVolleyUntilEnemyDrops(
+  input: ReturnType<typeof userEvent.setup>,
+  before: number,
+  attempts: number,
+) {
+  for (let i = 0; i < attempts; i++) {
+    const pos = shell();
+    if (pos.mode !== "playing") {
+      throw new Error(
+        `doorway volley left play mode=${pos.mode}; class=${pos.classId}; x=${pos.x}; y=${pos.y}; hp=${pos.hp}; enemies=${pos.enemies}; projectiles=${pos.projectiles}`,
+      );
+    }
+    if (pos.x < 445) await hold(input, "ArrowRight", 120);
+    else if (pos.x > 470) await hold(input, "ArrowLeft", 120);
+    if (pos.y < 240) await hold(input, "ArrowDown", 100);
+    else if (pos.y > 260) await hold(input, "ArrowUp", 100);
+
+    await hold(input, "ArrowRight", 80);
+    await pressA(input);
+    await wait(320);
+
+    const state = shell();
+    if (state.enemies < before) return;
+  }
+  const state = shell();
+  throw new Error(
+    `enemy count did not drop from doorway volley ${before}; class=${state.classId}; x=${state.x}; y=${state.y}; hp=${state.hp}; enemies=${state.enemies}; projectiles=${state.projectiles}`,
   );
 }
 
@@ -199,26 +455,90 @@ async function defeatAt(
 ) {
   const before = shell().enemies;
   await walkTo(input, standX, standY);
-  await castUntilEnemyDrops(input, before, casts);
+  await attackEnemyAt(input, before, corpseX, corpseY, casts);
   await walkTo(input, corpseX, corpseY, 24);
 }
 
 it("plays the expanded road from title to the dungeon gate through public controls", async () => {
+  // The expanded road is the route-pack library; a new game now boots the
+  // compact rescue route, so this journey resumes from a Hearthwake save.
+  await journeyRepository.upsertSlot({
+    id: 1,
+    classId: "knight",
+    mapId: "map:village",
+    playerX: 96,
+    playerY: 272,
+    level: 1,
+    hp: 100,
+    maxHp: 100,
+    questSummary: "The road begins.",
+    snapshotJson: "{}",
+    updatedAt: new Date("2026-06-11T19:00:00Z"),
+  });
   mountApp();
   const input = userEvent.setup();
 
   await expect.element(page.getByTestId("landing-screen")).toBeVisible();
-  await userEvent.click(page.getByTestId("new-game-button"));
-  await expect.element(page.getByTestId("title-screen")).toBeVisible();
-  await input.keyboard("{ArrowRight}");
-  await wait(80);
-  await input.keyboard("j");
+  await userEvent.click(page.getByTestId("continue-button"));
   await expect.element(page.getByTestId("world-stage-shell")).toBeVisible();
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:village");
+
+  await walkToOrMap(input, 112, 416, "map:village-stable", 24);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:village-stable");
+  await walkTo(input, 208, 160, 20);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oswin Hayward");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("saddle-bells");
+  await pressA(input);
+  await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("Oswin's Feed Pail");
+  await pressA(input);
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 8");
+  await expect.element(page.getByTestId("shop-inventory-item:oat-bundle")).toHaveTextContent("x1");
+  await input.keyboard("k");
+  await wait(90);
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 10");
+  await expect.element(page.getByTestId("shop-inventory-item:oat-bundle")).toHaveTextContent("x0");
+  await userEvent.click(page.getByTestId("shop-close"));
+  await wait(100);
+  await walkToOrMap(input, 224, 292, "map:village", 28);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:village");
+
+  await walkTo(input, 528, 260, 16);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Penny Cartwright");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("wayfarer ribbon");
+  await pressA(input);
+  await expect.element(page.getByTestId("shop-panel")).toHaveTextContent("Penny's Road Cart");
+  await pressA(input);
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 8");
+  await expect
+    .element(page.getByTestId("shop-inventory-item:wayfarer-ribbon"))
+    .toHaveTextContent("x1");
+  await input.keyboard("k");
+  await wait(90);
+  await expect.element(page.getByTestId("top-hud")).toHaveTextContent("C 9");
+  await expect
+    .element(page.getByTestId("shop-inventory-item:wayfarer-ribbon"))
+    .toHaveTextContent("x0");
+  await userEvent.click(page.getByTestId("shop-close"));
+  await wait(100);
+
+  await walkTo(input, 600, 268, 16);
+  const letterFeedbackBefore = shell();
+  await pressA(input);
+  await expect
+    .poll(() => shell().inspectionPulses, { timeout: 2_000 })
+    .toBeGreaterThan(letterFeedbackBefore.inspectionPulses);
+  expect(shell().lastInspectionProp).toBe("prop:village-letter-basket");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Doorstep Letter");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("letter-basket");
+  await pressA(input);
+  await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("letter-basket");
 
   await walkTo(input, 620, 304, 24);
   await pressA(input);
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Page Pip");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("letter-basket");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keeper Brindle");
   await pressA(input);
 
@@ -239,9 +559,32 @@ it("plays the expanded road from title to the dungeon gate through public contro
 
   await walkToOrMap(input, 864, 304, "map:oldwood-forest", 24);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:oldwood-forest");
+  await walkTo(input, 150, 292, 20);
+  const waystoneFeedbackBefore = shell();
+  await pressA(input);
+  await expect
+    .poll(() => shell().inspectionPulses, { timeout: 2_000 })
+    .toBeGreaterThan(waystoneFeedbackBefore.inspectionPulses);
+  await expect
+    .poll(() => shell().sfxPlayed, { timeout: 2_000 })
+    .toBeGreaterThan(waystoneFeedbackBefore.sfxPlayed);
+  expect(shell().lastInspectionProp).toBe("prop:mossy-waystone");
+  expect(shell().lastInspectionAnim).toBe("anim:inspect-pulse");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Mossy Waystone");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Keep east");
+  await pressA(input);
+  await talkToOldwoodThorncutter(input);
+  await walkTo(input, 304, 292, 22);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oldwood Roadward");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("blue oat-string");
+  await pressA(input);
+  await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("blue oat-string");
   await walkTo(input, 392, 292, 20);
   await pressA(input);
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Oldwood Hermit");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("roadward");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("waystone");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("drive two raiders");
   await pressA(input);
 
@@ -255,22 +598,82 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("branches are quieter");
   await pressA(input);
 
+  await talkToOldwoodLanternKeeper(input);
   await walkToOrMap(input, 1000, 304, "map:deep-forest", 24);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:deep-forest");
+  await walkTo(input, 236, 320, 22);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Linnet Fernwise");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("fern-lamps");
+  await pressA(input);
+  await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("Linnet Fernwise");
   await walkToOrMap(input, 1068, 304, "map:sunken-road", 24);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:sunken-road");
   await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Sunken Road");
-
-  await hold(input, "ArrowRight", 1200);
-  await castUntilEnemyDrops(input, shell().enemies, 30);
-  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Dungeon Key");
+  await walkTo(input, 230, 336, 22);
   await pressA(input);
-  await hold(input, "ArrowRight", 1600);
-  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Castle dungeon gates");
+  await expect
+    .element(page.getByTestId("dialogue-box"))
+    .toHaveTextContent("Splintered Cart Ledger");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("water took the wheels");
+  await pressA(input);
+  await walkTo(input, 92, 304, 20);
 
-  await holdRightUntilMap(input, "map:castle-approach", 10);
+  if (shell().classId === "knight") {
+    await attackEnemyAt(input, shell().enemies, 360, 304, 18, { shielded: true });
+  } else {
+    await hold(input, "ArrowRight", 1200);
+    await castUntilEnemyDrops(input, shell().enemies, 30);
+  }
+  if ((await waitForDungeonKeyCue()) === "dialogue") await pressA(input);
+  await collectDungeonKeyFromWyrm(input);
+  await expect
+    .poll(() => textOf("quest-log"), { timeout: 10_000 })
+    .toContain("Castle dungeon gates");
+  await talkToSunkenCourier(input);
+  await walkToOrMap(input, 868, 304, "map:castle-approach", 20);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-approach");
-  await walkToOrMap(input, 930, 210, "map:castle-dungeon", 28);
+  await talkToApproachPilgrim(input);
+  await walkTo(input, 520, 264, 24);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Mage Gwydion");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Aveline");
+  await pressA(input);
+  await walkToOrMap(input, 936, 190, "map:castle-yard", 12);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-yard");
+  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("castle scribe");
+
+  await walkToOrMap(input, 744, 272, "map:castle-hall", 28);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-hall");
+  await walkTo(input, 220, 272, 20);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Castle Scribe");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Celia Knotwell");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("library");
+  await pressA(input);
+  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("library archive");
+
+  await walkToOrMap(input, 320, 118, "map:castle-library", 26);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-library");
+  await walkTo(input, 320, 132, 20);
+  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("armory standard");
+  await walkToOrMap(input, 320, 350, "map:castle-hall", 26);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-hall");
+
+  await walkToOrMap(input, 500, 430, "map:castle-armory", 26);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-armory");
+  await walkTo(input, 256, 232, 20);
+  await expect
+    .element(page.getByTestId("quest-log"))
+    .toHaveTextContent("Return to the castle scribe");
+  await walkToOrMap(input, 256, 40, "map:castle-hall", 26);
+  await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-hall");
+
+  await walkTo(input, 220, 272, 20);
+  await pressA(input);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("seal is remembered");
+  await pressA(input);
+  await walkToOrMap(input, 860, 272, "map:castle-dungeon", 28);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:castle-dungeon");
   await expect.element(page.getByTestId("dialogue-box")).toBeVisible();
   await pressA(input);
@@ -278,7 +681,7 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await expect
     .poll(async () => (await journeyRepository.latestSlot())?.mapId, { timeout: 5_000 })
     .toBe("map:castle-dungeon");
-}, 210_000);
+}, 260_000);
 
 it("continues the expanded journey through dungeon victory through public controls", async () => {
   mountApp();
@@ -290,17 +693,23 @@ it("continues the expanded journey through dungeon victory through public contro
   await expect.element(page.getByTestId("dialogue-box")).toBeVisible();
   await pressA(input);
 
-  await castUntilEnemyDrops(input, shell().enemies, 16);
-  await castUntilEnemyDrops(input, shell().enemies, 16);
-  await walkTo(input, 250, 266, 8);
-  await castUntilEnemyDrops(input, shell().enemies, 16);
-  if (shell().enemies > 1) {
-    await walkTo(input, 305, 266, 12);
-    await castUntilEnemyDrops(input, shell().enemies, 18);
+  if (shell().classId === "knight") {
+    await defeatDungeonGuardianAsKnight(input);
+  } else {
+    await castUntilEnemyDrops(input, shell().enemies, 16);
+    await castUntilEnemyDrops(input, shell().enemies, 16);
+    await walkTo(input, 250, 266, 8);
+    await castUntilEnemyDrops(input, shell().enemies, 16);
+    if (shell().enemies > 1) {
+      await walkTo(input, 305, 266, 12);
+      await castUntilEnemyDrops(input, shell().enemies, 18);
+    }
+    await walkTo(input, 305, 300, 12);
+    await walkTo(input, 500, 300, 12);
+    await walkTo(input, 500, 250, 12);
+    await walkTo(input, 455, 250, 36);
+    await doorwayVolleyUntilEnemyDrops(input, shell().enemies, 48);
   }
-  await walkTo(input, 305, 300, 12);
-  await walkTo(input, 510, 300, 12);
-  await castUntilEnemyDrops(input, shell().enemies, 24);
   await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Free Princess Amber");
   await userEvent.click(page.getByTestId("hud-menu"));
   await expect.element(page.getByTestId("minimap")).toBeVisible();
@@ -309,8 +718,20 @@ it("continues the expanded journey through dungeon victory through public contro
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("kingdom is saved");
   await pressA(input);
 
-  await expect.element(page.getByTestId("victory-screen")).toBeVisible();
+  await expect.element(page.getByTestId("results-screen")).toBeVisible();
+  await expect.element(page.getByTestId("result-ledger")).toHaveTextContent("Earned");
+  expect(shell().mode).toBe("results");
+  expect(shell().roses).toBeGreaterThanOrEqual(3);
+
+  await pressA(input);
+  await expect.element(page.getByTestId("upgrade-screen")).toBeVisible();
+  await expect.element(page.getByTestId("upgrade-purse")).toHaveTextContent("Coins");
+  const selectedBefore = shell().selectedUpgrade;
+  expect(selectedBefore).toMatch(/^upgrade:/);
+  await pressA(input);
+  await expect.element(page.getByTestId("upgrade-detail")).toHaveTextContent("joins the road");
+  await expect.poll(() => shell().purchasedUpgrades).toContain(selectedBefore);
+  await pressB(input);
+  await expect.element(page.getByTestId("results-screen")).toBeVisible();
   await expect.element(page.getByTestId("audio-state")).toHaveTextContent("Tone");
-  const path = await page.screenshot({ path: "playthrough-victory.png" });
-  expect(path).toBeTruthy();
-}, 210_000);
+}, 260_000);

@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:sand-sail-wreck",
+  "kind": "prop",
+  "grid": { "w": 24, "h": 18 },
+  "anchor": { "x": 12, "y": 18 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "..........X.............",
+        ".........XXC............",
+        "........XCCC............",
+        ".......XCCcC............",
+        "......XCCccC............",
+        ".....XCCcYYC............",
+        "....XCCcYYYYC...........",
+        "...XCCcYYEEYC...........",
+        "..XCCCCCCCCCCX..........",
+        ".....XBBBBX.............",
+        "....XBbBBbBX............",
+        "...XXBbbbbBXX...........",
+        "..XttXBBBBXttX..........",
+        "...XX......XX...........",
+        "........................",
+        "........................",
+        "........................",
+        "........................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "C", "c", "Y", "E", "B", "b", "t"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

@@ -1,0 +1,42 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:village-letter-basket",
+  "kind": "prop",
+  "grid": { "w": 20, "h": 18 },
+  "anchor": { "x": 10, "y": 18 },
+  "solid": false,
+  "interaction": {
+    "verb": "read",
+    "method": "action-button",
+    "sfx": "inspect",
+    "feedback": { "anim": "anim:inspect-pulse" },
+    "dialogue": { "bank": "dlgbank:village-letter-basket", "slot": "note" }
+  },
+  "states": {
+    "default": {
+      "rows": [
+        "....................",
+        "......XXXXXXXX......",
+        ".....XBBBBBBBBX.....",
+        "....XBBbBBbBBBX.....",
+        "...XBBLLLCCLLBBX....",
+        "...XBLllLCCllLBX....",
+        "...XBBBBBBBBBBX.....",
+        "....XbBrrrrBbX......",
+        ".....XXrrrrXX.......",
+        "......XGGGGX........",
+        ".....XGgGGgGX.......",
+        "......XXXXXX........",
+        "....................",
+        "....................",
+        "....................",
+        "....................",
+        "....................",
+        "...................."
+      ]
+    }
+  },
+  "recolorChannels": ["X", "B", "b", "L", "l", "C", "r", "G", "g"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

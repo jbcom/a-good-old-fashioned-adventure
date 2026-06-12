@@ -17,6 +17,7 @@ export interface SaveSlotSummary {
   hp: number;
   maxHp: number;
   questSummary: string;
+  snapshotJson: string;
   updatedAt: number;
 }
 
@@ -38,6 +39,7 @@ function toSummary(row: SqlRow): SaveSlotSummary {
     hp: Number(row.hp),
     maxHp: Number(row.max_hp),
     questSummary: String(row.quest_summary),
+    snapshotJson: String(row.snapshot_json ?? "{}"),
     updatedAt: Number(row.updated_at),
   };
 }
@@ -64,9 +66,18 @@ function isExistingConnectionError(error: unknown): boolean {
 
 export class CapacitorSaveRepository implements SaveRepository {
   private initialized = false;
+  private initializePromise: Promise<void> | null = null;
+  private writeQueue: Promise<void> = Promise.resolve();
 
   async initialize(): Promise<void> {
     if (this.initialized) return;
+    this.initializePromise ??= this.openAndMigrate().finally(() => {
+      this.initializePromise = null;
+    });
+    await this.initializePromise;
+  }
+
+  private async openAndMigrate(): Promise<void> {
     if (Capacitor.getPlatform() === "web") {
       ensureJeepSqliteElement();
       await customElements.whenDefined("jeep-sqlite");
@@ -90,21 +101,29 @@ export class CapacitorSaveRepository implements SaveRepository {
     this.initialized = true;
   }
 
+  private enqueueWrite(write: () => Promise<void>): Promise<void> {
+    const next = this.writeQueue.then(write, write);
+    this.writeQueue = next.catch(() => {});
+    return next;
+  }
+
   async latestSlot(): Promise<SaveSlotSummary | null> {
     await this.initialize();
+    await this.writeQueue;
     const result = await CapacitorSQLite.query({
       database: SAVE_DB_NAME,
       statement:
-        "SELECT id, class_id, map_id, player_x, player_y, level, hp, max_hp, quest_summary, updated_at FROM save_slots ORDER BY updated_at DESC LIMIT 1",
+        "SELECT id, class_id, map_id, player_x, player_y, level, hp, max_hp, quest_summary, snapshot_json, updated_at FROM save_slots ORDER BY updated_at DESC LIMIT 1",
     });
     return queryRows(result).map(toSummary)[0] ?? null;
   }
 
   async upsertSlot(row: NewSaveSlotRow): Promise<void> {
-    await this.initialize();
-    await CapacitorSQLite.run({
-      database: SAVE_DB_NAME,
-      statement: `INSERT INTO save_slots (
+    await this.enqueueWrite(async () => {
+      await this.initialize();
+      await CapacitorSQLite.run({
+        database: SAVE_DB_NAME,
+        statement: `INSERT INTO save_slots (
         id, class_id, map_id, player_x, player_y, level, hp, max_hp, quest_summary, snapshot_json, updated_at
       ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       ON CONFLICT(id) DO UPDATE SET
@@ -118,39 +137,42 @@ export class CapacitorSaveRepository implements SaveRepository {
         quest_summary = excluded.quest_summary,
         snapshot_json = excluded.snapshot_json,
         updated_at = excluded.updated_at`,
-      values: [
-        row.id,
-        row.classId,
-        row.mapId,
-        row.playerX,
-        row.playerY,
-        row.level,
-        row.hp,
-        row.maxHp,
-        row.questSummary,
-        row.snapshotJson,
-        row.updatedAt instanceof Date ? row.updatedAt.getTime() : row.updatedAt,
-      ],
+        values: [
+          row.id,
+          row.classId,
+          row.mapId,
+          row.playerX,
+          row.playerY,
+          row.level,
+          row.hp,
+          row.maxHp,
+          row.questSummary,
+          row.snapshotJson,
+          row.updatedAt instanceof Date ? row.updatedAt.getTime() : row.updatedAt,
+        ],
+      });
+      if (Capacitor.getPlatform() === "web")
+        await CapacitorSQLite.saveToStore({ database: SAVE_DB_NAME });
     });
-    if (Capacitor.getPlatform() === "web")
-      await CapacitorSQLite.saveToStore({ database: SAVE_DB_NAME });
   }
 
   async recordEvent(row: NewSaveEventRow): Promise<void> {
-    await this.initialize();
-    await CapacitorSQLite.run({
-      database: SAVE_DB_NAME,
-      statement:
-        "INSERT INTO save_events (slot_id, event_type, payload_json, created_at) VALUES (?, ?, ?, ?)",
-      values: [
-        row.slotId,
-        row.eventType,
-        row.payloadJson,
-        row.createdAt instanceof Date ? row.createdAt.getTime() : row.createdAt,
-      ],
+    await this.enqueueWrite(async () => {
+      await this.initialize();
+      await CapacitorSQLite.run({
+        database: SAVE_DB_NAME,
+        statement:
+          "INSERT INTO save_events (slot_id, event_type, payload_json, created_at) VALUES (?, ?, ?, ?)",
+        values: [
+          row.slotId,
+          row.eventType,
+          row.payloadJson,
+          row.createdAt instanceof Date ? row.createdAt.getTime() : row.createdAt,
+        ],
+      });
+      if (Capacitor.getPlatform() === "web")
+        await CapacitorSQLite.saveToStore({ database: SAVE_DB_NAME });
     });
-    if (Capacitor.getPlatform() === "web")
-      await CapacitorSQLite.saveToStore({ database: SAVE_DB_NAME });
   }
 }
 
@@ -175,6 +197,7 @@ export class MemorySaveRepository implements SaveRepository {
           hp: latest.hp,
           maxHp: latest.maxHp,
           questSummary: latest.questSummary,
+          snapshotJson: latest.snapshotJson,
           updatedAt: latest.updatedAt.getTime(),
         }
       : null;

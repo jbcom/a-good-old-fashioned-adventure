@@ -1,0 +1,31 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:oat-bin",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 14 },
+  "anchor": { "x": 8, "y": 14 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "................",
+        "...XXXXXXXXXX...",
+        "..XBBBBBBBBBBX..",
+        ".XBDDDDDDDDBBX..",
+        ".XBDGGGGGGGDDBX.",
+        ".XBDGgGgGgGDDBX.",
+        ".XBDGGDDGGGDDBX.",
+        ".XBDDDDDDDDDDBX.",
+        ".XBBBBBBBBBBBBX.",
+        "..XbbXGGGGXbbX..",
+        "...XXXX..XXXX...",
+        "................",
+        "................",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "B", "b", "D", "G", "g"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

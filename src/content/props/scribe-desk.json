@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:scribe-desk",
+  "kind": "prop",
+  "grid": { "w": 32, "h": 16 },
+  "anchor": { "x": 16, "y": 16 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "................................",
+        ".....XXXXXXXXXXXXXXXXXXXXXX.....",
+        "....XBBBBBBBBBBBBBBBBBBBBBBX....",
+        "...XBDDBBDDBBDDBBDDBBDDBBDDX....",
+        "...XBBBBBBBBBBBBBBBBBBBBBBBBX...",
+        "....XXXXXXXXXXXXXXXXXXXXXXXX....",
+        ".....XbX.....XGXXGX.....XbX.....",
+        ".....XbX.....XGYYGX.....XbX.....",
+        ".....XbX.....XGYYGX.....XbX.....",
+        ".....XbX.....XXXXXX.....XbX.....",
+        ".....XGX................XGX.....",
+        "................................",
+        "................................",
+        "................................",
+        "................................",
+        "................................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "B", "D", "b", "G", "Y"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

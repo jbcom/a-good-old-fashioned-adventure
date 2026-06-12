@@ -1,6 +1,6 @@
 ---
 title: Content Architecture
-updated: 2026-06-10
+updated: 2026-06-11
 status: current
 domain: technical
 ---
@@ -44,9 +44,12 @@ maintain.
 `engine` (tile size, camera, render scale), `player` (base stats, i-frames),
 `classes` (per-class attack + B-ability), `combat` (damage formulas,
 knockback, shake), `progression` (XP curve, level-up), `drops` (loot tables,
-chest contents), `enemies` (archetype stats + AI params), `audio` (synth
-recipes for SFX, BGM note tables), `ui` (theme tokens, controls). All numbers
-were extracted verbatim from the prototype.
+chest contents), `enemies` (archetype stats + AI params), `incremental`
+(rescue-loop anchors, coins/roses, upgrade graph, class unlocks, route packs),
+`audio` (synth recipes for SFX, BGM note tables), `ui` (theme tokens,
+controls). Prototype-derived numbers remain source material, but the current
+product contract is the incremental rescue loop in
+`docs/INCREMENTAL-RESCUE-LOOP.md`.
 
 ### `src/content/palettes/` — recolorability
 
@@ -75,28 +78,82 @@ entity.
 
 ### `src/content/tiles/` and `src/content/props/` — primitives
 
-Tiles are flat 16×16 background cells: `solid` + a list of declarative
-`drawOps` (`fill`/`rect`/`triangle`/`repeat-rect`, colors literal or
-`@K` palette refs, optional `animate` ref for shimmer effects). Props are
-foreground objects that y-sort with characters: pixel-grid `states`
-(`closed`/`open`/…), optional `interaction` (verb + method + sfx), `solid`
-flag. The shared op vocabulary lives in `schemas/draw-ops.schema.json`.
+Tiles are flat 16×16 background cells: `solid` + either a native pixel-sheet
+`rows` grid or a legacy list of declarative `drawOps`
+(`fill`/`rect`/`triangle`/`repeat-rect`, colors literal or `@K` palette refs,
+optional `animate` ref for shimmer effects). Broad terrain tiles should live in
+`src/content/pixelart/*.pix`, not JSON rectangle lists. A tile can declare
+`variantOf` to join a semantic family. Variant tiles inherit gameplay meaning
+from that family but carry different hand-authored pixels, so `tile:grass` can
+become clustered tuft, flower, root, and shade variants without changing
+collision or story code. Props are foreground objects that y-sort with
+characters: pixel-grid `states`
+(`closed`/`open`/…), optional `interaction` (verb + method + sfx, optionally a
+dialogue bank/slot for readable props, and optionally a `feedback.anim` pulse
+for inspected props), `solid` flag. The shared op vocabulary lives in
+`schemas/draw-ops.schema.json`.
+
+Native pixel sheets use a tiny line-oriented format owned by this repo:
+
+```text
+@pixel-sheet v1
+@tile tile:grass-tufts
+variantOf tile:grass
+solid false
+traits Tile
+rows
+eeeeeeeeeeeeeeee
+...14 more 16-character rows...
+eeeeeeeeeeeeeeee
+@end
+```
+
+Rows are palette-channel characters from `palette:base`; `.` remains
+transparent. Tests parse every sheet, require exact row widths, and register the
+resulting tile ids for referential integrity.
+
+Aseprite is the editor surface for this format. Run `pnpm author:pixelart` to
+regenerate `.aseprite` masters and `.png` previews next to each `.pix` sheet.
+The exporter is repo-owned: `scripts/export-pixelart.mjs` prepares the sheet
+payload and `scripts/aseprite/import-pixel-sheet.lua` performs the Aseprite
+import/export. The text sheet remains the runtime source of truth so diffs,
+tests, and content review stay precise.
+
+### `src/content/shops/` — counters and prices
+
+A shop file owns its `shop:*` id, keeper character, display name, listing ids,
+item refs, buy prices, sell prices, and transaction SFX. The shop layer never
+stores inventory directly; it prices `item:*` definitions and the sim mutates
+the player's `Inventory` plus common-currency trait. The current implementation
+still names that trait `PlayerGold`; the S9 UI and persistence layer present it
+as coins while the internal trait name remains stable. Dialogue nodes may
+reference `opensShop: "shop:*"` so writers can decide when a counter appears
+without hard-coding React behavior.
 
 ### `src/content/animations/` — anime.js timelines
 
 Named, reusable timeline specs targeting logical channels (`spriteOffset`,
-`spriteTint`, `spriteAlpha`, `layerOffset`). The React binding resolves a
-channel to the actual rendered object. Durations encode the prototype's
+`spriteTint`, `spriteAlpha`, `spriteScale`, `layerOffset`). The React binding
+resolves a channel to the actual rendered object. Durations encode the prototype's
 implicit sine periods (e.g. walk bob = |sin(t/90ms)|·2px → 283ms loop).
 
 ### `src/content/world/maps/` — where things are
 
 A map = size + base tile + ordered `generation` ops (the prototype's
-procedural loops, made declarative) + `playerSpawn` + an entity spawn table
-(refs to chars/props/enemy archetypes with positions) + `triggers` (zones,
-conditional-solid gates keyed on flags) + `onEnter` actions. The
-`unchosen-companions` spawn rule reproduces the prototype's "your two
-unpicked classes appear as NPCs" behavior.
+procedural loops, made declarative) + optional `terrainVariants` family rules
++ `playerSpawn` + an entity spawn table (refs to chars/props/enemy archetypes
+with positions) + `triggers` (zones, conditional-solid gates keyed on flags) +
+`onEnter` actions. `generation` paints semantic surfaces first; the deterministic
+terrain-variant pass then turns repeated base cells into authored chunks using
+four to eight family variants. The `unchosen-companions` spawn rule reproduces
+the prototype's "your two unpicked classes appear as NPCs" behavior.
+
+After the incremental pivot, maps are not assumed to be one mandatory linear
+campaign. The baseline runtime route is a south-to-north princess rescue, and
+existing maps are reusable route-pack material. A route pack may include a
+village beat, forest branch, hazard shortcut, castle threshold, or rose-gated
+interior side loop; unlock data lives in `src/config/incremental.json`, while
+the authored map content stays in `src/content/world/maps`.
 
 ### `src/content/story/` — the narrative layer
 
@@ -108,9 +165,12 @@ unpicked classes appear as NPCs" behavior.
   conditions — `dialogueEvent`, `counterDone` (kill/collect counters),
   `itemAcquired`, `enemyDefeated`, `enterZone`, `flag` — and carry `effects`
   (`setFlag`, `setTile`, `spawnItem`, `startQuest`, `startDialogue`,
-  `loadMap`, `endGame`, …). "A→B→C and beyond" is just more stages and more
-  edges; branches are multiple `advance` entries on one stage; optional
-  content hangs off `hints`. Chaining acts = `startQuest` effects.
+  `loadMap`, `grantRunReward`, `endGame`, …). "A→B→C and beyond" is just more
+  stages and more edges; branches are multiple `advance` entries on one stage;
+  optional content hangs off `hints`. Chaining acts = `startQuest` effects.
+  Rescue-loop payouts stay data-driven: princess rescue grants roses through a
+  quest effect, while repeatable enemy coins are reduced from `enemy:defeated`
+  events.
 - `dialogue/*.json` — **dialogue banks with slots**. A bank holds every node
   a speaker can say. `slots` map game state → node: evaluated top-down,
   first match wins, `default` last; a slot with an `id` is directly

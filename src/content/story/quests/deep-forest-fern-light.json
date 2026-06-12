@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:deep-forest-fern-light",
+  "kind": "quest",
+  "title": "The Fern-Lamps",
+  "act": 2,
+  "startOn": { "enterMap": "map:deep-forest" },
+  "start": "greet-fern-mender",
+  "stages": [
+    {
+      "id": "greet-fern-mender",
+      "log": "Ask Linnet Fernwise why the Deep Forest lower track is lit.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:fern-mender.start:accepted" },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:fern-mender-greeted" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

@@ -1,0 +1,37 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:pilgrim-canopy",
+  "kind": "prop",
+  "grid": { "w": 16, "h": 20 },
+  "anchor": { "x": 8, "y": 20 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "................",
+        "....XXXXXXXX....",
+        "...XDDDDDDDDX...",
+        "..XDBBBBBBBBDX..",
+        ".XDBBRRRRBBBBDX.",
+        "XDDDBBBBBBBDDDDX",
+        ".XBBBBBBBBBBBBX.",
+        "..XXXXXXXXXXXX..",
+        "....XG....GX....",
+        "....X......X....",
+        "...XX......XX...",
+        "...XB......BX...",
+        "..XBB......BBX..",
+        "..XBDDDDDDDDBX..",
+        "...XBBBBBBBBX...",
+        "....XXXXXXXX....",
+        "................",
+        "................",
+        "................",
+        "................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "D", "B", "R", "G"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

@@ -6,6 +6,7 @@
 import { createWorld, type Entity, type World } from "koota";
 import { classes, enemies, player as playerConfig } from "../lib/config";
 import { flags, getCharacter, getMap, getProp } from "../lib/content/registry";
+import { initialIncrementalProgress, upgradeMaxHpBonus } from "./incrementalProgress";
 import { buildGrid } from "./mapgen";
 import {
   AimDirection,
@@ -15,9 +16,14 @@ import {
   EventQueue,
   Facing,
   FlagState,
+  FxBurst,
+  type FxBurstState,
+  FxStats,
   Health,
   Hitbox,
+  IncrementalProgress,
   Interactable,
+  Inventory,
   IsEnemy,
   IsNpc,
   IsPickup,
@@ -27,6 +33,7 @@ import {
   LootContainer,
   MapRuntime,
   MoveIntent,
+  NpcPatrol,
   Outbox,
   PlayerGold,
   Projectile,
@@ -50,7 +57,9 @@ export function createGameWorld(seed = 1): World {
     Clock({ t: 0, dt: 0 }),
     CameraState({ x: 0, y: 0, shake: 0 }),
     EventQueue({ events: [] }),
+    IncrementalProgress(initialIncrementalProgress(playerConfig.baseStats.gold ?? 0)),
     QuestLog({ active: {}, completed: [] }),
+    FxStats({ spawned: 0 }),
     Outbox({ sfx: [], dialogue: null, mapLoad: null, endGame: null }),
   );
   return world;
@@ -60,19 +69,21 @@ export function spawnPlayer(world: World, classId: string, x: number, y: number)
   const classDef = classes.classes[classId];
   if (!classDef) throw new Error(`unknown class: ${classId}`);
   const base = playerConfig.baseStats;
+  const hpBonus = upgradeMaxHpBonus(world.get(IncrementalProgress), classId);
   return world.spawn(
     IsPlayer({ classId }),
     Transform({ x, y }),
     Facing({ dir: 1 }),
     Hitbox(playerConfig.movement.hitbox),
-    Health({ hp: base.hp, maxHp: base.maxHp }),
+    Health({ hp: base.hp + hpBonus, maxHp: base.maxHp + hpBonus }),
     Level({ level: base.level, xp: base.xp, nextXp: base.nextXp }),
     Speed({ value: playerConfig.movement.speed }),
     MoveIntent({ x: 0, y: 0 }),
     AimDirection({ x: 1, y: 0 }),
     CombatTimers({ attack: 0, dash: 0, dashCooldown: 0, iframes: 0 }),
     ShieldState({ active: false }),
-    PlayerGold({ value: 0 }),
+    PlayerGold({ value: playerConfig.baseStats.gold ?? 0 }),
+    Inventory({ items: {} }),
     SpriteRef({ spriteId: classDef.sprite, paletteId: classDef.palette }),
   );
 }
@@ -83,9 +94,10 @@ export function spawnNpc(
   x: number,
   y: number,
   dir: 1 | -1 = 1,
+  patrol?: { points: { x: number; y: number }[]; speed?: number },
 ): Entity {
   const character = getCharacter(charId);
-  return world.spawn(
+  const entity = world.spawn(
     IsNpc({ charId }),
     Transform({ x, y }),
     Facing({ dir }),
@@ -95,6 +107,18 @@ export function spawnNpc(
       paletteId: character.palette ?? "palette:base",
     }),
   );
+  if (patrol?.points.length) {
+    entity.add(
+      NpcPatrol({
+        points: patrol.points,
+        targetIndex: patrol.points.length > 1 ? 1 : 0,
+        speed: patrol.speed ?? 22,
+      }),
+      Speed({ value: patrol.speed ?? 22 }),
+      MoveIntent({ x: 0, y: 0 }),
+    );
+  }
+  return entity;
 }
 
 export function spawnEnemy(world: World, archetypeId: string, x: number, y: number): Entity {
@@ -122,6 +146,10 @@ export function spawnChest(world: World, x: number, y: number, contents: string)
       verb: prop.interaction?.verb ?? "open",
       once: prop.interaction?.once ?? true,
       used: false,
+      sfx: prop.interaction?.sfx ?? "chest",
+      feedbackAnim: prop.interaction?.feedback?.anim ?? "",
+      dialogueBank: "",
+      dialogueSlot: "",
     }),
   );
 }
@@ -130,11 +158,35 @@ export function spawnProp(world: World, propId: string, x: number, y: number): E
   const prop = getProp(propId);
   const entity = world.spawn(PropRef({ propId, state: "default" }), Transform({ x, y }));
   if (prop.solid) entity.add(IsSolid);
+  if (prop.interaction) {
+    entity.add(
+      Interactable({
+        verb: prop.interaction.verb,
+        once: prop.interaction.once ?? false,
+        used: false,
+        sfx: prop.interaction.sfx ?? "",
+        feedbackAnim: prop.interaction.feedback?.anim ?? "",
+        dialogueBank: prop.interaction.dialogue?.bank ?? "",
+        dialogueSlot: prop.interaction.dialogue?.slot ?? "",
+      }),
+    );
+  }
   return entity;
 }
 
 export function spawnPickup(world: World, itemId: string, x: number, y: number, value = 0): Entity {
   return world.spawn(IsPickup({ itemId, value }), Transform({ x, y }));
+}
+
+export function spawnFx(
+  world: World,
+  fx: Omit<FxBurstState, "total"> & { x: number; y: number },
+): Entity {
+  const { x, y, ...state } = fx;
+  const stats = world.get(FxStats);
+  if (stats) world.set(FxStats, { spawned: stats.spawned + 1 });
+  else world.add(FxStats({ spawned: 1 }));
+  return world.spawn(FxBurst({ ...state, total: state.left }), Transform({ x, y }));
 }
 
 export interface ProjectileSpawn {
@@ -192,9 +244,14 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
   }
   world.set(CameraState, { x, y, shake: 0 });
 
+  const unlockedPacks = world.get(IncrementalProgress)?.unlockedRoutePackIds ?? [];
   for (const spawn of def.entities) {
+    // relocation overlays: entities can require or exclude an unlocked pack
+    if (spawn.requiresRoutePack && !unlockedPacks.includes(spawn.requiresRoutePack)) continue;
+    if (spawn.withoutRoutePack && unlockedPacks.includes(spawn.withoutRoutePack)) continue;
     if (spawn.spawnRule === "unchosen-companions") {
-      const others = classes.roster.filter((c) => c !== opts.classId);
+      const companionRoster = classes.companionRoster ?? classes.roster;
+      const others = companionRoster.filter((c) => c !== opts.classId);
       for (const [i, pos] of (spawn.positions ?? []).entries()) {
         const companion = others[i];
         if (companion) spawnNpc(world, `char:companion-${companion}`, pos.x, pos.y);
@@ -206,7 +263,14 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
       continue;
     }
     if (spawn.ref?.startsWith("char:")) {
-      spawnNpc(world, spawn.ref, spawn.x as number, spawn.y as number, spawn.dir ?? 1);
+      spawnNpc(
+        world,
+        spawn.ref,
+        spawn.x as number,
+        spawn.y as number,
+        spawn.dir ?? 1,
+        spawn.patrol,
+      );
       continue;
     }
     if (spawn.ref === "prop:chest") {

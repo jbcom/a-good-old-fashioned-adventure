@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:sunken-road-wreck-picker",
+  "kind": "quest",
+  "title": "Bones of the Wash",
+  "act": 2,
+  "startOn": { "enterMap": "map:sunken-road" },
+  "start": "greet-picker",
+  "stages": [
+    {
+      "id": "greet-picker",
+      "log": "Greet Petch Marrow working the sandwyrm wreck at the sunken wash.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:sunken-road-wreck-picker.salvage:accepted" },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:sunken-road-wreck-picked" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

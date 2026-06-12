@@ -3,12 +3,24 @@
   "id": "map:deep-forest",
   "kind": "map",
   "name": "Deep Forest",
-  "size": { "cols": 68, "rows": 38 },
+  "size": {
+    "cols": 68,
+    "rows": 38
+  },
   "baseTile": "tile:leaf-litter",
   "bgmTheme": "deep-forest",
   "generation": [
-    { "op": "border", "tile": "tile:mountain" },
-    { "op": "row-span", "tile": "tile:path", "y": 19, "x0": 1, "x1": 66 },
+    {
+      "op": "border",
+      "tile": "tile:mountain"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 19,
+      "x0": 1,
+      "x1": 66
+    },
     {
       "op": "row-span",
       "tile": "tile:path",
@@ -25,19 +37,194 @@
       "x1": 57,
       "note": "lower animal track"
     },
-    { "op": "col-span", "tile": "tile:path", "x": 46, "y0": 13, "y1": 25, "note": "hermit track" }
+    {
+      "op": "col-span",
+      "tile": "tile:path",
+      "x": 46,
+      "y0": 13,
+      "y1": 25,
+      "note": "hermit track"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water",
+      "x0": 34,
+      "x1": 35,
+      "y0": 9,
+      "y1": 27,
+      "note": "the Thornwood stream cutting the deep wood"
+    },
+    {
+      "op": "region",
+      "tile": "tile:wood-bridge",
+      "x0": 34,
+      "x1": 35,
+      "y0": 18,
+      "y1": 20,
+      "note": "plank crossing wide enough for the player hitbox probes"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass",
+      "x0": 5,
+      "x1": 7,
+      "y0": 15,
+      "y1": 16,
+      "note": "fern clearing beside the mender's track"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass",
+      "x0": 60,
+      "x1": 62,
+      "y0": 23,
+      "y1": 24,
+      "note": "moss clearing before the Sunken Road threshold"
+    }
   ],
-  "playerSpawn": { "x": 48, "y": 304 },
+  "terrainVariants": [
+    {
+      "baseTile": "tile:leaf-litter",
+      "variants": [
+        "tile:leaf-litter",
+        "tile:leaf-litter-vein",
+        "tile:leaf-litter-roots",
+        "tile:leaf-litter-glowcap"
+      ],
+      "chunk": {
+        "w": 3,
+        "h": 2
+      },
+      "seed": 301,
+      "note": "deeper forest pockets with roots and glowcap breaks"
+    },
+    {
+      "baseTile": "tile:path",
+      "variants": ["tile:path", "tile:path-ruts", "tile:path-pebbles", "tile:path-moss"],
+      "chunk": {
+        "w": 4,
+        "h": 2
+      },
+      "seed": 302,
+      "note": "animal-track chunks instead of one path strip"
+    },
+    {
+      "baseTile": "tile:grass",
+      "variants": ["tile:grass", "tile:grass-tufts", "tile:grass-flowers", "tile:grass-roots"],
+      "chunk": {
+        "w": 2,
+        "h": 2
+      },
+      "seed": 503,
+      "note": "fern clearings breaking the leaf-litter carpet"
+    },
+    {
+      "baseTile": "tile:mountain",
+      "variants": [
+        "tile:mountain",
+        "tile:mountain-crag",
+        "tile:mountain-scree",
+        "tile:mountain-ledge"
+      ],
+      "chunk": {
+        "w": 2,
+        "h": 2
+      },
+      "seed": 506,
+      "note": "deep gorge walls with scree and ledges"
+    }
+  ],
+  "playerSpawn": {
+    "x": 48,
+    "y": 304
+  },
   "spawns": {
-    "default": { "x": 48, "y": 304 },
-    "from-oldwood": { "x": 48, "y": 304 },
-    "from-approach": { "x": 1024, "y": 304 }
+    "default": {
+      "x": 48,
+      "y": 304
+    },
+    "from-oldwood": {
+      "x": 48,
+      "y": 304
+    },
+    "from-approach": {
+      "x": 1024,
+      "y": 304
+    }
   },
   "entities": [
-    { "ref": "prop:broadleaf-tree", "x": 180, "y": 236, "note": "thicker canopy" },
-    { "ref": "prop:stump", "x": 308, "y": 336, "note": "mossy stump" },
-    { "ref": "prop:broadleaf-tree", "x": 620, "y": 248, "note": "old oak" },
-    { "ref": "prop:stump", "x": 820, "y": 330, "note": "fallen marker" },
+    {
+      "ref": "prop:broadleaf-tree",
+      "x": 180,
+      "y": 236,
+      "note": "thicker canopy"
+    },
+    {
+      "ref": "prop:fern-mender-cart",
+      "x": 222,
+      "y": 354,
+      "note": "Linnet's fern-lamp cart beside the lower track"
+    },
+    {
+      "ref": "prop:glowcap-ring",
+      "x": 278,
+      "y": 338,
+      "note": "glowcap ring marking the route rhyme"
+    },
+    {
+      "ref": "prop:glowcap-ring",
+      "x": 308,
+      "y": 336,
+      "note": "glowcap ring on the lower track"
+    },
+    {
+      "ref": "prop:fallen-log",
+      "x": 432,
+      "y": 336,
+      "note": "fallen log at the upper-to-lower path shift"
+    },
+    {
+      "ref": "prop:threshold-root-marker",
+      "x": 520,
+      "y": 286,
+      "note": "root-marker beside the stream"
+    },
+    {
+      "ref": "prop:broadleaf-tree",
+      "x": 620,
+      "y": 248,
+      "note": "old oak"
+    },
+    {
+      "ref": "prop:bramble-hedge",
+      "x": 708,
+      "y": 292,
+      "note": "bramble hedge near the companion trail"
+    },
+    {
+      "ref": "prop:glowcap-ring",
+      "x": 820,
+      "y": 330,
+      "note": "glowcap ring before the threshold"
+    },
+    {
+      "ref": "prop:forest-lantern-post",
+      "x": 936,
+      "y": 274,
+      "note": "last lantern before the Sunken Road"
+    },
+    {
+      "ref": "prop:lantern-oil-crate",
+      "x": 966,
+      "y": 306,
+      "note": "oil crate proving the last lantern is tended"
+    },
+    {
+      "ref": "prop:threshold-root-marker",
+      "x": 990,
+      "y": 322,
+      "note": "root marker tying the forest threshold to the road"
+    },
     {
       "ref": "char:lost-page",
       "x": 296,
@@ -46,21 +233,134 @@
       "note": "Lost Page Rowan near the upper animal track"
     },
     {
-      "spawnRule": "unchosen-companions",
-      "positions": [{ "x": 260, "y": 260 }, { "x": 730, "y": 258 }]
+      "ref": "char:fern-mender",
+      "x": 220,
+      "y": 320,
+      "dir": 1,
+      "patrol": {
+        "points": [
+          {
+            "x": 220,
+            "y": 320
+          },
+          {
+            "x": 284,
+            "y": 320
+          },
+          {
+            "x": 284,
+            "y": 348
+          },
+          {
+            "x": 220,
+            "y": 348
+          }
+        ],
+        "speed": 22
+      },
+      "note": "moving road-life scene on the lower track"
     },
-    { "enemy": "orc-scout", "x": 500, "y": 220 },
-    { "enemy": "bramble-stalker", "x": 680, "y": 184 },
-    { "enemy": "thorn-shaman", "x": 900, "y": 450 },
-    { "enemy": "forest-shaman", "x": 840, "y": 398 }
+    {
+      "spawnRule": "unchosen-companions",
+      "positions": [
+        {
+          "x": 260,
+          "y": 260
+        },
+        {
+          "x": 730,
+          "y": 258
+        }
+      ]
+    },
+    {
+      "enemy": "orc-scout",
+      "x": 500,
+      "y": 220
+    },
+    {
+      "enemy": "bramble-stalker",
+      "x": 680,
+      "y": 184
+    },
+    {
+      "enemy": "thorn-shaman",
+      "x": 900,
+      "y": 450
+    },
+    {
+      "enemy": "forest-shaman",
+      "x": 840,
+      "y": 398
+    },
+    {
+      "enemy": "glowcap-matron",
+      "x": 560,
+      "y": 480,
+      "note": "Deep Forest miniboss in the southern glowcap hollow"
+    },
+    {
+      "ref": "prop:glowcap-ring",
+      "x": 160,
+      "y": 200,
+      "note": "glowcap ring in the west shade"
+    },
+    {
+      "ref": "prop:glowcap-ring",
+      "x": 592,
+      "y": 352,
+      "note": "glowcap ring past the stream crossing"
+    }
   ],
+  "composition": {
+    "routeWindows": [
+      {
+        "label": "fern-mender lower track",
+        "zone": {
+          "x0": 1,
+          "y0": 14,
+          "x1": 24,
+          "y1": 23
+        },
+        "majorAnchors": ["char:fern-mender", "prop:fern-mender-cart"],
+        "minorProps": ["prop:glowcap-ring", "prop:glowcap-ring", "prop:broadleaf-tree"]
+      },
+      {
+        "label": "old oak and lost page trail",
+        "zone": {
+          "x0": 25,
+          "y0": 13,
+          "x1": 48,
+          "y1": 23
+        },
+        "majorAnchors": ["prop:broadleaf-tree", "enemy:orc-scout"],
+        "minorProps": ["prop:fallen-log", "prop:threshold-root-marker", "prop:bramble-hedge"]
+      },
+      {
+        "label": "last lantern before Sunken Road",
+        "zone": {
+          "x0": 49,
+          "y0": 15,
+          "x1": 66,
+          "y1": 25
+        },
+        "majorAnchors": ["prop:forest-lantern-post", "enemy:forest-shaman"],
+        "minorProps": ["prop:glowcap-ring", "prop:lantern-oil-crate", "prop:threshold-root-marker"]
+      }
+    ]
+  },
   "triggers": [
     {
       "id": "trigger:old-oak",
       "kind": "landmark",
       "label": "The Leaning Old Oak",
       "sfx": "interact",
-      "zone": { "x0": 596, "y0": 232, "x1": 662, "y1": 320 }
+      "zone": {
+        "x0": 596,
+        "y0": 232,
+        "x1": 662,
+        "y1": 320
+      }
     },
     {
       "id": "trigger:west-road",
@@ -69,7 +369,12 @@
       "toMap": "map:oldwood-forest",
       "toSpawn": "from-deep",
       "sfx": "interact",
-      "zone": { "x0": 0, "y0": 276, "x1": 28, "y1": 332 }
+      "zone": {
+        "x0": 0,
+        "y0": 276,
+        "x1": 28,
+        "y1": 332
+      }
     },
     {
       "id": "trigger:east-road",
@@ -78,7 +383,12 @@
       "toMap": "map:sunken-road",
       "toSpawn": "from-forest",
       "sfx": "interact",
-      "zone": { "x0": 1052, "y0": 276, "x1": 1088, "y1": 332 }
+      "zone": {
+        "x0": 1052,
+        "y0": 276,
+        "x1": 1088,
+        "y1": 332
+      }
     }
   ]
 }

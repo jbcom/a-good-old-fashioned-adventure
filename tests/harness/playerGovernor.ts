@@ -3,6 +3,7 @@ import {
   chooseGovernorAction,
   type GovernorAction,
   type GovernorGoal,
+  type GovernorPlanStep,
   goalSatisfied,
   type PlayerPerception,
 } from "./playerGovernorModel";
@@ -20,6 +21,7 @@ interface DirectionOptions extends PursueOptions {
 
 interface PointOptions extends PursueOptions {
   tolerance?: number;
+  stopGoal?: GovernorGoal;
 }
 
 const keyByButton: Record<string, string> = {
@@ -53,7 +55,8 @@ function isVisible(element: HTMLElement | null): boolean {
 function inferMode(): string {
   if (isVisible(byTestId("landing-screen"))) return "landing";
   if (isVisible(byTestId("title-screen"))) return "title";
-  if (isVisible(byTestId("victory-screen"))) return "victory";
+  if (isVisible(byTestId("results-screen"))) return "results";
+  if (isVisible(byTestId("upgrade-screen"))) return "upgrade";
   if (isVisible(byTestId("gameover-screen"))) return "gameover";
   if (isVisible(byTestId("world-stage-shell")) || isVisible(byTestId("top-hud"))) return "playing";
   return "unknown";
@@ -118,7 +121,7 @@ export class PlayerGovernor {
 
   async press(button: string): Promise<void> {
     const key = keyByButton[button] ?? button;
-    await this.input.keyboard(key);
+    await this.input.keyboard(key.startsWith("Arrow") ? `{${key}}` : key);
     await wait(100);
   }
 
@@ -130,9 +133,17 @@ export class PlayerGovernor {
     await wait(100);
   }
 
-  async act(action: GovernorAction): Promise<void> {
+  async act(action: GovernorAction, stopGoal?: GovernorGoal): Promise<void> {
     if (action.kind === "click") {
       await this.click(action.button);
+      return;
+    }
+    if (action.kind === "reachPoint") {
+      await this.reachPoint(action.x, action.y, {
+        tolerance: action.tolerance,
+        maxSteps: action.maxSteps,
+        stopGoal,
+      });
       return;
     }
     if (action.kind === "hold") {
@@ -152,7 +163,7 @@ export class PlayerGovernor {
       const perception = this.perceive();
       if (goalSatisfied(goal, perception)) return perception;
       history.push(describePerception(perception));
-      await this.act(chooseGovernorAction(perception, actions));
+      await this.act(chooseGovernorAction(perception, actions), goal);
     }
     const finalPerception = this.perceive();
     history.push(describePerception(finalPerception));
@@ -183,6 +194,15 @@ export class PlayerGovernor {
     );
   }
 
+  async runPlan(plan: GovernorPlanStep[], options: PursueOptions = {}): Promise<PlayerPerception> {
+    for (const step of plan) {
+      await this.pursue(step.goal, step.actions, {
+        maxSteps: step.maxSteps ?? options.maxSteps,
+      });
+    }
+    return this.perceive();
+  }
+
   async reachPoint(
     targetX: number,
     targetY: number,
@@ -194,6 +214,7 @@ export class PlayerGovernor {
 
     for (let step = 0; step < maxSteps; step++) {
       const perception = this.perceive();
+      if (options.stopGoal && goalSatisfied(options.stopGoal, perception)) return perception;
       const x = perception.diagnostics?.x ?? 0;
       const y = perception.diagnostics?.y ?? 0;
       const dx = targetX - x;

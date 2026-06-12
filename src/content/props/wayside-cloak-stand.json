@@ -1,0 +1,35 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:wayside-cloak-stand",
+  "kind": "prop",
+  "grid": { "w": 24, "h": 18 },
+  "anchor": { "x": 12, "y": 18 },
+  "solid": false,
+  "states": {
+    "default": {
+      "rows": [
+        "........................",
+        "...........XX...........",
+        "..........XBBX..........",
+        ".........XBbbBX.........",
+        "........XBbRRbBX........",
+        ".......XBbRrrRbBX.......",
+        "......XBbRRYYRRbBX......",
+        ".....XBBBBBBBBBBBBX.....",
+        "......XCCX....XCCX......",
+        ".....XccX......XccX.....",
+        "....XCCX........XCCX....",
+        "...XccX....LL....XccX...",
+        "....XX.....Ll.....XX....",
+        "...........LL...........",
+        "........................",
+        "........................",
+        "........................",
+        "........................"
+      ]
+    }
+  },
+  "recolorChannels": ["X", "B", "b", "R", "r", "Y", "C", "c", "L", "l"],
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

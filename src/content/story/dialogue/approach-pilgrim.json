@@ -1,0 +1,34 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:approach-pilgrim",
+  "kind": "dialogue-bank",
+  "speaker": "char:approach-pilgrim",
+  "slots": [
+    { "when": { "flag": "flag:approach-pilgrim-warned" }, "node": "after" },
+    {
+      "when": { "quest": "quest:approach-pilgrim-warning", "stage": "take-warning" },
+      "node": "warning"
+    },
+    { "default": true, "node": "plain" }
+  ],
+  "nodes": {
+    "warning": {
+      "lines": [
+        "Aveline Dustcoat, pilgrim of the last warm kettle before castle stone.",
+        "Tell Gwydion the gate wind is running low and mean. Even banners are keeping their heads down."
+      ],
+      "choices": [{ "id": "accepted", "text": "Carry Aveline's warning." }],
+      "emits": "dlg:approach-pilgrim.warning"
+    },
+    "after": {
+      "lines": ["The kettle has one more cup in it. Take courage while it is hot."],
+      "emits": "dlg:approach-pilgrim.after"
+    },
+    "plain": {
+      "lines": [
+        "Cloak tight, boots steady. Castle roads are polite only to people who distrust them."
+      ],
+      "emits": "dlg:approach-pilgrim.plain"
+    }
+  }
+}

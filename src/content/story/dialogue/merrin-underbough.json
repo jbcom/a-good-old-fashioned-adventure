@@ -1,0 +1,33 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:merrin-underbough",
+  "kind": "dialogue-bank",
+  "speaker": "char:merrin-underbough",
+  "slots": [
+    { "when": { "flag": "flag:tavern-song-learned" }, "node": "after-song" },
+    { "when": { "quest": "quest:tavern-song", "stage": "ask-merrin" }, "node": "song" },
+    { "default": true, "node": "welcome" }
+  ],
+  "nodes": {
+    "welcome": {
+      "lines": [
+        "Merrin Underbough keeps the hearth-song low until the road is ready to hear itself.",
+        "See the story-quilt by the bench? Every square is a safe return, sewn before the brave part begins."
+      ],
+      "emits": "dlg:merrin-underbough.welcome"
+    },
+    "song": {
+      "lines": [
+        "The verse keeps two promises: go out kindly, and come home with one more name than you left with.",
+        "If the road starts to roar, hum the second line and remember Hearthwake heard you first."
+      ],
+      "emits": "dlg:merrin-underbough.song"
+    },
+    "after-song": {
+      "lines": [
+        "There now. The board has lent you its little courage, and courage is best returned with interest."
+      ],
+      "emits": "dlg:merrin-underbough.after-song"
+    }
+  }
+}

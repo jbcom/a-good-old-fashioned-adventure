@@ -1,0 +1,29 @@
+{
+  "$schema": "../../../schemas/shop.schema.json",
+  "id": "shop:brindle-counter",
+  "kind": "shop",
+  "name": "Brindle's Counter",
+  "keeper": "char:shopkeeper",
+  "currency": "item:gold",
+  "buySfx": "coin",
+  "sellSfx": "coin",
+  "denySfx": "interact",
+  "listings": [
+    {
+      "id": "travel-cake",
+      "item": "item:travel-cake",
+      "label": "Travel Cake",
+      "description": "Oat, honey, and road salt wrapped in waxed leaf.",
+      "buyPrice": 6,
+      "sellPrice": 3
+    },
+    {
+      "id": "mending-plaster",
+      "item": "item:mending-plaster",
+      "label": "Mending Plaster",
+      "description": "Clean linen and hedge-herb paste for the next bad scrape.",
+      "buyPrice": 8,
+      "sellPrice": 4
+    }
+  ]
+}

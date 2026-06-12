@@ -57,10 +57,11 @@ describe("melee", () => {
   it("opens a chest with the swing", () => {
     const { world, player } = arena("knight");
     player.set(Transform, { x: 100, y: 100 });
+    const startingGold = player.get(PlayerGold)?.value ?? 0;
     const chest = spawnChest(world, 118, 100, "Gold");
     playerAttack(world);
     expect(chest.get(LootContainer)?.opened).toBe(true);
-    expect(player.get(PlayerGold)?.value).toBe(50);
+    expect(player.get(PlayerGold)?.value).toBe(startingGold + 50);
   });
 });
 

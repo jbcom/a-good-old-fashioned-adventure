@@ -12,13 +12,31 @@ TypeScript adventure game shipped to Android via Capacitor (arcade-cabinet diale
 
 ## Repo-specific
 
+Current product direction: **mobile incremental storybook rescue game**. The
+core loop is now one repeatable south-to-north princess rescue route: start as
+the knight at the bottom, push north, defeat the dragon guarding the princess,
+earn common coins plus rarer roses, spend rewards on a directed acyclic
+upgrade graph (a proper DAG — all prerequisites owned before a node opens),
+then begin a changed run. Existing bespoke villages, roads,
+interiors, NPCs, shops, props, and enemies become unlockable route packs,
+objectives, modifiers, and side loops around that rescue loop. The authoritative
+pillar is `docs/INCREMENTAL-RESCUE-LOOP.md`.
+
+Current progress snapshot: S9.1, S9.2, and S9.3 are complete. The game now
+persists incremental progression and the public-control journey reaches rescue
+results, opens the upgrade graph with A, buys an affordable connected node with
+A, and returns to results with B. Remaining open work is documented in
+`.agent-state/directive.md`: S8.24 composition budget tuning, S9.4 compact
+rescue-route runtime slice, and S9.5 second-run proof.
+
 Content-first architecture: ALL tunables live in `src/config/*.json`, all
 assets/world/story in `src/content/**/*.json` (validated by `schemas/`,
 spec in `docs/CONTENT-ARCHITECTURE.md`). Code interprets content, never
 embeds it. The original prototype is `kingdom_quest_rpg.tsx` (reference
 only — it does not run; see decisions table in the spec).
 
-The repo is scaffolded and in continuous build-out on `feat/content-architecture`.
+The repo is scaffolded and in continuous build-out on the active long-running
+local branch. `.agent-state/directive.md` is the durable work queue.
 
 - **Run:** `pnpm dev`
 - **Test:** `pnpm lint` / `pnpm typecheck` / `pnpm test` / `pnpm test:browser`
@@ -31,3 +49,11 @@ The repo is scaffolded and in continuous build-out on `feat/content-architecture
 - `.agent-state/directive.md` is ACTIVE and is the durable work queue.
 - `.claude/gates.json` enforces visual/audio/sim and Capacitor evidence rules.
 - Browser validation is not optional: `tests/browser/playthrough.test.tsx` drives the public player journey through real keyboard controls.
+- Work order remains docs > tests > code. Product pivots must first update
+  pillar docs and config contracts, then tests, then runtime.
+- Exterior pixel-art quality is now a content contract: mandatory route maps
+  must use terrain-family variants in deterministic chunks, not one repeated
+  base tile with a few accent pixels.
+- Native pixel art lives in `src/content/pixelart/*.pix`; regenerate editor
+  files with `pnpm author:pixelart`, which uses the checked-in Lua importer at
+  `scripts/aseprite/import-pixel-sheet.lua`.

@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../../schemas/dialogue.schema.json",
+  "id": "dlgbank:threadseller",
+  "kind": "dialogue-bank",
+  "speaker": "char:threadseller",
+  "slots": [{ "default": true, "node": "gossip" }],
+  "nodes": {
+    "gossip": {
+      "lines": [
+        "Mind Brindle's prices, dear heart. He counts copper fairly, but his travel cakes vanish before noon.",
+        "The green thread on the shelf is for boots, packs, and courage that frays on the road."
+      ],
+      "emits": "dlg:threadseller.gossip"
+    }
+  }
+}
