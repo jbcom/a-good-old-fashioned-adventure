@@ -43,6 +43,16 @@ story, not from grinding ordinary enemies. Coin rewards should be frequent
 enough to make a failed run useful; rose rewards should make a successful or
 well-played run memorable.
 
+### Death pays out
+
+The player never has to finish. That is the point of the dual currencies: a
+run that ends in death still banks every coin earned along the way — defeated
+enemies, road tasks, miniboss clears, achievements, incremental objectives.
+Roses require reaching the princess. Dying before the rescue means a run with
+zero roses but real coin progress, so the next attempt always starts stronger.
+Coins are the consolation arc; roses are the triumph arc. No outcome of a run
+is ever a wipe.
+
 ## Upgrade Web
 
 The upgrade screen is a spiderweb map rooted at one central vow. Nodes unlock
@@ -61,8 +71,49 @@ Upgrade node categories:
   skipping the rescue.
 
 The web spends mostly coins near the root and asks for roses at branch-defining
-moments. A class unlock can cost coins; an identity-changing class ability
-should usually ask for roses.
+moments. The class economy is fixed: **new character classes unlock with
+roses**, and **every class owns its own coin-funded upgrade track** — its own
+strand of the web growing out of the class node. Buying into a new identity is
+a story moment paid with the rare currency; deepening an identity you already
+own is steady coin work that every run funds, finished or not.
+
+## Run Ladder and Minibosses
+
+Every unlockable map area is a risk/reward decision made before the rescue:
+new areas offer significantly better rewards at the cost of more route
+complexity between the knight and the princess.
+
+- **Every map has its own miniboss before the dragon.** Each route-pack map
+  fields a named miniboss whose clear pays a significant coin purse and feeds
+  rose objectives on clean clears. The dragon stays the final guardian; the
+  minibosses are the rungs.
+- Unlocking an area never makes an older area mandatory. Old ground stays as
+  optional coin routes; new ground is where both danger and density rise.
+
+## The Princess Is in Another Castle
+
+Some upgrades move the tale itself. Unlockable maps come in both outdoor and
+indoor flavors, and the deepest of them relocate the princess and the dragon:
+unlock the castle and the rescue continues into the candlelit hall; unlock the
+dragon lair and the top of the route moves again. The old summit becomes a
+waypoint with its miniboss, and the ladder grows one honest rung — the
+storybook homage is deliberate: the princess is in another castle.
+
+## Balance Doctrine — No Sharp Edges
+
+The loop must feel achievable, gradual, and organically balanced. Concrete
+rules, enforced as budget tests over `src/config/incremental.json`:
+
+- **Unlock cadence:** at any point in the web, the next affordable node should
+  arrive within roughly one to three runs of ordinary play at the player's
+  current depth. No node is priced like a wall.
+- **Income scales with depth:** coin income at the player's deepest unlocked
+  area outpaces earlier areas, so replaying old ground is a choice, never a
+  tax. The player should never feel forced to partial-grind shallow routes to
+  afford the next step.
+- **Every run is forward progress:** death-banked coins guarantee even the
+  worst run moves the web. Rose pacing rewards mastery without starving a
+  player who dies often — coin-funded class tracks always offer a next buy.
 
 ## Content Positioning
 
@@ -122,3 +173,7 @@ agree:
 - S9.5 remains the second-run proof: rescue, spend, start another run, and
   observe the unlocked route/class/enemy/map mutation through player-facing
   state.
+- The reward-loop mandate (2026-06-11) adds the queue beyond S9.5: realign the
+  class economy (rose-priced class unlocks, per-class coin tracks) before the
+  runtime slice, then death-payout coin banking, per-map minibosses, princess
+  relocation unlocks, and budget tests enforcing the no-sharp-edges doctrine.

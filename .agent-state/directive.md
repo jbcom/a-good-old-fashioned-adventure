@@ -109,8 +109,13 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S9.1 Pillar docs and config contract: define the mobile incremental princess-rescue loop, coins/roses economy, spiderweb upgrade graph, class unlocks, and route-pack positioning before runtime changes
 - [x] S9.2 Upgrade-web data model: persist coins, roses, rescue count, unlocked classes, unlocked route packs, and purchased upgrade nodes through Drizzle/Capacitor SQLite plus web validation
 - [x] S9.3 Results and upgrade UI: turn princess rescue into a results panel and between-run spiderweb upgrade screen with public A/B and directional input validation
+- [ ] S9.6 Class economy realignment (user mandate 2026-06-11, precedes S9.4): class unlock nodes cost roses, not coins; every class gains its own coin-funded upgrade track as a connected strand off its class node; update `src/config/incremental.json`, doc language, and the rarity/cost unit tests together
 - [ ] S9.4 Rescue-route runtime slice: build the bottom-to-top core rescue map with knight start, princess top anchor, dragon guard, compact mobile HUD currencies, and playthrough coverage
 - [ ] S9.5 Second-run proof: extend the player governor to rescue, spend a connected upgrade, start another run, and observe the unlocked route/class/enemy change through public controls
+- [ ] S9.7 Death pays out: incremental tasks/achievements pay coins during the run and every coin banks on death; prove through public controls that a run ending in death still grows the wallet and the next run starts stronger (zero roses, real coins)
+- [ ] S9.8 Miniboss ladder: every route-pack map fields a named miniboss before the dragon with a significant coin purse and clean-clear rose objective hooks; dragon stays the final guardian
+- [ ] S9.9 The princess is in another castle: map-category upgrade nodes unlock indoor and outdoor areas, the deepest of which relocate princess + dragon (castle hall, dragon lair); the old summit becomes a waypoint with its miniboss
+- [ ] S9.10 Balance budget tests: encode the no-sharp-edges doctrine as unit tests over incremental.json — next affordable node within ~1-3 runs of income at current depth, deepest-area income outpaces shallow areas, no node priced like a wall
 
 ## Learnings log (forward sweeps append here)
 - yuka FleeBehavior defaults panicDistance=10 — silently inert beyond it; always set panicDistance explicitly when kiting.
