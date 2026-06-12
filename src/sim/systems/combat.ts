@@ -10,7 +10,7 @@ import { getItem } from "../../lib/content/registry";
 import { collides } from "../collision";
 import { pushEvent } from "../events";
 import { spawnFx, spawnPickup, spawnProjectile } from "../factories";
-import { recordDeathPayout } from "../incrementalProgress";
+import { bankCoins, recordDeathPayout } from "../incrementalProgress";
 import {
   AimDirection,
   CameraState,
@@ -29,7 +29,6 @@ import {
   Level,
   LootContainer,
   Outbox,
-  PlayerGold,
   Projectile,
   PropRef,
   ShieldState,
@@ -262,8 +261,9 @@ export function applyItemPickup(world: World, itemId: string, value: number): vo
       if (flags) flags.values[op.setFlag as string] = true;
     }
     if ("grantGold" in op) {
-      const gold = player.get(PlayerGold);
-      if (gold) player.set(PlayerGold, { value: gold.value + value });
+      // treasure banks straight into the single incremental wallet —
+      // a death after a good haul still pays (death-pays-out rule)
+      bankCoins(world, value);
     }
     if ("maxHpUp" in op) {
       const health = player.get(Health);

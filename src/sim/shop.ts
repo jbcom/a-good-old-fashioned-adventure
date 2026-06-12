@@ -2,7 +2,8 @@ import type { Entity, World } from "koota";
 import { getShop } from "../lib/content/registry";
 import type { ShopDef, ShopListingDef } from "../lib/content/types";
 import { pushEvent } from "./events";
-import { Inventory, IsPlayer, Outbox, PlayerGold } from "./traits";
+import { adjustCoins, currentProgress } from "./incrementalProgress";
+import { Inventory, IsPlayer, Outbox } from "./traits";
 
 export interface ShopTransactionResult {
   ok: boolean;
@@ -77,26 +78,25 @@ export function buyShopListing(
   const shop = getShop(shopId);
   const listing = listingOf(shop, listingId);
   const player = playerOf(world);
-  const gold = player.get(PlayerGold);
-  if (!gold) throw new Error("shop transaction requires PlayerGold");
   const owned = countOf(player, listing.item);
 
-  if (gold.value < listing.buyPrice) {
+  // the shop spends the single incremental wallet: a mid-run purchase
+  // draws on real savings (docs/INCREMENTAL-RESCUE-LOOP.md §currencies)
+  const nextGold = adjustCoins(world, -listing.buyPrice);
+  if (nextGold === null) {
     emitSfx(world, shop.denySfx ?? "interact");
     return result(
       false,
       "buy",
       shop,
       listing,
-      gold.value,
+      currentProgress(world).coins,
       owned,
       `Need ${listing.buyPrice} coins for ${listing.label}.`,
     );
   }
 
-  const nextGold = gold.value - listing.buyPrice;
   const nextCount = owned + 1;
-  player.set(PlayerGold, { value: nextGold });
   setCount(player, listing.item, nextCount);
   emitSfx(world, shop.buySfx ?? "pickup");
   pushEvent(world, {
@@ -116,18 +116,24 @@ export function sellShopListing(
   const shop = getShop(shopId);
   const listing = listingOf(shop, listingId);
   const player = playerOf(world);
-  const gold = player.get(PlayerGold);
-  if (!gold) throw new Error("shop transaction requires PlayerGold");
   const owned = countOf(player, listing.item);
 
   if (owned <= 0) {
     emitSfx(world, shop.denySfx ?? "interact");
-    return result(false, "sell", shop, listing, gold.value, 0, `No ${listing.label} in the pack.`);
+    return result(
+      false,
+      "sell",
+      shop,
+      listing,
+      currentProgress(world).coins,
+      0,
+      `No ${listing.label} in the pack.`,
+    );
   }
 
-  const nextGold = gold.value + listing.sellPrice;
+  // a sale is conversion, not income: it skips the earned-this-run ledger
+  const nextGold = adjustCoins(world, listing.sellPrice) ?? currentProgress(world).coins;
   const nextCount = owned - 1;
-  player.set(PlayerGold, { value: nextGold });
   setCount(player, listing.item, nextCount);
   emitSfx(world, shop.sellSfx ?? "pickup");
   pushEvent(world, {

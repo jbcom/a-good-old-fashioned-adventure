@@ -38,7 +38,6 @@ import {
   MoveIntent,
   NpcPatrol,
   Outbox,
-  PlayerGold,
   Projectile,
   PropRef,
   QuestLog,
@@ -87,7 +86,6 @@ export function spawnPlayer(world: World, classId: string, x: number, y: number)
     AimDirection({ x: 1, y: 0 }),
     CombatTimers({ attack: 0, dash: 0, dashCooldown: 0, iframes: 0 }),
     ShieldState({ active: false }),
-    PlayerGold({ value: playerConfig.baseStats.gold ?? 0 }),
     Inventory({ items: {} }),
     SpriteRef({ spriteId: classDef.sprite, paletteId: classDef.palette }),
   );

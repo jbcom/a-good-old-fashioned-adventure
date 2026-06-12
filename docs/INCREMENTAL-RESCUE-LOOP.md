@@ -43,6 +43,14 @@ story, not from grinding ordinary enemies. Coin rewards should be frequent
 enough to make a failed run useful; rose rewards should make a successful or
 well-played run memorable.
 
+There is exactly ONE coin wallet: `IncrementalProgress.coins`. Chest gold,
+enemy bounties, and shop transactions all read and write it directly — there
+is no separate per-run purse. Treasure banks the moment it is opened (so a
+death after a good haul still pays, per the death-pays-out rule), and a shop
+purchase mid-run spends real savings, which is the intended risk/reward
+choice. The pre-pivot `PlayerGold` trait was a second wallet whose contents
+evaporated at run end; it is removed, not bridged.
+
 ### Death pays out
 
 The player never has to finish. That is the point of the dual currencies: a

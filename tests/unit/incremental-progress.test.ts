@@ -8,7 +8,7 @@ import {
   sanitizeIncrementalProgress,
 } from "../../src/sim/incrementalProgress";
 import { step } from "../../src/sim/tick";
-import { IncrementalProgress, IsPlayer, PlayerGold } from "../../src/sim/traits";
+import { IncrementalProgress } from "../../src/sim/traits";
 
 describe("incremental progression state", () => {
   it("boots with the first vow, knight, and starting coin balance", () => {
@@ -23,7 +23,7 @@ describe("incremental progression state", () => {
       unlockedClassIds: ["knight"],
       unlockedRoutePackIds: [],
     });
-    expect(world.queryFirst(IsPlayer)?.get(PlayerGold)?.value).toBe(playerConfig.baseStats.gold);
+    expect(world.get(IncrementalProgress)?.coins).toBe(playerConfig.baseStats.gold);
   });
 
   it("turns enemy defeat events into common coins without bypassing the event reducer", () => {
@@ -39,7 +39,6 @@ describe("incremental progression state", () => {
       coins: startingCoins + reward,
       currentRunCoinsEarned: reward,
     });
-    expect(world.queryFirst(IsPlayer)?.get(PlayerGold)?.value).toBe(startingCoins + reward);
   });
 
   it("records princess rescue as a rare rose payout and last-run summary", () => {
@@ -132,7 +131,7 @@ describe("incremental progression state", () => {
     expect(world.get(IncrementalProgress)).toMatchObject({
       upgradeRanks: { "upgrade:knight-vigor": 2 },
     });
-    expect(world.queryFirst(IsPlayer)?.get(PlayerGold)?.value).toBe(4);
+    expect(world.get(IncrementalProgress)?.coins).toBe(4);
 
     const third = purchaseUpgradeNode(world, "upgrade:knight-vigor");
     expect(third).toMatchObject({ ok: false, reason: "currency" });

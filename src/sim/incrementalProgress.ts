@@ -1,13 +1,7 @@
 import type { World } from "koota";
 import type { IncrementalUpgradeNode } from "../lib/config";
 import { enemies, incremental } from "../lib/config";
-import {
-  IncrementalProgress,
-  type IncrementalProgressState,
-  IsPlayer,
-  Outbox,
-  PlayerGold,
-} from "./traits";
+import { IncrementalProgress, type IncrementalProgressState, Outbox } from "./traits";
 
 function integer(value: unknown, fallback = 0): number {
   const number = Number(value);
@@ -170,7 +164,7 @@ function sanitizeLastRun(input: unknown): IncrementalProgressState["lastRun"] {
   };
 }
 
-function currentProgress(world: World): IncrementalProgressState {
+export function currentProgress(world: World): IncrementalProgressState {
   const existing = world.get(IncrementalProgress);
   if (existing) return existing;
   const next = initialIncrementalProgress();
@@ -186,11 +180,6 @@ function bankSfx(world: World, name: "coin" | "rose"): void {
   world.get(Outbox)?.sfx.push(name);
 }
 
-function syncPlayerCoins(world: World, coins: number): void {
-  const player = world.queryFirst(IsPlayer);
-  if (player?.has(PlayerGold)) player.set(PlayerGold, { value: coins });
-}
-
 export function restoreIncrementalProgress(
   world: World,
   input: unknown,
@@ -198,30 +187,36 @@ export function restoreIncrementalProgress(
 ): IncrementalProgressState {
   const next = sanitizeIncrementalProgress(input, fallbackCoins);
   setProgress(world, next);
-  syncPlayerCoins(world, next.coins);
   return next;
 }
 
-export function syncProgressCoinsFromPlayer(world: World): IncrementalProgressState {
-  const progress = currentProgress(world);
-  const playerCoins = world.queryFirst(IsPlayer)?.get(PlayerGold)?.value;
-  if (playerCoins === undefined || playerCoins === progress.coins) return progress;
-  const next = { ...progress, coins: playerCoins };
-  setProgress(world, next);
-  return next;
-}
-
-function addCoins(world: World, amount: number): void {
+/**
+ * Bank coin INCOME (chests, bounties, run rewards): credits the single
+ * wallet and the run's earned ledger (docs/INCREMENTAL-RESCUE-LOOP.md
+ * §currencies — there is no per-run purse).
+ */
+export function bankCoins(world: World, amount: number): void {
   if (amount <= 0) return;
   const progress = currentProgress(world);
-  const coins = progress.coins + amount;
   setProgress(world, {
     ...progress,
-    coins,
+    coins: progress.coins + amount,
     currentRunCoinsEarned: progress.currentRunCoinsEarned + amount,
   });
-  syncPlayerCoins(world, coins);
   bankSfx(world, "coin");
+}
+
+/**
+ * Shop-side conversion: moves coins without touching the earned ledger
+ * (a sale is not income; a purchase is not negative income). Returns the
+ * new balance, or null when the wallet can't cover a debit.
+ */
+export function adjustCoins(world: World, delta: number): number | null {
+  const progress = currentProgress(world);
+  const coins = progress.coins + delta;
+  if (coins < 0) return null;
+  setProgress(world, { ...progress, coins });
+  return coins;
 }
 
 function addRoses(world: World, amount: number): IncrementalProgressState {
@@ -241,7 +236,7 @@ export function grantRunReward(world: World, rewardId: string): void {
   const reward = incremental.runRewards[rewardId];
   if (!reward) return;
   if (reward.currency === "coins") {
-    addCoins(world, reward.base ?? 0);
+    bankCoins(world, reward.base ?? 0);
     return;
   }
 
@@ -270,7 +265,7 @@ export function applyIncrementalEventReward(
   if (eventType !== "enemy:defeated") return;
   grantRunReward(world, "enemyDefeated");
   // warband reinforcements carry a bounty: the adversarial trade pays
-  if (bounty > 0) addCoins(world, bounty);
+  if (bounty > 0) bankCoins(world, bounty);
   if (!archetypeId || !enemies.archetypes[archetypeId]?.miniboss) return;
 
   // minibosses always pay a purse; the FIRST clean clear pays a rose
@@ -403,7 +398,6 @@ export function purchaseUpgradeNode(world: World, nodeId: string): UpgradePurcha
     unlockedRoutePackIds: addUnique(progress.unlockedRoutePackIds, node.routePack),
   };
   setProgress(world, next);
-  syncPlayerCoins(world, next.coins);
   const message =
     maxRanks > 1
       ? nextRank === 1

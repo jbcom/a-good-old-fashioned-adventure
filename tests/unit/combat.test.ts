@@ -14,13 +14,13 @@ import {
   Facing,
   FlagState,
   Health,
+  IncrementalProgress,
   IsEnemy,
   IsPickup,
   IsPlayer,
   Level,
   LootContainer,
   Outbox,
-  PlayerGold,
   Projectile,
   ShieldState,
   Transform,
@@ -55,14 +55,18 @@ describe("melee", () => {
     expect(drops).toContain("item:xp-orb");
   });
 
-  it("opens a chest with the swing", () => {
+  it("opens a chest with the swing and banks the haul in the wallet", () => {
     const { world, player } = arena("knight");
     player.set(Transform, { x: 100, y: 100 });
-    const startingGold = player.get(PlayerGold)?.value ?? 0;
+    const progress0 = world.get(IncrementalProgress);
     const chest = spawnChest(world, 118, 100, "Gold");
     playerAttack(world);
     expect(chest.get(LootContainer)?.opened).toBe(true);
-    expect(player.get(PlayerGold)?.value).toBe(startingGold + 50);
+    // treasure is income: it credits the single wallet AND the run ledger
+    expect(world.get(IncrementalProgress)?.coins).toBe((progress0?.coins ?? 0) + 50);
+    expect(world.get(IncrementalProgress)?.currentRunCoinsEarned).toBe(
+      (progress0?.currentRunCoinsEarned ?? 0) + 50,
+    );
   });
 });
 

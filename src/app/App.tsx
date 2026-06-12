@@ -46,13 +46,13 @@ import {
 import { pushEvent } from "../sim/events";
 import { createGameWorld, instantiateMap } from "../sim/factories";
 import {
+  currentProgress,
   nodeRanks,
   purchasedRank,
   purchaseUpgradeNode,
   rankCost,
   restoreIncrementalProgress,
   sanitizeIncrementalProgress,
-  syncProgressCoinsFromPlayer,
   type UpgradePurchaseResult,
 } from "../sim/incrementalProgress";
 import { applyEffects, autoStartQuests, questLogLines } from "../sim/quests";
@@ -78,7 +78,6 @@ import {
   MapRuntime,
   MoveIntent,
   Outbox,
-  PlayerGold,
   Projectile,
   PropRef,
   QuestLog,
@@ -362,8 +361,7 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
   const playerTag = player?.get(IsPlayer);
   const health = player?.get(Health);
   const level = player?.get(Level);
-  const gold = player?.get(PlayerGold);
-  const incrementalProgress = syncProgressCoinsFromPlayer(world);
+  const incrementalProgress = currentProgress(world);
   const inventory = player?.get(Inventory);
   const transform = player?.get(Transform);
   const mapId = runtime?.mapId ?? "";
@@ -376,7 +374,7 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     level: level?.level ?? 1,
     xp: level?.xp ?? 0,
     nextXp: level?.nextXp ?? 1,
-    gold: gold?.value ?? 0,
+    gold: incrementalProgress.coins,
     incrementalProgress: {
       ...incrementalProgress,
       purchasedUpgradeIds: [...incrementalProgress.purchasedUpgradeIds],
@@ -1476,9 +1474,6 @@ export function App({
           xp: currentLevel?.xp ?? 0,
           nextXp: currentLevel?.nextXp ?? 50,
         });
-      }
-      if (player && options.gold !== undefined) {
-        player.set(PlayerGold, { value: options.gold });
       }
       if (player && options.inventory !== undefined) {
         player.set(Inventory, { items: options.inventory });
