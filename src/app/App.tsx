@@ -477,6 +477,22 @@ function firstUpgradeableIndex(progress: IncrementalProgressState): number {
   return Math.max(0, purchased);
 }
 
+/** The cheapest currently-affordable next node — the signpost on results. */
+function nextVow(progress: IncrementalProgressState): IncrementalUpgradeNode | null {
+  let best: IncrementalUpgradeNode | null = null;
+  let bestPrice = Number.POSITIVE_INFINITY;
+  for (const node of RING_NODES) {
+    if (upgradeNodeState(progress, node) !== "available") continue;
+    const price = rankCost(node, purchasedRank(progress, node));
+    const weight = price.coins + price.roses * 20;
+    if (weight < bestPrice) {
+      bestPrice = weight;
+      best = node;
+    }
+  }
+  return best;
+}
+
 function nearestDialogue(world: World): NpcDialogueHit | null {
   const player = playerOf(world);
   const pt = player?.get(Transform);
@@ -1041,6 +1057,15 @@ function ResultsPanel({
           <span>Total {snapshot.incrementalProgress.roses}R</span>
           <span>Rescues {snapshot.incrementalProgress.rescueCount}</span>
         </div>
+        {nextVow(snapshot.incrementalProgress) && (
+          <p className="dialogue-line" data-testid="next-vow">
+            Next vow: {nextVow(snapshot.incrementalProgress)?.label} —{" "}
+            {upgradeCostLabel(
+              snapshot.incrementalProgress,
+              nextVow(snapshot.incrementalProgress) as IncrementalUpgradeNode,
+            )}
+          </p>
+        )}
         <div className="result-actions">
           <button
             className="menu-button"
@@ -1936,10 +1961,21 @@ export function App({
       {mode === "gameover" && (
         <section className="end-screen" data-testid="gameover-screen">
           <div className="end-panel" data-testid="end-panel" ref={endPanelRef}>
-            <h1>GAME OVER</h1>
-            <p className="dialogue-line">The old road claims another hero.</p>
-            <button className="menu-button" type="button" onClick={() => startGame()}>
-              A NEW RUN
+            <p className="manuscript-kicker">Chapter's End</p>
+            <h1>Carried Back to Hearthwake</h1>
+            <p className="dialogue-line">
+              The road kept your coins safe:{" "}
+              {snapshot.incrementalProgress.lastRun?.coinsEarned ??
+                snapshot.incrementalProgress.currentRunCoinsEarned}
+              C banked, {snapshot.incrementalProgress.coins}C in the purse. The tale turns its page.
+            </p>
+            {nextVow(snapshot.incrementalProgress) && (
+              <p className="dialogue-line" data-testid="next-vow">
+                Next vow: {nextVow(snapshot.incrementalProgress)?.label}
+              </p>
+            )}
+            <button className="menu-button" type="button" onClick={startNextRun}>
+              A NEXT CHAPTER
             </button>
           </div>
         </section>

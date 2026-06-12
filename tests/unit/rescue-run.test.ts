@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { incremental } from "../../src/lib/config";
+import { audio, incremental } from "../../src/lib/config";
 import { getMap, getQuest } from "../../src/lib/content/registry";
 import { emitDialogueSeen, resolveDialogue } from "../../src/sim/dialogue";
 import { pushEvent } from "../../src/sim/events";
@@ -48,6 +48,17 @@ describe("S9.4 rescue-route runtime slice", () => {
     // fights, bends, and dialogue
     expect(walkSeconds).toBeGreaterThan(5);
     expect(walkSeconds).toBeLessThan(60);
+  });
+
+  it("plays the currency motifs when rewards bank", () => {
+    const world = bootRescueRoute();
+    const sfxBefore = world.get(Outbox)?.sfx.length ?? 0;
+    grantRunReward(world, "enemyDefeated");
+    expect(world.get(Outbox)?.sfx.slice(sfxBefore)).toContain("coin");
+    grantRunReward(world, "princessRescued");
+    expect(world.get(Outbox)?.sfx).toContain("rose");
+    expect(audio.sfx.coin).toBeTruthy();
+    expect(audio.sfx.rose).toBeTruthy();
   });
 
   it("banks the wallet when the run ends in death", () => {

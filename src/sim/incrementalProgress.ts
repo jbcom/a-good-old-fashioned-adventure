@@ -1,7 +1,13 @@
 import type { World } from "koota";
 import type { IncrementalUpgradeNode } from "../lib/config";
 import { enemies, incremental } from "../lib/config";
-import { IncrementalProgress, type IncrementalProgressState, IsPlayer, PlayerGold } from "./traits";
+import {
+  IncrementalProgress,
+  type IncrementalProgressState,
+  IsPlayer,
+  Outbox,
+  PlayerGold,
+} from "./traits";
 
 function integer(value: unknown, fallback = 0): number {
   const number = Number(value);
@@ -176,6 +182,10 @@ function setProgress(world: World, next: IncrementalProgressState): void {
   world.set(IncrementalProgress, next);
 }
 
+function bankSfx(world: World, name: "coin" | "rose"): void {
+  world.get(Outbox)?.sfx.push(name);
+}
+
 function syncPlayerCoins(world: World, coins: number): void {
   const player = world.queryFirst(IsPlayer);
   if (player?.has(PlayerGold)) player.set(PlayerGold, { value: coins });
@@ -211,6 +221,7 @@ function addCoins(world: World, amount: number): void {
     currentRunCoinsEarned: progress.currentRunCoinsEarned + amount,
   });
   syncPlayerCoins(world, coins);
+  bankSfx(world, "coin");
 }
 
 function addRoses(world: World, amount: number): IncrementalProgressState {
@@ -222,6 +233,7 @@ function addRoses(world: World, amount: number): IncrementalProgressState {
     currentRunRosesEarned: progress.currentRunRosesEarned + amount,
   };
   setProgress(world, next);
+  bankSfx(world, "rose");
   return next;
 }
 

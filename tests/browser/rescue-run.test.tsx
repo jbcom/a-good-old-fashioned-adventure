@@ -104,6 +104,7 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
   await governor.press("a");
   await expect.element(page.getByTestId("results-screen")).toBeVisible();
   await expect.element(page.getByTestId("result-ledger")).toHaveTextContent("Earned");
+  await expect.element(page.getByTestId("next-vow")).toHaveTextContent("Next vow:");
 
   await page.viewport(390, 844);
   await wait(250);
@@ -236,6 +237,10 @@ it("banks coins through death and into the next run", async () => {
     // left play mode mid-walk: the road claimed the knight early
   }
   await expect.poll(() => governor.perceive().mode, { timeout: 60_000 }).toBe("gameover");
+  await expect
+    .element(page.getByTestId("gameover-screen"))
+    .toHaveTextContent("Carried Back to Hearthwake");
+  await expect.element(page.getByTestId("gameover-screen")).toHaveTextContent("banked");
   const banked = Number(shell().dataset.coins ?? 0);
   expect(banked).toBeGreaterThan(0);
   const deathShot = await page.screenshot({
