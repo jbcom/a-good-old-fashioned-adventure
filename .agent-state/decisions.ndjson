@@ -71,3 +71,4 @@
 {"ts":"2026-06-12T22:29:18.387Z","sha":"81d6772f221c06e00156b9c385accc39c7bd8952","subject":"feat: tier classes enter the DAG; GOAP mandate locked into S18.3","decision":null,"why":null,"resolves":["S18.3 config half; GOAP behavioral contract encoded"],"overrides":[]}
 {"ts":"2026-06-12T22:34:00.054Z","sha":"17b2c7d57dc937c70b3612396e407ee5db37d01e","subject":"feat: twelve minds, one file each","decision":null,"why":null,"resolves":["S18.3 GOAP brains + DAG completion (verb execution next)"],"overrides":[]}
 {"ts":"2026-06-12T22:36:50.669Z","sha":"2dddb7e391381e9eff0672be09b27faf055fa970","subject":"feat: the tier verbs land — wither, channel, whirl, volley","decision":null,"why":null,"resolves":["S18.3 complete; directive/hook alignment"],"overrides":[]}
+{"ts":"2026-06-12T22:38:28.274Z","sha":"02d5e7c1d962785072afcab5c5d114f86b3cbdf2","subject":"feat: the ladder takes the field","decision":null,"why":null,"resolves":["S18.4 tier journey"],"overrides":[]}
