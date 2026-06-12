@@ -243,6 +243,8 @@ export function spawnProjectile(world: World, spec: ProjectileSpawn): Entity {
 export interface InstantiateOptions {
   classId: string;
   spawnId?: string;
+  /** Rail command fields no player pawn — units are the only allies. */
+  withPlayer?: boolean;
 }
 
 const TILE = 16;
@@ -275,7 +277,7 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
   if (existingPlayer) {
     existingPlayer.set(Transform, { x, y });
     existingPlayer.set(MoveIntent, { x: 0, y: 0 });
-  } else {
+  } else if (opts.withPlayer !== false) {
     spawnPlayer(world, opts.classId, x, y);
   }
   world.set(CameraState, { x, y, shake: 0 });

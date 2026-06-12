@@ -12,6 +12,17 @@ behavior belongs to the sim through Yuka-backed systems; the player governor
 belongs to validation. Its job is to prove the shipped journey can be completed
 through the same controls and signals a player receives.
 
+## Rail-command pivot (2026-06-12)
+
+The button-driven PlayerGovernor described below is retired with the player
+pawn (docs/RAIL-COMMAND.md). Its plan-and-pursue loop lives on in two heirs:
+the in-sim unit brains (`src/sim/systems/unitAI.ts`) and the test-side
+CommanderGovernor (`tests/harness/commanderGovernor.ts`), which places units
+by drag and reads only the public dataset. The commander journey still ends
+on the results panel with coins and roses, still buys a connected node with A
+on the upgrade screen, and still carries the second-run proof — the loop's
+contract survived the controls.
+
 ## Contract
 
 - The governor may press only player controls: directional input, A, B, and

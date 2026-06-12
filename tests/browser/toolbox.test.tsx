@@ -4,7 +4,7 @@ import { afterEach, expect, it } from "vitest";
 import { page } from "vitest/browser";
 import { App } from "../../src/app/App";
 import { MemorySaveRepository } from "../../src/persistence/saveRepository";
-import { PlayerGovernor } from "../harness/playerGovernor";
+import { CommanderGovernor } from "../harness/commanderGovernor";
 import { wait } from "../harness/wait";
 
 let container: HTMLDivElement | undefined;
@@ -69,10 +69,12 @@ it("drags a knight from the toolbox onto the field", async () => {
   });
 
   mountApp(repository);
-  const governor = new PlayerGovernor();
+  const governor = new CommanderGovernor();
   await expect.element(page.getByTestId("landing-screen")).toBeVisible();
-  await governor.click("continue-button");
-  await expect.poll(() => governor.perceive().mapName, { timeout: 10_000 }).toBe("Rescue Road");
+  await governor.tap("continue-button");
+  await expect
+    .poll(() => governor.perceive().mapName, { timeout: 10_000 })
+    .toBe("map:rescue-route");
 
   await expect.element(page.getByTestId("unit-toolbox")).toBeVisible();
   await expect

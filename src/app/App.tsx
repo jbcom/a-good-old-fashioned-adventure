@@ -67,13 +67,10 @@ import {
 } from "../sim/incrementalProgress";
 import { applyEffects, autoStartQuests, questLogLines } from "../sim/quests";
 import { buyShopListing, type ShopTransactionResult, sellShopListing } from "../sim/shop";
-import { playerAbility, playerAttack } from "../sim/systems/combat";
 import { frontline } from "../sim/systems/waves";
 import { SIM_DT, step } from "../sim/tick";
 import {
-  AimDirection,
   Choreo,
-  Facing,
   FlagState,
   FxStats,
   Health,
@@ -98,7 +95,7 @@ import {
 } from "../sim/traits";
 import "./App.css";
 
-type Mode = "landing" | "title" | "playing" | "results" | "upgrade" | "gameover";
+type Mode = "landing" | "playing" | "results" | "upgrade" | "gameover";
 type Direction = "up" | "down" | "left" | "right";
 
 interface DialogueState {
@@ -240,13 +237,6 @@ keyMap.p = "pause";
 
 function normalizeKey(key: string): string {
   return key.length === 1 ? key.toLowerCase() : key;
-}
-
-function directionVector(input: InputState) {
-  return {
-    x: (input.right ? 1 : 0) - (input.left ? 1 : 0),
-    y: (input.down ? 1 : 0) - (input.up ? 1 : 0),
-  };
 }
 
 function playerOf(world: World): Entity | undefined {
@@ -571,32 +561,6 @@ function nearestReadableProp(world: World): ReadablePropHit | null {
   return best;
 }
 
-function aimAtNearestEnemy(world: World, maxDistance = 340) {
-  const player = playerOf(world);
-  const pt = player?.get(Transform);
-  if (!player || !pt) return;
-  let best: { dx: number; dy: number; dist: number } | null = null;
-  for (const enemy of world.query(IsEnemy, Transform)) {
-    const et = enemy.get(Transform);
-    if (!et) continue;
-    const dx = et.x - pt.x;
-    const dy = et.y - pt.y;
-    const dist = Math.hypot(dx, dy);
-    if (dist <= maxDistance && (!best || dist < best.dist)) best = { dx, dy, dist };
-  }
-  if (!best) return;
-  player.set(AimDirection, { x: best.dx, y: best.dy });
-  if (best.dx !== 0) player.set(Facing, { dir: best.dx > 0 ? 1 : -1 });
-}
-
-function applyInputToWorld(world: World, input: InputState) {
-  const player = playerOf(world);
-  if (!player) return;
-  const intent = directionVector(input);
-  player.set(MoveIntent, intent);
-  if (intent.x !== 0 || intent.y !== 0) player.set(AimDirection, intent);
-}
-
 function insideZone(map: MapDef, x: number, y: number, triggerId: string): boolean {
   const trigger = map.triggers?.find((entry) => entry.id === triggerId);
   const zone = trigger?.zone;
@@ -679,13 +643,6 @@ function usePanelEntrance(signature: string) {
 }
 
 /** Knight holds the center of the picker until the full roster aligns. */
-function centeredRoster(unlocked: string[]): string[] {
-  if (!unlocked.includes("knight")) return unlocked;
-  const others = unlocked.filter((classId) => classId !== "knight");
-  const before = Math.floor(others.length / 2);
-  return [...others.slice(0, before), "knight", ...others.slice(before)];
-}
-
 function ClassSpriteThumb({ classId }: { classId: string }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
@@ -701,46 +658,6 @@ function ClassSpriteThumb({ classId }: { classId: string }) {
     ctx.drawImage(source, 0, 0);
   }, [classId]);
   return <canvas className="class-thumb" ref={ref} />;
-}
-
-function TitleScreen({
-  roster,
-  selected,
-  onSelect,
-  onStart,
-}: {
-  roster: string[];
-  selected: string;
-  onSelect: (classId: string) => void;
-  onStart: () => void;
-}) {
-  const panelRef = usePanelEntrance("title");
-  return (
-    <section className="title-screen" data-testid="title-screen">
-      <div className="title-panel" data-testid="title-panel" ref={panelRef}>
-        <h1>A GOOD OLD FASHIONED ADVENTURE</h1>
-        <p className="dialogue-line">Begin as a knight. New callings wait in the upgrade graph.</p>
-        <div className="class-row">
-          {roster.map((classId) => (
-            <button
-              className="class-button"
-              data-testid={`class-${classId}`}
-              type="button"
-              key={classId}
-              aria-pressed={selected === classId}
-              onClick={() => onSelect(classId)}
-            >
-              <ClassSpriteThumb classId={classId} />
-              <span className="class-name">{classId}</span>
-            </button>
-          ))}
-        </div>
-        <button className="menu-button" data-testid="start-button" type="button" onClick={onStart}>
-          A START
-        </button>
-      </div>
-    </section>
-  );
 }
 
 function LandingScreen({
@@ -1356,72 +1273,6 @@ function UnitToolbox({
   );
 }
 
-function VirtualPad({
-  setDirection,
-  pressA,
-  setB,
-}: {
-  setDirection: (dir: Direction, pressed: boolean) => void;
-  pressA: () => void;
-  setB: (pressed: boolean) => void;
-}) {
-  const bindDir = (dir: Direction) => ({
-    onPointerDown: () => setDirection(dir, true),
-    onPointerUp: () => setDirection(dir, false),
-    onPointerCancel: () => setDirection(dir, false),
-    onPointerLeave: () => setDirection(dir, false),
-  });
-  return (
-    <div className="virtual-pad" data-testid="virtual-pad">
-      <div className="dpad">
-        <button className="pad-button pad-up" data-testid="pad-up" type="button" {...bindDir("up")}>
-          ↑
-        </button>
-        <button
-          className="pad-button pad-left"
-          data-testid="pad-left"
-          type="button"
-          {...bindDir("left")}
-        >
-          ←
-        </button>
-        <button
-          className="pad-button pad-right"
-          data-testid="pad-right"
-          type="button"
-          {...bindDir("right")}
-        >
-          →
-        </button>
-        <button
-          className="pad-button pad-down"
-          data-testid="pad-down"
-          type="button"
-          {...bindDir("down")}
-        >
-          ↓
-        </button>
-      </div>
-      <div className="face-buttons">
-        <button
-          className="face-button secondary"
-          data-testid="button-b"
-          type="button"
-          onPointerDown={() => setB(true)}
-          onPointerUp={() => setB(false)}
-          onPointerCancel={() => setB(false)}
-          onPointerLeave={() => setB(false)}
-        >
-          B
-        </button>
-        <button className="face-button" data-testid="button-a" type="button" onClick={pressA}>
-          A
-        </button>
-      </div>
-    </div>
-  );
-}
-
 export function App({
   saveRepository = getSaveRepository(),
 }: {
@@ -1429,13 +1280,7 @@ export function App({
 } = {}) {
   const repositoryRef = useRef(saveRepository);
   const [mode, setMode] = useState<Mode>("landing");
-  const [selectedClass, setSelectedClass] = useState("knight");
   const [latestSave, setLatestSave] = useState<SaveSlotSummary | null>(null);
-  const pickerRoster = useMemo(() => {
-    if (!latestSave) return centeredRoster(classes.roster);
-    const saved = parseSavedSnapshot(latestSave.snapshotJson);
-    return centeredRoster(saved.incrementalProgress?.unlockedClassIds ?? classes.roster);
-  }, [latestSave]);
   const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [world, setWorld] = useState<World | null>(null);
@@ -1578,7 +1423,8 @@ export function App({
     (nextWorld: World, mapId: string, classId: string, spawnId?: string) => {
       inputRef.current = emptyInput();
       setShopState(null);
-      instantiateMap(nextWorld, mapId, { classId, spawnId });
+      // rail command: the field has no player pawn — units are the allies
+      instantiateMap(nextWorld, mapId, { classId, spawnId, withPlayer: false });
       zoneEnteredRef.current.clear();
       audioRef.current?.setTheme(getMap(mapId).bgmTheme);
       pushEvent(nextWorld, { type: "map:entered", mapId });
@@ -1592,7 +1438,7 @@ export function App({
 
   const startGame = useCallback(
     (options: StartOptions = {}) => {
-      const classId = options.classId ?? selectedClass;
+      const classId = options.classId ?? incremental.classes.starting;
       const mapId = options.mapId ?? incremental.loop.startMap;
       const nextWorld = createGameWorld(19);
       autoStartQuests(nextWorld);
@@ -1632,7 +1478,7 @@ export function App({
       }
       refreshSnapshot(nextWorld, { persist: true });
     },
-    [adoptWorld, audioDebug, loadMap, refreshSnapshot, selectedClass],
+    [adoptWorld, audioDebug, loadMap, refreshSnapshot],
   );
 
   const continueGame = useCallback(() => {
@@ -1715,7 +1561,8 @@ export function App({
         );
       }
       if (requestedMap) {
-        const classId = playerOf(activeWorld)?.get(IsPlayer)?.classId ?? selectedClass;
+        const classId =
+          playerOf(activeWorld)?.get(IsPlayer)?.classId ?? incremental.classes.starting;
         loadMap(activeWorld, requestedMap.mapId, classId, requestedMap.spawnId);
       }
       if (endGame) {
@@ -1725,7 +1572,7 @@ export function App({
       }
       refreshSnapshot(activeWorld, { persist: !!endGame });
     },
-    [loadMap, refreshSnapshot, selectedClass],
+    [loadMap, refreshSnapshot],
   );
 
   const updateShopFromResult = useCallback((result: ShopTransactionResult) => {
@@ -1817,7 +1664,7 @@ export function App({
     inputStats.current.aPresses += 1;
     if (paused) return;
     if (mode === "landing") {
-      setMode("title");
+      startGame();
       return;
     }
     if (mode === "results") {
@@ -1831,10 +1678,6 @@ export function App({
     if (mode === "gameover") {
       // death pays out: the next run keeps the banked wallet
       startNextRun();
-      return;
-    }
-    if (mode === "title") {
-      startGame();
       return;
     }
     if (!world) return;
@@ -1883,9 +1726,6 @@ export function App({
       clearOutbox(world);
       return;
     }
-    aimAtNearestEnemy(world);
-    inputStats.current.attackCalls += 1;
-    playerAttack(world);
     clearOutbox(world);
   }, [
     advanceDialogue,
@@ -1925,7 +1765,6 @@ export function App({
         if (pressed) handleShopSell();
         return;
       }
-      playerAbility(world, pressed);
       clearOutbox(world);
     },
     [clearOutbox, dialogue, handleShopSell, mode, paused, shopState, world],
@@ -1965,16 +1804,6 @@ export function App({
       else if (action === "b" && !event.repeat) setB(true);
       else if (action !== "a" && action !== "b" && action !== "pause" && !event.repeat)
         setDirection(action, true);
-      if (mode === "title" && action === "left") {
-        if (pickerRoster.length === 0) return;
-        const idx = pickerRoster.indexOf(selectedClass);
-        setSelectedClass(pickerRoster[(idx + pickerRoster.length - 1) % pickerRoster.length]);
-      }
-      if (mode === "title" && action === "right") {
-        if (pickerRoster.length === 0) return;
-        const idx = pickerRoster.indexOf(selectedClass);
-        setSelectedClass(pickerRoster[(idx + 1) % pickerRoster.length]);
-      }
     };
     const onKeyUp = (event: KeyboardEvent) => {
       const action = keyMap[normalizeKey(event.key)];
@@ -1989,7 +1818,7 @@ export function App({
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
     };
-  }, [mode, pickerRoster, pressA, selectedClass, setB, setDirection, togglePause]);
+  }, [mode, pressA, setB, setDirection, togglePause]);
 
   useEffect(() => {
     if (!world || mode !== "playing") return;
@@ -2002,7 +1831,6 @@ export function App({
       if (!dialogue && !paused && !shopState && mode === "playing") {
         acc += dt;
         while (acc >= SIM_DT) {
-          applyInputToWorld(world, inputRef.current);
           step(world, SIM_DT);
           handleZoneTriggers(world, zoneEnteredRef.current);
           clearOutbox(world);
@@ -2119,7 +1947,7 @@ export function App({
           latestSave={latestSave}
           settings={settings}
           settingsOpen={settingsOpen}
-          onNewGame={() => setMode("title")}
+          onNewGame={() => startGame()}
           onContinue={continueGame}
           onToggleSettings={() => setSettingsOpen((open) => !open)}
           onToggleMute={() => setMuted((value) => !value)}
@@ -2141,15 +1969,7 @@ export function App({
           <GameStage world={world} />
         </div>
       )}
-      {mode === "title" && (
-        <TitleScreen
-          roster={pickerRoster}
-          selected={selectedClass}
-          onSelect={setSelectedClass}
-          onStart={() => startGame()}
-        />
-      )}
-      {world && mode !== "title" && (
+      {world && (
         <>
           <Hud
             snapshot={snapshot}
@@ -2162,7 +1982,6 @@ export function App({
             onToggleMute={() => setMuted((value) => !value)}
             onRetire={retireRun}
           />
-          <VirtualPad setDirection={setDirection} pressA={pressA} setB={setB} />
           {mode === "playing" && (
             <UnitToolbox
               world={world}

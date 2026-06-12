@@ -54,8 +54,6 @@ it("persists a web save through Capacitor SQLite and restores it from Continue",
   mountProductionApp();
   await expect.element(page.getByTestId("landing-screen")).toBeVisible();
   await input.keyboard("j");
-  await expect.element(page.getByTestId("title-screen")).toBeVisible();
-  await input.keyboard("j");
   await expect.element(page.getByTestId("world-stage-shell")).toBeVisible();
 
   await expect
