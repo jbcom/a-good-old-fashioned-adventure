@@ -1,6 +1,6 @@
 {
   "comment": "License-aware registry of every purchased/imported asset under public/assets/. Raw downloads live in raw-assets/ (gitignored); only curated keepers land here. tests/unit/asset-manifest.test.ts is the integrity gate: every file listed must exist with the stated geometry, and every image under the covered directories must be listed. POLICY: any NEW directory of imported assets under public/assets/ must be added to coveredDirs in the same change, or the gate cannot see it (fonts/ and the engine wasm are first-party, not imports).",
-  "coveredDirs": ["bosses", "tilemaps"],
+  "coveredDirs": ["bosses", "tilemaps", "enemies"],
   "packs": [
     {
       "id": "high-dragon",
@@ -130,6 +130,109 @@
       "license": "Backterria itch.io pack terms (see pack page at url); game-use licensed to purchaser.",
       "mappedUse": "Terrain texture uplift candidate — autotile cliff/ledge pieces and dithered ground fills for the SA.2 terrain rework (sand + mountain families flagged weak).",
       "files": [{ "path": "tilemaps/ground.png", "width": 448, "height": 384 }]
+    },
+    {
+      "id": "elthen-bat",
+      "title": "Bat Sprite Pack",
+      "author": "Elthen (Ahmet Avci)",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
+      "url": "https://elthen.itch.io/bat-sprite-pack",
+      "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
+      "mappedUse": "SA.3 gap 1 — dungeon region trash-enemy body (16px fly cycle, hang, death).",
+      "files": [{ "path": "enemies/bat.png", "width": 80, "height": 72 }]
+    },
+    {
+      "id": "elthen-rat",
+      "title": "2D Pixel Art Rat Sprites",
+      "author": "Elthen (Ahmet Avci)",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
+      "url": "https://elthen.itch.io/2d-pixel-art-rat-sprites",
+      "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
+      "mappedUse": "SA.3 gap 1 — dungeon region trash-enemy body (32px idle/walk/attack/death rows). Dark coat: verify contrast on dungeon floor tiles at wiring time.",
+      "files": [{ "path": "enemies/rat.png", "width": 160, "height": 256 }]
+    },
+    {
+      "id": "elthen-naked-mole-rat",
+      "title": "2D Pixel Art Naked Mole Rat Sprites",
+      "author": "Elthen (Ahmet Avci)",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
+      "url": "https://elthen.itch.io/2d-pixel-art-naked-mole-rat-sprites",
+      "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
+      "mappedUse": "SA.3 gap 1 — dungeon region trash-enemy body with dig/burrow rows; dirt-burrow.png is the burrow-mound fx sheet that pairs with the dig animation.",
+      "files": [
+        { "path": "enemies/naked-mole-rat.png", "width": 256, "height": 256 },
+        { "path": "enemies/dirt-burrow.png", "width": 96, "height": 32 }
+      ]
+    },
+    {
+      "id": "elthen-snake",
+      "title": "2D Pixel Art Snake Sprites",
+      "author": "Elthen (Ahmet Avci)",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
+      "url": "https://elthen.itch.io/2d-pixel-art-snake-sprites",
+      "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
+      "mappedUse": "SA.3 gap 1 — sunken-road region trash-enemy body (32px slither/strike/coil/death rows).",
+      "files": [{ "path": "enemies/snake.png", "width": 160, "height": 320 }]
+    },
+    {
+      "id": "elthen-cobra",
+      "title": "2D Pixel Art Cobra Sprites",
+      "author": "Elthen (Ahmet Avci)",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
+      "url": "https://elthen.itch.io/2d-pixel-art-cobra-sprites",
+      "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
+      "mappedUse": "SA.3 gap 1 — castle-approach region trash-enemy body (32px hood-flare strike rows read as elite snake).",
+      "files": [{ "path": "enemies/cobra.png", "width": 256, "height": 160 }]
+    },
+    {
+      "id": "elthen-wild-boar",
+      "title": "2D Pixel Art Wild Boar Sprites",
+      "author": "Elthen (Ahmet Avci)",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
+      "url": "https://elthen.itch.io/2d-pixel-art-wild-boar-sprites",
+      "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
+      "mappedUse": "SA.3 gap 1 — forest region trash-enemy body; sheet ships two coat variants (light + shaggy dark), covering forest AND deep-forest without a palette swap.",
+      "files": [{ "path": "enemies/boar.png", "width": 256, "height": 384 }]
+    },
+    {
+      "id": "elthen-raven",
+      "title": "2D Pixel Art Raven Sprites",
+      "author": "Elthen (Ahmet Avci)",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
+      "url": "https://elthen.itch.io/2d-pixel-art-raven-sprites",
+      "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
+      "mappedUse": "SA.3 gap 1 — sunken-road region trash-enemy body; richest bird sheet (hop, peck, takeoff, fly, land rows) — also a prop-layer ambience candidate (perched ravens on wrecks).",
+      "files": [{ "path": "enemies/raven.png", "width": 512, "height": 576 }]
+    },
+    {
+      "id": "elthen-vulture",
+      "title": "2D Pixel Art Vulture Sprites",
+      "author": "Elthen (Ahmet Avci)",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
+      "url": "https://elthen.itch.io/2d-pixel-art-vulture-sprites",
+      "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
+      "mappedUse": "SA.3 gap 1 — castle-approach region trash-enemy body; carrion-peck frames fit the siege-litter tone.",
+      "files": [{ "path": "enemies/vulture.png", "width": 320, "height": 160 }]
+    },
+    {
+      "id": "elthen-owl",
+      "title": "2D Pixel Art Owl Sprites",
+      "author": "Elthen (Ahmet Avci)",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
+      "url": "https://elthen.itch.io/2d-pixel-art-owl-sprites",
+      "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
+      "mappedUse": "SA.3 gap 1 — forest region trash-enemy body (perched + flying rows); perch rows double as oldwood ambience props.",
+      "files": [{ "path": "enemies/owl.png", "width": 352, "height": 320 }]
+    },
+    {
+      "id": "elthen-squirrel",
+      "title": "2D Pixel Art Squirrel Sprites",
+      "author": "Elthen (Ahmet Avci)",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
+      "url": "https://elthen.itch.io/2d-pixel-art-squirrel-sprites",
+      "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
+      "mappedUse": "SA.3 gap 1 — forest region trash/critter body (run, jump, climb rows); also overworld ambience.",
+      "files": [{ "path": "enemies/squirrel.png", "width": 256, "height": 224 }]
     }
   ]
 }

@@ -111,7 +111,50 @@ First curation shortlist (allow-list candidates):
   step must slice it into named regions (a slicer manifest mapping cell
   coords → asset ids) so individual cells become addressable content.
 
-Next: download the shortlist via the adapted fetcher, extract to
-raw-assets/ (gitignored), curate keepers under public/assets/ with the
-license-aware manifest, and style-check each against Errant Storybook
-before wiring.
+### SA.0(c) research pass — audio mapping (S20.3)
+
+The engine today is a single ToneJS synth (`src/audio/toneEngine.ts`):
+`setTheme()` plays note-loop themes from `src/config/audio.json` (8 themes:
+overworld, village, interior, forest, deep-forest, sunken-road,
+castle-approach, dungeon) and `playSfx()` fires 13 synth recipes (slash,
+magic, dash, hurt, shield, interact, inspect, pickup, coin, levelUp,
+chest, victory, rose). Downloaded pack inventories map onto that surface:
+
+| Surface | Pack → tracks | Disposition |
+| --- | --- | --- |
+| dungeon, sunken-road themes | Retro Dungeon (12 loops: Ancient_Dungeon, Dark_Corridor, Echoing_Cave, Lost_Labyrinth…) | replace synth loops |
+| deep-forest, castle-approach tension | Dark Ambient GLV4 (10 loops: ColdLight, ShadowRoom, LowTension, UnknowPath…) | replace synth loops |
+| village, interior, overworld | Fantasy RPG GLV5 (10× 30s loops: GoldenVillage, WarmInn, RiverstoneTown, SilverForest, QuietAdventure…) | replace synth loops |
+| wave/battle state (new surface) | Retro Combat (12 loops: Battle_Encounter, Dungeon_Combat, Monster_Battle, RPG_Battle_Theme…) | new: combat theme layer the synth never had |
+| boss encounters (new surface) | Retro Boss Battle (miniboss, last_phase_boss, dark_overlord, prebattle_tension…) | new: boss theme layer |
+| title/menu (new surface) | Calm Menu (10: calm, fantasy, mystic, soft_piano, ambient variants) | new: menu bed |
+| victory, levelUp stingers | Victory & Level Complete (24 stingers: triumph, reward, levelup, complete…) | replace synth recipes |
+| interact, inspect, pickup, coin, chest | UI SFX Pack (40: Click, Cancel, Coin, achievement families…) | replace where the sample reads better; A/B against synth recipe per cue |
+| slash, magic, dash, hurt, shield | — no purchased coverage — | keep bespoke ToneJS recipes (combat foley stays chiptune-bright, identity-bearing) |
+
+Integration shape: the engine grows a sample-player path (Tone.Player pool)
+beside the synth path; themes/cues become config entries pointing at either
+a synth recipe or a curated file under `public/assets/audio/<pack>/…` with
+MANIFEST.json entries. WAV masters exist for all packs; ship OGG/MP3
+(size) after a listening pass picks the keepers — full 2 GB of WAVs never
+ships, only the curated subset.
+
+### SA.0(c) research pass — animal sprite packs (SA.3 gap 1)
+
+All ten packs are by Elthen (elthen.itch.io) — one consistent outlined
+16/32-px style family, side-view sheets with idle/walk/attack/death rows,
+read at zoom 2026-06-12. Every sheet is a **clear** keeper, curated to
+`public/assets/enemies/` with manifest entries:
+
+| Region | Bodies | Notes |
+| --- | --- | --- |
+| forest | boar, squirrel, owl | boar ships light + shaggy-dark coats — covers deep-forest too, no palette swap; owl perch rows double as oldwood ambience |
+| sunken-road | snake, raven | raven is the richest sheet (hop/peck/takeoff/fly/land); perched ravens work as wreck props |
+| castle-approach | vulture, cobra | vulture carrion-peck frames fit siege litter; cobra hood-flare reads elite |
+| dungeon | bat, rat, naked-mole-rat | mole rat has dig rows + a bonus dirt-burrow fx sheet; rat's dark coat needs a contrast check on dungeon floors at wiring time |
+
+Style fit: Elthen bodies are side-view (left/right via mirroring) vs the
+4-direction `.pix` hero/dragon — acceptable for trash enemies that travel
+lanes; bosses stay 4-directional. Frame-row semantics (which row is
+walk/attack/death per sheet) get pinned in the SA.3 wiring step when each
+body becomes an addressable sprite def.

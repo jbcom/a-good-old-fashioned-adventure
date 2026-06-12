@@ -111,7 +111,9 @@ for (const pack of packs) {
   for (const upload of uploads) {
     const looseDir = join(EXTRACTED, slugify(pack.title));
     const isArchive = ARCHIVE_RE.test(upload.filename);
-    if (!isArchive) mkdirSync(looseDir, { recursive: true });
+    // mkdir must stay behind the DRY gate: a leftover empty dir makes the
+    // extraction phase (existsSync skip) treat the pack as already extracted
+    if (!isArchive && !DRY) mkdirSync(looseDir, { recursive: true });
     const dest = isArchive ? join(ARCHIVES, upload.filename) : join(looseDir, upload.filename);
 
     if (existsSync(dest) && statSync(dest).size === upload.size) {
