@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { enemies, incremental } from "../../src/lib/config";
-import { getMap, getSprite } from "../../src/lib/content/registry";
+import { getCharacterSprite, getMap } from "../../src/lib/content/registry";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import {
   applyIncrementalEventReward,
@@ -24,7 +24,7 @@ describe("S9.8 miniboss ladder", () => {
       for (const id of minibosses) {
         const archetype = enemies.archetypes[id];
         expect(archetype.sprite, `${id} needs a bespoke design`).toMatch(/^sprite:boss-/);
-        expect(getSprite(archetype.sprite).rows.length).toBeGreaterThan(0);
+        expect(getCharacterSprite(archetype.sprite).rows.length).toBeGreaterThan(0);
       }
     }
     // the dragon remains the final guardian, not a miniboss

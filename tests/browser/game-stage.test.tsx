@@ -2,8 +2,9 @@ import { StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, expect, it } from "vitest";
 import { page } from "vitest/browser";
+import { preloadSheetImages } from "../../src/render/atlas";
 import { GameStage } from "../../src/render/GameStage";
-import { createGameWorld, instantiateMap } from "../../src/sim/factories";
+import { createGameWorld, instantiateMap, spawnEnemy } from "../../src/sim/factories";
 import { autoStartQuests } from "../../src/sim/quests";
 import { step } from "../../src/sim/tick";
 import { CameraState, IsPlayer, Transform } from "../../src/sim/traits";
@@ -179,5 +180,35 @@ it("renders the S6 castle approach exterior staging", async () => {
     .toBeTruthy();
   await new Promise((resolve) => setTimeout(resolve, 600));
   const path = await page.screenshot({ path: "game-stage-castle-approach.png" });
+  expect(path).toBeTruthy();
+});
+
+it("renders the High Dragon boss sheet in the candlelit hall", async () => {
+  const world = createGameWorld(3);
+  instantiateMap(world, "map:castle-hall", { classId: "knight" });
+  // the route-pack gate normally controls this spawn; the render contract
+  // under test is the purchased 96px sheet, so place the boss directly
+  spawnEnemy(world, "dragon-guardian", 732, 268);
+  world.queryFirst(IsPlayer)?.set(Transform, { x: 700, y: 290 });
+  world.set(CameraState, { x: 716, y: 278, shake: 0 });
+  for (let i = 0; i < 30; i++) step(world);
+
+  container = mountStageContainer();
+  root = createRoot(container);
+  root.render(
+    <StrictMode>
+      <GameStage world={world} />
+    </StrictMode>,
+  );
+
+  await expect
+    .poll(() => container?.querySelector<HTMLCanvasElement>("canvas[data-ready='1']"), {
+      timeout: 10_000,
+    })
+    .toBeTruthy();
+  // the purchased strips decode asynchronously — hold for the real frames
+  await preloadSheetImages();
+  await new Promise((resolve) => setTimeout(resolve, 600));
+  const path = await page.screenshot({ path: "game-stage-boss-hall.png" });
   expect(path).toBeTruthy();
 });

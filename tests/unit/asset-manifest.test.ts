@@ -83,6 +83,9 @@ describe("asset manifest", () => {
     for (const pack of manifest.packs) {
       if (!pack.frameSize) continue;
       for (const file of pack.files) {
+        // an audio file inside a frameSize pack must fail loudly, not
+        // arithmetic-on-undefined its way to a pass
+        expect(file.width, `${file.path} in a frameSize pack but has no width`).toBeDefined();
         expect(file.width, `${file.path} width`).toBe((file.frames ?? 0) * pack.frameSize);
         expect(file.height, `${file.path} height`).toBe(pack.frameSize);
         expect(file.frames, `${file.path} frames`).toBe(

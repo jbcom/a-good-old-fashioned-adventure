@@ -90,12 +90,15 @@ First curation shortlist (allow-list candidates):
   This directly answers the characters.png dragon-grid "green smear"
   verdict **for boss-scale uses**: SA.2's dragon rework becomes "wire the
   High Dragon sheets for the boss" instead of repainting the 16px grid.
-  Architecture note for the wiring step: these are pre-rendered PNG strips,
-  not palette-keyed `.pix` grids, so the atlas baker needs a second source
-  path (load sheet image → crop direction/frame rect → cached canvas)
-  alongside `rasterizeRows`; palette swaps do NOT apply to this asset
-  class, so trash-tier palette-swap consumers (orcs, wyrm, warlord) stay on
-  bespoke SA.3 grids. License permits game distribution, attribution
+  WIRED (docs/CONTENT-ARCHITECTURE.md §Purchased PNG sheet sprites):
+  `sprite:high-dragon` (src/content/sprites/high-dragon.json) rides the
+  same `sprite:*` registry with a second atlas backend (preloaded sheet
+  image → direction/frame crop → cached canvas); the dragon-guardian
+  archetype now renders it, verified in the real renderer
+  (tests/browser/game-stage.test.tsx boss-hall screenshot, read at review:
+  96px boss reads clearly against the hall, dwarfing 16px characters).
+  Palette swaps do NOT apply to this asset class, so trash-tier
+  palette-swap consumers (orcs, wyrm, warlord) stay on bespoke SA.3 grids. License permits game distribution, attribution
   optional; `public/assets/MANIFEST.json` records pack, license, geometry,
   and mapped use, gated by `tests/unit/asset-manifest.test.ts`.
 - **First manual imports (user-added):**

@@ -20,8 +20,11 @@ import {
 } from "three";
 import { combat, engine } from "../lib/config";
 import { getAnimation, getItem, getSprite } from "../lib/content/registry";
+import { isSheetSprite, resolveSheetFrame } from "../lib/content/sheetSprite";
 import {
   CameraState,
+  Choreo,
+  Clock,
   CombatTimers,
   Facing,
   FxBurst,
@@ -36,7 +39,14 @@ import {
   SpriteRef,
   Transform,
 } from "../sim/traits";
-import { flashCanvas, propCanvas, spriteCanvas, tileCanvas } from "./atlas";
+import {
+  flashCanvas,
+  preloadSheetImages,
+  propCanvas,
+  sheetFrameCanvas,
+  spriteCanvas,
+  tileCanvas,
+} from "./atlas";
 import { createDioramaMaterial, setDioramaTexture } from "./materials";
 import { channelsOf, fadeOut, playMotion, releaseMotion, restartMotion } from "./motion";
 import { iframeAlpha, spritePose, threatScale } from "./pose";
@@ -156,23 +166,44 @@ class SceneSync {
       if (!t || !ref) continue;
       const flashing = (entity.get(HitFlash)?.left ?? 0) > 0;
       const pose = spritePose(world, entity, ref.spriteId);
-      const canvas = flashing
-        ? flashCanvas(ref.spriteId, ref.paletteId)
-        : spriteCanvas(ref.spriteId, ref.paletteId, pose);
-      const key = `${ref.spriteId}|${ref.paletteId}|${flashing ? "flash" : pose}`;
       const id = entity as unknown as number;
-      const tracked = this.billboard(canvas, key, id, scene);
       const dir = entity.get(Facing)?.dir ?? 1;
       const intent = entity.get(MoveIntent);
       const moving = !!intent && (intent.x !== 0 || intent.y !== 0);
       const spriteDef = getSprite(ref.spriteId);
-      const channels = playMotion(
-        id,
-        moving ? (spriteDef.animations.walk ?? null) : (spriteDef.animations.idle ?? null),
-      );
-      tracked.mesh.position.set(t.x, canvas.height / 2 - channels.translateY, t.y);
+
+      let canvas: HTMLCanvasElement;
+      let key: string;
+      let translateY = 0;
+      if (isSheetSprite(spriteDef)) {
+        // purchased sheets carry direction + frame cycles in their own
+        // pixels: the resolver reads sim state, the strip does the rest
+        const frame = resolveSheetFrame(spriteDef, {
+          pose,
+          choreoPhase: entity.get(Choreo)?.phase ?? "",
+          facingDir: dir >= 0 ? 1 : -1,
+          moveX: intent?.x ?? 0,
+          moveY: intent?.y ?? 0,
+          t: world.get(Clock)?.t ?? 0,
+        });
+        canvas = sheetFrameCanvas(spriteDef, frame);
+        key = `${ref.spriteId}|${frame.anim.image}|${frame.sourceX},${frame.sourceY}`;
+      } else {
+        canvas = flashing
+          ? flashCanvas(ref.spriteId, ref.paletteId)
+          : spriteCanvas(ref.spriteId, ref.paletteId, pose);
+        key = `${ref.spriteId}|${ref.paletteId}|${flashing ? "flash" : pose}`;
+        const channels = playMotion(
+          id,
+          moving ? (spriteDef.animations.walk ?? null) : (spriteDef.animations.idle ?? null),
+        );
+        translateY = channels.translateY;
+      }
+      const tracked = this.billboard(canvas, key, id, scene);
+      tracked.mesh.position.set(t.x, canvas.height / 2 - translateY, t.y);
       const pulse = threatScale(world, entity);
-      tracked.mesh.scale.x = dir * pulse;
+      // sheet strips already face their direction in pixels — never mirror
+      tracked.mesh.scale.x = (isSheetSprite(spriteDef) ? 1 : dir) * pulse;
       tracked.mesh.scale.y = pulse;
       const spriteMaterial = tracked.mesh.material as ShaderMaterial;
       if (spriteMaterial.uniforms?.uAlpha) {
@@ -357,6 +388,8 @@ function WorldScene({ world }: { world: World }) {
 }
 
 export function GameStage({ world }: { world: World }) {
+  // idempotent; sheet frames blit transparent until decode completes
+  void preloadSheetImages();
   return (
     <Canvas
       dpr={1}

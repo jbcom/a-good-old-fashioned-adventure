@@ -9,6 +9,7 @@
 import { parsePixelSheet } from "./pixelSheet";
 import type {
   AnimationDef,
+  AnySpriteDef,
   CharacterDef,
   DialogueBankDef,
   FlagDef,
@@ -65,7 +66,7 @@ export const props = byId([
 
 export const sprites = byId([
   ...Object.values(
-    glob<SpriteDef>(
+    glob<AnySpriteDef>(
       import.meta.glob("/src/content/sprites/*.json", { eager: true, import: "default" }),
     ),
   ),
@@ -135,6 +136,13 @@ function lookup<T>(registry: Map<string, T>, id: string, kind: string): T {
 export const getTile = (id: string) => lookup(tiles, id, "tile");
 export const getProp = (id: string) => lookup(props, id, "prop");
 export const getSprite = (id: string) => lookup(sprites, id, "sprite");
+/** Narrowing lookup for consumers that need .pix rows/frames/palette swaps
+ * (rasterizers, recolor tests) — fails loud on a purchased sheet sprite. */
+export const getCharacterSprite = (id: string): SpriteDef => {
+  const def = getSprite(id);
+  if (def.kind !== "character-sprite") throw new Error(`${id} is not a character-sprite`);
+  return def;
+};
 export const getAnimation = (id: string) => lookup(animations, id, "animation");
 export const getMap = (id: string) => lookup(maps, id, "map");
 export const getQuest = (id: string) => lookup(quests, id, "quest");

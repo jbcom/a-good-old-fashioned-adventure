@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { combat } from "../../src/lib/config";
-import { getSprite } from "../../src/lib/content/registry";
+import { getCharacterSprite } from "../../src/lib/content/registry";
 import { iframeAlpha, spritePose } from "../../src/render/pose";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import { damagePlayer, playerAttack } from "../../src/sim/systems/combat";
@@ -17,7 +17,7 @@ function bootKnight() {
 
 describe("S12 pose frames", () => {
   it("parses the hero pose frames from the pix sheet", () => {
-    const hero = getSprite("sprite:hero");
+    const hero = getCharacterSprite("sprite:hero");
     for (const pose of ["walk-0", "walk-1", "attack", "hurt"]) {
       const rows = hero.frames?.[pose];
       expect(rows, `sprite:hero needs ${pose}`).toBeDefined();

@@ -5,11 +5,11 @@ import {
   characters,
   dialogueBanks,
   flags,
+  getCharacterSprite,
   getDialogueBank,
   getMap,
   getQuest,
   getShop,
-  getSprite,
   getTile,
   items,
   maps,
@@ -24,7 +24,8 @@ describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
     expect(tiles.size).toBe(44);
     expect(props.size).toBe(69);
-    expect(sprites.size).toBe(61);
+    // 61 .pix sprites + sprite:high-dragon (the first purchased sheet sprite)
+    expect(sprites.size).toBe(62);
     expect(animations.size).toBe(7);
     expect(maps.size).toBe(17);
     expect(quests.size).toBe(21);
@@ -37,7 +38,7 @@ describe("registries are fully populated", () => {
 
   it("typed lookups resolve real content", () => {
     expect(getTile("tile:water").solid).toBe(true);
-    expect(getSprite("sprite:hero").rows).toHaveLength(16);
+    expect(getCharacterSprite("sprite:hero").rows).toHaveLength(16);
     expect(getMap("map:overworld").size).toEqual({ cols: 96, rows: 48 });
     expect(getQuest("quest:broken-bridge").start).toBe("find-woodcutter");
     expect(getQuest("quest:stable-oat-kindness").start).toBe("buy-oats");
@@ -63,6 +64,9 @@ describe("registries are fully populated", () => {
 
   it("every sprite animation ref resolves through the registry", () => {
     for (const sprite of sprites.values()) {
+      // sheet sprites own their animations inline (frame strips, not
+      // anim:* refs) — tests/unit/sheet-sprites.test.ts validates those
+      if (sprite.kind === "sheet-sprite") continue;
       for (const animId of Object.values(sprite.animations)) {
         expect(animations.has(animId), `${sprite.id} -> ${animId}`).toBe(true);
       }

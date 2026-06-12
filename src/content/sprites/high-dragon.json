@@ -1,0 +1,73 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:high-dragon",
+  "kind": "sheet-sprite",
+  "description": "Boss-tier dragon from the Electric Lemon Games High Dragon pack (public/assets/MANIFEST.json#high-dragon). 96px frames, 4 direction blocks per strip. Replaces the boss-scale uses of the 16px sprite:dragon grid.",
+  "frameSize": { "w": 96, "h": 96 },
+  "anchor": { "x": 48, "y": 88 },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "bosses/dragon/idle.png",
+      "framesPerDirection": 8,
+      "directional": true,
+      "fps": 8
+    },
+    "walk": {
+      "image": "bosses/dragon/walk.png",
+      "framesPerDirection": 6,
+      "directional": true,
+      "fps": 10
+    },
+    "melee": {
+      "image": "bosses/dragon/melee.png",
+      "framesPerDirection": 6,
+      "directional": true,
+      "fps": 12
+    },
+    "firebreath": {
+      "image": "bosses/dragon/firebreath.png",
+      "framesPerDirection": 16,
+      "directional": true,
+      "fps": 12
+    },
+    "launch": {
+      "image": "bosses/dragon/launch.png",
+      "framesPerDirection": 8,
+      "directional": true,
+      "fps": 10
+    },
+    "hover": {
+      "image": "bosses/dragon/hover.png",
+      "framesPerDirection": 6,
+      "directional": true,
+      "fps": 8
+    },
+    "fly": {
+      "image": "bosses/dragon/fly.png",
+      "framesPerDirection": 6,
+      "directional": true,
+      "fps": 10
+    },
+    "death": {
+      "image": "bosses/dragon/death.png",
+      "framesPerDirection": 9,
+      "directional": false,
+      "fps": 8,
+      "loop": false
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "melee",
+    "hurt": "idle",
+    "death": "death",
+    "roar": "launch",
+    "volley": "firebreath",
+    "lull": "hover"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

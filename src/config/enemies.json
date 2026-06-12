@@ -352,7 +352,7 @@
     },
     "dragon-guardian": {
       "name": "Route Dragon",
-      "sprite": "sprite:dragon",
+      "sprite": "sprite:high-dragon",
       "palette": "palette:boss",
       "family": "dragon",
       "hp": 60,

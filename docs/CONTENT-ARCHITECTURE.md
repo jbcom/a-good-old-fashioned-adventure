@@ -119,6 +119,40 @@ payload and `scripts/aseprite/import-pixel-sheet.lua` performs the Aseprite
 import/export. The text sheet remains the runtime source of truth so diffs,
 tests, and content review stay precise.
 
+### Purchased PNG sheet sprites — the second raster backend
+
+Purchased pixel art (`public/assets/MANIFEST.json`) ships as pre-rendered
+PNG sheets, not palette-keyed `.pix` grids. Use cases, enumerated before
+this was designed (SA.0→SA.3):
+
+1. **Boss strips** (High Dragon): 96px frames, 4 consecutive direction
+   blocks (right/up/left/down), one strip per choreography state
+   (idle/walk/melee/firebreath/launch/hover/fly/death).
+2. **Trash bodies** (Elthen packs): one sheet per animal, row-per-animation,
+   side-view, facing via mirror-x.
+3. **Static cells** (Backterria mega-sheets): 16px cells addressed by grid
+   coords through a slicer manifest → tiles/props/items. No animation.
+4. **Non-use:** palette swaps. Sheets are fixed-color; `recolorChannels`
+   never applies. A sheet sprite that needs a variant ships the variant in
+   pixels (the boar's two coats) or doesn't exist.
+
+Decision: sheet sprites are **the same `SpriteDef` content type with a
+`sheet` source instead of `rows`** — a JSON def declares the image path
+(under `public/assets/`), frame geometry, named animations (state →
+direction blocks/rows + frame range + fps), `anchor`, and `traits`, and
+registers under the same `sprite:*` namespace. The atlas baker grows a
+second backend: `sheet` defs rasterize by cropping the preloaded sheet
+image instead of `rasterizeRows`. Images preload once at app boot (the
+curated set is small — the whole dragon is ~200 KB) so the atlas stays
+synchronous; a sheet sprite that misses preload fails loud, never blits
+blank. Mega-sheet cells (use 3) are NOT sprites — the slicer manifest
+slots into the tile/prop layer when SA.3 region props land.
+
+Why one content type and not a parallel `sheets/` registry: every consumer
+(factories, pose system, y-sort, content-integrity tests) already speaks
+`sprite:*` + `getSprite()`; a second namespace would fork every lookup
+site for an asset distinction the renderer alone cares about.
+
 ### `src/content/shops/` — counters and prices
 
 A shop file owns its `shop:*` id, keeper character, display name, listing ids,

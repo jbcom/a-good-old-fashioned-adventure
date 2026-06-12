@@ -67,6 +67,37 @@ export interface SpriteDef {
   koota: { traits: string[] };
 }
 
+/** One animation inside a purchased PNG sheet sprite: a horizontal strip
+ * of frames, optionally laid out as 4 consecutive direction blocks
+ * (docs/CONTENT-ARCHITECTURE.md §Purchased PNG sheet sprites). */
+export interface SheetAnimDef {
+  /** image path under public/assets/ (must be manifested) */
+  image: string;
+  framesPerDirection: number;
+  /** true → the strip holds directionOrder.length consecutive blocks */
+  directional: boolean;
+  fps: number;
+  /** default true; false clamps on the final frame (death) */
+  loop?: boolean;
+  /** y row index for multi-row sheets (row 0 when absent) */
+  row?: number;
+}
+
+export interface SheetSpriteDef {
+  id: string;
+  kind: "sheet-sprite";
+  description?: string;
+  frameSize: { w: number; h: number };
+  anchor: { x: number; y: number };
+  directionOrder: ("right" | "up" | "left" | "down")[];
+  animations: Record<string, SheetAnimDef>;
+  /** bridges the .pix pose vocabulary + choreography phases to animations */
+  poseMap: Record<string, string>;
+  koota: { traits: string[] };
+}
+
+export type AnySpriteDef = SpriteDef | SheetSpriteDef;
+
 export interface AnimationDef {
   id: string;
   kind: "animation";

@@ -7,11 +7,19 @@
 import type { Entity, World } from "koota";
 import { classes, combat, enemies } from "../lib/config";
 import { getSprite } from "../lib/content/registry";
+import { isSheetSprite } from "../lib/content/sheetSprite";
 import { Choreo, Clock, CombatTimers, IsPlayer, MoveIntent, Threat } from "../sim/traits";
 
 function hasFrame(spriteId: string, pose: string): boolean {
   if (!spriteId) return false;
-  return !!getSprite(spriteId).frames?.[pose];
+  const def = getSprite(spriteId);
+  if (isSheetSprite(def)) {
+    // sheet sprites answer for the whole pose family (walk-0, walk-up-1 →
+    // walk); the resolver picks direction and frame from sim state
+    const key = pose.replace(/-up-\d+$/, "").replace(/-\d+$/, "");
+    return def.poseMap[key] !== undefined;
+  }
+  return !!def.frames?.[pose];
 }
 
 /** Walk cycle index from the deterministic sim clock. */
