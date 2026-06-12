@@ -151,6 +151,12 @@ export function enemyAIStep(world: World, dt: number): void {
     if (!info || !transform || !speed) continue;
     const archetype = enemies.archetypes[info.archetypeId];
     if (!archetype) continue;
+    // the wither decays on the enemy's own clock — never gated behind
+    // having a target (an unopposed survivor must still shed the debuff)
+    const witherNow = enemy.get(Withered);
+    if (witherNow && witherNow.left > 0) {
+      enemy.set(Withered, { left: Math.max(0, witherNow.left - dt) });
+    }
     const playerPos = nearestAllyTo(world, transform);
     if (!playerPos) continue;
 
@@ -325,9 +331,7 @@ export function enemyAIStep(world: World, dt: number): void {
     }
 
     // the wither slows: drag the stride while the debuff holds
-    const withered = enemy.get(Withered);
-    if (withered && withered.left > 0) {
-      enemy.set(Withered, { left: Math.max(0, withered.left - dt) });
+    if ((enemy.get(Withered)?.left ?? 0) > 0) {
       intentScale *= combatConfig.wither.speedFactor;
     }
     enemy.set(MoveIntent, { x: intentX * intentScale, y: intentY * intentScale });
