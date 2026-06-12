@@ -4,6 +4,7 @@ import { afterEach, expect, it } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import { App } from "../../src/app/App";
 import { MemorySaveRepository } from "../../src/persistence/saveRepository";
+import { wait } from "../harness/wait";
 
 let container: HTMLDivElement | undefined;
 let root: Root | undefined;
@@ -67,8 +68,6 @@ function textOf(testId: string) {
       .trim() ?? ""
   );
 }
-
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function pressA(input = userEvent.setup()) {
   await input.keyboard("j");

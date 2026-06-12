@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { enemies, incremental } from "../../src/lib/config";
 import { getMap } from "../../src/lib/content/registry";
 import { nodeRanks, rankCost } from "../../src/sim/incrementalProgress";
+import { familyArchetypeIds } from "../harness/families";
 
 const { nodes, root } = incremental.upgradeGraph;
 
@@ -116,9 +117,7 @@ describe("S13.2 adversarial warband trade", () => {
     expect(warbands.length).toBeGreaterThan(0);
     const startMap = getMap(incremental.loop.startMap);
     for (const node of familyNodes) {
-      const tagged = Object.entries(enemies.archetypes)
-        .filter(([, archetype]) => archetype.family === node.enemyFamily)
-        .map(([id]) => id);
+      const tagged = familyArchetypeIds(node.enemyFamily ?? "");
       expect(tagged.length, `${node.id} family ${node.enemyFamily} tags nothing`).toBeGreaterThan(
         0,
       );

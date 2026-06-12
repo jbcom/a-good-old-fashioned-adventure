@@ -5,11 +5,11 @@ import { page } from "vitest/browser";
 import { App } from "../../src/app/App";
 import { maps } from "../../src/lib/content/registry";
 import { MemorySaveRepository } from "../../src/persistence/saveRepository";
+import { wait } from "../harness/wait";
 
 let container: HTMLDivElement | undefined;
 let root: Root | undefined;
 let originalBodyStyle = "";
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 afterEach(() => {
   root?.unmount();

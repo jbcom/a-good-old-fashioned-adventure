@@ -4,6 +4,7 @@ import { afterEach, expect, it } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import { App } from "../../src/app/App";
 import { MemorySaveRepository } from "../../src/persistence/saveRepository";
+import { wait } from "../harness/wait";
 
 let container: HTMLDivElement | undefined;
 let root: Root | undefined;
@@ -34,8 +35,6 @@ function mountApp() {
     </StrictMode>,
   );
 }
-
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 function shell() {
   const el = page.getByTestId("game-shell").element() as HTMLElement;

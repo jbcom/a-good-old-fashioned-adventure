@@ -6,11 +6,11 @@ import { App } from "../../src/app/App";
 import { MemorySaveRepository } from "../../src/persistence/saveRepository";
 import { PlayerGovernor } from "../harness/playerGovernor";
 import type { GovernorPlanStep, PlayerPerception } from "../harness/playerGovernorModel";
+import { wait } from "../harness/wait";
 
 let container: HTMLDivElement | undefined;
 let root: Root | undefined;
 let originalBodyStyle = "";
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 afterEach(() => {
   root?.unmount();

@@ -327,6 +327,12 @@ function spawnWarbandReinforcements(
   familyHosts: Map<string, { archetypeId: string; x: number; y: number }[]>,
 ): void {
   const ranks = world.get(IncrementalProgress)?.upgradeRanks ?? {};
+  // tile collision can't see entities: track every taken spot so wrapped
+  // ranks (more reinforcements than hosts) never stack on a host or peer
+  const occupied = new Set<string>();
+  for (const hosts of familyHosts.values()) {
+    for (const host of hosts) occupied.add(`${host.x},${host.y}`);
+  }
   for (const node of incremental.upgradeGraph.nodes) {
     // only bounty-carrying count ranks reinforce; rose majors use
     // enemyFamily as taxonomy (dragon-wake must not clone the boss)
@@ -339,13 +345,13 @@ function spawnWarbandReinforcements(
       const hitbox = enemies.archetypes[host.archetypeId].hitbox;
       const placed = REINFORCEMENT_OFFSETS.map(
         ([dx, dy]) => [host.x + dx, host.y + dy] as const,
-      ).find(([x, y]) => !collides(world, x, y, hitbox.w, hitbox.h));
-      const [x, y] = placed ?? [host.x, host.y];
-      const reinforcement = spawnEnemy(world, host.archetypeId, x, y);
-      reinforcement.set(IsEnemy, {
-        archetypeId: host.archetypeId,
-        bounty: node.spawnBounty ?? 0,
-      });
+      ).find(([x, y]) => !occupied.has(`${x},${y}`) && !collides(world, x, y, hitbox.w, hitbox.h));
+      // a fully walled host yields no spot: skip rather than stack entities
+      if (!placed) continue;
+      occupied.add(`${placed[0]},${placed[1]}`);
+      const reinforcement = spawnEnemy(world, host.archetypeId, placed[0], placed[1]);
+      const tag = reinforcement.get(IsEnemy);
+      if (tag) reinforcement.set(IsEnemy, { ...tag, bounty: node.spawnBounty });
     }
   }
 }
