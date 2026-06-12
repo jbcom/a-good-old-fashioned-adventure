@@ -78,11 +78,32 @@ First curation shortlist (allow-list candidates):
   (12 loops), Retro Boss Battle, RPG Fantasy Tavern & Adventure, Calm Menu,
   Victory & Level Complete (24 stingers), Dark Ambient.
 - **SFX (feeds S20.3):** UI Sound Effects Pack (40 interface sounds).
+- **High Dragon boss pack (user-added, reviewed 2026-06-12):**
+  Electric Lemon Games "High Dragon" + death-animation add-on, curated to
+  `public/assets/bosses/dragon/` (raws in `raw-assets/itch/high-dragon/`).
+  Verdict: **clear — boss-tier keeper.** 96×96 frames, clean 16-bit
+  rendering with strong silhouette, interior shading, and baked drop
+  shadows; 9 animations (idle/walk/melee/firebreath/fly/hover/launch with
+  no-shadow airborne variants, plus a 9-frame death). Strips are 4
+  consecutive direction blocks ordered right/up/left/down (left is a
+  pixel-exact mirror of right); firebreath runs 16 frames per direction.
+  This directly answers the characters.png dragon-grid "green smear"
+  verdict **for boss-scale uses**: SA.2's dragon rework becomes "wire the
+  High Dragon sheets for the boss" instead of repainting the 16px grid.
+  Architecture note for the wiring step: these are pre-rendered PNG strips,
+  not palette-keyed `.pix` grids, so the atlas baker needs a second source
+  path (load sheet image → crop direction/frame rect → cached canvas)
+  alongside `rasterizeRows`; palette swaps do NOT apply to this asset
+  class, so trash-tier palette-swap consumers (orcs, wyrm, warlord) stay on
+  bespoke SA.3 grids. License permits game distribution, attribution
+  optional; `public/assets/MANIFEST.json` records pack, license, geometry,
+  and mapped use, gated by `tests/unit/asset-manifest.test.ts`.
 - **First manual imports (user-added):**
   `public/assets/tilemaps/ground.png` — autotile cliff/ledge pieces,
   dithered grounds, palette ramps; terrain texture uplift candidate.
-  `public/assets/tilemaps/roguelike.png` — a full organized 16x16 roguelike
-  mega-sheet with labeled category columns (terrain, fortifications,
+  `public/assets/tilemaps/roguelike.png` — "The Roguelike" v1.16.1 by
+  Backterria (credit baked into the sheet corners) — a full organized 16x16
+  roguelike mega-sheet with labeled category columns (terrain, fortifications,
   creatures, items, weapons, armor, tools, props): hundreds of cells; prime
   source for SA.3 region props, pickups/items, and prop breadth. Curation
   step must slice it into named regions (a slicer manifest mapping cell

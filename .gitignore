@@ -24,3 +24,4 @@ output/playwright/
 .env
 .itch-cache/
 raw-assets/
+.DS_Store
