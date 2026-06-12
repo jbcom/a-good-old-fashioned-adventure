@@ -54,13 +54,19 @@ export function threatScale(world: World, entity: Entity): number {
   if (!threat) return 1;
   const windup = enemies.aiDefaults.windup;
   const t = world.get(Clock)?.t ?? 0;
-  if (!threat.armed && threat.windupLeft > 0 && threat.windupLeft < windup.duration) {
+  const feedback = combat.feedback;
+  if (
+    !threat.armed &&
+    windup.duration > 0 &&
+    threat.windupLeft > 0 &&
+    threat.windupLeft < windup.duration
+  ) {
     const progress = 1 - threat.windupLeft / windup.duration;
-    const throb = (1 + Math.sin(t * 24)) / 2;
-    return 1 + 0.14 * progress * throb;
+    const throb = (1 + Math.sin(t * feedback.telegraphThrobHz)) / 2;
+    return 1 + feedback.telegraphThrobScale * progress * throb;
   }
   if (threat.casting) {
-    return Math.floor(t * 14) % 2 === 0 ? 1.12 : 1;
+    return Math.floor(t * feedback.castFlickerHz) % 2 === 0 ? feedback.castFlickerScale : 1;
   }
   return 1;
 }

@@ -1805,10 +1805,12 @@ export function App({
       else if (action !== "a" && action !== "b" && action !== "pause" && !event.repeat)
         setDirection(action, true);
       if (mode === "title" && action === "left") {
+        if (pickerRoster.length === 0) return;
         const idx = pickerRoster.indexOf(selectedClass);
         setSelectedClass(pickerRoster[(idx + pickerRoster.length - 1) % pickerRoster.length]);
       }
       if (mode === "title" && action === "right") {
+        if (pickerRoster.length === 0) return;
         const idx = pickerRoster.indexOf(selectedClass);
         setSelectedClass(pickerRoster[(idx + 1) % pickerRoster.length]);
       }
