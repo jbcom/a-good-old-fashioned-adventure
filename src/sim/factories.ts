@@ -11,6 +11,7 @@ import { buildGrid } from "./mapgen";
 import {
   AimDirection,
   CameraState,
+  Choreo,
   Clock,
   CombatTimers,
   EventQueue,
@@ -127,7 +128,7 @@ export function spawnNpc(
 export function spawnEnemy(world: World, archetypeId: string, x: number, y: number): Entity {
   const archetype = enemies.archetypes[archetypeId];
   if (!archetype) throw new Error(`unknown enemy archetype: ${archetypeId}`);
-  return world.spawn(
+  const entity = world.spawn(
     IsEnemy({ archetypeId }),
     Transform({ x, y }),
     Facing({ dir: -1 }),
@@ -138,6 +139,11 @@ export function spawnEnemy(world: World, archetypeId: string, x: number, y: numb
     Threat({ windupLeft: enemies.aiDefaults.windup.duration, armed: false, casting: false }),
     SpriteRef({ spriteId: archetype.sprite, paletteId: archetype.palette }),
   );
+  const phases = archetype.boss?.phases;
+  const stance = archetype.guard?.stance;
+  if (phases) entity.add(Choreo({ phase: "roar", left: phases.roar }));
+  else if (stance) entity.add(Choreo({ phase: "", left: 0 }));
+  return entity;
 }
 
 export function spawnChest(world: World, x: number, y: number, contents: string): Entity {

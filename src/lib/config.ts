@@ -140,6 +140,12 @@ export interface EnemyArchetype {
     aggroRange: number;
     deaggroRange: number;
     leashRange: number;
+    stance?: {
+      guard: number;
+      open: number;
+      damageMultiplier: number;
+      moveFactor: number;
+    };
   };
   caster?: {
     attackRange: number;
@@ -160,6 +166,12 @@ export interface EnemyArchetype {
     spreadAngles: number[];
     projectile: { type: string; speed: number; life: number };
     sfx: string;
+    phases?: {
+      roar: number;
+      volley: number;
+      lull: number;
+      armorMultiplier: number;
+    };
   };
 }
 

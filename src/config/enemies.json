@@ -224,7 +224,13 @@
       "guard": {
         "aggroRange": 100,
         "deaggroRange": 140,
-        "leashRange": 104
+        "leashRange": 104,
+        "stance": {
+          "guard": 1.1,
+          "open": 1.4,
+          "damageMultiplier": 0.35,
+          "moveFactor": 0.4
+        }
       },
       "miniboss": true
     },
@@ -337,7 +343,13 @@
           "speed": 80,
           "life": 2.5
         },
-        "sfx": "magic"
+        "sfx": "magic",
+        "phases": {
+          "roar": 0.9,
+          "volley": 0.9,
+          "lull": 1.4,
+          "armorMultiplier": 0.5
+        }
       }
     }
   }

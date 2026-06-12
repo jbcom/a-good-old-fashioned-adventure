@@ -11,7 +11,17 @@ import type { Entity, World } from "koota";
 import { FleeBehavior, SeekBehavior, Vector3, Vehicle } from "yuka";
 import { enemies } from "../../lib/config";
 import { spawnProjectile } from "../factories";
-import { Facing, IsEnemy, IsPlayer, MoveIntent, Outbox, Speed, Threat, Transform } from "../traits";
+import {
+  Choreo,
+  Facing,
+  IsEnemy,
+  IsPlayer,
+  MoveIntent,
+  Outbox,
+  Speed,
+  Threat,
+  Transform,
+} from "../traits";
 
 interface EnemyAi {
   vehicle: Vehicle;
@@ -130,6 +140,7 @@ export function enemyAIStep(world: World, dt: number): void {
 
     let intentX = 0;
     let intentY = 0;
+    let intentScale = 1;
     let useSteering = false;
 
     ai.vehicle.position.set(transform.x, transform.y, 0);
@@ -218,12 +229,58 @@ export function enemyAIStep(world: World, dt: number): void {
         } else if (ai.mode === "return") {
           useSteering = returnToPost(ai, transform);
         }
+        // stance fighters alternate a crouched guard (slow, armored) with
+        // open windows while engaged; the stance drops outside the fight
+        const stance = spec.stance;
+        const choreo = stance ? enemy.get(Choreo) : undefined;
+        if (stance && choreo) {
+          if (ai.mode === "chase") {
+            let { phase, left } = choreo;
+            if (phase !== "guard" && phase !== "open") {
+              phase = "guard";
+              left = stance.guard;
+            } else {
+              left -= dt;
+              if (left <= 0) {
+                phase = phase === "guard" ? "open" : "guard";
+                left += phase === "guard" ? stance.guard : stance.open;
+              }
+            }
+            enemy.set(Choreo, { phase, left });
+            if (phase === "guard") intentScale = stance.moveFactor;
+          } else if (choreo.phase !== "") {
+            enemy.set(Choreo, { phase: "", left: 0 });
+          }
+        }
         break;
       }
       case "boss": {
         const spec = archetype.boss;
         if (!spec) break;
-        if (dist < spec.aggroRange) {
+        if (dist >= spec.aggroRange) break;
+        const phases = spec.phases;
+        const choreo = phases ? enemy.get(Choreo) : undefined;
+        if (phases && choreo) {
+          // deterministic fight pattern: roar (hold, telegraph) -> volley
+          // (advance, one spread on entry) -> lull (hold, vulnerable)
+          let { phase, left } = choreo;
+          left -= dt;
+          if (left <= 0) {
+            if (phase === "roar") {
+              phase = "volley";
+              left += phases.volley;
+              castAt(world, transform, playerPos, spec.projectile, spec.sfx, spec.spreadAngles);
+            } else if (phase === "volley") {
+              phase = "lull";
+              left += phases.lull;
+            } else {
+              phase = "roar";
+              left += phases.roar;
+            }
+          }
+          enemy.set(Choreo, { phase, left });
+          if (phase === "volley") useSteering = seekTo(ai, playerPos);
+        } else {
           useSteering = seekTo(ai, playerPos);
           if (ai.castCooldown <= 0) {
             ai.castCooldown = spec.cooldown;
@@ -245,7 +302,7 @@ export function enemyAIStep(world: World, dt: number): void {
       }
     }
 
-    enemy.set(MoveIntent, { x: intentX, y: intentY });
+    enemy.set(MoveIntent, { x: intentX * intentScale, y: intentY * intentScale });
     if (intentX !== 0) enemy.set(Facing, { dir: intentX > 0 ? 1 : -1 });
     else if (dx !== 0) enemy.set(Facing, { dir: dx > 0 ? 1 : -1 });
 

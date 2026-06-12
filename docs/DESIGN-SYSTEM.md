@@ -41,6 +41,18 @@ cabinet, and not cyberpunk glass.
   the same pose as `data-player-pose`, so journeys assert animation through
   public state. Sprites without an authored pose fall back to their base rows.
 
+- **Boss choreography:** bosses fight in readable, deterministic phases held
+  in the public `Choreo` trait (`src/sim/traits.ts`) and ticked by config
+  timers in `src/sim/systems/enemyAI.ts`. The route dragon cycles
+  roar → volley → lull: it roars in place with a heavy throb
+  (`combat.feedback.roarThrobScale`), fires its spread once on entering the
+  volley while advancing, then stands vulnerable through the lull — full
+  damage lands only in the lull (`boss.phases.armorMultiplier` elsewhere).
+  The banner knight cycles guard ↔ open while aggroed: guarding it crouches
+  (`guardCrouchScale`), advances at `stance.moveFactor` speed, and takes
+  `stance.damageMultiplier` damage. Phase timers live on the archetype in
+  `src/config/enemies.json`; the renderer reads the same trait the tests do.
+
 ## Source Tokens
 
 `src/config/ui.json` owns the source tokens:
