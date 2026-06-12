@@ -42,7 +42,7 @@
       "tier": 4,
       "threat": 9,
       "maps": ["map:castle-hall", "map:castle-library", "map:castle-armory", "map:castle-dungeon"],
-      "archetypes": ["crypt-skeleton", "crypt-sentry", "shadow-warlord"]
+      "archetypes": ["crypt-skeleton", "crypt-sentry", "lectern-shade", "shadow-warlord"]
     }
   ],
   "archetypes": {
@@ -323,6 +323,30 @@
         "aggroRange": 60,
         "deaggroRange": 120,
         "leashRange": 80
+      }
+    },
+    "lectern-shade": {
+      "name": "Lectern Shade",
+      "sprite": "sprite:boss-lectern-shade",
+      "palette": "palette:base",
+      "hp": 90,
+      "speed": 36,
+      "hitbox": {
+        "w": 14,
+        "h": 14
+      },
+      "behavior": "caster",
+      "miniboss": true,
+      "caster": {
+        "attackRange": 110,
+        "keepDistance": 56,
+        "cooldown": 1.8,
+        "projectile": {
+          "type": "shadowbolt",
+          "speed": 70,
+          "life": 2.2
+        },
+        "sfx": "magic"
       }
     },
     "dragon-guardian": {

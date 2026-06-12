@@ -7,6 +7,7 @@
   "pickupRadius": 12,
   "chestContents": {
     "Gold": { "item": "item:gold", "amount": 50 },
+    "RoyalGold": { "item": "item:gold", "amount": 150 },
     "HPUp": { "item": "item:max-hp-up", "amount": 20 },
     "AttackUp": { "item": "item:attack-up", "amount": 1 }
   }
