@@ -60,7 +60,8 @@ export const NpcPatrol = trait(() => ({
 
 export const IsPlayer = trait({ classId: "" });
 export const IsNpc = trait({ charId: "" });
-export const IsEnemy = trait({ archetypeId: "" });
+/** bounty: extra coins this spawn pays on defeat (warband reinforcements). */
+export const IsEnemy = trait({ archetypeId: "", bounty: 0 });
 export const IsPickup = trait({ itemId: "", value: 0 });
 export const IsSolid = trait();
 
@@ -111,6 +112,8 @@ export interface GameEvent {
     | "shop:buy"
     | "shop:sell";
   archetypeId?: string;
+  /** Extra coins carried by a warband reinforcement, paid on defeat. */
+  bounty?: number;
   itemId?: string;
   shopId?: string;
   listingId?: string;

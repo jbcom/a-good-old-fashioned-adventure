@@ -170,6 +170,7 @@
         "rankCostGrowth": 1.7,
         "prerequisites": ["upgrade:dragon-wake"],
         "enemyFamily": "orc",
+        "spawnBounty": 4,
         "unlocks": [],
         "note": "Adversarial coin rank: one more orc on route maps per rank \u2014 harder roads, but every orc pays coins.",
         "track": "encounters"

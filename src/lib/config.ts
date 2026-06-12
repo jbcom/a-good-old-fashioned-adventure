@@ -77,6 +77,8 @@ export interface IncrementalUpgradeNode {
   classId?: string;
   routePack?: string;
   enemyFamily?: string;
+  /** Coins each warband reinforcement pays on defeat, beyond enemyDefeated. */
+  spawnBounty?: number;
   ability?: string;
   ranks?: number;
   rankCostGrowth?: number;
@@ -126,6 +128,8 @@ export interface EnemyArchetype {
   name: string;
   sprite: string;
   palette: string;
+  /** Warband family tag: enemyFamily rank nodes reinforce matching spawns. */
+  family?: string;
   hp: number;
   speed: number;
   hitbox: { w: number; h: number };

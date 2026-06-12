@@ -135,6 +135,15 @@ every extra orc is more coins per run. Adversarial ranks are the loop's
 self-balancing throttle: the player chooses when to raise the danger in
 exchange for income, instead of the game imposing a difficulty curve.
 
+Mechanically: an upgrade node with `enemyFamily` and owned `ranks` adds one
+reinforcement per rank when a map instantiates. Enemy archetypes carry a
+`family` tag in `enemies.json`; reinforcements spawn at deterministic offsets
+beside that family's authored spawns on the map (collision-probed so they
+land on walkable ground), so the same save always produces the same field.
+Each reinforcement carries the node's `spawnBounty` — paid in coins on top of
+the standard `enemyDefeated` reward when it falls. The bounty is what makes
+the adversarial trade rational: harder roads, but every extra orc pays.
+
 ### Bosses are placed; trash is fodder
 
 Enemy content splits into two deliberately different species:

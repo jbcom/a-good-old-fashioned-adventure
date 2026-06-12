@@ -265,9 +265,12 @@ export function applyIncrementalEventReward(
   world: World,
   eventType: string,
   archetypeId?: string,
+  bounty = 0,
 ): void {
   if (eventType !== "enemy:defeated") return;
   grantRunReward(world, "enemyDefeated");
+  // warband reinforcements carry a bounty: the adversarial trade pays
+  if (bounty > 0) addCoins(world, bounty);
   if (!archetypeId || !enemies.archetypes[archetypeId]?.miniboss) return;
 
   // minibosses always pay a purse; the FIRST clean clear pays a rose

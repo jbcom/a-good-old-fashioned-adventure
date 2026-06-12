@@ -108,6 +108,7 @@ export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: 
 
   if (hp <= 0) {
     const archetypeId = enemy.get(IsEnemy)?.archetypeId ?? "";
+    const bounty = enemy.get(IsEnemy)?.bounty ?? 0;
     const maxHp = health.maxHp;
     const { x, y } = transform;
     const ghost = enemy.get(SpriteRef);
@@ -135,7 +136,7 @@ export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: 
         spawnPickup(world, roll.item, x + (roll.offsetX ?? 0), y, 0);
       }
     }
-    pushEvent(world, { type: "enemy:defeated", archetypeId, x, y });
+    pushEvent(world, { type: "enemy:defeated", archetypeId, bounty, x, y });
   } else {
     enemy.set(Health, { hp, maxHp: health.maxHp });
     sfx(world, "hurt");

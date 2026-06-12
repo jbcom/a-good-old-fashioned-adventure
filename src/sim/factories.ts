@@ -4,8 +4,9 @@
  * instantiateMap is the only way a map comes to life.
  */
 import { createWorld, type Entity, type World } from "koota";
-import { classes, enemies, player as playerConfig } from "../lib/config";
+import { classes, enemies, incremental, player as playerConfig } from "../lib/config";
 import { flags, getCharacter, getMap, getProp } from "../lib/content/registry";
+import { collides } from "./collision";
 import { initialIncrementalProgress, upgradeMaxHpBonus } from "./incrementalProgress";
 import { buildGrid } from "./mapgen";
 import {
@@ -255,6 +256,7 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
   world.set(CameraState, { x, y, shake: 0 });
 
   const unlockedPacks = world.get(IncrementalProgress)?.unlockedRoutePackIds ?? [];
+  const familyHosts = new Map<string, { archetypeId: string; x: number; y: number }[]>();
   for (const spawn of def.entities) {
     // relocation overlays: entities can require or exclude an unlocked pack
     if (spawn.requiresRoutePack && !unlockedPacks.includes(spawn.requiresRoutePack)) continue;
@@ -270,6 +272,12 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
     }
     if (spawn.enemy) {
       spawnEnemy(world, spawn.enemy, spawn.x as number, spawn.y as number);
+      const family = enemies.archetypes[spawn.enemy]?.family;
+      if (family) {
+        const hosts = familyHosts.get(family) ?? [];
+        hosts.push({ archetypeId: spawn.enemy, x: spawn.x as number, y: spawn.y as number });
+        familyHosts.set(family, hosts);
+      }
       continue;
     }
     if (spawn.ref?.startsWith("char:")) {
@@ -291,6 +299,51 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
       const px = spawn.tileAt ? spawn.tileAt[0] * TILE + TILE / 2 : (spawn.x as number);
       const py = spawn.tileAt ? (spawn.tileAt[1] + 1) * TILE : (spawn.y as number);
       spawnProp(world, spawn.ref, px, py);
+    }
+  }
+  spawnWarbandReinforcements(world, familyHosts);
+}
+
+/**
+ * Adversarial warband ranks (docs/INCREMENTAL-RESCUE-LOOP.md §adversarial
+ * incrementals): each owned rank of an enemyFamily upgrade node adds one
+ * reinforcement beside that family's authored spawns on this map, placed at
+ * the first walkable deterministic offset. Reinforcements carry the node's
+ * spawnBounty, paid in coins on defeat.
+ */
+const REINFORCEMENT_OFFSETS: ReadonlyArray<readonly [number, number]> = [
+  [20, 0],
+  [-20, 0],
+  [0, 20],
+  [0, -20],
+  [28, 14],
+  [-28, 14],
+  [28, -14],
+  [-28, -14],
+];
+
+function spawnWarbandReinforcements(
+  world: World,
+  familyHosts: Map<string, { archetypeId: string; x: number; y: number }[]>,
+): void {
+  const ranks = world.get(IncrementalProgress)?.upgradeRanks ?? {};
+  for (const node of incremental.upgradeGraph.nodes) {
+    if (!node.enemyFamily) continue;
+    const owned = ranks[node.id] ?? 0;
+    const hosts = familyHosts.get(node.enemyFamily);
+    if (owned <= 0 || !hosts?.length) continue;
+    for (let i = 0; i < owned; i++) {
+      const host = hosts[i % hosts.length];
+      const hitbox = enemies.archetypes[host.archetypeId].hitbox;
+      const placed = REINFORCEMENT_OFFSETS.map(
+        ([dx, dy]) => [host.x + dx, host.y + dy] as const,
+      ).find(([x, y]) => !collides(world, x, y, hitbox.w, hitbox.h));
+      const [x, y] = placed ?? [host.x, host.y];
+      const reinforcement = spawnEnemy(world, host.archetypeId, x, y);
+      reinforcement.set(IsEnemy, {
+        archetypeId: host.archetypeId,
+        bounty: node.spawnBounty ?? 0,
+      });
     }
   }
 }

@@ -4,7 +4,7 @@
 **Owner:** Claude (mandated by jbogaty)
 **Mandate:** "using a long-running local branch, improving and expanding your own prompt with each loop iteration, until the game is fully built. Use your own best judgement, fully autonomously, docs > tests > code, and make sure vitest browser plugin is being used with GPU-enabled headed browser tests, not just unit tests. The entire player journey start to finish needs to be fully validated as you work by constantly expanding a playthrough test that uses actual button presses (A/B / directional etc...) to emulate what the player would do. ToneJS, AnimeJS, and either r3f or pixijs depending on whether you can make 2.5D extrapolation work and VALIDATE IT with screenshots and establish it to be of the highest calibre of quality, otherwise stick with 2D. YOU are responsible for all validation of all research and all library decisions. Sounds, animation, are what are necessary. I also want you to add yukajs for enemy behaviors and make sure you add DEPTH and LENGTH to the game, with interior maps, exterior maps, a minimap, and a properly designed HUD, UI/UX"
 
-**Branch:** `codex/castle-interior-depth` (current milestone branch from merged `main`; forward commits only).
+**Branch:** `feat/incremental-arc` (THE long-running local branch — user re-mandate 2026-06-12: ALL work layers here as forward commits; remote/CI is touched ONCE at the end of the arc. No per-item PRs, no per-item pushes. At each milestone boundary, run the local comprehensive review trio scoped to the milestone diff and fold findings into forward commits.)
 
 ## What CONTINUOUS means
 1. Never stop for status reports the user didn't ask for.
@@ -15,7 +15,9 @@
 6. Only stop on: explicit user halt, red CI blocking, or genuine STOP_FAIL.
 
 ## Operating loop
-while queue has [ ] items: docs → failing test → implement → verify (incl. screenshots for visuals) → commit → dispatch reviewers → mark [x] → backward/forward sweep → edit THIS FILE with learnings → next.
+while queue has [ ] items: docs → failing test → implement → verify (incl. screenshots for visuals) → commit LOCALLY on the arc branch → mark [x] → backward/forward sweep → edit THIS FILE with learnings → next.
+At each MILESTONE boundary: dispatch the local review trio (comprehensive-review, security, code-simplifier) against the milestone diff, fold every finding into forward commits, then open the next milestone.
+At the END of the arc (queue empty or user ships): push once, open ONE PR, babysit it to squash-merge, live-verify.
 This directive IS the self-improving prompt the mandate requires: every iteration ends by refining it.
 
 ## Standing constraints
@@ -141,6 +143,13 @@ Use cases enumerated: player attack (directional pose + arc), player hurt (knock
 - [x] S12.7 Class picker (user mandate 2026-06-12): replace the title-screen class buttons with the actual class sprites (atlas canvases of sprite:hero in each class palette), arrange the roster with the knight as the CENTER entry when fewer than all classes are unlocked, keep left/right + A selection and pointer parity
 - [x] S12.8 Turning while moving (user mandate 2026-06-12): every mover (player, NPCs, enemies) updates Facing from its movement so nobody slides without turning; the hero gains back-view frames (idle-up, walk-up-0/1) selected when moving north; both .pix parsers and the pose selector extend together
 - [x] S12.6 Evidence: mid-combat frame-burst screenshots captured by the journey and read; playthrough assertions on pose/telegraph state through the public dataset
+
+### S13 Adversarial incrementals made real (user mandate: extra enemies = more risk, more coins; arc branch feat/incremental-arc)
+Use cases enumerated: (1) buying a warband rank between runs must change the NEXT run's spawn set on the family's maps, deterministically placed so journeys can assert it; (2) every extra spawn must pay a bounty over the base kill reward or the trade is pure downside; (3) balance gates must price the risk/income trade so ranks stay attractive without grinding; (4) other enemy-category nodes (sorcerer-cinder etc.) flow through the same consumption path, not bespoke wiring.
+- [x] S13.1 Warband ranks consumed by spawners: enemyFamily rank nodes add +1 spawn per rank to that family's archetypes on route maps (deterministic placement near existing family spawns); each warband spawn pays a bounty on top of enemyDefeated coins; unit tests on spawn count + bounty per rank
+- [ ] S13.2 Balance breadth: income model in the balance-budget gates includes warband bounty income vs added risk; no-sharp-edges assertions cover rank 0-3 progressions
+- [ ] S13.3 Journey proof: governor buys an orc-warband rank between runs, the next run spawns the extra orc (public dataset enemy count) and banks visibly more coins; evidence screenshot read
+- [ ] S13.R Milestone review: local trio (comprehensive-review, security, code-simplifier) on the S13 diff; findings folded forward as commits
 
 ## Learnings log (forward sweeps append here)
 - 2026-06-12 S12.5/S12.6 closure: boss choreography lives in a public Choreo trait (phase + time left) ticked inside the existing behavior cases in enemyAI — the dragon cycles roar (hold, heavy throb) -> volley (advance, ONE spread on phase entry) -> lull (hold, only fully-vulnerable window via boss.phases.armorMultiplier); the banner-knight alternates guard (moveFactor slow, stance.damageMultiplier soak, crouch scale) and open while engaged, dropping to empty phase when disengaged. The phase machine pauses outside aggro. Renderer and journey read the SAME trait (threatScale branches + data-boss-phase dataset), so choreography is asserted through public state. Carry-over from #12: never write a trait twice in one loop iteration from a stale snapshot — fold all field updates into one set; gate cadence-sensitive systems with counting tests, not existence tests.

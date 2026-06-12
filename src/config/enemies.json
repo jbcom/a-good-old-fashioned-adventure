@@ -50,6 +50,7 @@
       "name": "Forest Orc",
       "sprite": "sprite:dragon",
       "palette": "palette:orc",
+      "family": "orc",
       "hp": 20,
       "speed": 32,
       "hitbox": {
@@ -74,6 +75,7 @@
       "name": "Orc Scout",
       "sprite": "sprite:dragon",
       "palette": "palette:orc",
+      "family": "orc",
       "hp": 15,
       "speed": 45,
       "hitbox": {
