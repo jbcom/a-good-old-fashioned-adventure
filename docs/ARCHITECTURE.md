@@ -26,7 +26,7 @@ src/app/       composition root
 ```
 
 `src/config/incremental.json` is the product loop contract. It owns currencies,
-run anchors, class unlock nodes, route-pack unlocks, and the upgrade-web graph
+run anchors, class unlock nodes, route-pack unlocks, and the upgrade-graph graph
 described in `docs/INCREMENTAL-RESCUE-LOOP.md`. Runtime code reads that config
 through `src/lib/config.ts`; tests enforce graph connectivity and currency
 rarity before UI or sim code can rely on it.
@@ -86,7 +86,7 @@ into state (see CONTENT-ARCHITECTURE.md §story).
   `VITEST_BROWSER_HEADLESS=false` so the headed/GPU contract matches local
   validation. The **playthrough test** drives the real app purely through
   synthetic input (keyboard/pointer on the virtual pad) and must traverse the
-  full current player journey, including results and upgrade-web controls; it
+  full current player journey, including results and upgrade-graph controls; it
   grows with every feature.
 - `tests/harness/playerGovernor*.ts` — a test-side GOAP player governor
   documented in `docs/PLAYER-GOVERNOR.md`. It perceives public UI, presses

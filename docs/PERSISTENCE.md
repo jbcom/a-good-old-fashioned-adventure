@@ -67,7 +67,7 @@ column shape. The current runtime persists:
 
 This keeps the Drizzle table stable while the save contract grows through
 `snapshotJson`. A later migration can promote high-query fields into columns if
-the upgrade web needs indexed account-level progression. Any such migration must
+the upgrade graph needs indexed account-level progression. Any such migration must
 keep existing web/mobile saves readable and must be validated with the live
 headed web persistence check, not only `MemorySaveRepository`.
 
@@ -76,7 +76,7 @@ The browser persistence gate now asserts this shape with the production
 enables Continue, and Continue restores the same incremental fields onto the
 game shell.
 
-S9.3 also mutates that snapshot from the results/upgrade-web flow: rescuing the
-princess records the last-run summary, A opens the upgrade web, A buys an
+S9.3 also mutates that snapshot from the results/upgrade-graph flow: rescuing the
+princess records the last-run summary, A opens the upgrade graph, A buys an
 affordable connected node, the purchase subtracts coins or roses, and B returns
 to results with the purchased node persisted.

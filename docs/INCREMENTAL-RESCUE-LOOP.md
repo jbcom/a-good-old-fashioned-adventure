@@ -22,7 +22,7 @@ Each run is intentionally legible on a phone:
 - A dragon guards the princess.
 - The default route has no required castle interior navigation.
 - The first playable class is the knight.
-- The run result opens the upgrade web, then starts another rescue route.
+- The run result opens the upgrade graph, then starts another rescue route.
 
 The current expanded journey remains valuable source material. Hearthwake,
 Oldwood, Sunken Road, Castle Approach, castle rooms, and dungeon pieces become
@@ -235,7 +235,7 @@ The core run keeps the already-binding 80% gameplay-area rule:
 
 - Currencies fit in the one-line top HUD.
 - On phones, health remains a percentage and currency labels are compact.
-- The upgrade web is a between-run screen, not persistent gameplay chrome.
+- The upgrade graph is a between-run screen, not persistent gameplay chrome.
 - Quest log and minimap remain in the slideout unless the player opens them.
 - Directional and A/B controls stay translucent overlays on the bottom corners.
 
@@ -249,19 +249,19 @@ agree:
   language.
 - Browser tests validate any visible loop change through public A/B and
   directional controls.
-- The results panel and upgrade web must be reachable by A/B and directional
+- The results panel and upgrade graph must be reachable by A/B and directional
   input only; pointer buttons are mirrors, not a separate path.
 - The playthrough governor eventually plays a full rescue run, spends rewards
-  on the upgrade web, starts a second run, and observes the unlocked change.
+  on the upgrade graph, starts a second run, and observes the unlocked change.
 
 ## Current Implementation Status
 
 - S9.1 is complete: this pillar doc and `src/config/incremental.json` define
-  currencies, class unlocks, route packs, and the connected upgrade web.
+  currencies, class unlocks, route packs, and the connected upgrade graph.
 - S9.2 is complete: Drizzle/Capacitor SQLite saves persist coins, roses, rescue
   count, unlocked classes, unlocked route packs, purchased nodes, and the last
   run summary through `snapshotJson`.
-- S9.3 is complete: princess rescue opens results, A opens the upgrade web,
+- S9.3 is complete: princess rescue opens results, A opens the upgrade graph,
   up/down moves selection, A buys an affordable connected node, and B returns
   to results through public controls.
 - S9.4 remains the next runtime-shape change: build the compact bottom-to-top

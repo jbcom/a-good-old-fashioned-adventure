@@ -402,6 +402,7 @@ function saveRowFromSnapshot(current: UiSnapshot) {
       roses: current.incrementalProgress.roses,
       rescueCount: current.incrementalProgress.rescueCount,
       purchasedUpgradeIds: current.incrementalProgress.purchasedUpgradeIds,
+      upgradeRanks: current.incrementalProgress.upgradeRanks,
       unlockedClassIds: current.incrementalProgress.unlockedClassIds,
       unlockedRoutePackIds: current.incrementalProgress.unlockedRoutePackIds,
       currentRunCoinsEarned: current.incrementalProgress.currentRunCoinsEarned,
@@ -441,7 +442,10 @@ function upgradeCostLabel(
 ): string {
   const ownedRanks = purchasedRank(progress, node);
   const maxRanks = nodeRanks(node);
-  const price = rankCost(node, Math.min(ownedRanks, maxRanks - 1));
+  if (ownedRanks >= maxRanks) {
+    return maxRanks > 1 ? `Full · ${ownedRanks}/${maxRanks}` : "Owned";
+  }
+  const price = rankCost(node, ownedRanks);
   const costs = [price.coins ? `${price.coins}C` : "", price.roses ? `${price.roses}R` : ""].filter(
     Boolean,
   );
@@ -1384,7 +1388,7 @@ export function App({
     setMode("gameover");
   }, []);
 
-  const openUpgradeWeb = useCallback(() => {
+  const openUpgradeGraph = useCallback(() => {
     const current = snapshotRef.current.incrementalProgress;
     setSelectedUpgradeIndex(firstUpgradeableIndex(current));
     setUpgradeMessage("");
@@ -1531,7 +1535,7 @@ export function App({
       return;
     }
     if (mode === "results") {
-      openUpgradeWeb();
+      openUpgradeGraph();
       return;
     }
     if (mode === "upgrade") {
@@ -1598,7 +1602,7 @@ export function App({
     handleShopBuy,
     handleUpgradeBuy,
     mode,
-    openUpgradeWeb,
+    openUpgradeGraph,
     paused,
     shopState,
     startGame,
@@ -1844,7 +1848,7 @@ export function App({
       {mode === "results" && (
         <ResultsPanel
           snapshot={snapshot}
-          onOpenUpgrade={openUpgradeWeb}
+          onOpenUpgrade={openUpgradeGraph}
           onStartRun={startNextRun}
         />
       )}

@@ -24,7 +24,7 @@ chrome, or cyberpunk glass.
 - **Title / class select:** the selected unlocked class is changed with
   left/right and confirmed with A. Pointer users can press the same visible
   class buttons. Knight is the first class; ranger, rogue, bard, sorcerer, and
-  later roles come from the upgrade web.
+  later roles come from the upgrade graph.
 - **Playing:** r3f stage fills the screen; HUD overlays the top and lower left;
   virtual pad overlays the lower corners for touch and browser playthroughs.
 - **Dialogue:** a bottom dialogue panel pauses movement, shows speaker/lines,
@@ -32,11 +32,11 @@ chrome, or cyberpunk glass.
 - **Pause:** Esc/P or the slideout pause button freezes sim stepping and opens
   a compact centered menu. Resume returns to the same world state.
 - **Victory / results:** rescuing the princess opens a result panel that shows
-  coins, roses, and the next upgrade-web entry point before another run begins.
+  coins, roses, and the next upgrade-graph entry point before another run begins.
   The world remains behind the result panel so the player sees where the run
-  ended. A opens the upgrade web; pointer users can press the same visible
+  ended. A opens the upgrade graph; pointer users can press the same visible
   button.
-- **Upgrade web:** a between-run panel shows the upgrade DAG as a tiered
+- **Upgrade graph:** a between-run panel shows the upgrade DAG as a tiered
   list with cost, category, lock/purchased state, and the current purse —
   nodes appear in topological order, each gated on all of its prerequisite
   nodes. Up/down moves selection. A buys the selected connected node. B

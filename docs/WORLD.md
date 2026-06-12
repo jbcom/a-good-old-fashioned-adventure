@@ -17,7 +17,7 @@ in `src/content/story`, and code only interprets the content contract.
 ## Incremental Positioning
 
 The baseline run is one bottom-to-top rescue route: player south, princess
-north, dragon as guardian, then a between-run upgrade web. The existing long
+north, dragon as guardian, then a between-run upgrade graph. The existing long
 route is not discarded; it is recast as unlockable route packs:
 
 - Hearthwake Village becomes the warm opening-route modifier, economy source,
@@ -33,7 +33,7 @@ route is not discarded; it is recast as unlockable route packs:
 
 As of S9.3, the authored Hearthwake-to-dungeon road still provides the playable
 route that reaches the princess rescue. The end state has already pivoted:
-rescue now opens the results panel, A enters the upgrade web, up/down selects
+rescue now opens the results panel, A enters the upgrade graph, up/down selects
 nodes, A buys a connected affordable upgrade, and B returns to results. S9.4 is
 the remaining runtime-shape pivot that turns the active route itself into the
 compact south-to-north rescue map. S9.5 then proves a second run visibly changes

@@ -45,7 +45,7 @@ maintain.
 `classes` (per-class attack + B-ability), `combat` (damage formulas,
 knockback, shake), `progression` (XP curve, level-up), `drops` (loot tables,
 chest contents), `enemies` (archetype stats + AI params), `incremental`
-(rescue-loop anchors, coins/roses, upgrade web, class unlocks, route packs),
+(rescue-loop anchors, coins/roses, upgrade graph, class unlocks, route packs),
 `audio` (synth recipes for SFX, BGM note tables), `ui` (theme tokens,
 controls). Prototype-derived numbers remain source material, but the current
 product contract is the incremental rescue loop in

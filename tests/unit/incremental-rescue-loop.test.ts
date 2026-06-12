@@ -44,7 +44,7 @@ describe("incremental rescue loop contract", () => {
   it("repositions current world content as route packs instead of a mandatory linear campaign", () => {
     expect(designDoc).toContain("incremental rescue loop");
     expect(designDoc).toContain("coins, roses");
-    expect(designDoc).toContain("A opens the upgrade web");
+    expect(designDoc).toContain("A opens the upgrade graph");
     expect(designDoc).toContain("A buys the selected connected node");
     expect(designDoc).toContain("returns to results");
     expect(worldDoc).toContain("Incremental Positioning");

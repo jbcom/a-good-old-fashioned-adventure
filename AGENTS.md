@@ -24,7 +24,7 @@ pillar is `docs/INCREMENTAL-RESCUE-LOOP.md`.
 
 Current progress snapshot: S9.1, S9.2, and S9.3 are complete. The game now
 persists incremental progression and the public-control journey reaches rescue
-results, opens the upgrade web with A, buys an affordable connected node with
+results, opens the upgrade graph with A, buys an affordable connected node with
 A, and returns to results with B. Remaining open work is documented in
 `.agent-state/directive.md`: S8.24 composition budget tuning, S9.4 compact
 rescue-route runtime slice, and S9.5 second-run proof.

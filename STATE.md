@@ -8,7 +8,7 @@ Branch: `codex/castle-interior-depth`
 
 - Mobile incremental rescue loop is the active product frame. The player
   rescues the princess, earns coins and roses, opens a results panel, buys
-  connected upgrade-web nodes, and begins changed runs.
+  connected upgrade-graph nodes, and begins changed runs.
 - Content-first JSON registry, schemas, Koota sim, Yuka enemy/NPC behaviors,
   ToneJS audio, AnimeJS motion, r3f HD-2D renderer, Errant Storybook UI, and
   Capacitor/SQLite persistence are in place.
@@ -16,7 +16,7 @@ Branch: `codex/castle-interior-depth`
   Approach -> castle rooms -> dungeon road remains playable and is now treated
   as unlockable route-pack material for the incremental loop.
 - Browser playthrough validation uses public directional/A/B input and now
-  proves princess rescue -> results -> upgrade web -> connected purchase -> B
+  proves princess rescue -> results -> upgrade graph -> connected purchase -> B
   back to results.
 - Capacitor Android scaffold, SQLite/Preferences/Device plugins, local web
   SQLite wasm copy, `cap:sync`, and debug APK assemble are green locally.

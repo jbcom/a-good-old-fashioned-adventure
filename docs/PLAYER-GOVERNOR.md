@@ -84,7 +84,7 @@ only proving a linear campaign endpoint:
 2. Complete a south-to-north rescue route with A/B/directional input.
 3. Defeat the dragon guardian through normal combat controls.
 4. Rescue the princess and observe the results panel with coins and roses.
-5. Enter the upgrade web, buy a connected node with A, and leave with B.
+5. Enter the upgrade graph, buy a connected node with A, and leave with B.
 6. Start the next run and observe the unlocked route, class, enemy, or map
    mutation through player-facing state.
 
