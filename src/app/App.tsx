@@ -60,6 +60,7 @@ import {
   purchasedRank,
   purchaseUpgradeNode,
   rankCost,
+  recordDeathPayout,
   restoreIncrementalProgress,
   rosterFor,
   sanitizeIncrementalProgress,
@@ -1513,11 +1514,17 @@ export function App({
   }, [mode]);
 
   const retireRun = useCallback(() => {
+    // retiring closes the run like any other end: the ledger banks
+    const activeWorld = worldRef.current;
+    if (activeWorld) {
+      recordDeathPayout(activeWorld);
+      refreshSnapshot(activeWorld, { persist: true });
+    }
     setPanelOpen(false);
     setShopState(null);
     setPaused(false);
     setMode("gameover");
-  }, []);
+  }, [refreshSnapshot]);
 
   const openUpgradeGraph = useCallback(() => {
     const current = snapshotRef.current.incrementalProgress;

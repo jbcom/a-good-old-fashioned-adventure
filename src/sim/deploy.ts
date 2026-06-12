@@ -5,6 +5,7 @@
  * HUD read the same counts.
  */
 import type { Entity, World } from "koota";
+import { collides } from "./collision";
 import { spawnUnit } from "./factories";
 import { rosterFor } from "./incrementalProgress";
 import { getRail } from "./rail";
@@ -31,11 +32,25 @@ export function deployPosition(world: World): { x: number; y: number } {
   const front = frontline(world);
   const anchor = front ?? south;
   const placedTotal = Object.values(placedCounts(world)).reduce((a, b) => a + b, 0);
-  // stagger drops so the line forms instead of stacking
-  return {
+  // stagger drops so the line forms instead of stacking; probe for open
+  // ground so a drop never lands inside a wall
+  const base = {
     x: anchor.x + (placedTotal % 3) * 16 - 16,
     y: anchor.y + 28 + Math.floor(placedTotal / 3) * 14,
   };
+  const probes: ReadonlyArray<readonly [number, number]> = [
+    [0, 0],
+    [16, 0],
+    [-16, 0],
+    [0, 16],
+    [0, -16],
+  ];
+  for (const [dx, dy] of probes) {
+    if (!collides(world, base.x + dx, base.y + dy, 10, 10)) {
+      return { x: base.x + dx, y: base.y + dy };
+    }
+  }
+  return base;
 }
 
 /** Deploy one unit of a class if the roster still has it. */

@@ -137,12 +137,15 @@ export function spawnUnit(world: World, classId: string, x: number, y: number): 
   const classDef = classes.classes[classId];
   const temperament = classDef?.temperament;
   if (!classDef || !temperament) throw new Error(`class ${classId} has no temperament`);
+  // DAG vigor ranks shape the class's units now that no pawn exists
+  const hpBonus = upgradeMaxHpBonus(world.get(IncrementalProgress), classId);
+  const hp = temperament.hp + hpBonus;
   return world.spawn(
     IsUnit({ classId }),
     Transform({ x, y }),
     Facing({ dir: 1 }),
     Hitbox(playerConfig.movement.hitbox),
-    Health({ hp: temperament.hp, maxHp: temperament.hp }),
+    Health({ hp, maxHp: hp }),
     Speed({ value: temperament.speed }),
     MoveIntent({ x: 0, y: 0 }),
     AimDirection({ x: 1, y: 0 }),
