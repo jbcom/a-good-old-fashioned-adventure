@@ -145,6 +145,8 @@ export interface IncrementalProgressState {
   unlockedRoutePackIds: string[];
   currentRunCoinsEarned: number;
   currentRunRosesEarned: number;
+  /** road-waypoint zones already paid this run (map:trigger keys). */
+  currentRunRoadIds: string[];
   activeRoutePackId: string;
   lastRun: IncrementalLastRun | null;
 }
@@ -161,6 +163,7 @@ export const IncrementalProgress = trait(
     unlockedRoutePackIds: [],
     currentRunCoinsEarned: 0,
     currentRunRosesEarned: 0,
+    currentRunRoadIds: [],
     activeRoutePackId: "baseline",
     lastRun: null,
   }),

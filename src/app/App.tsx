@@ -1533,6 +1533,7 @@ export function App({
         ...current.incrementalProgress,
         currentRunCoinsEarned: 0,
         currentRunRosesEarned: 0,
+        currentRunRoadIds: [],
       },
     });
   }, [startGame]);

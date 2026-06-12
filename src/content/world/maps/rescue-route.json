@@ -3,17 +3,59 @@
   "id": "map:rescue-route",
   "kind": "map",
   "name": "Rescue Road",
-  "size": { "cols": 26, "rows": 64 },
+  "size": {
+    "cols": 26,
+    "rows": 64
+  },
   "baseTile": "tile:grass",
   "bgmTheme": "overworld",
   "generation": [
-    { "op": "border", "tile": "tile:mountain" },
-    { "op": "col-span", "tile": "tile:path", "x": 8, "y0": 44, "y1": 61 },
-    { "op": "row-span", "tile": "tile:path", "y": 44, "x0": 8, "x1": 17 },
-    { "op": "col-span", "tile": "tile:path", "x": 17, "y0": 26, "y1": 44 },
-    { "op": "row-span", "tile": "tile:path", "y": 26, "x0": 8, "x1": 17 },
-    { "op": "col-span", "tile": "tile:path", "x": 8, "y0": 8, "y1": 26 },
-    { "op": "row-span", "tile": "tile:path", "y": 8, "x0": 8, "x1": 13 },
+    {
+      "op": "border",
+      "tile": "tile:mountain"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:path",
+      "x": 8,
+      "y0": 44,
+      "y1": 61
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 44,
+      "x0": 8,
+      "x1": 17
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:path",
+      "x": 17,
+      "y0": 26,
+      "y1": 44
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 26,
+      "x0": 8,
+      "x1": 17
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:path",
+      "x": 8,
+      "y0": 8,
+      "y1": 26
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 8,
+      "x0": 8,
+      "x1": 13
+    },
     {
       "op": "region",
       "tile": "tile:castle-road",
@@ -37,14 +79,20 @@
     {
       "baseTile": "tile:grass",
       "variants": ["tile:grass", "tile:grass-tufts", "tile:grass-flowers", "tile:grass-roots"],
-      "chunk": { "w": 3, "h": 2 },
+      "chunk": {
+        "w": 3,
+        "h": 2
+      },
       "seed": 601,
       "note": "open climb meadows"
     },
     {
       "baseTile": "tile:path",
       "variants": ["tile:path", "tile:path-ruts", "tile:path-pebbles", "tile:path-moss"],
-      "chunk": { "w": 2, "h": 2 },
+      "chunk": {
+        "w": 2,
+        "h": 2
+      },
       "seed": 602,
       "note": "the rescue road's worn serpentine"
     },
@@ -56,14 +104,20 @@
         "tile:mountain-scree",
         "tile:mountain-ledge"
       ],
-      "chunk": { "w": 2, "h": 2 },
+      "chunk": {
+        "w": 2,
+        "h": 2
+      },
       "seed": 603,
       "note": "valley walls hemming the climb"
     },
     {
       "baseTile": "tile:water",
       "variants": ["tile:water", "tile:water-glint", "tile:water-reeds", "tile:water-deep"],
-      "chunk": { "w": 3, "h": 2 },
+      "chunk": {
+        "w": 3,
+        "h": 2
+      },
       "seed": 604,
       "note": "spring pool reeds and glints"
     },
@@ -75,27 +129,85 @@
         "tile:castle-road-moss",
         "tile:castle-road-worn"
       ],
-      "chunk": { "w": 2, "h": 2 },
+      "chunk": {
+        "w": 2,
+        "h": 2
+      },
       "seed": 605,
       "note": "old plateau paving where the princess waits"
     }
   ],
-  "playerSpawn": { "x": 136, "y": 976 },
+  "playerSpawn": {
+    "x": 136,
+    "y": 976
+  },
   "spawns": {
-    "default": { "x": 136, "y": 976 }
+    "default": {
+      "x": 136,
+      "y": 976
+    }
   },
   "entities": [
-    { "ref": "prop:signpost", "x": 160, "y": 968, "note": "the rescue road begins" },
-    { "ref": "prop:mossy-waystone", "x": 152, "y": 716, "note": "first bend marker" },
-    { "ref": "prop:forest-lantern-post", "x": 296, "y": 420, "note": "upper climb lantern" },
-    { "ref": "prop:broadleaf-tree", "x": 96, "y": 500, "note": "west shoulder shade" },
-    { "ref": "prop:broadleaf-tree", "x": 320, "y": 256, "note": "east shoulder shade" },
-    { "enemy": "forest-orc", "x": 136, "y": 880 },
-    { "enemy": "oldwood-raider", "x": 168, "y": 712 },
-    { "enemy": "forest-orc", "x": 280, "y": 600 },
-    { "enemy": "orc-scout", "x": 280, "y": 480 },
-    { "enemy": "forest-orc", "x": 136, "y": 320 },
-    { "enemy": "oldwood-raider", "x": 200, "y": 136 },
+    {
+      "ref": "prop:signpost",
+      "x": 160,
+      "y": 968,
+      "note": "the rescue road begins"
+    },
+    {
+      "ref": "prop:mossy-waystone",
+      "x": 152,
+      "y": 716,
+      "note": "first bend marker"
+    },
+    {
+      "ref": "prop:forest-lantern-post",
+      "x": 296,
+      "y": 420,
+      "note": "upper climb lantern"
+    },
+    {
+      "ref": "prop:broadleaf-tree",
+      "x": 96,
+      "y": 500,
+      "note": "west shoulder shade"
+    },
+    {
+      "ref": "prop:broadleaf-tree",
+      "x": 320,
+      "y": 256,
+      "note": "east shoulder shade"
+    },
+    {
+      "enemy": "forest-orc",
+      "x": 136,
+      "y": 880
+    },
+    {
+      "enemy": "oldwood-raider",
+      "x": 168,
+      "y": 712
+    },
+    {
+      "enemy": "forest-orc",
+      "x": 280,
+      "y": 600
+    },
+    {
+      "enemy": "orc-scout",
+      "x": 280,
+      "y": 480
+    },
+    {
+      "enemy": "forest-orc",
+      "x": 136,
+      "y": 320
+    },
+    {
+      "enemy": "oldwood-raider",
+      "x": 200,
+      "y": 136
+    },
     {
       "enemy": "dragon-guardian",
       "x": 216,
@@ -135,7 +247,60 @@
       "toSpawn": "rescue-gate",
       "sfx": "interact",
       "requiresRoutePack": "castle-interior",
-      "zone": { "x0": 192, "y0": 40, "x1": 240, "y1": 76 }
+      "zone": {
+        "x0": 192,
+        "y0": 40,
+        "x1": 240,
+        "y1": 76
+      }
+    },
+    {
+      "id": "trigger:road-south-bend",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the first bend past the orc camp",
+      "zone": {
+        "x0": 100,
+        "y0": 690,
+        "x1": 180,
+        "y1": 750
+      }
+    },
+    {
+      "id": "trigger:road-east-jog",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the eastern jog around the thicket",
+      "zone": {
+        "x0": 240,
+        "y0": 460,
+        "x1": 320,
+        "y1": 520
+      }
+    },
+    {
+      "id": "trigger:road-west-return",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the western return below the climb",
+      "zone": {
+        "x0": 110,
+        "y0": 390,
+        "x1": 190,
+        "y1": 450
+      }
+    },
+    {
+      "id": "trigger:road-summit-straight",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the summit straight before the pass",
+      "zone": {
+        "x0": 100,
+        "y0": 140,
+        "x1": 180,
+        "y1": 200
+      }
     }
   ]
 }

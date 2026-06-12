@@ -1,7 +1,13 @@
 import type { World } from "koota";
 import type { IncrementalUpgradeNode } from "../lib/config";
 import { enemies, incremental } from "../lib/config";
-import { IncrementalProgress, type IncrementalProgressState, Outbox } from "./traits";
+import { getMap } from "../lib/content/registry";
+import {
+  type GameEvent,
+  IncrementalProgress,
+  type IncrementalProgressState,
+  Outbox,
+} from "./traits";
 
 function integer(value: unknown, fallback = 0): number {
   const number = Number(value);
@@ -105,6 +111,7 @@ export function initialIncrementalProgress(startingCoins = 0): IncrementalProgre
     unlockedRoutePackIds: [],
     currentRunCoinsEarned: 0,
     currentRunRosesEarned: 0,
+    currentRunRoadIds: [],
     activeRoutePackId: "baseline",
     lastRun: null,
   };
@@ -142,6 +149,9 @@ export function sanitizeIncrementalProgress(
     unlockedRoutePackIds,
     currentRunCoinsEarned: integer(data.currentRunCoinsEarned),
     currentRunRosesEarned: integer(data.currentRunRosesEarned),
+    currentRunRoadIds: Array.isArray(data.currentRunRoadIds)
+      ? data.currentRunRoadIds.filter((id): id is string => typeof id === "string").slice(0, 256)
+      : [],
     activeRoutePackId,
     lastRun: sanitizeLastRun(data.lastRun),
   };
@@ -253,6 +263,7 @@ export function grantRunReward(world: World, rewardId: string): void {
     // save/refresh before the next run must not inherit them
     currentRunCoinsEarned: 0,
     currentRunRosesEarned: 0,
+    currentRunRoadIds: [],
     lastRun: {
       result: "victory",
       coinsEarned: next.currentRunCoinsEarned,
@@ -263,13 +274,13 @@ export function grantRunReward(world: World, rewardId: string): void {
   });
 }
 
-export function applyIncrementalEventReward(
-  world: World,
-  eventType: string,
-  archetypeId?: string,
-  bounty = 0,
-): void {
-  if (eventType !== "enemy:defeated") return;
+export function applyIncrementalEventReward(world: World, event: GameEvent): void {
+  if (event.type === "zone:entered") {
+    applyRoadTravelled(world, event);
+    return;
+  }
+  if (event.type !== "enemy:defeated") return;
+  const { archetypeId, bounty = 0 } = event;
   grantRunReward(world, "enemyDefeated");
   // warband reinforcements carry a bounty: the adversarial trade pays
   if (bounty > 0) bankCoins(world, bounty);
@@ -289,6 +300,25 @@ export function applyIncrementalEventReward(
 }
 
 /**
+ * Travel pays (docs/INCREMENTAL-RESCUE-LOOP.md §currencies): the first
+ * crossing of each road-waypoint zone per run banks roadTravelled coins.
+ * currentRunRoadIds remembers crossings; run close resets it.
+ */
+function applyRoadTravelled(world: World, event: GameEvent): void {
+  if (!event.mapId || !event.triggerId) return;
+  const trigger = getMap(event.mapId).triggers?.find((entry) => entry.id === event.triggerId);
+  if (trigger?.kind !== "road-waypoint") return;
+  const key = `${event.mapId}:${event.triggerId}`;
+  const progress = currentProgress(world);
+  if (progress.currentRunRoadIds.includes(key)) return;
+  setProgress(world, {
+    ...progress,
+    currentRunRoadIds: [...progress.currentRunRoadIds, key],
+  });
+  bankCoins(world, incremental.runRewards.roadTravelled.perSegment ?? 0);
+}
+
+/**
  * Death pays out: the run's banked coins stay banked and the run closes with
  * a gameover ledger entry instead of a wipe.
  */
@@ -299,6 +329,7 @@ export function recordDeathPayout(world: World): IncrementalProgressState {
     // mirror the victory path: closing the run zeroes the live counters
     currentRunCoinsEarned: 0,
     currentRunRosesEarned: 0,
+    currentRunRoadIds: [],
     lastRun: {
       result: "gameover",
       coinsEarned: progress.currentRunCoinsEarned,

@@ -77,11 +77,15 @@ describe("S13.1 warband ranks reinforce the field", () => {
     const coins = () => world.get(IncrementalProgress)?.coins ?? 0;
 
     const c0 = coins();
-    applyIncrementalEventReward(world, "enemy:defeated", "forest-orc");
+    applyIncrementalEventReward(world, { type: "enemy:defeated", archetypeId: "forest-orc" });
     expect(coins()).toBe(c0 + base);
 
     const c1 = coins();
-    applyIncrementalEventReward(world, "enemy:defeated", "forest-orc", warband.spawnBounty);
+    applyIncrementalEventReward(world, {
+      type: "enemy:defeated",
+      archetypeId: "forest-orc",
+      bounty: warband.spawnBounty,
+    });
     expect(coins()).toBe(c1 + base + (warband.spawnBounty ?? 0));
   });
 

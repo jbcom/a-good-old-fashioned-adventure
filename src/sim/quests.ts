@@ -168,7 +168,7 @@ function counterMatches(
 /** Reduce one event into every active quest. */
 export function reduceEvent(world: World, event: GameEvent): void {
   const log = world.get(QuestLog);
-  applyIncrementalEventReward(world, event.type, event.archetypeId, event.bounty ?? 0);
+  applyIncrementalEventReward(world, event);
   if (!log) return;
 
   // startOn: quests that begin when a map is entered

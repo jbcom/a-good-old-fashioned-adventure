@@ -43,6 +43,14 @@ story, not from grinding ordinary enemies. Coin rewards should be frequent
 enough to make a failed run useful; rose rewards should make a successful or
 well-played run memorable.
 
+Travel itself pays: route maps carry `road-waypoint` trigger zones along
+their authored path, and the first crossing of each segment per run banks
+`runRewards.roadTravelled` coins (`currentRunRoadIds` tracks crossings and
+resets when a run closes). A run that dies halfway still banked the road it
+walked — the gentlest expression of death-pays-out. Every `runRewards` key
+must have a live grant path; a unit gate fails the build when config promises
+income that nothing grants.
+
 There is exactly ONE coin wallet: `IncrementalProgress.coins`. Chest gold,
 enemy bounties, and shop transactions all read and write it directly — there
 is no separate per-run purse. Treasure banks the moment it is opened (so a
