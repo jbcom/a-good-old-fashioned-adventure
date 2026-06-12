@@ -123,6 +123,9 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S9.14 Journey-suite pivot (user mandate 2026-06-11): the Yuka-governor rescue-loop run is the PRIMARY journey test — first introductory map through trash coins, the dragon, the princess, the rose, an unlock purchase, then playing the next changed run; recast every remaining pre-incremental journey test as route-pack library coverage booted from seeded saves (rescue-run.test.tsx already covers intro-to-unlock; the next-run leg lands with S9.5)
 - [x] S9.10 Balance budget tests: encode the no-sharp-edges doctrine as unit tests over incremental.json — next affordable node within ~1-3 runs of income at current depth, deepest-area income outpaces shallow areas, no node priced like a wall
 
+### S10 Release
+- [ ] [WAIT] Babysit PR #2 (incremental princess-rescue loop milestone) to green CI, address and resolve every review thread, squash-merge, then verify the app runs from main
+
 ## Learnings log (forward sweeps append here)
 - yuka FleeBehavior defaults panicDistance=10 — silently inert beyond it; always set panicDistance explicitly when kiting.
 - 2026-06-10: prior session's deep-research workflow + reviewer died on session exit — background work must be treated as lost across session boundaries; redo in-queue (S2.1).
