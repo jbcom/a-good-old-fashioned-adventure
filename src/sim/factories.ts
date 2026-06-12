@@ -43,6 +43,7 @@ import {
   ShieldState,
   Speed,
   SpriteRef,
+  Threat,
   Transform,
 } from "./traits";
 
@@ -132,6 +133,7 @@ export function spawnEnemy(world: World, archetypeId: string, x: number, y: numb
     Health({ hp: archetype.hp, maxHp: archetype.hp }),
     Speed({ value: archetype.speed }),
     MoveIntent({ x: 0, y: 0 }),
+    Threat({ windupLeft: enemies.aiDefaults.windup.duration, armed: false, casting: false }),
     SpriteRef({ spriteId: archetype.sprite, paletteId: archetype.palette }),
   );
 }

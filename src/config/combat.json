@@ -42,7 +42,11 @@
     "dissolveFxRise": 10,
     "attackPoseDuration": 0.16,
     "walkFrameFps": 6,
-    "iframeBlinkHz": 10
+    "iframeBlinkHz": 10,
+    "telegraphThrobHz": 24,
+    "telegraphThrobScale": 0.14,
+    "castFlickerHz": 14,
+    "castFlickerScale": 1.12
   },
   "projectileSprites": {
     "arrow": "sprite:proj-arrow",

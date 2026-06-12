@@ -39,7 +39,7 @@ import {
 import { flashCanvas, propCanvas, spriteCanvas, tileCanvas } from "./atlas";
 import { createDioramaMaterial, setDioramaTexture } from "./materials";
 import { channelsOf, fadeOut, playMotion, releaseMotion, restartMotion } from "./motion";
-import { iframeAlpha, spritePose } from "./pose";
+import { iframeAlpha, spritePose, threatScale } from "./pose";
 
 const TILE = 16;
 const textures = new WeakMap<HTMLCanvasElement, CanvasTexture>();
@@ -171,7 +171,9 @@ class SceneSync {
         moving ? (spriteDef.animations.walk ?? null) : (spriteDef.animations.idle ?? null),
       );
       tracked.mesh.position.set(t.x, canvas.height / 2 - channels.translateY, t.y);
-      tracked.mesh.scale.x = dir;
+      const pulse = threatScale(world, entity);
+      tracked.mesh.scale.x = dir * pulse;
+      tracked.mesh.scale.y = pulse;
       const spriteMaterial = tracked.mesh.material as ShaderMaterial;
       if (spriteMaterial.uniforms?.uAlpha) {
         spriteMaterial.uniforms.uAlpha.value = iframeAlpha(world, entity);

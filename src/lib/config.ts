@@ -175,7 +175,12 @@ export const progression = progressionJson;
 export const incremental = incrementalJson as unknown as IncrementalConfig;
 export const drops = dropsJson;
 export const enemies = enemiesJson as unknown as {
-  aiDefaults: { aggroRange: number; deaggroRange: number; patrolRange: number };
+  aiDefaults: {
+    aggroRange: number;
+    deaggroRange: number;
+    patrolRange: number;
+    windup: { duration: number; armRange: number; disarmRange: number; castFlash: number };
+  };
   difficultyCurve: {
     id: string;
     label: string;

@@ -40,6 +40,24 @@ describe("S12 pose frames", () => {
     expect(spritePose(world, player, "sprite:hero")).toBe("walk-1");
   });
 
+  it("shows its back while heading north", () => {
+    const { world, player } = bootKnight();
+    world.set(Clock, { t: 0, dt: 0 });
+    player.set(MoveIntent, { x: 0, y: -1 });
+    expect(spritePose(world, player, "sprite:hero")).toBe("walk-up-0");
+    world.set(Clock, { t: 1 / combat.feedback.walkFrameFps + 0.001, dt: 0 });
+    expect(spritePose(world, player, "sprite:hero")).toBe("walk-up-1");
+
+    // diagonal with dominant x stays side-facing; south stays front
+    player.set(MoveIntent, { x: 1, y: -0.4 });
+    expect(spritePose(world, player, "sprite:hero")).toBe("walk-1");
+    player.set(MoveIntent, { x: 0, y: 1 });
+    expect(spritePose(world, player, "sprite:hero")).toBe("walk-1");
+
+    // sprites without authored up frames fall back to the side walk
+    expect(spritePose(world, player, "sprite:princess")).toBe("idle");
+  });
+
   it("lunges through the attack pose window after a swing", () => {
     const { world, player } = bootKnight();
     playerAttack(world);

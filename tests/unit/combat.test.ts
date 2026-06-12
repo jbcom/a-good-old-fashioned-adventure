@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { enemies } from "../../src/lib/config";
 import {
   createGameWorld,
   instantiateMap,
@@ -132,12 +133,13 @@ function spawnProjectileAt(
 }
 
 describe("touch damage and iframes", () => {
-  it("ticks 10 damage with 0.5s iframes, not per-frame", () => {
+  it("ticks 10 damage with 0.5s iframes after the wind-up, not per-frame", () => {
     const { world, player } = arena("knight");
     player.set(Transform, { x: 100, y: 100 });
     const skeleton = spawnEnemy(world, "crypt-skeleton", 104, 100);
-    // pin both in place: no AI yet, just overlap
-    step(world);
+    // contact is telegraphed: the wind-up must finish before touch arms
+    const windupSteps = Math.ceil(enemies.aiDefaults.windup.duration * 60) + 1;
+    for (let i = 0; i < windupSteps; i++) step(world);
     expect(player.get(Health)?.hp).toBe(90);
     for (let i = 0; i < 10; i++) step(world);
     expect(player.get(Health)?.hp).toBe(90); // still inside iframes
@@ -151,7 +153,8 @@ describe("touch damage and iframes", () => {
     player.set(Transform, { x: 100, y: 100 });
     player.set(Health, { hp: 5, maxHp: 100 });
     spawnEnemy(world, "crypt-skeleton", 104, 100);
-    step(world);
+    const windupSteps = Math.ceil(enemies.aiDefaults.windup.duration * 60) + 2;
+    for (let i = 0; i < windupSteps; i++) step(world);
     expect(world.get(Outbox)?.endGame).toBe("gameover");
   });
 });
