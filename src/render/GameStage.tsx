@@ -39,6 +39,7 @@ import {
 import { flashCanvas, propCanvas, spriteCanvas, tileCanvas } from "./atlas";
 import { createDioramaMaterial, setDioramaTexture } from "./materials";
 import { channelsOf, fadeOut, playMotion, releaseMotion, restartMotion } from "./motion";
+import { iframeAlpha, spritePose } from "./pose";
 
 const TILE = 16;
 const textures = new WeakMap<HTMLCanvasElement, CanvasTexture>();
@@ -154,10 +155,11 @@ class SceneSync {
       const ref = entity.get(SpriteRef);
       if (!t || !ref) continue;
       const flashing = (entity.get(HitFlash)?.left ?? 0) > 0;
+      const pose = spritePose(world, entity, ref.spriteId);
       const canvas = flashing
         ? flashCanvas(ref.spriteId, ref.paletteId)
-        : spriteCanvas(ref.spriteId, ref.paletteId);
-      const key = `${ref.spriteId}|${ref.paletteId}|${flashing ? "flash" : "base"}`;
+        : spriteCanvas(ref.spriteId, ref.paletteId, pose);
+      const key = `${ref.spriteId}|${ref.paletteId}|${flashing ? "flash" : pose}`;
       const id = entity as unknown as number;
       const tracked = this.billboard(canvas, key, id, scene);
       const dir = entity.get(Facing)?.dir ?? 1;
@@ -170,6 +172,10 @@ class SceneSync {
       );
       tracked.mesh.position.set(t.x, canvas.height / 2 - channels.translateY, t.y);
       tracked.mesh.scale.x = dir;
+      const spriteMaterial = tracked.mesh.material as ShaderMaterial;
+      if (spriteMaterial.uniforms?.uAlpha) {
+        spriteMaterial.uniforms.uAlpha.value = iframeAlpha(world, entity);
+      }
       seen.add(id);
       if (entity.get(IsPlayer)) this.spawnDashGhosts(entity, canvas, scene);
     }

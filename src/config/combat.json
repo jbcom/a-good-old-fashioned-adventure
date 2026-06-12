@@ -39,7 +39,10 @@
     "damageTextRiseSpeed": -20,
     "swingFxDuration": 0.12,
     "dissolveFxDuration": 0.35,
-    "dissolveFxRise": 10
+    "dissolveFxRise": 10,
+    "attackPoseDuration": 0.16,
+    "walkFrameFps": 6,
+    "iframeBlinkHz": 10
   },
   "projectileSprites": {
     "arrow": "sprite:proj-arrow",

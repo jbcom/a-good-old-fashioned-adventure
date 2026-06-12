@@ -64,6 +64,13 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
   });
   expect(startShot).toBeTruthy();
 
+  // pose frames are public state: the walk cycle shows while moving
+  const shellPose = () =>
+    (page.getByTestId("game-shell").element() as HTMLElement).dataset.playerPose ?? "";
+  const holdWalk = governor.hold("up", 900);
+  await expect.poll(shellPose, { timeout: 800 }).toMatch(/walk-/);
+  await holdWalk;
+
   // serpentine climb: fight the path trash as it engages, then take the bends
   const waypoints: Array<[number, number, number]> = [
     [136, 896, 8],
@@ -80,8 +87,15 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
 
   // the route dragon holds the pass below the plateau
   await governor.reachPoint(192, 152, { tolerance: 28, maxSteps: 48 });
+  let combatBursts = 0;
   for (let round = 0; round < 12; round++) {
     await fightNearby(governor, 6);
+    if (combatBursts < 3) {
+      await page.screenshot({
+        path: `../../docs/evidence/combat-frame-${combatBursts}.png`,
+      });
+      combatBursts += 1;
+    }
     if (governor.perceive().questText.includes("Free Princess Amber")) break;
     await governor.reachPoint(206, 140, { tolerance: 30, maxSteps: 12 });
   }
