@@ -329,6 +329,7 @@
       "name": "Route Dragon",
       "sprite": "sprite:dragon",
       "palette": "palette:boss",
+      "family": "dragon",
       "hp": 60,
       "speed": 44,
       "hitbox": {

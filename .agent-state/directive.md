@@ -147,7 +147,7 @@ Use cases enumerated: player attack (directional pose + arc), player hurt (knock
 ### S13 Adversarial incrementals made real (user mandate: extra enemies = more risk, more coins; arc branch feat/incremental-arc)
 Use cases enumerated: (1) buying a warband rank between runs must change the NEXT run's spawn set on the family's maps, deterministically placed so journeys can assert it; (2) every extra spawn must pay a bounty over the base kill reward or the trade is pure downside; (3) balance gates must price the risk/income trade so ranks stay attractive without grinding; (4) other enemy-category nodes (sorcerer-cinder etc.) flow through the same consumption path, not bespoke wiring.
 - [x] S13.1 Warband ranks consumed by spawners: enemyFamily rank nodes add +1 spawn per rank to that family's archetypes on route maps (deterministic placement near existing family spawns); each warband spawn pays a bounty on top of enemyDefeated coins; unit tests on spawn count + bounty per rank
-- [ ] S13.2 Balance breadth: income model in the balance-budget gates includes warband bounty income vs added risk; no-sharp-edges assertions cover rank 0-3 progressions
+- [x] S13.2 Balance breadth: income model in the balance-budget gates includes warband bounty income vs added risk; no-sharp-edges assertions cover rank 0-3 progressions
 - [ ] S13.3 Journey proof: governor buys an orc-warband rank between runs, the next run spawns the extra orc (public dataset enemy count) and banks visibly more coins; evidence screenshot read
 - [ ] S13.R Milestone review: local trio (comprehensive-review, security, code-simplifier) on the S13 diff; findings folded forward as commits
 

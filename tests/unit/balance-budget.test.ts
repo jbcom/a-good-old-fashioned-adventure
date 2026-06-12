@@ -101,3 +101,58 @@ describe("S9.10 no-sharp-edges balance budget", () => {
     }
   });
 });
+
+describe("S13.2 adversarial warband trade", () => {
+  const familyNodes = nodes.filter((node) => node.enemyFamily);
+  const warbands = familyNodes.filter((node) => (node.spawnBounty ?? 0) > 0);
+
+  it("wires every bounty rank to spawned, tagged archetypes", () => {
+    // an unconsumed family node is a dead purchase — exactly the bug S13.1
+    // fixed. Every bounty family must tag at least one archetype, and the
+    // start map must field one so the rank visibly changes a run. Families
+    // without a bounty are taxonomy on rose majors and must still tag
+    // something, but only count ranks (spawnBounty) reinforce — a major like
+    // dragon-wake must never clone its boss.
+    expect(warbands.length).toBeGreaterThan(0);
+    const startMap = getMap(incremental.loop.startMap);
+    for (const node of familyNodes) {
+      const tagged = Object.entries(enemies.archetypes)
+        .filter(([, archetype]) => archetype.family === node.enemyFamily)
+        .map(([id]) => id);
+      expect(tagged.length, `${node.id} family ${node.enemyFamily} tags nothing`).toBeGreaterThan(
+        0,
+      );
+      if (!(node.spawnBounty ?? 0)) continue;
+      const fielded = startMap.entities.some(
+        (entity) => entity.enemy && tagged.includes(entity.enemy),
+      );
+      expect(fielded, `${node.enemyFamily} has no spawn on ${incremental.loop.startMap}`).toBe(
+        true,
+      );
+      expect(nodeRanks(node), `${node.id} bounty nodes are count ranks`).toBeGreaterThan(1);
+    }
+  });
+
+  it("keeps every rank's payback gradual: bounded runs, no sharp edges", () => {
+    const killReward = incremental.runRewards.enemyDefeated.base ?? 0;
+    for (const node of warbands) {
+      // one reinforcement dies once per run: marginal income per rank per run
+      const marginal = killReward + (node.spawnBounty ?? 0);
+      let previousPayback = 0;
+      for (let owned = 0; owned < nodeRanks(node); owned++) {
+        const payback = rankCost(node, owned).coins / marginal;
+        expect(
+          payback,
+          `${node.id} rank ${owned + 1} takes ${payback.toFixed(1)} runs to pay back`,
+        ).toBeLessThanOrEqual(12);
+        if (previousPayback > 0) {
+          expect(
+            payback,
+            `${node.id} rank ${owned + 1} payback spikes vs rank ${owned}`,
+          ).toBeLessThanOrEqual(previousPayback * 2);
+        }
+        previousPayback = payback;
+      }
+    }
+  });
+});

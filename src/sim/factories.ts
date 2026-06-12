@@ -328,7 +328,9 @@ function spawnWarbandReinforcements(
 ): void {
   const ranks = world.get(IncrementalProgress)?.upgradeRanks ?? {};
   for (const node of incremental.upgradeGraph.nodes) {
-    if (!node.enemyFamily) continue;
+    // only bounty-carrying count ranks reinforce; rose majors use
+    // enemyFamily as taxonomy (dragon-wake must not clone the boss)
+    if (!node.enemyFamily || !node.spawnBounty) continue;
     const owned = ranks[node.id] ?? 0;
     const hosts = familyHosts.get(node.enemyFamily);
     if (owned <= 0 || !hosts?.length) continue;
