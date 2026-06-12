@@ -119,6 +119,23 @@ describe("CI and release automation", () => {
     }
   });
 
+  it("gates every browser test file: core sweeps the directory, journeys own their exclusions", () => {
+    // hand-maintained include lists rot — rescue-run/map-evidence silently
+    // dropped out of CI once. Core must be directory-based, and every file
+    // excluded from core must run in the journey command instead.
+    const pkg = JSON.parse(read("package.json")) as {
+      scripts: Record<string, string>;
+    };
+    const core = pkg.scripts["test:browser:core"];
+    const journey = pkg.scripts["test:browser:journey"];
+    expect(core).toMatch(/ tests\/browser$/);
+    const excluded = [...core.matchAll(/--exclude (\S+)/g)].map((match) => match[1]);
+    expect(excluded.length).toBeGreaterThan(0);
+    for (const file of excluded) {
+      expect(journey, `${file} is excluded from core but not in the journey run`).toContain(file);
+    }
+  });
+
   it("keeps the native pixel-art authoring pipeline checked in", () => {
     const pkg = JSON.parse(read("package.json")) as {
       scripts: Record<string, string>;
