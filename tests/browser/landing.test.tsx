@@ -80,3 +80,45 @@ it("enables continue when a save slot exists", async () => {
   expect(shell.dataset.classId).toBe("ranger");
   expect(shell.dataset.mapId).toBe("map:castle-dungeon");
 });
+
+it("centers the knight among unlocked classes with sprite thumbs", async () => {
+  const repository = new MemorySaveRepository();
+  await repository.upsertSlot({
+    id: 1,
+    classId: "knight",
+    mapId: "map:rescue-route",
+    playerX: 136,
+    playerY: 976,
+    level: 1,
+    hp: 100,
+    maxHp: 100,
+    questSummary: "Three callings answered",
+    snapshotJson: JSON.stringify({
+      coins: 0,
+      roses: 0,
+      purchasedUpgradeIds: ["upgrade:first-vow"],
+      unlockedClassIds: ["knight", "ranger", "rogue"],
+      unlockedRoutePackIds: [],
+    }),
+    updatedAt: new Date("2026-06-12T10:00:00Z"),
+  });
+
+  mountApp(repository);
+  await expect.element(page.getByTestId("landing-screen")).toBeVisible();
+  await userEvent.click(page.getByTestId("new-game-button"));
+  await expect.element(page.getByTestId("class-ranger")).toBeVisible();
+
+  const row = (page.getByTestId("title-panel").element() as HTMLElement).querySelector(
+    ".class-row",
+  );
+  const order = [...(row?.querySelectorAll("button") ?? [])].map((button) => button.dataset.testid);
+  expect(order).toEqual(["class-ranger", "class-knight", "class-rogue"]);
+  for (const button of row?.querySelectorAll("button") ?? []) {
+    expect(button.querySelector("canvas.class-thumb"), button.dataset.testid).toBeTruthy();
+  }
+
+  const pickerShot = await page.screenshot({
+    path: "../../docs/evidence/class-picker-unlocked.png",
+  });
+  expect(pickerShot).toBeTruthy();
+});

@@ -414,6 +414,31 @@
     0 12px 28px rgba(23, 17, 11, 0.36);
 }
 
+.class-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.class-button {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 14px;
+}
+
+.class-thumb {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+}
+
+.class-name {
+  font-variant: small-caps;
+  letter-spacing: 0.08em;
+}
+
 .currency-token {
   display: inline-block;
   transform-origin: center;

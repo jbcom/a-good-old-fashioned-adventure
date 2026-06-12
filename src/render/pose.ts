@@ -15,10 +15,9 @@ function hasFrame(spriteId: string, pose: string): boolean {
 }
 
 /** Walk cycle index from the deterministic sim clock. */
-function walkPose(world: World): string {
+function walkFrame(world: World): number {
   const t = world.get(Clock)?.t ?? 0;
-  const frame = Math.floor(t * combat.feedback.walkFrameFps) % 2;
-  return `walk-${frame}`;
+  return Math.floor(t * combat.feedback.walkFrameFps) % 2;
 }
 
 export function spritePose(world: World, entity: Entity, spriteId: string | undefined): string {
@@ -35,9 +34,12 @@ export function spritePose(world: World, entity: Entity, spriteId: string | unde
 
   const intent = entity.get(MoveIntent);
   const moving = !!intent && (intent.x !== 0 || intent.y !== 0);
-  if (moving) {
-    const pose = walkPose(world);
-    if (hasFrame(spriteId, pose)) return pose;
+  if (moving && intent) {
+    const frame = walkFrame(world);
+    // movers TURN as they move: show the back view while heading north
+    const headingUp = intent.y < 0 && Math.abs(intent.y) >= Math.abs(intent.x);
+    if (headingUp && hasFrame(spriteId, `walk-up-${frame}`)) return `walk-up-${frame}`;
+    if (hasFrame(spriteId, `walk-${frame}`)) return `walk-${frame}`;
   }
   return "idle";
 }

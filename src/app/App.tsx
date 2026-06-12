@@ -34,6 +34,7 @@ import {
   readViewport,
   resolveDeviceProfile,
 } from "../platform/deviceProfile";
+import { spriteCanvas } from "../render/atlas";
 import { GameStage } from "../render/GameStage";
 import { spritePose } from "../render/pose";
 import {
@@ -653,11 +654,38 @@ function usePanelEntrance(signature: string) {
   return ref;
 }
 
+/** Knight holds the center of the picker until the full roster aligns. */
+function centeredRoster(unlocked: string[]): string[] {
+  if (!unlocked.includes("knight")) return unlocked;
+  const others = unlocked.filter((classId) => classId !== "knight");
+  const before = Math.floor(others.length / 2);
+  return [...others.slice(0, before), "knight", ...others.slice(before)];
+}
+
+function ClassSpriteThumb({ classId }: { classId: string }) {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  useEffect(() => {
+    const target = ref.current;
+    const def = classes.classes[classId];
+    if (!target || !def) return;
+    const source = spriteCanvas(def.sprite, def.palette);
+    target.width = source.width;
+    target.height = source.height;
+    const ctx = target.getContext("2d");
+    if (!ctx) return;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(source, 0, 0);
+  }, [classId]);
+  return <canvas className="class-thumb" ref={ref} />;
+}
+
 function TitleScreen({
+  roster,
   selected,
   onSelect,
   onStart,
 }: {
+  roster: string[];
   selected: string;
   onSelect: (classId: string) => void;
   onStart: () => void;
@@ -669,7 +697,7 @@ function TitleScreen({
         <h1>A GOOD OLD FASHIONED ADVENTURE</h1>
         <p className="dialogue-line">Begin as a knight. New callings wait in the upgrade graph.</p>
         <div className="class-row">
-          {classes.roster.map((classId) => (
+          {roster.map((classId) => (
             <button
               className="class-button"
               data-testid={`class-${classId}`}
@@ -678,7 +706,8 @@ function TitleScreen({
               aria-pressed={selected === classId}
               onClick={() => onSelect(classId)}
             >
-              {classId.toUpperCase()}
+              <ClassSpriteThumb classId={classId} />
+              <span className="class-name">{classId}</span>
             </button>
           ))}
         </div>
@@ -1242,6 +1271,11 @@ export function App({
   const [mode, setMode] = useState<Mode>("landing");
   const [selectedClass, setSelectedClass] = useState("knight");
   const [latestSave, setLatestSave] = useState<SaveSlotSummary | null>(null);
+  const pickerRoster = useMemo(() => {
+    if (!latestSave) return centeredRoster(classes.roster);
+    const saved = parseSavedSnapshot(latestSave.snapshotJson);
+    return centeredRoster(saved.incrementalProgress?.unlockedClassIds ?? classes.roster);
+  }, [latestSave]);
   const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [world, setWorld] = useState<World | null>(null);
@@ -1771,12 +1805,12 @@ export function App({
       else if (action !== "a" && action !== "b" && action !== "pause" && !event.repeat)
         setDirection(action, true);
       if (mode === "title" && action === "left") {
-        const idx = classes.roster.indexOf(selectedClass);
-        setSelectedClass(classes.roster[(idx + classes.roster.length - 1) % classes.roster.length]);
+        const idx = pickerRoster.indexOf(selectedClass);
+        setSelectedClass(pickerRoster[(idx + pickerRoster.length - 1) % pickerRoster.length]);
       }
       if (mode === "title" && action === "right") {
-        const idx = classes.roster.indexOf(selectedClass);
-        setSelectedClass(classes.roster[(idx + 1) % classes.roster.length]);
+        const idx = pickerRoster.indexOf(selectedClass);
+        setSelectedClass(pickerRoster[(idx + 1) % pickerRoster.length]);
       }
     };
     const onKeyUp = (event: KeyboardEvent) => {
@@ -1792,7 +1826,7 @@ export function App({
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
     };
-  }, [mode, pressA, selectedClass, setB, setDirection, togglePause]);
+  }, [mode, pickerRoster, pressA, selectedClass, setB, setDirection, togglePause]);
 
   useEffect(() => {
     if (!world || mode !== "playing") return;
@@ -1921,7 +1955,12 @@ export function App({
         </div>
       )}
       {mode === "title" && (
-        <TitleScreen selected={selectedClass} onSelect={setSelectedClass} onStart={startGame} />
+        <TitleScreen
+          roster={pickerRoster}
+          selected={selectedClass}
+          onSelect={setSelectedClass}
+          onStart={() => startGame()}
+        />
       )}
       {world && mode !== "title" && (
         <>
