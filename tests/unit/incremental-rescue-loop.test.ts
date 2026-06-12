@@ -28,7 +28,15 @@ describe("incremental rescue loop contract", () => {
     expect(loopDoc).toContain("no required castle interior navigation");
     expect(loopDoc).toContain("coins");
     expect(loopDoc).toContain("roses");
-    expect(loopDoc).toContain("spiderweb map");
+    const compactLoopDoc = loopDoc.replace(/\s+/g, " ");
+    expect(compactLoopDoc).toContain("directed acyclic graph");
+    expect(compactLoopDoc).toContain("all** of its prerequisites");
+    expect(compactLoopDoc).toContain("Death pays out");
+    expect(compactLoopDoc).toContain("never has to finish");
+    expect(compactLoopDoc).toContain("classes unlock with roses");
+    expect(compactLoopDoc).toContain("miniboss before the dragon");
+    expect(compactLoopDoc).toContain("princess is in another castle");
+    expect(compactLoopDoc).toContain("No Sharp Edges");
     expect(loopDoc).toContain("80% gameplay-area rule");
     expect(loopDoc).toContain("reachable by A/B and directional");
   });
@@ -47,7 +55,8 @@ describe("incremental rescue loop contract", () => {
   it("keeps agent handoff docs pointed at the incremental pivot", () => {
     expect(agentsDoc).toContain("mobile incremental storybook rescue game");
     expect(agentsDoc).toContain("south-to-north princess rescue route");
-    expect(agentsDoc).toContain("connected spiderweb");
+    expect(agentsDoc).toContain("directed acyclic");
+    expect(agentsDoc).toContain("proper DAG");
     expect(agentsDoc).toContain("Work order remains docs > tests > code");
     expect(claudeDoc).toContain("Use `AGENTS.md` as the authoritative repository instruction file");
     expect(claudeDoc).toContain("docs/INCREMENTAL-RESCUE-LOOP.md");
@@ -90,7 +99,7 @@ describe("incremental rescue loop contract", () => {
     expect(incremental.runRewards.princessRescued.currency).toBe("roses");
   });
 
-  it("defines a connected spiderweb upgrade graph with coin and rose spending", () => {
+  it("defines a connected upgrade DAG with coin and rose spending", () => {
     const ids = upgradeIds();
     expect(ids).toContain(incremental.upgradeWeb.root);
 
@@ -110,6 +119,46 @@ describe("incremental rescue loop contract", () => {
 
     expect(coinNodes).toBeGreaterThan(roseNodes);
     expect(roseNodes).toBeGreaterThanOrEqual(5);
+  });
+
+  it("keeps the upgrade graph a proper DAG with consistent reverse edges", () => {
+    const nodes = incremental.upgradeWeb.nodes;
+    const byId = new Map(nodes.map((node) => [node.id, node]));
+
+    // unlocks must be the exact reverse edges of prerequisites
+    for (const node of nodes) {
+      for (const unlocked of node.unlocks) {
+        expect(
+          byId.get(unlocked)?.prerequisites,
+          `${node.id} unlocks ${unlocked} but is not its prerequisite`,
+        ).toContain(node.id);
+      }
+      for (const prerequisite of node.prerequisites) {
+        expect(
+          byId.get(prerequisite)?.unlocks,
+          `${node.id} requires ${prerequisite} but is missing from its unlocks`,
+        ).toContain(node.id);
+      }
+    }
+
+    // single source: only the root has no prerequisites
+    const sources = nodes.filter((node) => node.prerequisites.length === 0);
+    expect(sources.map((node) => node.id)).toEqual([incremental.upgradeWeb.root]);
+
+    // acyclic: Kahn's algorithm visits every node
+    const indegree = new Map(nodes.map((node) => [node.id, node.prerequisites.length]));
+    const queue = [incremental.upgradeWeb.root];
+    let visited = 0;
+    while (queue.length > 0) {
+      const id = queue.shift() as string;
+      visited += 1;
+      for (const dependent of byId.get(id)?.unlocks ?? []) {
+        const remaining = (indegree.get(dependent) ?? 0) - 1;
+        indegree.set(dependent, remaining);
+        if (remaining === 0) queue.push(dependent);
+      }
+    }
+    expect(visited, "upgrade graph contains a cycle or unreachable node").toBe(nodes.length);
   });
 
   it("locks new classes behind upgrade nodes without putting them on the opening roster", () => {

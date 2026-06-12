@@ -53,11 +53,17 @@ zero roses but real coin progress, so the next attempt always starts stronger.
 Coins are the consolation arc; roses are the triumph arc. No outcome of a run
 is ever a wipe.
 
-## Upgrade Web
+## Upgrade DAG
 
-The upgrade screen is a spiderweb map rooted at one central vow. Nodes unlock
-only through connected neighbors, so progression looks like a storybook tangle
-rather than a vertical checklist.
+The upgrade graph is a proper directed acyclic graph rooted at one central
+vow (decision 2026-06-11: DAG over the earlier spiderweb metaphor). Edges are
+directed — each node lists the prerequisite nodes that must already be owned,
+and a node becomes purchasable only when **all** of its prerequisites are
+purchased. The graph has exactly one source (the root vow), no cycles
+(validated by a topological-sort unit test), and its `unlocks` lists are the
+exact reverse edges of `prerequisites`. The between-run screen presents nodes
+by topological tier, so progression reads as honest forward steps rather than
+a tangle.
 
 Upgrade node categories:
 
@@ -70,10 +76,10 @@ Upgrade node categories:
 - **Relic:** account-wide conveniences that compress repeated play without
   skipping the rescue.
 
-The web spends mostly coins near the root and asks for roses at branch-defining
-moments. The class economy is fixed: **new character classes unlock with
-roses**, and **every class owns its own coin-funded upgrade track** — its own
-strand of the web growing out of the class node. Buying into a new identity is
+The graph spends mostly coins near the root and asks for roses at
+branch-defining moments. The class economy is fixed: **new character classes
+unlock with roses**, and **every class owns its own coin-funded upgrade
+track** — its own branch of the DAG growing out of the class node. Buying into a new identity is
 a story moment paid with the rare currency; deepening an identity you already
 own is steady coin work that every run funds, finished or not.
 

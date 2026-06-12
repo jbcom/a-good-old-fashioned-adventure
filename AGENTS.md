@@ -15,8 +15,9 @@ TypeScript adventure game shipped to Android via Capacitor (arcade-cabinet diale
 Current product direction: **mobile incremental storybook rescue game**. The
 core loop is now one repeatable south-to-north princess rescue route: start as
 the knight at the bottom, push north, defeat the dragon guarding the princess,
-earn common coins plus rarer roses, spend rewards on a connected spiderweb
-upgrade web, then begin a changed run. Existing bespoke villages, roads,
+earn common coins plus rarer roses, spend rewards on a directed acyclic
+upgrade graph (a proper DAG — all prerequisites owned before a node opens),
+then begin a changed run. Existing bespoke villages, roads,
 interiors, NPCs, shops, props, and enemies become unlockable route packs,
 objectives, modifiers, and side loops around that rescue loop. The authoritative
 pillar is `docs/INCREMENTAL-RESCUE-LOOP.md`.
