@@ -18,8 +18,9 @@ agent notes there or in the pillar docs that `AGENTS.md` names.
 
 ## Instruction Source
 
-`AGENTS.md` is the authoritative repository instruction file. Start there
-before making changes. If this file and `AGENTS.md` ever conflict, follow
+Use `AGENTS.md` as the authoritative repository instruction file. Start there
+before making changes; it points to `docs/INCREMENTAL-RESCUE-LOOP.md` for the
+active product pillar. If this file and `AGENTS.md` ever conflict, follow
 `AGENTS.md` and update this file only to preserve Claude-specific behavior.
 
 ## Claude-Specific Notes

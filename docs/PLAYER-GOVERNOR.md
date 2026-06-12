@@ -90,3 +90,7 @@ only proving a linear campaign endpoint:
 
 The governor may use shell diagnostics for route steering while the minimap is
 still coarse, but every accepted milestone must be visible to a player.
+
+Current status: S9.3 proves steps 4 and 5 on the existing authored route. S9.4
+must move the runtime route itself to the compact south-to-north rescue slice.
+S9.5 must prove the second-run mutation after a purchased node.

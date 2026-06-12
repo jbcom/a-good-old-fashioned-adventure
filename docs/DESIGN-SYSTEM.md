@@ -21,9 +21,9 @@ cabinet, and not cyberpunk glass.
 - **Old-book type, not novelty pixel font:** headings use a storybook serif
   stack; body copy stays bookish and readable; compact HUD tokens use a narrow
   humanist stack instead of arcade monospace.
-- **Diorama continuity:** pause, game over, and victory dim the world but keep
-  it visible behind the panel. The UI interrupts the scene; it does not replace
-  it.
+- **Diorama continuity:** pause, game over, results, and the between-run
+  upgrade web dim the world but keep it visible behind the panel. The UI
+  interrupts the scene; it does not replace it.
 - **Manuscript wash:** the r3f stage uses a diorama shader pass for warm vellum
   light, brown ink shade, and subtle paper grain. This is a storybook lighting
   language, not a CRT filter.

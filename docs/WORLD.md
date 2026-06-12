@@ -29,6 +29,16 @@ route is not discarded; it is recast as unlockable route packs:
 - Castle interiors become rose-gated side loops or late-run route mutations
   rather than mandatory navigation before every rescue.
 
+## Current Runtime Status
+
+As of S9.3, the authored Hearthwake-to-dungeon road still provides the playable
+route that reaches the princess rescue. The end state has already pivoted:
+rescue now opens the results panel, A enters the upgrade web, up/down selects
+nodes, A buys a connected affordable upgrade, and B returns to results. S9.4 is
+the remaining runtime-shape pivot that turns the active route itself into the
+compact south-to-north rescue map. S9.5 then proves a second run visibly changes
+after a purchased upgrade.
+
 ## Region Map
 
 | Region | Map ids | Role | Tone |
@@ -38,7 +48,7 @@ route is not discarded; it is recast as unlockable route packs:
 | Sunken Road Desert | `map:sunken-road`, `map:desert-ruins` | key hunt, ranged enemies, environmental gates | ochre, low strings, mirage shimmer |
 | Castle Approach | `map:castle-approach`, `map:castle-yard` | escalation, guarded gate, exterior siege props | dusk brass, drums, tighter paths |
 | Castle Interior | `map:castle-hall`, `map:castle-library`, `map:castle-armory` | exploration, dialogue reveals, heraldic room verbs | candlelit stone, echoing arpeggios |
-| Dungeon | `map:castle-dungeon` | final combat, rescue, victory | cold stone, low drones, boss pressure |
+| Dungeon | `map:castle-dungeon` | final combat, rescue payout, results entry | cold stone, low drones, boss pressure |
 
 ## Portal Graph
 
@@ -89,20 +99,22 @@ flowchart LR
   Hall --> Dungeon
 ```
 
-## Quest Arc
+## Route-Pack Quest Library
 
-The expanded route keeps the existing rescue as the ending but gives it a full
-storybook middle.
+The expanded quest arc remains authored content, but it is no longer the
+product baseline. It is a library of route-pack beats, objectives, side loops,
+and rose/coin opportunities that can be unlocked around the repeatable rescue
+run.
 
-| Act | Quest | Required map coverage | Shape |
+| Act | Quest | Map coverage | Route-pack use |
 | --- | --- | --- | --- |
-| 1 | `quest:morning-errands` | village, house, shop, tavern | talk/fetch loop that teaches interiors and Continue |
-| 1 | `quest:broken-bridge` | village, oldwood forest | existing bridge quest moved into the village-to-forest road |
-| 2 | `quest:oldwood-oath` | oldwood forest, deep forest | multi-counter combat and NPC report chain |
-| 2 | `quest:lost-page` | tavern, deep forest, library clue | branch between ranger trail and wizard clue |
-| 3 | `quest:dungeon-key` | sunken road, desert ruins | existing key hunt expanded with a ruin interior |
-| 3 | `quest:castle-letters` | castle approach, yard, hall, library, armory | guarded-gate dialogue and heraldic evidence collection |
-| 4 | `quest:rescue-amber` | castle hall, armory/library, dungeon | final rescue and victory |
+| 1 | `quest:morning-errands` | village, house, shop, tavern | opening hub objectives, service tutorial, Continue/save mental model |
+| 1 | `quest:broken-bridge` | village, oldwood forest | early route repair, forest threshold, common-coin activity |
+| 2 | `quest:oldwood-oath` | oldwood forest, deep forest | road mastery, combat counters, rose-worthy forest branch |
+| 2 | `quest:lost-page` | tavern, deep forest, library clue | class-route flavor between ranger trail and wizard clue |
+| 3 | `quest:dungeon-key` | sunken road, desert ruins | hazard shortcut/key route pack and optional ruin side loop |
+| 3 | `quest:castle-letters` | castle approach, yard, hall, library, armory | rose-gated castle evidence side loop |
+| 4 | `quest:rescue-amber` | castle hall, armory/library, dungeon | princess rescue payout, dragon/boss pressure, results entry |
 
 The playthrough test grows with each act. It must use only player controls:
 keyboard A/B and directional input or the virtual pad/buttons.
@@ -166,6 +178,13 @@ pixel content and let the r3f diorama pipeline project it into depth:
   and optional source material. They should not block authored 16-bit content
   that fits this game's language more directly.
 
+## Implemented Slice History
+
+The numbered slices below are implementation history and content standards
+already absorbed into the route-pack library. They are not the current product
+loop by themselves; the active queue and remaining work live in
+`.agent-state/directive.md`.
+
 ## First S6 Slice
 
 The first implemented depth slice is village interiors:
@@ -175,14 +194,15 @@ The first implemented depth slice is village interiors:
    `map:village-tavern`.
 3. Add browser tests that enter a village interior and return through the same
    visible controls.
-4. Keep the existing original journey playable while the expanded route grows.
+4. Keep the then-existing original journey playable while the expanded route
+   grows.
 5. Drive the interior journey with the player governor from
    `docs/PLAYER-GOVERNOR.md`, not with private sim writes or coordinate
    teleports.
 
 ## Second S6 Slice
 
-The next implemented depth slice is exterior road length:
+The implemented exterior-road depth slice added route length:
 
 1. Add `map:oldwood-forest`, `map:deep-forest`, and
    `map:castle-approach` as authored exterior maps.
@@ -191,8 +211,8 @@ The next implemented depth slice is exterior road length:
    triggers.
 3. Add at least one forest ground tile, one castle-road tile, and new
    storytelling props for signs, stumps, and castle approach staging.
-4. Preserve the original proven victory path until the expanded questline
-   replaces it in S6.6.
+4. Preserve the then-proven route until the expanded questline replaces it in
+   S6.6.
 5. Add a focused browser route test that uses the player governor and public
    directional input to travel from Hearthwake Village to Castle Approach.
 
@@ -237,8 +257,8 @@ storybook road readability on phone screens:
    chasing across the whole map. This keeps the approach tense while preserving
    the player-governed route test.
 5. Dungeon enemies remain relentless and boss-led. Their curve entry must be
-   stronger than the approach entry and must keep the existing proven victory
-   encounter intact until S6.6 expands the end-to-end journey through the new
+   stronger than the approach entry and must keep the then-proven rescue
+   encounter intact while S6.6 expands the end-to-end journey through the new
    route.
 
 Enemy AI remains config-first. Code may add general Yuka behavior interpreters
@@ -247,8 +267,8 @@ range, cooldown, and projectile data live in JSON.
 
 ## Fifth S6 Slice
 
-The expanded playthrough slice replaces the original two-map proof with a
-single start-to-victory journey through the authored road:
+The expanded playthrough slice replaced the earliest route proof with a
+single start-to-results journey through the authored road:
 
 1. New Game starts in `map:village`, not the legacy `map:overworld`.
 2. The required route is Hearthwake Village, Oldwood Forest, Deep Forest,
@@ -266,7 +286,8 @@ single start-to-victory journey through the authored road:
    gate, then the route must pass through the castle yard and hall before the
    dungeon.
 6. `tests/browser/playthrough.test.tsx` must prove the full route through real
-   keyboard A/B and directional input only, including the final victory screen.
+   keyboard A/B and directional input only, including the rescue results screen
+   and between-run upgrade entry.
 
 ## Sixth S6 Slice
 
@@ -305,7 +326,7 @@ interior instead of a background suggestion:
 3. Add a desert pilgrim NPC and mural trigger. The player can enter the ruin,
    walk to the mural, receive a short lore dialogue, and return to Sunken Road
    through public directional input and A-button dialogue.
-4. Keep the main victory route direct: the Sunken Road east-road trigger still
+4. Keep the main rescue route direct: the Sunken Road east-road trigger still
    reaches Castle Approach, and the ruins are a readable landmark loop rather
    than a required detour for the current key quest.
 5. Capture fresh desktop and phone screenshots of the ruin interior before
@@ -370,7 +391,7 @@ existing route while preserving the proven public-control traversal:
 2. Place the landmarks around `map:oldwood-forest` and `map:deep-forest` so
    the player sees bends, clearings, and roadside history before combat starts.
 3. Keep the direct route passable for the player governor and the full
-   start-to-victory playthrough.
+   start-to-results playthrough.
 4. Add unit coverage for the doc, prop ids, and map placements.
 5. Add headed browser validation that enters Oldwood through public controls,
    walks to the first landmark cluster, and captures desktop and phone evidence.
@@ -700,8 +721,8 @@ slice must add at least one meaningful player-facing verb or story signal:
 - Optional interiors off the main road need a clear reason to exist: a landmark
   prop, a talkable person or readable object, and a reversible exit.
 - Road maps may keep a direct route for the player governor, but the tile plan
-  should imply bends, clearings, landmarks, and branches that can hold future
-  quests.
+  should imply bends, clearings, landmarks, and branches that can hold
+  upgrade-gated questlets.
 - Mandatory exterior maps must declare `composition.routeWindows` per
   `docs/CONTENT-COMPOSITION.md`. Repeated grass, sand, leaf, or road carpets
   are not acceptable unless the window has an explicit travel or threshold

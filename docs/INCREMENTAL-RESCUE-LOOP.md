@@ -105,3 +105,20 @@ agree:
   input only; pointer buttons are mirrors, not a separate path.
 - The playthrough governor eventually plays a full rescue run, spends rewards
   on the upgrade web, starts a second run, and observes the unlocked change.
+
+## Current Implementation Status
+
+- S9.1 is complete: this pillar doc and `src/config/incremental.json` define
+  currencies, class unlocks, route packs, and the connected upgrade web.
+- S9.2 is complete: Drizzle/Capacitor SQLite saves persist coins, roses, rescue
+  count, unlocked classes, unlocked route packs, purchased nodes, and the last
+  run summary through `snapshotJson`.
+- S9.3 is complete: princess rescue opens results, A opens the upgrade web,
+  up/down moves selection, A buys an affordable connected node, and B returns
+  to results through public controls.
+- S9.4 remains the next runtime-shape change: build the compact bottom-to-top
+  rescue route with knight start, princess top anchor, dragon guard, compact
+  currency HUD, and browser playthrough coverage.
+- S9.5 remains the second-run proof: rescue, spend, start another run, and
+  observe the unlocked route/class/enemy/map mutation through player-facing
+  state.

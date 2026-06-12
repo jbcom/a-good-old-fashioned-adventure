@@ -90,8 +90,8 @@ right. They must not reserve layout space or shrink the world stage.
   scanlines are intentionally absent.
 - Typography, role colors, panel frames, and menu motion come from the Errant
   Storybook design language before component-level styling.
-- Dialogue nodes emit events; quest reducers own every flag, item, map, and
-  victory mutation.
+- Dialogue nodes emit events; quest reducers own every flag, item, map, rescue,
+  results, and upgrade mutation.
 - Visual validation requires a headed browser screenshot that is read before a
   change is considered complete.
 

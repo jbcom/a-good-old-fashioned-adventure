@@ -82,10 +82,12 @@ into state (see CONTENT-ARCHITECTURE.md §story).
 - `tests/unit/` — node: content integrity, mapgen, sim systems, quest
   logic.
 - `tests/browser/` — Vitest browser mode, playwright provider, headed
-  Chromium with GPU (CI runs headless but still GPU-flagged). The
-  **playthrough test** drives the real app purely through synthetic
-  input (keyboard/pointer on the virtual pad) and must traverse the full
-  current player journey; it grows with every feature.
+  Chromium with GPU flags. CI runs the browser job on macOS with
+  `VITEST_BROWSER_HEADLESS=false` so the headed/GPU contract matches local
+  validation. The **playthrough test** drives the real app purely through
+  synthetic input (keyboard/pointer on the virtual pad) and must traverse the
+  full current player journey, including results and upgrade-web controls; it
+  grows with every feature.
 - `tests/harness/playerGovernor*.ts` — a test-side GOAP player governor
   documented in `docs/PLAYER-GOVERNOR.md`. It perceives public UI, presses
   real player controls, and never writes sim state.

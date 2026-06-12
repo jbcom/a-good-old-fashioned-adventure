@@ -75,3 +75,8 @@ The browser persistence gate now asserts this shape with the production
 `CapacitorSaveRepository`: New Game writes coins/roses/upgrade state, reload
 enables Continue, and Continue restores the same incremental fields onto the
 game shell.
+
+S9.3 also mutates that snapshot from the results/upgrade-web flow: rescuing the
+princess records the last-run summary, A opens the upgrade web, A buys an
+affordable connected node, the purchase subtracts coins or roses, and B returns
+to results with the purchased node persisted.

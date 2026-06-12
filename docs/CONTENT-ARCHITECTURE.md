@@ -93,8 +93,8 @@ A shop file owns its `shop:*` id, keeper character, display name, listing ids,
 item refs, buy prices, sell prices, and transaction SFX. The shop layer never
 stores inventory directly; it prices `item:*` definitions and the sim mutates
 the player's `Inventory` plus common-currency trait. The current implementation
-still names that trait `PlayerGold`; S9 economy work should present and persist
-it as coins unless and until the internal trait is renamed. Dialogue nodes may
+still names that trait `PlayerGold`; the S9 UI and persistence layer present it
+as coins while the internal trait name remains stable. Dialogue nodes may
 reference `opensShop: "shop:*"` so writers can decide when a counter appears
 without hard-coding React behavior.
 

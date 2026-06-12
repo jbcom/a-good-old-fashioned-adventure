@@ -34,6 +34,11 @@ The full journey test drives the app through public controls only:
 It may read shell `data-*` attributes for diagnostics, but it must not write
 Koota state or teleport the player.
 
+The current journey must cover princess rescue, the results panel, upgrade-web
+entry, a connected upgrade purchase with A, and B returning to results. The
+next rescue-loop proof must add the second run and visible unlocked mutation
+without bypassing public controls.
+
 ## Screenshots
 
 Visual tests write ignored PNGs under `tests/browser/`. Read screenshots before

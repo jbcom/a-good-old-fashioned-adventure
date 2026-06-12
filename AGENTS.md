@@ -21,6 +21,13 @@ interiors, NPCs, shops, props, and enemies become unlockable route packs,
 objectives, modifiers, and side loops around that rescue loop. The authoritative
 pillar is `docs/INCREMENTAL-RESCUE-LOOP.md`.
 
+Current progress snapshot: S9.1, S9.2, and S9.3 are complete. The game now
+persists incremental progression and the public-control journey reaches rescue
+results, opens the upgrade web with A, buys an affordable connected node with
+A, and returns to results with B. Remaining open work is documented in
+`.agent-state/directive.md`: S8.24 composition budget tuning, S9.4 compact
+rescue-route runtime slice, and S9.5 second-run proof.
+
 Content-first architecture: ALL tunables live in `src/config/*.json`, all
 assets/world/story in `src/content/**/*.json` (validated by `schemas/`,
 spec in `docs/CONTENT-ARCHITECTURE.md`). Code interprets content, never
