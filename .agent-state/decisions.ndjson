@@ -75,3 +75,4 @@
 {"ts":"2026-06-12T22:40:42.700Z","sha":"be620ce074dd2e4b2dbd68aa34cbd180fa711f39","subject":"docs: the pixel-art audit — every sheet read at zoom","decision":null,"why":null,"resolves":["SA.1 audit pass"],"overrides":[]}
 {"ts":"2026-06-12T22:43:34.238Z","sha":"b6f685781310df3ba2611b39448f30c13c394354","subject":"feat: the audit's debts paid — beast, faces, wind","decision":null,"why":null,"resolves":["SA.2 weak-grid rework","S18.R review fold"],"overrides":[]}
 {"ts":"2026-06-12T22:43:49.961Z","sha":"48327575ad2e86741e28243fa6ada0c36ba1e806","subject":"docs: archive the closed S18 milestone to the pillar","decision":null,"why":null,"resolves":["S18 archival"],"overrides":[]}
+{"ts":"2026-06-12T22:52:51.607Z","sha":"3c9b365145678b9ffa5810eaf625a569cb01aad9","subject":"docs: queue the Aseprite deep-dive — the honest answer is no","decision":null,"why":null,"resolves":["SA.4 queued (user question encoded)"],"overrides":[]}
