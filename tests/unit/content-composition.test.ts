@@ -6,6 +6,7 @@ import type {
   MapCompositionWindow,
   MapDef,
   MapEntitySpawn,
+  TerrainVariantRule,
   TileDef,
 } from "../../src/lib/content/types";
 import { buildGrid } from "../../src/sim/mapgen";
@@ -19,15 +20,6 @@ const mandatoryExteriorMaps = [
 ] as const;
 
 const dominantTileCap = 0.84;
-
-interface TerrainVariantRule {
-  baseTile: string;
-  variants: string[];
-  chunk: { w: number; h: number };
-  seed: number;
-}
-
-type VariantMapDef = MapDef & { terrainVariants?: TerrainVariantRule[] };
 
 const requiredTerrainFamilies: Record<(typeof mandatoryExteriorMaps)[number], string[]> = {
   "map:village": ["tile:grass", "tile:path", "tile:village-cobble", "tile:mountain"],
@@ -67,12 +59,8 @@ function occurrences(ids: string[], id: string): number {
   return ids.filter((candidate) => candidate === id).length;
 }
 
-function requiredOccurrences(ids: string[], id: string): number {
-  return ids.filter((candidate) => candidate === id).length;
-}
-
 function terrainRules(map: MapDef): TerrainVariantRule[] {
-  return ((map as VariantMapDef).terrainVariants ?? []) as TerrainVariantRule[];
+  return map.terrainVariants ?? [];
 }
 
 function semanticTile(map: MapDef, tileId: string): string {
@@ -129,9 +117,9 @@ describe("content composition rules", () => {
     for (const mapId of mandatoryExteriorMaps) {
       const map = getMap(mapId);
       for (const window of map.composition?.routeWindows ?? []) {
-        const share = dominantShare(
-          windowTiles(map, window).map((tile) => semanticTile(map, tile)),
-        );
+        const tiles = windowTiles(map, window);
+        expect(tiles.length, `${mapId}:${window.label} zone is empty`).toBeGreaterThan(0);
+        const share = dominantShare(tiles.map((tile) => semanticTile(map, tile)));
         expect(window.openReason, `${mapId}:${window.label}`).toBeUndefined();
         expect(share, `${mapId}:${window.label}`).toBeLessThanOrEqual(dominantTileCap);
       }
@@ -184,7 +172,7 @@ describe("content composition rules", () => {
         const presentMajor = window.majorAnchors.filter((id) => presentIds.includes(id));
         const presentMinor = window.minorProps.filter(
           (id, index, ids) =>
-            occurrences(presentIds, id) >= requiredOccurrences(ids.slice(0, index + 1), id),
+            occurrences(presentIds, id) >= occurrences(ids.slice(0, index + 1), id),
         );
 
         expect(presentMajor.length, `${mapId}:${window.label}`).toBeGreaterThanOrEqual(1);

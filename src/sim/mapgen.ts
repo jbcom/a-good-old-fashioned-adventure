@@ -28,13 +28,9 @@ export interface GenOp {
   note?: string;
 }
 
-export interface TerrainVariantRule {
-  baseTile: string;
-  variants: string[];
-  chunk: { w: number; h: number };
-  seed: number;
-  note?: string;
-}
+import type { TerrainVariantRule } from "../lib/content/types";
+
+export type { TerrainVariantRule } from "../lib/content/types";
 
 export interface MapGenInput {
   size: { cols: number; rows: number };

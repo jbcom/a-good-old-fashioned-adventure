@@ -225,7 +225,7 @@
         "label": "courier layby and upper sail wreck",
         "zone": { "x0": 26, "y0": 13, "x1": 45, "y1": 23 },
         "majorAnchors": ["char:sunken-courier", "prop:shade-cloth-rig", "prop:sand-sail-wreck"],
-        "minorProps": ["prop:water-jar-stand", "prop:wind-ribbon-cairn", "prop:broken-cart"]
+        "minorProps": ["prop:water-jar-stand", "prop:broken-cart"]
       },
       {
         "label": "broken pillars before the castle road",
