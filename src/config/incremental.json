@@ -63,6 +63,7 @@
         "rankCostGrowth": 1.6,
         "prerequisites": ["upgrade:first-vow"],
         "classId": "knight",
+        "effect": { "maxHp": 10 },
         "unlocks": [],
         "note": "Coin-ranked knight track: extra health per rank for the starting class."
       },

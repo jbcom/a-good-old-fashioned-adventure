@@ -1348,6 +1348,11 @@ export function App({
         audioRef.current?.setTheme(getMap(mapId).bgmTheme);
         setAudioDebug(audioRef.current?.debugState() ?? audioDebug);
       });
+      if (options.incrementalProgress) {
+        // restore before spawning so rank effects (e.g. Knight's Vigor max HP)
+        // shape the new run's player
+        restoreIncrementalProgress(nextWorld, options.incrementalProgress, options.gold ?? 0);
+      }
       loadMap(nextWorld, mapId, classId, options.spawnId);
       const player = playerOf(nextWorld);
       if (player && options.playerX !== undefined && options.playerY !== undefined) {
@@ -1369,9 +1374,6 @@ export function App({
       }
       if (player && options.inventory !== undefined) {
         player.set(Inventory, { items: options.inventory });
-      }
-      if (options.incrementalProgress) {
-        restoreIncrementalProgress(nextWorld, options.incrementalProgress, options.gold ?? 0);
       }
       refreshSnapshot(nextWorld, { persist: true });
     },
@@ -1762,6 +1764,7 @@ export function App({
       "data-enemies": String(snapshot.enemies),
       "data-projectiles": String(snapshot.projectiles),
       "data-fx-spawned": String(snapshot.fxSpawned),
+      "data-max-hp": String(snapshot.maxHp),
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
       "data-gold": String(snapshot.incrementalProgress.coins),
       "data-coins": String(snapshot.incrementalProgress.coins),
@@ -1795,6 +1798,7 @@ export function App({
       snapshot.incrementalProgress,
       snapshot.inventory,
       snapshot.mapId,
+      snapshot.maxHp,
       snapshot.playerX,
       snapshot.playerY,
       snapshot.projectiles,

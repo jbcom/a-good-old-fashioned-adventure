@@ -25,6 +25,21 @@ export function purchasedRank(
   return Math.min(nodeRanks(node), Math.max(1, integer(progress.upgradeRanks[node.id], 1)));
 }
 
+export function upgradeMaxHpBonus(
+  progress: IncrementalProgressState | undefined,
+  classId: string,
+): number {
+  if (!progress) return 0;
+  let bonus = 0;
+  for (const node of incremental.upgradeGraph.nodes) {
+    const perRank = node.effect?.maxHp ?? 0;
+    if (!perRank) continue;
+    if (node.classId && node.classId !== classId) continue;
+    bonus += perRank * purchasedRank(progress, node);
+  }
+  return bonus;
+}
+
 export function rankCost(
   node: IncrementalUpgradeNode,
   ownedRanks: number,

@@ -276,6 +276,9 @@ class SceneSync {
       if (!seen.has(id)) {
         scene.remove(tracked.mesh);
         tracked.mesh.geometry.dispose();
+        // uMap textures are deliberately NOT disposed here: textureFor caches
+        // one CanvasTexture per atlas canvas, shared across meshes — bounded
+        // by the content set, not entity churn.
         (tracked.mesh.material as ShaderMaterial).dispose();
         releaseMotion(id);
         this.inspectionSerials.delete(id);

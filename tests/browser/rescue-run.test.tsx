@@ -126,4 +126,11 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
   await expect.element(page.getByTestId("upgrade-detail")).toHaveTextContent("joins the road");
   await governor.press("b");
   await expect.element(page.getByTestId("results-screen")).toBeVisible();
+
+  // second-run proof: the purchased rank visibly changes the next run
+  await governor.click("result-new-run");
+  await expect.poll(() => governor.perceive().mapName, { timeout: 10_000 }).toBe("Rescue Road");
+  const shell = () => page.getByTestId("game-shell").element() as HTMLElement;
+  expect(shell().dataset.purchasedUpgrades).toContain("upgrade:knight-vigor");
+  await expect.poll(() => Number(shell().dataset.maxHp ?? 0)).toBe(110);
 }, 240_000);

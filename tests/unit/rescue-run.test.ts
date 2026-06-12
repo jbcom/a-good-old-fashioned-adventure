@@ -4,9 +4,10 @@ import { getMap, getQuest } from "../../src/lib/content/registry";
 import { emitDialogueSeen, resolveDialogue } from "../../src/sim/dialogue";
 import { pushEvent } from "../../src/sim/events";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
+import { sanitizeIncrementalProgress } from "../../src/sim/incrementalProgress";
 import { autoStartQuests } from "../../src/sim/quests";
 import { step } from "../../src/sim/tick";
-import { IncrementalProgress, Outbox, QuestLog } from "../../src/sim/traits";
+import { Health, IncrementalProgress, IsPlayer, Outbox, QuestLog } from "../../src/sim/traits";
 
 function bootRescueRoute() {
   const world = createGameWorld(246);
@@ -46,6 +47,19 @@ describe("S9.4 rescue-route runtime slice", () => {
     // fights, bends, and dialogue
     expect(walkSeconds).toBeGreaterThan(5);
     expect(walkSeconds).toBeLessThan(60);
+  });
+
+  it("shapes the next run with purchased knight-vigor ranks", () => {
+    const world = createGameWorld(247);
+    world.set(
+      IncrementalProgress,
+      sanitizeIncrementalProgress({
+        purchasedUpgradeIds: ["upgrade:first-vow", "upgrade:knight-vigor"],
+        upgradeRanks: { "upgrade:knight-vigor": 2 },
+      }),
+    );
+    instantiateMap(world, "map:rescue-route", { classId: "knight" });
+    expect(world.queryFirst(IsPlayer)?.get(Health)).toMatchObject({ hp: 120, maxHp: 120 });
   });
 
   it("advances the rescue quest from dragon fall to a paying rescue", () => {

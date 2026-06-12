@@ -6,7 +6,7 @@
 import { createWorld, type Entity, type World } from "koota";
 import { classes, enemies, player as playerConfig } from "../lib/config";
 import { flags, getCharacter, getMap, getProp } from "../lib/content/registry";
-import { initialIncrementalProgress } from "./incrementalProgress";
+import { initialIncrementalProgress, upgradeMaxHpBonus } from "./incrementalProgress";
 import { buildGrid } from "./mapgen";
 import {
   AimDirection,
@@ -69,12 +69,13 @@ export function spawnPlayer(world: World, classId: string, x: number, y: number)
   const classDef = classes.classes[classId];
   if (!classDef) throw new Error(`unknown class: ${classId}`);
   const base = playerConfig.baseStats;
+  const hpBonus = upgradeMaxHpBonus(world.get(IncrementalProgress), classId);
   return world.spawn(
     IsPlayer({ classId }),
     Transform({ x, y }),
     Facing({ dir: 1 }),
     Hitbox(playerConfig.movement.hitbox),
-    Health({ hp: base.hp, maxHp: base.maxHp }),
+    Health({ hp: base.hp + hpBonus, maxHp: base.maxHp + hpBonus }),
     Level({ level: base.level, xp: base.xp, nextXp: base.nextXp }),
     Speed({ value: playerConfig.movement.speed }),
     MoveIntent({ x: 0, y: 0 }),
