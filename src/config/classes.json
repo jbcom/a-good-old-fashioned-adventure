@@ -1,7 +1,13 @@
 {
   "$schema": "../../schemas/config.schema.json",
-  "roster": ["knight"],
-  "companionRoster": ["knight", "ranger", "wizard"],
+  "roster": [
+    "knight"
+  ],
+  "companionRoster": [
+    "knight",
+    "ranger",
+    "wizard"
+  ],
   "classes": {
     "knight": {
       "sprite": "sprite:hero",
@@ -47,7 +53,11 @@
         "kind": "leap",
         "label": "LEAP",
         "backwardDistance": 45,
-        "spreadAngles": [-0.15, 0, 0.15],
+        "spreadAngles": [
+          -0.15,
+          0,
+          0.15
+        ],
         "spreadSpeed": 140,
         "spreadLife": 1.5,
         "cooldown": 1.0,
@@ -193,6 +203,145 @@
         "blastRadius": 30,
         "hp": 50,
         "speed": 28
+      }
+    },
+    "priest": {
+      "sprite": "sprite:priest",
+      "palette": "palette:base",
+      "attack": {
+        "kind": "melee",
+        "reach": 24,
+        "cooldown": 0.8
+      },
+      "ability": {
+        "kind": "shield",
+        "label": "WARD",
+        "sfx": "shield"
+      },
+      "temperament": {
+        "verb": "heal-beam",
+        "engage": 140,
+        "keepDistance": 80,
+        "hp": 50,
+        "speed": 30,
+        "healPerPulse": 4,
+        "pulsePeriod": 0.6,
+        "auraRadius": 140
+      }
+    },
+    "warlock": {
+      "sprite": "sprite:warlock",
+      "palette": "palette:base",
+      "attack": {
+        "kind": "projectile",
+        "projectile": "shadowbolt",
+        "cooldown": 1.1,
+        "speed": 120,
+        "life": 1.6
+      },
+      "ability": {
+        "kind": "blink",
+        "label": "PACT",
+        "sfx": "magic"
+      },
+      "temperament": {
+        "verb": "debuff-aura",
+        "engage": 120,
+        "keepDistance": 70,
+        "hp": 52,
+        "speed": 30,
+        "auraRadius": 70
+      }
+    },
+    "barbarian": {
+      "sprite": "sprite:barbarian",
+      "palette": "palette:base",
+      "attack": {
+        "kind": "melee",
+        "reach": 34,
+        "cooldown": 0.5
+      },
+      "ability": {
+        "kind": "leap",
+        "label": "ROAR",
+        "sfx": "slash"
+      },
+      "temperament": {
+        "verb": "blade-storm",
+        "engage": 30,
+        "chargeSpeedMultiplier": 1.5,
+        "hp": 85,
+        "speed": 50,
+        "blastRadius": 34
+      }
+    },
+    "dread-knight": {
+      "sprite": "sprite:dread-knight",
+      "palette": "palette:base",
+      "attack": {
+        "kind": "melee",
+        "reach": 42,
+        "cooldown": 0.4
+      },
+      "ability": {
+        "kind": "shield",
+        "label": "DREAD",
+        "sfx": "shield"
+      },
+      "temperament": {
+        "verb": "charge",
+        "engage": 36,
+        "chargeSpeedMultiplier": 1.7,
+        "hp": 110,
+        "speed": 52,
+        "withersOnHit": true
+      }
+    },
+    "shaman": {
+      "sprite": "sprite:shaman",
+      "palette": "palette:base",
+      "attack": {
+        "kind": "melee",
+        "reach": 26,
+        "cooldown": 0.9
+      },
+      "ability": {
+        "kind": "blink",
+        "label": "SPIRIT",
+        "sfx": "magic"
+      },
+      "temperament": {
+        "verb": "aoe",
+        "engage": 100,
+        "keepDistance": 56,
+        "hp": 62,
+        "speed": 30,
+        "blastRadius": 32,
+        "healPerPulse": 5,
+        "auraRadius": 32
+      }
+    },
+    "stormcaller": {
+      "sprite": "sprite:stormcaller",
+      "palette": "palette:base",
+      "attack": {
+        "kind": "projectile",
+        "projectile": "magic-bolt",
+        "cooldown": 0.6,
+        "speed": 150,
+        "life": 1.4
+      },
+      "ability": {
+        "kind": "leap",
+        "label": "TEMPEST",
+        "sfx": "magic"
+      },
+      "temperament": {
+        "verb": "storm-volley",
+        "engage": 110,
+        "hp": 75,
+        "speed": 44,
+        "blastRadius": 110
       }
     }
   }

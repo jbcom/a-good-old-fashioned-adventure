@@ -18,8 +18,17 @@
       "label": "Coins",
       "shortLabel": "C",
       "relativeVolume": "common",
-      "primarySources": ["enemy-defeated", "road-skirmish", "repeatable-route"],
-      "spendRoles": ["ranked-upgrades", "class-tracks", "adversarial-risk", "practical-upgrades"],
+      "primarySources": [
+        "enemy-defeated",
+        "road-skirmish",
+        "repeatable-route"
+      ],
+      "spendRoles": [
+        "ranked-upgrades",
+        "class-tracks",
+        "adversarial-risk",
+        "practical-upgrades"
+      ],
       "hudPriority": 1
     },
     "roses": {
@@ -27,8 +36,18 @@
       "shortLabel": "R",
       "relativeVolume": "rare",
       "rarityRatioAgainstCoins": 0.18,
-      "primarySources": ["princess-rescued", "objective-mastered", "road-mastered"],
-      "spendRoles": ["major-unlocks", "new-classes", "new-maps", "new-bosses", "princess-boons"],
+      "primarySources": [
+        "princess-rescued",
+        "objective-mastered",
+        "road-mastered"
+      ],
+      "spendRoles": [
+        "major-unlocks",
+        "new-classes",
+        "new-maps",
+        "new-bosses",
+        "princess-boons"
+      ],
       "hudPriority": 2
     }
   },
@@ -81,12 +100,16 @@
         },
         "ranks": 5,
         "rankCostGrowth": 1.6,
-        "prerequisites": ["upgrade:first-vow"],
+        "prerequisites": [
+          "upgrade:first-vow"
+        ],
         "classId": "knight",
         "effect": {
           "maxHp": 10
         },
-        "unlocks": [],
+        "unlocks": [
+          "upgrade:barbarian-storm"
+        ],
         "note": "Coin-ranked knight track: extra health per rank for the starting class.",
         "track": "characters"
       },
@@ -97,7 +120,9 @@
         "cost": {
           "roses": 1
         },
-        "prerequisites": ["upgrade:first-vow"],
+        "prerequisites": [
+          "upgrade:first-vow"
+        ],
         "routePack": "oldwood",
         "unlocks": [
           "upgrade:road-provisions",
@@ -113,9 +138,14 @@
         "cost": {
           "roses": 1
         },
-        "prerequisites": ["upgrade:first-vow"],
+        "prerequisites": [
+          "upgrade:first-vow"
+        ],
         "classId": "ranger",
-        "unlocks": ["upgrade:ranger-craft", "upgrade:ranger-leap-rose"],
+        "unlocks": [
+          "upgrade:ranger-craft",
+          "upgrade:ranger-leap-rose"
+        ],
         "track": "characters"
       },
       {
@@ -125,9 +155,14 @@
         "cost": {
           "roses": 2
         },
-        "prerequisites": ["upgrade:first-vow"],
+        "prerequisites": [
+          "upgrade:first-vow"
+        ],
         "enemyFamily": "dragon",
-        "unlocks": ["upgrade:orc-warband", "upgrade:sorcerer-cinder"],
+        "unlocks": [
+          "upgrade:orc-warband",
+          "upgrade:sorcerer-cinder"
+        ],
         "track": "encounters"
       },
       {
@@ -139,7 +174,9 @@
         },
         "ranks": 5,
         "rankCostGrowth": 1.5,
-        "prerequisites": ["upgrade:oldwood-bend"],
+        "prerequisites": [
+          "upgrade:oldwood-bend"
+        ],
         "unlocks": [],
         "note": "Coin-ranked run conveniences that compress repeated travel without skipping the rescue.",
         "track": "vows"
@@ -153,7 +190,9 @@
         },
         "ranks": 3,
         "rankCostGrowth": 1.6,
-        "prerequisites": ["upgrade:ranger-trail"],
+        "prerequisites": [
+          "upgrade:ranger-trail"
+        ],
         "classId": "ranger",
         "unlocks": [],
         "note": "Coin-ranked ranger track deepening the rose-unlocked class.",
@@ -168,7 +207,9 @@
         },
         "ranks": 3,
         "rankCostGrowth": 1.7,
-        "prerequisites": ["upgrade:dragon-wake"],
+        "prerequisites": [
+          "upgrade:dragon-wake"
+        ],
         "enemyFamily": "orc",
         "spawnBounty": 4,
         "unlocks": [],
@@ -182,9 +223,13 @@
         "cost": {
           "roses": 2
         },
-        "prerequisites": ["upgrade:oldwood-bend"],
+        "prerequisites": [
+          "upgrade:oldwood-bend"
+        ],
         "routePack": "deep-forest",
-        "unlocks": ["upgrade:bard-road-song"],
+        "unlocks": [
+          "upgrade:bard-road-song"
+        ],
         "track": "roads"
       },
       {
@@ -194,9 +239,14 @@
         "cost": {
           "roses": 2
         },
-        "prerequisites": ["upgrade:oldwood-bend"],
+        "prerequisites": [
+          "upgrade:oldwood-bend"
+        ],
         "classId": "rogue",
-        "unlocks": ["upgrade:rogue-knives", "upgrade:sunken-shortcut"],
+        "unlocks": [
+          "upgrade:rogue-knives",
+          "upgrade:sunken-shortcut"
+        ],
         "track": "characters"
       },
       {
@@ -206,7 +256,9 @@
         "cost": {
           "roses": 3
         },
-        "prerequisites": ["upgrade:ranger-trail"],
+        "prerequisites": [
+          "upgrade:ranger-trail"
+        ],
         "classId": "ranger",
         "ability": "leap",
         "unlocks": [],
@@ -219,9 +271,15 @@
         "cost": {
           "roses": 3
         },
-        "prerequisites": ["upgrade:dragon-wake"],
+        "prerequisites": [
+          "upgrade:dragon-wake"
+        ],
         "classId": "sorcerer",
-        "unlocks": ["upgrade:sorcerer-emberweave", "upgrade:castle-candle-loop"],
+        "unlocks": [
+          "upgrade:sorcerer-emberweave",
+          "upgrade:castle-candle-loop",
+          "upgrade:warlock-pact"
+        ],
         "track": "characters"
       },
       {
@@ -233,7 +291,9 @@
         },
         "ranks": 3,
         "rankCostGrowth": 1.6,
-        "prerequisites": ["upgrade:rogue-shortcut"],
+        "prerequisites": [
+          "upgrade:rogue-shortcut"
+        ],
         "classId": "rogue",
         "unlocks": [],
         "note": "Coin-ranked rogue track deepening the rose-unlocked class.",
@@ -246,9 +306,15 @@
         "cost": {
           "roses": 3
         },
-        "prerequisites": ["upgrade:thornwood-mastered"],
+        "prerequisites": [
+          "upgrade:thornwood-mastered"
+        ],
         "classId": "bard",
-        "unlocks": ["upgrade:bard-meter", "upgrade:princess-boon"],
+        "unlocks": [
+          "upgrade:bard-meter",
+          "upgrade:princess-boon",
+          "upgrade:priest-vows"
+        ],
         "track": "characters"
       },
       {
@@ -258,9 +324,13 @@
         "cost": {
           "roses": 3
         },
-        "prerequisites": ["upgrade:rogue-shortcut"],
+        "prerequisites": [
+          "upgrade:rogue-shortcut"
+        ],
         "routePack": "sunken-road",
-        "unlocks": ["upgrade:castle-approach-siege"],
+        "unlocks": [
+          "upgrade:castle-approach-siege"
+        ],
         "track": "roads"
       },
       {
@@ -272,7 +342,9 @@
         },
         "ranks": 3,
         "rankCostGrowth": 1.6,
-        "prerequisites": ["upgrade:sorcerer-cinder"],
+        "prerequisites": [
+          "upgrade:sorcerer-cinder"
+        ],
         "classId": "sorcerer",
         "unlocks": [],
         "note": "Coin-ranked sorcerer track deepening the rose-unlocked class.",
@@ -287,7 +359,9 @@
         },
         "ranks": 3,
         "rankCostGrowth": 1.6,
-        "prerequisites": ["upgrade:bard-road-song"],
+        "prerequisites": [
+          "upgrade:bard-road-song"
+        ],
         "classId": "bard",
         "unlocks": [],
         "note": "Coin-ranked bard track deepening the rose-unlocked class.",
@@ -300,7 +374,9 @@
         "cost": {
           "roses": 4
         },
-        "prerequisites": ["upgrade:sunken-shortcut"],
+        "prerequisites": [
+          "upgrade:sunken-shortcut"
+        ],
         "routePack": "castle-approach",
         "unlocks": [],
         "track": "roads"
@@ -312,7 +388,9 @@
         "cost": {
           "roses": 5
         },
-        "prerequisites": ["upgrade:sorcerer-cinder"],
+        "prerequisites": [
+          "upgrade:sorcerer-cinder"
+        ],
         "routePack": "castle-interior",
         "unlocks": [],
         "track": "castle"
@@ -324,12 +402,182 @@
         "cost": {
           "roses": 4
         },
-        "prerequisites": ["upgrade:bard-road-song"],
+        "prerequisites": [
+          "upgrade:bard-road-song"
+        ],
         "unlocks": [],
         "track": "vows"
+      },
+      {
+        "id": "upgrade:priest-vows",
+        "label": "Priest's Vows",
+        "category": "class",
+        "track": "characters",
+        "cost": {
+          "roses": 3
+        },
+        "prerequisites": [
+          "upgrade:bard-road-song"
+        ],
+        "classId": "priest",
+        "unlocks": [
+          "upgrade:shaman",
+          "upgrade:priest-procession"
+        ],
+        "note": "A healer joins the line: the heal-beam channels into the most wounded ally."
+      },
+      {
+        "id": "upgrade:warlock-pact",
+        "label": "Warlock's Pact",
+        "category": "class",
+        "track": "characters",
+        "cost": {
+          "roses": 3
+        },
+        "prerequisites": [
+          "upgrade:sorcerer-cinder"
+        ],
+        "classId": "warlock",
+        "unlocks": [
+          "upgrade:dread-knight",
+          "upgrade:warband-of-one"
+        ],
+        "note": "The withering field slows and weakens every enemy inside it."
+      },
+      {
+        "id": "upgrade:barbarian-storm",
+        "label": "Barbarian's Storm",
+        "category": "class",
+        "track": "characters",
+        "cost": {
+          "roses": 4
+        },
+        "prerequisites": [
+          "upgrade:knight-vigor"
+        ],
+        "classId": "barbarian",
+        "unlocks": [
+          "upgrade:stormcaller",
+          "upgrade:bloodline"
+        ],
+        "note": "The blade storm strikes everything in its whirl \u2014 the knight keeps the shield."
+      },
+      {
+        "id": "upgrade:dread-knight",
+        "label": "Dread Knight",
+        "category": "class",
+        "track": "characters",
+        "cost": {
+          "roses": 9
+        },
+        "prerequisites": [
+          "upgrade:warlock-pact",
+          "upgrade:knight-vigor"
+        ],
+        "classId": "dread-knight",
+        "unlocks": [],
+        "note": "Knight and pact fused: a charge that carries the wither \u2014 every blow debuffs."
+      },
+      {
+        "id": "upgrade:shaman",
+        "label": "Shaman",
+        "category": "class",
+        "track": "characters",
+        "cost": {
+          "roses": 8
+        },
+        "prerequisites": [
+          "upgrade:priest-vows",
+          "upgrade:sorcerer-cinder"
+        ],
+        "classId": "shaman",
+        "unlocks": [],
+        "note": "Priest and cinder fused: bursts that scorch enemies and mend allies standing inside."
+      },
+      {
+        "id": "upgrade:stormcaller",
+        "label": "Stormcaller",
+        "category": "class",
+        "track": "characters",
+        "cost": {
+          "roses": 9
+        },
+        "prerequisites": [
+          "upgrade:barbarian-storm",
+          "upgrade:sorcerer-emberweave"
+        ],
+        "classId": "stormcaller",
+        "unlocks": [],
+        "note": "Wizard and storm fused: the whirl looses bolts at everything in range."
+      },
+      {
+        "id": "upgrade:priest-procession",
+        "label": "Priest Procession",
+        "category": "ability",
+        "track": "characters",
+        "cost": {
+          "coins": 30
+        },
+        "ranks": 2,
+        "rankCostGrowth": 1.8,
+        "prerequisites": [
+          "upgrade:priest-vows"
+        ],
+        "classId": "priest",
+        "unlocks": [],
+        "effect": {
+          "unitCount": 1
+        },
+        "note": "Another vow taken: one more priest walks the line per rank."
+      },
+      {
+        "id": "upgrade:warband-of-one",
+        "label": "Coven Grows",
+        "category": "ability",
+        "track": "characters",
+        "cost": {
+          "coins": 32
+        },
+        "ranks": 2,
+        "rankCostGrowth": 1.8,
+        "prerequisites": [
+          "upgrade:warlock-pact"
+        ],
+        "classId": "warlock",
+        "unlocks": [],
+        "effect": {
+          "unitCount": 1
+        },
+        "note": "The pact spreads: one more warlock per rank."
+      },
+      {
+        "id": "upgrade:bloodline",
+        "label": "Bloodline",
+        "category": "ability",
+        "track": "characters",
+        "cost": {
+          "coins": 34
+        },
+        "ranks": 2,
+        "rankCostGrowth": 1.8,
+        "prerequisites": [
+          "upgrade:barbarian-storm"
+        ],
+        "classId": "barbarian",
+        "unlocks": [],
+        "effect": {
+          "unitCount": 1
+        },
+        "note": "Kin answer the storm: one more barbarian per rank."
       }
     ],
-    "ringOrder": ["vows", "characters", "encounters", "roads", "castle"],
+    "ringOrder": [
+      "vows",
+      "characters",
+      "encounters",
+      "roads",
+      "castle"
+    ],
     "trackEntries": {
       "vows": "upgrade:first-vow",
       "characters": "upgrade:knight-vigor",
@@ -337,41 +585,68 @@
       "roads": "upgrade:oldwood-bend",
       "castle": "upgrade:castle-candle-loop"
     },
-    "lockedTracks": ["castle"]
+    "lockedTracks": [
+      "castle"
+    ]
   },
   "classes": {
     "starting": "knight",
-    "unlockable": ["ranger", "rogue", "bard", "sorcerer"]
+    "unlockable": [
+      "ranger",
+      "rogue",
+      "bard",
+      "sorcerer",
+      "priest",
+      "warlock",
+      "barbarian",
+      "dread-knight",
+      "shaman",
+      "stormcaller"
+    ]
   },
   "routePacks": [
     {
       "id": "oldwood",
       "label": "Oldwood Bend",
-      "maps": ["map:oldwood-forest"],
+      "maps": [
+        "map:oldwood-forest"
+      ],
       "role": "first branching road with forest pressure and safe-passage objectives"
     },
     {
       "id": "deep-forest",
       "label": "Thornwood Dusk",
-      "maps": ["map:deep-forest"],
+      "maps": [
+        "map:deep-forest"
+      ],
       "role": "rose-awarding road mastery and inhabited woodland scenes"
     },
     {
       "id": "sunken-road",
       "label": "Sunken Road",
-      "maps": ["map:sunken-road", "map:desert-ruins"],
+      "maps": [
+        "map:sunken-road",
+        "map:desert-ruins"
+      ],
       "role": "hazard shortcut, desert silhouettes, and optional ruin objectives"
     },
     {
       "id": "castle-approach",
       "label": "Siege Approach",
-      "maps": ["map:castle-approach", "map:castle-yard"],
+      "maps": [
+        "map:castle-approach",
+        "map:castle-yard"
+      ],
       "role": "threshold pressure before the dragon rescue"
     },
     {
       "id": "castle-interior",
       "label": "Candlelit Castle Loop",
-      "maps": ["map:castle-hall", "map:castle-library", "map:castle-armory"],
+      "maps": [
+        "map:castle-hall",
+        "map:castle-library",
+        "map:castle-armory"
+      ],
       "role": "rose-gated side loop with scribe and heraldic objectives"
     }
   ]
