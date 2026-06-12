@@ -56,3 +56,4 @@
 {"ts":"2026-06-12T20:16:46.105Z","sha":"daa4df03ae7a9e8e59d85a16d74a59d7f3a4c453","subject":"fix: fold S14 review findings forward","decision":null,"why":null,"resolves":["S14.R milestone review"],"overrides":[]}
 {"ts":"2026-06-12T20:23:36.078Z","sha":"4c30f161ab68ae67a3528505be24106e8e0368da","subject":"feat: the road itself pays","decision":null,"why":null,"resolves":["S15.1 travel pays"],"overrides":[]}
 {"ts":"2026-06-12T20:28:51.685Z","sha":"79849c190c4a91b35298dbb4d0a9a6004af90f66","subject":"feat: a bespoke emblem for every vow in the graph","decision":null,"why":null,"resolves":["S16.1 emblem language"],"overrides":[]}
+{"ts":"2026-06-12T20:42:13.735Z","sha":"c9c7f50157d1e27d32ce6f8728866c7465106c5b","subject":"feat: the vow graph becomes a designed screen","decision":null,"why":null,"resolves":["S16.2 screen rebuild","S16.3 tooltips"],"overrides":[]}

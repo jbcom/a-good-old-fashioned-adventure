@@ -47,6 +47,17 @@ Each temperament is an archetype block in `classes.json` (movement profile +
 attack profile), interpreted by a unit-AI system that reuses the enemy
 Yuka interpreter patterns (seek/flee/charge/hold-range are shared verbs).
 
+**The Yuka player-governor work transfers directly (user call-out).** The
+governor already solved "an autonomous agent that perceives the field,
+picks a target, navigates to it, and engages through the same inputs the
+sim honors" — that is exactly what an allied unit is. The plan-and-pursue
+loop in `tests/harness/playerGovernorModel.ts` (perceive → choose action →
+reach point → engage) moves INTO the sim as the unit brain: each placed
+unit runs a per-class instance of it on Yuka steering, while the test-side
+governor shrinks to a CommanderGovernor that only places units and reads
+the public dataset. One brain, two homes — the in-sim version drives play,
+the test version drives strategy.
+
 ## Waves
 
 The enemy side mirrors the unit side: waves spawn from authored gates ahead
