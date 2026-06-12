@@ -32,6 +32,7 @@ import {
   PropRef,
   ShieldState,
   SpriteRef,
+  Threat,
   Transform,
 } from "../traits";
 import { rngFor } from "../worldRng";
@@ -345,6 +346,10 @@ export function combatStep(world: World, dt: number): void {
     const et = enemy.get(Transform);
     if (!et) continue;
     const dist = Math.hypot(playerTransform.x - et.x, playerTransform.y - et.y);
+    // telegraphed contact: an enemy must finish its wind-up before its touch
+    // can hurt (Threat.armed); enemies without the trait stay immediate
+    const threat = enemy.get(Threat);
+    if (threat && !threat.armed) continue;
     if (dist < combat.hitboxes.touchRadius) {
       if (player.get(ShieldState)?.active) {
         const facing = player.get(Facing);

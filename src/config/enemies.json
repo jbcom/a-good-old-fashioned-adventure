@@ -3,7 +3,13 @@
   "aiDefaults": {
     "aggroRange": 80,
     "deaggroRange": 120,
-    "patrolRange": 40
+    "patrolRange": 40,
+    "windup": {
+      "duration": 0.45,
+      "armRange": 26,
+      "disarmRange": 64,
+      "castFlash": 0.35
+    }
   },
   "difficultyCurve": [
     {

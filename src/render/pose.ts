@@ -5,9 +5,9 @@
  * dataset.
  */
 import type { Entity, World } from "koota";
-import { classes, combat } from "../lib/config";
+import { classes, combat, enemies } from "../lib/config";
 import { getSprite } from "../lib/content/registry";
-import { Clock, CombatTimers, IsPlayer, MoveIntent } from "../sim/traits";
+import { Clock, CombatTimers, IsPlayer, MoveIntent, Threat } from "../sim/traits";
 
 function hasFrame(spriteId: string, pose: string): boolean {
   if (!spriteId) return false;
@@ -40,6 +40,27 @@ export function spritePose(world: World, entity: Entity, spriteId: string | unde
     if (hasFrame(spriteId, pose)) return pose;
   }
   return "idle";
+}
+
+/**
+ * Telegraph pulse: a winding-up melee enemy swells with a building throb and
+ * a ranged enemy flickers larger through its pre-shot beat — danger is
+ * always readable before damage lands.
+ */
+export function threatScale(world: World, entity: Entity): number {
+  const threat = entity.get(Threat);
+  if (!threat) return 1;
+  const windup = enemies.aiDefaults.windup;
+  const t = world.get(Clock)?.t ?? 0;
+  if (!threat.armed && threat.windupLeft > 0 && threat.windupLeft < windup.duration) {
+    const progress = 1 - threat.windupLeft / windup.duration;
+    const throb = (1 + Math.sin(t * 24)) / 2;
+    return 1 + 0.14 * progress * throb;
+  }
+  if (threat.casting) {
+    return Math.floor(t * 14) % 2 === 0 ? 1.12 : 1;
+  }
+  return 1;
 }
 
 /** Alpha for the iframe blink: visible damage immunity without a new frame. */

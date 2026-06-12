@@ -11,7 +11,7 @@ import type { Entity, World } from "koota";
 import { FleeBehavior, SeekBehavior, Vector3, Vehicle } from "yuka";
 import { enemies } from "../../lib/config";
 import { spawnProjectile } from "../factories";
-import { Facing, IsEnemy, IsPlayer, MoveIntent, Outbox, Speed, Transform } from "../traits";
+import { Facing, IsEnemy, IsPlayer, MoveIntent, Outbox, Speed, Threat, Transform } from "../traits";
 
 interface EnemyAi {
   vehicle: Vehicle;
@@ -248,5 +248,38 @@ export function enemyAIStep(world: World, dt: number): void {
     enemy.set(MoveIntent, { x: intentX, y: intentY });
     if (intentX !== 0) enemy.set(Facing, { dir: intentX > 0 ? 1 : -1 });
     else if (dx !== 0) enemy.set(Facing, { dir: dx > 0 ? 1 : -1 });
+
+    // telegraphs: touch damage arms after a visible wind-up near the player;
+    // ranged enemies flash through the last beat before each shot
+    const threat = enemy.get(Threat);
+    if (threat) {
+      const windup = enemies.aiDefaults.windup;
+      let { windupLeft, armed } = threat;
+      if (dist <= windup.armRange) {
+        if (!armed) {
+          windupLeft = Math.max(0, windupLeft - dt);
+          if (windupLeft === 0) armed = true;
+        }
+      } else if (dist > windup.disarmRange) {
+        armed = false;
+        windupLeft = windup.duration;
+      }
+      const castRange =
+        archetype.caster?.attackRange ??
+        archetype.turret?.attackRange ??
+        archetype.boss?.aggroRange;
+      const casting =
+        castRange !== undefined &&
+        dist < castRange &&
+        ai.castCooldown > 0 &&
+        ai.castCooldown < windup.castFlash;
+      if (
+        windupLeft !== threat.windupLeft ||
+        armed !== threat.armed ||
+        casting !== threat.casting
+      ) {
+        enemy.set(Threat, { windupLeft, armed, casting });
+      }
+    }
   }
 }
