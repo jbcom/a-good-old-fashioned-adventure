@@ -283,3 +283,72 @@ it("banks coins through death and into the next run", async () => {
   await expect.poll(() => governor.perceive().mode, { timeout: 10_000 }).toBe("playing");
   expect(Number(shell().dataset.coins ?? 0)).toBe(banked);
 }, 240_000);
+
+it("fields one more orc per warband rank and the bounty pays", async () => {
+  await page.viewport(1280, 720);
+  await wait(100);
+
+  const { getMap } = await import("../../src/lib/content/registry");
+  const { incremental } = await import("../../src/lib/config");
+  const authoredEnemies = getMap("map:rescue-route").entities.filter(
+    (entity) => entity.enemy && !entity.requiresRoutePack,
+  ).length;
+
+  const repository = new MemorySaveRepository();
+  await repository.upsertSlot({
+    id: 1,
+    classId: "knight",
+    mapId: "map:rescue-route",
+    playerX: 136,
+    playerY: 976,
+    level: 2,
+    hp: 110,
+    maxHp: 110,
+    questSummary: "The road grows teeth",
+    snapshotJson: JSON.stringify({
+      coins: 30,
+      roses: 0,
+      purchasedUpgradeIds: ["upgrade:first-vow", "upgrade:dragon-wake", "upgrade:orc-warband"],
+      upgradeRanks: { "upgrade:orc-warband": 1 },
+      unlockedClassIds: ["knight"],
+      unlockedRoutePackIds: [],
+    }),
+    updatedAt: new Date("2026-06-12T12:00:00Z"),
+  });
+
+  mountApp(repository);
+  const governor = new PlayerGovernor();
+  await expect.element(page.getByTestId("landing-screen")).toBeVisible();
+  await governor.click("continue-button");
+  await expect.poll(() => governor.perceive().mapName, { timeout: 10_000 }).toBe("Rescue Road");
+
+  // the rank survived the save round-trip and the field grew by exactly one
+  const shell = () => page.getByTestId("game-shell").element() as HTMLElement;
+  expect(shell().dataset.upgradeRanks).toContain("upgrade:orc-warband:1");
+  await expect
+    .poll(() => Number(shell().dataset.enemies ?? 0), { timeout: 10_000 })
+    .toBe(authoredEnemies + 1);
+
+  // the reinforcement spawns beside the first orc on the road: clearing the
+  // doubled camp pays the standard kill twice plus the bounty on top
+  const coins0 = Number(shell().dataset.coins ?? 0);
+  await governor.reachPoint(136, 880, { tolerance: 30, maxSteps: 48 });
+  const warbandShot = await page.screenshot({
+    path: "../../docs/evidence/warband-reinforced-road.png",
+  });
+  expect(warbandShot).toBeTruthy();
+  for (let round = 0; round < 6; round++) {
+    await fightNearby(governor, 6);
+    if (Number(shell().dataset.enemies ?? 0) <= authoredEnemies - 1) break;
+  }
+  await expect
+    .poll(() => Number(shell().dataset.enemies ?? 0), { timeout: 15_000 })
+    .toBeLessThanOrEqual(authoredEnemies - 1);
+  const killReward = incremental.runRewards.enemyDefeated.base ?? 0;
+  const warbandNode = incremental.upgradeGraph.nodes.find(
+    (node) => node.id === "upgrade:orc-warband",
+  );
+  expect(Number(shell().dataset.coins ?? 0)).toBeGreaterThanOrEqual(
+    coins0 + killReward * 2 + (warbandNode?.spawnBounty ?? 0),
+  );
+}, 240_000);

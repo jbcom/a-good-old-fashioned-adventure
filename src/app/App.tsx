@@ -1889,6 +1889,9 @@ export function App({
       "data-roses": String(snapshot.incrementalProgress.roses),
       "data-rescue-count": String(snapshot.incrementalProgress.rescueCount),
       "data-purchased-upgrades": snapshot.incrementalProgress.purchasedUpgradeIds.join(","),
+      "data-upgrade-ranks": Object.entries(snapshot.incrementalProgress.upgradeRanks)
+        .map(([id, owned]) => `${id}:${owned}`)
+        .join(","),
       "data-unlocked-classes": snapshot.incrementalProgress.unlockedClassIds.join(","),
       "data-unlocked-route-packs": snapshot.incrementalProgress.unlockedRoutePackIds.join(","),
       "data-selected-upgrade":
