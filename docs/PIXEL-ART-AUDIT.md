@@ -134,10 +134,14 @@ chest, victory, rose). Downloaded pack inventories map onto that surface:
 
 Integration shape: the engine grows a sample-player path (Tone.Player pool)
 beside the synth path; themes/cues become config entries pointing at either
-a synth recipe or a curated file under `public/assets/audio/<pack>/…` with
-MANIFEST.json entries. WAV masters exist for all packs; ship OGG/MP3
-(size) after a listening pass picks the keepers — full 2 GB of WAVs never
-ships, only the curated subset.
+a synth recipe or a curated file. Provisional keepers are STAGED:
+`public/assets/audio/music/<surface>.m4a` (13 surfaces, 128k AAC
+transcoded from the WAV masters — the 8 existing themes plus menu, combat,
+prebattle, miniboss, boss), `audio/stingers/{victory,levelup}.mp3`, and
+`audio/ui/<cue>.mp3` (10 cue families), ~29 MB shipped vs 2 GB of raws.
+Keepers were picked by track semantics; the deciding audition happens
+in-game when S20.3 wires the sample path (every alternate track stays in
+raw-assets/extracted/ for the A/B).
 
 ### SA.0(c) research pass — animal sprite packs (SA.3 gap 1)
 

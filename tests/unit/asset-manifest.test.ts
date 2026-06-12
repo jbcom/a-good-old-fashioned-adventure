@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -15,8 +15,10 @@ const assetsRoot = fileURLToPath(new URL("../../public/assets", import.meta.url)
 
 interface ManifestFile {
   path: string;
-  width: number;
-  height: number;
+  // images carry pixel geometry; audio files carry neither (existence +
+  // non-empty is their gate)
+  width?: number;
+  height?: number;
   frames?: number;
   directions?: number;
   framesPerDirection?: number;
@@ -45,10 +47,10 @@ function pngDimensions(path: string): { width: number; height: number } {
   return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
 }
 
-function walkImages(dir: string): string[] {
+function walkMedia(dir: string): string[] {
   // string mode (not withFileTypes) keeps this portable across Node versions
   return (readdirSync(dir, { recursive: true }) as string[])
-    .filter((name) => /\.(png|webp|gif|jpg)$/i.test(name))
+    .filter((name) => /\.(png|webp|gif|jpg|m4a|mp3|ogg|wav)$/i.test(name))
     .map((name) => join(dir, name).slice(assetsRoot.length + 1));
 }
 
@@ -68,8 +70,12 @@ describe("asset manifest", () => {
     for (const file of allFiles) {
       const abs = join(assetsRoot, file.path);
       expect(existsSync(abs), `${file.path} listed in manifest but missing on disk`).toBe(true);
-      const dims = pngDimensions(abs);
-      expect(dims, file.path).toEqual({ width: file.width, height: file.height });
+      if (file.width !== undefined) {
+        const dims = pngDimensions(abs);
+        expect(dims, file.path).toEqual({ width: file.width, height: file.height });
+      } else {
+        expect(statSync(abs).size, `${file.path} is empty`).toBeGreaterThan(0);
+      }
     }
   });
 
@@ -86,11 +92,11 @@ describe("asset manifest", () => {
     }
   });
 
-  it("every image under the covered directories is manifested", () => {
+  it("every media file under the covered directories is manifested", () => {
     const manifested = new Set(allFiles.map((f) => f.path));
-    const onDisk = manifest.coveredDirs.flatMap((d) => walkImages(join(assetsRoot, d)));
+    const onDisk = manifest.coveredDirs.flatMap((d) => walkMedia(join(assetsRoot, d)));
     expect(onDisk.length).toBeGreaterThan(0);
     const orphans = onDisk.filter((p) => !manifested.has(p));
-    expect(orphans, "images on disk with no manifest entry (license/use unrecorded)").toEqual([]);
+    expect(orphans, "media on disk with no manifest entry (license/use unrecorded)").toEqual([]);
   });
 });

@@ -1,6 +1,6 @@
 {
   "comment": "License-aware registry of every purchased/imported asset under public/assets/. Raw downloads live in raw-assets/ (gitignored); only curated keepers land here. tests/unit/asset-manifest.test.ts is the integrity gate: every file listed must exist with the stated geometry, and every image under the covered directories must be listed. POLICY: any NEW directory of imported assets under public/assets/ must be added to coveredDirs in the same change, or the gate cannot see it (fonts/ and the engine wasm are first-party, not imports).",
-  "coveredDirs": ["bosses", "tilemaps", "enemies"],
+  "coveredDirs": ["bosses", "tilemaps", "enemies", "audio"],
   "packs": [
     {
       "id": "high-dragon",
@@ -233,6 +233,109 @@
       "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
       "mappedUse": "SA.3 gap 1 — forest region trash/critter body (run, jump, climb rows); also overworld ambience.",
       "files": [{ "path": "enemies/squirrel.png", "width": 256, "height": 224 }]
+    },
+    {
+      "id": "pixelloops-fantasy-rpg",
+      "title": "RPG Fantasy Music Pack – 10 Tavern & Adventure Tracks (GameLoops Vol 5)",
+      "author": "PixelLoops",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; m4a transcoded 128k AAC from the WAV masters in raw-assets/extracted/)",
+      "url": "https://pixelloops.itch.io/game-loops-vol5-fantasy-rpg",
+      "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
+      "mappedUse": "S20.3 theme replacements — provisional keepers picked by track semantics (docs/PIXEL-ART-AUDIT.md §SA.0(c) audio mapping); final pick is the in-game audition when the sample-player path lands.",
+      "files": [
+        { "path": "audio/music/overworld.m4a" },
+        { "path": "audio/music/village.m4a" },
+        { "path": "audio/music/interior.m4a" },
+        { "path": "audio/music/forest.m4a" }
+      ]
+    },
+    {
+      "id": "pixelloops-dark-ambient",
+      "title": "Dark Ambient Game Music Pack – Mystery & Horror Loops (GameLoops Vol 4)",
+      "author": "PixelLoops",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; m4a transcoded 128k AAC from the WAV masters in raw-assets/extracted/)",
+      "url": "https://pixelloops.itch.io/game-loops-vol4-dark-ambient-mystery",
+      "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
+      "mappedUse": "S20.3 theme replacements for the tension regions — provisional keepers, final pick at in-game audition.",
+      "files": [
+        { "path": "audio/music/deep-forest.m4a" },
+        { "path": "audio/music/castle-approach.m4a" }
+      ]
+    },
+    {
+      "id": "pixelloops-retro-dungeon",
+      "title": "Retro Dungeon Game Music Pack – 12 Chiptune Loops",
+      "author": "PixelLoops",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; m4a transcoded 128k AAC from the WAV masters in raw-assets/extracted/)",
+      "url": "https://pixelloops.itch.io/retro-dungeon-game-music-pack-12-chiptune-loops",
+      "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
+      "mappedUse": "S20.3 theme replacements for dungeon + sunken-road — provisional keepers, final pick at in-game audition.",
+      "files": [{ "path": "audio/music/dungeon.m4a" }, { "path": "audio/music/sunken-road.m4a" }]
+    },
+    {
+      "id": "pixelloops-main-menu",
+      "title": "Calm Menu Music Pack – Perfect for Game Menus & UI (10 Loops)",
+      "author": "PixelLoops",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; m4a transcoded 128k AAC from the WAV masters in raw-assets/extracted/)",
+      "url": "https://pixelloops.itch.io/main-menu-music-pack-10-calm-game-menu-loops-wav-mp3",
+      "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
+      "mappedUse": "S20.3 new surface: title/menu bed the synth never had.",
+      "files": [{ "path": "audio/music/menu.m4a" }]
+    },
+    {
+      "id": "pixelloops-retro-combat",
+      "title": "Retro Combat Music Pack - 12 Chiptune Battle Loops",
+      "author": "PixelLoops",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; m4a transcoded 128k AAC from the WAV masters in raw-assets/extracted/)",
+      "url": "https://pixelloops.itch.io/retro-combat-music-pack-12-chiptune-battle-loops",
+      "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
+      "mappedUse": "S20.3 new surface: wave/combat theme layer.",
+      "files": [{ "path": "audio/music/combat.m4a" }]
+    },
+    {
+      "id": "pixelloops-boss-battle",
+      "title": "Retro Boss Battle Music Pack – Chiptune Loops",
+      "author": "PixelLoops",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; m4a transcoded 128k AAC from the WAV masters in raw-assets/extracted/)",
+      "url": "https://pixelloops.itch.io/retro-chiptune-game-music-pack-12-boss-battle-loops",
+      "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
+      "mappedUse": "S20.3 new surface: boss choreography beds — prebattle tension, miniboss, final-phase boss.",
+      "files": [
+        { "path": "audio/music/prebattle.m4a" },
+        { "path": "audio/music/miniboss.m4a" },
+        { "path": "audio/music/boss.m4a" }
+      ]
+    },
+    {
+      "id": "pixelloops-victory-stingers",
+      "title": "Victory & Level Complete Music Pack – 24 Game Stingers",
+      "author": "PixelLoops",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; MP3 masters copied from raw-assets/extracted/)",
+      "url": "https://pixelloops.itch.io/victory-level-complete-music-pack-24-game-stingers",
+      "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
+      "mappedUse": "S20.3 — replaces the victory and levelUp ToneJS recipes (triumph + levelup stingers).",
+      "files": [{ "path": "audio/stingers/victory.mp3" }, { "path": "audio/stingers/levelup.mp3" }]
+    },
+    {
+      "id": "pixelloops-ui-sfx",
+      "title": "UI Sound Effects Pack – 40 Game Interface Sounds (WAV + MP3)",
+      "author": "PixelLoops",
+      "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; MP3 masters copied from raw-assets/extracted/, one keeper per cue family)",
+      "url": "https://pixelloops.itch.io/ui-sound-effects-pack-40-game-interface-sounds-wav-mp3",
+      "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
+      "mappedUse": "S20.3 — candidates to replace interact/inspect/pickup/coin/chest ToneJS recipes; A/B per cue at wiring time (each family has _02.._04 variants in raw-assets if the _01 keeper loses).",
+      "files": [
+        { "path": "audio/ui/click.mp3" },
+        { "path": "audio/ui/confirm.mp3" },
+        { "path": "audio/ui/cancel.mp3" },
+        { "path": "audio/ui/hover.mp3" },
+        { "path": "audio/ui/error.mp3" },
+        { "path": "audio/ui/coin.mp3" },
+        { "path": "audio/ui/popup.mp3" },
+        { "path": "audio/ui/unlock.mp3" },
+        { "path": "audio/ui/notification.mp3" },
+        { "path": "audio/ui/achievement.mp3" }
+      ]
     }
   ]
 }
