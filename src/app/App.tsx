@@ -347,6 +347,15 @@ function updateExplored(snapshot: UiSnapshot, exploredByMap: Map<string, Set<str
   return new Set(explored);
 }
 
+/** First active boss choreography phase; allocation-free — runs per frame. */
+function activeBossPhase(world: World): string {
+  for (const entity of world.query(IsEnemy, Choreo)) {
+    const phase = entity.get(Choreo)?.phase ?? "";
+    if (phase !== "") return phase;
+  }
+  return "";
+}
+
 function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): UiSnapshot {
   const runtime = world.get(MapRuntime);
   const player = playerOf(world);
@@ -384,9 +393,7 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     playerPose: player
       ? spritePose(world, player, player.get(SpriteRef)?.spriteId ?? "sprite:hero")
       : "idle",
-    bossPhase: [...world.query(IsEnemy, Choreo)]
-      .map((entity) => entity.get(Choreo)?.phase ?? "")
-      .find((phase) => phase !== "") ?? "",
+    bossPhase: activeBossPhase(world),
     questLines: questLogLines(world),
     runtime: {
       cols: runtime?.cols ?? 0,
