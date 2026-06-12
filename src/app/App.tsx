@@ -7,7 +7,7 @@ import {
   type ToneAudioEngine,
 } from "../audio/toneEngine";
 import ui from "../config/ui.json";
-import { classes, engine } from "../lib/config";
+import { classes, engine, type IncrementalUpgradeNode, incremental } from "../lib/config";
 import { getCharacter, getDialogueBank, getMap, getProp, getShop } from "../lib/content/registry";
 import type { DialogueNode, MapDef } from "../lib/content/types";
 import {
@@ -37,9 +37,11 @@ import {
 import { pushEvent } from "../sim/events";
 import { createGameWorld, instantiateMap } from "../sim/factories";
 import {
+  purchaseUpgradeNode,
   restoreIncrementalProgress,
   sanitizeIncrementalProgress,
   syncProgressCoinsFromPlayer,
+  type UpgradePurchaseResult,
 } from "../sim/incrementalProgress";
 import { applyEffects, autoStartQuests, questLogLines } from "../sim/quests";
 import { buyShopListing, type ShopTransactionResult, sellShopListing } from "../sim/shop";
@@ -50,6 +52,7 @@ import {
   Facing,
   FlagState,
   Health,
+  IncrementalProgress,
   type IncrementalProgressState,
   InspectionPulse,
   Interactable,
@@ -69,7 +72,7 @@ import {
 } from "../sim/traits";
 import "./App.css";
 
-type Mode = "landing" | "title" | "playing" | "victory" | "gameover";
+type Mode = "landing" | "title" | "playing" | "results" | "upgrade" | "gameover";
 type Direction = "up" | "down" | "left" | "right";
 
 interface DialogueState {
@@ -160,6 +163,8 @@ interface ShopState {
   selectedIndex: number;
   message: string;
 }
+
+type UpgradeNodeState = "purchased" | "available" | "unaffordable" | "locked";
 
 const EMPTY_SNAPSHOT: UiSnapshot = {
   mapId: "",
@@ -399,6 +404,46 @@ function saveRowFromSnapshot(current: UiSnapshot) {
     }),
     updatedAt: new Date(),
   };
+}
+
+function upgradeTestId(nodeId: string): string {
+  return `upgrade-node-${nodeId.replace(/[^a-z0-9-]/g, "-")}`;
+}
+
+function upgradeNodeState(
+  progress: IncrementalProgressState,
+  node: IncrementalUpgradeNode,
+): UpgradeNodeState {
+  if (progress.purchasedUpgradeIds.includes(node.id)) return "purchased";
+  const reachable = node.prerequisites.every((id) => progress.purchasedUpgradeIds.includes(id));
+  if (!reachable) return "locked";
+  if (progress.coins < (node.cost.coins ?? 0) || progress.roses < (node.cost.roses ?? 0)) {
+    return "unaffordable";
+  }
+  return "available";
+}
+
+function upgradeCostLabel(node: IncrementalUpgradeNode): string {
+  const costs = [
+    node.cost.coins ? `${node.cost.coins}C` : "",
+    node.cost.roses ? `${node.cost.roses}R` : "",
+  ].filter(Boolean);
+  return costs.length ? costs.join(" ") : "Root";
+}
+
+function firstUpgradeableIndex(progress: IncrementalProgressState): number {
+  const available = incremental.upgradeWeb.nodes.findIndex(
+    (node) => upgradeNodeState(progress, node) === "available",
+  );
+  if (available >= 0) return available;
+  const reachableUnpurchased = incremental.upgradeWeb.nodes.findIndex((node) =>
+    ["unaffordable", "available"].includes(upgradeNodeState(progress, node)),
+  );
+  if (reachableUnpurchased >= 0) return reachableUnpurchased;
+  const purchased = incremental.upgradeWeb.nodes.findIndex(
+    (node) => upgradeNodeState(progress, node) === "purchased",
+  );
+  return Math.max(0, purchased);
 }
 
 function nearestDialogue(world: World): NpcDialogueHit | null {
@@ -908,6 +953,125 @@ function ShopPanel({
   );
 }
 
+function ResultsPanel({
+  snapshot,
+  onOpenUpgrade,
+  onStartRun,
+}: {
+  snapshot: UiSnapshot;
+  onOpenUpgrade: () => void;
+  onStartRun: () => void;
+}) {
+  const panelRef = usePanelEntrance("results");
+  const run = snapshot.incrementalProgress.lastRun;
+  return (
+    <section className="results-screen" data-testid="results-screen">
+      <div className="results-panel" data-testid="results-panel" ref={panelRef}>
+        <p className="manuscript-kicker">Princess Rescued</p>
+        <h1>Run Complete</h1>
+        <p className="dialogue-line">
+          The road folds back into the book. Spend the spoils, then tell the tale again.
+        </p>
+        <div className="result-ledger" data-testid="result-ledger">
+          <span>
+            Earned {run?.coinsEarned ?? snapshot.incrementalProgress.currentRunCoinsEarned}C
+          </span>
+          <span>
+            Earned {run?.rosesEarned ?? snapshot.incrementalProgress.currentRunRosesEarned}R
+          </span>
+          <span>Total {snapshot.incrementalProgress.coins}C</span>
+          <span>Total {snapshot.incrementalProgress.roses}R</span>
+          <span>Rescues {snapshot.incrementalProgress.rescueCount}</span>
+        </div>
+        <div className="result-actions">
+          <button
+            className="menu-button"
+            data-testid="open-upgrade-web"
+            type="button"
+            onClick={onOpenUpgrade}
+          >
+            A Upgrade Web
+          </button>
+          <button
+            className="menu-button"
+            data-testid="result-new-run"
+            type="button"
+            onClick={onStartRun}
+          >
+            New Run
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function UpgradeWebPanel({
+  snapshot,
+  selectedIndex,
+  message,
+  onSelect,
+  onBuy,
+  onBack,
+}: {
+  snapshot: UiSnapshot;
+  selectedIndex: number;
+  message: string;
+  onSelect: (index: number) => void;
+  onBuy: () => void;
+  onBack: () => void;
+}) {
+  const panelRef = usePanelEntrance("upgrade-web");
+  const selectedNode =
+    incremental.upgradeWeb.nodes[selectedIndex] ?? incremental.upgradeWeb.nodes[0];
+  return (
+    <section className="upgrade-screen" data-testid="upgrade-screen">
+      <div className="upgrade-panel" data-testid="upgrade-panel" ref={panelRef}>
+        <p className="manuscript-kicker">The Vow Web</p>
+        <h1>Upgrade Web</h1>
+        <div className="upgrade-purse" data-testid="upgrade-purse">
+          <span>{snapshot.incrementalProgress.coins} Coins</span>
+          <span>{snapshot.incrementalProgress.roses} Roses</span>
+        </div>
+        <div className="upgrade-web-list" role="listbox" aria-label="Upgrade Web">
+          {incremental.upgradeWeb.nodes.map((node, index) => {
+            const state = upgradeNodeState(snapshot.incrementalProgress, node);
+            return (
+              <button
+                className="upgrade-node"
+                data-state={state}
+                data-testid={upgradeTestId(node.id)}
+                type="button"
+                key={node.id}
+                aria-pressed={selectedIndex === index}
+                onClick={() => onSelect(index)}
+              >
+                <span className="upgrade-node-label">{node.label}</span>
+                <span>{node.category}</span>
+                <span>{upgradeCostLabel(node)}</span>
+                <span>{state}</span>
+              </button>
+            );
+          })}
+        </div>
+        <div className="upgrade-detail" data-testid="upgrade-detail">
+          <strong>{selectedNode.label}</strong>
+          <span>{upgradeCostLabel(selectedNode)}</span>
+          <p>{message || "Up/down chooses a vow. A buys. B returns to results."}</p>
+        </div>
+        <div className="result-actions">
+          <button className="menu-button" data-testid="upgrade-buy" type="button" onClick={onBuy}>
+            A Buy
+          </button>
+          <button className="menu-button" data-testid="upgrade-back" type="button" onClick={onBack}>
+            B Back
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function VirtualPad({
   setDirection,
   pressA,
@@ -989,6 +1153,8 @@ export function App({
   const [snapshot, setSnapshot] = useState<UiSnapshot>(EMPTY_SNAPSHOT);
   const [dialogue, setDialogue] = useState<DialogueState | null>(null);
   const [shopState, setShopState] = useState<ShopState | null>(null);
+  const [selectedUpgradeIndex, setSelectedUpgradeIndex] = useState(0);
+  const [upgradeMessage, setUpgradeMessage] = useState("");
   const [panelOpen, setPanelOpen] = useState(false);
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(DEFAULT_SETTINGS.muted);
@@ -998,7 +1164,7 @@ export function App({
     classifyDeviceProfile({ platform: "web", model: "browser" }, readViewport()),
   );
   const pausePanelRef = usePanelEntrance(paused && mode === "playing" ? "pause-open" : "pause");
-  const endPanelRef = usePanelEntrance(mode === "victory" || mode === "gameover" ? mode : "end");
+  const endPanelRef = usePanelEntrance(mode === "gameover" ? mode : "end");
   const [audioDebug, setAudioDebug] = useState<AudioDebugState>({
     label: "Tone",
     ready: false,
@@ -1126,6 +1292,7 @@ export function App({
       setPaused(false);
       setPanelOpen(false);
       setShopState(null);
+      setUpgradeMessage("");
       void audioRef.current?.resumeFromGesture().then(() => {
         audioRef.current?.setTheme(getMap(mapId).bgmTheme);
         setAudioDebug(audioRef.current?.debugState() ?? audioDebug);
@@ -1199,6 +1366,29 @@ export function App({
     setMode("gameover");
   }, []);
 
+  const openUpgradeWeb = useCallback(() => {
+    const current = snapshotRef.current.incrementalProgress;
+    setSelectedUpgradeIndex(firstUpgradeableIndex(current));
+    setUpgradeMessage("");
+    setPanelOpen(false);
+    setPaused(false);
+    setMode("upgrade");
+  }, []);
+
+  const startNextRun = useCallback(() => {
+    const current = snapshotRef.current;
+    startGame({
+      classId: current.classId || "knight",
+      gold: current.incrementalProgress.coins,
+      inventory: current.inventory,
+      incrementalProgress: {
+        ...current.incrementalProgress,
+        currentRunCoinsEarned: 0,
+        currentRunRosesEarned: 0,
+      },
+    });
+  }, [startGame]);
+
   const clearOutbox = useCallback(
     (activeWorld: World) => {
       const outbox = activeWorld.get(Outbox);
@@ -1224,9 +1414,9 @@ export function App({
       if (endGame) {
         setPanelOpen(false);
         setPaused(false);
-        setMode(endGame);
+        setMode(endGame === "victory" ? "results" : "gameover");
       }
-      refreshSnapshot(activeWorld);
+      refreshSnapshot(activeWorld, { persist: !!endGame });
     },
     [loadMap, refreshSnapshot, selectedClass],
   );
@@ -1282,6 +1472,27 @@ export function App({
     });
   }, []);
 
+  const moveUpgradeSelection = useCallback((delta: number) => {
+    setSelectedUpgradeIndex((current) => {
+      const count = incremental.upgradeWeb.nodes.length;
+      return (current + delta + count) % count;
+    });
+  }, []);
+
+  const handleUpgradeBuy = useCallback((): UpgradePurchaseResult | null => {
+    if (!world) return null;
+    const node = incremental.upgradeWeb.nodes[selectedUpgradeIndex];
+    if (!node) return null;
+    const result = purchaseUpgradeNode(world, node.id);
+    setUpgradeMessage(result.message);
+    if (result.ok) {
+      const progress = world.get(IncrementalProgress);
+      if (progress) setSelectedUpgradeIndex(firstUpgradeableIndex(progress));
+    }
+    refreshSnapshot(world, { persist: true });
+    return result;
+  }, [refreshSnapshot, selectedUpgradeIndex, world]);
+
   const advanceDialogue = useCallback(() => {
     if (!world || !dialogue) return;
     void audioRef.current?.resumeFromGesture();
@@ -1301,7 +1512,15 @@ export function App({
       setMode("title");
       return;
     }
-    if (mode === "title" || mode === "victory" || mode === "gameover") {
+    if (mode === "results") {
+      openUpgradeWeb();
+      return;
+    }
+    if (mode === "upgrade") {
+      handleUpgradeBuy();
+      return;
+    }
+    if (mode === "title" || mode === "gameover") {
       startGame();
       return;
     }
@@ -1359,7 +1578,9 @@ export function App({
     clearOutbox,
     dialogue,
     handleShopBuy,
+    handleUpgradeBuy,
     mode,
+    openUpgradeWeb,
     paused,
     shopState,
     startGame,
@@ -1379,6 +1600,10 @@ export function App({
 
   const setB = useCallback(
     (pressed: boolean) => {
+      if (mode === "upgrade") {
+        if (pressed) setMode("results");
+        return;
+      }
       if (!world || mode !== "playing" || dialogue || paused) return;
       void audioRef.current?.resumeFromGesture();
       if (shopState) {
@@ -1393,6 +1618,12 @@ export function App({
 
   const setDirection = useCallback(
     (dir: Direction, pressed: boolean) => {
+      if (mode === "upgrade") {
+        inputRef.current[dir] = false;
+        if (pressed && dir === "up") moveUpgradeSelection(-1);
+        if (pressed && dir === "down") moveUpgradeSelection(1);
+        return;
+      }
       if (shopState) {
         inputRef.current[dir] = false;
         if (pressed && dir === "up") moveShopSelection(-1);
@@ -1405,7 +1636,7 @@ export function App({
       }
       inputRef.current[dir] = pressed;
     },
-    [moveShopSelection, paused, shopState],
+    [mode, moveShopSelection, moveUpgradeSelection, paused, shopState],
   );
 
   useEffect(() => {
@@ -1451,7 +1682,7 @@ export function App({
     const frame = (now: number) => {
       const dt = Math.min(engine.maxTimestep, (now - last) / 1000);
       last = now;
-      if (!dialogue && !paused && !shopState) {
+      if (!dialogue && !paused && !shopState && mode === "playing") {
         acc += dt;
         while (acc >= SIM_DT) {
           applyInputToWorld(world, inputRef.current);
@@ -1487,6 +1718,8 @@ export function App({
       "data-purchased-upgrades": snapshot.incrementalProgress.purchasedUpgradeIds.join(","),
       "data-unlocked-classes": snapshot.incrementalProgress.unlockedClassIds.join(","),
       "data-unlocked-route-packs": snapshot.incrementalProgress.unlockedRoutePackIds.join(","),
+      "data-selected-upgrade":
+        incremental.upgradeWeb.nodes[selectedUpgradeIndex]?.id ?? incremental.upgradeWeb.root,
       "data-inventory": JSON.stringify(snapshot.inventory),
       "data-paused": String(paused),
       "data-muted": String(muted),
@@ -1512,6 +1745,7 @@ export function App({
       snapshot.playerX,
       snapshot.playerY,
       snapshot.projectiles,
+      selectedUpgradeIndex,
     ],
   );
 
@@ -1589,6 +1823,26 @@ export function App({
           onClose={() => setShopState(null)}
         />
       )}
+      {mode === "results" && (
+        <ResultsPanel
+          snapshot={snapshot}
+          onOpenUpgrade={openUpgradeWeb}
+          onStartRun={startNextRun}
+        />
+      )}
+      {mode === "upgrade" && (
+        <UpgradeWebPanel
+          snapshot={snapshot}
+          selectedIndex={selectedUpgradeIndex}
+          message={upgradeMessage}
+          onSelect={(index) => {
+            setSelectedUpgradeIndex(index);
+            setUpgradeMessage("");
+          }}
+          onBuy={handleUpgradeBuy}
+          onBack={() => setMode("results")}
+        />
+      )}
       {paused && mode === "playing" && (
         <section className="pause-screen" data-testid="pause-screen">
           <div className="pause-panel" data-testid="pause-panel" ref={pausePanelRef}>
@@ -1604,16 +1858,11 @@ export function App({
           </div>
         </section>
       )}
-      {(mode === "victory" || mode === "gameover") && (
-        <section
-          className="end-screen"
-          data-testid={mode === "victory" ? "victory-screen" : "gameover-screen"}
-        >
+      {mode === "gameover" && (
+        <section className="end-screen" data-testid="gameover-screen">
           <div className="end-panel" data-testid="end-panel" ref={endPanelRef}>
-            <h1>{mode === "victory" ? "VICTORY" : "GAME OVER"}</h1>
-            <p className="dialogue-line">
-              {mode === "victory" ? "The kingdom is saved." : "The old road claims another hero."}
-            </p>
+            <h1>GAME OVER</h1>
+            <p className="dialogue-line">The old road claims another hero.</p>
             <button className="menu-button" type="button" onClick={() => startGame()}>
               A NEW RUN
             </button>

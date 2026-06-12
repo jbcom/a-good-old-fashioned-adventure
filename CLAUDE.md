@@ -1,7 +1,13 @@
 <!-- profile: arcade-game+agent-state+mobile-android+standard-repo v1 -->
-# a-good-old-fashioned-adventure
+# a-good-old-fashioned-adventure Claude Adapter
 
-Claude-specific adapter for the shared repository instructions.
+This file is intentionally Claude-specific. It must not carry shared
+repository instructions, product status, work queues, validation gates, or
+long-running goal state.
+
+For all overall repository instructions, read and follow `AGENTS.md`. Keep
+shared progress, pivots, command lists, validation expectations, and durable
+agent notes there or in the pillar docs that `AGENTS.md` names.
 
 ## Profiles loaded
 
@@ -12,23 +18,16 @@ Claude-specific adapter for the shared repository instructions.
 
 ## Instruction Source
 
-Use `AGENTS.md` as the authoritative repository instruction file. Do not
-duplicate repository status, product direction, commands, gates, or work queue
-here; keeping those in one place prevents Claude-specific context from drifting
-behind the active Codex branch.
-
-Before making changes, read:
-
-- `AGENTS.md`
-- `.agent-state/directive.md`
-- `docs/INCREMENTAL-RESCUE-LOOP.md`
-- `docs/DESIGN.md`
-- `docs/ARCHITECTURE.md`
-- `docs/PLAYER-GOVERNOR.md`
+`AGENTS.md` is the authoritative repository instruction file. Start there
+before making changes. If this file and `AGENTS.md` ever conflict, follow
+`AGENTS.md` and update this file only to preserve Claude-specific behavior.
 
 ## Claude-Specific Notes
 
 - Treat `.claude/gates.json` as Claude-side enforcement for the same gates
   described in `AGENTS.md`.
-- If any instruction here conflicts with `AGENTS.md`, follow `AGENTS.md` and
-  update this file only as a Claude adapter.
+- Do not duplicate the current branch, product direction, goal status, test
+  matrix, or work queue here.
+- When shared instructions need to change, update `AGENTS.md`; when pillar
+  docs need to change, update the relevant `docs/*.md`; when Claude-specific
+  mechanics need to change, update this file.

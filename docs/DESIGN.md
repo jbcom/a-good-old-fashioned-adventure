@@ -34,7 +34,12 @@ chrome, or cyberpunk glass.
 - **Victory / results:** rescuing the princess opens a result panel that shows
   coins, roses, and the next upgrade-web entry point before another run begins.
   The world remains behind the result panel so the player sees where the run
-  ended.
+  ended. A opens the upgrade web; pointer users can press the same visible
+  button.
+- **Upgrade web:** a between-run panel shows connected upgrade nodes as a
+  spiderweb list with cost, category, lock/purchased state, and the current
+  purse. Up/down moves selection. A buys the selected connected node. B
+  returns to results without starting a run.
 - **Game over:** the slideout can retire a run into game over for
   arcade-cabinet and mobile menu parity. A starts another run.
 

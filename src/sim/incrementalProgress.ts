@@ -1,4 +1,5 @@
 import type { World } from "koota";
+import type { IncrementalUpgradeNode } from "../lib/config";
 import { incremental } from "../lib/config";
 import { IncrementalProgress, type IncrementalProgressState, IsPlayer, PlayerGold } from "./traits";
 
@@ -185,4 +186,101 @@ export function grantRunReward(world: World, rewardId: string): void {
 
 export function applyIncrementalEventReward(world: World, eventType: string): void {
   if (eventType === "enemy:defeated") grantRunReward(world, "enemyDefeated");
+}
+
+export interface UpgradePurchaseResult {
+  ok: boolean;
+  nodeId: string;
+  label: string;
+  reason?: "missing" | "purchased" | "locked" | "currency";
+  message: string;
+  coins: number;
+  roses: number;
+}
+
+function nodeById(nodeId: string): IncrementalUpgradeNode | undefined {
+  return incremental.upgradeWeb.nodes.find((node) => node.id === nodeId);
+}
+
+function canReachNode(progress: IncrementalProgressState, node: IncrementalUpgradeNode): boolean {
+  return node.prerequisites.every((id) => progress.purchasedUpgradeIds.includes(id));
+}
+
+function hasCurrency(progress: IncrementalProgressState, node: IncrementalUpgradeNode): boolean {
+  return progress.coins >= (node.cost.coins ?? 0) && progress.roses >= (node.cost.roses ?? 0);
+}
+
+function addUnique(values: string[], value?: string): string[] {
+  if (!value || values.includes(value)) return values;
+  return [...values, value];
+}
+
+export function purchaseUpgradeNode(world: World, nodeId: string): UpgradePurchaseResult {
+  const progress = currentProgress(world);
+  const node = nodeById(nodeId);
+  if (!node) {
+    return {
+      ok: false,
+      nodeId,
+      label: nodeId,
+      reason: "missing",
+      message: "That vow has not been written yet.",
+      coins: progress.coins,
+      roses: progress.roses,
+    };
+  }
+  if (progress.purchasedUpgradeIds.includes(node.id)) {
+    return {
+      ok: false,
+      nodeId: node.id,
+      label: node.label,
+      reason: "purchased",
+      message: `${node.label} is already part of the tale.`,
+      coins: progress.coins,
+      roses: progress.roses,
+    };
+  }
+  if (!canReachNode(progress, node)) {
+    return {
+      ok: false,
+      nodeId: node.id,
+      label: node.label,
+      reason: "locked",
+      message: `${node.label} needs a connected vow first.`,
+      coins: progress.coins,
+      roses: progress.roses,
+    };
+  }
+  if (!hasCurrency(progress, node)) {
+    return {
+      ok: false,
+      nodeId: node.id,
+      label: node.label,
+      reason: "currency",
+      message: `${node.label} asks for ${node.cost.coins ?? 0} coins and ${
+        node.cost.roses ?? 0
+      } roses.`,
+      coins: progress.coins,
+      roses: progress.roses,
+    };
+  }
+
+  const next = {
+    ...progress,
+    coins: progress.coins - (node.cost.coins ?? 0),
+    roses: progress.roses - (node.cost.roses ?? 0),
+    purchasedUpgradeIds: [...progress.purchasedUpgradeIds, node.id],
+    unlockedClassIds: addUnique(progress.unlockedClassIds, node.classId),
+    unlockedRoutePackIds: addUnique(progress.unlockedRoutePackIds, node.routePack),
+  };
+  setProgress(world, next);
+  syncPlayerCoins(world, next.coins);
+  return {
+    ok: true,
+    nodeId: node.id,
+    label: node.label,
+    message: `${node.label} joins the road.`,
+    coins: next.coins,
+    roses: next.roses,
+  };
 }

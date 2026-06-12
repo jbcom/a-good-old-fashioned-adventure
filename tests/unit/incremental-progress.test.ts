@@ -2,7 +2,11 @@ import { describe, expect, it } from "vitest";
 import { incremental, player as playerConfig } from "../../src/lib/config";
 import { pushEvent } from "../../src/sim/events";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
-import { grantRunReward, sanitizeIncrementalProgress } from "../../src/sim/incrementalProgress";
+import {
+  grantRunReward,
+  purchaseUpgradeNode,
+  sanitizeIncrementalProgress,
+} from "../../src/sim/incrementalProgress";
 import { step } from "../../src/sim/tick";
 import { IncrementalProgress, IsPlayer, PlayerGold } from "../../src/sim/traits";
 
@@ -78,5 +82,35 @@ describe("incremental progression state", () => {
       unlockedClassIds: ["knight", "ranger"],
       unlockedRoutePackIds: ["oldwood"],
     });
+  });
+
+  it("buys only connected and affordable upgrade nodes, unlocking classes and route packs", () => {
+    const world = createGameWorld(19);
+    instantiateMap(world, "map:village", { classId: "knight" });
+
+    expect(purchaseUpgradeNode(world, "upgrade:rogue-shortcut")).toMatchObject({
+      ok: false,
+      reason: "locked",
+    });
+    expect(purchaseUpgradeNode(world, "upgrade:oldwood-bend")).toMatchObject({
+      ok: false,
+      reason: "currency",
+    });
+
+    world.set(IncrementalProgress, {
+      ...(world.get(IncrementalProgress) ?? sanitizeIncrementalProgress({}, 0)),
+      coins: 50,
+    });
+    const bought = purchaseUpgradeNode(world, "upgrade:ranger-trail");
+    expect(bought).toMatchObject({
+      ok: true,
+      nodeId: "upgrade:ranger-trail",
+      coins: 0,
+    });
+    expect(world.get(IncrementalProgress)).toMatchObject({
+      purchasedUpgradeIds: ["upgrade:first-vow", "upgrade:ranger-trail"],
+      unlockedClassIds: ["knight", "ranger"],
+    });
+    expect(world.queryFirst(IsPlayer)?.get(PlayerGold)?.value).toBe(0);
   });
 });

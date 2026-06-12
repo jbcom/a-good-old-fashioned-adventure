@@ -55,7 +55,8 @@ function isVisible(element: HTMLElement | null): boolean {
 function inferMode(): string {
   if (isVisible(byTestId("landing-screen"))) return "landing";
   if (isVisible(byTestId("title-screen"))) return "title";
-  if (isVisible(byTestId("victory-screen"))) return "victory";
+  if (isVisible(byTestId("results-screen"))) return "results";
+  if (isVisible(byTestId("upgrade-screen"))) return "upgrade";
   if (isVisible(byTestId("gameover-screen"))) return "gameover";
   if (isVisible(byTestId("world-stage-shell")) || isVisible(byTestId("top-hud"))) return "playing";
   return "unknown";

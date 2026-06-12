@@ -30,11 +30,15 @@ describe("incremental rescue loop contract", () => {
     expect(loopDoc).toContain("roses");
     expect(loopDoc).toContain("spiderweb map");
     expect(loopDoc).toContain("80% gameplay-area rule");
+    expect(loopDoc).toContain("reachable by A/B and directional");
   });
 
   it("repositions current world content as route packs instead of a mandatory linear campaign", () => {
     expect(designDoc).toContain("incremental rescue loop");
     expect(designDoc).toContain("coins, roses");
+    expect(designDoc).toContain("A opens the upgrade web");
+    expect(designDoc).toContain("A buys the selected connected node");
+    expect(designDoc).toContain("returns to results");
     expect(worldDoc).toContain("Incremental Positioning");
     expect(worldDoc).toContain("unlockable route packs");
     expect(worldDoc).toContain("Castle interiors become rose-gated side loops");

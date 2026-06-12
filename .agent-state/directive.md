@@ -108,7 +108,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 ### S9 Incremental rescue pivot
 - [x] S9.1 Pillar docs and config contract: define the mobile incremental princess-rescue loop, coins/roses economy, spiderweb upgrade graph, class unlocks, and route-pack positioning before runtime changes
 - [x] S9.2 Upgrade-web data model: persist coins, roses, rescue count, unlocked classes, unlocked route packs, and purchased upgrade nodes through Drizzle/Capacitor SQLite plus web validation
-- [ ] S9.3 Results and upgrade UI: turn princess rescue into a results panel and between-run spiderweb upgrade screen with public A/B and directional input validation
+- [x] S9.3 Results and upgrade UI: turn princess rescue into a results panel and between-run spiderweb upgrade screen with public A/B and directional input validation
 - [ ] S9.4 Rescue-route runtime slice: build the bottom-to-top core rescue map with knight start, princess top anchor, dragon guard, compact mobile HUD currencies, and playthrough coverage
 - [ ] S9.5 Second-run proof: extend the player governor to rescue, spend a connected upgrade, start another run, and observe the unlocked route/class/enemy change through public controls
 
@@ -174,3 +174,6 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - 2026-06-11 S9 pivot correction: the product loop is now the princess rescue itself. Existing bespoke maps, props, NPCs, shops, interiors, and encounters should become unlockable route packs and upgrade-web branches around a repeatable bottom-to-top rescue run with coins from enemies and rarer roses from princess/objective mastery.
 - 2026-06-11 S9.1 handoff correction: `CLAUDE.md` is Claude-only delegation now; `AGENTS.md` is the repo instruction source and must name the incremental rescue loop so new agents do not follow stale pre-scaffold or linear-campaign context.
 - 2026-06-11 S9.2 persistence correction: keep the save table stable and grow `snapshotJson` first. Runtime now serializes coins, roses, rescue count, purchased upgrade ids, unlocked classes, unlocked route packs, and last-run summary; headed web persistence must prove those fields survive Continue through the real Capacitor repository.
+- 2026-06-11 S9.3 UI target: victory is now a results stop, not an immediate new-run screen. A opens the upgrade web, up/down selects a connected node, A buys, B returns to results, and browser proof must use public input.
+- 2026-06-11 S9.3 results/upgrade correction: the first rescue must expose at least one connected affordable upgrade, or the public-control upgrade screen selects a purchased root node and fails the dopamine loop. The initial rescue now buys into Oldwood Bend, persists the node, and returns to results through B after full headed browser proof.
+- 2026-06-11 Claude adapter correction: keep `CLAUDE.md` as a thin Claude-only file. Shared branch state, product pivots, commands, validation rules, and queue progress belong in `AGENTS.md`, `.agent-state/directive.md`, and pillar docs so Codex and Claude do not fork instructions.

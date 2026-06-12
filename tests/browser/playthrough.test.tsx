@@ -48,6 +48,10 @@ function shell() {
     enemies: Number(el.dataset.enemies ?? 0),
     projectiles: Number(el.dataset.projectiles ?? 0),
     hp: Number(el.dataset.hp ?? 0),
+    coins: Number(el.dataset.coins ?? 0),
+    roses: Number(el.dataset.roses ?? 0),
+    purchasedUpgrades: el.dataset.purchasedUpgrades ?? "",
+    selectedUpgrade: el.dataset.selectedUpgrade ?? "",
     inspectionPulses: Number(el.dataset.inspectionPulses ?? 0),
     lastInspectionProp: el.dataset.lastInspectionProp ?? "",
     lastInspectionAnim: el.dataset.lastInspectionAnim ?? "",
@@ -68,6 +72,11 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 async function pressA(input = userEvent.setup()) {
   await input.keyboard("j");
+  await wait(90);
+}
+
+async function pressB(input = userEvent.setup()) {
+  await input.keyboard("k");
   await wait(90);
 }
 
@@ -672,6 +681,20 @@ it("continues the expanded journey through dungeon victory through public contro
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("kingdom is saved");
   await pressA(input);
 
-  await expect.element(page.getByTestId("victory-screen")).toBeVisible();
+  await expect.element(page.getByTestId("results-screen")).toBeVisible();
+  await expect.element(page.getByTestId("result-ledger")).toHaveTextContent("Earned");
+  expect(shell().mode).toBe("results");
+  expect(shell().roses).toBeGreaterThanOrEqual(3);
+
+  await pressA(input);
+  await expect.element(page.getByTestId("upgrade-screen")).toBeVisible();
+  await expect.element(page.getByTestId("upgrade-purse")).toHaveTextContent("Coins");
+  const selectedBefore = shell().selectedUpgrade;
+  expect(selectedBefore).toMatch(/^upgrade:/);
+  await pressA(input);
+  await expect.element(page.getByTestId("upgrade-detail")).toHaveTextContent("joins the road");
+  await expect.poll(() => shell().purchasedUpgrades).toContain(selectedBefore);
+  await pressB(input);
+  await expect.element(page.getByTestId("results-screen")).toBeVisible();
   await expect.element(page.getByTestId("audio-state")).toHaveTextContent("Tone");
 }, 260_000);

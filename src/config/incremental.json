@@ -52,7 +52,7 @@
         "id": "upgrade:oldwood-bend",
         "label": "Oldwood Bend",
         "category": "route",
-        "cost": { "coins": 35 },
+        "cost": { "coins": 15 },
         "prerequisites": ["upgrade:first-vow"],
         "routePack": "oldwood",
         "unlocks": ["upgrade:thornwood-mastered", "upgrade:rogue-shortcut"]

@@ -83,6 +83,8 @@
 
 .landing-screen,
 .title-screen,
+.results-screen,
+.upgrade-screen,
 .end-screen,
 .pause-screen {
   position: absolute;
@@ -207,6 +209,8 @@
 /* vellum surfaces: illuminated manuscript pages over the diorama */
 .landing-scroll,
 .title-panel,
+.results-panel,
+.upgrade-panel,
 .end-panel,
 .pause-panel {
   position: relative;
@@ -235,6 +239,8 @@
 
 .landing-scroll::before,
 .title-panel::before,
+.results-panel::before,
+.upgrade-panel::before,
 .end-panel::before,
 .pause-panel::before {
   position: absolute;
@@ -247,6 +253,8 @@
 
 .landing-scroll::after,
 .title-panel::after,
+.results-panel::after,
+.upgrade-panel::after,
 .end-panel::after,
 .pause-panel::after {
   position: absolute;
@@ -269,6 +277,8 @@
 
 .landing-scroll h1,
 .title-panel h1,
+.results-panel h1,
+.upgrade-panel h1,
 .end-panel h1,
 .pause-panel h1 {
   position: relative;
@@ -493,7 +503,8 @@
 
 .game-shell[data-paused="true"] .side-panel,
 .game-shell[data-mode="gameover"] .side-panel,
-.game-shell[data-mode="victory"] .side-panel {
+.game-shell[data-mode="results"] .side-panel,
+.game-shell[data-mode="upgrade"] .side-panel {
   pointer-events: none;
   transform: translateX(calc(100% + 18px));
   transition: none;
@@ -647,6 +658,105 @@
   line-height: 1.25;
 }
 
+.result-ledger,
+.upgrade-purse {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+  margin: 18px 0;
+  color: var(--danger-dark);
+  font-family: var(--font-numeric);
+  font-size: 12px;
+}
+
+.upgrade-purse {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(320px, 100%);
+  margin: 0 auto 14px;
+}
+
+.result-ledger span,
+.upgrade-purse span {
+  padding: 8px;
+  border: 1px solid rgba(138, 95, 50, 0.38);
+  background: rgba(249, 236, 202, 0.45);
+}
+
+.result-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.upgrade-web-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  max-height: min(34vh, 260px);
+  overflow: auto;
+}
+
+.upgrade-node {
+  display: grid;
+  gap: 3px;
+  min-height: 86px;
+  padding: 8px;
+  border: 1px solid rgba(138, 95, 50, 0.42);
+  border-radius: 4px;
+  background: rgba(249, 236, 202, 0.42);
+  color: var(--body);
+  font-family: var(--font-numeric);
+  font-size: 11px;
+  text-align: left;
+}
+
+.upgrade-node[aria-pressed="true"] {
+  border-color: var(--danger);
+  box-shadow: inset 0 0 0 1px rgba(159, 47, 40, 0.35);
+  background: rgba(255, 244, 208, 0.68);
+}
+
+.upgrade-node[data-state="purchased"] {
+  color: var(--signal);
+}
+
+.upgrade-node[data-state="locked"] {
+  opacity: 0.62;
+}
+
+.upgrade-node-label {
+  color: var(--text);
+  font-family: var(--font-display);
+  font-size: 16px;
+  line-height: 1.05;
+}
+
+.upgrade-detail {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px;
+  border: 1px solid rgba(138, 95, 50, 0.34);
+  background: rgba(249, 236, 202, 0.42);
+  text-align: left;
+}
+
+.upgrade-detail strong {
+  color: var(--danger-dark);
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 400;
+}
+
+.upgrade-detail p {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--body);
+  font-size: 13px;
+}
+
 .choice-row {
   display: flex;
   gap: 10px;
@@ -735,14 +845,23 @@
 @media (max-width: 760px) {
   .landing-scroll h1,
   .title-panel h1,
+  .results-panel h1,
+  .upgrade-panel h1,
   .end-panel h1,
   .pause-panel h1 {
     font-size: 34px;
   }
 
   .landing-actions,
-  .class-row {
+  .class-row,
+  .result-actions,
+  .result-ledger,
+  .upgrade-web-list {
     grid-template-columns: 1fr;
+  }
+
+  .upgrade-web-list {
+    max-height: 32vh;
   }
 
   .top-hud {

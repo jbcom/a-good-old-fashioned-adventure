@@ -101,5 +101,7 @@ agree:
   language.
 - Browser tests validate any visible loop change through public A/B and
   directional controls.
+- The results panel and upgrade web must be reachable by A/B and directional
+  input only; pointer buttons are mirrors, not a separate path.
 - The playthrough governor eventually plays a full rescue run, spends rewards
   on the upgrade web, starts a second run, and observes the unlocked change.
