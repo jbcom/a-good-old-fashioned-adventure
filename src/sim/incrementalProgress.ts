@@ -34,6 +34,24 @@ export function purchasedRank(
   return Math.min(nodeRanks(node), Math.max(1, integer(progress.upgradeRanks[node.id], 1)));
 }
 
+/**
+ * Rail-command roster (docs/RAIL-COMMAND.md §sim model): every unlocked
+ * class fields one unit, plus whatever unitCount ranks the DAG added.
+ */
+export function rosterFor(
+  progress: IncrementalProgressState,
+): { classId: string; count: number }[] {
+  return progress.unlockedClassIds.map((classId) => {
+    let count = 1;
+    for (const node of incremental.upgradeGraph.nodes) {
+      const perRank = node.effect?.unitCount ?? 0;
+      if (!perRank || node.classId !== classId) continue;
+      count += perRank * purchasedRank(progress, node);
+    }
+    return { classId, count };
+  });
+}
+
 export function upgradeMaxHpBonus(
   progress: IncrementalProgressState | undefined,
   classId: string,

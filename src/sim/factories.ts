@@ -43,6 +43,7 @@ import {
   PropRef,
   QuestLog,
   RngState,
+  RosterPlaced,
   ShieldState,
   Speed,
   SpriteRef,
@@ -67,6 +68,7 @@ export function createGameWorld(seed = 1): World {
     FxStats({ spawned: 0 }),
     HitStop({ left: 0 }),
     WaveState({ wave: 0, engaged: false }),
+    RosterPlaced({ counts: {} }),
     Outbox({ sfx: [], dialogue: null, mapLoad: null, endGame: null }),
   );
   return world;

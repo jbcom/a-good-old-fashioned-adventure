@@ -1020,3 +1020,49 @@
 .game-shell[data-device-profile="phone"] .top-hud {
   min-height: 34px;
 }
+
+/* rail-command toolbox: the single gameplay control surface
+   (docs/RAIL-COMMAND.md §controls) */
+.unit-toolbox {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid rgba(138, 95, 50, 0.5);
+  border-radius: 8px;
+  background: rgba(249, 236, 202, 0.82);
+  z-index: 6;
+}
+
+.toolbox-panel {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  width: 56px;
+  padding: 6px 4px;
+  border: 1px solid rgba(138, 95, 50, 0.45);
+  border-radius: 6px;
+  background: rgba(255, 244, 208, 0.7);
+  touch-action: none;
+  cursor: grab;
+}
+
+.toolbox-panel:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.toolbox-panel .class-thumb {
+  width: 32px;
+  height: 32px;
+  image-rendering: pixelated;
+}
+
+.toolbox-count {
+  font-family: var(--font-numeric);
+  font-size: 11px;
+  color: var(--danger-dark);
+}

@@ -108,6 +108,8 @@ export const HitStop = trait({ left: 0 });
  */
 export const WaveState = trait({ wave: 0, engaged: false });
 export const WaveSpawned = trait({ wave: 0 });
+/** Units deployed this run, by class — roster spending is sim state. */
+export const RosterPlaced = trait(() => ({ counts: {} as Record<string, number> }));
 export const CameraState = trait({ x: 0, y: 0, shake: 0 });
 
 export interface GameEvent {

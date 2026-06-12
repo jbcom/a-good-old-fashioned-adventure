@@ -45,6 +45,7 @@ import {
 import { spriteCanvas } from "../render/atlas";
 import { GameStage } from "../render/GameStage";
 import { spritePose } from "../render/pose";
+import { deployUnit, placedCounts, remainingFor } from "../sim/deploy";
 import {
   emitDialogueChoice,
   emitDialogueSeen,
@@ -60,6 +61,7 @@ import {
   purchaseUpgradeNode,
   rankCost,
   restoreIncrementalProgress,
+  rosterFor,
   sanitizeIncrementalProgress,
   type UpgradePurchaseResult,
 } from "../sim/incrementalProgress";
@@ -82,6 +84,7 @@ import {
   IsEnemy,
   IsNpc,
   IsPlayer,
+  IsUnit,
   Level,
   MapRuntime,
   MoveIntent,
@@ -139,6 +142,8 @@ interface UiSnapshot {
   playerY: number;
   enemies: number;
   projectiles: number;
+  units: number;
+  unitsPlaced: Record<string, number>;
   fxSpawned: number;
   playerPose: string;
   bossPhase: string;
@@ -204,6 +209,8 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   playerY: 0,
   enemies: 0,
   projectiles: 0,
+  units: 0,
+  unitsPlaced: {},
   fxSpawned: 0,
   playerPose: "idle",
   bossPhase: "",
@@ -388,6 +395,8 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     playerY: transform?.y ?? 0,
     enemies: [...world.query(IsEnemy)].length,
     projectiles: [...world.query(Projectile)].length,
+    units: [...world.query(IsUnit)].length,
+    unitsPlaced: { ...placedCounts(world) },
     fxSpawned: world.get(FxStats)?.spawned ?? 0,
     playerPose: player
       ? spritePose(world, player, player.get(SpriteRef)?.spriteId ?? "sprite:hero")
@@ -1220,7 +1229,9 @@ function UpgradeWebPanel({
     },
     onPointerDown: (event: ReactPointerEvent) => {
       if (!event.isPrimary) return; // single-active-pointer: secondary touches are ignored
-      (event.currentTarget as Element).releasePointerCapture?.(event.pointerId);
+      try {
+        (event.currentTarget as Element).releasePointerCapture(event.pointerId);
+      } catch {}
       clearHold();
       holdTimer.current = window.setTimeout(() => onSelect(index), UPGRADE_HOLD_MS);
     },
@@ -1294,6 +1305,50 @@ function UpgradeWebPanel({
         </div>
       </div>
     </section>
+  );
+}
+
+function UnitToolbox({
+  world,
+  snapshot,
+  onArm,
+  onDisarm,
+}: {
+  world: World;
+  snapshot: UiSnapshot;
+  onArm: (classId: string) => void;
+  onDisarm: () => void;
+}) {
+  const roster = rosterFor(snapshot.incrementalProgress);
+  return (
+    <div className="unit-toolbox" data-testid="unit-toolbox">
+      {roster.map(({ classId }) => {
+        const remaining = remainingFor(world, classId);
+        return (
+          <button
+            className="toolbox-panel"
+            data-testid={`toolbox-panel-${classId}`}
+            data-remaining={remaining}
+            type="button"
+            key={classId}
+            aria-label={`Deploy ${classId} (${remaining} left)`}
+            disabled={remaining <= 0}
+            onPointerDown={(event) => {
+              // releasing capture lets the drop land on the stage; synthetic
+              // pointers have no capture and would throw InvalidPointerId
+              try {
+                (event.currentTarget as Element).releasePointerCapture(event.pointerId);
+              } catch {}
+              onArm(classId);
+            }}
+            onPointerUp={onDisarm}
+          >
+            <ClassSpriteThumb classId={classId} />
+            <span className="toolbox-count">{remaining}</span>
+          </button>
+        );
+      })}
+    </div>
   );
 }
 
@@ -1421,7 +1476,8 @@ export function App({
   });
   const inputRef = useRef<InputState>(emptyInput());
   /** input observability: journeys assert presses actually reach the sim */
-  const inputStats = useRef({ aPresses: 0, attackCalls: 0 });
+  const inputStats = useRef({ aPresses: 0, attackCalls: 0, drops: 0, deploys: 0, dragArms: 0 });
+  const dragClassRef = useRef<string | null>(null);
   const snapshotRef = useRef<UiSnapshot>(EMPTY_SNAPSHOT);
   const audioRef = useRef<ToneAudioEngine | null>(null);
   const mapIntroSeenRef = useRef(new Set<string>());
@@ -1970,8 +2026,12 @@ export function App({
       "data-fx-spawned": String(snapshot.fxSpawned),
       "data-player-pose": snapshot.playerPose,
       "data-boss-phase": snapshot.bossPhase,
+      "data-units": String(snapshot.units),
       "data-a-presses": String(inputStats.current.aPresses),
       "data-attack-calls": String(inputStats.current.attackCalls),
+      "data-drops": String(inputStats.current.drops),
+      "data-drag-arms": String(inputStats.current.dragArms),
+      "data-deploys": String(inputStats.current.deploys),
       "data-max-hp": String(snapshot.maxHp),
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
       "data-coins": String(snapshot.incrementalProgress.coins),
@@ -2014,6 +2074,7 @@ export function App({
       snapshot.playerX,
       snapshot.playerY,
       snapshot.projectiles,
+      snapshot.units,
       selectedUpgradeIndex,
     ],
   );
@@ -2059,7 +2120,18 @@ export function App({
         />
       )}
       {world && (
-        <div className="world-stage-shell" data-testid="world-stage-shell">
+        <div
+          className="world-stage-shell"
+          data-testid="world-stage-shell"
+          onPointerUp={() => {
+            inputStats.current.drops += 1;
+            const classId = dragClassRef.current;
+            dragClassRef.current = null;
+            if (!classId || mode !== "playing") return;
+            if (deployUnit(world, classId)) inputStats.current.deploys += 1;
+            refreshSnapshot(world);
+          }}
+        >
           <GameStage world={world} />
         </div>
       )}
@@ -2085,6 +2157,19 @@ export function App({
             onRetire={retireRun}
           />
           <VirtualPad setDirection={setDirection} pressA={pressA} setB={setB} />
+          {mode === "playing" && (
+            <UnitToolbox
+              world={world}
+              snapshot={snapshot}
+              onArm={(classId) => {
+                dragClassRef.current = classId;
+                inputStats.current.dragArms += 1;
+              }}
+              onDisarm={() => {
+                dragClassRef.current = null;
+              }}
+            />
+          )}
         </>
       )}
       {dialogue && <DialogueBox dialogue={dialogue} onAdvance={advanceDialogue} />}
