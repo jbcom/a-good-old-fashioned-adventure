@@ -99,8 +99,8 @@ describe("S6 exterior route generation", () => {
   it("stages the castle approach with a stone road and gate apron", () => {
     expect(semanticTile(castleApproach[19][4])).toBe("tile:castle-road");
     expect(semanticTile(castleApproach[19][70])).toBe("tile:castle-road");
-    expect(castleApproach[14][61]).toBe("tile:stone-floor");
-    expect(castleApproach[6][63]).toBe("tile:mountain");
+    expect(semanticTile(castleApproach[14][61])).toBe("tile:stone-floor");
+    expect(semanticTile(castleApproach[6][63])).toBe("tile:mountain");
   });
 
   it("lays the Sunken Road as a desert threshold with old stone and wash", () => {
@@ -108,7 +108,7 @@ describe("S6 exterior route generation", () => {
     expect(semanticTile(sunkenRoad[19][52])).toBe("tile:path");
     expect(semanticTile(sunkenRoad[18][42])).toBe("tile:castle-road");
     expect(semanticTile(sunkenRoad[19][22])).toBe("tile:path");
-    expect(sunkenRoad[10][18]).toBe("tile:water");
+    expect(semanticTile(sunkenRoad[10][18])).toBe("tile:water");
     expect(semanticTile(sunkenRoad[18][30])).toBe("tile:castle-road");
   });
 });

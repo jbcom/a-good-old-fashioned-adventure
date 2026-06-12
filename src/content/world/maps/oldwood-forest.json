@@ -96,6 +96,18 @@
       "chunk": { "w": 2, "h": 2 },
       "seed": 205,
       "note": "mossy side-verge pockets by the last lantern"
+    },
+    {
+      "baseTile": "tile:mountain",
+      "variants": [
+        "tile:mountain",
+        "tile:mountain-crag",
+        "tile:mountain-scree",
+        "tile:mountain-ledge"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 505,
+      "note": "old ridge wall with crags and ledges"
     }
   ],
   "playerSpawn": { "x": 48, "y": 304 },

@@ -4,7 +4,9 @@
 .agent-state/.indexed-sha
 .agent-state/.last-stop-sha
 .agent-state/.last-compaction
+.agent-state/.last-stop-fingerprint
 .agent-state/batch.json
+.claude/state/
 
 # deps / build (arcade-game dialect)
 node_modules/
@@ -15,6 +17,7 @@ tsconfig.tsbuildinfo
 # screenshot scratch output from browser tests
 tests/browser/*.png
 tests/browser/__screenshots__/
+.vitest-attachments/
 .playwright-cli/
 output/
 output/playwright/

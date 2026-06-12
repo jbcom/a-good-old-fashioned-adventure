@@ -5,7 +5,7 @@ grid 24x18
 anchor 12,18
 solid false
 state default
-channels X,B,b,Y,O,C,D,E,e,g
+channels X,B,b,Y,O,C,D,E,e,g,G
 palette palette:base
 traits Transform,Sprite,DepthSorted
 rows
@@ -91,4 +91,64 @@ rows
 ............................
 ............................
 ............................
+@end
+
+@prop prop:wyrm-rib-stake
+grid 20x26
+anchor 10,26
+solid false
+state default
+channels X,W,C,c,B,b,d,D
+palette palette:base
+traits Transform,Sprite,DepthSorted
+rows
+....................
+........XXXX........
+......XXWWWWXX......
+.....XWWCCCCWWX.....
+....XWWCX..XCWWX....
+...XWWCX....XCWWX...
+...XWCX......XCWX...
+..XWCX........XCWX..
+..XWCX........XCWX..
+..XWCcX......XcCWX..
+..XWCX........XCWX..
+.XWCX..........XCWX.
+.XWCX..........XCWX.
+.XBBBX........XBBBX.
+.XbBbX........XbBbX.
+.XWCX..........XCWX.
+.XWCcX........XcCWX.
+.XWCX..........XCWX.
+XWCX............XCWX
+XWCX............XCWX
+XWCcX..........XcCWX
+XWCX............XCWX
+XDdX............XdDX
+DDdDX..........XDdDD
+.DDX............XDD.
+....................
+@end
+
+@prop prop:salvage-rope-coil
+grid 16x12
+anchor 8,12
+solid false
+state default
+channels X,B,b,C,c
+palette palette:base
+traits Transform,Sprite,DepthSorted
+rows
+................
+....XXXXXX......
+..XXBBBBBBXX....
+.XBBbBBbBBBBX...
+.XBbBBBBbBBbX...
+.XBBbBBBBbBBX...
+.XbBBBBbBBBbX...
+..XBBbBBBBXX....
+...XXBBBBXXCX...
+.....XXXX..XcCX.
+............XCX.
+................
 @end

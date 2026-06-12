@@ -729,6 +729,30 @@ stretch playable:
 5. Prove the route-window budget through unit tests, headed browser evidence,
    and public A-button dialogue validation.
 
+## Twenty-Eighth Content-Depth Slice
+
+The second composition budget pass closes the terrain-family gaps the first
+pass left open and gives the route's emptiest window an authored verb:
+
+1. Tighten the route-window dominant-tile cap from 0.88 to 0.84. The four
+   windows that leaned hardest on one semantic surface — Deep Forest's
+   fern-mender track and last-lantern threshold, the Sunken Road wash, and
+   Aveline's west wayside on the Castle Approach — gain authored secondary
+   terrain instead of a looser budget.
+2. Extend terrain families to every remaining repeated exterior surface:
+   `tile:mountain` border crags, scree, and ledges across all five mandatory
+   maps; `tile:water` glints, reeds, and deep pools on the Sunken Road wash;
+   and `tile:stone-floor` cracked, mossy, and worn paving on the Castle
+   Approach gatehouse threshold. Each family ships four hand-authored 16x16
+   `.pix` variants painted by deterministic chunk noise.
+3. Turn the Sunken Road wash-and-sandwyrm-wreck window into a worked beat with
+   `char:sunken-road-wreck-picker`, `quest:sunken-road-wreck-picker`, a public
+   A-button greeting that sets `flag:sunken-road-wreck-picked`, and salvage
+   props in the player's depth band so the widest window on the route reads as
+   a working salvage site, not justified emptiness.
+4. Prove the tightened budget through unit tests, headed browser evidence, and
+   public A-button dialogue validation.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map

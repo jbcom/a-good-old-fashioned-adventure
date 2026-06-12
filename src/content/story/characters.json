@@ -199,6 +199,15 @@
       "dialogue": "dlgbank:sunken-courier",
       "note": "Moving Sunken Road courier who turns the shaded layby into a route encounter."
     },
+    "char:sunken-road-wreck-picker": {
+      "name": "Petch Marrow",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:desert-pilgrim",
+      "portraitColor": "#b08a4f",
+      "dialogue": "dlgbank:sunken-road-wreck-picker",
+      "note": "Wreck-picker working the sandwyrm wash who turns the widest Sunken Road window into a public A-button route verb."
+    },
     "char:sunken-cart-ledger": {
       "name": "Splintered Cart Ledger",
       "role": "voice",

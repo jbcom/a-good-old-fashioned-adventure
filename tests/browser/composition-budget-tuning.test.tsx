@@ -53,6 +53,22 @@ async function pressNearLanternKeeper(governor: PlayerGovernor) {
   throw new Error(`Caddoc Wick dialogue did not open: ${governor.perceive().dialogueText}`);
 }
 
+async function pressNearWreckPicker(governor: PlayerGovernor) {
+  const points = [
+    [176, 296],
+    [216, 296],
+    [216, 320],
+    [160, 320],
+  ] as const;
+  for (const [x, y] of points) {
+    await governor.reachPoint(x, y, { tolerance: 22, maxSteps: 32 });
+    await governor.press("a");
+    await wait(120);
+    if (governor.perceive().dialogueText.includes("Petch Marrow")) return;
+  }
+  throw new Error(`Petch Marrow dialogue did not open: ${governor.perceive().dialogueText}`);
+}
+
 it("turns Oldwood's last-lantern window into a public-control route verb", async () => {
   await page.viewport(1280, 720);
   await wait(100);
@@ -98,6 +114,53 @@ it("turns Oldwood's last-lantern window into a public-control route verb", async
 
   await governor.press("a");
   await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("Caddoc Wick");
+}, 50_000);
+
+it("turns the sunken wash wreck window into a public-control route verb", async () => {
+  await page.viewport(1280, 720);
+  await wait(100);
+
+  const repository = new MemorySaveRepository();
+  await repository.upsertSlot({
+    id: 1,
+    classId: "ranger",
+    mapId: "map:sunken-road",
+    playerX: 96,
+    playerY: 304,
+    level: 1,
+    hp: 100,
+    maxHp: 100,
+    questSummary: "Meet the wreck picker",
+    snapshotJson: "{}",
+    updatedAt: new Date("2026-06-11T19:20:00Z"),
+  });
+
+  mountApp(repository);
+  const governor = new PlayerGovernor();
+  await expect.element(page.getByTestId("landing-screen")).toBeVisible();
+  await governor.click("continue-button");
+  await expect.poll(() => governor.perceive().mapName).toBe("Sunken Road");
+  await expect.element(page.getByTestId("quest-log")).toHaveTextContent("Petch Marrow");
+
+  await governor.reachPoint(176, 296, { tolerance: 22, maxSteps: 32 });
+  await pressNearWreckPicker(governor);
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("Petch Marrow");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("wreck");
+  const desktopPath = await page.screenshot({
+    path: "../../docs/evidence/sunken-wash-salvage.png",
+  });
+  expect(desktopPath).toBeTruthy();
+
+  await page.viewport(390, 844);
+  await wait(250);
+  const phonePath = await page.screenshot({
+    path: "../../docs/evidence/sunken-wash-salvage-phone.png",
+  });
+  expect(phonePath).toBeTruthy();
+  await page.viewport(1280, 720);
+
+  await governor.press("a");
+  await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("Petch Marrow");
 }, 50_000);
 
 it("frames the Deep Forest threshold props after removing open-space reliance", async () => {

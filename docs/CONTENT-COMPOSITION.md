@@ -31,9 +31,11 @@ Each route window must name:
 ## Tile Variation
 
 No ordinary route window may be a carpet of one tile. In tests, the dominant
-tile in a current mandatory exterior window must stay below the configured cap.
-This catches problems like thirty grass or sand cells in a row with no authored
-counterpoint.
+tile in a current mandatory exterior window must stay below the configured cap
+(tightened from 0.88 to 0.84 in the second budget pass). This catches problems
+like thirty grass or sand cells in a row with no authored counterpoint. When a
+window exceeds the cap, the fix is authored secondary terrain inside the zone —
+a clearing, a paving fragment, a wash edge — never a looser budget.
 
 That rule is necessary but not sufficient. A route can still look primitive if
 the same base tile is repeated with only a few accent pixels. Mandatory exterior
@@ -41,7 +43,11 @@ terrain must therefore use authored terrain families:
 
 - A terrain family has one semantic base tile such as `tile:grass`,
   `tile:path`, `tile:leaf-litter`, `tile:sand`, `tile:castle-road`, or
-  `tile:village-cobble`.
+  `tile:village-cobble`. Since the second budget pass this includes the
+  repeated border and hazard surfaces too: `tile:mountain` (crags, scree,
+  ledges), `tile:water` (glints, reeds, deep pools), and `tile:stone-floor`
+  (cracked, mossy, worn paving). A surface that repeats on a mandatory
+  exterior map is in scope no matter whether the player can walk on it.
 - Each family used across a current mandatory exterior route needs four to
   eight hand-authored 16x16 variants. Variants may share collision semantics,
   but they need distinct pixel shapes: tufts, roots, stones, ruts, moss seams,

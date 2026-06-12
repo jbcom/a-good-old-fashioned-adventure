@@ -37,6 +37,7 @@ describe("createGameWorld", () => {
       "flag:stable-oats-bought": false,
       "flag:sunken-cart-read": false,
       "flag:sunken-courier-warned": false,
+      "flag:sunken-road-wreck-picked": false,
       "flag:tavern-song-learned": false,
       "flag:village-letter-basket-read": false,
     });

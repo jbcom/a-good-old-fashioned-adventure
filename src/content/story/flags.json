@@ -50,6 +50,10 @@
       "default": false,
       "description": "The player has rung Caddoc Wick's road bell at Oldwood's last lantern."
     },
+    "flag:sunken-road-wreck-picked": {
+      "default": false,
+      "description": "The player has helped Petch Marrow lash the salvage sled at the sandwyrm wreck."
+    },
     "flag:oldwood-waystone-read": {
       "default": false,
       "description": "The player has read the mossy waystone at the first Oldwood bend."

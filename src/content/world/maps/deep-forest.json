@@ -25,7 +25,25 @@
       "x1": 57,
       "note": "lower animal track"
     },
-    { "op": "col-span", "tile": "tile:path", "x": 46, "y0": 13, "y1": 25, "note": "hermit track" }
+    { "op": "col-span", "tile": "tile:path", "x": 46, "y0": 13, "y1": 25, "note": "hermit track" },
+    {
+      "op": "region",
+      "tile": "tile:grass",
+      "x0": 5,
+      "x1": 7,
+      "y0": 15,
+      "y1": 16,
+      "note": "fern clearing beside the mender's track"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass",
+      "x0": 60,
+      "x1": 62,
+      "y0": 23,
+      "y1": 24,
+      "note": "moss clearing before the Sunken Road threshold"
+    }
   ],
   "terrainVariants": [
     {
@@ -46,6 +64,25 @@
       "chunk": { "w": 4, "h": 2 },
       "seed": 302,
       "note": "animal-track chunks instead of one path strip"
+    },
+    {
+      "baseTile": "tile:grass",
+      "variants": ["tile:grass", "tile:grass-tufts", "tile:grass-flowers", "tile:grass-roots"],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 503,
+      "note": "fern clearings breaking the leaf-litter carpet"
+    },
+    {
+      "baseTile": "tile:mountain",
+      "variants": [
+        "tile:mountain",
+        "tile:mountain-crag",
+        "tile:mountain-scree",
+        "tile:mountain-ledge"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 506,
+      "note": "deep gorge walls with scree and ledges"
     }
   ],
   "playerSpawn": { "x": 48, "y": 304 },

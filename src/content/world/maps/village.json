@@ -158,6 +158,18 @@
       "chunk": { "w": 3, "h": 2 },
       "seed": 103,
       "note": "domestic paving with worn and mossed pockets"
+    },
+    {
+      "baseTile": "tile:mountain",
+      "variants": [
+        "tile:mountain",
+        "tile:mountain-crag",
+        "tile:mountain-scree",
+        "tile:mountain-ledge"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 504,
+      "note": "valley rim crags and scree around the village"
     }
   ],
   "playerSpawn": { "x": 96, "y": 272 },

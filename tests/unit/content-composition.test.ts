@@ -18,7 +18,7 @@ const mandatoryExteriorMaps = [
   "map:castle-approach",
 ] as const;
 
-const dominantTileCap = 0.88;
+const dominantTileCap = 0.84;
 
 interface TerrainVariantRule {
   baseTile: string;
@@ -30,11 +30,11 @@ interface TerrainVariantRule {
 type VariantMapDef = MapDef & { terrainVariants?: TerrainVariantRule[] };
 
 const requiredTerrainFamilies: Record<(typeof mandatoryExteriorMaps)[number], string[]> = {
-  "map:village": ["tile:grass", "tile:path", "tile:village-cobble"],
-  "map:oldwood-forest": ["tile:leaf-litter", "tile:path", "tile:grass"],
-  "map:deep-forest": ["tile:leaf-litter", "tile:path"],
-  "map:sunken-road": ["tile:sand", "tile:path", "tile:castle-road"],
-  "map:castle-approach": ["tile:grass", "tile:castle-road"],
+  "map:village": ["tile:grass", "tile:path", "tile:village-cobble", "tile:mountain"],
+  "map:oldwood-forest": ["tile:leaf-litter", "tile:path", "tile:grass", "tile:mountain"],
+  "map:deep-forest": ["tile:leaf-litter", "tile:path", "tile:mountain"],
+  "map:sunken-road": ["tile:sand", "tile:path", "tile:castle-road", "tile:mountain", "tile:water"],
+  "map:castle-approach": ["tile:grass", "tile:castle-road", "tile:mountain", "tile:stone-floor"],
 };
 
 function documentFromRepo(path: string): string {
@@ -109,6 +109,10 @@ describe("content composition rules", () => {
     expect(compact).toContain("terrainVariants");
     expect(compact).toContain("four to eight");
     expect(compact).toContain("deterministic noise");
+    expect(compact).toContain("tile:mountain");
+    expect(compact).toContain("tile:water");
+    expect(compact).toContain("tile:stone-floor");
+    expect(compact).toContain("never a looser budget");
     expect(doc).toContain("major anchor");
     expect(doc).toContain("minor props");
     expect(doc).toContain("openReason");

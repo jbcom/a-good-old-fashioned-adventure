@@ -570,6 +570,75 @@ cCCCCCCCCCCCCCCc
 cccccccccccccccc
 @end
 
+@tile tile:mountain-crag
+variantOf tile:mountain
+solid true
+traits Tile,Solid
+rows
+cccccccccccccccc
+cccCcccccccccccc
+ccCWCcccccCCcccc
+ccCCCccccCCCCccc
+cCCCCCcccCCCCccc
+cCCcCCcccCCcCCcc
+cCCcCCccCCCcCCcc
+cCCccCCcCCccCCCc
+cCCccCCCCCcccCCc
+cCCcccCCCCcccCCc
+cCCcccccCCcccCCc
+cCCccccccCCccCCc
+cCCccccccCCccCCc
+cCCCCCCCCCCCCCCc
+cccccccccccccccc
+cccccccccccccccc
+@end
+
+@tile tile:mountain-scree
+variantOf tile:mountain
+solid true
+traits Tile,Solid
+rows
+cccccccccccccccc
+cccccccccccccccc
+ccccccCCcccccccc
+cccccCCCCccccccc
+ccCCcCCCCcccCCcc
+ccCCcccCCcccCCcc
+cccccCCccccccccc
+ccCCCcccccCCCccc
+ccCCCccCCcCCCccc
+cccccccCCccccccc
+ccccCCcccccccccc
+cccCCCCccccCCccc
+cccCCCCcccCCCCcc
+ccCCCCCCccCCCCcc
+cCCCCCCCCCCCCCCc
+cccccccccccccccc
+@end
+
+@tile tile:mountain-ledge
+variantOf tile:mountain
+solid true
+traits Tile,Solid
+rows
+cccccccccccccccc
+cCCCCCCCCCCCCCCc
+cCCCCCCCCCCCCCCc
+ccccCCccccCCcccc
+cccccccccccccccc
+cCCCCCCCCCCCCccc
+cCCCCCCCCCCCCccc
+ccccCCccccCCcccc
+cccccccccccccccc
+cccCCCCCCCCCCCCc
+cccCCCCCCCCCCCCc
+ccccCCccccCCcccc
+cccccccccccccccc
+cCCCCCCCCCCCCCCc
+cCCCCCCCCCCCCCCc
+cccccccccccccccc
+@end
+
 @tile tile:water
 solid true
 traits Tile,Solid,AnimatedTile
@@ -589,6 +658,75 @@ llaallllllLLLLll
 llLLLLllllllllll
 llllllllllllclll
 lllllaaallllllll
+llllllllllllllll
+@end
+
+@tile tile:water-glint
+variantOf tile:water
+solid true
+traits Tile,Solid,AnimatedTile
+rows
+llllllllllllllll
+llllLWLlllllllll
+llllllllllllllll
+lllllllllllLWLll
+llllllllllllllll
+llLWLlllllllllll
+lllllllllllllcll
+llllllllLWLlllll
+llllllllllllllll
+lllaaLWLllllllll
+llllllllllllllll
+llllllllllllLWLl
+llclllllllllllll
+llllllLWLlllllll
+llllllllllalllll
+llllllllllllllll
+@end
+
+@tile tile:water-reeds
+variantOf tile:water
+solid true
+traits Tile,Solid,AnimatedTile
+rows
+llllllllllllllll
+llllElllllllllll
+llllElllllElllll
+lllaEallllElllll
+llllEllllaEallll
+llllllllllElllll
+llElllllllllllll
+llEllllllllEllll
+laEallllllaEalll
+llElllllllllElll
+lllllllEllllllll
+lllllllEllllllll
+llllllaEalllllll
+lllllllEllllllll
+llllllllllllllll
+llllllllllllllll
+@end
+
+@tile tile:water-deep
+variantOf tile:water
+solid true
+traits Tile,Solid,AnimatedTile
+rows
+llllllllllllllll
+llllllllllllllll
+lllllcllllllllll
+llllllllllllllll
+llllllllllclllll
+lllaalllllllllll
+llllllllllllllll
+llllllllllllllll
+llclllllllllllll
+llllllllllllclll
+llllllllllllllll
+llllllaallllllll
+llllllllllllllll
+lllllllllcllllll
+llllllllllllllll
 llllllllllllllll
 @end
 
@@ -633,6 +771,75 @@ kcccckkkkcCCckkk
 kkkkkkkkkcccckkk
 kkkkcccckkkkkkkk
 kkkkcCCckkkkcccc
+kkkkkkkkkkkkkkkk
+@end
+
+@tile tile:stone-floor-cracked
+variantOf tile:stone-floor
+solid false
+traits Tile
+rows
+kkkkkkkkkkkkkkkk
+kcccckkkkkkkkkkk
+kcCXckkkkcccckkk
+kccXckkkkcCCckkk
+kkkXkkkkkcccckkk
+kkkkcccckkkkkkkk
+kkkkcCCckkkkcccc
+kkkkccXckkkkcCXc
+kkkkkkXkkkkkccXc
+kcccckkXkkkkkkkk
+kcCCckkkkcccckkk
+kcccckkkkcXCckkk
+kkkkkkkkkccXckkk
+kkkkcccckkkXkkkk
+kkkkcCCckkkkcccc
+kkkkkkkkkkkkkkkk
+@end
+
+@tile tile:stone-floor-moss
+variantOf tile:stone-floor
+solid false
+traits Tile
+rows
+kkkkkkkkkkkkkkkk
+kcccckeekkkkkkkk
+kcCCckkekkcccckk
+kcccckkkkkcCCckk
+kkeekkkkkkcccckk
+kkkkcccckkkkkkkk
+kkkkcCCckkeecccc
+kkkkcccckkkecCCc
+kkkkkkkkkkkkcccc
+kcccckkkTkkkkkkk
+kcCCckkkkcccckkk
+kcccckkkkcCCckke
+kkkkkkkkkcccckke
+kkkkcccckkkkkkkk
+kkkkcCCckeekcccc
+kkkkkkkkkkkkkkkk
+@end
+
+@tile tile:stone-floor-worn
+variantOf tile:stone-floor
+solid false
+traits Tile
+rows
+kkkkkkkkkkkkkkkk
+kccckkkkkkkkkkkk
+kcCcckkkkccckkkk
+kkccckkkkcCcckkk
+kkkkkkkkkkccckkk
+kkkkccckkkkkkkkk
+kkkkcCcckkkkkccc
+kkkkkccckkkkcCcc
+kkkkkkkkkkkkkccc
+kkccckkkkkkkkkkk
+kcCcckkkkccckkkk
+kkccckkkkcCcckkk
+kkkkkkkkkkccckkk
+kkkkccckkkkkkkkk
+kkkkcCcckkkkkccc
 kkkkkkkkkkkkkkkk
 @end
 

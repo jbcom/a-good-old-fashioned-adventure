@@ -53,6 +53,15 @@ function bootOldwoodWorld() {
   return world;
 }
 
+function bootSunkenRoadWorld() {
+  const world = createGameWorld(245);
+  autoStartQuests(world);
+  instantiateMap(world, "map:sunken-road", { classId: "ranger" });
+  pushEvent(world, { type: "map:entered", mapId: "map:sunken-road" });
+  step(world, 0);
+  return world;
+}
+
 function findNpc(world: ReturnType<typeof createGameWorld>, charId: string) {
   return [...world.query(IsNpc)].find((entity) => entity.get(IsNpc)?.charId === charId);
 }
@@ -140,6 +149,60 @@ describe("S8.24 composition budget tuning", () => {
     seconds(world, 1);
 
     const after = keeper?.get(Transform);
+    expect(Math.abs((after?.x ?? 0) - (start?.x ?? 0))).toBeGreaterThan(6);
+  });
+
+  it("adds detailed salvage props to the sunken wash window", () => {
+    for (const propId of ["prop:wyrm-rib-stake", "prop:salvage-rope-coil"] as const) {
+      const prop = getProp(propId);
+      expect(prop.recolorChannels?.length, propId).toBeGreaterThanOrEqual(5);
+      const rows = stateRows(prop);
+      expect(rows.length, propId).toBeGreaterThan(0);
+      for (const row of rows) expect(row, propId).toHaveLength(prop.grid.w);
+      expect(channels(rows).size, propId).toBeGreaterThanOrEqual(5);
+    }
+
+    expect([...propRefs(getMap("map:sunken-road"))]).toEqual(
+      expect.arrayContaining(["prop:wyrm-rib-stake", "prop:salvage-rope-coil"]),
+    );
+  });
+
+  it("runs the wreck picker salvage greeting through dialogue into a flag", () => {
+    expect(characters.get("char:sunken-road-wreck-picker")?.dialogue).toBe(
+      "dlgbank:sunken-road-wreck-picker",
+    );
+    expect(dialogueBanks.has("dlgbank:sunken-road-wreck-picker")).toBe(true);
+    expect(flags.has("flag:sunken-road-wreck-picked")).toBe(true);
+
+    const quest = getQuest("quest:sunken-road-wreck-picker");
+    expect(quest.startOn?.enterMap).toBe("map:sunken-road");
+    expect(quest.stages[0]?.log).toContain("wreck");
+
+    const world = bootSunkenRoadWorld();
+    expect(world.get(QuestLog)?.active["quest:sunken-road-wreck-picker"]?.stage).toBe(
+      "greet-picker",
+    );
+
+    const dialogue = resolveDialogue(world, "dlgbank:sunken-road-wreck-picker");
+    expect(dialogue.nodeKey).toBe("salvage");
+    expect(dialogue.node.lines.join(" ")).toContain("wreck");
+    emitDialogueChoice(world, dialogue.node, "accepted");
+    step(world, 0);
+
+    expect(world.get(QuestLog)?.completed).toContain("quest:sunken-road-wreck-picker");
+    expect(world.get(FlagState)?.values["flag:sunken-road-wreck-picked"]).toBe(true);
+    expect(resolveDialogue(world, "dlgbank:sunken-road-wreck-picker").nodeKey).toBe("after");
+  });
+
+  it("moves the wreck picker patrol through Yuka steering", () => {
+    const world = bootSunkenRoadWorld();
+    const picker = findNpc(world, "char:sunken-road-wreck-picker");
+    const start = picker?.get(Transform);
+
+    expect(picker?.get(NpcPatrol)?.points).toHaveLength(4);
+    seconds(world, 1);
+
+    const after = picker?.get(Transform);
     expect(Math.abs((after?.x ?? 0) - (start?.x ?? 0))).toBeGreaterThan(6);
   });
 });

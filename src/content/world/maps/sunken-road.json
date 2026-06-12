@@ -35,6 +35,15 @@
       "note": "shallow roadside wash below the old aqueduct"
     },
     {
+      "op": "region",
+      "tile": "tile:castle-road",
+      "x0": 5,
+      "x1": 8,
+      "y0": 13,
+      "y1": 15,
+      "note": "wash-buried paving slabs near the wreck"
+    },
+    {
       "op": "col-span",
       "tile": "tile:castle-road",
       "x": 30,
@@ -85,6 +94,25 @@
       "chunk": { "w": 2, "h": 2 },
       "seed": 400,
       "note": "old road slabs emerging from the sand"
+    },
+    {
+      "baseTile": "tile:mountain",
+      "variants": [
+        "tile:mountain",
+        "tile:mountain-crag",
+        "tile:mountain-scree",
+        "tile:mountain-ledge"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 507,
+      "note": "wind-cut canyon rim around the wash"
+    },
+    {
+      "baseTile": "tile:water",
+      "variants": ["tile:water", "tile:water-glint", "tile:water-reeds", "tile:water-deep"],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 508,
+      "note": "roadside wash pools with reeds and glints"
     }
   ],
   "playerSpawn": { "x": 48, "y": 304 },
@@ -97,6 +125,34 @@
   "entities": [
     { "ref": "prop:signpost", "x": 108, "y": 274, "note": "last Oldwood marker" },
     { "ref": "prop:broken-cart", "x": 230, "y": 336, "note": "cart splintered at the wash" },
+    {
+      "ref": "char:sunken-road-wreck-picker",
+      "x": 176,
+      "y": 296,
+      "dir": -1,
+      "patrol": {
+        "points": [
+          { "x": 160, "y": 296 },
+          { "x": 216, "y": 296 },
+          { "x": 216, "y": 320 },
+          { "x": 160, "y": 320 }
+        ],
+        "speed": 18
+      },
+      "note": "Petch Marrow picks the sandwyrm wreck at the wash"
+    },
+    {
+      "ref": "prop:wyrm-rib-stake",
+      "x": 208,
+      "y": 280,
+      "note": "bleached wyrm rib staked as a salvage marker"
+    },
+    {
+      "ref": "prop:salvage-rope-coil",
+      "x": 148,
+      "y": 312,
+      "note": "picker's rope coil beside the wash path"
+    },
     { "ref": "prop:sandstone-arch", "x": 440, "y": 286, "note": "first ruin tooth above the road" },
     { "ref": "prop:stump", "x": 316, "y": 360, "note": "bleached roadside stump" },
     { "ref": "prop:barrel", "x": 420, "y": 260, "note": "half-buried caravan barrel" },
@@ -157,8 +213,13 @@
       {
         "label": "wash and sandwyrm wreck",
         "zone": { "x0": 1, "y0": 8, "x1": 26, "y1": 23 },
-        "majorAnchors": ["enemy:desert-wyrm", "prop:broken-cart"],
-        "minorProps": ["prop:signpost", "prop:stump", "prop:sandstone-arch"]
+        "majorAnchors": [
+          "enemy:desert-wyrm",
+          "prop:broken-cart",
+          "char:sunken-road-wreck-picker",
+          "prop:wyrm-rib-stake"
+        ],
+        "minorProps": ["prop:signpost", "prop:stump", "prop:salvage-rope-coil"]
       },
       {
         "label": "courier layby and upper sail wreck",
