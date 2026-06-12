@@ -62,3 +62,4 @@
 {"ts":"2026-06-12T20:50:13.635Z","sha":"468660c8028fc652225f41873a9690d4a5338629","subject":"feat: unit brains — the governor's loop lives in the sim","decision":null,"why":null,"resolves":["S17.2 unit sim core"],"overrides":[]}
 {"ts":"2026-06-12T20:54:53.529Z","sha":"4e88e98d0d68cd12ded6d2bf4b887eefacb49cff","subject":"feat: waves break against the line","decision":null,"why":null,"resolves":["S17.3 waves","S16.R review fold"],"overrides":[]}
 {"ts":"2026-06-12T20:57:07.104Z","sha":"d716ac952133b5f675a924fc58bcb8847f7eca92","subject":"feat: the rail carries the line north","decision":null,"why":null,"resolves":["S17.4 rail and camera"],"overrides":[]}
+{"ts":"2026-06-12T21:06:54.208Z","sha":"061f2f6968ae54360f712222af7ec7188f4ae1a4","subject":"feat: the toolbox commands the field","decision":null,"why":null,"resolves":["S17.5 toolbox and drag placement (cutover rides S17.6)"],"overrides":[]}

@@ -68,6 +68,7 @@ import {
 import { applyEffects, autoStartQuests, questLogLines } from "../sim/quests";
 import { buyShopListing, type ShopTransactionResult, sellShopListing } from "../sim/shop";
 import { playerAbility, playerAttack } from "../sim/systems/combat";
+import { frontline } from "../sim/systems/waves";
 import { SIM_DT, step } from "../sim/tick";
 import {
   AimDirection,
@@ -144,6 +145,7 @@ interface UiSnapshot {
   projectiles: number;
   units: number;
   unitsPlaced: Record<string, number>;
+  frontY: number;
   fxSpawned: number;
   playerPose: string;
   bossPhase: string;
@@ -211,6 +213,7 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   projectiles: 0,
   units: 0,
   unitsPlaced: {},
+  frontY: 0,
   fxSpawned: 0,
   playerPose: "idle",
   bossPhase: "",
@@ -397,6 +400,7 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     projectiles: [...world.query(Projectile)].length,
     units: [...world.query(IsUnit)].length,
     unitsPlaced: { ...placedCounts(world) },
+    frontY: frontline(world)?.y ?? 0,
     fxSpawned: world.get(FxStats)?.spawned ?? 0,
     playerPose: player
       ? spritePose(world, player, player.get(SpriteRef)?.spriteId ?? "sprite:hero")
@@ -2027,6 +2031,7 @@ export function App({
       "data-player-pose": snapshot.playerPose,
       "data-boss-phase": snapshot.bossPhase,
       "data-units": String(snapshot.units),
+      "data-front-y": snapshot.frontY.toFixed(1),
       "data-a-presses": String(inputStats.current.aPresses),
       "data-attack-calls": String(inputStats.current.attackCalls),
       "data-drops": String(inputStats.current.drops),
@@ -2075,6 +2080,7 @@ export function App({
       snapshot.playerY,
       snapshot.projectiles,
       snapshot.units,
+      snapshot.frontY,
       selectedUpgradeIndex,
     ],
   );
