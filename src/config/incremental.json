@@ -69,7 +69,8 @@
           "upgrade:oldwood-bend",
           "upgrade:ranger-trail",
           "upgrade:dragon-wake"
-        ]
+        ],
+        "track": "vows"
       },
       {
         "id": "upgrade:knight-vigor",
@@ -86,7 +87,8 @@
           "maxHp": 10
         },
         "unlocks": [],
-        "note": "Coin-ranked knight track: extra health per rank for the starting class."
+        "note": "Coin-ranked knight track: extra health per rank for the starting class.",
+        "track": "characters"
       },
       {
         "id": "upgrade:oldwood-bend",
@@ -101,7 +103,8 @@
           "upgrade:road-provisions",
           "upgrade:thornwood-mastered",
           "upgrade:rogue-shortcut"
-        ]
+        ],
+        "track": "roads"
       },
       {
         "id": "upgrade:ranger-trail",
@@ -112,7 +115,8 @@
         },
         "prerequisites": ["upgrade:first-vow"],
         "classId": "ranger",
-        "unlocks": ["upgrade:ranger-craft", "upgrade:ranger-leap-rose"]
+        "unlocks": ["upgrade:ranger-craft", "upgrade:ranger-leap-rose"],
+        "track": "characters"
       },
       {
         "id": "upgrade:dragon-wake",
@@ -123,7 +127,8 @@
         },
         "prerequisites": ["upgrade:first-vow"],
         "enemyFamily": "dragon",
-        "unlocks": ["upgrade:orc-warband", "upgrade:sorcerer-cinder"]
+        "unlocks": ["upgrade:orc-warband", "upgrade:sorcerer-cinder"],
+        "track": "encounters"
       },
       {
         "id": "upgrade:road-provisions",
@@ -136,7 +141,8 @@
         "rankCostGrowth": 1.5,
         "prerequisites": ["upgrade:oldwood-bend"],
         "unlocks": [],
-        "note": "Coin-ranked run conveniences that compress repeated travel without skipping the rescue."
+        "note": "Coin-ranked run conveniences that compress repeated travel without skipping the rescue.",
+        "track": "vows"
       },
       {
         "id": "upgrade:ranger-craft",
@@ -150,7 +156,8 @@
         "prerequisites": ["upgrade:ranger-trail"],
         "classId": "ranger",
         "unlocks": [],
-        "note": "Coin-ranked ranger track deepening the rose-unlocked class."
+        "note": "Coin-ranked ranger track deepening the rose-unlocked class.",
+        "track": "characters"
       },
       {
         "id": "upgrade:orc-warband",
@@ -164,7 +171,8 @@
         "prerequisites": ["upgrade:dragon-wake"],
         "enemyFamily": "orc",
         "unlocks": [],
-        "note": "Adversarial coin rank: one more orc on route maps per rank \u2014 harder roads, but every orc pays coins."
+        "note": "Adversarial coin rank: one more orc on route maps per rank \u2014 harder roads, but every orc pays coins.",
+        "track": "encounters"
       },
       {
         "id": "upgrade:thornwood-mastered",
@@ -175,7 +183,8 @@
         },
         "prerequisites": ["upgrade:oldwood-bend"],
         "routePack": "deep-forest",
-        "unlocks": ["upgrade:bard-road-song"]
+        "unlocks": ["upgrade:bard-road-song"],
+        "track": "roads"
       },
       {
         "id": "upgrade:rogue-shortcut",
@@ -186,7 +195,8 @@
         },
         "prerequisites": ["upgrade:oldwood-bend"],
         "classId": "rogue",
-        "unlocks": ["upgrade:rogue-knives", "upgrade:sunken-shortcut"]
+        "unlocks": ["upgrade:rogue-knives", "upgrade:sunken-shortcut"],
+        "track": "characters"
       },
       {
         "id": "upgrade:ranger-leap-rose",
@@ -198,7 +208,8 @@
         "prerequisites": ["upgrade:ranger-trail"],
         "classId": "ranger",
         "ability": "leap",
-        "unlocks": []
+        "unlocks": [],
+        "track": "characters"
       },
       {
         "id": "upgrade:sorcerer-cinder",
@@ -209,7 +220,8 @@
         },
         "prerequisites": ["upgrade:dragon-wake"],
         "classId": "sorcerer",
-        "unlocks": ["upgrade:sorcerer-emberweave", "upgrade:castle-candle-loop"]
+        "unlocks": ["upgrade:sorcerer-emberweave", "upgrade:castle-candle-loop"],
+        "track": "characters"
       },
       {
         "id": "upgrade:rogue-knives",
@@ -223,7 +235,8 @@
         "prerequisites": ["upgrade:rogue-shortcut"],
         "classId": "rogue",
         "unlocks": [],
-        "note": "Coin-ranked rogue track deepening the rose-unlocked class."
+        "note": "Coin-ranked rogue track deepening the rose-unlocked class.",
+        "track": "characters"
       },
       {
         "id": "upgrade:bard-road-song",
@@ -234,7 +247,8 @@
         },
         "prerequisites": ["upgrade:thornwood-mastered"],
         "classId": "bard",
-        "unlocks": ["upgrade:bard-meter", "upgrade:princess-boon"]
+        "unlocks": ["upgrade:bard-meter", "upgrade:princess-boon"],
+        "track": "characters"
       },
       {
         "id": "upgrade:sunken-shortcut",
@@ -245,7 +259,8 @@
         },
         "prerequisites": ["upgrade:rogue-shortcut"],
         "routePack": "sunken-road",
-        "unlocks": ["upgrade:castle-approach-siege"]
+        "unlocks": ["upgrade:castle-approach-siege"],
+        "track": "roads"
       },
       {
         "id": "upgrade:sorcerer-emberweave",
@@ -259,7 +274,8 @@
         "prerequisites": ["upgrade:sorcerer-cinder"],
         "classId": "sorcerer",
         "unlocks": [],
-        "note": "Coin-ranked sorcerer track deepening the rose-unlocked class."
+        "note": "Coin-ranked sorcerer track deepening the rose-unlocked class.",
+        "track": "characters"
       },
       {
         "id": "upgrade:bard-meter",
@@ -273,7 +289,8 @@
         "prerequisites": ["upgrade:bard-road-song"],
         "classId": "bard",
         "unlocks": [],
-        "note": "Coin-ranked bard track deepening the rose-unlocked class."
+        "note": "Coin-ranked bard track deepening the rose-unlocked class.",
+        "track": "characters"
       },
       {
         "id": "upgrade:castle-approach-siege",
@@ -284,7 +301,8 @@
         },
         "prerequisites": ["upgrade:sunken-shortcut"],
         "routePack": "castle-approach",
-        "unlocks": []
+        "unlocks": [],
+        "track": "roads"
       },
       {
         "id": "upgrade:castle-candle-loop",
@@ -295,7 +313,8 @@
         },
         "prerequisites": ["upgrade:sorcerer-cinder"],
         "routePack": "castle-interior",
-        "unlocks": []
+        "unlocks": [],
+        "track": "castle"
       },
       {
         "id": "upgrade:princess-boon",
@@ -305,9 +324,19 @@
           "roses": 4
         },
         "prerequisites": ["upgrade:bard-road-song"],
-        "unlocks": []
+        "unlocks": [],
+        "track": "vows"
       }
-    ]
+    ],
+    "ringOrder": ["vows", "characters", "encounters", "roads", "castle"],
+    "trackEntries": {
+      "vows": "upgrade:first-vow",
+      "characters": "upgrade:knight-vigor",
+      "encounters": "upgrade:dragon-wake",
+      "roads": "upgrade:oldwood-bend",
+      "castle": "upgrade:castle-candle-loop"
+    },
+    "lockedTracks": ["castle"]
   },
   "classes": {
     "starting": "knight",

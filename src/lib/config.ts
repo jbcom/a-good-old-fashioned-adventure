@@ -64,10 +64,13 @@ export interface IncrementalCurrencyDef {
   hudPriority: number;
 }
 
+export type IncrementalTrackId = "vows" | "characters" | "encounters" | "roads" | "castle";
+
 export interface IncrementalUpgradeNode {
   id: string;
   label: string;
   category: "route" | "enemy" | "class" | "ability" | "map" | "relic";
+  track: IncrementalTrackId;
   cost: Partial<Record<IncrementalCurrencyId, number>>;
   prerequisites: string[];
   unlocks: string[];
@@ -102,6 +105,9 @@ export interface IncrementalConfig {
   >;
   upgradeGraph: {
     root: string;
+    ringOrder: IncrementalTrackId[];
+    trackEntries: Record<IncrementalTrackId, string>;
+    lockedTracks: IncrementalTrackId[];
     nodes: IncrementalUpgradeNode[];
   };
   classes: {

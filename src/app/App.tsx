@@ -425,6 +425,11 @@ function upgradeTestId(nodeId: string): string {
   return `upgrade-node-${nodeId.replace(/[^a-z0-9-]/g, "-")}`;
 }
 
+/** Nodes in ring order: vows, characters, encounters, roads, castle. */
+const RING_NODES: IncrementalUpgradeNode[] = incremental.upgradeGraph.ringOrder.flatMap((track) =>
+  incremental.upgradeGraph.nodes.filter((node) => node.track === track),
+);
+
 function upgradeNodeState(
   progress: IncrementalProgressState,
   node: IncrementalUpgradeNode,
@@ -458,15 +463,15 @@ function upgradeCostLabel(
 }
 
 function firstUpgradeableIndex(progress: IncrementalProgressState): number {
-  const available = incremental.upgradeGraph.nodes.findIndex(
+  const available = RING_NODES.findIndex(
     (node) => upgradeNodeState(progress, node) === "available",
   );
   if (available >= 0) return available;
-  const reachableUnpurchased = incremental.upgradeGraph.nodes.findIndex((node) =>
+  const reachableUnpurchased = RING_NODES.findIndex((node) =>
     ["unaffordable", "available"].includes(upgradeNodeState(progress, node)),
   );
   if (reachableUnpurchased >= 0) return reachableUnpurchased;
-  const purchased = incremental.upgradeGraph.nodes.findIndex(
+  const purchased = RING_NODES.findIndex(
     (node) => upgradeNodeState(progress, node) === "purchased",
   );
   return Math.max(0, purchased);
@@ -1075,8 +1080,7 @@ function UpgradeWebPanel({
   onBack: () => void;
 }) {
   const panelRef = usePanelEntrance("upgrade-graph");
-  const selectedNode =
-    incremental.upgradeGraph.nodes[selectedIndex] ?? incremental.upgradeGraph.nodes[0];
+  const selectedNode = RING_NODES[selectedIndex] ?? RING_NODES[0];
   return (
     <section className="upgrade-screen" data-testid="upgrade-screen">
       <div className="upgrade-panel" data-testid="upgrade-panel" ref={panelRef}>
@@ -1087,25 +1091,31 @@ function UpgradeWebPanel({
           <span>{snapshot.incrementalProgress.roses} Roses</span>
         </div>
         <div className="upgrade-graph-list" role="listbox" aria-label="Upgrade Graph">
-          {incremental.upgradeGraph.nodes.map((node, index) => {
-            const state = upgradeNodeState(snapshot.incrementalProgress, node);
-            return (
-              <button
-                className="upgrade-node"
-                data-state={state}
-                data-testid={upgradeTestId(node.id)}
-                type="button"
-                key={node.id}
-                aria-pressed={selectedIndex === index}
-                onClick={() => onSelect(index)}
-              >
-                <span className="upgrade-node-label">{node.label}</span>
-                <span>{node.category}</span>
-                <span>{upgradeCostLabel(snapshot.incrementalProgress, node)}</span>
-                <span>{state}</span>
-              </button>
-            );
-          })}
+          {incremental.upgradeGraph.ringOrder.map((track) => (
+            <div className="upgrade-track" data-testid={`upgrade-track-${track}`} key={track}>
+              <h2 className="upgrade-track-label">{track}</h2>
+              {RING_NODES.map((node, index) => {
+                if (node.track !== track) return null;
+                const state = upgradeNodeState(snapshot.incrementalProgress, node);
+                return (
+                  <button
+                    className="upgrade-node"
+                    data-state={state}
+                    data-testid={upgradeTestId(node.id)}
+                    type="button"
+                    key={node.id}
+                    aria-pressed={selectedIndex === index}
+                    onClick={() => onSelect(index)}
+                  >
+                    <span className="upgrade-node-label">{node.label}</span>
+                    <span>{node.category}</span>
+                    <span>{upgradeCostLabel(snapshot.incrementalProgress, node)}</span>
+                    <span>{state}</span>
+                  </button>
+                );
+              })}
+            </div>
+          ))}
         </div>
         <div className="upgrade-detail" data-testid="upgrade-detail">
           <strong>{selectedNode.label}</strong>
@@ -1529,14 +1539,14 @@ export function App({
 
   const moveUpgradeSelection = useCallback((delta: number) => {
     setSelectedUpgradeIndex((current) => {
-      const count = incremental.upgradeGraph.nodes.length;
+      const count = RING_NODES.length;
       return (current + delta + count) % count;
     });
   }, []);
 
   const handleUpgradeBuy = useCallback((): UpgradePurchaseResult | null => {
     if (!world) return null;
-    const node = incremental.upgradeGraph.nodes[selectedUpgradeIndex];
+    const node = RING_NODES[selectedUpgradeIndex];
     if (!node) return null;
     const result = purchaseUpgradeNode(world, node.id);
     setUpgradeMessage(result.message);
@@ -1782,7 +1792,7 @@ export function App({
       "data-unlocked-classes": snapshot.incrementalProgress.unlockedClassIds.join(","),
       "data-unlocked-route-packs": snapshot.incrementalProgress.unlockedRoutePackIds.join(","),
       "data-selected-upgrade":
-        incremental.upgradeGraph.nodes[selectedUpgradeIndex]?.id ?? incremental.upgradeGraph.root,
+        RING_NODES[selectedUpgradeIndex]?.id ?? incremental.upgradeGraph.root,
       "data-inventory": JSON.stringify(snapshot.inventory),
       "data-paused": String(paused),
       "data-muted": String(muted),
