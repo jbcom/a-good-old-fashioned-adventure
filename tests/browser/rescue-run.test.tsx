@@ -87,6 +87,15 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
 
   // the route dragon holds the pass below the plateau
   await governor.reachPoint(192, 152, { tolerance: 28, maxSteps: 48 });
+
+  // the dragon fights in readable phases, exposed through the public dataset:
+  // engagement starts a roar/volley/lull cycle, and the vulnerable lull
+  // arrives on its config timer
+  const bossPhase = () =>
+    (page.getByTestId("game-shell").element() as HTMLElement).dataset.bossPhase ?? "";
+  await expect.poll(bossPhase, { timeout: 8000 }).toMatch(/^(roar|volley|lull)$/);
+  await expect.poll(bossPhase, { timeout: 8000 }).toBe("lull");
+
   let combatBursts = 0;
   for (let round = 0; round < 12; round++) {
     await fightNearby(governor, 6);

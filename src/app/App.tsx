@@ -61,6 +61,7 @@ import { playerAbility, playerAttack } from "../sim/systems/combat";
 import { SIM_DT, step } from "../sim/tick";
 import {
   AimDirection,
+  Choreo,
   Facing,
   FlagState,
   FxStats,
@@ -134,6 +135,7 @@ interface UiSnapshot {
   projectiles: number;
   fxSpawned: number;
   playerPose: string;
+  bossPhase: string;
   questLines: string[];
   runtime: {
     cols: number;
@@ -200,6 +202,7 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   projectiles: 0,
   fxSpawned: 0,
   playerPose: "idle",
+  bossPhase: "",
   questLines: [],
   runtime: { cols: 0, rows: 0, grid: [] },
   explored: new Set(),
@@ -381,6 +384,9 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     playerPose: player
       ? spritePose(world, player, player.get(SpriteRef)?.spriteId ?? "sprite:hero")
       : "idle",
+    bossPhase: [...world.query(IsEnemy, Choreo)]
+      .map((entity) => entity.get(Choreo)?.phase ?? "")
+      .find((phase) => phase !== "") ?? "",
     questLines: questLogLines(world),
     runtime: {
       cols: runtime?.cols ?? 0,
@@ -1868,6 +1874,7 @@ export function App({
       "data-projectiles": String(snapshot.projectiles),
       "data-fx-spawned": String(snapshot.fxSpawned),
       "data-player-pose": snapshot.playerPose,
+      "data-boss-phase": snapshot.bossPhase,
       "data-max-hp": String(snapshot.maxHp),
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
       "data-gold": String(snapshot.incrementalProgress.coins),
@@ -1895,6 +1902,7 @@ export function App({
       mode,
       muted,
       paused,
+      snapshot.bossPhase,
       snapshot.classId,
       snapshot.enemies,
       snapshot.fxSpawned,

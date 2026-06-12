@@ -5,7 +5,7 @@
  * pickup goes through the event bus so quests stay in sync.
  */
 import type { Entity, World } from "koota";
-import { classes, combat, drops, progression } from "../../lib/config";
+import { classes, combat, drops, enemies, progression } from "../../lib/config";
 import { getItem } from "../../lib/content/registry";
 import { collides } from "../collision";
 import { pushEvent } from "../events";
@@ -14,6 +14,7 @@ import { recordDeathPayout } from "../incrementalProgress";
 import {
   AimDirection,
   CameraState,
+  Choreo,
   CombatTimers,
   Facing,
   FlagState,
@@ -87,6 +88,17 @@ export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: 
   const health = enemy.get(Health);
   const transform = enemy.get(Transform);
   if (!health || !transform) return;
+
+  // choreographed bosses soak damage outside their open windows: the dragon
+  // is only fully vulnerable in its lull, a stance fighter while not guarding
+  const choreo = enemy.get(Choreo);
+  if (choreo && choreo.phase !== "") {
+    const archetype = enemies.archetypes[enemy.get(IsEnemy)?.archetypeId ?? ""];
+    const phases = archetype?.boss?.phases;
+    if (phases && choreo.phase !== "lull") dmg *= phases.armorMultiplier;
+    const stance = archetype?.guard?.stance;
+    if (stance && choreo.phase === "guard") dmg *= stance.damageMultiplier;
+  }
 
   const hp = health.hp - dmg;
   enemy.set(Transform, { ...transform, x: transform.x + knockDir * combat.knockback.enemyOnHit });

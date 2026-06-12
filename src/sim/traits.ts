@@ -45,6 +45,12 @@ export const FxStats = trait({ spawned: 0 });
 
 /** Enemy threat telegraph: touch damage arms only after a visible wind-up. */
 export const Threat = trait({ windupLeft: 0, armed: false, casting: false });
+/**
+ * Boss choreography: the current phase of a config-timed fight pattern
+ * (dragon roar/volley/lull, banner-knight guard/open). Public so the
+ * renderer and tests read the same state (docs/DESIGN-SYSTEM.md).
+ */
+export const Choreo = trait({ phase: "", left: 0 });
 export const PropRef = trait({ propId: "", state: "default" });
 export const NpcPatrol = trait(() => ({
   points: [] as { x: number; y: number }[],

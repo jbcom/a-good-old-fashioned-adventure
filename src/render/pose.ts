@@ -7,7 +7,7 @@
 import type { Entity, World } from "koota";
 import { classes, combat, enemies } from "../lib/config";
 import { getSprite } from "../lib/content/registry";
-import { Clock, CombatTimers, IsPlayer, MoveIntent, Threat } from "../sim/traits";
+import { Choreo, Clock, CombatTimers, IsPlayer, MoveIntent, Threat } from "../sim/traits";
 
 function hasFrame(spriteId: string, pose: string): boolean {
   if (!spriteId) return false;
@@ -55,6 +55,14 @@ export function threatScale(world: World, entity: Entity): number {
   const windup = enemies.aiDefaults.windup;
   const t = world.get(Clock)?.t ?? 0;
   const feedback = combat.feedback;
+  // boss choreography reads above the per-frame telegraphs: a roaring boss
+  // swells with a heavy throb, a guarding one crouches behind its shield
+  const choreo = entity.get(Choreo);
+  if (choreo?.phase === "roar") {
+    const throb = (1 + Math.sin(t * feedback.telegraphThrobHz)) / 2;
+    return 1 + feedback.roarThrobScale * throb;
+  }
+  if (choreo?.phase === "guard") return feedback.guardCrouchScale;
   if (
     !threat.armed &&
     windup.duration > 0 &&
