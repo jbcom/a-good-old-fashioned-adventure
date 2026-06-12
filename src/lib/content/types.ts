@@ -170,7 +170,7 @@ export interface CharacterDef {
 
 export interface ItemDef {
   name: string;
-  pickup?: { color?: string; anim?: string; sfx?: string };
+  pickup?: { sprite: string; color?: string; anim?: string; sfx?: string };
   onPickup: Record<string, unknown>[];
   floater?: { text: string; color: string };
 }

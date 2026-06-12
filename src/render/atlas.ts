@@ -51,9 +51,12 @@ export function flashCanvas(spriteId: string, paletteId: string): HTMLCanvasElem
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new Error("2d context unavailable");
     ctx.drawImage(source, 0, 0);
-    ctx.globalCompositeOperation = "source-in";
+    // bright silhouette pulse that keeps a hint of the sprite's inner detail
+    ctx.globalCompositeOperation = "source-atop";
+    ctx.globalAlpha = 0.8;
     ctx.fillStyle = "#ffffff";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.globalAlpha = 1;
     return canvas;
   });
 }

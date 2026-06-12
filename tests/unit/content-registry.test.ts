@@ -23,7 +23,7 @@ describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
     expect(tiles.size).toBe(44);
     expect(props.size).toBe(69);
-    expect(sprites.size).toBe(3);
+    expect(sprites.size).toBe(16);
     expect(animations.size).toBe(7);
     expect(maps.size).toBe(17);
     expect(quests.size).toBe(21);

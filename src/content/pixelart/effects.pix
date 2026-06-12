@@ -1,0 +1,238 @@
+@pixel-sheet v1
+# World effect art: pickups and projectiles. Nothing in the world may render
+# as a bare colored quad — every drop and bolt gets an authored silhouette.
+
+@sprite sprite:pickup-orb
+description XP orb drop: green glass bead with a window shine.
+grid 8x8
+anchor 4,8
+channels X,E,e,W
+palette palette:base
+animations idle=anim:pickup-bob
+traits Transform,Sprite,DepthSorted
+rows
+..XXX...
+.XEEEX..
+XEEWEEX.
+XEEEEEX.
+XEeEEeX.
+XeEEEeX.
+.XeeeX..
+..XXX...
+@end
+
+@sprite sprite:pickup-heart
+description Heart drop: outlined storybook heart with a shine pixel.
+grid 8x8
+anchor 4,8
+channels X,R,r,W
+palette palette:base
+animations idle=anim:pickup-bob
+traits Transform,Sprite,DepthSorted
+rows
+.XX.XX..
+XRRXRRX.
+XRRRRRX.
+XRrWrRX.
+.XRrRX..
+..XRX...
+...X....
+........
+@end
+
+@sprite sprite:pickup-cake
+description Travel cake: frosted slab on a sandy base.
+grid 8x8
+anchor 4,8
+channels X,F,W,D,d
+palette palette:base
+animations idle=anim:pickup-bob
+traits Transform,Sprite,DepthSorted
+rows
+........
+..XXXX..
+.XFFFFX.
+XFWFFWFX
+XDDDDDDX
+XDdDDdDX
+.XXXXXX.
+........
+@end
+
+@sprite sprite:pickup-oats
+description Oat bundle: tied golden sheaf.
+grid 8x8
+anchor 4,8
+channels X,G,g
+palette palette:base
+animations idle=anim:pickup-bob
+traits Transform,Sprite,DepthSorted
+rows
+...XX...
+..XGgX..
+.XGGgX..
+.XgGGX..
+XGGgGGX.
+XgGGGgX.
+.XXXXX..
+........
+@end
+
+@sprite sprite:pickup-plaster
+description Mending plaster: rolled bandage with a bright wrap line.
+grid 8x8
+anchor 4,8
+channels X,F,f,W
+palette palette:base
+animations idle=anim:pickup-bob
+traits Transform,Sprite,DepthSorted
+rows
+........
+.XXXXX..
+XFFFFFX.
+XFfWfFX.
+XFFFFFX.
+.XXXXX..
+........
+........
+@end
+
+@sprite sprite:pickup-ribbon
+description Wayfarer ribbon: knotted tan ribbon with loose tails.
+grid 8x8
+anchor 4,8
+channels X,B,b
+palette palette:base
+animations idle=anim:pickup-bob
+traits Transform,Sprite,DepthSorted
+rows
+..X..X..
+.XBXXBX.
+.XBbBBX.
+..XBBX..
+.XBbBBX.
+XBX..XBX
+X.X..X.X
+........
+@end
+
+@sprite sprite:pickup-key
+description Dungeon key: gold bow, shaft, and teeth.
+grid 8x8
+anchor 4,8
+channels X,G,g,W
+palette palette:base
+animations idle=anim:pickup-bob
+traits Transform,Sprite,DepthSorted
+rows
+.XXX....
+XGWGX...
+XG.GX...
+.XXX....
+..XGX...
+..XGX...
+..XGGX..
+..XX.X..
+@end
+
+@sprite sprite:proj-arrow
+description Ranger arrow in flight: red fletch, wood shaft, silver head.
+grid 8x3
+anchor 4,2
+channels X,R,B,S,W
+palette palette:base
+facing mirror-x 1
+animations idle=anim:idle
+traits Transform,Sprite,DepthSorted
+rows
+XR......
+RBBBBSSW
+XR......
+@end
+
+@sprite sprite:proj-magic-bolt
+description Wizard bolt: white core in a sky-blue diamond.
+grid 5x5
+anchor 2,3
+channels X,W,L
+palette palette:base
+animations idle=anim:idle
+traits Transform,Sprite,DepthSorted
+rows
+..X..
+.XWX.
+XWLWX
+.XWX.
+..X..
+@end
+
+@sprite sprite:proj-magmaball
+description Magma ball: molten core ringed in ember orange.
+grid 7x7
+anchor 3,4
+channels X,O,Y,W
+palette palette:base
+animations idle=anim:idle
+traits Transform,Sprite,DepthSorted
+rows
+..XXX..
+.XOOOX.
+XOYYYOX
+XOYWYOX
+XOYYYOX
+.XOOOX.
+..XXX..
+@end
+
+@sprite sprite:proj-sandball
+description Sandwyrm spit: gritty whirl of pale and shaded sand.
+grid 6x6
+anchor 3,3
+channels X,D,d
+palette palette:base
+animations idle=anim:idle
+traits Transform,Sprite,DepthSorted
+rows
+.XXXX.
+XDddDX
+XdDDdX
+XdDDdX
+XDddDX
+.XXXX.
+@end
+
+@sprite sprite:proj-thornbolt
+description Thorn shaman bolt: spinning green barb.
+grid 7x7
+anchor 3,4
+channels X,E,e,T
+palette palette:base
+animations idle=anim:idle
+traits Transform,Sprite,DepthSorted
+rows
+X..X...
+.XEEX..
+.XEeEXX
+..XeTeX
+.XEeEXX
+.XEEX..
+X..X...
+@end
+
+@sprite sprite:proj-shadowbolt
+description Shadow bolt: violet orb with a pale malicious core.
+grid 7x7
+anchor 3,4
+channels X,K,k,W
+palette palette:base
+animations idle=anim:idle
+traits Transform,Sprite,DepthSorted
+rows
+..XXX..
+.XKKKX.
+XKkkkKX
+XKkWkKX
+XKkkkKX
+.XKKKX.
+..XXX..
+@end

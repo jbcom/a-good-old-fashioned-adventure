@@ -1,9 +1,18 @@
 {
   "$schema": "../../schemas/config.schema.json",
   "damage": {
-    "melee": { "base": 10, "perLevel": 4 },
-    "arrow": { "base": 8, "perLevel": 3 },
-    "magicBolt": { "base": 8, "perLevel": 3 },
+    "melee": {
+      "base": 10,
+      "perLevel": 4
+    },
+    "arrow": {
+      "base": 8,
+      "perLevel": 3
+    },
+    "magicBolt": {
+      "base": 8,
+      "perLevel": 3
+    },
     "enemyTouch": 10,
     "enemyProjectile": 15
   },
@@ -28,5 +37,13 @@
     "enemyHitFlashDuration": 0.2,
     "damageTextLife": 0.6,
     "damageTextRiseSpeed": -20
+  },
+  "projectileSprites": {
+    "arrow": "sprite:proj-arrow",
+    "magic-bolt": "sprite:proj-magic-bolt",
+    "magmaball": "sprite:proj-magmaball",
+    "sandball": "sprite:proj-sandball",
+    "shadowbolt": "sprite:proj-shadowbolt",
+    "thornbolt": "sprite:proj-thornbolt"
   }
 }

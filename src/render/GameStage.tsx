@@ -18,7 +18,7 @@ import {
   SRGBColorSpace,
   type Texture,
 } from "three";
-import { engine } from "../lib/config";
+import { combat, engine } from "../lib/config";
 import { getAnimation, getItem, getSprite } from "../lib/content/registry";
 import {
   CameraState,
@@ -40,16 +40,7 @@ import { createDioramaMaterial, setDioramaTexture } from "./materials";
 import { channelsOf, fadeOut, playMotion, releaseMotion, restartMotion } from "./motion";
 
 const TILE = 16;
-const PROJECTILE_COLORS: Record<string, string> = {
-  arrow: "#c2c1e8",
-  "magic-bolt": "#e0f2ff",
-  magmaball: "#df7126",
-  sandball: "#cfa153",
-  shadowbolt: "#76428a",
-};
-
 const textures = new WeakMap<HTMLCanvasElement, CanvasTexture>();
-const solidCanvases = new Map<string, HTMLCanvasElement>();
 
 function textureFor(canvas: HTMLCanvasElement): CanvasTexture {
   let texture = textures.get(canvas);
@@ -62,21 +53,6 @@ function textureFor(canvas: HTMLCanvasElement): CanvasTexture {
     textures.set(canvas, texture);
   }
   return texture;
-}
-
-function solidCanvas(color: string, width: number, height: number): HTMLCanvasElement {
-  const key = `${color}|${width}x${height}`;
-  const cached = solidCanvases.get(key);
-  if (cached) return cached;
-  const canvas = document.createElement("canvas");
-  canvas.width = width;
-  canvas.height = height;
-  const ctx = canvas.getContext("2d");
-  if (!ctx) throw new Error("2d context unavailable");
-  ctx.fillStyle = color;
-  ctx.fillRect(0, 0, width, height);
-  solidCanvases.set(key, canvas);
-  return canvas;
 }
 
 function composeGround(world: World): HTMLCanvasElement {
@@ -224,10 +200,11 @@ class SceneSync {
       const id = entity as unknown as number;
       let tracked = this.meshes.get(id);
       if (!tracked) {
-        const color = getItem(info.itemId).pickup?.color ?? "#ffffff";
-        const canvas = solidCanvas(color, 6, 6);
+        const spriteId = getItem(info.itemId).pickup?.sprite;
+        if (!spriteId) throw new Error(`${info.itemId} pickup has no authored sprite`);
+        const canvas = spriteCanvas(spriteId, "palette:base");
         const mesh = new Mesh(
-          new PlaneGeometry(6, 6),
+          new PlaneGeometry(canvas.width, canvas.height),
           createDioramaMaterial(textureFor(canvas), { role: "spark" }),
         );
         mesh.rotation.x = engine.stage.billboardTilt;
@@ -248,10 +225,11 @@ class SceneSync {
       const id = entity as unknown as number;
       let tracked = this.meshes.get(id);
       if (!tracked) {
-        const color = PROJECTILE_COLORS[p.type] ?? "#ffffff";
-        const canvas = solidCanvas(color, p.type === "arrow" ? 6 : 4, p.type === "arrow" ? 2 : 4);
+        const spriteId = combat.projectileSprites[p.type as keyof typeof combat.projectileSprites];
+        if (!spriteId) throw new Error(`projectile type ${p.type} has no authored sprite`);
+        const canvas = spriteCanvas(spriteId, "palette:base");
         const mesh = new Mesh(
-          new PlaneGeometry(p.type === "arrow" ? 6 : 4, p.type === "arrow" ? 2 : 4),
+          new PlaneGeometry(canvas.width, canvas.height),
           createDioramaMaterial(textureFor(canvas), { role: "spark" }),
         );
         mesh.rotation.x = engine.stage.billboardTilt;
@@ -259,6 +237,7 @@ class SceneSync {
         tracked = { mesh, textureKey: p.type };
         this.meshes.set(id, tracked);
       }
+      if (p.type === "arrow") tracked.mesh.scale.x = p.vx >= 0 ? 1 : -1;
       tracked.mesh.position.set(t.x, 7, t.y);
       seen.add(id);
     }

@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { basename, dirname, join, resolve } from "node:path";
 
@@ -134,14 +134,14 @@ function exportSheet(file) {
   return { file, asepriteFile, pngFile, width, height, assets: assets.length };
 }
 
+const sheetDir = resolve(repoRoot, "src/content/pixelart");
 const files =
   process.argv.length > 2
     ? process.argv.slice(2).map((file) => resolve(file))
-    : [
-        resolve(repoRoot, "src/content/pixelart/terrain.pix"),
-        resolve(repoRoot, "src/content/pixelart/characters.pix"),
-        resolve(repoRoot, "src/content/pixelart/route-props.pix"),
-      ];
+    : readdirSync(sheetDir)
+        .filter((file) => file.endsWith(".pix"))
+        .sort()
+        .map((file) => join(sheetDir, file));
 
 for (const result of files.map(exportSheet)) {
   console.log(
