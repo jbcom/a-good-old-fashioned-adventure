@@ -91,6 +91,60 @@ A/B gameplay buttons, free player movement, the player entity as a single
 controlled hero (units are spawned allies; there is no `IsPlayer` pawn in
 the field — command state replaces it).
 
+## Sim model (S17.1 lock)
+
+- **Roster.** `rosterFor(progress)` derives `{ classId, count }[]` from the
+  DAG: a class node unlocks the class at count 1; `unitCount` rank nodes
+  (the class-track coin connectors gain `effect: { unitCount: 1 }` per
+  rank) raise the multiple. The knight starts at 1. The toolbox shows one
+  panel per rostered class with `remaining = count - placed`.
+- **Unit trait.** `IsUnit({ classId, brain })` + the existing Transform /
+  Health / Speed / MoveIntent / Facing / CombatTimers vocabulary. There is
+  no `IsPlayer` pawn in the field; HUD vitals aggregate the front line.
+  Units are spawned ONLY by `spawnUnit(world, classId, x, y)` (factory
+  doctrine).
+- **Temperaments.** `classes.json` gains per-class `temperament`:
+  `{ verb: "charge" | "hold-range" | "aoe" | "flank" | "aura", engage:
+  number, ...verb tunables }`. One interpreter system (`unitAI`) drives all
+  units on Yuka steering, sharing seek/flee verbs with `enemyAI`; the
+  governor's plan-and-pursue model is its decision layer (perceive field →
+  pick target by temperament → pursue → engage through the same combat
+  paths enemies use).
+- **Rail.** `getRail(mapId)` orders the map's `road-waypoint` zones south →
+  north by zone center; units and waves receive Yuka follow-path along it
+  with per-class lateral freedom (knight breaks rail to charge; rogue takes
+  a wide offset lane). Placement is legal within the visible band south of
+  the front.
+- **Waves.** Maps gain `waveGates: { id, x, y }[]` and the sim a
+  `WaveState` world resource `{ wave, nextAt, alive }`. Wave N draws from
+  the map's region archetypes: size = `1 + floor(N/2) + warband ranks`,
+  variety widens with N. A gate releases its wave when the front crosses
+  its trigger line or the previous wave dies. Wave kills pay the standard
+  bounty economy.
+- **Front + camera.** `Frontline` world resource = max rail-progress over
+  living units. The camera eases toward the front (existing camera-follow
+  swaps its target). Checkpoint crossings by the FRONT pay roadTravelled.
+- **Win / collapse.** Reaching the rail's end engages the map's placed boss
+  (dragon choreography unchanged); boss death → princess → roses. All
+  units dead with a wave still alive = collapse → `recordDeathPayout` —
+  identical ledger semantics to today.
+- **Controls.** Gameplay input is exactly one gesture: drag a toolbox panel
+  onto the rail band (pointerdown on panel → pointermove → pointerup on
+  stage = `spawnUnit`). Menus are tap-only. The keyboard keeps ONLY menu
+  navigation; A/B/d-pad and the virtual pad are deleted in the same commit
+  that turns the new journey green.
+
+## Migration (every commit stays green)
+
+1. Unit sim lands BESIDE the player sim (units + waves fully unit-tested
+   while the old journey still passes).
+2. The toolbox + drag placement land behind the existing playing mode;
+   the new CommanderGovernor journey is written against them.
+3. The cutover commit: title becomes New Game / Continue, the player pawn
+   stops spawning, pad/A/B/picker code and their tests are deleted, the
+   old button journeys are replaced by the commander journeys — one commit,
+   all gates green before and after.
+
 ## Testing shape
 
 PlayerGovernor becomes a CommanderGovernor: it perceives the public dataset
