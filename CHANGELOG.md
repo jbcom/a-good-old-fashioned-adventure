@@ -2,6 +2,13 @@
 
 All notable changes will be managed by release-please.
 
+## [1.1.0](https://github.com/jbcom/a-good-old-fashioned-adventure/compare/a-good-old-fashioned-adventure-v1.0.1...a-good-old-fashioned-adventure-v1.1.0) (2026-06-12)
+
+
+### Features
+
+* complete the ci, release, cd shipping flow ([#7](https://github.com/jbcom/a-good-old-fashioned-adventure/issues/7)) ([94cea1e](https://github.com/jbcom/a-good-old-fashioned-adventure/commit/94cea1eecf6616410f4120db50198b4547eb0b20))
+
 ## [1.0.1](https://github.com/jbcom/a-good-old-fashioned-adventure/compare/a-good-old-fashioned-adventure-v1.0.0...a-good-old-fashioned-adventure-v1.0.1) (2026-06-12)
 
 
