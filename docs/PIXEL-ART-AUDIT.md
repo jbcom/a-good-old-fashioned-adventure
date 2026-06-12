@@ -78,9 +78,15 @@ First curation shortlist (allow-list candidates):
   (12 loops), Retro Boss Battle, RPG Fantasy Tavern & Adventure, Calm Menu,
   Victory & Level Complete (24 stingers), Dark Ambient.
 - **SFX (feeds S20.3):** UI Sound Effects Pack (40 interface sounds).
-- **First manual import:** `public/assets/tilemaps/ground.png` (user-added)
-  — autotile cliff/ledge pieces, dithered grounds, palette ramps; candidate
-  source for terrain texture uplift.
+- **First manual imports (user-added):**
+  `public/assets/tilemaps/ground.png` — autotile cliff/ledge pieces,
+  dithered grounds, palette ramps; terrain texture uplift candidate.
+  `public/assets/tilemaps/roguelike.png` — a full organized 16x16 roguelike
+  mega-sheet with labeled category columns (terrain, fortifications,
+  creatures, items, weapons, armor, tools, props): hundreds of cells; prime
+  source for SA.3 region props, pickups/items, and prop breadth. Curation
+  step must slice it into named regions (a slicer manifest mapping cell
+  coords → asset ids) so individual cells become addressable content.
 
 Next: download the shortlist via the adapted fetcher, extract to
 raw-assets/ (gitignored), curate keepers under public/assets/ with the
