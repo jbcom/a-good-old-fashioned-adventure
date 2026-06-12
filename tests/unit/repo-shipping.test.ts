@@ -1,4 +1,4 @@
-import { readFileSync, statSync } from "node:fs";
+import { readdirSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
 
@@ -52,6 +52,61 @@ describe("CI and release automation", () => {
     expect(workflow).toContain("pnpm exec playwright install chromium");
     expect(workflow).toContain("actions/upload-artifact");
     expect(workflow).toContain("android/app/build/outputs/apk/debug/*.apk");
+  });
+
+  it("ships versioned release artifacts with provenance from release.yml", () => {
+    const workflow = read(".github/workflows/release.yml");
+    expect(workflow).toContain("release:");
+    expect(workflow).toContain("types: [published]");
+    expect(workflow).toContain("workflow_dispatch");
+    expect(workflow).toContain("pnpm build");
+    expect(workflow).toContain("./gradlew :app:assembleDebug");
+    expect(workflow).toContain("actions/attest-build-provenance");
+    expect(workflow).toContain("gh release upload");
+    // provenance + asset upload need these scopes
+    expect(workflow).toContain("contents: write");
+    expect(workflow).toContain("id-token: write");
+    expect(workflow).toContain("attestations: write");
+    // dispatched tags are untrusted input: validate before checkout
+    expect(workflow).toContain("Validate release tag");
+  });
+
+  it("deploys the game to GitHub Pages from cd.yml on main pushes", () => {
+    const workflow = read(".github/workflows/cd.yml");
+    expect(workflow).toContain("branches:");
+    expect(workflow).toContain("- main");
+    expect(workflow).toContain("pnpm build");
+    expect(workflow).toContain("actions/configure-pages");
+    expect(workflow).toContain("actions/upload-pages-artifact");
+    expect(workflow).toContain("actions/deploy-pages");
+    // pages deploys need these scopes
+    expect(workflow).toContain("pages: write");
+    expect(workflow).toContain("id-token: write");
+    // pages serves the project under a subpath: the bundle must be
+    // relative-base
+    expect(read("vite.config.ts")).toContain('base: "./"');
+  });
+
+  it("pins every workflow action to a full commit SHA", () => {
+    const workflowDir = resolve(process.cwd(), ".github/workflows");
+    for (const file of readdirSync(workflowDir)) {
+      if (!file.endsWith(".yml")) continue;
+      const lines = read(`.github/workflows/${file}`).split("\n");
+      for (const line of lines) {
+        const match = line.match(/uses:\s*(\S+)/);
+        if (!match) continue;
+        expect(match[1], `${file}: ${line.trim()} must pin a 40-char SHA`).toMatch(
+          /@[0-9a-f]{40}$/,
+        );
+      }
+    }
+  });
+
+  it("documents the ci to release to cd flow", () => {
+    const deployment = read("DEPLOYMENT.md");
+    expect(deployment).toContain("release.yml");
+    expect(deployment).toContain("cd.yml");
+    expect(deployment).toContain("GitHub Pages");
   });
 
   it("runs browser groups with CLI-level serialization flags", () => {
