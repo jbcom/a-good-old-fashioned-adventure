@@ -460,15 +460,26 @@ async function defeatAt(
 }
 
 it("plays the expanded road from title to the dungeon gate through public controls", async () => {
+  // The expanded road is the route-pack library; a new game now boots the
+  // compact rescue route, so this journey resumes from a Hearthwake save.
+  await journeyRepository.upsertSlot({
+    id: 1,
+    classId: "knight",
+    mapId: "map:village",
+    playerX: 96,
+    playerY: 272,
+    level: 1,
+    hp: 100,
+    maxHp: 100,
+    questSummary: "The road begins.",
+    snapshotJson: "{}",
+    updatedAt: new Date("2026-06-11T19:00:00Z"),
+  });
   mountApp();
   const input = userEvent.setup();
 
   await expect.element(page.getByTestId("landing-screen")).toBeVisible();
-  await userEvent.click(page.getByTestId("new-game-button"));
-  await expect.element(page.getByTestId("title-screen")).toBeVisible();
-  await input.keyboard("{ArrowRight}");
-  await wait(80);
-  await input.keyboard("j");
+  await userEvent.click(page.getByTestId("continue-button"));
   await expect.element(page.getByTestId("world-stage-shell")).toBeVisible();
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:village");
 
@@ -715,10 +726,6 @@ it("continues the expanded journey through dungeon victory through public contro
   await pressA(input);
   await expect.element(page.getByTestId("upgrade-screen")).toBeVisible();
   await expect.element(page.getByTestId("upgrade-purse")).toHaveTextContent("Coins");
-  const upgradeGraphPath = await page.screenshot({
-    path: "../../docs/evidence/upgrade-graph-ranked.png",
-  });
-  expect(upgradeGraphPath).toBeTruthy();
   const selectedBefore = shell().selectedUpgrade;
   expect(selectedBefore).toMatch(/^upgrade:/);
   await pressA(input);

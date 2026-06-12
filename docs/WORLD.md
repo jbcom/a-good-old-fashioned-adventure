@@ -31,13 +31,26 @@ route is not discarded; it is recast as unlockable route packs:
 
 ## Current Runtime Status
 
-As of S9.3, the authored Hearthwake-to-dungeon road still provides the playable
-route that reaches the princess rescue. The end state has already pivoted:
-rescue now opens the results panel, A enters the upgrade graph, up/down selects
-nodes, A buys a connected affordable upgrade, and B returns to results. S9.4 is
-the remaining runtime-shape pivot that turns the active route itself into the
-compact south-to-north rescue map. S9.5 then proves a second run visibly changes
-after a purchased upgrade.
+As of S9.4, a new game boots straight into `map:rescue-route` — the compact
+bottom-to-top baseline run defined by `incremental.loop.startMap`. The knight
+spawns at the south edge, a serpentine path climbs north past trash-mob coin
+fights, the route dragon (`dragon-guardian`, a winnable 60 hp first guardian —
+the Shadow Warlord remains the dungeon boss) holds the pass below the princess
+plateau, and freeing Princess Amber (`quest:rescue-run`) pays the rescue roses
+and opens results → upgrade graph. The authored Hearthwake-to-dungeon road
+remains fully playable as the route-pack library; browser journey coverage
+seeds it from a save slot instead of New Game. S9.5 then proves a second run
+visibly changes after a purchased upgrade.
+
+### Rescue Route Map Contract
+
+`map:rescue-route` is 26x64 tiles (416x1024 px, ~2-3.5 minutes with fights at
+144 px/s): grass base, mountain border, serpentine path spine with two bends,
+a water pocket off the east shoulder, a castle-road slab plateau for the
+princess at the north, terrain families (grass, path, mountain, water,
+castle-road) painted by deterministic chunks, and authored waypoint props. Trash mobs (forest orcs, raiders, a
+scout) line the path as the coin engine; the dragon is the only authored boss
+placement.
 
 ## Region Map
 

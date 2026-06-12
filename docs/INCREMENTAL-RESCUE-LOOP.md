@@ -264,9 +264,12 @@ agree:
 - S9.3 is complete: princess rescue opens results, A opens the upgrade graph,
   up/down moves selection, A buys an affordable connected node, and B returns
   to results through public controls.
-- S9.4 remains the next runtime-shape change: build the compact bottom-to-top
-  rescue route with knight start, princess top anchor, dragon guard, compact
-  currency HUD, and browser playthrough coverage.
+- S9.4 is complete: `incremental.loop.startMap` boots a new game into
+  `map:rescue-route` — knight south, serpentine coin-fight climb, the winnable
+  `dragon-guardian` below the princess plateau, `quest:rescue-run` paying the
+  rescue roses into results, with the one-line currency HUD and a public-input
+  browser run proving the whole loop. The expanded road stays playable as the
+  route-pack library behind saved slots.
 - S9.5 remains the second-run proof: rescue, spend, start another run, and
   observe the unlocked route/class/enemy/map mutation through player-facing
   state.

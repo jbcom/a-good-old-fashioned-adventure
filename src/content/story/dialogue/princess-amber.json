@@ -4,10 +4,15 @@
   "kind": "dialogue-bank",
   "speaker": "char:princess-amber",
   "slots": [
+    { "when": { "quest": "quest:rescue-run", "stage": "reach-princess" }, "node": "freed" },
     { "when": { "quest": "quest:rescue-amber", "stage": "reach-amber" }, "node": "rescued" },
     { "default": true, "node": "captive" }
   ],
   "nodes": {
+    "freed": {
+      "lines": ["My knight! The dragon sleeps and the road is yours — our kingdom is saved!"],
+      "emits": "dlg:princess-amber.freed"
+    },
     "rescued": {
       "lines": ["My hero! The Dark Shadow Warlord has been vaporized! Our kingdom is saved!"],
       "emits": "dlg:princess-amber.rescued"

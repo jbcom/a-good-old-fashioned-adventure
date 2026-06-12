@@ -190,6 +190,22 @@
         "projectile": { "type": "shadowbolt", "speed": 90, "life": 3.0 },
         "sfx": "magic"
       }
+    },
+    "dragon-guardian": {
+      "name": "Route Dragon",
+      "sprite": "sprite:dragon",
+      "palette": "palette:boss",
+      "hp": 60,
+      "speed": 44,
+      "hitbox": { "w": 18, "h": 18 },
+      "behavior": "boss",
+      "boss": {
+        "aggroRange": 140,
+        "cooldown": 1.6,
+        "spreadAngles": [-0.2, 0.2],
+        "projectile": { "type": "shadowbolt", "speed": 80, "life": 2.5 },
+        "sfx": "magic"
+      }
     }
   }
 }

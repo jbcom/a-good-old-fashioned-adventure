@@ -1306,7 +1306,7 @@ export function App({
   const startGame = useCallback(
     (options: StartOptions = {}) => {
       const classId = options.classId ?? selectedClass;
-      const mapId = options.mapId ?? "map:village";
+      const mapId = options.mapId ?? incremental.loop.startMap;
       const nextWorld = createGameWorld(19);
       autoStartQuests(nextWorld);
       setWorld(nextWorld);

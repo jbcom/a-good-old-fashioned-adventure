@@ -25,8 +25,8 @@ describe("registries are fully populated", () => {
     expect(props.size).toBe(69);
     expect(sprites.size).toBe(3);
     expect(animations.size).toBe(7);
-    expect(maps.size).toBe(16);
-    expect(quests.size).toBe(20);
+    expect(maps.size).toBe(17);
+    expect(quests.size).toBe(21);
     expect(dialogueBanks.size).toBe(31);
     expect(characters.size).toBe(34);
     expect(items.size).toBe(10);

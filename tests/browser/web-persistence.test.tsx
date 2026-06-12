@@ -86,7 +86,7 @@ it("persists a web save through Capacitor SQLite and restores it from Continue",
       },
       { timeout: 10_000 },
     )
-    .toBe("knight:map:village:12:12:0:0:upgrade:first-vow:knight:");
+    .toBe("knight:map:rescue-route:12:12:0:0:upgrade:first-vow:knight:");
 
   root?.unmount();
   root = undefined;
@@ -102,7 +102,7 @@ it("persists a web save through Capacitor SQLite and restores it from Continue",
   await expect.element(page.getByTestId("world-stage-shell")).toBeVisible();
   const shell = page.getByTestId("game-shell").element() as HTMLElement;
   expect(shell.dataset.classId).toBe("knight");
-  expect(shell.dataset.mapId).toBe("map:village");
+  expect(shell.dataset.mapId).toBe("map:rescue-route");
   expect(shell.dataset.coins).toBe("12");
   expect(shell.dataset.roses).toBe("0");
   expect(shell.dataset.rescueCount).toBe("0");

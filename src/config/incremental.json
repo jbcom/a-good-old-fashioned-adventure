@@ -8,6 +8,7 @@
     "playerAnchor": "south",
     "princessAnchor": "north",
     "guardian": "dragon",
+    "startMap": "map:rescue-route",
     "coreRunRequiresCastleInterior": false,
     "resultsMode": "upgrade-graph",
     "targetGameplayAreaPercentPhone": 80

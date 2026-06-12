@@ -89,6 +89,7 @@ export interface IncrementalConfig {
     playerAnchor: "south";
     princessAnchor: "north";
     guardian: "dragon";
+    startMap: string;
     coreRunRequiresCastleInterior: boolean;
     resultsMode: "upgrade-graph";
     targetGameplayAreaPercentPhone: number;

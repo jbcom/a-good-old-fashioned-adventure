@@ -1,0 +1,38 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:rescue-run",
+  "kind": "quest",
+  "title": "The Rescue Road",
+  "act": 1,
+  "startOn": { "enterMap": "map:rescue-route" },
+  "start": "fell-the-dragon",
+  "stages": [
+    {
+      "id": "fell-the-dragon",
+      "log": "Climb the rescue road and fell the route dragon.",
+      "advance": [
+        {
+          "when": { "enemyDefeated": "dragon-guardian" },
+          "to": "reach-princess",
+          "effects": [{ "sfx": "interact" }]
+        }
+      ]
+    },
+    {
+      "id": "reach-princess",
+      "log": "Free Princess Amber at the head of the road.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:princess-amber.freed:seen" },
+          "to": "done",
+          "effects": [
+            { "grantRunReward": "princessRescued" },
+            { "sfx": "victory" },
+            { "endGame": "victory" }
+          ]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}
