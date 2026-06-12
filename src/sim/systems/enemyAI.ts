@@ -9,7 +9,7 @@
  */
 import type { Entity, World } from "koota";
 import { FleeBehavior, SeekBehavior, Vector3, Vehicle } from "yuka";
-import { enemies } from "../../lib/config";
+import { combat as combatConfig, enemies } from "../../lib/config";
 import { spawnProjectile } from "../factories";
 import {
   Choreo,
@@ -22,6 +22,7 @@ import {
   Speed,
   Threat,
   Transform,
+  Withered,
 } from "../traits";
 
 interface EnemyAi {
@@ -323,6 +324,12 @@ export function enemyAIStep(world: World, dt: number): void {
       }
     }
 
+    // the wither slows: drag the stride while the debuff holds
+    const withered = enemy.get(Withered);
+    if (withered && withered.left > 0) {
+      enemy.set(Withered, { left: Math.max(0, withered.left - dt) });
+      intentScale *= combatConfig.wither.speedFactor;
+    }
     enemy.set(MoveIntent, { x: intentX * intentScale, y: intentY * intentScale });
     if (intentX !== 0) enemy.set(Facing, { dir: intentX > 0 ? 1 : -1 });
     else if (dx !== 0) enemy.set(Facing, { dir: dx > 0 ? 1 : -1 });

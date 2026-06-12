@@ -35,6 +35,7 @@ import {
   SpriteRef,
   Threat,
   Transform,
+  Withered,
 } from "../traits";
 import { rngFor } from "../worldRng";
 
@@ -98,6 +99,10 @@ export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: 
     const stance = archetype?.guard?.stance;
     if (stance && choreo.phase === "guard") dmg *= stance.damageMultiplier;
   }
+
+  // the wither softens: a withered enemy takes amplified damage
+  // (single consumption point — damageEnemy IS every damage path)
+  if ((enemy.get(Withered)?.left ?? 0) > 0) dmg *= combat.wither.damageTakenFactor;
 
   const hp = health.hp - dmg;
   // anchored guardians hold their post: blows never slide them off it —

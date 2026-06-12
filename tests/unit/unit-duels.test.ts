@@ -1,8 +1,17 @@
 import { describe, expect, it } from "vitest";
 import { classes } from "../../src/lib/config";
 import { createGameWorld, instantiateMap, spawnEnemy, spawnUnit } from "../../src/sim/factories";
+import { damageEnemy } from "../../src/sim/systems/combat";
 import { step } from "../../src/sim/tick";
-import { Health, IsEnemy, IsPlayer, IsUnit, Transform } from "../../src/sim/traits";
+import {
+  Health,
+  IsEnemy,
+  IsPlayer,
+  IsUnit,
+  Projectile,
+  Transform,
+  Withered,
+} from "../../src/sim/traits";
 
 /** Open-floor arena with no player pawn: the rail-command field. */
 function arena(seed = 41) {
@@ -82,5 +91,75 @@ describe("S17.2 unit temperaments", () => {
     spawnEnemy(world, "forest-orc", 204, 200);
     runSeconds(world, 6);
     expect([...world.query(IsUnit)]).toHaveLength(0);
+  });
+});
+
+describe("S18.3 tier verbs", () => {
+  it("the warlock's field withers: slowed stride, softened body", () => {
+    const world = arena(46);
+    spawnUnit(world, "warlock", 200, 200);
+    const orc = spawnEnemy(world, "forest-orc", 230, 200);
+    runSeconds(world, 0.5);
+    expect(orc.get(Withered)?.left ?? 0).toBeGreaterThan(0);
+
+    // softened: the same blow lands harder on the withered
+    const fresh = spawnEnemy(world, "forest-orc", 600, 600);
+    const hpW0 = orc.get(Health)?.hp ?? 0;
+    const hpF0 = fresh.get(Health)?.hp ?? 0;
+    damageEnemy(world, orc, 10, 1);
+    damageEnemy(world, fresh, 10, 1);
+    const witheredLoss = hpW0 - (orc.get(Health)?.hp ?? 0);
+    const freshLoss = hpF0 - (fresh.get(Health)?.hp ?? 0);
+    expect(witheredLoss).toBeGreaterThan(freshLoss);
+  });
+
+  it("the priest channels the wounded back to their feet", () => {
+    const world = arena(47);
+    const knight = spawnUnit(world, "knight", 210, 200);
+    spawnUnit(world, "priest", 230, 200);
+    const max = classes.classes.knight.temperament?.hp ?? 0;
+    knight.set(Health, { hp: max - 25, maxHp: max });
+    runSeconds(world, 4);
+    expect(knight.get(Health)?.hp ?? 0).toBeGreaterThan(max - 25);
+  });
+
+  it("the dread knight's blows carry the wither", () => {
+    const world = arena(48);
+    spawnUnit(world, "dread-knight", 180, 200);
+    const orc = spawnEnemy(world, "forest-orc", 230, 200);
+    let withered = false;
+    for (let i = 0; i < 60 * 4 && world.has(orc); i++) {
+      step(world, 1 / 60);
+      if ((orc.get(Withered)?.left ?? 0) > 0) {
+        withered = true;
+        break;
+      }
+    }
+    expect(withered).toBe(true);
+  });
+
+  it("the stormcaller's whirl looses bolts at the whole pack", () => {
+    const world = arena(49);
+    spawnUnit(world, "stormcaller", 200, 200);
+    spawnEnemy(world, "forest-orc", 260, 190);
+    spawnEnemy(world, "forest-orc", 250, 220);
+    spawnEnemy(world, "forest-orc", 270, 205);
+    let maxBolts = 0;
+    for (let i = 0; i < 60 * 2; i++) {
+      step(world, 1 / 60);
+      maxBolts = Math.max(maxBolts, [...world.query(Projectile)].length);
+    }
+    expect(maxBolts).toBeGreaterThanOrEqual(3);
+  });
+
+  it("the barbarian's storm strikes everything in the whirl", () => {
+    const world = arena(50);
+    spawnUnit(world, "barbarian", 200, 200);
+    const a = spawnEnemy(world, "forest-orc", 240, 195);
+    const b = spawnEnemy(world, "forest-orc", 245, 210);
+    runSeconds(world, 3);
+    const aHurt = !world.has(a) || (a.get(Health)?.hp ?? 99) < 20;
+    const bHurt = !world.has(b) || (b.get(Health)?.hp ?? 99) < 20;
+    expect(aHurt && bHurt).toBe(true);
   });
 });

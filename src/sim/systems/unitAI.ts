@@ -25,6 +25,7 @@ import {
   Speed,
   Threat,
   Transform,
+  Withered,
 } from "../traits";
 import { damageEnemy, meleeDamage } from "./combat";
 
@@ -93,22 +94,41 @@ function unitStrike(
 
   if (attack.kind === "projectile") {
     world.get(Outbox)?.sfx.push("magic");
-    const len = Math.max(1e-6, target.dist);
-    spawnProjectile(world, {
-      type: attack.projectile ?? "arrow",
-      x: transform.x + ((target.x - transform.x) / len) * 10,
-      y: transform.y + ((target.y - transform.y) / len) * 10 - 6,
-      vx: ((target.x - transform.x) / len) * (attack.speed ?? 160),
-      vy: ((target.y - transform.y) / len) * (attack.speed ?? 160),
-      life: attack.life ?? 2,
-      fromPlayer: true,
-    });
+    // storm-volley looses a bolt at EVERY enemy in the whirl radius;
+    // everyone else fires a single aimed shot
+    const targets =
+      temperament.verb === "storm-volley"
+        ? [...world.query(IsEnemy, Health, Transform)]
+            .map((enemy) => {
+              const t = enemy.get(Transform);
+              return t
+                ? { x: t.x, y: t.y, d: Math.hypot(t.x - transform.x, t.y - transform.y) }
+                : null;
+            })
+            .filter(
+              (t): t is { x: number; y: number; d: number } =>
+                !!t && t.d <= (temperament.blastRadius ?? 100),
+            )
+        : [{ x: target.x, y: target.y, d: target.dist }];
+    for (const aim of targets) {
+      const len = Math.max(1e-6, aim.d);
+      spawnProjectile(world, {
+        type: attack.projectile ?? "arrow",
+        x: transform.x + ((aim.x - transform.x) / len) * 10,
+        y: transform.y + ((aim.y - transform.y) / len) * 10 - 6,
+        vx: ((aim.x - transform.x) / len) * (attack.speed ?? 160),
+        vy: ((aim.y - transform.y) / len) * (attack.speed ?? 160),
+        life: attack.life ?? 2,
+        fromPlayer: true,
+      });
+    }
     return;
   }
 
   world.get(Outbox)?.sfx.push("slash");
   // melee: strike the target, and an AoE temperament splashes the cluster
   damageEnemy(world, target.enemy, meleeDamage(1), dir);
+  if (temperament.withersOnHit) applyWither(world, target.enemy);
   const blast = temperament.blastRadius ?? 0;
   if (blast > 0) {
     for (const enemy of [...world.query(IsEnemy, Health, Transform)]) {
@@ -117,9 +137,16 @@ function unitStrike(
       if (!t) continue;
       if (Math.hypot(t.x - target.x, t.y - target.y) <= blast) {
         damageEnemy(world, enemy, meleeDamage(1), dir);
+        if (temperament.withersOnHit) applyWither(world, enemy);
       }
     }
   }
+}
+
+function applyWither(world: World, enemy: Entity): void {
+  void world;
+  if (enemy.has(Withered)) enemy.set(Withered, { left: combat.wither.duration });
+  else enemy.add(Withered({ left: combat.wither.duration }));
 }
 
 function buildFieldView(world: World, self: { x: number; y: number }): FieldView {
@@ -224,7 +251,9 @@ export function unitAIStep(world: World, dt: number): void {
           break;
         }
         case "hold-range":
-        case "aoe": {
+        case "aoe":
+        case "debuff-aura":
+        case "storm-volley": {
           const keep = temperament.keepDistance ?? temperament.engage / 2;
           if (target.dist > temperament.engage) {
             brain.seek.active = true;
@@ -240,12 +269,17 @@ export function unitAIStep(world: World, dt: number): void {
           }
           break;
         }
-        case "aura": {
-          // march with the line: stay near the foremost ally, never engage
+        case "aura":
+        case "heal-beam": {
+          // supports never engage: the goal layer steers them
           break;
         }
       }
-      if (target.dist <= temperament.engage && temperament.verb !== "aura") {
+      if (
+        target.dist <= temperament.engage &&
+        temperament.verb !== "aura" &&
+        temperament.verb !== "heal-beam"
+      ) {
         unitStrike(world, unit, info.classId, temperament, target);
       }
     }
@@ -264,6 +298,48 @@ export function unitAIStep(world: World, dt: number): void {
         if (ahead) {
           brain.seek.active = true;
           brain.seek.target.set(ahead.x, ahead.y, 0);
+        }
+      }
+    }
+
+    // the withering field: every enemy inside the radius carries the debuff
+    if (temperament.verb === "debuff-aura") {
+      const radius = temperament.auraRadius ?? 0;
+      for (const enemy of world.query(IsEnemy, Health, Transform)) {
+        const t = enemy.get(Transform);
+        if (!t) continue;
+        if (Math.hypot(t.x - transform.x, t.y - transform.y) <= radius) {
+          applyWither(world, enemy);
+        }
+      }
+    }
+
+    // heal-beam: channel into the most wounded ally within reach
+    if (temperament.verb === "heal-beam") {
+      brain.pulseLeft -= dt;
+      if (brain.pulseLeft <= 0) {
+        brain.pulseLeft += temperament.pulsePeriod ?? 0.6;
+        let patient: Entity | null = null;
+        let worst = 1;
+        for (const ally of world.query(IsUnit, Health, Transform)) {
+          if (ally === unit) continue;
+          const t = ally.get(Transform);
+          const health = ally.get(Health);
+          if (!t || !health || health.maxHp <= 0) continue;
+          const away = Math.hypot(t.x - transform.x, t.y - transform.y);
+          if (away > temperament.engage) continue;
+          const ratio = health.hp / health.maxHp;
+          if (ratio < worst) {
+            worst = ratio;
+            patient = ally;
+          }
+        }
+        const health = patient?.get(Health);
+        if (patient && health && worst < 1) {
+          patient.set(Health, {
+            hp: Math.min(health.maxHp, health.hp + (temperament.healPerPulse ?? 0)),
+            maxHp: health.maxHp,
+          });
         }
       }
     }

@@ -60,5 +60,10 @@
     "sandball": "sprite:proj-sandball",
     "shadowbolt": "sprite:proj-shadowbolt",
     "thornbolt": "sprite:proj-thornbolt"
+  },
+  "wither": {
+    "duration": 2.5,
+    "speedFactor": 0.55,
+    "damageTakenFactor": 1.35
   }
 }

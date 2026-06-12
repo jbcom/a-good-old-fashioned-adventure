@@ -43,6 +43,8 @@ export const FxBurst = trait(
 /** World resource: monotonic count of spawned fx bursts (test observability). */
 export const FxStats = trait({ spawned: 0 });
 
+/** Withered (warlock line): slowed and softened while it lasts. */
+export const Withered = trait({ left: 0 });
 /** Enemy threat telegraph: touch damage arms only after a visible wind-up. */
 export const Threat = trait({ windupLeft: 0, armed: false, casting: false });
 /**
