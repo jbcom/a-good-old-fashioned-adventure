@@ -46,7 +46,10 @@
     "telegraphThrobHz": 24,
     "telegraphThrobScale": 0.14,
     "castFlickerHz": 14,
-    "castFlickerScale": 1.12
+    "castFlickerScale": 1.12,
+    "hitStopDuration": 0.07,
+    "projectileTrailHz": 18,
+    "projectileTrailDuration": 0.18
   },
   "projectileSprites": {
     "arrow": "sprite:proj-arrow",

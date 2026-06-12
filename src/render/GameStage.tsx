@@ -262,6 +262,7 @@ class SceneSync {
           fx.kind === "dissolve"
             ? flashCanvas(fx.spriteId, fx.paletteId)
             : spriteCanvas(fx.spriteId, fx.paletteId);
+        // trail ghosts reuse the projectile's own sprite at fading alpha
         const mesh = new Mesh(
           new PlaneGeometry(canvas.width, canvas.height),
           createDioramaMaterial(textureFor(canvas), { role: "spark" }),
@@ -274,9 +275,13 @@ class SceneSync {
       }
       const progress = 1 - fx.left / fx.total;
       const material = tracked.mesh.material as ShaderMaterial;
-      if (material.uniforms.uAlpha) material.uniforms.uAlpha.value = fx.left / fx.total;
+      if (material.uniforms.uAlpha) {
+        const fade = fx.left / fx.total;
+        material.uniforms.uAlpha.value = fx.kind === "trail" ? fade * 0.6 : fade;
+      }
       const rise = fx.kind === "dissolve" ? progress * combat.feedback.dissolveFxRise : 0;
-      tracked.mesh.position.set(t.x, 9 + rise, t.y);
+      const height = fx.kind === "trail" ? 7 : 9;
+      tracked.mesh.position.set(t.x, height + rise, t.y);
       seen.add(id);
     }
 

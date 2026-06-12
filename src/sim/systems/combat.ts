@@ -21,6 +21,7 @@ import {
   Health,
   Hitbox,
   HitFlash,
+  HitStop,
   IsEnemy,
   IsPickup,
   IsPlayer,
@@ -195,12 +196,16 @@ export function playerAttack(world: World): void {
     h: combat.hitboxes.swingHeight,
   };
 
+  let connected = false;
   for (const enemy of [...world.query(IsEnemy, Health, Transform)]) {
     const box = entityBox(enemy);
     if (box && rectOverlap(swing, box)) {
       damageEnemy(world, enemy, meleeDamage(level.level), facing.dir);
+      connected = true;
     }
   }
+  // hit-stop: a connecting swing freezes the sim for a crunchy beat
+  if (connected) world.set(HitStop, { left: combat.feedback.hitStopDuration });
   for (const chest of [...world.query(LootContainer, Transform)]) {
     const t = chest.get(Transform);
     const loot = chest.get(LootContainer);
@@ -304,6 +309,23 @@ export function combatStep(world: World, dt: number): void {
     const p = projectile.get(Projectile);
     const t = projectile.get(Transform);
     if (!p || !t) continue;
+    // streak: each bolt sheds fading ghosts of itself along its flight
+    let trail = p.trail - dt;
+    if (trail <= 0) {
+      const trailSprite = combat.projectileSprites[p.type as keyof typeof combat.projectileSprites];
+      if (trailSprite) {
+        spawnFx(world, {
+          kind: "trail",
+          spriteId: trailSprite,
+          paletteId: "palette:base",
+          dir: p.vx >= 0 ? 1 : -1,
+          left: combat.feedback.projectileTrailDuration,
+          x: t.x,
+          y: t.y,
+        });
+      }
+      trail = 1 / combat.feedback.projectileTrailHz;
+    }
     const life = p.life - dt;
     if (life <= 0) {
       projectile.destroy();
@@ -312,7 +334,7 @@ export function combatStep(world: World, dt: number): void {
     const x = t.x + p.vx * dt;
     const y = t.y + p.vy * dt;
     projectile.set(Transform, { x, y });
-    projectile.set(Projectile, { ...p, life });
+    projectile.set(Projectile, { ...p, life, trail });
 
     if (p.fromPlayer) {
       const level = player?.get(Level);

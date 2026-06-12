@@ -21,6 +21,7 @@ import {
   FxStats,
   Health,
   Hitbox,
+  HitStop,
   IncrementalProgress,
   Interactable,
   Inventory,
@@ -61,6 +62,7 @@ export function createGameWorld(seed = 1): World {
     IncrementalProgress(initialIncrementalProgress(playerConfig.baseStats.gold ?? 0)),
     QuestLog({ active: {}, completed: [] }),
     FxStats({ spawned: 0 }),
+    HitStop({ left: 0 }),
     Outbox({ sfx: [], dialogue: null, mapLoad: null, endGame: null }),
   );
   return world;
@@ -203,7 +205,7 @@ export interface ProjectileSpawn {
 
 export function spawnProjectile(world: World, spec: ProjectileSpawn): Entity {
   const { x, y, ...rest } = spec;
-  return world.spawn(Projectile(rest), Transform({ x, y }));
+  return world.spawn(Projectile({ ...rest, trail: 0 }), Transform({ x, y }));
 }
 
 export interface InstantiateOptions {
