@@ -24,13 +24,19 @@ jobs:
     name: Versioned Web Bundle
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Validate release tag
+        run: |
+          if ! [[ "$RELEASE_TAG" =~ ^[a-z0-9-]+-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: invalid release tag '$RELEASE_TAG'" >&2
+            exit 1
+          fi
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           ref: ${{ env.RELEASE_TAG }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
         with:
           version: 10.33.2
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 22
           cache: pnpm
@@ -38,10 +44,14 @@ jobs:
       - run: pnpm build
       - name: Package web bundle
         run: |
+          if [ ! -f "dist/index.html" ]; then
+            echo "Error: dist/ is missing or incomplete" >&2
+            exit 1
+          fi
           BUNDLE="a-good-old-fashioned-adventure-web-${RELEASE_TAG}.zip"
           (cd dist && zip -qr "../${BUNDLE}" .)
           echo "BUNDLE=${BUNDLE}" >> "$GITHUB_ENV"
-      - uses: actions/attest-build-provenance@v3
+      - uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
         with:
           subject-path: ${{ env.BUNDLE }}
       - name: Upload to release
@@ -53,31 +63,42 @@ jobs:
     name: Versioned Android Debug APK
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - name: Validate release tag
+        run: |
+          if ! [[ "$RELEASE_TAG" =~ ^[a-z0-9-]+-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: invalid release tag '$RELEASE_TAG'" >&2
+            exit 1
+          fi
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
           ref: ${{ env.RELEASE_TAG }}
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@0e279bb959325dab635dd2c09392533439d90093 # v6.0.8
         with:
           version: 10.33.2
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 22
           cache: pnpm
-      - uses: actions/setup-java@v5
+      - uses: actions/setup-java@be666c2fcd27ec809703dec50e508c2fdc7f6654 # v5.2.0
         with:
           distribution: zulu
           java-version: 21
-      - uses: android-actions/setup-android@v4
+      - uses: android-actions/setup-android@40fd30fb8d7440372e1316f5d1809ec01dcd3699 # v4.0.1
       - run: pnpm install --frozen-lockfile
       - run: pnpm cap:sync
       - run: ./gradlew :app:assembleDebug
         working-directory: android
       - name: Package APK
         run: |
+          APK_SOURCE="android/app/build/outputs/apk/debug/app-debug.apk"
+          if [ ! -f "$APK_SOURCE" ]; then
+            echo "Error: debug APK not found at $APK_SOURCE" >&2
+            exit 1
+          fi
           APK="a-good-old-fashioned-adventure-${RELEASE_TAG}-debug.apk"
-          cp android/app/build/outputs/apk/debug/app-debug.apk "$APK"
+          cp "$APK_SOURCE" "$APK"
           echo "APK=${APK}" >> "$GITHUB_ENV"
-      - uses: actions/attest-build-provenance@v3
+      - uses: actions/attest-build-provenance@a2bbfa25375fe432b6a289bc6b6cd05ecd0c4c32 # v4.1.0
         with:
           subject-path: ${{ env.APK }}
       - name: Upload to release
