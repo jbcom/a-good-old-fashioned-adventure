@@ -307,12 +307,17 @@ export function enemyAIStep(world: World, dt: number): void {
     else if (dx !== 0) enemy.set(Facing, { dir: dx > 0 ? 1 : -1 });
 
     // telegraphs: touch damage arms after a visible wind-up near the player;
-    // ranged enemies flash through the last beat before each shot
+    // ranged enemies flash through the last beat before each shot. A
+    // touchHarmless enemy (the lectern wraith) never arms — standing inside
+    // it is safe; only its attacks threaten.
     const threat = enemy.get(Threat);
     if (threat) {
       const windup = enemies.aiDefaults.windup;
       let { windupLeft, armed } = threat;
-      if (dist <= windup.armRange) {
+      if (archetype.touchHarmless) {
+        armed = false;
+        windupLeft = windup.duration;
+      } else if (dist <= windup.armRange) {
         if (!armed) {
           windupLeft = Math.max(0, windupLeft - dt);
           if (windupLeft === 0) armed = true;

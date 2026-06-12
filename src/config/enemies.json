@@ -335,12 +335,13 @@
         "w": 14,
         "h": 14
       },
-      "behavior": "caster",
+      "behavior": "turret",
+      "touchHarmless": true,
+      "knockbackImmune": true,
       "miniboss": true,
-      "caster": {
-        "attackRange": 110,
-        "keepDistance": 56,
-        "cooldown": 1.8,
+      "turret": {
+        "attackRange": 120,
+        "cooldown": 2.4,
         "projectile": {
           "type": "shadowbolt",
           "speed": 70,

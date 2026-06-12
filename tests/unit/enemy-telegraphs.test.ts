@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { enemies } from "../../src/lib/config";
 import { threatScale } from "../../src/render/pose";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
+import { damageEnemy } from "../../src/sim/systems/combat";
 import { step } from "../../src/sim/tick";
 import { Clock, Health, IsEnemy, IsPlayer, Threat, Transform } from "../../src/sim/traits";
 
@@ -60,6 +61,41 @@ describe("S12.3 enemy telegraphs", () => {
 
     orc.set(Threat, { windupLeft: 0, armed: true, casting: false });
     expect(threatScale(world, orc)).toBe(1);
+  });
+
+  it("never arms a touchHarmless enemy: the wraith hurts only through bolts", () => {
+    const world = createGameWorld(74);
+    instantiateMap(world, "map:castle-library", { classId: "knight" });
+    const player = world.queryFirst(IsPlayer);
+    const shade = [...world.query(IsEnemy, Transform)].find(
+      (entity) => entity.get(IsEnemy)?.archetypeId === "lectern-shade",
+    );
+    if (!player || !shade) throw new Error("missing actors");
+    const st = shade.get(Transform);
+    player.set(Transform, { x: st?.x ?? 0, y: st?.y ?? 0 });
+
+    // standing inside the wraith through three full wind-ups: contact never
+    // arms (touch damage requires armed — gated in combatStep), and the
+    // wind-up clock never even starts
+    for (let i = 0; i < 3; i++) {
+      step(world, windup.duration + 0.05);
+      expect(shade.get(Threat)?.armed).toBe(false);
+      expect(shade.get(Threat)?.windupLeft).toBe(windup.duration);
+    }
+  });
+
+  it("holds an anchored guardian on its post through repeated blows", () => {
+    const world = createGameWorld(75);
+    instantiateMap(world, "map:castle-library", { classId: "knight" });
+    const shade = [...world.query(IsEnemy, Transform)].find(
+      (entity) => entity.get(IsEnemy)?.archetypeId === "lectern-shade",
+    );
+    if (!shade) throw new Error("missing shade");
+    const x0 = shade.get(Transform)?.x;
+    // without knockbackImmune each hit slides the shade 10px — five blows
+    // would carry it beyond sword reach and turn the duel unwinnable
+    for (let i = 0; i < 5; i++) damageEnemy(world, shade, 1, 1);
+    expect(shade.get(Transform)?.x).toBe(x0);
   });
 
   it("flickers casters through the pre-shot beat", () => {

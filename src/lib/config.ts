@@ -134,6 +134,10 @@ export interface EnemyArchetype {
   speed: number;
   hitbox: { w: number; h: number };
   behavior: "patrol" | "chase" | "caster" | "turret" | "boss" | "ambush" | "guard";
+  /** Contact never arms: this enemy threatens only through its attacks. */
+  touchHarmless?: boolean;
+  /** Blows never displace it: anchored guardians hold their post. */
+  knockbackImmune?: boolean;
   miniboss?: boolean;
   relentless?: boolean;
   ambush?: {

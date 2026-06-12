@@ -95,11 +95,16 @@ export function createToneAudioEngine(): ToneAudioEngine {
     bgmIndex = 0;
   }
 
+  let lastBgmTime = 0;
   function playBgmStep(notes: number[]) {
     if (disposed || !notes.length) return;
     const note = notes[bgmIndex % notes.length];
     bgmIndex += 1;
-    bgmSynth.triggerAttackRelease(note, audio.bgm.noteDuration, Tone.now() + 0.02);
+    // Tone asserts start times strictly increase; rapid remounts can land
+    // two steps in the same audio frame, so nudge past the previous note
+    const at = Math.max(Tone.now() + 0.02, lastBgmTime + 1e-3);
+    lastBgmTime = at;
+    bgmSynth.triggerAttackRelease(note, audio.bgm.noteDuration, at);
   }
 
   function startLoop() {

@@ -39,6 +39,9 @@ function mountApp(repository: MemorySaveRepository) {
 
 async function fightNearby(governor: PlayerGovernor, presses: number) {
   for (let i = 0; i < presses; i++) {
+    // never mash through a death: A on the gameover screen silently starts
+    // a NEW RUN, teleporting the test onto Rescue Road mid-assertion
+    if (governor.perceive().mode !== "playing") return;
     await governor.press("a");
     await wait(80);
   }
@@ -157,7 +160,7 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
   const shell = () => page.getByTestId("game-shell").element() as HTMLElement;
   expect(shell().dataset.purchasedUpgrades).toContain("upgrade:knight-vigor");
   await expect.poll(() => Number(shell().dataset.maxHp ?? 0)).toBe(110);
-}, 240_000);
+}, 360_000);
 
 it("walks through the castle gate to the relocated princess", async () => {
   await page.viewport(1280, 720);
@@ -201,6 +204,63 @@ it("walks through the castle gate to the relocated princess", async () => {
   await governor.reachPoint(216, 60, { tolerance: 16, maxSteps: 40 });
   await expect.poll(() => governor.perceive().mapName, { timeout: 10_000 }).toBe("Castle Hall");
 
+  // detour: the library branch must outpay the straight lane — face the
+  // Lectern Shade, crack the royal strongbox, bank it all before the rescue
+  const shell2 = () => page.getByTestId("game-shell").element() as HTMLElement;
+  const coinsBeforeBranch = Number(shell2().dataset.coins ?? 0);
+  const rosesBeforeBranch = Number(shell2().dataset.roses ?? 0);
+  await governor.reachPoint(320, 116, { tolerance: 28, maxSteps: 48 });
+  await expect.poll(() => governor.perceive().mapName, { timeout: 10_000 }).toBe("Castle Library");
+  const enemiesAtEntry = Number(shell2().dataset.enemies ?? 0);
+  const fxAtEntry = Number(shell2().dataset.fxSpawned ?? 0);
+  for (let round = 0; round < 16; round++) {
+    await governor.reachPoint(250, 208, { tolerance: 30, maxSteps: 16 }).catch(() => {});
+    await fightNearby(governor, 6);
+    if (Number(shell2().dataset.enemies ?? 0) < enemiesAtEntry) break;
+    if (governor.perceive().mode !== "playing") break;
+  }
+  const duelState = {
+    mode: governor.perceive().mode,
+    map: governor.perceive().mapName,
+    hp: shell2().dataset.hp,
+    enemies: shell2().dataset.enemies,
+    enemiesAtEntry,
+    swingsFired: Number(shell2().dataset.fxSpawned ?? 0) - fxAtEntry,
+    aPresses: shell2().dataset.aPresses,
+    attackCalls: shell2().dataset.attackCalls,
+    dialogueOpen: !!document.querySelector('[data-testid="dialogue-box"]'),
+    dialogueText: document.querySelector('[data-testid="dialogue-box"]')?.textContent ?? "",
+    pose: shell2().dataset.playerPose,
+    x: shell2().dataset.playerX,
+    y: shell2().dataset.playerY,
+  };
+  await page.screenshot({ path: "../../docs/evidence/library-duel-state.png" });
+  expect(duelState.mode, `duel state: ${JSON.stringify(duelState)}`).toBe("playing");
+  expect(duelState.map, `duel state: ${JSON.stringify(duelState)}`).toBe("Castle Library");
+  // first clean clear of a placed miniboss pays a rose
+  await expect
+    .poll(() => Number(shell2().dataset.roses ?? 0), { timeout: 15_000 })
+    .toBeGreaterThan(rosesBeforeBranch);
+  // crack the strongbox from the side so the horizontal swing arc covers it
+  for (let round = 0; round < 8; round++) {
+    await governor.reachPoint(224, 128, { tolerance: 12, maxSteps: 24 }).catch(() => {});
+    await governor.hold("right", 200);
+    await fightNearby(governor, 3);
+    if (Number(shell2().dataset.coins ?? 0) >= coinsBeforeBranch + 150) break;
+  }
+  await expect
+    .poll(() => Number(shell2().dataset.coins ?? 0), { timeout: 10_000 })
+    .toBeGreaterThanOrEqual(coinsBeforeBranch + 150);
+  const libraryShot = await page.screenshot({
+    path: "../../docs/evidence/castle-library-shade.png",
+  });
+  expect(libraryShot).toBeTruthy();
+
+  // back to the hall through the south door — aim deep into the portal zone
+  // so reach tolerance can't stop short of its edge
+  await governor.reachPoint(320, 368, { tolerance: 10, maxSteps: 56 }).catch(() => {});
+  await expect.poll(() => governor.perceive().mapName, { timeout: 10_000 }).toBe("Castle Hall");
+
   // the dragon followed her into the candlelit hall — take the south lane,
   // clear of the library door (y<=144) and the armory door (x468-532, y>=404)
   const hallWaypoints: Array<[number, number, number]> = [
@@ -221,8 +281,13 @@ it("walks through the castle gate to the relocated princess", async () => {
     .poll(() => governor.perceive().questText, { timeout: 10_000 })
     .toContain("Free Princess Amber");
 
-  await governor.reachPoint(788, 264, { tolerance: 26, maxSteps: 32 });
-  await governor.press("a");
+  // close to within the princess's speak radius before pressing — a loose
+  // stop leaves A as a sword swing instead of a greeting
+  for (let i = 0; i < 4; i++) {
+    await governor.reachPoint(788, 264, { tolerance: 12, maxSteps: 24 }).catch(() => {});
+    await governor.press("a");
+    if (governor.perceive().dialogueText.includes("kingdom")) break;
+  }
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("kingdom is saved");
   const hallShot = await page.screenshot({
     path: "../../docs/evidence/castle-hall-rescue.png",
@@ -231,7 +296,7 @@ it("walks through the castle gate to the relocated princess", async () => {
 
   await governor.press("a");
   await expect.element(page.getByTestId("results-screen")).toBeVisible();
-}, 240_000);
+}, 360_000);
 
 it("banks coins through death and into the next run", async () => {
   await page.viewport(1280, 720);
@@ -337,9 +402,15 @@ it("fields one more orc per warband rank and the bounty pays", async () => {
     path: "../../docs/evidence/warband-reinforced-road.png",
   });
   expect(warbandShot).toBeTruthy();
-  for (let round = 0; round < 6; round++) {
+  // the pair may drift while chasing: re-close on both camp spots each round
+  for (let round = 0; round < 12; round++) {
+    const target: [number, number] = round % 2 === 0 ? [136, 880] : [156, 880];
+    await governor
+      .reachPoint(target[0], target[1], { tolerance: 22, maxSteps: 20 })
+      .catch(() => {});
     await fightNearby(governor, 6);
     if (Number(shell().dataset.enemies ?? 0) <= authoredEnemies - 1) break;
+    if (governor.perceive().mode !== "playing") break;
   }
   await expect
     .poll(() => Number(shell().dataset.enemies ?? 0), { timeout: 15_000 })

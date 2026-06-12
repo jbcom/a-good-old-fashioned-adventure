@@ -87,12 +87,12 @@ export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: 
   const health = enemy.get(Health);
   const transform = enemy.get(Transform);
   if (!health || !transform) return;
+  const archetype = enemies.archetypes[enemy.get(IsEnemy)?.archetypeId ?? ""];
 
   // choreographed bosses soak damage outside their open windows: the dragon
   // is only fully vulnerable in its lull, a stance fighter while not guarding
   const choreo = enemy.get(Choreo);
   if (choreo && choreo.phase !== "") {
-    const archetype = enemies.archetypes[enemy.get(IsEnemy)?.archetypeId ?? ""];
     const phases = archetype?.boss?.phases;
     if (phases && choreo.phase !== "lull") dmg *= phases.armorMultiplier;
     const stance = archetype?.guard?.stance;
@@ -100,7 +100,14 @@ export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: 
   }
 
   const hp = health.hp - dmg;
-  enemy.set(Transform, { ...transform, x: transform.x + knockDir * combat.knockback.enemyOnHit });
+  // anchored guardians hold their post: blows never slide them off it —
+  // an immovable turret can otherwise be knocked beyond sword reach
+  if (!archetype?.knockbackImmune) {
+    enemy.set(Transform, {
+      ...transform,
+      x: transform.x + knockDir * combat.knockback.enemyOnHit,
+    });
+  }
   if (enemy.has(HitFlash)) enemy.set(HitFlash, { left: combat.feedback.enemyHitFlashDuration });
   else enemy.add(HitFlash({ left: combat.feedback.enemyHitFlashDuration }));
   shake(world, combat.screenShake.onEnemyHit);

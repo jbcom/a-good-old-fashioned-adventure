@@ -1330,6 +1330,8 @@ export function App({
     sfxPlayed: 0,
   });
   const inputRef = useRef<InputState>(emptyInput());
+  /** input observability: journeys assert presses actually reach the sim */
+  const inputStats = useRef({ aPresses: 0, attackCalls: 0 });
   const snapshotRef = useRef<UiSnapshot>(EMPTY_SNAPSHOT);
   const audioRef = useRef<ToneAudioEngine | null>(null);
   const mapIntroSeenRef = useRef(new Set<string>());
@@ -1663,6 +1665,7 @@ export function App({
   }, [clearOutbox, dialogue, world]);
 
   const pressA = useCallback(() => {
+    inputStats.current.aPresses += 1;
     if (paused) return;
     if (mode === "landing") {
       setMode("title");
@@ -1732,6 +1735,7 @@ export function App({
       return;
     }
     aimAtNearestEnemy(world);
+    inputStats.current.attackCalls += 1;
     playerAttack(world);
     clearOutbox(world);
   }, [
@@ -1877,6 +1881,8 @@ export function App({
       "data-fx-spawned": String(snapshot.fxSpawned),
       "data-player-pose": snapshot.playerPose,
       "data-boss-phase": snapshot.bossPhase,
+      "data-a-presses": String(inputStats.current.aPresses),
+      "data-attack-calls": String(inputStats.current.attackCalls),
       "data-max-hp": String(snapshot.maxHp),
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
       "data-gold": String(snapshot.incrementalProgress.coins),
