@@ -54,6 +54,37 @@ describe("CI and release automation", () => {
     expect(workflow).toContain("android/app/build/outputs/apk/debug/*.apk");
   });
 
+  it("ships versioned release artifacts with provenance from release.yml", () => {
+    const workflow = read(".github/workflows/release.yml");
+    expect(workflow).toContain("release:");
+    expect(workflow).toContain("types: [published]");
+    expect(workflow).toContain("workflow_dispatch");
+    expect(workflow).toContain("pnpm build");
+    expect(workflow).toContain("./gradlew :app:assembleDebug");
+    expect(workflow).toContain("actions/attest-build-provenance");
+    expect(workflow).toContain("gh release upload");
+  });
+
+  it("deploys the game to GitHub Pages from cd.yml on main pushes", () => {
+    const workflow = read(".github/workflows/cd.yml");
+    expect(workflow).toContain("branches:");
+    expect(workflow).toContain("- main");
+    expect(workflow).toContain("pnpm build");
+    expect(workflow).toContain("actions/configure-pages");
+    expect(workflow).toContain("actions/upload-pages-artifact");
+    expect(workflow).toContain("actions/deploy-pages");
+    // pages serves the project under a subpath: the bundle must be
+    // relative-base
+    expect(read("vite.config.ts")).toContain('base: "./"');
+  });
+
+  it("documents the ci to release to cd flow", () => {
+    const deployment = read("DEPLOYMENT.md");
+    expect(deployment).toContain("release.yml");
+    expect(deployment).toContain("cd.yml");
+    expect(deployment).toContain("GitHub Pages");
+  });
+
   it("runs browser groups with CLI-level serialization flags", () => {
     const pkg = JSON.parse(read("package.json")) as {
       scripts: Record<string, string>;

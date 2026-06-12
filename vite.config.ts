@@ -2,6 +2,9 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 
 export default defineConfig({
+  // relative base: the same bundle serves from GitHub Pages' project subpath
+  // and from Capacitor's file:// origin
+  base: "./",
   plugins: [react()],
   publicDir: "public",
   assetsInclude: ["**/*.wasm", "**/*.pix"],

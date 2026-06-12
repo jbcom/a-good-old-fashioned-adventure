@@ -1,0 +1,86 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to (re)build assets for
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+env:
+  CI: true
+  RELEASE_TAG: ${{ github.event_name == 'release' && github.event.release.tag_name || inputs.tag }}
+
+jobs:
+  web-bundle:
+    name: Versioned Web Bundle
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - name: Package web bundle
+        run: |
+          BUNDLE="a-good-old-fashioned-adventure-web-${RELEASE_TAG}.zip"
+          (cd dist && zip -qr "../${BUNDLE}" .)
+          echo "BUNDLE=${BUNDLE}" >> "$GITHUB_ENV"
+      - uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: ${{ env.BUNDLE }}
+      - name: Upload to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" "$BUNDLE" --clobber
+
+  android-apk:
+    name: Versioned Android Debug APK
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ env.RELEASE_TAG }}
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.33.2
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-java@v5
+        with:
+          distribution: zulu
+          java-version: 21
+      - uses: android-actions/setup-android@v4
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm cap:sync
+      - run: ./gradlew :app:assembleDebug
+        working-directory: android
+      - name: Package APK
+        run: |
+          APK="a-good-old-fashioned-adventure-${RELEASE_TAG}-debug.apk"
+          cp android/app/build/outputs/apk/debug/app-debug.apk "$APK"
+          echo "APK=${APK}" >> "$GITHUB_ENV"
+      - uses: actions/attest-build-provenance@v3
+        with:
+          subject-path: ${{ env.APK }}
+      - name: Upload to release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$RELEASE_TAG" "$APK" --clobber
