@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { incremental } from "../../src/lib/config";
 import {
   animations,
   characters,
@@ -23,7 +24,7 @@ describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
     expect(tiles.size).toBe(44);
     expect(props.size).toBe(69);
-    expect(sprites.size).toBe(23);
+    expect(sprites.size).toBe(43);
     expect(animations.size).toBe(7);
     expect(maps.size).toBe(17);
     expect(quests.size).toBe(21);
@@ -73,6 +74,15 @@ describe("registries are fully populated", () => {
       if (character.dialogue) {
         expect(dialogueBanks.has(character.dialogue), `${id} -> ${character.dialogue}`).toBe(true);
       }
+    }
+  });
+
+  it("every upgrade node carries a bespoke emblem sprite", () => {
+    // the DAG is a wall of designs, never a wall of text
+    // (docs/DESIGN-SYSTEM.md §upgrade emblems)
+    for (const node of incremental.upgradeGraph.nodes) {
+      const emblemId = node.id.replace(/^upgrade:/, "sprite:emblem-");
+      expect(sprites.has(emblemId), `${node.id} has no emblem ${emblemId}`).toBe(true);
     }
   });
 });

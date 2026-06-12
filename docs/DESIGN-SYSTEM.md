@@ -53,6 +53,20 @@ cabinet, and not cyberpunk glass.
   `stance.damageMultiplier` damage. Phase timers live on the archetype in
   `src/config/enemies.json`; the renderer reads the same trait the tests do.
 
+- **Upgrade emblems:** every node in the upgrade graph carries a bespoke
+  16x16 pixel emblem (`src/content/pixelart/upgrades.pix`, sprite id
+  `sprite:emblem-<node>` for `upgrade:<node>`) — the DAG reads as a wall of
+  designs, never a wall of text. Emblems are bold single-glyph metaphors
+  (a wax-sealed scroll for the First Vow, a tusked banner for the Orc
+  Warband) drawn with 1px ink outlines and generous negative space so they
+  stay readable at 40-56px tile size. Node STATE is an icon treatment, not
+  a caption: purchased = full ink, available = parchment-bright, can't
+  afford = ghosted (low alpha), locked = dark silhouette. Rank progress is
+  pips under the tile. Detail text lives in the tooltip layer only: hover
+  on desktop, ~350ms hold-finger or drag-over scrubbing on touch, with a
+  fixed bottom detail sheet on phone widths. A registry gate fails when a
+  graph node lacks its emblem.
+
 ## Source Tokens
 
 `src/config/ui.json` owns the source tokens:
