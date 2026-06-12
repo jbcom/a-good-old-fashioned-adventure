@@ -24,6 +24,7 @@ import {
   CameraState,
   CombatTimers,
   Facing,
+  FxBurst,
   HitFlash,
   InspectionPulse,
   IsPickup,
@@ -239,6 +240,35 @@ class SceneSync {
       }
       if (p.type === "arrow") tracked.mesh.scale.x = p.vx >= 0 ? 1 : -1;
       tracked.mesh.position.set(t.x, 7, t.y);
+      seen.add(id);
+    }
+
+    for (const entity of world.query(Transform, FxBurst)) {
+      const t = entity.get(Transform);
+      const fx = entity.get(FxBurst);
+      if (!t || !fx || fx.total <= 0) continue;
+      const id = entity as unknown as number;
+      let tracked = this.meshes.get(id);
+      if (!tracked) {
+        const canvas =
+          fx.kind === "dissolve"
+            ? flashCanvas(fx.spriteId, fx.paletteId)
+            : spriteCanvas(fx.spriteId, fx.paletteId);
+        const mesh = new Mesh(
+          new PlaneGeometry(canvas.width, canvas.height),
+          createDioramaMaterial(textureFor(canvas), { role: "spark" }),
+        );
+        mesh.rotation.x = engine.stage.billboardTilt;
+        mesh.scale.x = fx.dir >= 0 ? 1 : -1;
+        scene.add(mesh);
+        tracked = { mesh, textureKey: `${fx.kind}|${fx.spriteId}` };
+        this.meshes.set(id, tracked);
+      }
+      const progress = 1 - fx.left / fx.total;
+      const material = tracked.mesh.material as ShaderMaterial;
+      if (material.uniforms.uAlpha) material.uniforms.uAlpha.value = fx.left / fx.total;
+      const rise = fx.kind === "dissolve" ? progress * combat.feedback.dissolveFxRise : 0;
+      tracked.mesh.position.set(t.x, 9 + rise, t.y);
       seen.add(id);
     }
 

@@ -18,6 +18,30 @@ export const Speed = trait({ value: 0 });
 export const MoveIntent = trait({ x: 0, y: 0 });
 export const AimDirection = trait({ x: 1, y: 0 });
 export const SpriteRef = trait({ spriteId: "", paletteId: "" });
+
+/** Short-lived combat/motion feedback burst: swing arcs, death dissolves. */
+export interface FxBurstState {
+  kind: "swing" | "dissolve";
+  spriteId: string;
+  paletteId: string;
+  dir: number;
+  left: number;
+  total: number;
+}
+
+export const FxBurst = trait(
+  (): FxBurstState => ({
+    kind: "swing",
+    spriteId: "",
+    paletteId: "palette:base",
+    dir: 1,
+    left: 0,
+    total: 0,
+  }),
+);
+
+/** World resource: monotonic count of spawned fx bursts (test observability). */
+export const FxStats = trait({ spawned: 0 });
 export const PropRef = trait({ propId: "", state: "default" });
 export const NpcPatrol = trait(() => ({
   points: [] as { x: number; y: number }[],

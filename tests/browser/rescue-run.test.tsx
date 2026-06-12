@@ -89,6 +89,10 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
     .poll(() => governor.perceive().questText, { timeout: 10_000 })
     .toContain("Free Princess Amber");
 
+  // combat motion fired: swing streaks and death dissolves were spawned
+  const shellEl = page.getByTestId("game-shell").element() as HTMLElement;
+  expect(Number(shellEl.dataset.fxSpawned ?? 0)).toBeGreaterThan(5);
+
   await governor.reachPoint(216, 96, { tolerance: 26, maxSteps: 32 });
   await governor.press("a");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("kingdom is saved");

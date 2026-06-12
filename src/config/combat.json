@@ -36,7 +36,10 @@
   "feedback": {
     "enemyHitFlashDuration": 0.2,
     "damageTextLife": 0.6,
-    "damageTextRiseSpeed": -20
+    "damageTextRiseSpeed": -20,
+    "swingFxDuration": 0.12,
+    "dissolveFxDuration": 0.35,
+    "dissolveFxRise": 10
   },
   "projectileSprites": {
     "arrow": "sprite:proj-arrow",

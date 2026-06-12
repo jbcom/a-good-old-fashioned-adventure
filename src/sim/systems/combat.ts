@@ -9,13 +9,14 @@ import { classes, combat, drops, progression } from "../../lib/config";
 import { getItem } from "../../lib/content/registry";
 import { collides } from "../collision";
 import { pushEvent } from "../events";
-import { spawnPickup, spawnProjectile } from "../factories";
+import { spawnFx, spawnPickup, spawnProjectile } from "../factories";
 import {
   AimDirection,
   CameraState,
   CombatTimers,
   Facing,
   FlagState,
+  FxBurst,
   Health,
   Hitbox,
   HitFlash,
@@ -29,6 +30,7 @@ import {
   Projectile,
   PropRef,
   ShieldState,
+  SpriteRef,
   Transform,
 } from "../traits";
 import { rngFor } from "../worldRng";
@@ -93,6 +95,18 @@ export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: 
     const archetypeId = enemy.get(IsEnemy)?.archetypeId ?? "";
     const maxHp = health.maxHp;
     const { x, y } = transform;
+    const ghost = enemy.get(SpriteRef);
+    if (ghost) {
+      spawnFx(world, {
+        kind: "dissolve",
+        spriteId: ghost.spriteId,
+        paletteId: ghost.paletteId,
+        dir: knockDir,
+        left: combat.feedback.dissolveFxDuration,
+        x,
+        y,
+      });
+    }
     enemy.destroy();
     sfx(world, "pickup");
 
@@ -162,6 +176,15 @@ export function playerAttack(world: World): void {
 
   sfx(world, "slash");
   const reach = attack.reach ?? 28;
+  spawnFx(world, {
+    kind: "swing",
+    spriteId: "sprite:fx-swing",
+    paletteId: "palette:base",
+    dir: facing.dir,
+    left: combat.feedback.swingFxDuration,
+    x: transform.x + aim.x * (reach / 2),
+    y: transform.y + aim.y * (reach / 2) - 8,
+  });
   const swing: Box = {
     x: transform.x + aim.x * (reach / 2) - reach / 2,
     y: transform.y + aim.y * (reach / 2) + combat.hitboxes.swingVerticalOffset,
@@ -265,6 +288,14 @@ function grantXp(world: World, player: Entity, amount: number): void {
 export function combatStep(world: World, dt: number): void {
   const player = world.queryFirst(IsPlayer);
   const playerTransform = player?.get(Transform);
+
+  for (const fx of [...world.query(FxBurst)]) {
+    const state = fx.get(FxBurst);
+    if (!state) continue;
+    const left = state.left - dt;
+    if (left <= 0) fx.destroy();
+    else fx.set(FxBurst, { ...state, left });
+  }
 
   for (const projectile of [...world.query(Projectile, Transform)]) {
     const p = projectile.get(Projectile);

@@ -414,6 +414,11 @@
     0 12px 28px rgba(23, 17, 11, 0.36);
 }
 
+.currency-token {
+  display: inline-block;
+  transform-origin: center;
+}
+
 .top-hud {
   position: absolute;
   top: env(safe-area-inset-top, 0);

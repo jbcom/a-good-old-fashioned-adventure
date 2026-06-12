@@ -61,6 +61,7 @@ import {
   AimDirection,
   Facing,
   FlagState,
+  FxStats,
   Health,
   IncrementalProgress,
   type IncrementalProgressState,
@@ -128,6 +129,7 @@ interface UiSnapshot {
   playerY: number;
   enemies: number;
   projectiles: number;
+  fxSpawned: number;
   questLines: string[];
   runtime: {
     cols: number;
@@ -192,6 +194,7 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   playerY: 0,
   enemies: 0,
   projectiles: 0,
+  fxSpawned: 0,
   questLines: [],
   runtime: { cols: 0, rows: 0, grid: [] },
   explored: new Set(),
@@ -369,6 +372,7 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     playerY: transform?.y ?? 0,
     enemies: [...world.query(IsEnemy)].length,
     projectiles: [...world.query(Projectile)].length,
+    fxSpawned: world.get(FxStats)?.spawned ?? 0,
     questLines: questLogLines(world),
     runtime: {
       cols: runtime?.cols ?? 0,
@@ -574,6 +578,31 @@ function handleZoneTriggers(world: World, entered: Set<string>) {
   }
 }
 
+function CurrencyToken({ label, value, testId }: { label: string; value: number; testId: string }) {
+  const ref = useRef<HTMLSpanElement | null>(null);
+  const last = useRef(value);
+  useEffect(() => {
+    const token = ref.current;
+    if (value > last.current && token) {
+      const animation = animate(token, {
+        scale: [1, 1.3, 1],
+        duration: 420,
+        ease: "outBack",
+      });
+      last.current = value;
+      return () => {
+        animation.cancel();
+      };
+    }
+    last.current = value;
+  }, [value]);
+  return (
+    <span ref={ref} className="currency-token" data-testid={testId}>
+      {label} {value}
+    </span>
+  );
+}
+
 function usePanelEntrance(signature: string) {
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -756,8 +785,8 @@ function Hud({
           max={snapshot.nextXp}
           value={snapshot.xp}
         />
-        <span>C {snapshot.incrementalProgress.coins}</span>
-        <span>R {snapshot.incrementalProgress.roses}</span>
+        <CurrencyToken label="C" value={snapshot.incrementalProgress.coins} testId="hud-coins" />
+        <CurrencyToken label="R" value={snapshot.incrementalProgress.roses} testId="hud-roses" />
         <span className="map-token">{snapshot.mapName}</span>
         <button
           className="hud-menu"
@@ -1732,6 +1761,7 @@ export function App({
       "data-player-y": snapshot.playerY.toFixed(1),
       "data-enemies": String(snapshot.enemies),
       "data-projectiles": String(snapshot.projectiles),
+      "data-fx-spawned": String(snapshot.fxSpawned),
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
       "data-gold": String(snapshot.incrementalProgress.coins),
       "data-coins": String(snapshot.incrementalProgress.coins),
@@ -1760,6 +1790,7 @@ export function App({
       paused,
       snapshot.classId,
       snapshot.enemies,
+      snapshot.fxSpawned,
       snapshot.hp,
       snapshot.incrementalProgress,
       snapshot.inventory,

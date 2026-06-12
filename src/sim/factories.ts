@@ -16,6 +16,9 @@ import {
   EventQueue,
   Facing,
   FlagState,
+  FxBurst,
+  type FxBurstState,
+  FxStats,
   Health,
   Hitbox,
   IncrementalProgress,
@@ -56,6 +59,7 @@ export function createGameWorld(seed = 1): World {
     EventQueue({ events: [] }),
     IncrementalProgress(initialIncrementalProgress(playerConfig.baseStats.gold ?? 0)),
     QuestLog({ active: {}, completed: [] }),
+    FxStats({ spawned: 0 }),
     Outbox({ sfx: [], dialogue: null, mapLoad: null, endGame: null }),
   );
   return world;
@@ -171,6 +175,17 @@ export function spawnProp(world: World, propId: string, x: number, y: number): E
 
 export function spawnPickup(world: World, itemId: string, x: number, y: number, value = 0): Entity {
   return world.spawn(IsPickup({ itemId, value }), Transform({ x, y }));
+}
+
+export function spawnFx(
+  world: World,
+  fx: Omit<FxBurstState, "total"> & { x: number; y: number },
+): Entity {
+  const { x, y, ...state } = fx;
+  const stats = world.get(FxStats);
+  if (stats) world.set(FxStats, { spawned: stats.spawned + 1 });
+  else world.add(FxStats({ spawned: 1 }));
+  return world.spawn(FxBurst({ ...state, total: state.left }), Transform({ x, y }));
 }
 
 export interface ProjectileSpawn {
