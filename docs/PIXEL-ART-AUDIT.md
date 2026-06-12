@@ -64,3 +64,25 @@ State treatments carry the legibility; composites read fused.
 4. **Map-count check**: 17 maps ship; rails exist on one. Every route map
    in the S19 loop needs its gates/waypoints AND enough tile variety to
    pass the uniqueness gates after the rail content lands.
+
+## SA.0 itch library scan (327 packs owned)
+
+Classification: 224 PSX/3D (wrong medium — skip), 50 pixel-2D, 28 audio.
+First curation shortlist (allow-list candidates):
+
+- **Region trash bodies (feeds SA.3 gap 1):** 2D Pixel Art Bat / Rat /
+  Snake / Wild Boar / Raven / Vulture / Cobra / Owl / Squirrel sprite
+  packs — animal wave enemies give each region its own bodies without
+  hand-authoring every grid.
+- **Music (feeds S20.3):** Retro Combat (12 battle loops), Retro Dungeon
+  (12 loops), Retro Boss Battle, RPG Fantasy Tavern & Adventure, Calm Menu,
+  Victory & Level Complete (24 stingers), Dark Ambient.
+- **SFX (feeds S20.3):** UI Sound Effects Pack (40 interface sounds).
+- **First manual import:** `public/assets/tilemaps/ground.png` (user-added)
+  — autotile cliff/ledge pieces, dithered grounds, palette ramps; candidate
+  source for terrain texture uplift.
+
+Next: download the shortlist via the adapted fetcher, extract to
+raw-assets/ (gitignored), curate keepers under public/assets/ with the
+license-aware manifest, and style-check each against Errant Storybook
+before wiring.

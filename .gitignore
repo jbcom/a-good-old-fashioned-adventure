@@ -21,3 +21,6 @@ tests/browser/__screenshots__/
 .playwright-cli/
 output/
 output/playwright/
+.env
+.itch-cache/
+raw-assets/
