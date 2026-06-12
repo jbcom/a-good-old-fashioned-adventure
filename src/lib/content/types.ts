@@ -59,6 +59,7 @@ export interface SpriteDef {
   grid: { w: number; h: number };
   anchor: { x: number; y: number };
   rows: string[];
+  frames?: Record<string, string[]>;
   recolorChannels: string[];
   defaultPalette: string;
   facing?: { method: "mirror-x" | "frames"; defaultDir: 1 | -1 };

@@ -34,6 +34,8 @@ interface DraftSprite {
   animations?: Record<string, string>;
   traits?: string[];
   rows: string[];
+  frames: Record<string, string[]>;
+  activeFrame?: string;
 }
 
 type DraftAsset = DraftTile | DraftProp | DraftSprite;
@@ -167,6 +169,9 @@ function finalizeSprite(draft: DraftSprite, path: string): SpriteDef {
   if (!draft.animations) throw new Error(`${path}:${draft.id}: missing animations`);
   if (!draft.traits?.length) throw new Error(`${path}:${draft.id}: missing traits`);
   validateRows(draft, draft.grid, path);
+  for (const [frame, rows] of Object.entries(draft.frames)) {
+    validateRows({ id: `${draft.id}#${frame}`, rows }, draft.grid, path);
+  }
   return {
     id: draft.id,
     kind: "character-sprite",
@@ -174,6 +179,7 @@ function finalizeSprite(draft: DraftSprite, path: string): SpriteDef {
     grid: draft.grid,
     anchor: draft.anchor,
     rows: draft.rows,
+    frames: Object.keys(draft.frames).length ? draft.frames : undefined,
     recolorChannels: draft.recolorChannels,
     defaultPalette: draft.defaultPalette,
     facing: draft.facing,
@@ -218,6 +224,18 @@ export function parsePixelSheet(source: string, path = "<pixel-sheet>"): ParsedP
         closeCurrent();
       } else if (!current) {
         throw new Error(`${path}:${lineNumber}: pixel row without an open asset`);
+      } else if (line.startsWith("frame ")) {
+        if (current.kind !== "sprite") {
+          throw new Error(`${path}:${lineNumber}: frame blocks are sprite-only`);
+        }
+        const name = line.slice("frame ".length).trim();
+        if (!/^[a-z0-9-]+$/.test(name)) {
+          throw new Error(`${path}:${lineNumber}: invalid frame name ${name}`);
+        }
+        current.activeFrame = name;
+        current.frames[name] = [];
+      } else if (current.kind === "sprite" && current.activeFrame) {
+        current.frames[current.activeFrame].push(line);
       } else {
         current.rows.push(line);
       }
@@ -246,7 +264,7 @@ export function parsePixelSheet(source: string, path = "<pixel-sheet>"): ParsedP
       if (!spriteIdPattern.test(id)) {
         throw new Error(`${path}:${lineNumber}: invalid sprite id ${id}`);
       }
-      current = { kind: "sprite", id, rows: [] };
+      current = { kind: "sprite", id, rows: [], frames: {} };
       continue;
     }
 

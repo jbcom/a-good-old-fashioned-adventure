@@ -35,6 +35,7 @@ import {
   resolveDeviceProfile,
 } from "../platform/deviceProfile";
 import { GameStage } from "../render/GameStage";
+import { spritePose } from "../render/pose";
 import {
   emitDialogueChoice,
   emitDialogueSeen,
@@ -79,6 +80,7 @@ import {
   Projectile,
   PropRef,
   QuestLog,
+  SpriteRef,
   Transform,
 } from "../sim/traits";
 import "./App.css";
@@ -130,6 +132,7 @@ interface UiSnapshot {
   enemies: number;
   projectiles: number;
   fxSpawned: number;
+  playerPose: string;
   questLines: string[];
   runtime: {
     cols: number;
@@ -195,6 +198,7 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   enemies: 0,
   projectiles: 0,
   fxSpawned: 0,
+  playerPose: "idle",
   questLines: [],
   runtime: { cols: 0, rows: 0, grid: [] },
   explored: new Set(),
@@ -373,6 +377,9 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     enemies: [...world.query(IsEnemy)].length,
     projectiles: [...world.query(Projectile)].length,
     fxSpawned: world.get(FxStats)?.spawned ?? 0,
+    playerPose: player
+      ? spritePose(world, player, player.get(SpriteRef)?.spriteId ?? "sprite:hero")
+      : "idle",
     questLines: questLogLines(world),
     runtime: {
       cols: runtime?.cols ?? 0,
@@ -1824,6 +1831,7 @@ export function App({
       "data-enemies": String(snapshot.enemies),
       "data-projectiles": String(snapshot.projectiles),
       "data-fx-spawned": String(snapshot.fxSpawned),
+      "data-player-pose": snapshot.playerPose,
       "data-max-hp": String(snapshot.maxHp),
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
       "data-gold": String(snapshot.incrementalProgress.coins),
@@ -1859,6 +1867,7 @@ export function App({
       snapshot.inventory,
       snapshot.mapId,
       snapshot.maxHp,
+      snapshot.playerPose,
       snapshot.playerX,
       snapshot.playerY,
       snapshot.projectiles,

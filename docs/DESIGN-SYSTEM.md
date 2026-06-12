@@ -30,6 +30,16 @@ cabinet, and not cyberpunk glass.
 - **AnimeJS motion:** menu panels enter with short, restrained AnimeJS movement.
   CSS transitions are acceptable for simple drawer movement, but authored
   gameplay/menu motion belongs to the AnimeJS layer.
+- **Pose frames:** character sprites animate by swapping authored pose frames,
+  not by transform tricks alone. A `.pix` `@sprite` block may follow its base
+  `rows` with named `frame <name>` blocks of the same grid (idle is the base;
+  the shipped hero carries `walk-0`/`walk-1`, `attack`, `hurt`). The renderer
+  picks the pose from live sim state in `src/render/pose.ts` — attack inside
+  the post-swing window (`combat.feedback.attackPoseDuration`), hurt during
+  iframes (with an alpha blink at `iframeBlinkHz`), a two-frame walk cycle on
+  the deterministic sim clock (`walkFrameFps`) — and the HUD snapshot exposes
+  the same pose as `data-player-pose`, so journeys assert animation through
+  public state. Sprites without an authored pose fall back to their base rows.
 
 ## Source Tokens
 

@@ -21,10 +21,16 @@ function baked(key: string, bake: () => HTMLCanvasElement): HTMLCanvasElement {
 }
 
 /** Character sprite at a palette (knight/ranger/wizard/orc/... swaps). */
-export function spriteCanvas(spriteId: string, paletteId: string): HTMLCanvasElement {
-  return baked(`${spriteId}|${paletteId}`, () => {
+export function spriteCanvas(
+  spriteId: string,
+  paletteId: string,
+  pose = "idle",
+): HTMLCanvasElement {
+  return baked(`${spriteId}|${paletteId}|${pose}`, () => {
     const sprite = getSprite(spriteId);
-    return rasterizeRows(sprite.rows, resolvePalette(paletteId));
+    // sprites without an authored pose frame fall back to the base rows
+    const rows = sprite.frames?.[pose] ?? sprite.rows;
+    return rasterizeRows(rows, resolvePalette(paletteId));
   });
 }
 
