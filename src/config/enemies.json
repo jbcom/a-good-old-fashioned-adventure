@@ -102,7 +102,7 @@
         "projectile": {
           "type": "magmaball",
           "speed": 60,
-          "life": 3.0
+          "life": 3
         },
         "sfx": "magic"
       }
@@ -132,7 +132,7 @@
     },
     "bramble-stalker": {
       "name": "Bramble Stalker",
-      "sprite": "sprite:dragon",
+      "sprite": "sprite:wild-boar-dark",
       "palette": "palette:bramble",
       "hp": 34,
       "speed": 54,
@@ -254,7 +254,7 @@
         "projectile": {
           "type": "shadowbolt",
           "speed": 90,
-          "life": 3.0
+          "life": 3
         },
         "sfx": "magic"
       }

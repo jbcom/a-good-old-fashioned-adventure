@@ -175,6 +175,7 @@ class SceneSync {
       let canvas: HTMLCanvasElement;
       let key: string;
       let translateY = 0;
+      let sheetMirror = false;
       if (isSheetSprite(spriteDef)) {
         // purchased sheets carry direction + frame cycles in their own
         // pixels: the resolver reads sim state, the strip does the rest
@@ -186,8 +187,16 @@ class SceneSync {
           moveY: intent?.y ?? 0,
           t: world.get(Clock)?.t ?? 0,
         });
-        canvas = sheetFrameCanvas(spriteDef, frame);
-        key = `${ref.spriteId}|${frame.anim.image}|${frame.sourceX},${frame.sourceY}`;
+        sheetMirror = frame.mirror;
+        if (flashing) {
+          // white-silhouette feedback works for sheets too (flash bakes
+          // from the sprite's static idle frame)
+          canvas = flashCanvas(ref.spriteId, ref.paletteId);
+          key = `${ref.spriteId}|${ref.paletteId}|flash`;
+        } else {
+          canvas = sheetFrameCanvas(spriteDef, frame);
+          key = `${ref.spriteId}|${frame.anim.image}|${frame.sourceX},${frame.sourceY}`;
+        }
       } else {
         canvas = flashing
           ? flashCanvas(ref.spriteId, ref.paletteId)
@@ -202,8 +211,8 @@ class SceneSync {
       const tracked = this.billboard(canvas, key, id, scene);
       tracked.mesh.position.set(t.x, canvas.height / 2 - translateY, t.y);
       const pulse = threatScale(world, entity);
-      // sheet strips already face their direction in pixels — never mirror
-      tracked.mesh.scale.x = (isSheetSprite(spriteDef) ? 1 : dir) * pulse;
+      // directional sheets face in pixels; side-view sheets mirror on demand
+      tracked.mesh.scale.x = (isSheetSprite(spriteDef) ? (sheetMirror ? -1 : 1) : dir) * pulse;
       tracked.mesh.scale.y = pulse;
       const spriteMaterial = tracked.mesh.material as ShaderMaterial;
       if (spriteMaterial.uniforms?.uAlpha) {

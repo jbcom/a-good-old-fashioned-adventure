@@ -189,6 +189,9 @@ it("renders the High Dragon boss sheet in the candlelit hall", async () => {
   // the route-pack gate normally controls this spawn; the render contract
   // under test is the purchased 96px sheet, so place the boss directly
   spawnEnemy(world, "dragon-guardian", 732, 268);
+  // side-view row sheet beside the directional strips: one shot proves both
+  // backends (and the mirror path — stalker placed right of the player)
+  spawnEnemy(world, "bramble-stalker", 680, 300);
   world.queryFirst(IsPlayer)?.set(Transform, { x: 700, y: 290 });
   world.set(CameraState, { x: 716, y: 278, shake: 0 });
   for (let i = 0; i < 30; i++) step(world);

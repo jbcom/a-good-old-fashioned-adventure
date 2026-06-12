@@ -37,6 +37,12 @@
       "minItems": 1,
       "uniqueItems": true
     },
+    "facing": {
+      "type": "object",
+      "required": ["nativeDir"],
+      "properties": { "nativeDir": { "enum": ["right", "left"] } },
+      "additionalProperties": false
+    },
     "animations": {
       "type": "object",
       "minProperties": 1,

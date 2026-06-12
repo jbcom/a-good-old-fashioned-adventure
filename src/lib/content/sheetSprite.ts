@@ -33,6 +33,8 @@ export interface SheetFrame {
   /** source rect origin inside the animation's image */
   sourceX: number;
   sourceY: number;
+  /** true → renderer flips horizontally (side-view sheet facing the other way) */
+  mirror: boolean;
 }
 
 /** "walk-1" → walk; "walk-up-0" → walk + forced up. */
@@ -65,11 +67,25 @@ export function resolveSheetFrame(def: SheetSpriteDef, query: SheetFrameQuery): 
   const frame = anim.loop === false ? Math.min(raw, fpd - 1) : raw % fpd;
   const block = anim.directional ? Math.max(0, def.directionOrder.indexOf(direction)) : 0;
 
+  // side-view sheets carry one native facing; flip when the entity points
+  // the other way (vertical travel keeps the last horizontal facing)
+  let mirror = false;
+  if (def.facing) {
+    const horizontal =
+      direction === "left" || direction === "right"
+        ? direction
+        : query.facingDir === -1
+          ? "left"
+          : "right";
+    mirror = horizontal !== def.facing.nativeDir;
+  }
+
   return {
     animName,
     anim,
     direction,
     sourceX: (block * fpd + frame) * def.frameSize.w,
     sourceY: (anim.row ?? 0) * def.frameSize.h,
+    mirror,
   };
 }

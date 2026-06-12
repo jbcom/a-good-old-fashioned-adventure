@@ -51,11 +51,14 @@ export function sheetFrameCanvas(def: SheetSpriteDef, frame: SheetFrame): HTMLCa
   const image = sheetImages.get(frame.anim.image);
   if (!image) {
     if (sheetsReady) throw new Error(`${def.id}: sheet image missing: ${frame.anim.image}`);
-    // preload in flight (or impossible, e.g. jsdom) — blit nothing, never stale
-    const placeholder = document.createElement("canvas");
-    placeholder.width = def.frameSize.w;
-    placeholder.height = def.frameSize.h;
-    return placeholder;
+    // preload in flight (or impossible, e.g. jsdom) — blit nothing, never
+    // stale; cached per sprite so the render loop doesn't churn textures
+    return baked(`${def.id}|placeholder`, () => {
+      const placeholder = document.createElement("canvas");
+      placeholder.width = def.frameSize.w;
+      placeholder.height = def.frameSize.h;
+      return placeholder;
+    });
   }
   const key = `${def.id}|${frame.anim.image}|${frame.sourceX},${frame.sourceY}`;
   return baked(key, () => {
@@ -126,6 +129,10 @@ export function propCanvas(propId: string, state: string, paletteId?: string): H
 
 /** White silhouette of a sprite — the damage hit-flash frame. */
 export function flashCanvas(spriteId: string, paletteId: string): HTMLCanvasElement {
+  // a sheet sprite mid-preload would bake a blank flash into the cache
+  // forever — hand back the uncached placeholder until images are ready
+  const def = getSprite(spriteId);
+  if (isSheetSprite(def) && !sheetsReady) return spriteCanvas(spriteId, paletteId);
   return baked(`${spriteId}|${paletteId}|flash`, () => {
     const source = spriteCanvas(spriteId, paletteId);
     const canvas = document.createElement("canvas");

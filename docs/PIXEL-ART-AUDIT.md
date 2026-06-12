@@ -163,5 +163,12 @@ read at zoom 2026-06-12. Every sheet is a **clear** keeper, curated to
 Style fit: Elthen bodies are side-view (left/right via mirroring) vs the
 4-direction `.pix` hero/dragon — acceptable for trash enemies that travel
 lanes; bosses stay 4-directional. Frame-row semantics (which row is
-walk/attack/death per sheet) get pinned in the SA.3 wiring step when each
-body becomes an addressable sprite def.
+walk/attack/death per sheet) get pinned per sheet as each body becomes an
+addressable sprite def. First wired: the boar (rows pinned from the
+gridded read: idle 4f / walk 8f / attack 4f / hurt 4f per coat, light at
+rows 0-3, dark at 6-9) ships as sprite:wild-boar + sprite:wild-boar-dark
+with `facing.nativeDir: "left"` driving the new mirror-x path; the
+Bramble Stalker archetype wears the dark coat, verified in the boss-hall
+stage screenshot beside the dragon (both raster backends in one shot).
+Remaining nine sheets follow the same convention as SA.3 wave content
+consumes them.

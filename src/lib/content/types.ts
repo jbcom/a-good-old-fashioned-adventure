@@ -90,6 +90,10 @@ export interface SheetSpriteDef {
   frameSize: { w: number; h: number };
   anchor: { x: number; y: number };
   directionOrder: ("right" | "up" | "left" | "down")[];
+  /** side-view row sheets declare which way their pixels natively face;
+   * the renderer mirrors when the entity faces the other way. Directional
+   * block sheets (the dragon) omit this and never mirror. */
+  facing?: { nativeDir: "right" | "left" };
   animations: Record<string, SheetAnimDef>;
   /** bridges the .pix pose vocabulary + choreography phases to animations */
   poseMap: Record<string, string>;

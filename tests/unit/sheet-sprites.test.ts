@@ -36,7 +36,7 @@ describe("sheet sprite defs", () => {
     expect(sheetDefs.length).toBeGreaterThan(0);
   });
 
-  it("every animation image exists on disk and is manifested with matching strip geometry", () => {
+  it("every animation image exists on disk and is manifested with fitting geometry", () => {
     for (const def of sheetDefs) {
       for (const [name, anim] of Object.entries(def.animations)) {
         const abs = join(assetsRoot, anim.image);
@@ -44,10 +44,17 @@ describe("sheet sprite defs", () => {
         const entry = manifestByPath.get(anim.image);
         expect(entry, `${def.id} ${name}: ${anim.image} not in MANIFEST.json`).toBeDefined();
         const directions = anim.directional ? def.directionOrder.length : 1;
+        // frame extents must fit inside the manifested sheet — a row sheet
+        // (boar) is wider than its shortest row, a dedicated strip (dragon)
+        // is exactly as wide as its frames
         expect(
-          entry?.width,
-          `${def.id} ${name}: strip width must equal directions × framesPerDirection × frame width`,
-        ).toBe(directions * anim.framesPerDirection * def.frameSize.w);
+          directions * anim.framesPerDirection * def.frameSize.w,
+          `${def.id} ${name}: frames overflow the sheet width`,
+        ).toBeLessThanOrEqual(entry?.width ?? 0);
+        expect(
+          ((anim.row ?? 0) + 1) * def.frameSize.h,
+          `${def.id} ${name}: row ${anim.row ?? 0} overflows the sheet height`,
+        ).toBeLessThanOrEqual(entry?.height ?? 0);
       }
     }
   });
@@ -125,5 +132,33 @@ describe("resolveSheetFrame", () => {
   it("unknown poses fall back to idle", () => {
     const r = resolveSheetFrame(dragon, { ...base, pose: "no-such-pose" });
     expect(r.animName).toBe("idle");
+  });
+
+  it("a 4-direction sheet never mirrors", () => {
+    const r = resolveSheetFrame(dragon, { ...base, facingDir: -1 });
+    expect(r.mirror).toBe(false);
+  });
+});
+
+describe("side-view sheets (mirror-x)", () => {
+  const boar = getSprite("sprite:wild-boar") as SheetSpriteDef;
+  const base = { pose: "idle", choreoPhase: "", facingDir: 1 as const, moveX: 0, moveY: 0, t: 0 };
+
+  it("rows address vertically: dark variant walk reads row 7", () => {
+    const dark = getSprite("sprite:wild-boar-dark") as SheetSpriteDef;
+    const r = resolveSheetFrame(dark, { ...base, pose: "walk-0", moveX: -1, facingDir: -1 });
+    expect(r.sourceY).toBe(7 * dark.frameSize.h);
+    expect(r.sourceX).toBe(0);
+  });
+
+  it("facing the native direction does not mirror; the other way does", () => {
+    expect(resolveSheetFrame(boar, { ...base, facingDir: -1 }).mirror).toBe(false);
+    expect(resolveSheetFrame(boar, base).mirror).toBe(true);
+  });
+
+  it("vertical travel keeps the last horizontal facing for the mirror", () => {
+    const r = resolveSheetFrame(boar, { ...base, pose: "walk-up-1", moveY: -1, facingDir: -1 });
+    expect(r.direction).toBe("up");
+    expect(r.mirror).toBe(false);
   });
 });
