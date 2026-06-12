@@ -93,6 +93,7 @@ import {
   QuestLog,
   SpriteRef,
   Transform,
+  Withered,
 } from "../sim/traits";
 import "./App.css";
 
@@ -144,6 +145,7 @@ interface UiSnapshot {
   units: number;
   unitsPlaced: Record<string, number>;
   frontY: number;
+  withered: number;
   fxSpawned: number;
   playerPose: string;
   bossPhase: string;
@@ -212,6 +214,7 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   units: 0,
   unitsPlaced: {},
   frontY: 0,
+  withered: 0,
   fxSpawned: 0,
   playerPose: "idle",
   bossPhase: "",
@@ -392,6 +395,9 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     units: [...world.query(IsUnit)].length,
     unitsPlaced: { ...placedCounts(world) },
     frontY: frontline(world)?.y ?? 0,
+    withered: [...world.query(IsEnemy, Withered)].filter(
+      (enemy) => (enemy.get(Withered)?.left ?? 0) > 0,
+    ).length,
     fxSpawned: world.get(FxStats)?.spawned ?? 0,
     playerPose: player
       ? spritePose(world, player, player.get(SpriteRef)?.spriteId ?? "sprite:hero")
@@ -1867,6 +1873,7 @@ export function App({
       "data-boss-phase": snapshot.bossPhase,
       "data-units": String(snapshot.units),
       "data-front-y": snapshot.frontY.toFixed(1),
+      "data-withered": String(snapshot.withered),
       "data-a-presses": String(inputStats.current.aPresses),
       "data-attack-calls": String(inputStats.current.attackCalls),
       "data-drops": String(inputStats.current.drops),
@@ -1916,6 +1923,7 @@ export function App({
       snapshot.projectiles,
       snapshot.units,
       snapshot.frontY,
+      snapshot.withered,
       selectedUpgradeIndex,
     ],
   );
