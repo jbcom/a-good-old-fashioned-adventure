@@ -707,6 +707,28 @@ road into a small working wayside encounter:
    `openReason`, then prove the route with unit tests, headed browser evidence,
    and the public-control playthrough.
 
+## Twenty-Seventh Content-Depth Slice
+
+The composition budget tuning pass removes the remaining sparse-window
+exceptions from the current mandatory exterior route and makes another quiet
+stretch playable:
+
+1. Tighten `composition.routeWindows` so current mandatory exterior maps cannot
+   rely on `openReason`; new maps may still use it only as a temporary design
+   exception while authoring catches up.
+2. Turn Oldwood's quiet lantern walk into a worked road beat with
+   `char:oldwood-lantern-keeper`, `quest:oldwood-lantern-keeper`, a public
+   A-button greeting, and detailed lantern maintenance props in the player's
+   depth band.
+3. Add richer Deep Forest exit props before the Sunken Road threshold so the
+   last lantern window reads as tended forest craft, not justified emptiness.
+4. Promote mandatory exterior surfaces from single repeated tiles to
+   deterministic terrain-family chunks: grass, path, leaf litter, village
+   cobble, sand, and castle road each need four to eight authored 16x16 variants
+   before the route-window screenshots count as acceptable evidence.
+5. Prove the route-window budget through unit tests, headed browser evidence,
+   and public A-button dialogue validation.
+
 ## Content Depth Bar
 
 The first playable world cannot remain a five-minute corridor. Each new map
@@ -725,7 +747,9 @@ slice must add at least one meaningful player-facing verb or story signal:
   upgrade-gated questlets.
 - Mandatory exterior maps must declare `composition.routeWindows` per
   `docs/CONTENT-COMPOSITION.md`. Repeated grass, sand, leaf, or road carpets
-  are not acceptable unless the window has an explicit travel or threshold
-  reason plus visual punctuation.
+  are not acceptable. Current route maps should use terrain-family chunks with
+  four to eight variants per repeated surface; a new map may use an explicit
+  travel or threshold reason only while that authored variant pass is being
+  created.
 - Every route expansion should add browser validation through real movement
   and A/B input before claiming depth.

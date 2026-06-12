@@ -30,6 +30,8 @@ reference-only history. The current game is data-driven:
 - `pnpm typecheck` - TypeScript check.
 - `pnpm test` - unit/content/sim/platform tests.
 - `pnpm test:browser` - headed Vitest browser suite with GPU flags locally.
+- `pnpm author:pixelart` - regenerate Aseprite masters and PNG previews from
+  `src/content/pixelart/*.pix`.
 - `pnpm build` - production Vite build.
 - `pnpm cap:sync` - build web assets and sync Capacitor Android.
 - `cd android && ./gradlew :app:assembleDebug` - native debug APK build.

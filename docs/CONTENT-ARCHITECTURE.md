@@ -78,14 +78,46 @@ entity.
 
 ### `src/content/tiles/` and `src/content/props/` — primitives
 
-Tiles are flat 16×16 background cells: `solid` + a list of declarative
-`drawOps` (`fill`/`rect`/`triangle`/`repeat-rect`, colors literal or
-`@K` palette refs, optional `animate` ref for shimmer effects). Props are
-foreground objects that y-sort with characters: pixel-grid `states`
+Tiles are flat 16×16 background cells: `solid` + either a native pixel-sheet
+`rows` grid or a legacy list of declarative `drawOps`
+(`fill`/`rect`/`triangle`/`repeat-rect`, colors literal or `@K` palette refs,
+optional `animate` ref for shimmer effects). Broad terrain tiles should live in
+`src/content/pixelart/*.pix`, not JSON rectangle lists. A tile can declare
+`variantOf` to join a semantic family. Variant tiles inherit gameplay meaning
+from that family but carry different hand-authored pixels, so `tile:grass` can
+become clustered tuft, flower, root, and shade variants without changing
+collision or story code. Props are foreground objects that y-sort with
+characters: pixel-grid `states`
 (`closed`/`open`/…), optional `interaction` (verb + method + sfx, optionally a
 dialogue bank/slot for readable props, and optionally a `feedback.anim` pulse
 for inspected props), `solid` flag. The shared op vocabulary lives in
 `schemas/draw-ops.schema.json`.
+
+Native pixel sheets use a tiny line-oriented format owned by this repo:
+
+```text
+@pixel-sheet v1
+@tile tile:grass-tufts
+variantOf tile:grass
+solid false
+traits Tile
+rows
+eeeeeeeeeeeeeeee
+...14 more 16-character rows...
+eeeeeeeeeeeeeeee
+@end
+```
+
+Rows are palette-channel characters from `palette:base`; `.` remains
+transparent. Tests parse every sheet, require exact row widths, and register the
+resulting tile ids for referential integrity.
+
+Aseprite is the editor surface for this format. Run `pnpm author:pixelart` to
+regenerate `.aseprite` masters and `.png` previews next to each `.pix` sheet.
+The exporter is repo-owned: `scripts/export-pixelart.mjs` prepares the sheet
+payload and `scripts/aseprite/import-pixel-sheet.lua` performs the Aseprite
+import/export. The text sheet remains the runtime source of truth so diffs,
+tests, and content review stay precise.
 
 ### `src/content/shops/` — counters and prices
 
@@ -108,11 +140,13 @@ implicit sine periods (e.g. walk bob = |sin(t/90ms)|·2px → 283ms loop).
 ### `src/content/world/maps/` — where things are
 
 A map = size + base tile + ordered `generation` ops (the prototype's
-procedural loops, made declarative) + `playerSpawn` + an entity spawn table
-(refs to chars/props/enemy archetypes with positions) + `triggers` (zones,
-conditional-solid gates keyed on flags) + `onEnter` actions. The
-`unchosen-companions` spawn rule reproduces the prototype's "your two
-unpicked classes appear as NPCs" behavior.
+procedural loops, made declarative) + optional `terrainVariants` family rules
++ `playerSpawn` + an entity spawn table (refs to chars/props/enemy archetypes
+with positions) + `triggers` (zones, conditional-solid gates keyed on flags) +
+`onEnter` actions. `generation` paints semantic surfaces first; the deterministic
+terrain-variant pass then turns repeated base cells into authored chunks using
+four to eight family variants. The `unchosen-companions` spawn rule reproduces
+the prototype's "your two unpicked classes appear as NPCs" behavior.
 
 After the incremental pivot, maps are not assumed to be one mandatory linear
 campaign. The baseline runtime route is a south-to-north princess rescue, and

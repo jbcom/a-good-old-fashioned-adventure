@@ -20,8 +20,10 @@ export interface DrawOp {
 export interface TileDef {
   id: string;
   kind: "tile";
+  variantOf?: string;
   solid: boolean;
-  layers: DrawOp[];
+  layers?: DrawOp[];
+  rows?: string[];
   koota: { traits: string[] };
 }
 
@@ -94,6 +96,14 @@ export interface GenOp {
   note?: string;
 }
 
+export interface TerrainVariantRule {
+  baseTile: string;
+  variants: string[];
+  chunk: { w: number; h: number };
+  seed: number;
+  note?: string;
+}
+
 export interface MapEntitySpawn {
   ref?: string;
   enemy?: string;
@@ -139,6 +149,7 @@ export interface MapDef {
   baseTile: string;
   bgmTheme: string;
   generation: GenOp[];
+  terrainVariants?: TerrainVariantRule[];
   playerSpawn: { x: number; y: number };
   spawns: Record<string, { x: number; y: number }>;
   entities: MapEntitySpawn[];

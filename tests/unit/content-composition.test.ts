@@ -1,8 +1,13 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { getMap } from "../../src/lib/content/registry";
-import type { MapCompositionWindow, MapDef, MapEntitySpawn } from "../../src/lib/content/types";
+import { getMap, getTile } from "../../src/lib/content/registry";
+import type {
+  MapCompositionWindow,
+  MapDef,
+  MapEntitySpawn,
+  TileDef,
+} from "../../src/lib/content/types";
 import { buildGrid } from "../../src/sim/mapgen";
 
 const mandatoryExteriorMaps = [
@@ -13,7 +18,24 @@ const mandatoryExteriorMaps = [
   "map:castle-approach",
 ] as const;
 
-const dominantTileCap = 0.92;
+const dominantTileCap = 0.88;
+
+interface TerrainVariantRule {
+  baseTile: string;
+  variants: string[];
+  chunk: { w: number; h: number };
+  seed: number;
+}
+
+type VariantMapDef = MapDef & { terrainVariants?: TerrainVariantRule[] };
+
+const requiredTerrainFamilies: Record<(typeof mandatoryExteriorMaps)[number], string[]> = {
+  "map:village": ["tile:grass", "tile:path", "tile:village-cobble"],
+  "map:oldwood-forest": ["tile:leaf-litter", "tile:path", "tile:grass"],
+  "map:deep-forest": ["tile:leaf-litter", "tile:path"],
+  "map:sunken-road": ["tile:sand", "tile:path", "tile:castle-road"],
+  "map:castle-approach": ["tile:grass", "tile:castle-road"],
+};
 
 function documentFromRepo(path: string): string {
   return readFileSync(resolve(process.cwd(), path), "utf8");
@@ -49,6 +71,15 @@ function requiredOccurrences(ids: string[], id: string): number {
   return ids.filter((candidate) => candidate === id).length;
 }
 
+function terrainRules(map: MapDef): TerrainVariantRule[] {
+  return ((map as VariantMapDef).terrainVariants ?? []) as TerrainVariantRule[];
+}
+
+function semanticTile(map: MapDef, tileId: string): string {
+  const rule = terrainRules(map).find((candidate) => candidate.variants.includes(tileId));
+  return rule?.baseTile ?? tileId;
+}
+
 function windowTiles(map: MapDef, window: MapCompositionWindow): string[] {
   const grid = buildGrid(map);
   const tiles: string[] = [];
@@ -66,11 +97,18 @@ function dominantShare(tiles: string[]): number {
   return Math.max(...counts.values()) / tiles.length;
 }
 
+function cellsForFamily(map: MapDef, tiles: string[], baseTile: string): string[] {
+  return tiles.filter((tile) => semanticTile(map, tile) === baseTile);
+}
+
 describe("content composition rules", () => {
   it("documents the tile-variation, prop-cadence, and open-space rules", () => {
     const doc = documentFromRepo("docs/CONTENT-COMPOSITION.md");
     const compact = doc.replace(/\s+/g, " ");
     expect(compact).toContain("dominant tile");
+    expect(compact).toContain("terrainVariants");
+    expect(compact).toContain("four to eight");
+    expect(compact).toContain("deterministic noise");
     expect(doc).toContain("major anchor");
     expect(doc).toContain("minor props");
     expect(doc).toContain("openReason");
@@ -87,14 +125,48 @@ describe("content composition rules", () => {
     for (const mapId of mandatoryExteriorMaps) {
       const map = getMap(mapId);
       for (const window of map.composition?.routeWindows ?? []) {
-        const share = dominantShare(windowTiles(map, window));
-        if (window.openReason) {
-          expect(window.openReason, `${mapId}:${window.label}`).toMatch(
-            /travel|threshold|breath|leaving|exposed/i,
-          );
-          expect(share, `${mapId}:${window.label}`).toBeLessThanOrEqual(0.97);
-        } else {
-          expect(share, `${mapId}:${window.label}`).toBeLessThanOrEqual(dominantTileCap);
+        const share = dominantShare(
+          windowTiles(map, window).map((tile) => semanticTile(map, tile)),
+        );
+        expect(window.openReason, `${mapId}:${window.label}`).toBeUndefined();
+        expect(share, `${mapId}:${window.label}`).toBeLessThanOrEqual(dominantTileCap);
+      }
+    }
+  });
+
+  it("declares four to eight authored terrain variants for mandatory exterior surfaces", () => {
+    for (const mapId of mandatoryExteriorMaps) {
+      const map = getMap(mapId);
+      const rules = terrainRules(map);
+      for (const baseTile of requiredTerrainFamilies[mapId]) {
+        const rule = rules.find((candidate) => candidate.baseTile === baseTile);
+        expect(rule, `${mapId}:${baseTile}`).toBeDefined();
+        expect(rule?.variants.length, `${mapId}:${baseTile}`).toBeGreaterThanOrEqual(4);
+        expect(rule?.variants.length, `${mapId}:${baseTile}`).toBeLessThanOrEqual(8);
+        expect(rule?.variants, `${mapId}:${baseTile}`).toContain(baseTile);
+        expect(rule?.chunk.w, `${mapId}:${baseTile}`).toBeGreaterThanOrEqual(2);
+        expect(rule?.chunk.h, `${mapId}:${baseTile}`).toBeGreaterThanOrEqual(2);
+        for (const variantId of rule?.variants ?? []) {
+          const variant = getTile(variantId) as TileDef & { variantOf?: string };
+          expect(variant.solid, variantId).toBe(getTile(baseTile).solid);
+          if (variantId !== baseTile) expect(variant.variantOf, variantId).toBe(baseTile);
+        }
+      }
+    }
+  });
+
+  it("renders concrete terrain-variant diversity inside route windows", () => {
+    for (const mapId of mandatoryExteriorMaps) {
+      const map = getMap(mapId);
+      for (const window of map.composition?.routeWindows ?? []) {
+        const tiles = windowTiles(map, window);
+        for (const rule of terrainRules(map)) {
+          const familyTiles = cellsForFamily(map, tiles, rule.baseTile);
+          if (familyTiles.length < 16) continue;
+          expect(
+            new Set(familyTiles).size,
+            `${mapId}:${window.label}:${rule.baseTile}`,
+          ).toBeGreaterThanOrEqual(Math.min(4, rule.variants.length));
         }
       }
     }
@@ -112,12 +184,8 @@ describe("content composition rules", () => {
         );
 
         expect(presentMajor.length, `${mapId}:${window.label}`).toBeGreaterThanOrEqual(1);
-        if (window.openReason) {
-          expect(presentMinor.length, `${mapId}:${window.label}`).toBeGreaterThanOrEqual(1);
-        } else {
-          expect(window.minorProps.length, `${mapId}:${window.label}`).toBeGreaterThanOrEqual(2);
-          expect(presentMinor.length, `${mapId}:${window.label}`).toBeGreaterThanOrEqual(2);
-        }
+        expect(window.minorProps.length, `${mapId}:${window.label}`).toBeGreaterThanOrEqual(2);
+        expect(presentMinor.length, `${mapId}:${window.label}`).toBeGreaterThanOrEqual(2);
       }
     }
   });

@@ -50,3 +50,9 @@ local branch. `.agent-state/directive.md` is the durable work queue.
 - Browser validation is not optional: `tests/browser/playthrough.test.tsx` drives the public player journey through real keyboard controls.
 - Work order remains docs > tests > code. Product pivots must first update
   pillar docs and config contracts, then tests, then runtime.
+- Exterior pixel-art quality is now a content contract: mandatory route maps
+  must use terrain-family variants in deterministic chunks, not one repeated
+  base tile with a few accent pixels.
+- Native pixel art lives in `src/content/pixelart/*.pix`; regenerate editor
+  files with `pnpm author:pixelart`, which uses the checked-in Lua importer at
+  `scripts/aseprite/import-pixel-sheet.lua`.

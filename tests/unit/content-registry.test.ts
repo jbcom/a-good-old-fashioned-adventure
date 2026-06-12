@@ -21,16 +21,16 @@ import {
 
 describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
-    expect(tiles.size).toBe(17);
-    expect(props.size).toBe(64);
+    expect(tiles.size).toBe(35);
+    expect(props.size).toBe(67);
     expect(sprites.size).toBe(3);
     expect(animations.size).toBe(7);
     expect(maps.size).toBe(16);
-    expect(quests.size).toBe(18);
-    expect(dialogueBanks.size).toBe(29);
-    expect(characters.size).toBe(32);
+    expect(quests.size).toBe(19);
+    expect(dialogueBanks.size).toBe(30);
+    expect(characters.size).toBe(33);
     expect(items.size).toBe(10);
-    expect(flags.size).toBe(20);
+    expect(flags.size).toBe(21);
     expect(shops.size).toBe(3);
   });
 
@@ -46,6 +46,7 @@ describe("registries are fully populated", () => {
     expect(getQuest("quest:sunken-courier-warning").start).toBe("take-warning");
     expect(getQuest("quest:oldwood-thorncutters-lantern").start).toBe("greet-thorncutter");
     expect(getQuest("quest:approach-pilgrim-warning").start).toBe("take-warning");
+    expect(getQuest("quest:oldwood-lantern-keeper").start).toBe("greet-keeper");
     expect(getShop("shop:brindle-counter").listings).toHaveLength(2);
     expect(getShop("shop:oswin-stable-counter").listings).toHaveLength(2);
     expect(getShop("shop:road-cart-counter").listings).toHaveLength(2);

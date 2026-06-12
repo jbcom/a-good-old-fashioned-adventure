@@ -8,7 +8,14 @@ import {
 } from "../audio/toneEngine";
 import ui from "../config/ui.json";
 import { classes, engine, type IncrementalUpgradeNode, incremental } from "../lib/config";
-import { getCharacter, getDialogueBank, getMap, getProp, getShop } from "../lib/content/registry";
+import {
+  getCharacter,
+  getDialogueBank,
+  getMap,
+  getProp,
+  getShop,
+  getTile,
+} from "../lib/content/registry";
 import type { DialogueNode, MapDef } from "../lib/content/types";
 import {
   getSaveRepository,
@@ -828,9 +835,9 @@ function Minimap({ snapshot }: { snapshot: UiSnapshot }) {
     for (let y = 0; y < snapshot.runtime.rows; y++) {
       for (let x = 0; x < snapshot.runtime.cols; x++) {
         const explored = snapshot.explored.has(`${x},${y}`);
-        ctx.fillStyle = explored
-          ? (colors[snapshot.runtime.grid[y][x]] ?? ui.theme.textBody)
-          : ui.theme.background;
+        const tile = getTile(snapshot.runtime.grid[y][x]);
+        const colorTile = tile.variantOf ?? tile.id;
+        ctx.fillStyle = explored ? (colors[colorTile] ?? ui.theme.textBody) : ui.theme.background;
         ctx.fillRect(Math.floor(x * sx), Math.floor(y * sy), Math.ceil(sx), Math.ceil(sy));
       }
     }

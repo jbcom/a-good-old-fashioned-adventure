@@ -3,16 +3,24 @@
   "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/tile.schema.json",
   "title": "Tile primitive",
   "type": "object",
-  "required": ["id", "kind", "solid", "layers", "koota"],
+  "required": ["id", "kind", "solid", "koota"],
   "properties": {
     "id": { "type": "string", "pattern": "^tile:[a-z0-9-]+$" },
     "kind": { "const": "tile" },
+    "variantOf": { "type": "string", "pattern": "^tile:[a-z0-9-]+$" },
     "solid": { "type": "boolean" },
     "layers": { "$ref": "./draw-ops.schema.json#/$defs/opList" },
+    "rows": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 16, "maxLength": 16 },
+      "minItems": 16,
+      "maxItems": 16
+    },
     "koota": {
       "type": "object",
       "required": ["traits"],
       "properties": { "traits": { "type": "array", "items": { "type": "string" } } }
     }
-  }
+  },
+  "anyOf": [{ "required": ["layers"] }, { "required": ["rows"] }]
 }

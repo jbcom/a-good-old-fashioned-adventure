@@ -62,6 +62,7 @@ export function flashCanvas(spriteId: string, paletteId: string): HTMLCanvasElem
 export function tileCanvas(tileId: string): HTMLCanvasElement {
   return baked(`${tileId}|palette:base`, () => {
     const tile = getTile(tileId);
+    if (tile.rows) return rasterizeRows(tile.rows, resolvePalette("palette:base"));
     return rasterizeDrawOps(tile.layers as DrawOp[], resolvePalette("palette:base"));
   });
 }

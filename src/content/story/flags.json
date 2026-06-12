@@ -46,6 +46,10 @@
       "default": false,
       "description": "The player has thanked Hester Briarhook for keeping Oldwood's upper hazel arch trimmed."
     },
+    "flag:oldwood-lantern-kept": {
+      "default": false,
+      "description": "The player has rung Caddoc Wick's road bell at Oldwood's last lantern."
+    },
     "flag:oldwood-waystone-read": {
       "default": false,
       "description": "The player has read the mossy waystone at the first Oldwood bend."

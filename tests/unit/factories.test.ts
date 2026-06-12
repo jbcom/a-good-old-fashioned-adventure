@@ -27,6 +27,7 @@ describe("createGameWorld", () => {
       "flag:has-dungeon-key": false,
       "flag:lost-page-guided": false,
       "flag:morning-errands-done": false,
+      "flag:oldwood-lantern-kept": false,
       "flag:oldwood-oath-sworn": false,
       "flag:oldwood-roadward-mark": false,
       "flag:oldwood-thorncutter-greeted": false,

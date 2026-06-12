@@ -53,3 +53,10 @@ pixel grammar, then improve it with more variety: outlines, shadow pixels,
 highlights, broken edges, signage, ivy, shelves, barrels, hearth/table shapes,
 and recognizably different building silhouettes. A map is not visually complete
 when it is mostly flat-color tile fields.
+
+Terrain families are the base unit for exterior surface craft. A family keeps
+one semantic tile id for authoring intent, then supplies four to eight concrete
+16x16 variants with distinct pixel decisions. The map generator paints variants
+in deterministic chunks so forest leaves form pockets, roads form ruts and
+stones, village cobbles show worn paths, and desert sand breaks into wind-scored
+patches.

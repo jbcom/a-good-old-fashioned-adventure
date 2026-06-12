@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../../schemas/quest.schema.json",
+  "id": "quest:oldwood-lantern-keeper",
+  "kind": "quest",
+  "title": "The Last Lantern",
+  "act": 2,
+  "startOn": { "enterMap": "map:oldwood-forest" },
+  "start": "greet-keeper",
+  "stages": [
+    {
+      "id": "greet-keeper",
+      "log": "Greet Caddoc Wick by Oldwood's last lantern before the Deep Forest threshold.",
+      "advance": [
+        {
+          "when": { "dialogueEvent": "dlg:oldwood-lantern-keeper.lantern:accepted" },
+          "to": "done",
+          "effects": [{ "setFlag": "flag:oldwood-lantern-kept" }, { "sfx": "interact" }]
+        }
+      ]
+    },
+    { "id": "done", "terminal": true }
+  ]
+}

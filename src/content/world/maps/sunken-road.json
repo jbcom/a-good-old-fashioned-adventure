@@ -59,6 +59,34 @@
       "note": "shaded courier layby lower tread"
     }
   ],
+  "terrainVariants": [
+    {
+      "baseTile": "tile:sand",
+      "variants": ["tile:sand", "tile:sand-ripple", "tile:sand-pebbles", "tile:sand-roots"],
+      "chunk": { "w": 4, "h": 2 },
+      "seed": 401,
+      "note": "wind-scored desert chunks"
+    },
+    {
+      "baseTile": "tile:path",
+      "variants": ["tile:path", "tile:path-ruts", "tile:path-pebbles", "tile:path-moss"],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 400,
+      "note": "sunken footpath ruts and stones"
+    },
+    {
+      "baseTile": "tile:castle-road",
+      "variants": [
+        "tile:castle-road",
+        "tile:castle-road-cracked",
+        "tile:castle-road-moss",
+        "tile:castle-road-worn"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 400,
+      "note": "old road slabs emerging from the sand"
+    }
+  ],
   "playerSpawn": { "x": 48, "y": 304 },
   "spawns": {
     "default": { "x": 48, "y": 304 },

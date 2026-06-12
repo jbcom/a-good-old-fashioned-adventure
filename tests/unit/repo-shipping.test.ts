@@ -64,6 +64,29 @@ describe("CI and release automation", () => {
     }
   });
 
+  it("keeps the native pixel-art authoring pipeline checked in", () => {
+    const pkg = JSON.parse(read("package.json")) as {
+      scripts: Record<string, string>;
+    };
+    expect(pkg.scripts["author:pixelart"]).toBe("node scripts/export-pixelart.mjs");
+    expect(read("scripts/export-pixelart.mjs")).toContain(
+      "scripts/aseprite/import-pixel-sheet.lua",
+    );
+    expect(read("scripts/aseprite/import-pixel-sheet.lua")).toContain("Sprite(payload.width");
+
+    for (const basename of ["terrain", "characters", "route-props"]) {
+      expect(
+        statSync(resolve(process.cwd(), `src/content/pixelart/${basename}.pix`)).isFile(),
+      ).toBe(true);
+      expect(
+        statSync(resolve(process.cwd(), `src/content/pixelart/${basename}.aseprite`)).isFile(),
+      ).toBe(true);
+      expect(
+        statSync(resolve(process.cwd(), `src/content/pixelart/${basename}.png`)).isFile(),
+      ).toBe(true);
+    }
+  });
+
   it("keeps review-driven runtime safeguards in config and renderer code", () => {
     expect(read("src/config/ui.json")).toContain("autosaveIntervalMs");
     expect(read("src/app/App.tsx")).toContain("ui.persistence.autosaveIntervalMs");

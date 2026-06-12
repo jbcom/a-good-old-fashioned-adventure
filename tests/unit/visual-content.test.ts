@@ -65,6 +65,34 @@ function colorsInOps(ops: DrawOp[]): Set<string> {
   return new Set(ops.map((op) => op.color));
 }
 
+function tileColors(tile: TileDef): Set<string> {
+  if (tile.rows) return nonTransparentChannels(tile.rows);
+  return colorsInOps(tile.layers ?? []);
+}
+
+function tileSignature(tile: TileDef): string {
+  if (tile.rows) return tile.rows.join("\n");
+  return JSON.stringify(
+    (tile.layers ?? []).map((op) => ({
+      op: op.op,
+      color: op.color,
+      x: op.x,
+      y: op.y,
+      w: op.w,
+      h: op.h,
+      points: op.points,
+      stepX: op.stepX,
+      stepY: op.stepY,
+      count: op.count,
+    })),
+  );
+}
+
+function tileDetailScore(tile: TileDef): number {
+  if (tile.rows) return new Set(tile.rows).size;
+  return tile.layers?.length ?? 0;
+}
+
 function stateRows(prop: PropDef): string[] {
   const state = (prop.states.default ?? Object.values(prop.states)[0]) as PropState;
   return state.rows ?? [];
@@ -96,8 +124,36 @@ describe("authored pixel-art richness", () => {
     for (const id of requiredDetailedTiles) {
       const tile = tiles.get(id) as TileDef | undefined;
       expect(tile, id).toBeTruthy();
-      expect(tile?.layers.length, id).toBeGreaterThanOrEqual(4);
-      expect(colorsInOps(tile?.layers ?? []).size, id).toBeGreaterThanOrEqual(3);
+      expect(tileDetailScore(tile as TileDef), id).toBeGreaterThanOrEqual(4);
+      expect(tileColors(tile as TileDef).size, id).toBeGreaterThanOrEqual(3);
+    }
+  });
+
+  it("keeps terrain-family variants as deliberate pixel designs, not duplicate flat fills", () => {
+    const variantFamilies = new Map<string, TileDef[]>();
+    for (const tile of tiles.values()) {
+      const base = tile.variantOf ?? tile.id;
+      const family = variantFamilies.get(base) ?? [];
+      family.push(tile);
+      variantFamilies.set(base, family);
+    }
+
+    for (const id of [
+      "tile:grass",
+      "tile:path",
+      "tile:leaf-litter",
+      "tile:sand",
+      "tile:castle-road",
+      "tile:village-cobble",
+    ]) {
+      const family = variantFamilies.get(id) ?? [];
+      expect(family.length, id).toBeGreaterThanOrEqual(4);
+      expect(family.length, id).toBeLessThanOrEqual(8);
+      expect(new Set(family.map((tile) => tileSignature(tile))).size, id).toBe(family.length);
+      for (const tile of family) {
+        expect(tileDetailScore(tile), tile.id).toBeGreaterThanOrEqual(6);
+        expect(tileColors(tile).size, tile.id).toBeGreaterThanOrEqual(3);
+      }
     }
   });
 

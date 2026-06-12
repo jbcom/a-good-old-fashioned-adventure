@@ -105,6 +105,10 @@ content rewrite must keep that specificity and raise it:
 - No required terrain tile should be a single flat fill. Grass, path, sand,
   water, stone, wall, and bridge tiles need at least a ground color, a shadow
   mark, and authored detail pixels.
+- Repeated exterior terrain should be built from terrain families, not one
+  token tile. Grass, path, leaf litter, sand, castle road, and village cobble
+  require four to eight precise 16-bit variants arranged by deterministic
+  chunks, so the road reads as patched ground rather than noise or flat carpet.
 - Hubs must tell the story visually. A village needs facade props, trees,
   roadside furniture, and interior furniture before it can be considered a
   real place.

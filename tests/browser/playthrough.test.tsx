@@ -335,6 +335,31 @@ async function talkToOldwoodThorncutter(input: ReturnType<typeof userEvent.setup
   );
 }
 
+async function talkToOldwoodLanternKeeper(input: ReturnType<typeof userEvent.setup>) {
+  const meetPoints = [
+    [848, 300],
+    [884, 300],
+    [904, 324],
+    [832, 324],
+  ] as const;
+  for (const [x, y] of meetPoints) {
+    await walkTo(input, x, y, 18);
+    await pressA(input);
+    await wait(140);
+    if (textOf("dialogue-box").includes("Caddoc Wick")) {
+      await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("last lantern");
+      await pressA(input);
+      await expect.element(page.getByTestId("quest-log")).not.toHaveTextContent("Caddoc Wick");
+      return;
+    }
+  }
+  throw new Error(
+    `Caddoc Wick dialogue did not open; map=${shell().mapId}; x=${shell().x}; y=${shell().y}; dialogue=${textOf(
+      "dialogue-box",
+    )}; quest=${textOf("quest-log")}`,
+  );
+}
+
 async function talkToSunkenCourier(input: ReturnType<typeof userEvent.setup>) {
   const meetPoints = [
     [656, 336],
@@ -562,6 +587,7 @@ it("plays the expanded road from title to the dungeon gate through public contro
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("branches are quieter");
   await pressA(input);
 
+  await talkToOldwoodLanternKeeper(input);
   await walkToOrMap(input, 1000, 304, "map:deep-forest", 24);
   await expect.poll(() => shell().mapId, { timeout: 10_000 }).toBe("map:deep-forest");
   await walkTo(input, 236, 320, 22);

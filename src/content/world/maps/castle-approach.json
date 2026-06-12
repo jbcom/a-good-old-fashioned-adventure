@@ -72,6 +72,27 @@
       "note": "wayside pilgrim road pocket"
     }
   ],
+  "terrainVariants": [
+    {
+      "baseTile": "tile:grass",
+      "variants": ["tile:grass", "tile:grass-tufts", "tile:grass-flowers", "tile:grass-roots"],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 501,
+      "note": "approach verge chunks below the gate road"
+    },
+    {
+      "baseTile": "tile:castle-road",
+      "variants": [
+        "tile:castle-road",
+        "tile:castle-road-cracked",
+        "tile:castle-road-moss",
+        "tile:castle-road-worn"
+      ],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 502,
+      "note": "worn siege road slab chunks"
+    }
+  ],
   "playerSpawn": { "x": 48, "y": 304 },
   "spawns": {
     "default": { "x": 48, "y": 304 },

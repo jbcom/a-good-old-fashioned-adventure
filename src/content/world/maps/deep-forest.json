@@ -27,6 +27,27 @@
     },
     { "op": "col-span", "tile": "tile:path", "x": 46, "y0": 13, "y1": 25, "note": "hermit track" }
   ],
+  "terrainVariants": [
+    {
+      "baseTile": "tile:leaf-litter",
+      "variants": [
+        "tile:leaf-litter",
+        "tile:leaf-litter-vein",
+        "tile:leaf-litter-roots",
+        "tile:leaf-litter-glowcap"
+      ],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 301,
+      "note": "deeper forest pockets with roots and glowcap breaks"
+    },
+    {
+      "baseTile": "tile:path",
+      "variants": ["tile:path", "tile:path-ruts", "tile:path-pebbles", "tile:path-moss"],
+      "chunk": { "w": 4, "h": 2 },
+      "seed": 302,
+      "note": "animal-track chunks instead of one path strip"
+    }
+  ],
   "playerSpawn": { "x": 48, "y": 304 },
   "spawns": {
     "default": { "x": 48, "y": 304 },
@@ -73,6 +94,18 @@
       "x": 936,
       "y": 274,
       "note": "last lantern before the Sunken Road"
+    },
+    {
+      "ref": "prop:lantern-oil-crate",
+      "x": 966,
+      "y": 306,
+      "note": "oil crate proving the last lantern is tended"
+    },
+    {
+      "ref": "prop:threshold-root-marker",
+      "x": 990,
+      "y": 322,
+      "note": "root marker tying the forest threshold to the road"
     },
     {
       "ref": "char:lost-page",
@@ -124,8 +157,7 @@
         "label": "last lantern before Sunken Road",
         "zone": { "x0": 49, "y0": 15, "x1": 66, "y1": 25 },
         "majorAnchors": ["prop:forest-lantern-post", "enemy:forest-shaman"],
-        "minorProps": ["prop:stump", "prop:forest-lantern-post"],
-        "openReason": "The trees thin so the player feels the road leaving forest cover before the Sunken Road threshold."
+        "minorProps": ["prop:stump", "prop:lantern-oil-crate", "prop:threshold-root-marker"]
       }
     ]
   },

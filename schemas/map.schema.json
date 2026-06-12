@@ -51,6 +51,34 @@
         }
       }
     },
+    "terrainVariants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["baseTile", "variants", "chunk", "seed"],
+        "properties": {
+          "baseTile": { "$ref": "#/$defs/tileRef" },
+          "variants": {
+            "type": "array",
+            "minItems": 4,
+            "maxItems": 8,
+            "items": { "$ref": "#/$defs/tileRef" }
+          },
+          "chunk": {
+            "type": "object",
+            "required": ["w", "h"],
+            "properties": {
+              "w": { "type": "integer", "minimum": 2 },
+              "h": { "type": "integer", "minimum": 2 }
+            },
+            "additionalProperties": false
+          },
+          "seed": { "type": "integer" },
+          "note": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
     "playerSpawn": {
       "type": "object",
       "required": ["x", "y"],

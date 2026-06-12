@@ -154,6 +154,15 @@
       "dialogue": "dlgbank:oldwood-thorncutter",
       "note": "Moving Oldwood thorncutter who makes the upper hazel pocket feel tended."
     },
+    "char:oldwood-lantern-keeper": {
+      "name": "Caddoc Wick",
+      "role": "npc",
+      "sprite": "sprite:hero",
+      "palette": "palette:bellwarden",
+      "portraitColor": "#6d604a",
+      "dialogue": "dlgbank:oldwood-lantern-keeper",
+      "note": "Oldwood last-lantern keeper who turns the quiet threshold walk into a public A-button route verb."
+    },
     "char:lost-page": {
       "name": "Lost Page Rowan",
       "role": "npc",
