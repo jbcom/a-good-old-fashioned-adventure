@@ -48,6 +48,7 @@ import {
   SpriteRef,
   Threat,
   Transform,
+  WaveState,
 } from "./traits";
 
 export function createGameWorld(seed = 1): World {
@@ -65,6 +66,7 @@ export function createGameWorld(seed = 1): World {
     QuestLog({ active: {}, completed: [] }),
     FxStats({ spawned: 0 }),
     HitStop({ left: 0 }),
+    WaveState({ wave: 0, engaged: false }),
     Outbox({ sfx: [], dialogue: null, mapLoad: null, endGame: null }),
   );
   return world;

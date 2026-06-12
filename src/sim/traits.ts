@@ -101,6 +101,13 @@ export const RngState = trait({ seed: 1 });
 export const Clock = trait({ t: 0, dt: 0 });
 /** World resource: remaining hit-stop — sim time freezes while it drains. */
 export const HitStop = trait({ left: 0 });
+/**
+ * Rail-command wave machine (docs/RAIL-COMMAND.md §waves): `wave` is the
+ * last wave released, `engaged` flips when the first unit lands. Wave
+ * spawns carry WaveSpawned so authored map enemies never gate the cycle.
+ */
+export const WaveState = trait({ wave: 0, engaged: false });
+export const WaveSpawned = trait({ wave: 0 });
 export const CameraState = trait({ x: 0, y: 0, shake: 0 });
 
 export interface GameEvent {

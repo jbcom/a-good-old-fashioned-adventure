@@ -177,6 +177,10 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
   await expect.poll(() => screenEl().dataset.selectedNode).toBe("upgrade:knight-vigor");
   await governor.press("a");
   await expect.element(page.getByTestId("upgrade-detail")).toHaveTextContent("joins the road");
+  // state treatment is the UX signal: the bought tile reads as purchased
+  await expect
+    .element(page.getByTestId("upgrade-node-upgrade-knight-vigor"))
+    .toHaveAttribute("data-state", "purchased");
   await governor.press("b");
   await expect.element(page.getByTestId("results-screen")).toBeVisible();
 

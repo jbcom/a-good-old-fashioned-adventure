@@ -302,5 +302,27 @@
         "y1": 200
       }
     }
+  ],
+  "waveGates": [
+    {
+      "id": "gate:south-camp",
+      "x": 150,
+      "y": 830
+    },
+    {
+      "id": "gate:mid-bend",
+      "x": 270,
+      "y": 560
+    },
+    {
+      "id": "gate:west-climb",
+      "x": 150,
+      "y": 360
+    },
+    {
+      "id": "gate:summit-pass",
+      "x": 200,
+      "y": 180
+    }
   ]
 }

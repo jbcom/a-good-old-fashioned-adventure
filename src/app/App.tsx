@@ -1146,6 +1146,7 @@ function EmblemThumb({ nodeId }: { nodeId: string }) {
     const target = ref.current;
     if (!target) return;
     const source = spriteCanvas(emblemSpriteId(nodeId), "palette:base");
+    if (source.width === 0 || source.height === 0) return; // missing sprite: leave blank loudly in tests, not 0x0
     target.width = source.width;
     target.height = source.height;
     const ctx = target.getContext("2d");
@@ -1218,7 +1219,8 @@ function UpgradeWebPanel({
       if (event.pointerType === "mouse") onSelect(index);
     },
     onPointerDown: (event: ReactPointerEvent) => {
-      (event.target as Element).releasePointerCapture?.(event.pointerId);
+      if (!event.isPrimary) return; // single-active-pointer: secondary touches are ignored
+      (event.currentTarget as Element).releasePointerCapture?.(event.pointerId);
       clearHold();
       holdTimer.current = window.setTimeout(() => onSelect(index), UPGRADE_HOLD_MS);
     },
@@ -1242,7 +1244,7 @@ function UpgradeWebPanel({
           <span>{snapshot.incrementalProgress.coins} Coins</span>
           <span>{snapshot.incrementalProgress.roses} Roses</span>
         </div>
-        <div className="upgrade-graph-list" role="listbox" aria-label="Upgrade Graph">
+        <fieldset className="upgrade-graph-list" aria-label="Upgrade Graph">
           {incremental.upgradeGraph.ringOrder.map((track) => (
             <div className="upgrade-track" data-testid={`upgrade-track-${track}`} key={track}>
               <h2 className="upgrade-track-label">{track}</h2>
@@ -1269,7 +1271,7 @@ function UpgradeWebPanel({
               </div>
             </div>
           ))}
-        </div>
+        </fieldset>
         <div className="upgrade-detail upgrade-tooltip" data-testid="upgrade-detail">
           <EmblemThumb nodeId={selectedNode.id} />
           <div className="upgrade-tooltip-body">

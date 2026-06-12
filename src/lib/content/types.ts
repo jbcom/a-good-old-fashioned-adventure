@@ -156,6 +156,8 @@ export interface MapDef {
   terrainVariants?: TerrainVariantRule[];
   playerSpawn: { x: number; y: number };
   spawns: Record<string, { x: number; y: number }>;
+  /** Rail-command wave release points (docs/RAIL-COMMAND.md §waves). */
+  waveGates?: { id: string; x: number; y: number }[];
   entities: MapEntitySpawn[];
   composition?: { routeWindows?: MapCompositionWindow[] };
   triggers?: MapTrigger[];
