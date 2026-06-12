@@ -134,3 +134,44 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
   expect(shell().dataset.purchasedUpgrades).toContain("upgrade:knight-vigor");
   await expect.poll(() => Number(shell().dataset.maxHp ?? 0)).toBe(110);
 }, 240_000);
+
+it("banks coins through death and into the next run", async () => {
+  await page.viewport(1280, 720);
+  await wait(100);
+
+  mountApp(new MemorySaveRepository());
+  const governor = new PlayerGovernor();
+  await expect.element(page.getByTestId("landing-screen")).toBeVisible();
+  await governor.click("new-game-button");
+  await expect.element(page.getByTestId("title-screen")).toBeVisible();
+  await governor.press("a");
+  await expect.poll(() => governor.perceive().mapName, { timeout: 10_000 }).toBe("Rescue Road");
+
+  // earn coins from the first orc on the road
+  await governor.reachPoint(136, 896, { tolerance: 26, maxSteps: 48 });
+  await fightNearby(governor, 10);
+  const shell = () => page.getByTestId("game-shell").element() as HTMLElement;
+  await expect
+    .poll(() => Number(shell().dataset.coins ?? 0), { timeout: 15_000 })
+    .toBeGreaterThan(0);
+
+  // march into the dragon's bolts and fall — dying on the way also counts
+  try {
+    await governor.reachPoint(200, 168, { tolerance: 28, maxSteps: 60 });
+  } catch {
+    // left play mode mid-walk: the road claimed the knight early
+  }
+  await expect.poll(() => governor.perceive().mode, { timeout: 60_000 }).toBe("gameover");
+  const banked = Number(shell().dataset.coins ?? 0);
+  expect(banked).toBeGreaterThan(0);
+  const deathShot = await page.screenshot({
+    path: "../../docs/evidence/rescue-route-death-payout.png",
+  });
+  expect(deathShot).toBeTruthy();
+
+  // A starts another run with the wallet intact
+  await governor.press("a");
+  await expect.poll(() => governor.perceive().mapName, { timeout: 10_000 }).toBe("Rescue Road");
+  await expect.poll(() => governor.perceive().mode, { timeout: 10_000 }).toBe("playing");
+  expect(Number(shell().dataset.coins ?? 0)).toBe(banked);
+}, 240_000);

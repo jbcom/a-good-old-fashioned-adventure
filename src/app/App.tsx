@@ -1573,7 +1573,12 @@ export function App({
       handleUpgradeBuy();
       return;
     }
-    if (mode === "title" || mode === "gameover") {
+    if (mode === "gameover") {
+      // death pays out: the next run keeps the banked wallet
+      startNextRun();
+      return;
+    }
+    if (mode === "title") {
       startGame();
       return;
     }
@@ -1637,6 +1642,7 @@ export function App({
     paused,
     shopState,
     startGame,
+    startNextRun,
     world,
   ]);
 

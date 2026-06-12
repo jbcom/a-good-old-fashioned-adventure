@@ -4,8 +4,9 @@ import { getMap, getQuest } from "../../src/lib/content/registry";
 import { emitDialogueSeen, resolveDialogue } from "../../src/sim/dialogue";
 import { pushEvent } from "../../src/sim/events";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
-import { sanitizeIncrementalProgress } from "../../src/sim/incrementalProgress";
+import { grantRunReward, sanitizeIncrementalProgress } from "../../src/sim/incrementalProgress";
 import { autoStartQuests } from "../../src/sim/quests";
+import { damagePlayer } from "../../src/sim/systems/combat";
 import { step } from "../../src/sim/tick";
 import { Health, IncrementalProgress, IsPlayer, Outbox, QuestLog } from "../../src/sim/traits";
 
@@ -47,6 +48,26 @@ describe("S9.4 rescue-route runtime slice", () => {
     // fights, bends, and dialogue
     expect(walkSeconds).toBeGreaterThan(5);
     expect(walkSeconds).toBeLessThan(60);
+  });
+
+  it("banks the wallet when the run ends in death", () => {
+    const world = bootRescueRoute();
+    grantRunReward(world, "enemyDefeated");
+    grantRunReward(world, "enemyDefeated");
+    grantRunReward(world, "enemyDefeated");
+
+    damagePlayer(world, 9999, 0);
+
+    const progress = world.get(IncrementalProgress);
+    // base purse 12 plus three enemy bounties — all kept through death
+    expect(progress?.coins).toBe(21);
+    expect(progress?.lastRun).toMatchObject({
+      result: "gameover",
+      coinsEarned: 9,
+      rosesEarned: 0,
+      rescuedPrincess: false,
+    });
+    expect(world.get(Outbox)?.endGame).toBe("gameover");
   });
 
   it("shapes the next run with purchased knight-vigor ranks", () => {

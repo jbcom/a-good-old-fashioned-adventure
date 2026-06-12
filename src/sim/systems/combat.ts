@@ -10,6 +10,7 @@ import { getItem } from "../../lib/content/registry";
 import { collides } from "../collision";
 import { pushEvent } from "../events";
 import { spawnFx, spawnPickup, spawnProjectile } from "../factories";
+import { recordDeathPayout } from "../incrementalProgress";
 import {
   AimDirection,
   CameraState,
@@ -139,6 +140,7 @@ export function damagePlayer(world: World, amount: number, iframes: number): voi
   shake(world, combat.screenShake.onPlayerTouchHit);
   sfx(world, "hurt");
   if (health.hp - amount <= 0) {
+    recordDeathPayout(world);
     const outbox = world.get(Outbox);
     if (outbox) outbox.endGame = "gameover";
   }

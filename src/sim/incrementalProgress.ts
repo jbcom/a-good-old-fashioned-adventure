@@ -243,6 +243,26 @@ export function applyIncrementalEventReward(world: World, eventType: string): vo
   if (eventType === "enemy:defeated") grantRunReward(world, "enemyDefeated");
 }
 
+/**
+ * Death pays out: the run's banked coins stay banked and the run closes with
+ * a gameover ledger entry instead of a wipe.
+ */
+export function recordDeathPayout(world: World): IncrementalProgressState {
+  const progress = currentProgress(world);
+  const next: IncrementalProgressState = {
+    ...progress,
+    lastRun: {
+      result: "gameover",
+      coinsEarned: progress.currentRunCoinsEarned,
+      rosesEarned: progress.currentRunRosesEarned,
+      rescuedPrincess: false,
+      routePackId: progress.activeRoutePackId,
+    },
+  };
+  setProgress(world, next);
+  return next;
+}
+
 export interface UpgradePurchaseResult {
   ok: boolean;
   nodeId: string;
