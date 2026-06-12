@@ -171,4 +171,12 @@ with `facing.nativeDir: "left"` driving the new mirror-x path; the
 Bramble Stalker archetype wears the dark coat, verified in the boss-hall
 stage screenshot beside the dragon (both raster backends in one shot).
 Remaining nine sheets follow the same convention as SA.3 wave content
-consumes them.
+consumes them. Rows already pinned from gridded reads (defs get authored
+when the census assigns a consumer):
+
+- **rat** (32px, 5 cols): rows 0-3 face left — idle / attack (red-eye
+  lunge) / walk / hurt-flatten; rows 4-7 are pre-mirrored right-facing
+  duplicates — ignore them, `facing.nativeDir: "left"` + mirror covers it.
+- **bat** (16×24 cells, 5 cols): row 0 fly toward camera (red eyes),
+  row 1 fly away (back view — usable as the "up" travel row), row 2
+  5-frame death tumble. Front-facing flier: no nativeDir, never mirrors.
