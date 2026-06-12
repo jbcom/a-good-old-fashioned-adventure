@@ -124,7 +124,7 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S9.10 Balance budget tests: encode the no-sharp-edges doctrine as unit tests over incremental.json — next affordable node within ~1-3 runs of income at current depth, deepest-area income outpaces shallow areas, no node priced like a wall
 
 ### S10 Release
-- [x] [WAIT] Babysit PR #2 (incremental princess-rescue loop milestone) to green CI, address and resolve every review thread, squash-merge, then verify the app runs from main
+- [x] S10.1 Babysit PR #2 (incremental princess-rescue loop milestone) to green CI, address and resolve every review thread, squash-merge, then verify the app runs from main
 
 ## Learnings log (forward sweeps append here)
 - 2026-06-12 milestone closure: PR #2 squash-merged (de92e0d) — the incremental princess-rescue loop is the shipped product frame; main builds and boots in a headed browser. Final sweep: the next milestone candidates surfaced during this cycle are (a) per-family adversarial enemy-count consumption (orc-warband ranks actually spawning orcs), (b) roadTravelled/objectiveCleared reward wiring breadth, (c) castle room-graph depth beyond the hall venue (library/armory beats in relocated runs), (d) run-length measurement in the journey suite, (e) richer indoor differentiation. Queue them when the next milestone opens. Process lesson: `git checkout` can abort while a following `&&`-chained reset still runs — never chain checkout && reset --hard; verify the branch between steps.

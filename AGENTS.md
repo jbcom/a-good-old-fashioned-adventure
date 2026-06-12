@@ -22,12 +22,14 @@ interiors, NPCs, shops, props, and enemies become unlockable route packs,
 objectives, modifiers, and side loops around that rescue loop. The authoritative
 pillar is `docs/INCREMENTAL-RESCUE-LOOP.md`.
 
-Current progress snapshot: S9.1, S9.2, and S9.3 are complete. The game now
-persists incremental progression and the public-control journey reaches rescue
-results, opens the upgrade graph with A, buys an affordable connected node with
-A, and returns to results with B. Remaining open work is documented in
-`.agent-state/directive.md`: S8.24 composition budget tuning, S9.4 compact
-rescue-route runtime slice, and S9.5 second-run proof.
+Current progress snapshot: the incremental rescue milestone is SHIPPED (PR
+#2). New games boot the compact Rescue Road, the governor journey plays the
+full loop through public controls (coins, dragon, princess, rose, unlock,
+visibly changed second run), death banks the wallet onto a storybook chapter
+screen, minibosses are bespoke `.pix` placements paying first-clear roses,
+and the castle pack relocates princess and dragon into the candlelit hall.
+The directive in `.agent-state/directive.md` is RELEASED; its learnings log
+names the next-milestone candidates.
 
 Content-first architecture: ALL tunables live in `src/config/*.json`, all
 assets/world/story in `src/content/**/*.json` (validated by `schemas/`,
@@ -46,7 +48,8 @@ local branch. `.agent-state/directive.md` is the durable work queue.
 
 ## Notes
 
-- `.agent-state/directive.md` is ACTIVE and is the durable work queue.
+- `.agent-state/directive.md` is the durable work queue; it is RELEASED for
+  the shipped incremental milestone and reopens with the next milestone.
 - `.claude/gates.json` enforces visual/audio/sim and Capacitor evidence rules.
 - Browser validation is not optional: `tests/browser/playthrough.test.tsx` drives the public player journey through real keyboard controls.
 - Work order remains docs > tests > code. Product pivots must first update
