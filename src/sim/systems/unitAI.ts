@@ -11,12 +11,14 @@ import type { Entity, World } from "koota";
 import { SeekBehavior, Vector3, Vehicle } from "yuka";
 import { type ClassTemperament, classes, combat } from "../../lib/config";
 import { spawnProjectile } from "../factories";
+import { getRail, nextRailPoint } from "../rail";
 import {
   CombatTimers,
   Facing,
   Health,
   IsEnemy,
   IsUnit,
+  MapRuntime,
   MoveIntent,
   Outbox,
   Speed,
@@ -139,7 +141,10 @@ export function unitAIStep(world: World, dt: number): void {
     brain.vehicle.maxSpeed = speed.value;
     brain.seek.active = false;
 
-    const target = nearestEnemy(world, transform);
+    const found = nearestEnemy(world, transform);
+    // beyond perception the field is quiet: advance the rail instead
+    const perception = temperament.perception ?? 200;
+    const target = found && found.dist <= perception ? found : null;
     let intentX = 0;
     let intentY = 0;
     let speedScale = 1;
@@ -189,6 +194,16 @@ export function unitAIStep(world: World, dt: number): void {
       }
       if (target.dist <= temperament.engage && temperament.verb !== "aura") {
         unitStrike(world, unit, info.classId, temperament, target);
+      }
+    }
+
+    if (!target) {
+      // no threat in sight: march the designed route (docs/RAIL-COMMAND.md)
+      const mapId = world.get(MapRuntime)?.mapId ?? "";
+      const ahead = mapId ? nextRailPoint(getRail(mapId), transform) : null;
+      if (ahead) {
+        brain.seek.active = true;
+        brain.seek.target.set(ahead.x, ahead.y, 0);
       }
     }
 

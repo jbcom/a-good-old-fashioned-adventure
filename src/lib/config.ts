@@ -49,6 +49,8 @@ export interface ClassTemperament {
   verb: "charge" | "hold-range" | "aoe" | "flank" | "aura";
   /** range at which the unit's attack engages */
   engage: number;
+  /** sight range: enemies beyond it don't interrupt the rail march */
+  perception?: number;
   hp: number;
   speed: number;
   keepDistance?: number;

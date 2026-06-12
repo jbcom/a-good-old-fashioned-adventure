@@ -6,6 +6,7 @@
 import type { World } from "koota";
 import { drainEvents } from "./events";
 import { reduceEvent } from "./quests";
+import { railStep } from "./rail";
 import { updateCamera } from "./systems/camera";
 import { combatStep } from "./systems/combat";
 import { enemyAIStep } from "./systems/enemyAI";
@@ -56,6 +57,7 @@ export function step(world: World, dt: number = SIM_DT): void {
   combatStep(world, dt);
   unitTouchDamage(world, dt);
   waveStep(world);
+  railStep(world);
   for (const event of drainEvents(world)) reduceEvent(world, event);
   updateCamera(world, rngFor(world));
 }
