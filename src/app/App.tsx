@@ -1,6 +1,14 @@
 import { animate } from "animejs";
 import type { Entity, World } from "koota";
-import { type CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   type AudioDebugState,
   createToneAudioEngine,
@@ -1128,6 +1136,52 @@ function ResultsPanel({
   );
 }
 
+function emblemSpriteId(nodeId: string): string {
+  return nodeId.replace(/^upgrade:/, "sprite:emblem-");
+}
+
+function EmblemThumb({ nodeId }: { nodeId: string }) {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  useEffect(() => {
+    const target = ref.current;
+    if (!target) return;
+    const source = spriteCanvas(emblemSpriteId(nodeId), "palette:base");
+    target.width = source.width;
+    target.height = source.height;
+    const ctx = target.getContext("2d");
+    if (!ctx) return;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(source, 0, 0);
+  }, [nodeId]);
+  return <canvas className="emblem-thumb" ref={ref} />;
+}
+
+function RankPips({
+  progress,
+  node,
+}: {
+  progress: IncrementalProgressState;
+  node: IncrementalUpgradeNode;
+}) {
+  const total = nodeRanks(node);
+  if (total <= 1) return null;
+  const owned = purchasedRank(progress, node);
+  return (
+    <span className="rank-pips" aria-label={`rank ${owned} of ${total}`}>
+      {Array.from({ length: total }, (_, i) => (
+        <span
+          className="rank-pip"
+          data-filled={i < owned ? "true" : "false"}
+          // biome-ignore lint/suspicious/noArrayIndexKey: pips are positional by definition
+          key={i}
+        />
+      ))}
+    </span>
+  );
+}
+
+const UPGRADE_HOLD_MS = 350;
+
 function UpgradeWebPanel({
   snapshot,
   selectedIndex,
@@ -1144,9 +1198,43 @@ function UpgradeWebPanel({
   onBack: () => void;
 }) {
   const panelRef = usePanelEntrance("upgrade-graph");
+  const holdTimer = useRef<number | null>(null);
   const selectedNode = RING_NODES[selectedIndex] ?? RING_NODES[0];
+  const selectedState = upgradeNodeState(snapshot.incrementalProgress, selectedNode);
+
+  const clearHold = useCallback(() => {
+    if (holdTimer.current !== null) window.clearTimeout(holdTimer.current);
+    holdTimer.current = null;
+  }, []);
+  useEffect(() => clearHold, [clearHold]);
+
+  // tooltip triggers (docs/DESIGN-SYSTEM.md §upgrade emblems): mouse hover
+  // selects instantly; touch selects on a ~350ms hold; a held pointer
+  // dragged across tiles scrubs the selection (capture released so moves
+  // land on the tile under the finger)
+  const tileEvents = (index: number) => ({
+    onClick: () => onSelect(index),
+    onPointerEnter: (event: ReactPointerEvent) => {
+      if (event.pointerType === "mouse") onSelect(index);
+    },
+    onPointerDown: (event: ReactPointerEvent) => {
+      (event.target as Element).releasePointerCapture?.(event.pointerId);
+      clearHold();
+      holdTimer.current = window.setTimeout(() => onSelect(index), UPGRADE_HOLD_MS);
+    },
+    onPointerUp: clearHold,
+    onPointerCancel: clearHold,
+    onPointerMove: (event: ReactPointerEvent) => {
+      if (event.buttons > 0) onSelect(index);
+    },
+  });
+
   return (
-    <section className="upgrade-screen" data-testid="upgrade-screen">
+    <section
+      className="upgrade-screen"
+      data-testid="upgrade-screen"
+      data-selected-node={selectedNode.id}
+    >
       <div className="upgrade-panel" data-testid="upgrade-panel" ref={panelRef}>
         <p className="manuscript-kicker">The Vow Graph</p>
         <h1>Upgrade Graph</h1>
@@ -1158,33 +1246,41 @@ function UpgradeWebPanel({
           {incremental.upgradeGraph.ringOrder.map((track) => (
             <div className="upgrade-track" data-testid={`upgrade-track-${track}`} key={track}>
               <h2 className="upgrade-track-label">{track}</h2>
-              {RING_NODES.map((node, index) => {
-                if (node.track !== track) return null;
-                const state = upgradeNodeState(snapshot.incrementalProgress, node);
-                return (
-                  <button
-                    className="upgrade-node"
-                    data-state={state}
-                    data-testid={upgradeTestId(node.id)}
-                    type="button"
-                    key={node.id}
-                    aria-pressed={selectedIndex === index}
-                    onClick={() => onSelect(index)}
-                  >
-                    <span className="upgrade-node-label">{node.label}</span>
-                    <span>{node.category}</span>
-                    <span>{upgradeCostLabel(snapshot.incrementalProgress, node)}</span>
-                    <span>{state}</span>
-                  </button>
-                );
-              })}
+              <div className="upgrade-tile-row">
+                {RING_NODES.map((node, index) => {
+                  if (node.track !== track) return null;
+                  const state = upgradeNodeState(snapshot.incrementalProgress, node);
+                  return (
+                    <button
+                      className="upgrade-tile"
+                      data-state={state}
+                      data-testid={upgradeTestId(node.id)}
+                      type="button"
+                      key={node.id}
+                      aria-label={node.label}
+                      aria-pressed={selectedIndex === index}
+                      {...tileEvents(index)}
+                    >
+                      <EmblemThumb nodeId={node.id} />
+                      <RankPips progress={snapshot.incrementalProgress} node={node} />
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           ))}
         </div>
-        <div className="upgrade-detail" data-testid="upgrade-detail">
-          <strong>{selectedNode.label}</strong>
-          <span>{upgradeCostLabel(snapshot.incrementalProgress, selectedNode)}</span>
-          <p>{message || "Up/down chooses a vow. A buys. B returns to results."}</p>
+        <div className="upgrade-detail upgrade-tooltip" data-testid="upgrade-detail">
+          <EmblemThumb nodeId={selectedNode.id} />
+          <div className="upgrade-tooltip-body">
+            <strong>{selectedNode.label}</strong>
+            <span className="upgrade-tooltip-meta">
+              {selectedNode.track} · {upgradeCostLabel(snapshot.incrementalProgress, selectedNode)}
+              {" · "}
+              {selectedState}
+            </span>
+            <p>{message || selectedNode.note || "A buys. B returns to results."}</p>
+          </div>
         </div>
         <div className="result-actions">
           <button className="menu-button" data-testid="upgrade-buy" type="button" onClick={onBuy}>

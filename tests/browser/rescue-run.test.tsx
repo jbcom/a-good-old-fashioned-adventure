@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, expect, it } from "vitest";
-import { page } from "vitest/browser";
+import { page, userEvent } from "vitest/browser";
 import { App } from "../../src/app/App";
 import { MemorySaveRepository } from "../../src/persistence/saveRepository";
 import { PlayerGovernor } from "../harness/playerGovernor";
@@ -133,12 +133,48 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
   await governor.press("a");
   await expect.element(page.getByTestId("upgrade-screen")).toBeVisible();
   await expect.element(page.getByTestId("upgrade-purse")).toHaveTextContent("Coins");
+
+  // the vow graph is a wall of designs: every node tile carries its emblem
+  const { incremental: incrementalConfig } = await import("../../src/lib/config");
+  const emblems = document.querySelectorAll(".upgrade-tile canvas.emblem-thumb");
+  expect(emblems.length).toBe(incrementalConfig.upgradeGraph.nodes.length);
+
+  // hover IS the tooltip on desktop: pointing at a tile fills the detail sheet
+  const screenEl = () => page.getByTestId("upgrade-screen").element() as HTMLElement;
+  await userEvent.hover(page.getByTestId("upgrade-node-upgrade-dragon-wake"));
+  await expect.poll(() => screenEl().dataset.selectedNode).toBe("upgrade:dragon-wake");
+  await expect.element(page.getByTestId("upgrade-detail")).toHaveTextContent("Dragon Wake");
+
+  // drag-over scrubs the selection across tiles (touch reading of the graph):
+  // a held pointer moving over a tile selects it
+  page
+    .getByTestId("upgrade-node-upgrade-road-provisions")
+    .element()
+    .dispatchEvent(
+      new PointerEvent("pointermove", {
+        bubbles: true,
+        buttons: 1,
+        pointerId: 7,
+        pointerType: "touch",
+      }),
+    );
+  await expect.poll(() => screenEl().dataset.selectedNode).toBe("upgrade:road-provisions");
+
   const upgradeGraphShot = await page.screenshot({
     path: "../../docs/evidence/upgrade-graph-ranked.png",
   });
   expect(upgradeGraphShot).toBeTruthy();
+  await page.viewport(390, 844);
+  await wait(250);
+  const upgradePhoneShot = await page.screenshot({
+    path: "../../docs/evidence/upgrade-graph-phone.png",
+  });
+  expect(upgradePhoneShot).toBeTruthy();
+  await page.viewport(1280, 720);
 
-  // spend the run's coins on a connected rank, then return to results
+  // keyboard parity: cycle back to the connected rank and buy it with A
+  await userEvent.hover(page.getByTestId("upgrade-node-upgrade-knight-vigor"));
+  await expect.poll(() => screenEl().dataset.selectedNode).toBe("upgrade:knight-vigor");
   await governor.press("a");
   await expect.element(page.getByTestId("upgrade-detail")).toHaveTextContent("joins the road");
   await governor.press("b");
