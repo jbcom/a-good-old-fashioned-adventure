@@ -3,11 +3,17 @@
   "id": "map:castle-hall",
   "kind": "map",
   "name": "Castle Hall",
-  "size": { "cols": 56, "rows": 34 },
+  "size": {
+    "cols": 56,
+    "rows": 34
+  },
   "baseTile": "tile:stone-floor",
   "bgmTheme": "dungeon",
   "generation": [
-    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "border",
+      "tile": "tile:stone-wall"
+    },
     {
       "op": "row-span",
       "tile": "tile:castle-road",
@@ -59,23 +65,102 @@
       "note": "upper throne wall silhouette"
     }
   ],
-  "playerSpawn": { "x": 96, "y": 272 },
+  "playerSpawn": {
+    "x": 96,
+    "y": 272
+  },
   "spawns": {
-    "default": { "x": 96, "y": 272 },
-    "entry": { "x": 96, "y": 272 },
-    "from-library": { "x": 320, "y": 176 },
-    "from-armory": { "x": 500, "y": 344 }
+    "default": {
+      "x": 96,
+      "y": 272
+    },
+    "entry": {
+      "x": 96,
+      "y": 272
+    },
+    "from-library": {
+      "x": 320,
+      "y": 176
+    },
+    "from-armory": {
+      "x": 500,
+      "y": 344
+    },
+    "rescue-gate": {
+      "x": 96,
+      "y": 272
+    }
   },
   "entities": [
-    { "ref": "prop:castle-banner", "x": 150, "y": 216, "note": "western heraldry" },
-    { "ref": "prop:castle-shelf", "x": 174, "y": 244, "note": "scribe ledger shelf" },
-    { "ref": "prop:scribe-desk", "x": 238, "y": 244, "note": "scribe's letter desk" },
-    { "ref": "prop:castle-banner", "x": 620, "y": 216, "note": "eastern heraldry" },
-    { "ref": "prop:castle-shelf", "x": 690, "y": 250, "note": "sealed stair shelf" },
-    { "ref": "prop:castle-lantern", "x": 308, "y": 220, "note": "library aisle lamp" },
-    { "ref": "prop:castle-lantern", "x": 496, "y": 380, "note": "armory aisle lamp" },
-    { "ref": "prop:throne-door", "x": 826, "y": 260, "note": "sealed door to the dungeon stair" },
-    { "ref": "char:castle-scribe", "x": 220, "y": 272, "dir": 1 }
+    {
+      "ref": "prop:castle-banner",
+      "x": 150,
+      "y": 216,
+      "note": "western heraldry"
+    },
+    {
+      "ref": "prop:castle-shelf",
+      "x": 174,
+      "y": 244,
+      "note": "scribe ledger shelf"
+    },
+    {
+      "ref": "prop:scribe-desk",
+      "x": 238,
+      "y": 244,
+      "note": "scribe's letter desk"
+    },
+    {
+      "ref": "prop:castle-banner",
+      "x": 620,
+      "y": 216,
+      "note": "eastern heraldry"
+    },
+    {
+      "ref": "prop:castle-shelf",
+      "x": 690,
+      "y": 250,
+      "note": "sealed stair shelf"
+    },
+    {
+      "ref": "prop:castle-lantern",
+      "x": 308,
+      "y": 220,
+      "note": "library aisle lamp"
+    },
+    {
+      "ref": "prop:castle-lantern",
+      "x": 496,
+      "y": 380,
+      "note": "armory aisle lamp"
+    },
+    {
+      "ref": "prop:throne-door",
+      "x": 826,
+      "y": 260,
+      "note": "sealed door to the dungeon stair"
+    },
+    {
+      "ref": "char:castle-scribe",
+      "x": 220,
+      "y": 272,
+      "dir": 1
+    },
+    {
+      "enemy": "dragon-guardian",
+      "x": 732,
+      "y": 268,
+      "requiresRoutePack": "castle-interior",
+      "note": "the dragon followed the princess into the candlelit hall"
+    },
+    {
+      "ref": "char:princess-amber",
+      "x": 800,
+      "y": 264,
+      "dir": -1,
+      "requiresRoutePack": "castle-interior",
+      "note": "Princess Amber relocated before the throne door"
+    }
   ],
   "triggers": [
     {
@@ -85,7 +170,12 @@
       "toMap": "map:castle-yard",
       "toSpawn": "from-hall",
       "sfx": "interact",
-      "zone": { "x0": 0, "y0": 244, "x1": 28, "y1": 304 }
+      "zone": {
+        "x0": 0,
+        "y0": 244,
+        "x1": 28,
+        "y1": 304
+      }
     },
     {
       "id": "trigger:library-door",
@@ -94,7 +184,12 @@
       "toMap": "map:castle-library",
       "toSpawn": "entry",
       "sfx": "interact",
-      "zone": { "x0": 292, "y0": 88, "x1": 348, "y1": 144 }
+      "zone": {
+        "x0": 292,
+        "y0": 88,
+        "x1": 348,
+        "y1": 144
+      }
     },
     {
       "id": "trigger:armory-door",
@@ -103,7 +198,12 @@
       "toMap": "map:castle-armory",
       "toSpawn": "entry",
       "sfx": "interact",
-      "zone": { "x0": 468, "y0": 404, "x1": 532, "y1": 500 }
+      "zone": {
+        "x0": 468,
+        "y0": 404,
+        "x1": 532,
+        "y1": 500
+      }
     },
     {
       "id": "trigger:dungeon-stair",
@@ -113,7 +213,12 @@
       "toSpawn": "entry",
       "requiresFlag": "flag:castle-letters-cleared",
       "sfx": "interact",
-      "zone": { "x0": 850, "y0": 244, "x1": 896, "y1": 304 }
+      "zone": {
+        "x0": 850,
+        "y0": 244,
+        "x1": 896,
+        "y1": 304
+      }
     }
   ]
 }

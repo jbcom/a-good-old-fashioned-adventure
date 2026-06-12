@@ -96,13 +96,46 @@
     { "enemy": "orc-scout", "x": 280, "y": 480 },
     { "enemy": "forest-orc", "x": 136, "y": 320 },
     { "enemy": "oldwood-raider", "x": 200, "y": 136 },
-    { "enemy": "dragon-guardian", "x": 216, "y": 128 },
+    {
+      "enemy": "dragon-guardian",
+      "x": 216,
+      "y": 128,
+      "withoutRoutePack": "castle-interior",
+      "note": "the route dragon holds the pass until the castle opens"
+    },
     {
       "ref": "char:princess-amber",
       "x": 216,
       "y": 72,
       "dir": 1,
-      "note": "Princess Amber waits on the plateau at the head of the road"
+      "withoutRoutePack": "castle-interior",
+      "note": "Princess Amber waits on the plateau until the castle opens"
+    },
+    {
+      "ref": "prop:castle-gatehouse",
+      "x": 216,
+      "y": 64,
+      "requiresRoutePack": "castle-interior",
+      "note": "the princess is in another castle: the gate stands where she once waited"
+    },
+    {
+      "enemy": "banner-knight",
+      "x": 216,
+      "y": 144,
+      "requiresRoutePack": "castle-interior",
+      "note": "the old summit becomes a waypoint guarded by its champion"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:castle-gate",
+      "kind": "portal",
+      "label": "Through the castle gate",
+      "toMap": "map:castle-hall",
+      "toSpawn": "rescue-gate",
+      "sfx": "interact",
+      "requiresRoutePack": "castle-interior",
+      "zone": { "x0": 192, "y0": 40, "x1": 240, "y1": 76 }
     }
   ]
 }

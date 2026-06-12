@@ -244,7 +244,11 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
   }
   world.set(CameraState, { x, y, shake: 0 });
 
+  const unlockedPacks = world.get(IncrementalProgress)?.unlockedRoutePackIds ?? [];
   for (const spawn of def.entities) {
+    // relocation overlays: entities can require or exclude an unlocked pack
+    if (spawn.requiresRoutePack && !unlockedPacks.includes(spawn.requiresRoutePack)) continue;
+    if (spawn.withoutRoutePack && unlockedPacks.includes(spawn.withoutRoutePack)) continue;
     if (spawn.spawnRule === "unchosen-companions") {
       const companionRoster = classes.companionRoster ?? classes.roster;
       const others = companionRoster.filter((c) => c !== opts.classId);

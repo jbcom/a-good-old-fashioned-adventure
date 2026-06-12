@@ -59,6 +59,19 @@ depends on luck.
 | castle-approach | Banner Knight (`banner-knight`) | the guarded gate road |
 | castle-interior | Armory Sentinel (`armory-sentinel`) | the armory's dark corner |
 
+### The Princess Is in Another Castle (runtime)
+
+Map entities and triggers may declare `requiresRoutePack` / `withoutRoutePack`
+relocation overlays, filtered against the player's unlocked route packs at
+instantiation. Buying the castle route pack relocates the rescue: the princess
+and route dragon leave the rescue-route summit, the castle gatehouse and a
+Banner Knight champion take their place, and a gate portal leads into
+`map:castle-hall` where the dragon guards Princess Amber before the throne
+door. `quest:rescue-run` advances by archetype and dialogue, so the same quest
+completes in either venue. The hall keeps its library/armory/dungeon doors —
+the castle is its own branching room-graph, and the library journey is
+untouched when the pack is locked.
+
 ### Rescue Route Map Contract
 
 `map:rescue-route` is 26x64 tiles (416x1024 px, ~2-3.5 minutes with fights at

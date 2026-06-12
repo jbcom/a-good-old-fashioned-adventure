@@ -135,6 +135,80 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
   await expect.poll(() => Number(shell().dataset.maxHp ?? 0)).toBe(110);
 }, 240_000);
 
+it("walks through the castle gate to the relocated princess", async () => {
+  await page.viewport(1280, 720);
+  await wait(100);
+
+  const repository = new MemorySaveRepository();
+  await repository.upsertSlot({
+    id: 1,
+    classId: "knight",
+    mapId: "map:rescue-route",
+    playerX: 136,
+    playerY: 220,
+    level: 3,
+    hp: 120,
+    maxHp: 120,
+    questSummary: "The princess is in another castle",
+    snapshotJson: JSON.stringify({
+      coins: 60,
+      roses: 5,
+      purchasedUpgradeIds: ["upgrade:first-vow"],
+      unlockedClassIds: ["knight"],
+      unlockedRoutePackIds: ["castle-interior"],
+    }),
+    updatedAt: new Date("2026-06-12T08:00:00Z"),
+  });
+
+  mountApp(repository);
+  const governor = new PlayerGovernor();
+  await expect.element(page.getByTestId("landing-screen")).toBeVisible();
+  await governor.click("continue-button");
+  await expect.poll(() => governor.perceive().mapName, { timeout: 10_000 }).toBe("Rescue Road");
+
+  // the summit champion guards the gate where the princess once waited
+  await governor.reachPoint(200, 176, { tolerance: 26, maxSteps: 40 });
+  await fightNearby(governor, 14);
+  const gateShot = await page.screenshot({
+    path: "../../docs/evidence/rescue-route-castle-gate.png",
+  });
+  expect(gateShot).toBeTruthy();
+
+  await governor.reachPoint(216, 60, { tolerance: 16, maxSteps: 40 });
+  await expect.poll(() => governor.perceive().mapName, { timeout: 10_000 }).toBe("Castle Hall");
+
+  // the dragon followed her into the candlelit hall — take the south lane,
+  // clear of the library door (y<=144) and the armory door (x468-532, y>=404)
+  const hallWaypoints: Array<[number, number, number]> = [
+    [300, 330, 0],
+    [620, 330, 0],
+    [660, 280, 6],
+  ];
+  for (const [x, y, presses] of hallWaypoints) {
+    await governor.reachPoint(x, y, { tolerance: 28, maxSteps: 48 });
+    if (presses > 0) await fightNearby(governor, presses);
+  }
+  for (let round = 0; round < 12; round++) {
+    await fightNearby(governor, 6);
+    if (governor.perceive().questText.includes("Free Princess Amber")) break;
+    await governor.reachPoint(716, 268, { tolerance: 30, maxSteps: 12 });
+  }
+  await expect
+    .poll(() => governor.perceive().questText, { timeout: 10_000 })
+    .toContain("Free Princess Amber");
+
+  await governor.reachPoint(788, 264, { tolerance: 26, maxSteps: 32 });
+  await governor.press("a");
+  await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("kingdom is saved");
+  const hallShot = await page.screenshot({
+    path: "../../docs/evidence/castle-hall-rescue.png",
+  });
+  expect(hallShot).toBeTruthy();
+
+  await governor.press("a");
+  await expect.element(page.getByTestId("results-screen")).toBeVisible();
+}, 240_000);
+
 it("banks coins through death and into the next run", async () => {
   await page.viewport(1280, 720);
   await wait(100);

@@ -110,6 +110,8 @@
           "ref": { "type": "string", "pattern": "^(char|prop):[a-z0-9-]+$" },
           "enemy": { "type": "string", "pattern": "^[a-z0-9-]+$" },
           "spawnRule": { "type": "string" },
+          "requiresRoutePack": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "withoutRoutePack": { "type": "string", "pattern": "^[a-z0-9-]+$" },
           "x": { "type": "number" },
           "y": { "type": "number" },
           "tileAt": { "$ref": "#/$defs/tileCoord" },
@@ -190,6 +192,7 @@
           "zone": { "type": "object", "required": ["x0", "y0", "x1", "y1"] },
           "tiles": { "type": "array", "items": { "$ref": "#/$defs/tileCoord" } },
           "requiresFlag": { "$ref": "#/$defs/flagRef" },
+          "requiresRoutePack": { "type": "string", "pattern": "^[a-z0-9-]+$" },
           "solidUnlessFlag": { "$ref": "#/$defs/flagRef" },
           "effects": { "type": "array", "items": { "type": "object" } },
           "indicator": { "type": "object" }

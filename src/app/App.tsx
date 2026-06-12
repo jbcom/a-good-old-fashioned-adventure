@@ -557,9 +557,11 @@ function handleZoneTriggers(world: World, entered: Set<string>) {
   if (!runtime || !pt || !runtime.mapId) return;
   const map = getMap(runtime.mapId);
   const flags = world.get(FlagState)?.values ?? {};
+  const unlockedPacks = world.get(IncrementalProgress)?.unlockedRoutePackIds ?? [];
   for (const trigger of map.triggers ?? []) {
     if (!trigger.zone) continue;
     if (trigger.requiresFlag && !flags[trigger.requiresFlag]) continue;
+    if (trigger.requiresRoutePack && !unlockedPacks.includes(trigger.requiresRoutePack)) continue;
     if (!insideZone(map, pt.x, pt.y, trigger.id)) continue;
     const key = `${runtime.mapId}:${trigger.id}`;
     if (entered.has(key)) continue;

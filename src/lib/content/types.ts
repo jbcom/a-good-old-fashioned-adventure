@@ -108,6 +108,8 @@ export interface MapEntitySpawn {
   ref?: string;
   enemy?: string;
   spawnRule?: string;
+  requiresRoutePack?: string;
+  withoutRoutePack?: string;
   x?: number;
   y?: number;
   tileAt?: [number, number];
@@ -128,6 +130,7 @@ export interface MapTrigger {
   zone?: { x0: number; y0: number; x1: number; y1: number };
   tiles?: [number, number][];
   requiresFlag?: string;
+  requiresRoutePack?: string;
   solidUnlessFlag?: string;
   effects?: Record<string, unknown>[];
   indicator?: { drawOps: DrawOp[]; atTile: [number, number] };
