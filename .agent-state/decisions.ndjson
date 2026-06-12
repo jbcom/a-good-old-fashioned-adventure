@@ -74,3 +74,4 @@
 {"ts":"2026-06-12T22:38:28.274Z","sha":"02d5e7c1d962785072afcab5c5d114f86b3cbdf2","subject":"feat: the ladder takes the field","decision":null,"why":null,"resolves":["S18.4 tier journey"],"overrides":[]}
 {"ts":"2026-06-12T22:40:42.700Z","sha":"be620ce074dd2e4b2dbd68aa34cbd180fa711f39","subject":"docs: the pixel-art audit — every sheet read at zoom","decision":null,"why":null,"resolves":["SA.1 audit pass"],"overrides":[]}
 {"ts":"2026-06-12T22:43:34.238Z","sha":"b6f685781310df3ba2611b39448f30c13c394354","subject":"feat: the audit's debts paid — beast, faces, wind","decision":null,"why":null,"resolves":["SA.2 weak-grid rework","S18.R review fold"],"overrides":[]}
+{"ts":"2026-06-12T22:43:49.961Z","sha":"48327575ad2e86741e28243fa6ada0c36ba1e806","subject":"docs: archive the closed S18 milestone to the pillar","decision":null,"why":null,"resolves":["S18 archival"],"overrides":[]}
