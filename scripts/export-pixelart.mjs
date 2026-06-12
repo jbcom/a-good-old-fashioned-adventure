@@ -38,7 +38,14 @@ function parsePix(file) {
       if (line.startsWith("frame ")) {
         // pose frames export as their own atlas entries beside the base pose
         const pose = line.slice("frame ".length).trim();
-        current = { kind: current.kind, id: `${current.id}#${pose}`, grid: current.grid, rows: [] };
+        const baseId = current.baseId ?? current.id;
+        current = {
+          kind: current.kind,
+          id: `${baseId}#${pose}`,
+          baseId,
+          grid: current.grid,
+          rows: [],
+        };
         assets.push(current);
         continue;
       }

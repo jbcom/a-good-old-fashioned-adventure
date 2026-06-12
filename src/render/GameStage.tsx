@@ -173,7 +173,7 @@ class SceneSync {
       tracked.mesh.position.set(t.x, canvas.height / 2 - channels.translateY, t.y);
       tracked.mesh.scale.x = dir;
       const spriteMaterial = tracked.mesh.material as ShaderMaterial;
-      if (spriteMaterial.uniforms.uAlpha) {
+      if (spriteMaterial.uniforms?.uAlpha) {
         spriteMaterial.uniforms.uAlpha.value = iframeAlpha(world, entity);
       }
       seen.add(id);

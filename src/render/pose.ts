@@ -10,6 +10,7 @@ import { getSprite } from "../lib/content/registry";
 import { Clock, CombatTimers, IsPlayer, MoveIntent } from "../sim/traits";
 
 function hasFrame(spriteId: string, pose: string): boolean {
+  if (!spriteId) return false;
   return !!getSprite(spriteId).frames?.[pose];
 }
 
@@ -20,7 +21,8 @@ function walkPose(world: World): string {
   return `walk-${frame}`;
 }
 
-export function spritePose(world: World, entity: Entity, spriteId: string): string {
+export function spritePose(world: World, entity: Entity, spriteId: string | undefined): string {
+  if (!spriteId) return "idle";
   const timers = entity.get(CombatTimers);
   const playerInfo = entity.get(IsPlayer);
 
