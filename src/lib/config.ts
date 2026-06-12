@@ -44,12 +44,29 @@ export interface ClassAbility {
   sfx: string;
 }
 
+/** Rail-command unit temperament (docs/RAIL-COMMAND.md §sim model). */
+export interface ClassTemperament {
+  verb: "charge" | "hold-range" | "aoe" | "flank" | "aura";
+  /** range at which the unit's attack engages */
+  engage: number;
+  hp: number;
+  speed: number;
+  keepDistance?: number;
+  chargeSpeedMultiplier?: number;
+  blastRadius?: number;
+  lateralOffset?: number;
+  auraRadius?: number;
+  healPerPulse?: number;
+  pulsePeriod?: number;
+}
+
 export interface ClassDef {
   playable?: boolean;
   sprite: string;
   palette: string;
   attack: ClassAttack;
   ability: ClassAbility;
+  temperament?: ClassTemperament;
 }
 
 export type IncrementalCurrencyId = "coins" | "roses";

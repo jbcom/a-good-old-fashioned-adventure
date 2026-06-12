@@ -32,6 +32,7 @@ import {
   IsPickup,
   IsPlayer,
   IsSolid,
+  IsUnit,
   Level,
   LootContainer,
   MapRuntime,
@@ -122,6 +123,28 @@ export function spawnNpc(
     );
   }
   return entity;
+}
+
+/**
+ * Rail-command allied unit (docs/RAIL-COMMAND.md): spawned by toolbox
+ * placement, fights autonomously by its class temperament.
+ */
+export function spawnUnit(world: World, classId: string, x: number, y: number): Entity {
+  const classDef = classes.classes[classId];
+  const temperament = classDef?.temperament;
+  if (!classDef || !temperament) throw new Error(`class ${classId} has no temperament`);
+  return world.spawn(
+    IsUnit({ classId }),
+    Transform({ x, y }),
+    Facing({ dir: 1 }),
+    Hitbox(playerConfig.movement.hitbox),
+    Health({ hp: temperament.hp, maxHp: temperament.hp }),
+    Speed({ value: temperament.speed }),
+    MoveIntent({ x: 0, y: 0 }),
+    AimDirection({ x: 1, y: 0 }),
+    CombatTimers({ attack: 0, dash: 0, dashCooldown: 0, iframes: 0 }),
+    SpriteRef({ spriteId: classDef.sprite, paletteId: classDef.palette }),
+  );
 }
 
 export function spawnEnemy(world: World, archetypeId: string, x: number, y: number): Entity {

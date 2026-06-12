@@ -6,7 +6,12 @@
     "knight": {
       "sprite": "sprite:hero",
       "palette": "palette:knight",
-      "attack": { "kind": "melee", "reach": 42, "arcHeight": 24, "cooldown": 0.32 },
+      "attack": {
+        "kind": "melee",
+        "reach": 42,
+        "arcHeight": 24,
+        "cooldown": 0.32
+      },
       "ability": {
         "kind": "shield",
         "label": "SHIELD",
@@ -15,6 +20,13 @@
         "deflectsProjectiles": true,
         "contactKnockback": 18,
         "sfx": "shield"
+      },
+      "temperament": {
+        "verb": "charge",
+        "engage": 34,
+        "chargeSpeedMultiplier": 1.7,
+        "hp": 80,
+        "speed": 52
       }
     },
     "ranger": {
@@ -25,7 +37,10 @@
         "projectile": "arrow",
         "speed": 180,
         "life": 2.0,
-        "muzzleOffset": { "x": 10, "y": -6 },
+        "muzzleOffset": {
+          "x": 10,
+          "y": -6
+        },
         "cooldown": 0.32
       },
       "ability": {
@@ -39,6 +54,13 @@
         "iframes": 0.25,
         "dashDuration": 0.25,
         "sfx": "dash"
+      },
+      "temperament": {
+        "verb": "hold-range",
+        "engage": 120,
+        "keepDistance": 72,
+        "hp": 55,
+        "speed": 34
       }
     },
     "wizard": {
@@ -49,7 +71,10 @@
         "projectile": "magic-bolt",
         "speed": 160,
         "life": 2.0,
-        "muzzleOffset": { "x": 10, "y": -6 },
+        "muzzleOffset": {
+          "x": 10,
+          "y": -6
+        },
         "cooldown": 0.4
       },
       "ability": {
@@ -62,13 +87,25 @@
         "dashDuration": 0.2,
         "trailParticles": 4,
         "sfx": "dash"
+      },
+      "temperament": {
+        "verb": "hold-range",
+        "engage": 110,
+        "keepDistance": 64,
+        "hp": 50,
+        "speed": 32
       }
     },
     "rogue": {
       "playable": false,
       "sprite": "sprite:hero",
       "palette": "palette:rogue",
-      "attack": { "kind": "melee", "reach": 18, "arcHeight": 24, "cooldown": 0.16 },
+      "attack": {
+        "kind": "melee",
+        "reach": 18,
+        "arcHeight": 24,
+        "cooldown": 0.16
+      },
       "ability": {
         "kind": "blink",
         "label": "CLOAK",
@@ -79,6 +116,14 @@
         "dashDuration": 0.2,
         "trailParticles": 4,
         "sfx": "dash"
+      },
+      "temperament": {
+        "verb": "flank",
+        "engage": 30,
+        "lateralOffset": 44,
+        "chargeSpeedMultiplier": 1.5,
+        "hp": 60,
+        "speed": 58
       }
     },
     "bard": {
@@ -90,7 +135,10 @@
         "projectile": "song-note",
         "speed": 140,
         "life": 1.8,
-        "muzzleOffset": { "x": 10, "y": -6 },
+        "muzzleOffset": {
+          "x": 10,
+          "y": -6
+        },
         "cooldown": 0.48
       },
       "ability": {
@@ -101,6 +149,15 @@
         "deflectsProjectiles": true,
         "contactKnockback": 10,
         "sfx": "shield"
+      },
+      "temperament": {
+        "verb": "aura",
+        "engage": 150,
+        "auraRadius": 64,
+        "healPerPulse": 2,
+        "pulsePeriod": 2.0,
+        "hp": 55,
+        "speed": 36
       }
     },
     "sorcerer": {
@@ -112,7 +169,10 @@
         "projectile": "cinder-bolt",
         "speed": 150,
         "life": 2.2,
-        "muzzleOffset": { "x": 10, "y": -6 },
+        "muzzleOffset": {
+          "x": 10,
+          "y": -6
+        },
         "cooldown": 0.5
       },
       "ability": {
@@ -125,6 +185,14 @@
         "dashDuration": 0.22,
         "trailParticles": 5,
         "sfx": "dash"
+      },
+      "temperament": {
+        "verb": "aoe",
+        "engage": 100,
+        "keepDistance": 56,
+        "blastRadius": 30,
+        "hp": 50,
+        "speed": 28
       }
     }
   }

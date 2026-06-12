@@ -59,6 +59,8 @@ export const NpcPatrol = trait(() => ({
 }));
 
 export const IsPlayer = trait({ classId: "" });
+/** Rail-command allied unit: fights autonomously by class temperament. */
+export const IsUnit = trait({ classId: "" });
 export const IsNpc = trait({ charId: "" });
 /** bounty: extra coins this spawn pays on defeat (warband reinforcements). */
 export const IsEnemy = trait({ archetypeId: "", bounty: 0 });

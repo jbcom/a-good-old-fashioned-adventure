@@ -1167,7 +1167,7 @@ function RankPips({
   if (total <= 1) return null;
   const owned = purchasedRank(progress, node);
   return (
-    <span className="rank-pips" aria-label={`rank ${owned} of ${total}`}>
+    <span className="rank-pips" role="img" aria-label={`rank ${owned} of ${total}`}>
       {Array.from({ length: total }, (_, i) => (
         <span
           className="rank-pip"

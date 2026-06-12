@@ -16,6 +16,7 @@ import {
   Facing,
   IsEnemy,
   IsPlayer,
+  IsUnit,
   MoveIntent,
   Outbox,
   Speed,
@@ -117,11 +118,29 @@ function returnToPost(
   return seekTo(ai, { x: ai.origX, y: ai.origY });
 }
 
+/**
+ * The threat an enemy reacts to: the player pawn when present, otherwise
+ * the nearest rail-command unit (docs/RAIL-COMMAND.md — units are allies
+ * in the same targeting sense the player was).
+ */
+function nearestAllyTo(
+  world: World,
+  from: { x: number; y: number },
+): { x: number; y: number } | null {
+  const playerPos = world.queryFirst(IsPlayer)?.get(Transform);
+  if (playerPos) return playerPos;
+  let best: { x: number; y: number; dist: number } | null = null;
+  for (const unit of world.query(IsUnit, Transform)) {
+    const t = unit.get(Transform);
+    if (!t) continue;
+    const dist = Math.hypot(t.x - from.x, t.y - from.y);
+    if (!best || dist < best.dist) best = { x: t.x, y: t.y, dist };
+  }
+  return best;
+}
+
 export function enemyAIStep(world: World, dt: number): void {
   pruneDead(world);
-  const player = world.queryFirst(IsPlayer);
-  const playerPos = player?.get(Transform);
-  if (!playerPos) return;
   const defaults = enemies.aiDefaults;
 
   for (const enemy of [...world.query(IsEnemy, Transform, Speed, MoveIntent)]) {
@@ -131,6 +150,8 @@ export function enemyAIStep(world: World, dt: number): void {
     if (!info || !transform || !speed) continue;
     const archetype = enemies.archetypes[info.archetypeId];
     if (!archetype) continue;
+    const playerPos = nearestAllyTo(world, transform);
+    if (!playerPos) continue;
 
     const ai = aiFor(world, enemy, transform.x, transform.y);
     ai.castCooldown = Math.max(0, ai.castCooldown - dt);
