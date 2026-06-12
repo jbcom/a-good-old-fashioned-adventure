@@ -2,6 +2,13 @@
 
 All notable changes will be managed by release-please.
 
+## [1.0.1](https://github.com/jbcom/a-good-old-fashioned-adventure/compare/a-good-old-fashioned-adventure-v1.0.0...a-good-old-fashioned-adventure-v1.0.1) (2026-06-12)
+
+
+### Bug Fixes
+
+* stop pinning the release-please manifest version ([#5](https://github.com/jbcom/a-good-old-fashioned-adventure/issues/5)) ([9c3e607](https://github.com/jbcom/a-good-old-fashioned-adventure/commit/9c3e60745679f63e3feabc0bc24a9b499d32d304))
+
 ## 1.0.0 (2026-06-12)
 
 
