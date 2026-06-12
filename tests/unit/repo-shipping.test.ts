@@ -103,6 +103,7 @@ describe("CI and release automation", () => {
     expect(config.packages["."]["release-type"]).toBe("node");
     expect(config.packages["."]["changelog-path"]).toBe("CHANGELOG.md");
     expect(config.packages["."]["extra-files"]).toContain("package.json");
-    expect(manifest["."]).toBe("0.0.0");
+    // release-please owns the version; the gate only checks manifest shape
+    expect(manifest["."]).toMatch(/^\d+\.\d+\.\d+$/);
   });
 });
