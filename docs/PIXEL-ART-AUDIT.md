@@ -180,3 +180,20 @@ when the census assigns a consumer):
 - **bat** (16×24 cells, 5 cols): row 0 fly toward camera (red eyes),
   row 1 fly away (back view — usable as the "up" travel row), row 2
   5-frame death tumble. Front-facing flier: no nativeDir, never mirrors.
+
+### Aseprite as the author-side surface for purchased sheets (SA.4 a/b/c)
+
+`pnpm author:sheets` (scripts/import-sheet-sprites.mjs +
+scripts/aseprite/import-sheet-sprite.lua) compiles every sheet-sprite def
+into a tagged `.aseprite` master under raw-assets/aseprite/ — one frame
+per sheet frame, one tag per animation (per direction block for
+directional strips: the dragon master carries 233 frames / 29 tags),
+durations derived from the def's fps. The aseprite MCP then serves as the
+QA gate (`get_sprite_info` verified tag ranges + durations and caught a
+real importer bug — appending frames at a tag boundary extends the tag;
+`audit_animation` reports 0 overlaps / 0 out-of-range across all masters)
+and per-tag GIF exports land in raw-assets/previews/ behind the MCP
+preview server for human scrubbing. The GIF stills double-confirmed the
+direction-block order (up = back view, down = camera-facing). Masters and
+previews are regenerable, so both stay gitignored; the def JSON remains
+the runtime source of truth.

@@ -21,7 +21,8 @@
     "test:all": "pnpm test && pnpm test:browser",
     "author:pixelart": "node scripts/export-pixelart.mjs",
     "cap:sync": "pnpm build && cap sync android",
-    "cap:run:android": "pnpm cap:sync && cap run android"
+    "cap:run:android": "pnpm cap:sync && cap run android",
+    "author:sheets": "node scripts/import-sheet-sprites.mjs"
   },
   "dependencies": {
     "@capacitor-community/sqlite": "8.1.0",
