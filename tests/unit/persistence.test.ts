@@ -62,7 +62,6 @@ describe("save persistence architecture", () => {
     const repository = new MemorySaveRepository();
     const snapshotJson = JSON.stringify({
       coins: 15,
-      gold: 15,
       roses: 3,
       rescueCount: 1,
       purchasedUpgradeIds: ["upgrade:first-vow"],

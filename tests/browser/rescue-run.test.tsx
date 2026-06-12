@@ -37,16 +37,6 @@ function mountApp(repository: MemorySaveRepository) {
   );
 }
 
-async function fightNearby(governor: PlayerGovernor, presses: number) {
-  for (let i = 0; i < presses; i++) {
-    // never mash through a death: A on the gameover screen silently starts
-    // a NEW RUN, teleporting the test onto Rescue Road mid-assertion
-    if (governor.perceive().mode !== "playing") return;
-    await governor.press("a");
-    await wait(80);
-  }
-}
-
 it("plays a new game bottom-to-top rescue run through public controls", async () => {
   await page.viewport(1280, 720);
   await wait(100);
@@ -85,7 +75,7 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
   ];
   for (const [x, y, presses] of waypoints) {
     await governor.reachPoint(x, y, { tolerance: 26, maxSteps: 48 });
-    await fightNearby(governor, presses);
+    await governor.pressAttack(presses);
   }
 
   // the route dragon holds the pass below the plateau
@@ -101,7 +91,7 @@ it("plays a new game bottom-to-top rescue run through public controls", async ()
 
   let combatBursts = 0;
   for (let round = 0; round < 12; round++) {
-    await fightNearby(governor, 6);
+    await governor.pressAttack(6);
     if (combatBursts < 3) {
       await page.screenshot({
         path: `../../docs/evidence/combat-frame-${combatBursts}.png`,
@@ -195,7 +185,7 @@ it("walks through the castle gate to the relocated princess", async () => {
 
   // the summit champion guards the gate where the princess once waited
   await governor.reachPoint(200, 176, { tolerance: 26, maxSteps: 40 });
-  await fightNearby(governor, 14);
+  await governor.pressAttack(14);
   const gateShot = await page.screenshot({
     path: "../../docs/evidence/rescue-route-castle-gate.png",
   });
@@ -213,12 +203,10 @@ it("walks through the castle gate to the relocated princess", async () => {
   await expect.poll(() => governor.perceive().mapName, { timeout: 10_000 }).toBe("Castle Library");
   const enemiesAtEntry = Number(shell2().dataset.enemies ?? 0);
   const fxAtEntry = Number(shell2().dataset.fxSpawned ?? 0);
-  for (let round = 0; round < 16; round++) {
-    await governor.reachPoint(250, 208, { tolerance: 30, maxSteps: 16 }).catch(() => {});
-    await fightNearby(governor, 6);
-    if (Number(shell2().dataset.enemies ?? 0) < enemiesAtEntry) break;
-    if (governor.perceive().mode !== "playing") break;
-  }
+  await governor.fightUntil(
+    (perception) => (perception.diagnostics?.enemies ?? enemiesAtEntry) < enemiesAtEntry,
+    { maxRounds: 16, reanchor: { x: 250, y: 208 } },
+  );
   const duelState = {
     mode: governor.perceive().mode,
     map: governor.perceive().mapName,
@@ -245,7 +233,7 @@ it("walks through the castle gate to the relocated princess", async () => {
   for (let round = 0; round < 8; round++) {
     await governor.reachPoint(224, 128, { tolerance: 12, maxSteps: 24 }).catch(() => {});
     await governor.hold("right", 200);
-    await fightNearby(governor, 3);
+    await governor.pressAttack(3);
     if (Number(shell2().dataset.coins ?? 0) >= coinsBeforeBranch + 150) break;
   }
   await expect
@@ -270,10 +258,10 @@ it("walks through the castle gate to the relocated princess", async () => {
   ];
   for (const [x, y, presses] of hallWaypoints) {
     await governor.reachPoint(x, y, { tolerance: 28, maxSteps: 48 });
-    if (presses > 0) await fightNearby(governor, presses);
+    if (presses > 0) await governor.pressAttack(presses);
   }
   for (let round = 0; round < 12; round++) {
-    await fightNearby(governor, 6);
+    await governor.pressAttack(6);
     if (governor.perceive().questText.includes("Free Princess Amber")) break;
     await governor.reachPoint(716, 268, { tolerance: 30, maxSteps: 12 });
   }
@@ -283,11 +271,7 @@ it("walks through the castle gate to the relocated princess", async () => {
 
   // close to within the princess's speak radius before pressing — a loose
   // stop leaves A as a sword swing instead of a greeting
-  for (let i = 0; i < 4; i++) {
-    await governor.reachPoint(788, 264, { tolerance: 12, maxSteps: 24 }).catch(() => {});
-    await governor.press("a");
-    if (governor.perceive().dialogueText.includes("kingdom")) break;
-  }
+  await governor.convergeAndInteract(788, 264, "kingdom");
   await expect.element(page.getByTestId("dialogue-box")).toHaveTextContent("kingdom is saved");
   const hallShot = await page.screenshot({
     path: "../../docs/evidence/castle-hall-rescue.png",
@@ -312,7 +296,7 @@ it("banks coins through death and into the next run", async () => {
 
   // earn coins from the first orc on the road
   await governor.reachPoint(136, 896, { tolerance: 26, maxSteps: 48 });
-  await fightNearby(governor, 10);
+  await governor.pressAttack(10);
   const shell = () => page.getByTestId("game-shell").element() as HTMLElement;
   await expect
     .poll(() => Number(shell().dataset.coins ?? 0), { timeout: 15_000 })
@@ -408,7 +392,7 @@ it("fields one more orc per warband rank and the bounty pays", async () => {
     await governor
       .reachPoint(target[0], target[1], { tolerance: 22, maxSteps: 20 })
       .catch(() => {});
-    await fightNearby(governor, 6);
+    await governor.pressAttack(6);
     if (Number(shell().dataset.enemies ?? 0) <= authoredEnemies - 1) break;
     if (governor.perceive().mode !== "playing") break;
   }

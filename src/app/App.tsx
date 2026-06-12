@@ -125,7 +125,6 @@ interface UiSnapshot {
   level: number;
   xp: number;
   nextXp: number;
-  gold: number;
   incrementalProgress: IncrementalProgressState;
   inventory: Record<string, number>;
   playerX: number;
@@ -170,7 +169,6 @@ interface StartOptions {
   level?: number;
   hp?: number;
   maxHp?: number;
-  gold?: number;
   incrementalProgress?: IncrementalProgressState;
   inventory?: Record<string, number>;
 }
@@ -192,7 +190,6 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   level: 1,
   xp: 0,
   nextXp: 1,
-  gold: 0,
   incrementalProgress: sanitizeIncrementalProgress({}, 0),
   inventory: {},
   playerX: 0,
@@ -264,9 +261,7 @@ function numeric(input: unknown): number | undefined {
   return Number.isFinite(value) ? value : undefined;
 }
 
-function parseSavedSnapshot(
-  json: string,
-): Pick<StartOptions, "gold" | "incrementalProgress" | "inventory"> {
+function parseSavedSnapshot(json: string): Pick<StartOptions, "incrementalProgress" | "inventory"> {
   try {
     const parsed = JSON.parse(json) as {
       coins?: unknown;
@@ -292,7 +287,6 @@ function parseSavedSnapshot(
       coins ?? 0,
     );
     return {
-      gold: incrementalProgress.coins,
       incrementalProgress,
       inventory: cleanInventory(parsed.inventory),
     };
@@ -374,7 +368,6 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     level: level?.level ?? 1,
     xp: level?.xp ?? 0,
     nextXp: level?.nextXp ?? 1,
-    gold: incrementalProgress.coins,
     incrementalProgress: {
       ...incrementalProgress,
       purchasedUpgradeIds: [...incrementalProgress.purchasedUpgradeIds],
@@ -421,7 +414,6 @@ function saveRowFromSnapshot(current: UiSnapshot) {
       playerX: current.playerX,
       playerY: current.playerY,
       coins: current.incrementalProgress.coins,
-      gold: current.incrementalProgress.coins,
       roses: current.incrementalProgress.roses,
       rescueCount: current.incrementalProgress.rescueCount,
       purchasedUpgradeIds: current.incrementalProgress.purchasedUpgradeIds,
@@ -1459,7 +1451,7 @@ export function App({
       if (options.incrementalProgress) {
         // restore before spawning so rank effects (e.g. Knight's Vigor max HP)
         // shape the new run's player
-        restoreIncrementalProgress(nextWorld, options.incrementalProgress, options.gold ?? 0);
+        restoreIncrementalProgress(nextWorld, options.incrementalProgress);
       }
       loadMap(nextWorld, mapId, classId, options.spawnId);
       const player = playerOf(nextWorld);
@@ -1496,7 +1488,6 @@ export function App({
       level: latestSave.level,
       hp: latestSave.hp,
       maxHp: latestSave.maxHp,
-      gold: saved.gold,
       incrementalProgress: saved.incrementalProgress,
       inventory: saved.inventory,
     });
@@ -1537,7 +1528,6 @@ export function App({
     const current = snapshotRef.current;
     startGame({
       classId: current.classId || "knight",
-      gold: current.incrementalProgress.coins,
       inventory: current.inventory,
       incrementalProgress: {
         ...current.incrementalProgress,
@@ -1885,7 +1875,6 @@ export function App({
       "data-attack-calls": String(inputStats.current.attackCalls),
       "data-max-hp": String(snapshot.maxHp),
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
-      "data-gold": String(snapshot.incrementalProgress.coins),
       "data-coins": String(snapshot.incrementalProgress.coins),
       "data-roses": String(snapshot.incrementalProgress.roses),
       "data-rescue-count": String(snapshot.incrementalProgress.rescueCount),

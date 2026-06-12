@@ -395,10 +395,15 @@ export function combatStep(world: World, dt: number): void {
     if (dist < combat.hitboxes.touchRadius) {
       if (player.get(ShieldState)?.active) {
         const facing = player.get(Facing);
-        enemy.set(Transform, {
-          ...et,
-          x: et.x - (facing?.dir ?? 1) * combat.knockback.enemyOffShield,
-        });
+        // anchored guardians shrug the shield off too — knockbackImmune
+        // holds on every displacement path, not just sword blows
+        const archetype = enemies.archetypes[enemy.get(IsEnemy)?.archetypeId ?? ""];
+        if (!archetype?.knockbackImmune) {
+          enemy.set(Transform, {
+            ...et,
+            x: et.x - (facing?.dir ?? 1) * combat.knockback.enemyOffShield,
+          });
+        }
         sfx(world, "shield");
       } else {
         damagePlayer(world, combat.damage.enemyTouch, 0.5);

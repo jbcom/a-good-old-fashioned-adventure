@@ -5,6 +5,7 @@ import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import {
   grantRunReward,
   purchaseUpgradeNode,
+  recordDeathPayout,
   sanitizeIncrementalProgress,
 } from "../../src/sim/incrementalProgress";
 import { step } from "../../src/sim/tick";
@@ -58,6 +59,25 @@ describe("incremental progression state", () => {
       rosesEarned: incremental.runRewards.princessRescued.base,
       routePackId: "baseline",
     });
+    // the run closed: live counters reset so a refresh before the next run
+    // cannot inherit the dead run's totals
+    expect(progress?.currentRunCoinsEarned).toBe(0);
+    expect(progress?.currentRunRosesEarned).toBe(0);
+  });
+
+  it("closes the ledger on death the same way victory does", () => {
+    const world = createGameWorld(23);
+    instantiateMap(world, "map:village", { classId: "knight" });
+    grantRunReward(world, "enemyDefeated");
+
+    const closed = recordDeathPayout(world);
+    expect(closed.lastRun).toMatchObject({
+      result: "gameover",
+      rescuedPrincess: false,
+      coinsEarned: incremental.runRewards.enemyDefeated.base,
+    });
+    expect(closed.currentRunCoinsEarned).toBe(0);
+    expect(closed.currentRunRosesEarned).toBe(0);
   });
 
   it("sanitizes save payloads while preserving unlocked upgrades, classes, and route packs", () => {
@@ -81,6 +101,15 @@ describe("incremental progression state", () => {
       unlockedClassIds: ["knight", "ranger"],
       unlockedRoutePackIds: ["oldwood"],
     });
+  });
+
+  it("caps crafted wallets far beyond any reachable balance", () => {
+    const progress = sanitizeIncrementalProgress(
+      { coins: Number.MAX_SAFE_INTEGER, roses: Number.MAX_SAFE_INTEGER },
+      0,
+    );
+    expect(progress.coins).toBe(1_000_000);
+    expect(progress.roses).toBe(1_000_000);
   });
 
   it("buys only connected and affordable upgrade nodes, unlocking classes and route packs", () => {

@@ -133,6 +133,65 @@ export class PlayerGovernor {
     await wait(100);
   }
 
+  /**
+   * Press attack repeatedly, never mashing through a death — A on the
+   * gameover screen silently starts a NEW RUN mid-assertion.
+   */
+  async pressAttack(presses: number): Promise<void> {
+    for (let i = 0; i < presses; i++) {
+      if (this.perceive().mode !== "playing") return;
+      await this.press("a");
+    }
+  }
+
+  /**
+   * Fight in rounds until `done(perception)` holds: optionally re-anchor to
+   * a point each round (targets drift; reach tolerance can strand a blind
+   * masher), then swing. Stops early if play ends.
+   */
+  async fightUntil(
+    done: (perception: PlayerPerception) => boolean,
+    options: {
+      presses?: number;
+      maxRounds?: number;
+      reanchor?: { x: number; y: number; tolerance?: number; maxSteps?: number };
+    } = {},
+  ): Promise<void> {
+    for (let round = 0; round < (options.maxRounds ?? 12); round++) {
+      const anchor = options.reanchor;
+      if (anchor) {
+        await this.reachPoint(anchor.x, anchor.y, {
+          tolerance: anchor.tolerance ?? 30,
+          maxSteps: anchor.maxSteps ?? 16,
+        }).catch(() => {});
+      }
+      await this.pressAttack(options.presses ?? 6);
+      if (done(this.perceive())) return;
+      if (this.perceive().mode !== "playing") return;
+    }
+  }
+
+  /**
+   * Walk into speak range and press A, retrying until the dialogue carries
+   * the sentinel — a loose stop turns A into a sword swing instead of a
+   * greeting.
+   */
+  async convergeAndInteract(
+    x: number,
+    y: number,
+    sentinel: string,
+    options: { tolerance?: number; maxSteps?: number; maxTries?: number } = {},
+  ): Promise<void> {
+    for (let i = 0; i < (options.maxTries ?? 4); i++) {
+      await this.reachPoint(x, y, {
+        tolerance: options.tolerance ?? 12,
+        maxSteps: options.maxSteps ?? 24,
+      }).catch(() => {});
+      await this.press("a");
+      if (this.perceive().dialogueText.includes(sentinel)) return;
+    }
+  }
+
   async act(action: GovernorAction, stopGoal?: GovernorGoal): Promise<void> {
     if (action.kind === "click") {
       await this.click(action.button);

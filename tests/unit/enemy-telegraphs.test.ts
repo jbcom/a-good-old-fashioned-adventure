@@ -2,9 +2,17 @@ import { describe, expect, it } from "vitest";
 import { enemies } from "../../src/lib/config";
 import { threatScale } from "../../src/render/pose";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
-import { damageEnemy } from "../../src/sim/systems/combat";
+import { combatStep, damageEnemy } from "../../src/sim/systems/combat";
 import { step } from "../../src/sim/tick";
-import { Clock, Health, IsEnemy, IsPlayer, Threat, Transform } from "../../src/sim/traits";
+import {
+  Clock,
+  Health,
+  IsEnemy,
+  IsPlayer,
+  ShieldState,
+  Threat,
+  Transform,
+} from "../../src/sim/traits";
 
 const windup = enemies.aiDefaults.windup;
 
@@ -95,6 +103,25 @@ describe("S12.3 enemy telegraphs", () => {
     // without knockbackImmune each hit slides the shade 10px — five blows
     // would carry it beyond sword reach and turn the duel unwinnable
     for (let i = 0; i < 5; i++) damageEnemy(world, shade, 1, 1);
+    expect(shade.get(Transform)?.x).toBe(x0);
+  });
+
+  it("holds an anchored guardian against the shield deflect too", () => {
+    const world = createGameWorld(76);
+    instantiateMap(world, "map:castle-library", { classId: "knight" });
+    const player = world.queryFirst(IsPlayer);
+    const shade = [...world.query(IsEnemy, Transform)].find(
+      (entity) => entity.get(IsEnemy)?.archetypeId === "lectern-shade",
+    );
+    if (!player || !shade) throw new Error("missing actors");
+    const st = shade.get(Transform);
+    player.set(Transform, { x: st?.x ?? 0, y: st?.y ?? 0 });
+    player.set(ShieldState, { active: true });
+    // force the armed state (a future knockbackImmune enemy may arm for
+    // real) and run only the combat pass so enemyAI can't disarm it first
+    shade.set(Threat, { windupLeft: 0, armed: true, casting: false });
+    const x0 = shade.get(Transform)?.x;
+    combatStep(world, 1 / 60);
     expect(shade.get(Transform)?.x).toBe(x0);
   });
 

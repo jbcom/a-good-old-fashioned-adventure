@@ -8,6 +8,9 @@ function integer(value: unknown, fallback = 0): number {
   return Number.isFinite(number) && number >= 0 ? Math.floor(number) : fallback;
 }
 
+/** Untrusted save wallets are capped far beyond any reachable balance. */
+const WALLET_CAP = 1_000_000;
+
 function knownUpgradeIds(): Set<string> {
   return new Set(incremental.upgradeGraph.nodes.map((node) => node.id));
 }
@@ -127,8 +130,8 @@ export function sanitizeIncrementalProgress(
       ? data.activeRoutePackId
       : "baseline";
   return {
-    coins: integer(data.coins, fallbackCoins),
-    roses: integer(data.roses),
+    coins: Math.min(integer(data.coins, fallbackCoins), WALLET_CAP),
+    roses: Math.min(integer(data.roses), WALLET_CAP),
     rescueCount: integer(data.rescueCount),
     purchasedUpgradeIds,
     upgradeRanks: sanitizeUpgradeRanks(data.upgradeRanks, purchasedUpgradeIds),
@@ -246,6 +249,10 @@ export function grantRunReward(world: World, rewardId: string): void {
   setProgress(world, {
     ...next,
     rescueCount,
+    // the run closes here: its earned totals live on in lastRun only — a
+    // save/refresh before the next run must not inherit them
+    currentRunCoinsEarned: 0,
+    currentRunRosesEarned: 0,
     lastRun: {
       result: "victory",
       coinsEarned: next.currentRunCoinsEarned,
@@ -289,6 +296,9 @@ export function recordDeathPayout(world: World): IncrementalProgressState {
   const progress = currentProgress(world);
   const next: IncrementalProgressState = {
     ...progress,
+    // mirror the victory path: closing the run zeroes the live counters
+    currentRunCoinsEarned: 0,
+    currentRunRosesEarned: 0,
     lastRun: {
       result: "gameover",
       coinsEarned: progress.currentRunCoinsEarned,

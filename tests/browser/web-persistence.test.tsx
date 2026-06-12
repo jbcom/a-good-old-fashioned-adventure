@@ -65,7 +65,6 @@ it("persists a web save through Capacitor SQLite and restores it from Continue",
         if (!slot) return "";
         const snapshot = JSON.parse(slot.snapshotJson) as {
           coins?: number;
-          gold?: number;
           roses?: number;
           rescueCount?: number;
           purchasedUpgradeIds?: string[];
@@ -76,7 +75,6 @@ it("persists a web save through Capacitor SQLite and restores it from Continue",
           slot.classId,
           slot.mapId,
           snapshot.coins,
-          snapshot.gold,
           snapshot.roses,
           snapshot.rescueCount,
           snapshot.purchasedUpgradeIds?.join(","),
@@ -86,7 +84,7 @@ it("persists a web save through Capacitor SQLite and restores it from Continue",
       },
       { timeout: 10_000 },
     )
-    .toBe("knight:map:rescue-route:12:12:0:0:upgrade:first-vow:knight:");
+    .toBe("knight:map:rescue-route:12:0:0:upgrade:first-vow:knight:");
 
   root?.unmount();
   root = undefined;
