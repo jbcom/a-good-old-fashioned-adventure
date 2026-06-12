@@ -6,21 +6,31 @@ import { familyArchetypeIds } from "../harness/families";
 
 const { nodes, root } = incremental.upgradeGraph;
 
-/** Topological depth of each node from the root vow (prerequisite chain length). */
+/**
+ * Topological depth from the root vow. Affordability follows the DEEPEST
+ * prerequisite: a composite gated on two parents cannot be reached before
+ * its later parent, so depth = 1 + max(prerequisite depths).
+ */
 function nodeDepths(): Map<string, number> {
-  const depths = new Map<string, number>([[root, 0]]);
   const byId = new Map(nodes.map((node) => [node.id, node]));
-  const queue = [root];
-  while (queue.length > 0) {
-    const id = queue.shift() as string;
-    const depth = depths.get(id) ?? 0;
-    for (const next of byId.get(id)?.unlocks ?? []) {
-      if (!depths.has(next)) {
-        depths.set(next, depth + 1);
-        queue.push(next);
-      }
-    }
-  }
+  const depths = new Map<string, number>();
+  const visiting = new Set<string>();
+  const resolve = (id: string): number => {
+    const known = depths.get(id);
+    if (known !== undefined) return known;
+    if (visiting.has(id)) throw new Error(`cycle through ${id}`);
+    visiting.add(id);
+    const node = byId.get(id);
+    const prereqs = node?.prerequisites ?? [];
+    const depth =
+      id === root || prereqs.length === 0
+        ? 0
+        : 1 + Math.max(...prereqs.map((prereq) => resolve(prereq)));
+    visiting.delete(id);
+    depths.set(id, depth);
+    return depth;
+  };
+  for (const node of nodes) resolve(node.id);
   return depths;
 }
 

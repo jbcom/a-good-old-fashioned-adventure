@@ -46,7 +46,16 @@ export interface ClassAbility {
 
 /** Rail-command unit temperament (docs/RAIL-COMMAND.md §sim model). */
 export interface ClassTemperament {
-  verb: "charge" | "hold-range" | "aoe" | "flank" | "aura" | "heal-beam" | "debuff-aura" | "blade-storm" | "storm-volley";
+  verb:
+    | "charge"
+    | "hold-range"
+    | "aoe"
+    | "flank"
+    | "aura"
+    | "heal-beam"
+    | "debuff-aura"
+    | "blade-storm"
+    | "storm-volley";
   /** range at which the unit's attack engages */
   engage: number;
   /** sight range: enemies beyond it don't interrupt the rail march */

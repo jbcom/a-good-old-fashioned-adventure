@@ -9,7 +9,8 @@
  */
 import type { Entity, World } from "koota";
 import { SeekBehavior, Vector3, Vehicle } from "yuka";
-import { type ClassTemperament, classes, combat } from "../../lib/config";
+import { type ClassTemperament, classes, combat, enemies } from "../../lib/config";
+import { chooseGoal, type FieldView } from "../ai";
 import { spawnProjectile } from "../factories";
 import { getRail, nextRailPoint } from "../rail";
 import {
@@ -121,6 +122,32 @@ function unitStrike(
   }
 }
 
+function buildFieldView(world: World, self: { x: number; y: number }): FieldView {
+  const enemyList: FieldView["enemies"] = [];
+  for (const enemy of world.query(IsEnemy, Health, Transform)) {
+    const t = enemy.get(Transform);
+    const health = enemy.get(Health);
+    const info = enemy.get(IsEnemy);
+    if (!t || !health || !info) continue;
+    const behavior = enemies.archetypes[info.archetypeId]?.behavior;
+    enemyList.push({
+      id: enemy.id(),
+      x: t.x,
+      y: t.y,
+      hp: health.hp,
+      backline: behavior === "caster" || behavior === "turret" || behavior === "boss",
+    });
+  }
+  const allyList: FieldView["allies"] = [];
+  for (const ally of world.query(IsUnit, Health, Transform)) {
+    const t = ally.get(Transform);
+    const health = ally.get(Health);
+    if (!t || !health) continue;
+    allyList.push({ id: ally.id(), x: t.x, y: t.y, hp: health.hp, maxHp: health.maxHp });
+  }
+  return { self, enemies: enemyList, allies: allyList };
+}
+
 export function unitAIStep(world: World, dt: number): void {
   pruneDead(world);
   for (const unit of [...world.query(IsUnit, Transform, Speed, MoveIntent)]) {
@@ -141,10 +168,36 @@ export function unitAIStep(world: World, dt: number): void {
     brain.vehicle.maxSpeed = speed.value;
     brain.seek.active = false;
 
+    // the class's own mind picks the destination (directive S18.3 GOAP)
+    const view = buildFieldView(world, transform);
+    const goal = chooseGoal(info.classId, view);
     const found = nearestEnemy(world, transform);
     // beyond perception the field is quiet: advance the rail instead
     const perception = temperament.perception ?? 200;
-    const target = found && found.dist <= perception ? found : null;
+    let target = found && found.dist <= perception ? found : null;
+    if (
+      target &&
+      (goal.kind === "engage" || goal.kind === "hunt-backline" || goal.kind === "dive-cluster")
+    ) {
+      // chase the goal's chosen prey, not merely the closest body
+      for (const enemy of world.query(IsEnemy, Health, Transform)) {
+        if (enemy.id() !== goal.enemyId) continue;
+        const t = enemy.get(Transform);
+        if (!t) break;
+        const goalDist = Math.hypot(t.x - transform.x, t.y - transform.y);
+        if (goalDist <= perception * 1.4) {
+          target = { enemy, x: t.x, y: t.y, dist: goalDist };
+        }
+        break;
+      }
+    }
+    if (
+      target &&
+      (goal.kind === "mend" || goal.kind === "escort" || goal.kind === "cover-enemies")
+    ) {
+      // supports steer by their goal point, not the nearest enemy
+      target = null;
+    }
     let intentX = 0;
     let intentY = 0;
     let speedScale = 1;
@@ -198,12 +251,20 @@ export function unitAIStep(world: World, dt: number): void {
     }
 
     if (!target) {
-      // no threat in sight: march the designed route (docs/RAIL-COMMAND.md)
-      const mapId = world.get(MapRuntime)?.mapId ?? "";
-      const ahead = mapId ? nextRailPoint(getRail(mapId), transform) : null;
-      if (ahead) {
-        brain.seek.active = true;
-        brain.seek.target.set(ahead.x, ahead.y, 0);
+      if (goal.kind === "mend" || goal.kind === "escort" || goal.kind === "cover-enemies") {
+        const away = Math.hypot(goal.x - transform.x, goal.y - transform.y);
+        if (away > 12) {
+          brain.seek.active = true;
+          brain.seek.target.set(goal.x, goal.y, 0);
+        }
+      } else {
+        // no threat in sight: march the designed route (docs/RAIL-COMMAND.md)
+        const mapId = world.get(MapRuntime)?.mapId ?? "";
+        const ahead = mapId ? nextRailPoint(getRail(mapId), transform) : null;
+        if (ahead) {
+          brain.seek.active = true;
+          brain.seek.target.set(ahead.x, ahead.y, 0);
+        }
       }
     }
 
