@@ -17,7 +17,7 @@ const persistenceDoc = readFileSync(resolve(process.cwd(), "docs/PERSISTENCE.md"
 const playerGovernorDoc = readFileSync(resolve(process.cwd(), "docs/PLAYER-GOVERNOR.md"), "utf8");
 
 function upgradeIds() {
-  return new Set(incremental.upgradeWeb.nodes.map((node) => node.id));
+  return new Set(incremental.upgradeGraph.nodes.map((node) => node.id));
 }
 
 describe("incremental rescue loop contract", () => {
@@ -82,7 +82,7 @@ describe("incremental rescue loop contract", () => {
     expect(incremental.loop.princessAnchor).toBe("north");
     expect(incremental.loop.guardian).toBe("dragon");
     expect(incremental.loop.coreRunRequiresCastleInterior).toBe(false);
-    expect(incremental.loop.resultsMode).toBe("upgrade-web");
+    expect(incremental.loop.resultsMode).toBe("upgrade-graph");
     expect(incremental.loop.targetGameplayAreaPercentPhone).toBeGreaterThanOrEqual(80);
     expect(classes.classes.knight.attack.reach).toBeGreaterThanOrEqual(40);
     expect(classes.classes.knight.ability.moveSpeedMultiplier).toBeGreaterThanOrEqual(0.6);
@@ -101,15 +101,15 @@ describe("incremental rescue loop contract", () => {
 
   it("defines a connected upgrade DAG with coin and rose spending", () => {
     const ids = upgradeIds();
-    expect(ids).toContain(incremental.upgradeWeb.root);
+    expect(ids).toContain(incremental.upgradeGraph.root);
 
     let roseNodes = 0;
     let coinNodes = 0;
-    for (const node of incremental.upgradeWeb.nodes) {
+    for (const node of incremental.upgradeGraph.nodes) {
       expect(node.id).toMatch(/^upgrade:/);
       for (const prerequisite of node.prerequisites) expect(ids).toContain(prerequisite);
       for (const unlocked of node.unlocks) expect(ids).toContain(unlocked);
-      if (node.id !== incremental.upgradeWeb.root) {
+      if (node.id !== incremental.upgradeGraph.root) {
         expect(node.prerequisites.length, node.id).toBeGreaterThan(0);
         expect(Object.keys(node.cost).length, node.id).toBeGreaterThan(0);
       }
@@ -117,12 +117,63 @@ describe("incremental rescue loop contract", () => {
       if ((node.cost.coins ?? 0) > 0) coinNodes += 1;
     }
 
-    expect(coinNodes).toBeGreaterThan(roseNodes);
     expect(roseNodes).toBeGreaterThanOrEqual(5);
+    expect(coinNodes).toBeGreaterThanOrEqual(5);
+  });
+
+  it("prices majors in roses and connector ranks in coins", () => {
+    const nodes = incremental.upgradeGraph.nodes;
+    let coinRankTotal = 0;
+    let roseMajors = 0;
+    for (const node of nodes) {
+      if (node.id === incremental.upgradeGraph.root) continue;
+      const ranks = node.ranks ?? 1;
+      if (ranks > 1) {
+        // multi-rank connectors are pure coin tracks with growing per-rank cost
+        expect(node.cost.coins ?? 0, `${node.id} ranks need coin pricing`).toBeGreaterThan(0);
+        expect(node.cost.roses ?? 0, `${node.id} ranks must not cost roses`).toBe(0);
+        expect(node.rankCostGrowth ?? 1, `${node.id} needs growing rank cost`).toBeGreaterThan(1);
+        coinRankTotal += ranks;
+      } else {
+        // single-purchase nodes are the majors: rose-priced branching points
+        expect(node.cost.roses ?? 0, `${node.id} majors unlock with roses`).toBeGreaterThan(0);
+        expect(node.cost.coins ?? 0, `${node.id} majors must not cost coins`).toBe(0);
+        roseMajors += 1;
+      }
+    }
+    // significantly more coin-based incremental steps than rose majors
+    expect(coinRankTotal).toBeGreaterThanOrEqual(Math.ceil(roseMajors * 1.5));
+  });
+
+  it("gives every class including the knight its own coin-funded ranked track", () => {
+    const nodes = incremental.upgradeGraph.nodes;
+    const allClasses = [incremental.classes.starting, ...incremental.classes.unlockable];
+    for (const classId of allClasses) {
+      const track = nodes.find(
+        (node) =>
+          node.classId === classId &&
+          (node.ranks ?? 1) > 1 &&
+          (node.cost.coins ?? 0) > 0 &&
+          (node.cost.roses ?? 0) === 0,
+      );
+      expect(track, `${classId} needs a coin-ranked class track`).toBeTruthy();
+    }
+  });
+
+  it("includes at least one adversarial enemy-count coin track", () => {
+    const adversarial = incremental.upgradeGraph.nodes.find(
+      (node) =>
+        node.category === "enemy" &&
+        (node.ranks ?? 1) > 1 &&
+        (node.cost.coins ?? 0) > 0 &&
+        node.enemyFamily !== undefined,
+    );
+    expect(adversarial, "an enemy-count rank track must exist").toBeTruthy();
+    expect(adversarial?.note ?? "").toContain("more");
   });
 
   it("keeps the upgrade graph a proper DAG with consistent reverse edges", () => {
-    const nodes = incremental.upgradeWeb.nodes;
+    const nodes = incremental.upgradeGraph.nodes;
     const byId = new Map(nodes.map((node) => [node.id, node]));
 
     // unlocks must be the exact reverse edges of prerequisites
@@ -143,11 +194,11 @@ describe("incremental rescue loop contract", () => {
 
     // single source: only the root has no prerequisites
     const sources = nodes.filter((node) => node.prerequisites.length === 0);
-    expect(sources.map((node) => node.id)).toEqual([incremental.upgradeWeb.root]);
+    expect(sources.map((node) => node.id)).toEqual([incremental.upgradeGraph.root]);
 
     // acyclic: Kahn's algorithm visits every node
     const indegree = new Map(nodes.map((node) => [node.id, node.prerequisites.length]));
-    const queue = [incremental.upgradeWeb.root];
+    const queue = [incremental.upgradeGraph.root];
     let visited = 0;
     while (queue.length > 0) {
       const id = queue.shift() as string;
@@ -170,7 +221,7 @@ describe("incremental rescue loop contract", () => {
     for (const classId of incremental.classes.unlockable) {
       expect(classes.classes, classId).toHaveProperty(classId);
       expect(classes.roster, `${classId} should require upgrade unlock`).not.toContain(classId);
-      const unlockNode = incremental.upgradeWeb.nodes.find((node) => node.classId === classId);
+      const unlockNode = incremental.upgradeGraph.nodes.find((node) => node.classId === classId);
       expect(unlockNode?.category, `${classId} needs class node`).toBe("class");
     }
   });
@@ -184,7 +235,7 @@ describe("incremental rescue loop contract", () => {
     for (const pack of incremental.routePacks) {
       expect(pack.role.length, pack.id).toBeGreaterThan(24);
       for (const mapId of pack.maps) expect(maps.has(mapId), `${pack.id} ${mapId}`).toBe(true);
-      const unlockNode = incremental.upgradeWeb.nodes.find((node) => node.routePack === pack.id);
+      const unlockNode = incremental.upgradeGraph.nodes.find((node) => node.routePack === pack.id);
       expect(unlockNode, `${pack.id} needs upgrade node`).toBeTruthy();
     }
   });

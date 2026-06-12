@@ -75,6 +75,9 @@ export interface IncrementalUpgradeNode {
   routePack?: string;
   enemyFamily?: string;
   ability?: string;
+  ranks?: number;
+  rankCostGrowth?: number;
+  note?: string;
 }
 
 export interface IncrementalConfig {
@@ -87,7 +90,7 @@ export interface IncrementalConfig {
     princessAnchor: "north";
     guardian: "dragon";
     coreRunRequiresCastleInterior: boolean;
-    resultsMode: "upgrade-web";
+    resultsMode: "upgrade-graph";
     targetGameplayAreaPercentPhone: number;
   };
   currencies: Record<IncrementalCurrencyId, IncrementalCurrencyDef>;
@@ -95,7 +98,7 @@ export interface IncrementalConfig {
     string,
     { currency: IncrementalCurrencyId; base?: number; eliteBonus?: number; perSegment?: number }
   >;
-  upgradeWeb: {
+  upgradeGraph: {
     root: string;
     nodes: IncrementalUpgradeNode[];
   };

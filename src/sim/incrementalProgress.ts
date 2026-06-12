@@ -9,7 +9,44 @@ function integer(value: unknown, fallback = 0): number {
 }
 
 function knownUpgradeIds(): Set<string> {
-  return new Set(incremental.upgradeWeb.nodes.map((node) => node.id));
+  return new Set(incremental.upgradeGraph.nodes.map((node) => node.id));
+}
+
+export function nodeRanks(node: IncrementalUpgradeNode): number {
+  return Math.max(1, Math.floor(node.ranks ?? 1));
+}
+
+export function purchasedRank(
+  progress: IncrementalProgressState,
+  node: IncrementalUpgradeNode,
+): number {
+  if (!progress.purchasedUpgradeIds.includes(node.id)) return 0;
+  if (nodeRanks(node) === 1) return 1;
+  return Math.min(nodeRanks(node), Math.max(1, integer(progress.upgradeRanks[node.id], 1)));
+}
+
+export function rankCost(
+  node: IncrementalUpgradeNode,
+  ownedRanks: number,
+): { coins: number; roses: number } {
+  const factor = (node.rankCostGrowth ?? 1) ** ownedRanks;
+  return {
+    coins: Math.round((node.cost.coins ?? 0) * factor),
+    roses: Math.round((node.cost.roses ?? 0) * factor),
+  };
+}
+
+function sanitizeUpgradeRanks(input: unknown, purchased: string[]): Record<string, number> {
+  const source =
+    input && typeof input === "object" && !Array.isArray(input)
+      ? (input as Record<string, unknown>)
+      : {};
+  const result: Record<string, number> = {};
+  for (const node of incremental.upgradeGraph.nodes) {
+    if (nodeRanks(node) === 1 || !purchased.includes(node.id)) continue;
+    result[node.id] = Math.min(nodeRanks(node), Math.max(1, integer(source[node.id], 1)));
+  }
+  return result;
 }
 
 function knownClassIds(): Set<string> {
@@ -35,7 +72,8 @@ export function initialIncrementalProgress(startingCoins = 0): IncrementalProgre
     coins: Math.max(0, Math.floor(startingCoins)),
     roses: 0,
     rescueCount: 0,
-    purchasedUpgradeIds: [incremental.upgradeWeb.root],
+    purchasedUpgradeIds: [incremental.upgradeGraph.root],
+    upgradeRanks: {},
     unlockedClassIds: [incremental.classes.starting],
     unlockedRoutePackIds: [],
     currentRunCoinsEarned: 0,
@@ -53,7 +91,10 @@ export function sanitizeIncrementalProgress(
     input && typeof input === "object" && !Array.isArray(input)
       ? (input as Record<string, unknown>)
       : {};
-  const purchasedUpgradeIds = sanitizeIdList(data.purchasedUpgradeIds, knownUpgradeIds());
+  const purchasedRaw = sanitizeIdList(data.purchasedUpgradeIds, knownUpgradeIds());
+  const purchasedUpgradeIds = purchasedRaw.includes(incremental.upgradeGraph.root)
+    ? purchasedRaw
+    : [incremental.upgradeGraph.root, ...purchasedRaw];
   const unlockedClassIds = sanitizeIdList(data.unlockedClassIds, knownClassIds());
   const unlockedRoutePackIds = sanitizeIdList(data.unlockedRoutePackIds, knownRoutePackIds());
   const activeRoutePackId =
@@ -65,9 +106,8 @@ export function sanitizeIncrementalProgress(
     coins: integer(data.coins, fallbackCoins),
     roses: integer(data.roses),
     rescueCount: integer(data.rescueCount),
-    purchasedUpgradeIds: purchasedUpgradeIds.includes(incremental.upgradeWeb.root)
-      ? purchasedUpgradeIds
-      : [incremental.upgradeWeb.root, ...purchasedUpgradeIds],
+    purchasedUpgradeIds,
+    upgradeRanks: sanitizeUpgradeRanks(data.upgradeRanks, purchasedUpgradeIds),
     unlockedClassIds: unlockedClassIds.includes(incremental.classes.starting)
       ? unlockedClassIds
       : [incremental.classes.starting, ...unlockedClassIds],
@@ -199,15 +239,18 @@ export interface UpgradePurchaseResult {
 }
 
 function nodeById(nodeId: string): IncrementalUpgradeNode | undefined {
-  return incremental.upgradeWeb.nodes.find((node) => node.id === nodeId);
+  return incremental.upgradeGraph.nodes.find((node) => node.id === nodeId);
 }
 
 function canReachNode(progress: IncrementalProgressState, node: IncrementalUpgradeNode): boolean {
   return node.prerequisites.every((id) => progress.purchasedUpgradeIds.includes(id));
 }
 
-function hasCurrency(progress: IncrementalProgressState, node: IncrementalUpgradeNode): boolean {
-  return progress.coins >= (node.cost.coins ?? 0) && progress.roses >= (node.cost.roses ?? 0);
+function hasCurrency(
+  progress: IncrementalProgressState,
+  price: { coins: number; roses: number },
+): boolean {
+  return progress.coins >= price.coins && progress.roses >= price.roses;
 }
 
 function addUnique(values: string[], value?: string): string[] {
@@ -229,13 +272,18 @@ export function purchaseUpgradeNode(world: World, nodeId: string): UpgradePurcha
       roses: progress.roses,
     };
   }
-  if (progress.purchasedUpgradeIds.includes(node.id)) {
+  const ownedRanks = purchasedRank(progress, node);
+  const maxRanks = nodeRanks(node);
+  if (ownedRanks >= maxRanks) {
     return {
       ok: false,
       nodeId: node.id,
       label: node.label,
       reason: "purchased",
-      message: `${node.label} is already part of the tale.`,
+      message:
+        maxRanks > 1
+          ? `${node.label} is already at full rank.`
+          : `${node.label} is already part of the tale.`,
       coins: progress.coins,
       roses: progress.roses,
     };
@@ -251,35 +299,44 @@ export function purchaseUpgradeNode(world: World, nodeId: string): UpgradePurcha
       roses: progress.roses,
     };
   }
-  if (!hasCurrency(progress, node)) {
+  const price = rankCost(node, ownedRanks);
+  if (!hasCurrency(progress, price)) {
     return {
       ok: false,
       nodeId: node.id,
       label: node.label,
       reason: "currency",
-      message: `${node.label} asks for ${node.cost.coins ?? 0} coins and ${
-        node.cost.roses ?? 0
-      } roses.`,
+      message: `${node.label} asks for ${price.coins} coins and ${price.roses} roses.`,
       coins: progress.coins,
       roses: progress.roses,
     };
   }
 
+  const nextRank = ownedRanks + 1;
   const next = {
     ...progress,
-    coins: progress.coins - (node.cost.coins ?? 0),
-    roses: progress.roses - (node.cost.roses ?? 0),
-    purchasedUpgradeIds: [...progress.purchasedUpgradeIds, node.id],
+    coins: progress.coins - price.coins,
+    roses: progress.roses - price.roses,
+    purchasedUpgradeIds:
+      ownedRanks === 0 ? [...progress.purchasedUpgradeIds, node.id] : progress.purchasedUpgradeIds,
+    upgradeRanks:
+      maxRanks > 1 ? { ...progress.upgradeRanks, [node.id]: nextRank } : progress.upgradeRanks,
     unlockedClassIds: addUnique(progress.unlockedClassIds, node.classId),
     unlockedRoutePackIds: addUnique(progress.unlockedRoutePackIds, node.routePack),
   };
   setProgress(world, next);
   syncPlayerCoins(world, next.coins);
+  const message =
+    maxRanks > 1
+      ? nextRank === 1
+        ? `${node.label} joins the road (rank 1 of ${maxRanks}).`
+        : `${node.label} advances to rank ${nextRank} of ${maxRanks}.`
+      : `${node.label} joins the road.`;
   return {
     ok: true,
     nodeId: node.id,
     label: node.label,
-    message: `${node.label} joins the road.`,
+    message,
     coins: next.coins,
     roses: next.roses,
   };

@@ -19,7 +19,7 @@ describe("incremental progression state", () => {
       coins: playerConfig.baseStats.gold,
       roses: 0,
       rescueCount: 0,
-      purchasedUpgradeIds: [incremental.upgradeWeb.root],
+      purchasedUpgradeIds: [incremental.upgradeGraph.root],
       unlockedClassIds: ["knight"],
       unlockedRoutePackIds: [],
     });
@@ -99,18 +99,47 @@ describe("incremental progression state", () => {
 
     world.set(IncrementalProgress, {
       ...(world.get(IncrementalProgress) ?? sanitizeIncrementalProgress({}, 0)),
-      coins: 50,
+      roses: 2,
     });
     const bought = purchaseUpgradeNode(world, "upgrade:ranger-trail");
     expect(bought).toMatchObject({
       ok: true,
       nodeId: "upgrade:ranger-trail",
-      coins: 0,
+      roses: 1,
     });
     expect(world.get(IncrementalProgress)).toMatchObject({
       purchasedUpgradeIds: ["upgrade:first-vow", "upgrade:ranger-trail"],
       unlockedClassIds: ["knight", "ranger"],
     });
-    expect(world.queryFirst(IsPlayer)?.get(PlayerGold)?.value).toBe(0);
+  });
+
+  it("ranks up coin tracks with growing prices until full rank", () => {
+    const world = createGameWorld(20);
+    instantiateMap(world, "map:village", { classId: "knight" });
+    world.set(IncrementalProgress, {
+      ...(world.get(IncrementalProgress) ?? sanitizeIncrementalProgress({}, 0)),
+      coins: 30,
+    });
+
+    const first = purchaseUpgradeNode(world, "upgrade:knight-vigor");
+    expect(first).toMatchObject({ ok: true, coins: 20 });
+    expect(first.message).toContain("rank 1 of 5");
+
+    const second = purchaseUpgradeNode(world, "upgrade:knight-vigor");
+    expect(second).toMatchObject({ ok: true, coins: 4 });
+    expect(second.message).toContain("rank 2 of 5");
+
+    expect(world.get(IncrementalProgress)).toMatchObject({
+      upgradeRanks: { "upgrade:knight-vigor": 2 },
+    });
+    expect(world.queryFirst(IsPlayer)?.get(PlayerGold)?.value).toBe(4);
+
+    const third = purchaseUpgradeNode(world, "upgrade:knight-vigor");
+    expect(third).toMatchObject({ ok: false, reason: "currency" });
+
+    const roundTrip = sanitizeIncrementalProgress({
+      ...world.get(IncrementalProgress),
+    });
+    expect(roundTrip.upgradeRanks["upgrade:knight-vigor"]).toBe(2);
   });
 });

@@ -689,7 +689,7 @@
   margin-top: 18px;
 }
 
-.upgrade-web-list {
+.upgrade-graph-list {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
@@ -856,11 +856,11 @@
   .class-row,
   .result-actions,
   .result-ledger,
-  .upgrade-web-list {
+  .upgrade-graph-list {
     grid-template-columns: 1fr;
   }
 
-  .upgrade-web-list {
+  .upgrade-graph-list {
     max-height: 32vh;
   }
 

@@ -715,6 +715,10 @@ it("continues the expanded journey through dungeon victory through public contro
   await pressA(input);
   await expect.element(page.getByTestId("upgrade-screen")).toBeVisible();
   await expect.element(page.getByTestId("upgrade-purse")).toHaveTextContent("Coins");
+  const upgradeGraphPath = await page.screenshot({
+    path: "../../docs/evidence/upgrade-graph-ranked.png",
+  });
+  expect(upgradeGraphPath).toBeTruthy();
   const selectedBefore = shell().selectedUpgrade;
   expect(selectedBefore).toMatch(/^upgrade:/);
   await pressA(input);

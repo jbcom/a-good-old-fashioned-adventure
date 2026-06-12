@@ -44,7 +44,10 @@ import {
 import { pushEvent } from "../sim/events";
 import { createGameWorld, instantiateMap } from "../sim/factories";
 import {
+  nodeRanks,
+  purchasedRank,
   purchaseUpgradeNode,
+  rankCost,
   restoreIncrementalProgress,
   sanitizeIncrementalProgress,
   syncProgressCoinsFromPlayer,
@@ -421,33 +424,41 @@ function upgradeNodeState(
   progress: IncrementalProgressState,
   node: IncrementalUpgradeNode,
 ): UpgradeNodeState {
-  if (progress.purchasedUpgradeIds.includes(node.id)) return "purchased";
+  const ownedRanks = purchasedRank(progress, node);
+  if (ownedRanks >= nodeRanks(node)) return "purchased";
   const reachable = node.prerequisites.every((id) => progress.purchasedUpgradeIds.includes(id));
   if (!reachable) return "locked";
-  if (progress.coins < (node.cost.coins ?? 0) || progress.roses < (node.cost.roses ?? 0)) {
+  const price = rankCost(node, ownedRanks);
+  if (progress.coins < price.coins || progress.roses < price.roses) {
     return "unaffordable";
   }
   return "available";
 }
 
-function upgradeCostLabel(node: IncrementalUpgradeNode): string {
-  const costs = [
-    node.cost.coins ? `${node.cost.coins}C` : "",
-    node.cost.roses ? `${node.cost.roses}R` : "",
-  ].filter(Boolean);
-  return costs.length ? costs.join(" ") : "Root";
+function upgradeCostLabel(
+  progress: IncrementalProgressState,
+  node: IncrementalUpgradeNode,
+): string {
+  const ownedRanks = purchasedRank(progress, node);
+  const maxRanks = nodeRanks(node);
+  const price = rankCost(node, Math.min(ownedRanks, maxRanks - 1));
+  const costs = [price.coins ? `${price.coins}C` : "", price.roses ? `${price.roses}R` : ""].filter(
+    Boolean,
+  );
+  const cost = costs.length ? costs.join(" ") : "Root";
+  return maxRanks > 1 ? `${cost} · ${ownedRanks}/${maxRanks}` : cost;
 }
 
 function firstUpgradeableIndex(progress: IncrementalProgressState): number {
-  const available = incremental.upgradeWeb.nodes.findIndex(
+  const available = incremental.upgradeGraph.nodes.findIndex(
     (node) => upgradeNodeState(progress, node) === "available",
   );
   if (available >= 0) return available;
-  const reachableUnpurchased = incremental.upgradeWeb.nodes.findIndex((node) =>
+  const reachableUnpurchased = incremental.upgradeGraph.nodes.findIndex((node) =>
     ["unaffordable", "available"].includes(upgradeNodeState(progress, node)),
   );
   if (reachableUnpurchased >= 0) return reachableUnpurchased;
-  const purchased = incremental.upgradeWeb.nodes.findIndex(
+  const purchased = incremental.upgradeGraph.nodes.findIndex(
     (node) => upgradeNodeState(progress, node) === "purchased",
   );
   return Math.max(0, purchased);
@@ -593,7 +604,7 @@ function TitleScreen({
     <section className="title-screen" data-testid="title-screen">
       <div className="title-panel" data-testid="title-panel" ref={panelRef}>
         <h1>A GOOD OLD FASHIONED ADVENTURE</h1>
-        <p className="dialogue-line">Begin as a knight. New callings wait in the upgrade web.</p>
+        <p className="dialogue-line">Begin as a knight. New callings wait in the upgrade graph.</p>
         <div className="class-row">
           {classes.roster.map((classId) => (
             <button
@@ -993,11 +1004,11 @@ function ResultsPanel({
         <div className="result-actions">
           <button
             className="menu-button"
-            data-testid="open-upgrade-web"
+            data-testid="open-upgrade-graph"
             type="button"
             onClick={onOpenUpgrade}
           >
-            A Upgrade Web
+            A Upgrade Graph
           </button>
           <button
             className="menu-button"
@@ -1028,20 +1039,20 @@ function UpgradeWebPanel({
   onBuy: () => void;
   onBack: () => void;
 }) {
-  const panelRef = usePanelEntrance("upgrade-web");
+  const panelRef = usePanelEntrance("upgrade-graph");
   const selectedNode =
-    incremental.upgradeWeb.nodes[selectedIndex] ?? incremental.upgradeWeb.nodes[0];
+    incremental.upgradeGraph.nodes[selectedIndex] ?? incremental.upgradeGraph.nodes[0];
   return (
     <section className="upgrade-screen" data-testid="upgrade-screen">
       <div className="upgrade-panel" data-testid="upgrade-panel" ref={panelRef}>
-        <p className="manuscript-kicker">The Vow Web</p>
-        <h1>Upgrade Web</h1>
+        <p className="manuscript-kicker">The Vow Graph</p>
+        <h1>Upgrade Graph</h1>
         <div className="upgrade-purse" data-testid="upgrade-purse">
           <span>{snapshot.incrementalProgress.coins} Coins</span>
           <span>{snapshot.incrementalProgress.roses} Roses</span>
         </div>
-        <div className="upgrade-web-list" role="listbox" aria-label="Upgrade Web">
-          {incremental.upgradeWeb.nodes.map((node, index) => {
+        <div className="upgrade-graph-list" role="listbox" aria-label="Upgrade Graph">
+          {incremental.upgradeGraph.nodes.map((node, index) => {
             const state = upgradeNodeState(snapshot.incrementalProgress, node);
             return (
               <button
@@ -1055,7 +1066,7 @@ function UpgradeWebPanel({
               >
                 <span className="upgrade-node-label">{node.label}</span>
                 <span>{node.category}</span>
-                <span>{upgradeCostLabel(node)}</span>
+                <span>{upgradeCostLabel(snapshot.incrementalProgress, node)}</span>
                 <span>{state}</span>
               </button>
             );
@@ -1063,7 +1074,7 @@ function UpgradeWebPanel({
         </div>
         <div className="upgrade-detail" data-testid="upgrade-detail">
           <strong>{selectedNode.label}</strong>
-          <span>{upgradeCostLabel(selectedNode)}</span>
+          <span>{upgradeCostLabel(snapshot.incrementalProgress, selectedNode)}</span>
           <p>{message || "Up/down chooses a vow. A buys. B returns to results."}</p>
         </div>
         <div className="result-actions">
@@ -1481,14 +1492,14 @@ export function App({
 
   const moveUpgradeSelection = useCallback((delta: number) => {
     setSelectedUpgradeIndex((current) => {
-      const count = incremental.upgradeWeb.nodes.length;
+      const count = incremental.upgradeGraph.nodes.length;
       return (current + delta + count) % count;
     });
   }, []);
 
   const handleUpgradeBuy = useCallback((): UpgradePurchaseResult | null => {
     if (!world) return null;
-    const node = incremental.upgradeWeb.nodes[selectedUpgradeIndex];
+    const node = incremental.upgradeGraph.nodes[selectedUpgradeIndex];
     if (!node) return null;
     const result = purchaseUpgradeNode(world, node.id);
     setUpgradeMessage(result.message);
@@ -1726,7 +1737,7 @@ export function App({
       "data-unlocked-classes": snapshot.incrementalProgress.unlockedClassIds.join(","),
       "data-unlocked-route-packs": snapshot.incrementalProgress.unlockedRoutePackIds.join(","),
       "data-selected-upgrade":
-        incremental.upgradeWeb.nodes[selectedUpgradeIndex]?.id ?? incremental.upgradeWeb.root,
+        incremental.upgradeGraph.nodes[selectedUpgradeIndex]?.id ?? incremental.upgradeGraph.root,
       "data-inventory": JSON.stringify(snapshot.inventory),
       "data-paused": String(paused),
       "data-muted": String(muted),
