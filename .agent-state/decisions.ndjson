@@ -64,3 +64,4 @@
 {"ts":"2026-06-12T20:57:07.104Z","sha":"d716ac952133b5f675a924fc58bcb8847f7eca92","subject":"feat: the rail carries the line north","decision":null,"why":null,"resolves":["S17.4 rail and camera"],"overrides":[]}
 {"ts":"2026-06-12T21:06:54.208Z","sha":"061f2f6968ae54360f712222af7ec7188f4ae1a4","subject":"feat: the toolbox commands the field","decision":null,"why":null,"resolves":["S17.5 toolbox and drag placement (cutover rides S17.6)"],"overrides":[]}
 {"ts":"2026-06-12T21:21:46.037Z","sha":"48886f60b7f03f3dc74562962b7d4ccfb231b237","subject":"feat: the commander's journey — a war won without buttons","decision":null,"why":null,"resolves":["S17.6 commander journey (cutover demolition next)"],"overrides":[]}
+{"ts":"2026-06-12T21:59:37.953Z","sha":"cd03b08788aafb8c9fc7ac2a05d8872a571ef896","subject":"feat!: the cutover — rail command is the game","decision":null,"why":null,"resolves":["S17.5 cutover half","S17.6 journeys and demolition"],"overrides":[]}

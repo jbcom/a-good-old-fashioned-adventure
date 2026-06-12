@@ -58,6 +58,33 @@ governor shrinks to a CommanderGovernor that only places units and reads
 the public dataset. One brain, two homes — the in-sim version drives play,
 the test version drives strategy.
 
+## Class tiers (S18 lock — user mandate: string the characters DAG from simple to medium to advanced)
+
+The characters track becomes a three-tier ladder. Every class is a bespoke
+pixel design with its own emblem, temperament, and DAG node.
+
+**Simple tier (run-one identities).** Knight (sword-and-shield: charge),
+ranger (hold-range single-target arrows), rogue (flank), bard (marching
+auras), wizard (hold-range bolts), sorcerer (slow AoE). Already shipped.
+
+**Medium tier (earned complements, ~3-4 roses each, gated on a simple
+parent).** Priest after bard — `heal-beam`: holds mid-line and channels
+focused healing into the most wounded ally (stronger than the bard's pulse,
+single-target). Warlock after sorcerer — `debuff-aura`: slow advance,
+projects a withering field that slows enemies and lowers their damage
+inside its radius. Barbarian after knight — `blade-storm`: the knight
+stays sword-and-shield; the barbarian charges past the front and spins,
+striking every enemy in its whirl radius each beat.
+
+**Advanced composites (the long roses grind, ~8-10 roses, gated on BOTH
+parents).** Dread Knight = knight + warlock: a charge that carries the
+withering field with it — every blow also debuffs. Shaman = priest +
+sorcerer: AoE blasts that heal allies standing inside the burst. Stormcaller
+= wizard + barbarian (my composite): a blade-storm of bolts — spins while
+loosing projectiles at every enemy in range. Composites are the final
+unlocks the player works hard to reach; their emblems should read visibly
+"fused" (two parent motifs in one glyph).
+
 ## Waves
 
 The enemy side mirrors the unit side: waves spawn from authored gates ahead
