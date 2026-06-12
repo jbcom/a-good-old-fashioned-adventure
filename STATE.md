@@ -23,9 +23,10 @@ Branch: `codex/castle-interior-depth`
 - CI, release-please manifest mode, Dependabot pinned-stack ignores, and
   standard repo docs are scaffolded.
 
-## Active Queue
+## Queue State
 
-See `.agent-state/directive.md`. S9.3 is complete. Open work is S8.24
-composition tuning plus S9.4 rescue-route runtime slice and S9.5 second-run
-proof, but no further directive work should begin until this docs consistency
-pass is committed.
+The continuous directive in `.agent-state/directive.md` is **RELEASED**: the
+incremental princess-rescue milestone (S8.24 plus the full S9 ladder through
+the S10 release step) shipped via PR #2. The directive's learnings log names
+the next-milestone candidates; a new milestone reopens the directive with a
+fresh queue and Status: ACTIVE.

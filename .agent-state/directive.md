@@ -1,6 +1,6 @@
 # Continuous Work Directive — a-good-old-fashioned-adventure
 
-**Status:** ACTIVE
+**Status:** RELEASED
 **Owner:** Claude (mandated by jbogaty)
 **Mandate:** "using a long-running local branch, improving and expanding your own prompt with each loop iteration, until the game is fully built. Use your own best judgement, fully autonomously, docs > tests > code, and make sure vitest browser plugin is being used with GPU-enabled headed browser tests, not just unit tests. The entire player journey start to finish needs to be fully validated as you work by constantly expanding a playthrough test that uses actual button presses (A/B / directional etc...) to emulate what the player would do. ToneJS, AnimeJS, and either r3f or pixijs depending on whether you can make 2.5D extrapolation work and VALIDATE IT with screenshots and establish it to be of the highest calibre of quality, otherwise stick with 2D. YOU are responsible for all validation of all research and all library decisions. Sounds, animation, are what are necessary. I also want you to add yukajs for enemy behaviors and make sure you add DEPTH and LENGTH to the game, with interior maps, exterior maps, a minimap, and a properly designed HUD, UI/UX"
 
@@ -124,9 +124,10 @@ This directive IS the self-improving prompt the mandate requires: every iteratio
 - [x] S9.10 Balance budget tests: encode the no-sharp-edges doctrine as unit tests over incremental.json — next affordable node within ~1-3 runs of income at current depth, deepest-area income outpaces shallow areas, no node priced like a wall
 
 ### S10 Release
-- [ ] [WAIT] Babysit PR #2 (incremental princess-rescue loop milestone) to green CI, address and resolve every review thread, squash-merge, then verify the app runs from main
+- [x] S10.1 Babysit PR #2 (incremental princess-rescue loop milestone) to green CI, address and resolve every review thread, squash-merge, then verify the app runs from main
 
 ## Learnings log (forward sweeps append here)
+- 2026-06-12 milestone closure: PR #2 squash-merged (de92e0d) — the incremental princess-rescue loop is the shipped product frame; main builds and boots in a headed browser. Final sweep: the next milestone candidates surfaced during this cycle are (a) per-family adversarial enemy-count consumption (orc-warband ranks actually spawning orcs), (b) roadTravelled/objectiveCleared reward wiring breadth, (c) castle room-graph depth beyond the hall venue (library/armory beats in relocated runs), (d) run-length measurement in the journey suite, (e) richer indoor differentiation. Queue them when the next milestone opens. Process lesson: `git checkout` can abort while a following `&&`-chained reset still runs — never chain checkout && reset --hard; verify the branch between steps.
 - yuka FleeBehavior defaults panicDistance=10 — silently inert beyond it; always set panicDistance explicitly when kiting.
 - 2026-06-10: prior session's deep-research workflow + reviewer died on session exit — background work must be treated as lost across session boundaries; redo in-queue (S2.1).
 - S2 learnings now binding: fixed camera yaw (Octopath constraint, verified); integer-scale + letterbox presentation for Android fractional DPR (2.625 Pixel-class); NearestFilter+no-mipmaps+SRGB on every texture; low-virtual-res render + integer upscale; HUD/UI is React DOM, never canvas. pixi.js evaluated and REMOVED — do not reintroduce.
