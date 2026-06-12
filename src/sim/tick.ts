@@ -11,7 +11,7 @@ import { combatStep } from "./systems/combat";
 import { enemyAIStep } from "./systems/enemyAI";
 import { moveEntities } from "./systems/movement";
 import { npcAIStep } from "./systems/npcAI";
-import { Clock, CombatTimers, HitFlash } from "./traits";
+import { Clock, CombatTimers, HitFlash, HitStop } from "./traits";
 import { rngFor } from "./worldRng";
 
 export const SIM_DT = 1 / 60;
@@ -36,6 +36,14 @@ function tickTimers(world: World, dt: number): void {
 }
 
 export function step(world: World, dt: number = SIM_DT): void {
+  // hit-stop: impact freezes the whole sim for a beat — deterministic crunch
+  const stop = world.get(HitStop);
+  if (stop && stop.left > 0) {
+    const consumed = Math.min(dt, stop.left);
+    world.set(HitStop, { left: stop.left - consumed });
+    dt -= consumed;
+    if (dt <= 0) return;
+  }
   const clock = world.get(Clock);
   if (clock) world.set(Clock, { t: clock.t + dt, dt });
   tickTimers(world, dt);

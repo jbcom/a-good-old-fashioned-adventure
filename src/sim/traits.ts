@@ -21,7 +21,7 @@ export const SpriteRef = trait({ spriteId: "", paletteId: "" });
 
 /** Short-lived combat/motion feedback burst: swing arcs, death dissolves. */
 export interface FxBurstState {
-  kind: "swing" | "dissolve";
+  kind: "swing" | "dissolve" | "trail";
   spriteId: string;
   paletteId: string;
   dir: number;
@@ -75,7 +75,7 @@ export const CombatTimers = trait({ attack: 0, dash: 0, dashCooldown: 0, iframes
 export const ShieldState = trait({ active: false });
 export const HitFlash = trait({ left: 0 });
 
-export const Projectile = trait({ type: "", vx: 0, vy: 0, life: 0, fromPlayer: false });
+export const Projectile = trait({ type: "", vx: 0, vy: 0, life: 0, trail: 0, fromPlayer: false });
 export const PlayerGold = trait({ value: 0 });
 export const Inventory = trait(() => ({ items: {} as Record<string, number> }));
 
@@ -91,6 +91,8 @@ export const MapRuntime = trait(() => ({
 export const FlagState = trait(() => ({ values: {} as Record<string, boolean> }));
 export const RngState = trait({ seed: 1 });
 export const Clock = trait({ t: 0, dt: 0 });
+/** World resource: remaining hit-stop — sim time freezes while it drains. */
+export const HitStop = trait({ left: 0 });
 export const CameraState = trait({ x: 0, y: 0, shake: 0 });
 
 export interface GameEvent {

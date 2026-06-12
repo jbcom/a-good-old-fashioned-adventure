@@ -250,6 +250,12 @@ it("banks coins through death and into the next run", async () => {
   } catch {
     // left play mode mid-walk: the road claimed the knight early
   }
+  // bolts in flight: capture the projectile trails before the fall
+  await wait(1200);
+  const trailShot = await page.screenshot({
+    path: "../../docs/evidence/projectile-trails.png",
+  });
+  expect(trailShot).toBeTruthy();
   await expect.poll(() => governor.perceive().mode, { timeout: 60_000 }).toBe("gameover");
   await expect
     .element(page.getByTestId("gameover-screen"))
