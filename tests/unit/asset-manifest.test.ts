@@ -1,5 +1,6 @@
-import { readdirSync, readFileSync } from "node:fs";
-import { join, relative } from "node:path";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 
 /**
@@ -10,7 +11,7 @@ import { describe, expect, it } from "vitest";
  * no recorded license or mapped use, which must never ship silently.
  */
 
-const assetsRoot = join(__dirname, "../../public/assets");
+const assetsRoot = fileURLToPath(new URL("../../public/assets", import.meta.url));
 
 interface ManifestFile {
   path: string;
@@ -45,9 +46,10 @@ function pngDimensions(path: string): { width: number; height: number } {
 }
 
 function walkImages(dir: string): string[] {
-  return readdirSync(dir, { withFileTypes: true, recursive: true })
-    .filter((e) => e.isFile() && /\.(png|webp|gif|jpg)$/i.test(e.name))
-    .map((e) => relative(assetsRoot, join(e.parentPath, e.name)));
+  // string mode (not withFileTypes) keeps this portable across Node versions
+  return (readdirSync(dir, { recursive: true }) as string[])
+    .filter((name) => /\.(png|webp|gif|jpg)$/i.test(name))
+    .map((name) => join(dir, name).slice(assetsRoot.length + 1));
 }
 
 describe("asset manifest", () => {
@@ -64,7 +66,9 @@ describe("asset manifest", () => {
 
   it("every manifested file exists with the stated pixel geometry", () => {
     for (const file of allFiles) {
-      const dims = pngDimensions(join(assetsRoot, file.path));
+      const abs = join(assetsRoot, file.path);
+      expect(existsSync(abs), `${file.path} listed in manifest but missing on disk`).toBe(true);
+      const dims = pngDimensions(abs);
       expect(dims, file.path).toEqual({ width: file.width, height: file.height });
     }
   });

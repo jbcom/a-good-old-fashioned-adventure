@@ -1,5 +1,5 @@
 {
-  "comment": "License-aware registry of every purchased/imported asset under public/assets/. Raw downloads live in raw-assets/ (gitignored); only curated keepers land here. tests/unit/asset-manifest.test.ts is the integrity gate: every file listed must exist with the stated geometry, and every image under the covered directories must be listed.",
+  "comment": "License-aware registry of every purchased/imported asset under public/assets/. Raw downloads live in raw-assets/ (gitignored); only curated keepers land here. tests/unit/asset-manifest.test.ts is the integrity gate: every file listed must exist with the stated geometry, and every image under the covered directories must be listed. POLICY: any NEW directory of imported assets under public/assets/ must be added to coveredDirs in the same change, or the gate cannot see it (fonts/ and the engine wasm are first-party, not imports).",
   "coveredDirs": ["bosses", "tilemaps"],
   "packs": [
     {
@@ -13,18 +13,102 @@
       "directionOrder": ["right", "up", "left", "down"],
       "notes": "Strips are laid out as 4 consecutive direction blocks (right block first; left block is an exact horizontal mirror of right) of framesPerDirection frames each, except death which is single-direction. *-no-shadow variants exist for the airborne/death animations so the renderer can own shadow placement.",
       "files": [
-        { "path": "bosses/dragon/idle.png", "width": 3072, "height": 96, "frames": 32, "directions": 4, "framesPerDirection": 8 },
-        { "path": "bosses/dragon/walk.png", "width": 2304, "height": 96, "frames": 24, "directions": 4, "framesPerDirection": 6 },
-        { "path": "bosses/dragon/melee.png", "width": 2304, "height": 96, "frames": 24, "directions": 4, "framesPerDirection": 6 },
-        { "path": "bosses/dragon/firebreath.png", "width": 6144, "height": 96, "frames": 64, "directions": 4, "framesPerDirection": 16 },
-        { "path": "bosses/dragon/fly.png", "width": 2304, "height": 96, "frames": 24, "directions": 4, "framesPerDirection": 6 },
-        { "path": "bosses/dragon/fly-no-shadow.png", "width": 2304, "height": 96, "frames": 24, "directions": 4, "framesPerDirection": 6 },
-        { "path": "bosses/dragon/hover.png", "width": 2304, "height": 96, "frames": 24, "directions": 4, "framesPerDirection": 6 },
-        { "path": "bosses/dragon/hover-no-shadow.png", "width": 2304, "height": 96, "frames": 24, "directions": 4, "framesPerDirection": 6 },
-        { "path": "bosses/dragon/launch.png", "width": 3072, "height": 96, "frames": 32, "directions": 4, "framesPerDirection": 8 },
-        { "path": "bosses/dragon/launch-no-shadow.png", "width": 3072, "height": 96, "frames": 32, "directions": 4, "framesPerDirection": 8 },
-        { "path": "bosses/dragon/death.png", "width": 864, "height": 96, "frames": 9, "directions": 1, "framesPerDirection": 9 },
-        { "path": "bosses/dragon/death-no-shadow.png", "width": 864, "height": 96, "frames": 9, "directions": 1, "framesPerDirection": 9 }
+        {
+          "path": "bosses/dragon/idle.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon/walk.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon/melee.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon/firebreath.png",
+          "width": 6144,
+          "height": 96,
+          "frames": 64,
+          "directions": 4,
+          "framesPerDirection": 16
+        },
+        {
+          "path": "bosses/dragon/fly.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon/fly-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon/hover.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon/hover-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon/launch.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon/launch-no-shadow.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon/death.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        },
+        {
+          "path": "bosses/dragon/death-no-shadow.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        }
       ]
     },
     {
@@ -32,22 +116,20 @@
       "title": "The Roguelike v1.16.1 (mega-sheet)",
       "author": "Backterria",
       "source": "itch.io (purchased; manual import — attribution baked into the sheet corners)",
-      "license": "Itch.io purchased asset pack; game-use licensed to purchaser. Sheet carries its own baked-in credit (backterria / the roguelike v1.16.1).",
+      "url": "https://backterria.itch.io/the-roguelike",
+      "license": "Backterria itch.io pack terms (see pack page at url); game-use licensed to purchaser. Sheet carries its own baked-in credit (backterria / the roguelike v1.16.1).",
       "mappedUse": "16x16 category-columned mega-sheet (terrain, fortifications, creatures, items, weapons, armor, tools, props) — prime source for SA.3 region props, pickups/items, and prop breadth. Curation requires a slicer manifest mapping cell coords to asset ids before cells become addressable content.",
-      "files": [
-        { "path": "tilemaps/roguelike.png", "width": 1936, "height": 752 }
-      ]
+      "files": [{ "path": "tilemaps/roguelike.png", "width": 1936, "height": 752 }]
     },
     {
-      "id": "ground-tileset",
-      "title": "Ground tileset (autotile cliffs, dithered grounds, palette ramps)",
-      "author": "unidentified (manual itch.io import; pin author before any standalone redistribution)",
+      "id": "the-ground",
+      "title": "The Ground (autotile cliffs, dithered grounds, palette ramps)",
+      "author": "Backterria (identified from the owned library: same author/style family as The Roguelike)",
       "source": "itch.io (purchased; manual import)",
-      "license": "Itch.io purchased asset pack; game-use licensed to purchaser.",
+      "url": "https://backterria.itch.io/the-ground",
+      "license": "Backterria itch.io pack terms (see pack page at url); game-use licensed to purchaser.",
       "mappedUse": "Terrain texture uplift candidate — autotile cliff/ledge pieces and dithered ground fills for the SA.2 terrain rework (sand + mountain families flagged weak).",
-      "files": [
-        { "path": "tilemaps/ground.png", "width": 448, "height": 384 }
-      ]
+      "files": [{ "path": "tilemaps/ground.png", "width": 448, "height": 384 }]
     }
   ]
 }

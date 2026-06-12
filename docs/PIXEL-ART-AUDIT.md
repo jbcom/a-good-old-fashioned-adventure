@@ -99,8 +99,10 @@ First curation shortlist (allow-list candidates):
   optional; `public/assets/MANIFEST.json` records pack, license, geometry,
   and mapped use, gated by `tests/unit/asset-manifest.test.ts`.
 - **First manual imports (user-added):**
-  `public/assets/tilemaps/ground.png` — autotile cliff/ledge pieces,
-  dithered grounds, palette ramps; terrain texture uplift candidate.
+  `public/assets/tilemaps/ground.png` — "The Ground" by Backterria
+  (identified from the owned library; same author as the roguelike sheet) —
+  autotile cliff/ledge pieces, dithered grounds, palette ramps; terrain
+  texture uplift candidate.
   `public/assets/tilemaps/roguelike.png` — "The Roguelike" v1.16.1 by
   Backterria (credit baked into the sheet corners) — a full organized 16x16
   roguelike mega-sheet with labeled category columns (terrain, fortifications,
