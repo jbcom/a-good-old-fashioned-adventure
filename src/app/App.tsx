@@ -11,9 +11,9 @@ import {
 } from "react";
 import {
   type AudioDebugState,
-  createToneAudioEngine,
-  type ToneAudioEngine,
-} from "../audio/toneEngine";
+  createGameAudioEngine,
+  type GameAudioEngine,
+} from "../audio/howlerEngine";
 import ui from "../config/ui.json";
 import { classes, engine, type IncrementalUpgradeNode, incremental } from "../lib/config";
 import {
@@ -1335,13 +1335,13 @@ export function App({
   const inputStats = useRef({ aPresses: 0, attackCalls: 0, drops: 0, deploys: 0, dragArms: 0 });
   const dragClassRef = useRef<string | null>(null);
   const snapshotRef = useRef<UiSnapshot>(EMPTY_SNAPSHOT);
-  const audioRef = useRef<ToneAudioEngine | null>(null);
+  const audioRef = useRef<GameAudioEngine | null>(null);
   const mapIntroSeenRef = useRef(new Set<string>());
   const zoneEnteredRef = useRef(new Set<string>());
   const exploredRef = useRef(new Map<string, Set<string>>());
 
   useEffect(() => {
-    audioRef.current = createToneAudioEngine();
+    audioRef.current = createGameAudioEngine();
     setAudioDebug(audioRef.current.debugState());
     return () => audioRef.current?.dispose();
   }, []);

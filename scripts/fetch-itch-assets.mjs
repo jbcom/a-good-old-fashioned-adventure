@@ -63,6 +63,16 @@ const ALLOW_LIST = new Set([
   "Victory & Level Complete Music Pack – 24 Game Stingers",
   "Dark Ambient Game Music Pack – Mystery & Horror Loops",
   "UI Sound Effects Pack – 40 Game Interface Sounds (WAV + MP3)",
+  // howler.js full-switch mandate (2026-06-12): combat + interaction sfx coverage
+  "Impact & Hit Sound Effects Pack",
+  "Fantasy Magic Spell Sound Effects Pack",
+  "Explosion Sound Effects Pack for Games",
+  "Inventory & Item Sound Effects Pack",
+  "Cinematic Whoosh SFX Pack – 42 Fast Transition Sounds",
+  "Footsteps Sound Effects Pack",
+  "Ultimate Ambient Sound Effects Pack",
+  "Horror Sound Effects Pack",
+  "Weapon & Laser Sound Effects Pack",
 ]);
 
 const library = JSON.parse(readFileSync(LIBRARY, "utf8"));

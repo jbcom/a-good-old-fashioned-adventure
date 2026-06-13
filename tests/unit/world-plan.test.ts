@@ -127,10 +127,11 @@ describe("S6 world plan content", () => {
   });
 
   it("assigns authored map audio themes to the village slice", () => {
-    const themes = audio.bgm.themes as Record<string, number[]>;
-    expect(themes.village.length).toBeGreaterThan(8);
-    expect(themes.interior.length).toBeGreaterThan(8);
-    expect(themes["sunken-road"].length).toBeGreaterThan(8);
+    // howler switch: themes are purchased tracks, not synth note lists
+    const themes = audio.music as Record<string, string>;
+    expect(themes.village).toMatch(/^audio\/music\//);
+    expect(themes.interior).toMatch(/^audio\/music\//);
+    expect(themes["sunken-road"]).toMatch(/^audio\/music\//);
     expect(map("map:village").bgmTheme).toBe("village");
     for (const id of [
       "map:village-house",
