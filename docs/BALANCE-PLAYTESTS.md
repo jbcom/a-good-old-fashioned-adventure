@@ -289,3 +289,36 @@ S19.2 content: a cluster of kiting casters on the central rail is a
 line-advance soft-lock; casters belong on flanks or as a final gate, not a
 mid-rail wall. The broader N4 (proper rising late-map escalation, the 10-map
 content) remains for the content stage; the acute spike is closed.
+
+## S21.3 Difficulty arc — the frozen-roster spine ramp (2026-06-13)
+
+Measured the spine difficulty arc with a frozen mid-game roster
+(knight/ranger/wizard, warband-of-one ×4, dragon-wake + unlock-forest-orc),
+4 seeds per map:
+
+| Spine map | advance | felled/run | run-length | wins |
+|-----------|---------|-----------|------------|------|
+| rescue-route   | 1.00 | 7.0 | 17.3s | 4/4 |
+| oldwood-forest | 1.00 | 7.0 | 21.1s | 4/4 |
+| deep-forest    | 1.00 | 1.0 | 18.6s | 4/4 |
+| sunken-road    | 1.00 | 1.0 | 15.3s | 4/4 |
+| castle-approach| 1.00 | 1.0 | 19.8s | 4/4 |
+| castle-hall    | 1.00 | 0.0 | 14.5s | 4/4 |
+
+**The difficulty arc is unlock-driven, not map-sequence-driven (zone model).**
+Every map is winnable (4/4, advance 1.0) with this roster — but the felled
+count DROPS at later maps (7→1→0), not because they're easier, but because this
+roster only unlocked forest-orc (region:oldwood). Later maps sit in regions
+(castle-approach=dune-adder, dungeon=crypt-skeleton) whose enemies this roster
+hasn't unlocked, so those maps spawn almost no waves — the line breaks straight
+through to the princess, felling only the authored climax.
+
+This is the zone model working as intended: a map's difficulty is
+`region.archetypes ∩ unlockedEnemies`, so the RAMP comes from the player
+dialing in enemy unlocks (the enemy DAG), not from the map sequence alone. A
+player who unlocks the crypt tier makes castle-hall dense and hard; one who
+doesn't walks it. The "difficulty arc" is therefore the enemy-unlock curve
+(threat 2→9 across regions, enforced strictly-increasing by enemy-depth.test),
+experienced at the pace the player buys into it. The always-advance floor
+(every map winnable with a viable roster) holds across the whole spine — no map
+is a hard wall, the spike-ladder gate's invariant.
