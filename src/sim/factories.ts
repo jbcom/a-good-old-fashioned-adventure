@@ -18,6 +18,7 @@ import {
   EventQueue,
   Facing,
   FlagState,
+  Footsteps,
   FxBurst,
   type FxBurstState,
   FxStats,
@@ -91,6 +92,7 @@ export function spawnPlayer(world: World, classId: string, x: number, y: number)
     AimDirection({ x: 1, y: 0 }),
     CombatTimers({ attack: 0, dash: 0, dashCooldown: 0, iframes: 0 }),
     ShieldState({ active: false }),
+    Footsteps({ travelled: 0 }),
     Inventory({ items: {} }),
     SpriteRef({ spriteId: classDef.sprite, paletteId: classDef.palette }),
   );

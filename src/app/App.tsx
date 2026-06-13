@@ -1324,7 +1324,7 @@ export function App({
   const pausePanelRef = usePanelEntrance(paused && mode === "playing" ? "pause-open" : "pause");
   const endPanelRef = usePanelEntrance(mode === "gameover" ? mode : "end");
   const [audioDebug, setAudioDebug] = useState<AudioDebugState>({
-    label: "Tone",
+    label: "howler",
     ready: false,
     muted: false,
     theme: "",

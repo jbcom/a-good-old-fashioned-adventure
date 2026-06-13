@@ -83,6 +83,8 @@ export const InspectionPulse = trait({ anim: "", serial: 0 });
 
 export const Level = trait({ level: 1, xp: 0, nextXp: 50 });
 export const CombatTimers = trait({ attack: 0, dash: 0, dashCooldown: 0, iframes: 0 });
+/** Footstep cadence: distance travelled since the last footstep cue. */
+export const Footsteps = trait({ travelled: 0 });
 export const ShieldState = trait({ active: false });
 export const HitFlash = trait({ left: 0 });
 

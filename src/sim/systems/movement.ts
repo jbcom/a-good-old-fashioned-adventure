@@ -10,16 +10,31 @@ import {
   AimDirection,
   CombatTimers,
   Facing,
+  Footsteps,
   Hitbox,
   IsPlayer,
   MapRuntime,
   MoveIntent,
+  Outbox,
   ShieldState,
   Speed,
   Transform,
 } from "../traits";
 
 const TILE = 16;
+/** distance between footstep cues, tuned to the walk cycle */
+const FOOTSTEP_STRIDE = 14;
+
+/** Tile id → footstep surface (audio/sfx/footstep-<surface>.mp3). */
+function footstepSurface(tileId: string): string {
+  if (tileId.includes("water") || tileId.includes("river")) return "water";
+  if (tileId.includes("sand") || tileId.includes("dune")) return "sand";
+  if (tileId.includes("wood") || tileId.includes("floor") || tileId.includes("plank"))
+    return "wood";
+  if (tileId.includes("grass") || tileId.includes("moss") || tileId.includes("leaf"))
+    return "grass";
+  return "stone";
+}
 
 export function moveEntities(world: World, dt: number): void {
   const runtime = world.get(MapRuntime);
@@ -69,9 +84,30 @@ export function moveEntities(world: World, dt: number): void {
       y = Math.max(edgeTop, Math.min(boundsH - edgeBottom, y));
     }
 
+    const moved = Math.hypot(x - transform.x, y - transform.y);
     entity.set(Transform, { x, y });
     if (playerTag) entity.set(AimDirection, { x: ix, y: iy });
     if (ix > 0) entity.set(Facing, { dir: 1 });
     else if (ix < 0) entity.set(Facing, { dir: -1 });
+
+    // footstep cues ride travelled distance so cadence tracks real motion,
+    // not intent — a wall-blocked player goes quiet
+    const steps = playerTag ? entity.get(Footsteps) : undefined;
+    if (playerTag && steps && moved > 0) {
+      const travelled = steps.travelled + moved;
+      if (travelled >= FOOTSTEP_STRIDE) {
+        const col = Math.max(0, Math.min(runtime.cols - 1, Math.floor(x / TILE)));
+        const row = Math.max(0, Math.min(runtime.rows - 1, Math.floor(y / TILE)));
+        // armored classes clank regardless of ground
+        const cue =
+          playerTag.classId === "knight"
+            ? "footstep-armor"
+            : `footstep-${footstepSurface(runtime.grid[row][col])}`;
+        world.get(Outbox)?.sfx.push(cue);
+        entity.set(Footsteps, { travelled: travelled % FOOTSTEP_STRIDE });
+      } else {
+        entity.set(Footsteps, { travelled });
+      }
+    }
   }
 }

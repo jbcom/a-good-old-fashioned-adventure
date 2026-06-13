@@ -31,6 +31,7 @@ const asset = (path: string) => `/assets/${path}`;
 
 export function createGameAudioEngine(): GameAudioEngine {
   const howls = new Map<string, Howl>();
+  const fadeTimers = new Set<ReturnType<typeof setTimeout>>();
   let theme = "";
   let muted = false;
   let sfxPlayed = 0;
@@ -55,7 +56,12 @@ export function createGameAudioEngine(): GameAudioEngine {
     if (current) {
       current.fade(current.volume(), 0, audio.volumes.themeFadeMs);
       const fading = current;
-      setTimeout(() => fading.stop(), audio.volumes.themeFadeMs);
+      const timer = setTimeout(() => {
+        fadeTimers.delete(timer);
+        // dispose() may have unloaded everything mid-fade
+        if (!disposed) fading.stop();
+      }, audio.volumes.themeFadeMs);
+      fadeTimers.add(timer);
     }
     if (!path) return null;
     const next = howlFor(path, { loop: true, volume });
@@ -105,6 +111,11 @@ export function createGameAudioEngine(): GameAudioEngine {
     },
     dispose() {
       disposed = true;
+      for (const timer of fadeTimers) clearTimeout(timer);
+      fadeTimers.clear();
+      // Howler.mute is process-global — a muted engine must not silence
+      // the next engine instance (strict mode remounts, HMR, tests)
+      Howler.mute(false);
       for (const howl of howls.values()) howl.unload();
       howls.clear();
       music = null;
