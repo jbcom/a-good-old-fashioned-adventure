@@ -255,30 +255,63 @@ sub-path is always coin-priced and farmable. The map node thus offers
 both: coins to grow your line and the map's yield, roses to grow the
 dragon and your future rose income.
 
-**Three currencies (the resolution).** There was a contradiction in the
-draft economy: roses come from the PRINCESS at the rescue, but we also
-wanted partial/failed runs to pay "some roses" — yet if you never reach
-the princess, no one hands you a rose. A third currency resolves it
-cleanly with a NON-OVERLAPPING source, and that is what makes three
-currencies pull their weight rather than being roses-with-extra-steps:
+**Three currencies — the flywheel (final).** The roles are FLIPPED from the
+first draft into a compounding loop where the rarest currency feeds the
+engine that produces it. By rarity, rarest → most common:
 
-- **Coins** (common): trash kills, checkpoint crossings. Spend: class/map
-  economy upgrades — the always-farmable line. Earned every run, win or lose.
-- **Dragonglass** (uncommon — the dragon currency): farmed by damaging and
-  felling DRAGON-KIN, including on partial runs that whittle or kill the
-  map's dragon without completing the rescue. Spend: the dragon sub-tree
-  (strengthen a map's dragon → it pays more glass AND more roses). This is
-  what a deep-but-failed run banks toward the dragon loop.
-- **Roses** (rare): given ONLY by the princess, ONLY on a full rescue.
-  Spend: the major new-thing unlocks (new maps, new classes, new dragons).
-  The scarce prize that gates real progression.
+- **Roses** (RAREST): a TRICKLE from the princess, paid in proportion to
+  the number of DRAGONS SLAIN along the way (more dragons felled on the run
+  → more roses from her). Spend: the DRAGON TRACK — unlocking and upgrading
+  dragons. The apex currency, and the one the whole loop chases.
+- **Gems** (next rarest): from the dragon HOARD (felling dragon-kin). Spend:
+  the MAJORS — new maps, new classes (the big branching unlocks).
+- **Coins** (most common): from everything else — trash kills, checkpoints
+  — PLUS a share of the dragon hoard. Spend: the always-farmable economy/
+  ability ranks.
 
-This makes the dragon a self-coherent loop (glass in → stronger dragon →
-more glass + more roses out) WITHOUT muddying roses, and it gives partial
-runs a real reward (coins + glass) that is NOT roses — so "you always farm
-something" holds, the rescue stays the rose prize, and a hard boss never
-fully stalls because every attempt still banks glass toward making it
-beatable.
+The tension this creates: **you want more roses, so you need to slay more
+dragons; you spend roses to unlock/strengthen dragons; the dragons you slay
+drop gems (→ majors) and coins (→ economy) and earn roses from the
+princess.** It is a flywheel — roses buy the dragons that produce roses,
+gems buy the breadth that lets you reach more dragons, coins keep the line
+alive.
+
+**The dual-cost on dragons (closing the bootstrap brittleness).** Pricing
+dragons in roses ALONE exposes a brittle edge: roses come from princesses,
+princesses need dragons — a rose-starved player could stall at the dragon
+track. The fix: each dragon unlocks for EITHER an increasing number of
+ROSES **or** a big, painfully increasing number of GEMS — an OR-cost.
+Think logarithmic vs exponential: the rose price grows GENTLY (logarithmic
+— the efficient, intended path), while the gem alternative grows
+PUNISHINGLY (exponential — always available, but you pay dearly). A player
+flush with gems but short on roses can always force the dragon open with a
+brutal gem payment, so the dragon track is never a hard deadlock; the rose
+path stays the smart route. This puts the anti-block guarantee at the
+dragon track itself, not just the majors.
+
+The SAME dual-cost logic applies to the dragon UPGRADES, not just the
+unlock: every node in the dragon sub-tree is rose-OR-gem priced (roses
+cheap/logarithmic, gems painful/exponential). So roses are a SHORTCUT
+through the entire dragon track — never a hard block. A rose-rich player
+glides up the dragon tree; a rose-poor, gem-rich player grinds up it the
+expensive way; neither is ever locked out. The unifying principle: roses
+ACCELERATE the dragon ecosystem, gems GUARANTEE access to it, and the
+mandatory game (maps/classes on gems, the line on coins) runs regardless.
+
+**This is also the anti-block guarantee.** Because the MANDATORY
+progression — new maps, new classes (the majors) — runs on GEMS, and gems
+plus coins are always farmable from the first dragon and the trash, a
+player can NEVER be hard-stuck. Stuck on a hard fight? Farm gems off the
+first dragon and unlock more classes; farm coins for more buffs. Roses
+move into a SELF-CONTAINED ecosystem: you technically never HAVE to engage
+the rose/dragon track at all. Without roses you'd simply have fewer
+dragons — maybe one dragon and then five maps to traverse before a
+princess appears. WITH roses you unlock more dragons, so princesses (and
+their rose trickle) come more often and sooner. Roses are opt-in DEPTH,
+not a gate: the floor of the game is always reachable on gems + coins, and
+roses are the optional flywheel that accelerates it. Partial runs always
+farm coins and gems from any dragon-kin damaged, so every attempt advances
+the mandatory tracks even when the rescue fails.
 
 ## The player's curve — why the DAGs are shaped this way
 
