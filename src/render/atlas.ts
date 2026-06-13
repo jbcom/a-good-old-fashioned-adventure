@@ -13,6 +13,7 @@ import { type DrawOp, rasterizeDrawOps, rasterizeRows, resolvePalette } from "./
 const cache = new Map<string, HTMLCanvasElement>();
 const sheetImages = new Map<string, HTMLImageElement>();
 
+/** Clear the texture cache — used during tests to avoid cross-contamination. */
 export function clearAtlas(): void {
   cache.clear();
 }
@@ -112,7 +113,7 @@ function baked(key: string, bake: () => HTMLCanvasElement): HTMLCanvasElement {
   return canvas;
 }
 
-/** Character sprite at a palette (knight/ranger/wizard/orc/... swaps). */
+/** Cached rasterized sprite at a palette variant (knight/ranger/wizard), optionally pose-specific. */
 export function spriteCanvas(
   spriteId: string,
   paletteId: string,
@@ -134,7 +135,7 @@ export function spriteCanvas(
   });
 }
 
-/** Prop in a named state (chest closed/open, castle default, ...). */
+/** Cached rasterized prop in a named state (chest open/closed, altar, etc), with optional palette override. */
 export function propCanvas(propId: string, state: string, paletteId?: string): HTMLCanvasElement {
   const prop = getProp(propId);
   const palette = paletteId ?? prop.defaultPalette;
@@ -150,7 +151,7 @@ export function propCanvas(propId: string, state: string, paletteId?: string): H
   });
 }
 
-/** White silhouette of a sprite — the damage hit-flash frame. */
+/** Cached white silhouette of a sprite; used for the damage flash visual on hit. */
 export function flashCanvas(spriteId: string, paletteId: string): HTMLCanvasElement {
   // a sheet sprite mid-preload would bake a blank flash into the cache
   // forever — hand back the uncached placeholder until images are ready
@@ -174,7 +175,7 @@ export function flashCanvas(spriteId: string, paletteId: string): HTMLCanvasElem
   });
 }
 
-/** Tile face (16×16 .pix rows, draw-ops, or a purchased-sheet cell). */
+/** Cached 16×16 tile face, rasterized from .pix rows, draw-ops, or purchased sheet. */
 export function tileCanvas(tileId: string): HTMLCanvasElement {
   const tile = getTile(tileId);
   if (tile.sheet) {

@@ -13,6 +13,7 @@ import playerJson from "../config/player.json";
 import progressionJson from "../config/progression.json";
 import uiJson from "../config/ui.json";
 
+/** Shape of a class attack (melee or projectile with damage/cooldown params). */
 export interface ClassAttack {
   kind: "melee" | "projectile";
   reach?: number;
@@ -24,6 +25,7 @@ export interface ClassAttack {
   muzzleOffset?: { x: number; y: number };
 }
 
+/** Shape of a class ability (shield, leap, or blink with activation/cooldown params). */
 export interface ClassAbility {
   kind: "shield" | "leap" | "blink";
   label: string;
@@ -73,6 +75,7 @@ export interface ClassTemperament {
   withersOnHit?: boolean;
 }
 
+/** Complete player or NPC class definition (sprite, palette, attack, ability, temperament). */
 export interface ClassDef {
   playable?: boolean;
   sprite: string;
@@ -82,8 +85,10 @@ export interface ClassDef {
   temperament?: ClassTemperament;
 }
 
+/** Enumeration of incremental-loop currency types. */
 export type IncrementalCurrencyId = "coins" | "gems" | "roses";
 
+/** Currency definition including rarity, sources, and HUD priority. */
 export interface IncrementalCurrencyDef {
   label: string;
   shortLabel: string;
@@ -94,8 +99,10 @@ export interface IncrementalCurrencyDef {
   hudPriority: number;
 }
 
+/** Enumeration of upgrade-graph track names. */
 export type IncrementalTrackId = "vows" | "characters" | "encounters" | "roads" | "castle";
 
+/** Single node in the upgrade DAG: unlocks classes, enemies, routes, relics, or economy. */
 export interface IncrementalUpgradeNode {
   id: string;
   label: string;
@@ -146,6 +153,7 @@ export interface IncrementalUpgradeNode {
   note?: string;
 }
 
+/** Root shape: currencies, upgrade DAG, map DAG, route packs, class roster, and dragon lairs. */
 export interface IncrementalConfig {
   loop: {
     id: string;
@@ -201,6 +209,7 @@ export interface IncrementalConfig {
   mapLairs?: Record<string, { theme: string; rooms: string[] }>;
 }
 
+/** Enemy type archetype (sprite, ai behavior, hp/speed, attack shape). */
 export interface EnemyArchetype {
   name: string;
   sprite: string;
@@ -260,14 +269,19 @@ export interface EnemyArchetype {
   };
 }
 
+/** Engine configuration (frame rate, physics, global timing). */
 export const engine = engineJson;
+/** Player configuration (starting stats, damage, knockback). */
 export const player = playerJson;
+/** Class roster and class definitions (playable and NPC archetypes). */
 export const classes = classesJson as unknown as {
   roster: string[];
   companionRoster?: string[];
   classes: Record<string, ClassDef>;
 };
+/** Combat rules (balance, stagger, timing). */
 export const combat = combatJson;
+/** Progression config (XP curves, level rewards). */
 export const progression = progressionJson;
 // Upgrade nodes live one-per-file under src/config/upgrades/ (split from the
 // incremental.json monolith) and are globbed + merged back into the graph at
@@ -285,6 +299,7 @@ const upgradeNodes = Object.entries(upgradeNodeModules)
     return rest as IncrementalUpgradeNode;
   });
 
+/** Incremental-loop config: currencies, upgrade DAG, routes, lairs, dragon kin. */
 export const incremental = {
   ...(incrementalJson as unknown as IncrementalConfig),
   upgradeGraph: {
@@ -292,6 +307,7 @@ export const incremental = {
     nodes: upgradeNodes,
   },
 } as IncrementalConfig;
+/** Drop tables and loot distribution. */
 export const drops = dropsJson;
 // Enemy archetypes live one-per-file under src/config/enemies/ (split from the
 // enemies.json monolith, mirroring the upgrade-node split) and are globbed +
@@ -307,6 +323,7 @@ for (const mod of Object.values(enemyArchetypeModules)) {
   const { id, $schema: _schema, ...archetype } = mod;
   enemyArchetypes[id] = archetype as EnemyArchetype;
 }
+/** Enemy archetypes, AI defaults, and difficulty curve. */
 export const enemies = {
   ...(enemiesJson as unknown as {
     aiDefaults: {
@@ -326,5 +343,7 @@ export const enemies = {
   }),
   archetypes: enemyArchetypes,
 };
+/** Audio settings (sfx, music, volume, attenuation). */
 export const audio = audioJson;
+/** UI theme, colors, fonts, and layout. */
 export const ui = uiJson;
