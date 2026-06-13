@@ -17,6 +17,7 @@ import { runRail } from "./battleHarness";
 import {
   bankCoins,
   bankGems,
+  bankRoses,
   currentProgress,
   grantRunReward,
   recordDeathPayout,
@@ -54,12 +55,19 @@ function autoRunMap(world: World, mapId: string, seed: number): AutoRunResult {
     unlockedClassIds: progress.unlockedClassIds,
     purchasedUpgradeIds: progress.purchasedUpgradeIds,
     upgradeRanks: progress.upgradeRanks,
+    // pass the live first-clear set so the harness doesn't re-award a
+    // miniboss's one-time objective rose on a repeat AUTO (reviewer finding)
+    defeatedMinibossIds: progress.defeatedMinibossIds,
     seed,
   });
 
-  // transfer the simulated farm to the live wallet (harness world began at 0)
+  // transfer the simulated farm to the live wallet (harness world began at 0):
+  // coins, gems, AND the objective/miniboss roses the harness banked. The
+  // rescue rose is NOT in result.roses (the harness never fires princessRescued)
+  // — the live grantRunReward adds it below on a win, so no double-count.
   if (result.coins > 0) bankCoins(world, result.coins);
   if (result.gems > 0) bankGems(world, result.gems);
+  if (result.roses > 0) bankRoses(world, result.roses);
 
   if (result.reachedEnd) {
     // the line reached the princess: the rescue pays its roses (+ kin yield)

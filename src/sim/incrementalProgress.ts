@@ -332,6 +332,15 @@ export function bankGems(world: World, amount: number): void {
 }
 
 /**
+ * Bank roses into the live wallet and the run-earned ledger — the public
+ * rose banker (AUTO transfers the harness's objective/miniboss roses through
+ * this; the rescue rose goes via grantRunReward, not here).
+ */
+export function bankRoses(world: World, amount: number): void {
+  addRoses(world, amount);
+}
+
+/**
  * Shop-side conversion: moves coins without touching the earned ledger
  * (a sale is not income; a purchase is not negative income). Returns the
  * new balance, or null when the wallet can't cover a debit.

@@ -363,22 +363,8 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
           enemyEntity.add(KinIdentity({ relation: kin.relation, mapId }));
           enemyEntity.set(SpriteRef, { spriteId: kin.spriteId, paletteId: archetype.palette });
           // the dragon track's combat buffs (multi-attack volley, fireball AoE,
-          // richer reward) scale with the purchased dragon-might rank
-          const buff = dragonBuffFor(progress, mapId);
-          if (buff.extraBolts > 0 || buff.aoeRadius > 0 || buff.rewardMult !== 1) {
-            enemyEntity.add(DragonBuff(buff));
-            if (buff.extraBolts > 0) {
-              const health = enemyEntity.get(Health);
-              if (health) {
-                // a buffed dragon is also tankier — +25% hp per might rank
-                const hpMult = 1 + (buff.rewardMult - 1) * 0.5;
-                enemyEntity.set(Health, {
-                  hp: Math.round(health.hp * hpMult),
-                  maxHp: Math.round(health.maxHp * hpMult),
-                });
-              }
-            }
-          }
+          // richer reward, tankier body) scale with the purchased dragon-might rank
+          applyDragonBuff(enemyEntity, dragonBuffFor(progress, mapId));
         }
       }
       const family = enemies.archetypes[spawn.enemy]?.family;
@@ -445,9 +431,31 @@ function injectLairKin(world: World, mapId: string): void {
   boss.add(KinIdentity({ relation: kin.relation, mapId: parentMap }));
   const dragonArchetype = enemies.archetypes["dragon-guardian"];
   boss.set(SpriteRef, { spriteId: kin.spriteId, paletteId: dragonArchetype.palette });
-  const buff = dragonBuffFor(progress, parentMap);
-  if (buff.extraBolts > 0 || buff.aoeRadius > 0 || buff.rewardMult !== 1) {
-    boss.add(DragonBuff(buff));
+  applyDragonBuff(boss, dragonBuffFor(progress, parentMap));
+}
+
+/**
+ * Apply the dragon-track buff to a kin boss identically wherever it spawns
+ * (open-map holder OR lair-relocated): tag the DragonBuff and, when buffed,
+ * make the body tankier (+ per dragon-might rank) so a lair boss is never
+ * weaker than its open-map equivalent (reviewer finding 2026-06-13).
+ */
+function applyDragonBuff(
+  boss: Entity,
+  buff: { extraBolts: number; aoeRadius: number; rewardMult: number },
+): void {
+  if (buff.extraBolts <= 0 && buff.aoeRadius <= 0 && buff.rewardMult === 1) return;
+  boss.add(DragonBuff(buff));
+  if (buff.extraBolts > 0) {
+    const health = boss.get(Health);
+    if (health) {
+      // a buffed dragon is also tankier — +25% hp per might rank
+      const hpMult = 1 + (buff.rewardMult - 1) * 0.5;
+      boss.set(Health, {
+        hp: Math.round(health.hp * hpMult),
+        maxHp: Math.round(health.maxHp * hpMult),
+      });
+    }
   }
 }
 

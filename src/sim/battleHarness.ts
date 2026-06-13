@@ -35,6 +35,13 @@ export interface RunScenario {
   purchasedUpgradeIds?: string[];
   /** rank counts for multi-rank upgrade nodes (unitCount, hp, etc.) */
   upgradeRanks?: Record<string, number>;
+  /**
+   * Minibosses already first-cleared (so their objective-rose first-clear is
+   * NOT re-awarded). AUTO passes the live set so a repeat AUTO of a map with a
+   * miniboss doesn't farm the one-time rose again; the balance suite omits it
+   * (each sample is a fresh baseline).
+   */
+  defeatedMinibossIds?: string[];
   /** deterministic seed — same seed + scenario → same outcome */
   seed: number;
   /** safety cap so a stalemate resolves (default 120s of sim) */
@@ -86,6 +93,8 @@ export function runRail(scenario: RunScenario): RunResult {
     unlockedClassIds: scenario.unlockedClassIds,
     purchasedUpgradeIds: scenario.purchasedUpgradeIds ?? ["upgrade:first-vow"],
     upgradeRanks: scenario.upgradeRanks ?? {},
+    // first-cleared minibosses don't re-award their one-time objective rose
+    defeatedMinibossIds: scenario.defeatedMinibossIds ?? [],
   });
   instantiateMap(world, scenario.mapId, { classId: scenario.unlockedClassIds[0] ?? "knight" });
 
