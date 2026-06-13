@@ -185,6 +185,51 @@ quest engine advances unchanged (rose, victory, results into the DAG
 shop), exactly as if a pawn had spoken to her. The princess stays an
 authored NPC; nothing about her content changes.
 
+## The dragon's kin — a boss per map (the Mario nod)
+
+Roses are RARE by design: coin income grows roughly exponentially (a few,
+then ~10, ~20, ~40-50, …) while bosses — and thus roses — are much
+rarer. That scarcity is correct, but it exposes a late-game flaw: if
+every rescue is the same dragon for one rose, the long run drags
+(1-rose-1-dragon gets stale).
+
+The fix is structural and funny: **each map has its OWN boss holding the
+princess**, a full "sorry — our princess is in another castle" nod. Each
+is a member of the dragon's KIN, with a tracked relation modifier — the
+guardian you fell on map 1 turns out to be a brother, then an uncle, a
+sister, a step-cousin, a great-aunt, and so on. A big assortment of kin +
+modifiers (step-, great-, half-, twice-removed) gives every map a
+distinct boss reward, a distinct color, and a running gag ("Oh — sorry,
+I'm not the dragon with your princess. That's my brother/uncle/sister.").
+
+Implementation: the kin are COLOR-RECOLORED from the green High Dragon
+sheet (the same CC0-style derivation the Kenney dungeon tiles used — remap
+the green ramp to a new hue per relative), so each map's dragon-relative
+reads distinct without new art. The relation is config: a `dragonKin`
+table mapping map → { relation, color, name } tracked in progress
+(defeatedKin) so the dialogue can quip about who you've met.
+
+**The map sub-tree structure (the DAG shape).** Unlocking a map is the
+rose major; inside that map's sub-tree are TWO coin branches — the map's
+own upgrades (economy/yield) AND a DRAGON sub-tree that starts with
+unlocking THAT map's dragon (the kin boss) and continues with coin
+upgrades for it (its phases, hp, reward). The shape per map node:
+
+```
+map-N  (rose major — "unlock this map")
+ ├── map-N yield / economy ranks   (coins — the no-rose-wall sink)
+ └── map-N dragon-unlock           (the kin boss appears as this map's holder)
+      └── map-N dragon upgrades     (coins — phase/hp/reward ranks)
+```
+
+This obeys the same integrity rule the class DAG does (S19.1a gate): you
+cannot reach a map's dragon upgrades before unlocking that map's dragon,
+and you cannot reach the dragon before unlocking the map. So the player
+flow is: unlock map (rose) → go in → unlock its dragon → upgrade the
+dragon and the map (coins) → the dragon now holds the princess → fell it
+for the rose → unlock the NEXT map. Each step keeps the rose boss fresh
+and the coin sinks flowing.
+
 ## The player's curve — why the DAGs are shaped this way
 
 The intended experience, start to escalation:
