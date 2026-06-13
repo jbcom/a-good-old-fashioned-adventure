@@ -186,3 +186,28 @@ describe("side-view sheets (mirror-x)", () => {
     expect(r.mirror).toBe(false);
   });
 });
+
+describe("directionRows + directional guard", () => {
+  it("directionRows owns addressing — block arithmetic never double-offsets", () => {
+    const mage = getSprite("sprite:hooded-mage") as SheetSpriteDef;
+    // force the risky combination on a copy of a real anim
+    const def: SheetSpriteDef = {
+      ...mage,
+      animations: {
+        ...mage.animations,
+        idle: { ...mage.animations.idle, directional: true },
+      },
+    };
+    const r = resolveSheetFrame(def, {
+      pose: "idle",
+      choreoPhase: "",
+      facingDir: -1,
+      moveX: 0,
+      moveY: 0,
+      t: 0,
+    });
+    // left would be block 2 — with directionRows present the column must stay 0
+    expect(r.sourceX).toBe(0);
+    expect(r.sourceY).toBe(9 * def.frameSize.h);
+  });
+});

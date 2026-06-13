@@ -172,7 +172,10 @@ if (!DRY) {
     if (!ARCHIVE_RE.test(f)) continue;
     const slug = slugify(f.replace(ARCHIVE_RE, ""));
     const target = join(EXTRACTED, slug);
-    if (existsSync(target)) continue;
+    // a re-downloaded archive (pack update) must re-extract: stale targets
+    // are detected by mtime, not bare existence
+    if (existsSync(target) && statSync(target).mtimeMs >= statSync(join(ARCHIVES, f)).mtimeMs)
+      continue;
     mkdirSync(target, { recursive: true });
     try {
       if (/\.zip$/i.test(f)) {

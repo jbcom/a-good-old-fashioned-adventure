@@ -49,6 +49,10 @@ export function resolveSheetFrame(def: SheetSpriteDef, query: SheetFrameQuery): 
   const phaseMapped = query.choreoPhase !== "" && def.poseMap[query.choreoPhase] !== undefined;
   const { key, forcedDir } = normalizePose(phaseMapped ? query.choreoPhase : query.pose);
   const animName = def.poseMap[key] ?? def.poseMap.idle;
+  if (def.poseMap[key] === undefined && import.meta.env?.DEV) {
+    // a typo'd or newly-added sim pose would silently idle forever
+    console.warn(`${def.id}: pose "${query.pose}" unmapped — falling back to idle`);
+  }
   const anim = def.animations[animName];
   if (!anim)
     throw new Error(`${def.id}: poseMap resolves ${key} to undeclared animation ${animName}`);
@@ -65,7 +69,12 @@ export function resolveSheetFrame(def: SheetSpriteDef, query: SheetFrameQuery): 
   const fpd = anim.framesPerDirection;
   const raw = Math.floor(query.t * anim.fps);
   const frame = anim.loop === false ? Math.min(raw, fpd - 1) : raw % fpd;
-  const block = anim.directional ? Math.max(0, def.directionOrder.indexOf(direction)) : 0;
+  // directionRows owns direction addressing — block arithmetic must not
+  // also shift the column (latent double-offset if a def set both)
+  const block =
+    anim.directional && !anim.directionRows
+      ? Math.max(0, def.directionOrder.indexOf(direction))
+      : 0;
   const dirCell = anim.directionRows?.[direction];
   const row =
     dirCell === undefined ? (anim.row ?? 0) : typeof dirCell === "number" ? dirCell : dirCell.row;

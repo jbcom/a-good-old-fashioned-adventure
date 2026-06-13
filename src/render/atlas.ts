@@ -54,41 +54,53 @@ export function preloadSheetImages(): Promise<void> {
   return sheetPreload;
 }
 
-/** One frame of a sheet sprite, cropped from the preloaded strip. */
-export function sheetFrameCanvas(def: SheetSpriteDef, frame: SheetFrame): HTMLCanvasElement {
-  const image = sheetImages.get(frame.anim.image);
+/**
+ * Shared sheet-crop core: every consumer (sprite frame, prop state, tile
+ * face) is a cached crop of a preloaded image, with the same
+ * placeholder-until-ready / fail-loud-after discipline.
+ */
+function croppedSheetCanvas(
+  ownerId: string,
+  cacheKey: string,
+  rect: { image: string; x: number; y: number; w: number; h: number },
+): HTMLCanvasElement {
+  const image = sheetImages.get(rect.image);
   if (!image) {
-    if (sheetsReady) throw new Error(`${def.id}: sheet image missing: ${frame.anim.image}`);
+    if (sheetsReady) throw new Error(`${ownerId}: sheet image missing: ${rect.image}`);
     // preload in flight (or impossible, e.g. jsdom) — blit nothing, never
-    // stale; cached per sprite so the render loop doesn't churn textures
-    return baked(`${def.id}|placeholder`, () => {
+    // stale; cached per owner so the render loop doesn't churn textures
+    return baked(`${ownerId}|placeholder`, () => {
       const placeholder = document.createElement("canvas");
-      placeholder.width = def.frameSize.w;
-      placeholder.height = def.frameSize.h;
+      placeholder.width = rect.w;
+      placeholder.height = rect.h;
       return placeholder;
     });
   }
-  const key = `${def.id}|${frame.anim.image}|${frame.sourceX},${frame.sourceY}`;
-  return baked(key, () => {
+  return baked(cacheKey, () => {
     const canvas = document.createElement("canvas");
-    canvas.width = def.frameSize.w;
-    canvas.height = def.frameSize.h;
+    canvas.width = rect.w;
+    canvas.height = rect.h;
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new Error("2d context unavailable");
     ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(
-      image,
-      frame.sourceX,
-      frame.sourceY,
-      def.frameSize.w,
-      def.frameSize.h,
-      0,
-      0,
-      def.frameSize.w,
-      def.frameSize.h,
-    );
+    ctx.drawImage(image, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h);
     return canvas;
   });
+}
+
+/** One frame of a sheet sprite, cropped from the preloaded strip. */
+export function sheetFrameCanvas(def: SheetSpriteDef, frame: SheetFrame): HTMLCanvasElement {
+  return croppedSheetCanvas(
+    def.id,
+    `${def.id}|${frame.anim.image}|${frame.sourceX},${frame.sourceY}`,
+    {
+      image: frame.anim.image,
+      x: frame.sourceX,
+      y: frame.sourceY,
+      w: def.frameSize.w,
+      h: def.frameSize.h,
+    },
+  );
 }
 
 function baked(key: string, bake: () => HTMLCanvasElement): HTMLCanvasElement {
@@ -129,27 +141,7 @@ export function propCanvas(propId: string, state: string, paletteId?: string): H
   const propState = prop.states[state];
   if (!propState) throw new Error(`${propId}: unknown state ${state}`);
   if (propState.sheet) {
-    const rect = propState.sheet;
-    const image = sheetImages.get(rect.image);
-    if (!image) {
-      if (sheetsReady) throw new Error(`${propId}: sheet image missing: ${rect.image}`);
-      return baked(`${propId}|placeholder`, () => {
-        const placeholder = document.createElement("canvas");
-        placeholder.width = rect.w;
-        placeholder.height = rect.h;
-        return placeholder;
-      });
-    }
-    return baked(`${propId}|sheet|${state}`, () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = rect.w;
-      canvas.height = rect.h;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) throw new Error("2d context unavailable");
-      ctx.imageSmoothingEnabled = false;
-      ctx.drawImage(image, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h);
-      return canvas;
-    });
+    return croppedSheetCanvas(propId, `${propId}|sheet|${state}`, propState.sheet);
   }
   return baked(`${propId}|${palette}|${state}`, () => {
     const resolved = resolvePalette(palette);
@@ -186,27 +178,7 @@ export function flashCanvas(spriteId: string, paletteId: string): HTMLCanvasElem
 export function tileCanvas(tileId: string): HTMLCanvasElement {
   const tile = getTile(tileId);
   if (tile.sheet) {
-    const rect = tile.sheet;
-    const image = sheetImages.get(rect.image);
-    if (!image) {
-      if (sheetsReady) throw new Error(`${tileId}: sheet image missing: ${rect.image}`);
-      return baked(`${tileId}|placeholder`, () => {
-        const placeholder = document.createElement("canvas");
-        placeholder.width = rect.w;
-        placeholder.height = rect.h;
-        return placeholder;
-      });
-    }
-    return baked(`${tileId}|sheet`, () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = rect.w;
-      canvas.height = rect.h;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) throw new Error("2d context unavailable");
-      ctx.imageSmoothingEnabled = false;
-      ctx.drawImage(image, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h);
-      return canvas;
-    });
+    return croppedSheetCanvas(tileId, `${tileId}|sheet`, tile.sheet);
   }
   return baked(`${tileId}|palette:base`, () => {
     if (tile.rows) return rasterizeRows(tile.rows, resolvePalette("palette:base"));
