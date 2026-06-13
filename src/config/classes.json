@@ -128,7 +128,7 @@
     },
     "bard": {
       "playable": false,
-      "sprite": "sprite:hero",
+      "sprite": "sprite:red-mage",
       "palette": "palette:bard",
       "attack": {
         "kind": "projectile",

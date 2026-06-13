@@ -441,6 +441,11 @@
           "path": "npcs/serek.png",
           "width": 64,
           "height": 496
+        },
+        {
+          "path": "heroes/red-mage.png",
+          "width": 64,
+          "height": 256
         }
       ]
     },
