@@ -274,3 +274,13 @@ re-tune needed; the audit is the validation.
 
 N4 (late-map escalation) remains for the content stage; N3 (manual stays
 richest) is a standing S20 design constraint.
+
+**N4 NOW HAS HARD DATA (2026-06-13, tests/unit/spike-ladder.test.ts):** the
+map-ladder gate measured the inversion directly — with a frozen knight/ranger/
+wizard roster, the spine advance is 1.0, 1.0, **~0.60 (deep-forest)**, 1.0,
+1.0, 1.0. So `map:deep-forest` is an anomalously hard mid-spine spike: the maps
+AFTER it are easier, exactly the inversion N4 warned about. The gate pins this
+known anomaly and fails on any NEW inversion. FIX (S19.2): re-tune deep-forest
+(its geometry/boss makes the line stall ~midfield) and author proper late-map
+escalation so difficulty rises monotonically; then unpin the deep-forest
+exception from the ladder gate.
