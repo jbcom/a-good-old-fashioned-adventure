@@ -55,34 +55,18 @@
       "y": 160,
       "dir": -1,
       "note": "Oswin, penned with the captives"
-    },
-    {
-      "enemy": "forest-orc",
-      "x": 150,
-      "y": 192,
-      "note": "captured-village lair r4: orcs holding the stable mouth"
-    },
-    {
-      "enemy": "oldwood-raider",
-      "x": 210,
-      "y": 230,
-      "note": "captured-village lair r4: raider on the yard lane"
-    },
-    { "enemy": "crypt-bat", "x": 200, "y": 150, "note": "captured-village lair r4: rafter vermin" },
-    { "enemy": "forest-orc", "x": 280, "y": 196, "note": "captured-village lair r4: orc" },
-    { "enemy": "oldwood-raider", "x": 320, "y": 232, "note": "captured-village lair r4: raider" },
-    {
-      "enemy": "gate-sentry",
-      "x": 360,
-      "y": 192,
-      "note": "captured-village lair r4: a sentry over the pens"
-    },
-    {
-      "enemy": "gate-sentry",
-      "x": 400,
-      "y": 168,
-      "note": "captured-village lair r4: second pen-guard — the captives are well held"
     }
+  ],
+  "waveGates": [
+    { "id": "gate:stable-mouth", "x": 150, "y": 192, "note": "spawn zone — the stable mouth" },
+    {
+      "id": "gate:stable-rafters",
+      "x": 200,
+      "y": 150,
+      "note": "spawn zone — the rafters (vermin)"
+    },
+    { "id": "gate:stable-yard", "x": 260, "y": 232, "note": "spawn zone — the lower yard lane" },
+    { "id": "gate:stable-pens", "x": 360, "y": 184, "note": "spawn zone — over the captive pens" }
   ],
   "triggers": [
     {

@@ -28,17 +28,17 @@
       "op": "col-span",
       "tile": "tile:stone-wall",
       "x": 16,
-      "y0": 8,
-      "y1": 10,
-      "note": "barricade stub (a chokepoint, not a full wall)"
+      "y0": 3,
+      "y1": 8,
+      "note": "an upper barricade — the line passes below it on the rail row (11)"
     },
     {
       "op": "col-span",
       "tile": "tile:stone-wall",
       "x": 30,
-      "y0": 12,
-      "y1": 14,
-      "note": "second barricade stub on the opposite lane"
+      "y0": 14,
+      "y1": 19,
+      "note": "a lower barricade — the line passes above it on the rail row"
     }
   ],
   "playerSpawn": { "x": 48, "y": 176 },
@@ -71,37 +71,22 @@
       "y": 96,
       "contents": "HPUp",
       "note": "the keeper's strongbox the raiders missed"
-    },
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:market-stalls", "x": 200, "y": 176, "note": "spawn zone — the looted stalls" },
+    { "id": "gate:market-low", "x": 280, "y": 232, "note": "spawn zone — the lower market lane" },
     {
-      "enemy": "oldwood-raider",
-      "x": 180,
-      "y": 176,
-      "note": "captured-village lair r3: raiders manning the looted stalls"
-    },
-    {
-      "enemy": "orc-scout",
-      "x": 250,
-      "y": 232,
-      "note": "captured-village lair r3: scout on the lower lane"
-    },
-    {
-      "enemy": "forest-orc",
-      "x": 350,
-      "y": 168,
-      "note": "captured-village lair r3: orc at the chokepoint"
-    },
-    { "enemy": "oldwood-raider", "x": 440, "y": 232, "note": "captured-village lair r3: raider" },
-    {
-      "enemy": "forest-shaman",
-      "x": 500,
+      "id": "gate:market-counter",
+      "x": 480,
       "y": 110,
-      "note": "captured-village lair r3: a shaman atop the counter (upper flank, not the lane)"
+      "note": "spawn zone — atop the long counter (upper flank)"
     },
     {
-      "enemy": "gate-sentry",
+      "id": "gate:market-back",
       "x": 560,
       "y": 176,
-      "note": "captured-village lair r3: the sentry guarding the captives"
+      "note": "spawn zone — before the captives' pen"
     }
   ],
   "triggers": [

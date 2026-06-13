@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-deep-forest-3",
+  "label": "Storm the Sister's Den",
+  "category": "map",
+  "cost": {
+    "roses": 7,
+    "gems": 175
+  },
+  "prerequisites": ["upgrade:lair-deep-forest-2"],
+  "lairRoom": {
+    "mapId": "map:deep-forest",
+    "depth": 3,
+    "roomMap": "map:thornwood-deep"
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Thornwood-hollow lair, the deepest room: the overgrown heart where the sister-dragon nests among her beasts. The princess (and the deep-forest kin, if unlocked) waits here. Rose-OR-gem at the lair's steepest step (roses logarithmic, gems exponential)."
+}

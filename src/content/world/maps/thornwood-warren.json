@@ -1,0 +1,115 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:thornwood-warren",
+  "kind": "map",
+  "name": "The Thorn Warren",
+  "size": { "cols": 48, "rows": 24 },
+  "baseTile": "tile:path-ruts",
+  "bgmTheme": "deep-forest",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain" },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 12,
+      "x0": 2,
+      "x1": 45,
+      "note": "the trampled bandit lane the line pushes east along"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 14,
+      "y0": 2,
+      "y1": 9,
+      "note": "a thorn wall narrowing the warren (upper gap is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 14,
+      "y0": 15,
+      "y1": 21,
+      "note": "thorn wall lower"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 30,
+      "y0": 2,
+      "y1": 8,
+      "note": "second thorn wall"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 30,
+      "y0": 16,
+      "y1": 21,
+      "note": "second thorn wall lower"
+    },
+    {
+      "op": "region",
+      "tile": "tile:path-pebbles",
+      "x0": 34,
+      "x1": 45,
+      "y0": 8,
+      "y1": 16,
+      "note": "the gravelled bandit muster near the warren's end"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 192 },
+  "spawns": {
+    "default": { "x": 48, "y": 192 },
+    "entry": { "x": 48, "y": 192 }
+  },
+  "entities": [
+    {
+      "ref": "prop:bramble-hedge",
+      "x": 180,
+      "y": 150,
+      "note": "a thicket the raiders use as a barricade"
+    },
+    { "ref": "prop:bramble-hedge", "x": 110, "y": 230, "note": "low thorns crowding the lane" },
+    {
+      "ref": "prop:fallen-log",
+      "x": 300,
+      "y": 228,
+      "note": "a felled trunk dragged across the run"
+    },
+    {
+      "ref": "prop:notice-board",
+      "x": 420,
+      "y": 150,
+      "note": "the raiders' crude tally-board of plunder"
+    },
+    { "ref": "prop:barrel", "x": 500, "y": 220, "note": "a looted supply barrel" },
+    {
+      "ref": "prop:chest",
+      "x": 560,
+      "y": 150,
+      "contents": "Gold",
+      "note": "the raiders' coin-cache"
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:warren-mouth", "x": 230, "y": 192, "note": "spawn zone — the thorn-maze mouth" },
+    { "id": "gate:warren-pinch", "x": 360, "y": 168, "note": "spawn zone — the upper pinch" },
+    { "id": "gate:warren-low", "x": 400, "y": 240, "note": "spawn zone — the lower bramble lane" },
+    {
+      "id": "gate:warren-muster",
+      "x": 580,
+      "y": 192,
+      "note": "spawn zone — the bandit muster at the warren's end"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:warren-mouth",
+      "kind": "landmark",
+      "label": "The Thorn Warren's mouth",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 176, "x1": 80, "y1": 208 }
+    }
+  ]
+}

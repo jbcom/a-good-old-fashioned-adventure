@@ -146,8 +146,8 @@
       ]
     },
     "map:deep-forest": {
-      "theme": "netherrealm-portal",
-      "rooms": ["map:castle-library", "map:castle-yard"]
+      "theme": "thornwood-hollow",
+      "rooms": ["map:thornwood-grove", "map:thornwood-warren", "map:thornwood-deep"]
     },
     "map:sunken-road": {
       "theme": "sunken-crypt",

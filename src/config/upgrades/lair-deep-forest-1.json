@@ -1,7 +1,7 @@
 {
   "$schema": "../../../schemas/upgrade-node.schema.json",
   "id": "upgrade:lair-deep-forest-1",
-  "label": "Tear the Netherrealm Portal",
+  "label": "Enter the Thornwood Hollow",
   "category": "map",
   "cost": {
     "roses": 4,
@@ -11,9 +11,9 @@
   "lairRoom": {
     "mapId": "map:deep-forest",
     "depth": 1,
-    "roomMap": "map:castle-library"
+    "roomMap": "map:thornwood-grove"
   },
   "unlocks": ["upgrade:lair-deep-forest-2"],
   "track": "roads",
-  "note": "Dragon's Lair entrance (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks): a netherrealm portal opens behind Thornwood — the princess relocates into its first room. Rose-OR-gem (roses logarithmic shortcut, gems exponential fallback)."
+  "note": "Dragon's Lair entrance (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks): deep behind Thornwood a hollow opens — an old overgrown ruin the forest swallowed, now the sister-dragon's hunting den. The princess relocates into its first room. Rose-OR-gem (roses logarithmic shortcut, gems exponential fallback)."
 }

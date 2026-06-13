@@ -60,32 +60,55 @@ describe("dragon's lair", () => {
     }
   });
 
-  it("every lair room is a playable rail (advances and farms or wins)", () => {
-    // each room a player can be relocated into must be a real playable rail
-    // (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks — a room is a rail)
+  it("every lair room is a playable rail — sparse on no unlocks, dense on full", () => {
+    // a lair room is a zone-based rail (docs/RAIL-COMMAND.md §maps are zones, not
+    // enemies): with NO enemies unlocked it is a clear walk to the room's end;
+    // with the region's enemies unlocked, waves spawn from the unlocked
+    // permutation at the room's gates and the line FARMS. Both must hold.
     const roomMaps = new Set<string>();
     for (const node of incremental.upgradeGraph.nodes) {
       if (node.lairRoom) roomMaps.add(node.lairRoom.roomMap);
     }
     expect(roomMaps.size, "at least one lair room authored").toBeGreaterThan(0);
+
+    const classes = ["knight", "ranger", "wizard"];
+    const baseUpgrades = ["upgrade:first-vow", "upgrade:ranger-trail", "upgrade:wizard-focus"];
+    // a full enemy-unlock set across the early/mid regions so any lair room's
+    // region pool has something to draw from
+    const fullUnlocks = [
+      ...baseUpgrades,
+      "upgrade:dragon-wake",
+      "upgrade:unlock-forest-orc",
+      "upgrade:unlock-oldwood-raider",
+      "upgrade:unlock-orc-scout",
+      "upgrade:unlock-thorn-shaman",
+      "upgrade:unlock-bramble-stalker",
+      "upgrade:warband-of-one",
+    ];
+
     for (const roomMap of roomMaps) {
-      const r = runRail({
-        unlockedClassIds: ["knight", "ranger", "wizard"],
-        purchasedUpgradeIds: [
-          "upgrade:first-vow",
-          "upgrade:ranger-trail",
-          "upgrade:wizard-focus",
-          "upgrade:warband-of-one",
-        ],
+      // sparse: no enemy unlocks → the bare room is a clear walk to the end
+      const sparse = runRail({
+        unlockedClassIds: classes,
+        purchasedUpgradeIds: baseUpgrades,
+        mapId: roomMap,
+        seed: 5,
+        maxTicks: 60 * 90,
+      });
+      expect(sparse.advance, `${roomMap} stranded the line when bare`).toBeGreaterThan(0.4);
+
+      // dense: the region's enemies unlocked → waves spawn at the gates and farm
+      const dense = runRail({
+        unlockedClassIds: classes,
+        purchasedUpgradeIds: fullUnlocks,
         upgradeRanks: { "upgrade:warband-of-one": 4 },
         mapId: roomMap,
         seed: 5,
         maxTicks: 60 * 90,
       });
-      expect(r.advance, `${roomMap} stranded the line`).toBeGreaterThan(0.4);
       expect(
-        r.reachedEnd || r.enemiesFelled > 0 || r.coins > 0,
-        `${roomMap} neither won nor farmed`,
+        dense.enemiesFelled > 0 || dense.coins > 0,
+        `${roomMap} spawned no waves from the unlocked set — its spawn zones may be unwired`,
       ).toBe(true);
     }
   });

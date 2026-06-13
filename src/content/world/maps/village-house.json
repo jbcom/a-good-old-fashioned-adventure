@@ -97,27 +97,23 @@
       "y": 176,
       "dir": -1,
       "note": "the woodcutter, penned in the back room"
-    },
-    {
-      "enemy": "oldwood-raider",
-      "x": 170,
-      "y": 168,
-      "note": "captured-village lair r2: raiders looting the first room"
-    },
-    { "enemy": "crypt-bat", "x": 220, "y": 120, "note": "captured-village lair r2: nest vermin" },
-    {
-      "enemy": "forest-orc",
-      "x": 300,
-      "y": 184,
-      "note": "captured-village lair r2: orc in the middle room"
-    },
-    { "enemy": "oldwood-raider", "x": 380, "y": 176, "note": "captured-village lair r2: raider" },
-    {
-      "enemy": "gate-sentry",
-      "x": 540,
-      "y": 176,
-      "note": "captured-village lair r2: a sentry guards the captive's room"
     }
+  ],
+  "waveGates": [
+    {
+      "id": "gate:house-first",
+      "x": 160,
+      "y": 176,
+      "note": "spawn zone — the first ransacked room"
+    },
+    { "id": "gate:house-mid", "x": 320, "y": 176, "note": "spawn zone — the looted middle room" },
+    {
+      "id": "gate:house-mid-high",
+      "x": 300,
+      "y": 120,
+      "note": "spawn zone — the rafters (vermin lair)"
+    },
+    { "id": "gate:house-back", "x": 520, "y": 176, "note": "spawn zone — the captive's back room" }
   ],
   "triggers": [
     {

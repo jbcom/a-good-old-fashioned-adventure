@@ -17,7 +17,9 @@ describe("S6.5 regional enemy depth", () => {
   it("defines an ordered regional difficulty curve with real maps and archetypes", () => {
     expect(enemies.difficultyCurve.map((entry) => entry.id)).toEqual([
       "region:oldwood",
+      "region:captured-village",
       "region:deep-forest",
+      "region:thornwood-hollow",
       "region:castle-approach",
       "region:dungeon",
     ]);

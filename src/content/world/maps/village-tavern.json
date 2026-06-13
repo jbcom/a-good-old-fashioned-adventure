@@ -64,43 +64,22 @@
       "note": "the tavern's takings the dragon hoards"
     },
     {
-      "enemy": "forest-orc",
-      "x": 150,
-      "y": 176,
-      "note": "captured-village lair r5: the nest garrison at the door"
-    },
-    {
-      "enemy": "oldwood-raider",
-      "x": 210,
-      "y": 224,
-      "note": "captured-village lair r5: raider on the lower lane"
-    },
-    {
-      "enemy": "orc-scout",
-      "x": 240,
-      "y": 130,
-      "note": "captured-village lair r5: scout on the bar"
-    },
-    { "enemy": "forest-orc", "x": 320, "y": 184, "note": "captured-village lair r5: orc" },
-    { "enemy": "oldwood-raider", "x": 380, "y": 224, "note": "captured-village lair r5: raider" },
-    {
-      "enemy": "forest-shaman",
-      "x": 420,
-      "y": 110,
-      "note": "captured-village lair r5: a shaman on the upper bar (flank, off the lane)"
-    },
-    {
-      "enemy": "gate-sentry",
-      "x": 480,
-      "y": 176,
-      "note": "captured-village lair r5: the door-sentry of the nest"
-    },
-    {
       "enemy": "glowcap-matron",
-      "x": 600,
-      "y": 240,
-      "note": "captured-village lair r5: the dragon's lieutenant — a glowcap matron holds the hearth (the lair's miniboss climax)"
+      "x": 620,
+      "y": 230,
+      "note": "captured-village lair r5 CLIMAX: the dragon's lieutenant — a glowcap matron holds the hearth. The ONE authored combatant (the lair's fixed miniboss climax); the garrison around it is permuted from the player's unlocked set via the wave gates."
     }
+  ],
+  "waveGates": [
+    { "id": "gate:nest-door", "x": 180, "y": 176, "note": "spawn zone — the nest door" },
+    {
+      "id": "gate:nest-bar",
+      "x": 260,
+      "y": 130,
+      "note": "spawn zone — atop the long bar (upper flank)"
+    },
+    { "id": "gate:nest-low", "x": 320, "y": 224, "note": "spawn zone — the lower benches" },
+    { "id": "gate:nest-hearth", "x": 500, "y": 176, "note": "spawn zone — before the hearth-dais" }
   ],
   "triggers": [
     {

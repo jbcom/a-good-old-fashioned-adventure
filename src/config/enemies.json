@@ -21,12 +21,41 @@
       "archetypes": ["forest-orc", "oldwood-raider", "thorn-shaman"]
     },
     {
+      "id": "region:captured-village",
+      "label": "The Captured Village (oldwood lair)",
+      "tier": 2,
+      "threat": 3,
+      "maps": [
+        "map:village",
+        "map:village-house",
+        "map:village-shop",
+        "map:village-stable",
+        "map:village-tavern"
+      ],
+      "archetypes": ["forest-orc", "oldwood-raider", "orc-scout", "gate-sentry", "carrion-raven"]
+    },
+    {
       "id": "region:deep-forest",
       "label": "Deep Forest",
       "tier": 2,
       "threat": 4,
       "maps": ["map:deep-forest"],
       "archetypes": ["orc-scout", "thorn-shaman", "bramble-stalker"]
+    },
+    {
+      "id": "region:thornwood-hollow",
+      "label": "The Thornwood Hollow (deep-forest lair)",
+      "tier": 3,
+      "threat": 5,
+      "maps": ["map:thornwood-grove", "map:thornwood-warren", "map:thornwood-deep"],
+      "archetypes": [
+        "forest-orc",
+        "oldwood-raider",
+        "orc-scout",
+        "bramble-stalker",
+        "carrion-raven",
+        "thorn-shaman"
+      ]
     },
     {
       "id": "region:castle-approach",

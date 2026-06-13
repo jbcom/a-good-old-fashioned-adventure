@@ -1,0 +1,90 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:thornwood-grove",
+  "kind": "map",
+  "name": "The Hidden Grove",
+  "size": { "cols": 46, "rows": 24 },
+  "baseTile": "tile:leaf-litter-glowcap",
+  "bgmTheme": "deep-forest",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain" },
+    {
+      "op": "row-span",
+      "tile": "tile:grass-flowers",
+      "y": 12,
+      "x0": 2,
+      "x1": 43,
+      "note": "the flowered deer-trail the line follows east into the hollow"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass-flowers",
+      "x0": 4,
+      "x1": 16,
+      "y0": 4,
+      "y1": 19,
+      "note": "the sunlit grove mouth, dense with wildflowers"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass-tufts",
+      "x0": 20,
+      "x1": 30,
+      "y0": 5,
+      "y1": 18,
+      "note": "the tufted meadow midway"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 192 },
+  "spawns": {
+    "default": { "x": 48, "y": 192 },
+    "entry": { "x": 48, "y": 192 }
+  },
+  "entities": [
+    { "ref": "prop:broadleaf-tree", "x": 150, "y": 150, "note": "an old oak at the grove mouth" },
+    { "ref": "prop:flower-cart", "x": 250, "y": 230, "note": "a forager's abandoned flower cart" },
+    {
+      "ref": "prop:signpost",
+      "x": 380,
+      "y": 168,
+      "note": "a weathered trail-marker into the hollow"
+    },
+    {
+      "ref": "prop:vine-trellis",
+      "x": 460,
+      "y": 150,
+      "note": "a wild trellis where the meadow ends"
+    },
+    { "ref": "prop:chest", "x": 560, "y": 160, "contents": "Gold", "note": "a forager's cache" }
+  ],
+  "waveGates": [
+    { "id": "gate:grove-mid", "x": 360, "y": 192, "note": "spawn zone — the trail mid-lane" },
+    {
+      "id": "gate:grove-flank-high",
+      "x": 460,
+      "y": 130,
+      "note": "spawn zone — the upper meadow flank"
+    },
+    {
+      "id": "gate:grove-flank-low",
+      "x": 500,
+      "y": 252,
+      "note": "spawn zone — the lower flowered flank"
+    },
+    {
+      "id": "gate:grove-rear",
+      "x": 620,
+      "y": 192,
+      "note": "spawn zone — the forest edge before the warren"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:grove-mouth",
+      "kind": "landmark",
+      "label": "The Hidden Grove",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 176, "x1": 80, "y1": 208 }
+    }
+  ]
+}
