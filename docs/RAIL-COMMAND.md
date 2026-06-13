@@ -241,6 +241,19 @@ Unlock an antagonist pattern before its remediation exists and the curve
 spikes. The harness pairs each enemy-unlock state against the
 contemporaneous class-unlock state and asserts the answer exists.
 
+Each enemy type is itself a small sub-DAG: a SPAWN-PLACEMENT track. Per
+enemy type the player can upgrade the number of potential spawn positions
+(1 → up to 5), and each rank is a coin-reward multiplier — more spawn
+points means more income but a harder line to hold, because the enemy can
+now appear from any one of N positions, and different positions favor
+different SLICES of the board (a left-lane spawn pressures the flank a
+ranged unit wants; a mid spawn splits the line). This is the purest
+expression of the antagonist dial: the player trades defensive certainty
+for income, choosing how much chaos to invite. The placement set per
+enemy is a scenario dimension the harness models alongside the
+active-enemy-set — spawn geometry is a balance variable, not just a
+spawn-count.
+
 **Map DAG — successive, no jumping.** Maps are ordered DAG points: map 1
 is upgraded/cleared before map 2, and so on — no map-jumping, the same
 reason the class and enemy DAGs are strict. The princess always sits at
