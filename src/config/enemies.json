@@ -86,7 +86,7 @@
     },
     "forest-shaman": {
       "name": "Forest Shaman",
-      "sprite": "sprite:dragon",
+      "sprite": "sprite:hooded-mage",
       "palette": "palette:orc",
       "hp": 25,
       "speed": 20,
@@ -109,7 +109,7 @@
     },
     "thorn-shaman": {
       "name": "Thorn Shaman",
-      "sprite": "sprite:dragon",
+      "sprite": "sprite:hooded-mage",
       "palette": "palette:thorn-shaman",
       "hp": 28,
       "speed": 22,

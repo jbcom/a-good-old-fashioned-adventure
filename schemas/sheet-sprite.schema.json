@@ -55,7 +55,18 @@
           "directional": { "type": "boolean" },
           "fps": { "type": "number", "exclusiveMinimum": 0 },
           "loop": { "type": "boolean" },
-          "row": { "type": "integer", "minimum": 0 }
+          "row": { "type": "integer", "minimum": 0 },
+          "directionRows": {
+            "type": "object",
+            "required": ["right", "up", "left", "down"],
+            "properties": {
+              "right": { "type": "integer", "minimum": 0 },
+              "up": { "type": "integer", "minimum": 0 },
+              "left": { "type": "integer", "minimum": 0 },
+              "down": { "type": "integer", "minimum": 0 }
+            },
+            "additionalProperties": false
+          }
         },
         "additionalProperties": false
       }

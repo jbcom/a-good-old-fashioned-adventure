@@ -1,0 +1,48 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:hooded-mage",
+  "kind": "sheet-sprite",
+  "description": "Electric Lemon hooded mage, combat sheet (public/assets/MANIFEST.json#electric-lemon-rpg-characters). 16px frames, 4 frames per animation, one row per direction in E/W/S/N block order: staff swing rows 0-3, cast rows 4-7, combat idle rows 8-11, combat walk rows 12-15. Forest/thorn shaman body — every direction authored, never mirrors.",
+  "frameSize": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 15 },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "enemies/hooded-mage.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": { "right": 8, "left": 9, "down": 10, "up": 11 },
+      "fps": 5
+    },
+    "walk": {
+      "image": "enemies/hooded-mage.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": { "right": 12, "left": 13, "down": 14, "up": 15 },
+      "fps": 8
+    },
+    "attack": {
+      "image": "enemies/hooded-mage.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": { "right": 4, "left": 5, "down": 6, "up": 7 },
+      "fps": 10
+    },
+    "hurt": {
+      "image": "enemies/hooded-mage.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": { "right": 0, "left": 1, "down": 2, "up": 3 },
+      "fps": 10
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

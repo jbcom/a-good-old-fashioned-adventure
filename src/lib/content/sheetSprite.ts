@@ -66,13 +66,14 @@ export function resolveSheetFrame(def: SheetSpriteDef, query: SheetFrameQuery): 
   const raw = Math.floor(query.t * anim.fps);
   const frame = anim.loop === false ? Math.min(raw, fpd - 1) : raw % fpd;
   const block = anim.directional ? Math.max(0, def.directionOrder.indexOf(direction)) : 0;
+  const row = anim.directionRows ? anim.directionRows[direction] : (anim.row ?? 0);
 
   // side-view sheets carry one native facing; flip when the entity points
   // the other way (vertical travel keeps the last horizontal facing). A
-  // directional animation already picked its block — mirroring on top
-  // would double-flip, so facing only applies to row animations.
+  // directional animation already picked its block, and directionRows
+  // author every direction — mirroring either would double-flip.
   let mirror = false;
-  if (def.facing && !anim.directional) {
+  if (def.facing && !anim.directional && !anim.directionRows) {
     const horizontal =
       direction === "left" || direction === "right"
         ? direction
@@ -87,7 +88,7 @@ export function resolveSheetFrame(def: SheetSpriteDef, query: SheetFrameQuery): 
     anim,
     direction,
     sourceX: (block * fpd + frame) * def.frameSize.w,
-    sourceY: (anim.row ?? 0) * def.frameSize.h,
+    sourceY: row * def.frameSize.h,
     mirror,
   };
 }

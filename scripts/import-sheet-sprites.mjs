@@ -37,7 +37,13 @@ for (const file of readdirSync(defsDir)) {
   const entries = [];
   for (const [name, anim] of Object.entries(def.animations)) {
     const frameDurationMs = Math.round(1000 / anim.fps);
-    if (anim.directional) {
+    if (anim.directionRows) {
+      for (const [dir, row] of Object.entries(anim.directionRows)) {
+        entries.push(
+          `${name}-${dir}:${anim.image}:${row}:${anim.framesPerDirection}:${frameDurationMs}:0`,
+        );
+      }
+    } else if (anim.directional) {
       def.directionOrder.forEach((dir, block) => {
         entries.push(
           `${name}-${dir}:${anim.image}:${anim.row ?? 0}:${anim.framesPerDirection}:${frameDurationMs}:${

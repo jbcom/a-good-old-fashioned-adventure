@@ -235,6 +235,16 @@
       "files": [{ "path": "enemies/squirrel.png", "width": 256, "height": 224 }]
     },
     {
+      "id": "electric-lemon-rpg-characters",
+      "title": "Fantasy RPG Characters: Warriors - Mages - Rogues - Citizens!",
+      "author": "Electric Lemon Games (same author + license shape as the High Dragon)",
+      "source": "itch.io (purchased; raws in raw-assets/extracted/{citizens-guards-warriors,warriors_rogues_mages,heavy-knight}/)",
+      "url": "https://electriclemon.itch.io/citizens-guards-warriors",
+      "license": "Electric Lemon pack terms (pack page at url): attribution NOT necessary, no reselling/standalone distribution of the assets, commercial and non-commercial game use okay.",
+      "mappedUse": "SA.3 humanoid bodies — pack convention is 12 animation states x 4 directions (E/W/S/N row blocks), 4 frames per animation. First keeper: the hooded mage combat sheet wearing forest-shaman + thorn-shaman. Warriors/rogues/citizens/heavy-knight stay in raw-assets until their archetypes wire up.",
+      "files": [{ "path": "enemies/hooded-mage.png", "width": 64, "height": 256 }]
+    },
+    {
       "id": "pixelloops-fantasy-rpg",
       "title": "RPG Fantasy Music Pack – 10 Tavern & Adventure Tracks (GameLoops Vol 5)",
       "author": "PixelLoops",

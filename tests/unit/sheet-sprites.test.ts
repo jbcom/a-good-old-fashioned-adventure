@@ -140,6 +140,30 @@ describe("resolveSheetFrame", () => {
   });
 });
 
+describe("direction-row sheets (Electric Lemon humanoids)", () => {
+  const mage = getSprite("sprite:hooded-mage") as SheetSpriteDef;
+  const base = { pose: "idle", choreoPhase: "", facingDir: 1 as const, moveX: 0, moveY: 0, t: 0 };
+
+  it("each direction reads its authored row and never mirrors", () => {
+    const right = resolveSheetFrame(mage, base);
+    expect(right.sourceY).toBe(8 * mage.frameSize.h);
+    expect(right.mirror).toBe(false);
+    const left = resolveSheetFrame(mage, { ...base, facingDir: -1 });
+    expect(left.sourceY).toBe(9 * mage.frameSize.h);
+    expect(left.mirror).toBe(false);
+    const up = resolveSheetFrame(mage, { ...base, pose: "walk-up-0", moveY: -1 });
+    expect(up.sourceY).toBe(15 * mage.frameSize.h);
+    const down = resolveSheetFrame(mage, { ...base, pose: "walk-1", moveY: 1 });
+    expect(down.sourceY).toBe(14 * mage.frameSize.h);
+  });
+
+  it("frames advance horizontally within the direction row", () => {
+    const r = resolveSheetFrame(mage, { ...base, t: 1 / mage.animations.idle.fps });
+    expect(r.sourceX).toBe(mage.frameSize.w);
+    expect(r.sourceY).toBe(8 * mage.frameSize.h);
+  });
+});
+
 describe("side-view sheets (mirror-x)", () => {
   const boar = getSprite("sprite:wild-boar") as SheetSpriteDef;
   const base = { pose: "idle", choreoPhase: "", facingDir: 1 as const, moveX: 0, moveY: 0, t: 0 };
