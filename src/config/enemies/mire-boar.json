@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "mire-boar",
+  "name": "Mire Boar",
+  "sprite": "sprite:wild-boar-dark",
+  "palette": "palette:base",
+  "family": "mire-boar",
+  "hp": 26,
+  "speed": 30,
+  "hitbox": {
+    "w": 13,
+    "h": 13
+  },
+  "behavior": "patrol"
+}

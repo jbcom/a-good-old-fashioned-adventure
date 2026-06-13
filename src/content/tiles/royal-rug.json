@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:royal-rug",
+  "kind": "tile",
+  "solid": false,
+  "description": "Royal paving — Retro Textures blue-and-tan ornate tile floor (64px), the throne-room runner.",
+  "sheet": {
+    "image": "tilemaps/retro/floor_tiles_blue_small.png",
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 64
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

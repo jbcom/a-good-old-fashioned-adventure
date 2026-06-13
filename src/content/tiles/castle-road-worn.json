@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:castle-road-worn",
+  "kind": "tile",
+  "variantOf": "tile:castle-road",
+  "solid": false,
+  "description": "Worn flagstone — RPG Tiles Vector grey paving cell, native 64px.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 640,
+    "y": 256,
+    "w": 64,
+    "h": 64
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:magma-heart",
+  "kind": "map",
+  "name": "The Magma Heart",
+  "size": { "cols": 50, "rows": 26 },
+  "baseTile": "tile:ruin-mosaic",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain-crag" },
+    {
+      "op": "region",
+      "tile": "tile:sand",
+      "x0": 2,
+      "x1": 18,
+      "y0": 2,
+      "y1": 10,
+      "note": "the drifted ash-bank walling the north of the heart"
+    },
+    {
+      "op": "region",
+      "tile": "tile:sand-roots",
+      "x0": 2,
+      "x1": 16,
+      "y0": 16,
+      "y1": 24,
+      "note": "the cracked south ash-pan"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path-pebbles",
+      "y": 12,
+      "x0": 2,
+      "x1": 47,
+      "note": "the clinker causeway to the magma heart the line must hold"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path-pebbles",
+      "y": 13,
+      "x0": 2,
+      "x1": 47,
+      "note": "causeway, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 17,
+      "y0": 2,
+      "y1": 9,
+      "note": "a slag-arch pinching the causeway (the gap is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 33,
+      "y0": 16,
+      "y1": 23,
+      "note": "a second slag-arch off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain-scree",
+      "x0": 38,
+      "x1": 47,
+      "y0": 2,
+      "y1": 10,
+      "note": "the clinker-cone of the heart's north rim"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain-scree",
+      "x0": 38,
+      "x1": 47,
+      "y0": 16,
+      "y1": 24,
+      "note": "the clinker-cone where the dragon's ash-mother broods"
+    },
+    {
+      "op": "region",
+      "tile": "tile:ruin-floor",
+      "x0": 40,
+      "x1": 47,
+      "y0": 10,
+      "y1": 16,
+      "note": "the basalt dais where the causeway makes landfall — the climax stand"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 200 },
+  "spawns": {
+    "default": { "x": 48, "y": 200 },
+    "entry": { "x": 48, "y": 200 }
+  },
+  "entities": [
+    {
+      "ref": "prop:ruin-column",
+      "x": 200,
+      "y": 208,
+      "note": "a basalt column at the causeway's foot"
+    },
+    {
+      "ref": "prop:sandstone-arch",
+      "x": 300,
+      "y": 224,
+      "note": "a heat-warped arch leaning on the causeway"
+    },
+    {
+      "ref": "prop:dungeon-web",
+      "x": 360,
+      "y": 170,
+      "note": "the great ash-web of the slag-arch"
+    },
+    {
+      "ref": "prop:ruin-mural",
+      "x": 520,
+      "y": 224,
+      "note": "a fire-glazed mural of the waste before the dragon came"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 600,
+      "y": 224,
+      "contents": "Gold",
+      "note": "the magma-hoard's slag-locked coin"
+    },
+    {
+      "enemy": "ashmother-tyrant",
+      "x": 680,
+      "y": 200,
+      "note": "ashlands lair r3 CLIMAX: the ashmother-tyrant, the ash-mother the waste dragon set to brood the magma heart. The deepest authored climax of the waste. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:magma-mouth", "x": 240, "y": 200, "note": "spawn zone — the causeway mouth" },
+    {
+      "id": "gate:magma-arch",
+      "x": 380,
+      "y": 176,
+      "note": "spawn zone — past the slag-arch, upper"
+    },
+    { "id": "gate:magma-pan", "x": 420, "y": 264, "note": "spawn zone — the lower ash-pan" },
+    { "id": "gate:magma-dais", "x": 620, "y": 200, "note": "spawn zone — the basalt dais" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:magma-heart-landmark",
+      "kind": "landmark",
+      "label": "The Magma Heart",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 184, "x1": 80, "y1": 216 }
+    }
+  ]
+}

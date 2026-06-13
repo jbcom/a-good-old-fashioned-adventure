@@ -16,7 +16,7 @@
     "hue": 200,
     "roseYield": 6
   },
-  "unlocks": ["upgrade:dragon-might-sunken-road", "upgrade:dragon-kin-castle-approach"],
+  "unlocks": ["upgrade:dragon-might-sunken-road", "upgrade:dragon-kin-mistmire"],
   "track": "encounters",
   "note": "Kin boss for sunken-road. Rose-OR-gem dual cost (roses logarithmic shortcut, gems exponential fallback — docs/RAIL-COMMAND.md §dual-cost)."
 }

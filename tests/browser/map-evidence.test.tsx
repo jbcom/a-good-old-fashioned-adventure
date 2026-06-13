@@ -5,6 +5,7 @@ import { page } from "vitest/browser";
 import { App } from "../../src/app/App";
 import { maps } from "../../src/lib/content/registry";
 import { MemorySaveRepository } from "../../src/persistence/saveRepository";
+import { preloadSheetImages } from "../../src/render/atlas";
 import { wait } from "../harness/wait";
 
 let container: HTMLDivElement | undefined;
@@ -46,6 +47,10 @@ function unmountApp() {
 
 it("captures per-map experience evidence for every map", async () => {
   await page.viewport(1280, 720);
+  // decode every purchased PNG sheet (heroes, props, AND the ground packs)
+  // BEFORE any capture, so the evidence shows the real base+overlay terrain
+  // rather than the base-color-only fallback while images are still loading
+  await preloadSheetImages();
   await wait(100);
 
   for (const map of maps.values()) {

@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:shop-floor",
+  "kind": "tile",
+  "solid": false,
+  "description": "Shop floorboards — Retro Textures wood plank floor (64px), warm worn timber.",
+  "sheet": {
+    "image": "tilemaps/retro/floor_wood_planks.png",
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 64
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

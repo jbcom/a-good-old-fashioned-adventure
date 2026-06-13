@@ -1,0 +1,158 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:drowned-hold",
+  "kind": "map",
+  "name": "The Drowned Hold",
+  "size": { "cols": 50, "rows": 26 },
+  "baseTile": "tile:ruin-floor",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "region",
+      "tile": "tile:water-reeds",
+      "x0": 2,
+      "x1": 16,
+      "y0": 2,
+      "y1": 10,
+      "note": "the kelp-choked north bilge of the flooded hold"
+    },
+    {
+      "op": "region",
+      "tile": "tile:sand",
+      "x0": 2,
+      "x1": 14,
+      "y0": 16,
+      "y1": 24,
+      "note": "the silted south bank"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:wood-bridge",
+      "y": 12,
+      "x0": 2,
+      "x1": 47,
+      "note": "the floating gangway to the hold the line must hold"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:wood-bridge",
+      "y": 13,
+      "x0": 2,
+      "x1": 47,
+      "note": "gangway, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 17,
+      "y0": 2,
+      "y1": 9,
+      "note": "a flooded bulkhead pinching the gangway (the gap is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 33,
+      "y0": 16,
+      "y1": 23,
+      "note": "a second bulkhead off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 38,
+      "x1": 47,
+      "y0": 2,
+      "y1": 10,
+      "note": "the hold's drowned bilge, north reach"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 38,
+      "x1": 47,
+      "y0": 16,
+      "y1": 24,
+      "note": "the drowned bilge where the dragon's tide-mother broods"
+    },
+    {
+      "op": "region",
+      "tile": "tile:ruin-mosaic",
+      "x0": 40,
+      "x1": 47,
+      "y0": 10,
+      "y1": 16,
+      "note": "the captain's mosaic stateroom where the gangway makes landfall — the climax stand"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 200 },
+  "spawns": {
+    "default": { "x": 48, "y": 200 },
+    "entry": { "x": 48, "y": 200 }
+  },
+  "entities": [
+    {
+      "ref": "prop:sand-sail-wreck",
+      "x": 200,
+      "y": 208,
+      "note": "a stove-in launch at the gangway's foot"
+    },
+    {
+      "ref": "prop:supply-crate",
+      "x": 300,
+      "y": 224,
+      "note": "a hold-crate floated loose"
+    },
+    {
+      "ref": "prop:dungeon-web",
+      "x": 360,
+      "y": 170,
+      "note": "the great kelp-web of the bulkhead"
+    },
+    {
+      "ref": "prop:ruin-mural",
+      "x": 520,
+      "y": 224,
+      "note": "a barnacled mural of the harbour before the dragon came"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 600,
+      "y": 224,
+      "contents": "Gold",
+      "note": "the hold-hoard's drowned coin"
+    },
+    {
+      "enemy": "tidemother-tyrant",
+      "x": 680,
+      "y": 200,
+      "note": "harbour lair r3 CLIMAX: the tidemother-tyrant, the tide-mother the harbour dragon set to brood the drowned hold. The deepest authored climax of the harbour. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:hold-mouth", "x": 240, "y": 200, "note": "spawn zone — the gangway mouth" },
+    {
+      "id": "gate:hold-bulkhead",
+      "x": 380,
+      "y": 176,
+      "note": "spawn zone — past the bulkhead, upper"
+    },
+    { "id": "gate:hold-bank", "x": 420, "y": 264, "note": "spawn zone — the lower silt-bank" },
+    {
+      "id": "gate:hold-stateroom",
+      "x": 620,
+      "y": 200,
+      "note": "spawn zone — the captain's stateroom"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:drowned-hold-landmark",
+      "kind": "landmark",
+      "label": "The Drowned Hold",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 184, "x1": 80, "y1": 216 }
+    }
+  ]
+}

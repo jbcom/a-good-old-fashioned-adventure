@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:stone-floor-worn",
+  "kind": "tile",
+  "variantOf": "tile:stone-floor",
+  "solid": false,
+  "description": "Worn stone slab with a faint hairline — Kenney Roguelike Dungeon cell (tilemaps/kenney-dungeon.png, 16px on 17px stride; col 9, row 3). The light crack reads against the stone-floor base, matching the dungeon-floor family.",
+  "sheet": {
+    "image": "tilemaps/kenney-dungeon.png",
+    "x": 153,
+    "y": 51,
+    "w": 16,
+    "h": 16
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

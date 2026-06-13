@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:sand",
+  "kind": "tile",
+  "solid": false,
+  "description": "Desert sand — Retro Textures Fantasy pebbly sand floor (64px), real wind-scattered sand grains, the dune floor.",
+  "sheet": {
+    "image": "tilemaps/retro/floor_ground_sand.png",
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 64
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

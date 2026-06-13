@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:ashlands-crossing",
+  "label": "Cross the Ashlands",
+  "category": "route",
+  "cost": {
+    "roses": 7,
+    "gems": 160
+  },
+  "prerequisites": ["upgrade:frostpeak-ascent"],
+  "routePack": "ashlands",
+  "unlocks": ["upgrade:lair-ashlands-waste-1", "upgrade:castle-approach-siege"],
+  "track": "roads",
+  "note": "The burnt caldera waste below the castle wall. Unlocking it opens the waste and gates the castle siege behind it."
+}

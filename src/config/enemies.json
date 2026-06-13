@@ -66,10 +66,90 @@
       "archetypes": ["gate-sentry", "gatehouse-vulture", "dune-adder"]
     },
     {
+      "id": "region:mistmire",
+      "label": "Mistmire Marsh",
+      "tier": 4,
+      "threat": 7,
+      "maps": ["map:mistmire-marsh"],
+      "archetypes": ["bog-serpent", "fen-raven", "mire-boar", "dune-adder"]
+    },
+    {
+      "id": "region:mistmire-lair",
+      "label": "The Mistmire Lair",
+      "tier": 4,
+      "threat": 8,
+      "maps": ["map:mire-shallows", "map:mire-warren", "map:mire-heart"],
+      "archetypes": ["bog-serpent", "fen-raven", "mire-boar", "crypt-bat"]
+    },
+    {
+      "id": "region:crag",
+      "label": "The Crag Pass",
+      "tier": 4,
+      "threat": 9,
+      "maps": ["map:crag-pass"],
+      "archetypes": ["crag-vulture", "scree-adder", "cliff-bat", "mire-boar"]
+    },
+    {
+      "id": "region:crag-lair",
+      "label": "The Crag Roost",
+      "tier": 4,
+      "threat": 10,
+      "maps": ["map:crag-mouth", "map:scree-warren", "map:summit-roost"],
+      "archetypes": ["crag-vulture", "scree-adder", "cliff-bat", "crypt-bat"]
+    },
+    {
+      "id": "region:harbour",
+      "label": "Saltmarsh Harbour",
+      "tier": 4,
+      "threat": 11,
+      "maps": ["map:saltmarsh-harbour"],
+      "archetypes": ["harbour-gull", "dock-rat", "tide-eel", "crag-vulture"]
+    },
+    {
+      "id": "region:harbour-lair",
+      "label": "The Harbour Deeps",
+      "tier": 4,
+      "threat": 12,
+      "maps": ["map:tidewrack-cove", "map:smugglers-run", "map:drowned-hold"],
+      "archetypes": ["harbour-gull", "dock-rat", "tide-eel", "crypt-bat"]
+    },
+    {
+      "id": "region:frostpeak",
+      "label": "The Frostpeak Climb",
+      "tier": 4,
+      "threat": 13,
+      "maps": ["map:frostpeak-climb"],
+      "archetypes": ["frost-raven", "rime-bat", "snow-adder", "crag-vulture"]
+    },
+    {
+      "id": "region:frostpeak-lair",
+      "label": "The Frostpeak Vault",
+      "tier": 4,
+      "threat": 14,
+      "maps": ["map:glacier-maw", "map:rime-warren", "map:frostheart-vault"],
+      "archetypes": ["frost-raven", "rime-bat", "snow-adder", "crypt-bat"]
+    },
+    {
+      "id": "region:ashlands",
+      "label": "The Ashlands Waste",
+      "tier": 4,
+      "threat": 15,
+      "maps": ["map:ashlands-waste"],
+      "archetypes": ["ash-buzzard", "cinder-adder", "slag-rat", "dune-adder"]
+    },
+    {
+      "id": "region:ashlands-lair",
+      "label": "The Magma Deeps",
+      "tier": 4,
+      "threat": 16,
+      "maps": ["map:cinder-mouth", "map:slag-warren", "map:magma-heart"],
+      "archetypes": ["ash-buzzard", "cinder-adder", "slag-rat", "crypt-bat"]
+    },
+    {
       "id": "region:sunken-crypt",
       "label": "The Sunken Crypt (sunken-road lair)",
       "tier": 4,
-      "threat": 7,
+      "threat": 17,
       "maps": ["map:desert-ruins", "map:castle-dungeon", "map:crypt-vault"],
       "archetypes": ["dune-adder", "carrion-raven", "crypt-bat", "crypt-skeleton", "crypt-sentry"]
     },
@@ -77,7 +157,7 @@
       "id": "region:siege-warcamp",
       "label": "The Siege Warcamp (castle-approach lair)",
       "tier": 4,
-      "threat": 8,
+      "threat": 18,
       "maps": ["map:castle-yard"],
       "archetypes": [
         "forest-orc",
@@ -91,7 +171,7 @@
       "id": "region:dungeon",
       "label": "Obsidian Throne Dungeon",
       "tier": 4,
-      "threat": 9,
+      "threat": 19,
       "maps": [
         "map:castle-hall",
         "map:castle-library",

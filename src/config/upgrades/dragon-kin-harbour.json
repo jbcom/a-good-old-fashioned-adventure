@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-kin-harbour",
+  "label": "Rouse the Tide-Uncle",
+  "category": "enemy",
+  "cost": {
+    "roses": 6,
+    "gems": 225
+  },
+  "prerequisites": ["upgrade:dragon-kin-crag"],
+  "enemyFamily": "dragon",
+  "unlocksEnemy": "dragon",
+  "dragonKin": {
+    "mapId": "map:saltmarsh-harbour",
+    "relation": "tide-uncle",
+    "hue": 175,
+    "roseYield": 7
+  },
+  "unlocks": ["upgrade:dragon-might-harbour", "upgrade:dragon-kin-frostpeak"],
+  "track": "encounters",
+  "note": "Kin boss for saltmarsh-harbour, spliced between crag and castle-approach."
+}

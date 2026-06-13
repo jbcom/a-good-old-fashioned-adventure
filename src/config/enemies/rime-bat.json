@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "rime-bat",
+  "name": "Rime Bat",
+  "sprite": "sprite:bat",
+  "palette": "palette:base",
+  "family": "rime-bat",
+  "hp": 14,
+  "speed": 52,
+  "hitbox": {
+    "w": 10,
+    "h": 10
+  },
+  "behavior": "patrol"
+}

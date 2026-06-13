@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-crag-pass-3",
+  "label": "Storm the Summit Roost",
+  "category": "map",
+  "cost": {
+    "roses": 7,
+    "gems": 290
+  },
+  "prerequisites": ["upgrade:lair-crag-pass-2"],
+  "lairRoom": {
+    "mapId": "map:crag-pass",
+    "depth": 3,
+    "roomMap": "map:summit-roost"
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Crag lair room 3. Unlocking it relocates the princess deeper into the crag."
+}

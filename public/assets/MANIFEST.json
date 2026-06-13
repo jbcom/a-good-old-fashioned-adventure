@@ -717,22 +717,6 @@
       ]
     },
     {
-      "id": "the-ground",
-      "title": "The Ground (autotile cliffs, dithered grounds, palette ramps)",
-      "author": "Backterria (identified from the owned library: same author/style family as The Roguelike)",
-      "source": "itch.io (purchased; manual import)",
-      "url": "https://backterria.itch.io/the-ground",
-      "license": "Backterria itch.io pack terms (see pack page at url); game-use licensed to purchaser.",
-      "mappedUse": "Terrain texture uplift candidate — autotile cliff/ledge pieces and dithered ground fills for the SA.2 terrain rework (sand + mountain families flagged weak).",
-      "files": [
-        {
-          "path": "tilemaps/ground.png",
-          "width": 448,
-          "height": 384
-        }
-      ]
-    },
-    {
       "id": "elthen-bat",
       "title": "Bat Sprite Pack",
       "author": "Elthen (Ahmet Avci)",
@@ -1348,11 +1332,6 @@
           "path": "tilemaps/kenney-dungeon.png",
           "width": 492,
           "height": 305
-        },
-        {
-          "path": "tilemaps/kenney-dungeon-dark.png",
-          "width": 64,
-          "height": 16
         }
       ]
     },
@@ -1369,6 +1348,93 @@
           "path": "tilemaps/kenney-interior.png",
           "width": 458,
           "height": 305
+        }
+      ]
+    },
+    {
+      "id": "rpg-tiles-vector",
+      "title": "RPG Tiles Vector (Kenney) — 64px soft-shaded outdoor terrain",
+      "author": "Kenney (kenney.nl)",
+      "source": "itch.io / kenney.nl (CC0)",
+      "url": "https://kenney.nl/assets/rpg-urban-pack",
+      "license": "CC0 1.0 (public domain)",
+      "mappedUse": "Outdoor terrain at native 64px: grass/dirt/water/stone fills + autotile edges, trees, walls, roofs, doors. The richest-resolution terrain pack — ground bakes at native res so it never magnifies into a flat fill.",
+      "files": [
+        {
+          "path": "tilemaps/rpg-terrain.png",
+          "width": 1280,
+          "height": 832
+        }
+      ]
+    },
+    {
+      "id": "retro-textures-fantasy",
+      "title": "Retro Textures Fantasy — 64px tileable interior floors/walls",
+      "author": "Kenney (kenney.nl)",
+      "source": "itch.io / kenney.nl (CC0)",
+      "url": "https://kenney.nl/assets",
+      "license": "CC0 1.0 (public domain)",
+      "mappedUse": "High-res 64px interior floor textures: stone, wood planks, tan/blue tile, sand, dirt, grass — scale-matched to RPG Tiles Vector outdoor terrain for shop/tavern/ruin/castle floors + a true sand.",
+      "files": [
+        {
+          "path": "tilemaps/retro/floor_ground_dirt.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_ground_grass.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_ground_sand.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_stone.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_stone_pattern.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_tiles_blue_small.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_tiles_tan_large.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_wood_planks.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_wood_planks_wide.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_stone_sand_random.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_stone_sand_inset.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_tiles_sand_large.png",
+          "width": 64,
+          "height": 64
         }
       ]
     }

@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:village-cobble-moss",
+  "kind": "tile",
+  "solid": false,
+  "description": "Mossy village cobble — RPG Tiles Vector cobbled-dirt cell, native 64px.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 384,
+    "y": 64,
+    "w": 64,
+    "h": 64
+  },
+  "variantOf": "tile:village-cobble",
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

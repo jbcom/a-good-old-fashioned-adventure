@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:tavern-floor",
+  "kind": "tile",
+  "solid": false,
+  "description": "Tavern floorboards — Retro Textures wide wood plank floor (64px).",
+  "sheet": {
+    "image": "tilemaps/retro/floor_wood_planks_wide.png",
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 64
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:saltmarsh-harbour",
+  "kind": "map",
+  "name": "Saltmarsh Harbour",
+  "size": { "cols": 30, "rows": 58 },
+  "baseTile": "tile:grass",
+  "bgmTheme": "overworld",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain" },
+    {
+      "op": "region",
+      "tile": "tile:water",
+      "x0": 1,
+      "x1": 11,
+      "y0": 2,
+      "y1": 56,
+      "note": "the open sea filling the whole western half of the harbour"
+    },
+    {
+      "op": "region",
+      "tile": "tile:sand",
+      "x0": 11,
+      "x1": 15,
+      "y0": 2,
+      "y1": 56,
+      "note": "the tide-line strand between sea and road"
+    },
+    {
+      "op": "region",
+      "tile": "tile:wood-bridge",
+      "x0": 6,
+      "x1": 14,
+      "y0": 48,
+      "y1": 52,
+      "note": "the southern fishing pier reaching into the sea"
+    },
+    {
+      "op": "region",
+      "tile": "tile:wood-bridge",
+      "x0": 5,
+      "x1": 14,
+      "y0": 30,
+      "y1": 34,
+      "note": "the main cargo wharf"
+    },
+    {
+      "op": "region",
+      "tile": "tile:wood-bridge",
+      "x0": 7,
+      "x1": 14,
+      "y0": 12,
+      "y1": 16,
+      "note": "the northern jetty below the headland"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:castle-road",
+      "x": 20,
+      "y0": 6,
+      "y1": 56,
+      "note": "the harbour-front high road the line marches"
+    },
+    {
+      "op": "region",
+      "tile": "tile:castle-road",
+      "x0": 18,
+      "x1": 23,
+      "y0": 3,
+      "y1": 6,
+      "note": "the harbourmaster's stone landing where the kin waits"
+    }
+  ],
+  "terrainVariants": [
+    {
+      "baseTile": "tile:grass",
+      "variants": ["tile:grass", "tile:grass-tufts", "tile:grass-flowers", "tile:grass-roots"],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 911,
+      "note": "the salt-meadow above the strand"
+    },
+    {
+      "baseTile": "tile:water",
+      "variants": ["tile:water", "tile:water-glint", "tile:water-reeds", "tile:water-deep"],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 912,
+      "note": "the harbour swell, glints and deeps"
+    },
+    {
+      "baseTile": "tile:sand",
+      "variants": ["tile:sand", "tile:sand-ripple", "tile:sand-pebbles", "tile:sand-roots"],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 913,
+      "note": "the tide-line strand"
+    },
+    {
+      "baseTile": "tile:castle-road",
+      "variants": [
+        "tile:castle-road",
+        "tile:castle-road-cracked",
+        "tile:castle-road-moss",
+        "tile:castle-road-worn"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 914,
+      "note": "the harbour-front high road"
+    }
+  ],
+  "playerSpawn": { "x": 320, "y": 880 },
+  "spawns": {
+    "default": { "x": 320, "y": 880 },
+    "entry": { "x": 320, "y": 880 },
+    "from-crag-pass": { "x": 320, "y": 880 }
+  },
+  "entities": [
+    {
+      "ref": "prop:signpost",
+      "x": 336,
+      "y": 872,
+      "note": "the harbour road begins"
+    },
+    {
+      "ref": "prop:broken-cart",
+      "x": 280,
+      "y": 620,
+      "note": "a fishmonger's cart abandoned on the wharf road"
+    },
+    {
+      "ref": "prop:barrel",
+      "x": 230,
+      "y": 500,
+      "note": "a salt-cask stacked on the cargo wharf"
+    },
+    {
+      "ref": "prop:sand-sail-wreck",
+      "x": 200,
+      "y": 380,
+      "note": "a beached wreck rotting on the strand"
+    },
+    {
+      "ref": "prop:barrel",
+      "x": 250,
+      "y": 240,
+      "note": "a jetty cask below the headland"
+    },
+    {
+      "enemy": "dragon-guardian",
+      "x": 312,
+      "y": 120,
+      "withoutRoutePack": "castle-interior",
+      "note": "the harbour dragon holds the landing until the castle opens"
+    },
+    {
+      "ref": "char:princess-amber",
+      "x": 312,
+      "y": 72,
+      "dir": 1,
+      "withoutRoutePack": "castle-interior",
+      "note": "Princess Amber waits on the stone landing until the castle opens"
+    },
+    {
+      "ref": "prop:castle-gatehouse",
+      "x": 312,
+      "y": 64,
+      "requiresRoutePack": "castle-interior",
+      "note": "the princess is in another castle: the gate stands on the stone landing"
+    },
+    {
+      "enemy": "banner-knight",
+      "x": 312,
+      "y": 136,
+      "requiresRoutePack": "castle-interior",
+      "note": "the harbour landing becomes a waypoint guarded by its champion"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:harbour-castle-gate",
+      "kind": "portal",
+      "label": "Through the castle gate",
+      "toMap": "map:castle-hall",
+      "toSpawn": "rescue-gate",
+      "sfx": "interact",
+      "requiresRoutePack": "castle-interior",
+      "zone": { "x0": 288, "y0": 40, "x1": 336, "y1": 76 }
+    },
+    {
+      "id": "trigger:harbour-pier-bend",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the bend past the fishing pier",
+      "zone": { "x0": 280, "y0": 720, "x1": 360, "y1": 780 }
+    },
+    {
+      "id": "trigger:harbour-wharf",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the cargo wharf crossing",
+      "zone": { "x0": 280, "y0": 460, "x1": 360, "y1": 520 }
+    },
+    {
+      "id": "trigger:harbour-jetty",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the northern jetty",
+      "zone": { "x0": 280, "y0": 200, "x1": 360, "y1": 260 }
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:harbour-pier", "x": 320, "y": 800 },
+    { "id": "gate:harbour-wharf", "x": 300, "y": 540 },
+    { "id": "gate:harbour-strand", "x": 240, "y": 360 },
+    { "id": "gate:harbour-landing", "x": 312, "y": 190 }
+  ]
+}

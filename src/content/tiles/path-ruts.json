@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:path-ruts",
+  "kind": "tile",
+  "variantOf": "tile:path",
+  "solid": false,
+  "description": "Rutted dirt — RPG Tiles Vector dirt cell with wheel-worn grooves, native 64px.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 576,
+    "y": 64,
+    "w": 64,
+    "h": 64
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

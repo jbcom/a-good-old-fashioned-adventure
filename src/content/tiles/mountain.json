@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:mountain",
+  "kind": "tile",
+  "solid": true,
+  "description": "Mountain rock — the RPG Tiles Vector pack's opaque 64px grey stone block (public/assets/tilemaps/rpg-terrain.png, cols 13-14, rows 3-4). A solid impassable stone barrier authored at native resolution, replacing the dark navy .pix band that read as a flat saturated wall. The 2×2 field varies the rock face. Solid so the rail routes around it.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 832,
+    "y": 192,
+    "w": 64,
+    "h": 64,
+    "field": { "cols": 2, "rows": 2 }
+  },
+  "koota": {
+    "traits": ["Tile", "Solid"]
+  }
+}

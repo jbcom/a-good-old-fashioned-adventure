@@ -27,8 +27,23 @@ export interface TileDef {
   layers?: DrawOp[];
   rows?: string[];
   /** purchased-sheet crop (slicer manifest) — same second raster source
-   * props and sprites carry; palette swaps never apply */
-  sheet?: { image: string; x: number; y: number; w: number; h: number };
+   * props and sprites carry; palette swaps never apply. The (x,y,w,h) crop is
+   * the source's NATIVE resolution (16 for roguelike, 64 for RPG Tiles Vector)
+   * and the ground compositor bakes at native res so the texture never
+   * magnifies into a flat blob. With `field`, (x,y) is the top-left of a
+   * cols×rows block of w×h cells and the compositor samples a per-(col,row)
+   * cell so a ground area shows the pack's variation, not one repeated cell. */
+  sheet?: {
+    image: string;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    /** stepX/stepY default to w/h; set larger for a gutter between cells (e.g.
+     * the Kenney dungeon sheet's 17px stride over 16px cells) so a field cell
+     * advances by the stride and never crops the 1px separator. */
+    field?: { cols: number; rows: number; stepX?: number; stepY?: number };
+  };
   koota: { traits: string[] };
 }
 

@@ -31,9 +31,9 @@ describe("registries are fully populated", () => {
     // unit-feel FX sprites (deploy-puff, charge-dust, blade-arc, heal-glow,
     // wither-tint). The bespoke emblems that remain are identity nodes
     // (dragon/lair/relic/route/named-boss/rose-major).
-    expect(sprites.size).toBe(129);
+    expect(sprites.size).toBe(159);
     expect(animations.size).toBe(7);
-    expect(maps.size).toBe(24);
+    expect(maps.size).toBe(44);
     expect(quests.size).toBe(21);
     expect(dialogueBanks.size).toBe(31);
     expect(characters.size).toBe(35);

@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:mistmire-causeway",
+  "label": "Ford the Mistmire",
+  "category": "route",
+  "cost": {
+    "roses": 5,
+    "gems": 120
+  },
+  "prerequisites": ["upgrade:sunken-shortcut"],
+  "routePack": "mistmire",
+  "unlocks": ["upgrade:lair-mistmire-marsh-1", "upgrade:crag-ascent"],
+  "track": "roads",
+  "note": "The drowned road between the dunes and the castle. Unlocking the mistmire route opens the marsh spine map and gates the castle siege behind it."
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "scree-adder",
+  "name": "Scree Adder",
+  "sprite": "sprite:snake",
+  "palette": "palette:base",
+  "family": "scree-adder",
+  "hp": 20,
+  "speed": 34,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "patrol"
+}

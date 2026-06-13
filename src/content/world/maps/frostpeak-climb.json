@@ -1,0 +1,230 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:frostpeak-climb",
+  "kind": "map",
+  "name": "The Frostpeak Climb",
+  "size": { "cols": 30, "rows": 58 },
+  "baseTile": "tile:water",
+  "bgmTheme": "overworld",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain-ledge" },
+    {
+      "op": "region",
+      "tile": "tile:castle-road",
+      "x0": 13,
+      "x1": 17,
+      "y0": 2,
+      "y1": 56,
+      "note": "the narrow ice-causeway the climb follows up the glacier — the rest is open crevasse-ice"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain",
+      "x0": 1,
+      "x1": 8,
+      "y0": 2,
+      "y1": 20,
+      "note": "the west arete hemming the glacier, upper"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain",
+      "x0": 22,
+      "x1": 28,
+      "y0": 8,
+      "y1": 26,
+      "note": "the east arete"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain-scree",
+      "x0": 1,
+      "x1": 7,
+      "y0": 38,
+      "y1": 56,
+      "note": "the lower west moraine"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain-scree",
+      "x0": 23,
+      "x1": 28,
+      "y0": 34,
+      "y1": 56,
+      "note": "the lower east moraine"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass-roots",
+      "x0": 10,
+      "x1": 20,
+      "y0": 42,
+      "y1": 50,
+      "note": "a thin band of frozen tundra-turf at the glacier's foot"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass-roots",
+      "x0": 11,
+      "x1": 19,
+      "y0": 20,
+      "y1": 28,
+      "note": "a wind-scoured tundra shelf mid-climb"
+    },
+    {
+      "op": "region",
+      "tile": "tile:path",
+      "x0": 12,
+      "x1": 18,
+      "y0": 3,
+      "y1": 6,
+      "note": "the wind-scoured summit cornice where the kin waits"
+    }
+  ],
+  "terrainVariants": [
+    {
+      "baseTile": "tile:water",
+      "variants": ["tile:water", "tile:water-glint", "tile:water-reeds", "tile:water-deep"],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 1011,
+      "note": "the glacier's crevasses and blue ice"
+    },
+    {
+      "baseTile": "tile:castle-road",
+      "variants": [
+        "tile:castle-road",
+        "tile:castle-road-cracked",
+        "tile:castle-road-moss",
+        "tile:castle-road-worn"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 1012,
+      "note": "the rimed ice-causeway"
+    },
+    {
+      "baseTile": "tile:mountain",
+      "variants": [
+        "tile:mountain",
+        "tile:mountain-crag",
+        "tile:mountain-scree",
+        "tile:mountain-ledge"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 1013,
+      "note": "the aretes and moraine"
+    },
+    {
+      "baseTile": "tile:grass-roots",
+      "variants": ["tile:grass", "tile:grass-tufts", "tile:grass-roots", "tile:grass-flowers"],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 1014,
+      "note": "the tundra shelves"
+    }
+  ],
+  "playerSpawn": { "x": 240, "y": 880 },
+  "spawns": {
+    "default": { "x": 240, "y": 880 },
+    "entry": { "x": 240, "y": 880 },
+    "from-saltmarsh-harbour": { "x": 240, "y": 880 }
+  },
+  "entities": [
+    {
+      "ref": "prop:signpost",
+      "x": 256,
+      "y": 872,
+      "note": "the frostpeak climb begins"
+    },
+    {
+      "ref": "prop:broken-cart",
+      "x": 240,
+      "y": 700,
+      "note": "an expedition sled abandoned at the glacier's foot"
+    },
+    {
+      "ref": "prop:supply-crate",
+      "x": 245,
+      "y": 480,
+      "note": "a depot-crate cached on the tundra shelf"
+    },
+    {
+      "ref": "prop:barrel",
+      "x": 240,
+      "y": 360,
+      "note": "a fuel-cask iced to the causeway"
+    },
+    {
+      "ref": "prop:stump",
+      "x": 250,
+      "y": 280,
+      "note": "a krummholz snag below the summit cornice"
+    },
+    {
+      "enemy": "dragon-guardian",
+      "x": 240,
+      "y": 120,
+      "withoutRoutePack": "castle-interior",
+      "note": "the frost dragon holds the cornice until the castle opens"
+    },
+    {
+      "ref": "char:princess-amber",
+      "x": 240,
+      "y": 72,
+      "dir": 1,
+      "withoutRoutePack": "castle-interior",
+      "note": "Princess Amber waits on the summit cornice until the castle opens"
+    },
+    {
+      "ref": "prop:castle-gatehouse",
+      "x": 240,
+      "y": 64,
+      "requiresRoutePack": "castle-interior",
+      "note": "the princess is in another castle: the gate stands on the cornice"
+    },
+    {
+      "enemy": "banner-knight",
+      "x": 240,
+      "y": 136,
+      "requiresRoutePack": "castle-interior",
+      "note": "the frostpeak summit becomes a waypoint guarded by its champion"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:frost-castle-gate",
+      "kind": "portal",
+      "label": "Through the castle gate",
+      "toMap": "map:castle-hall",
+      "toSpawn": "rescue-gate",
+      "sfx": "interact",
+      "requiresRoutePack": "castle-interior",
+      "zone": { "x0": 216, "y0": 40, "x1": 264, "y1": 76 }
+    },
+    {
+      "id": "trigger:frost-foot-bend",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the bend at the glacier's foot",
+      "zone": { "x0": 200, "y0": 700, "x1": 280, "y1": 760 }
+    },
+    {
+      "id": "trigger:frost-tundra-shelf",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the mid-climb tundra shelf",
+      "zone": { "x0": 190, "y0": 380, "x1": 270, "y1": 440 }
+    },
+    {
+      "id": "trigger:frost-cornice",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the final cornice below the peak",
+      "zone": { "x0": 200, "y0": 160, "x1": 280, "y1": 220 }
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:frost-foot", "x": 240, "y": 800 },
+    { "id": "gate:frost-shelf", "x": 240, "y": 560 },
+    { "id": "gate:frost-mid", "x": 240, "y": 360 },
+    { "id": "gate:frost-cornice", "x": 240, "y": 190 }
+  ]
+}

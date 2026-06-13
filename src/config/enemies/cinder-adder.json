@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "cinder-adder",
+  "name": "Cinder Adder",
+  "sprite": "sprite:snake",
+  "palette": "palette:base",
+  "family": "cinder-adder",
+  "hp": 22,
+  "speed": 36,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "patrol"
+}

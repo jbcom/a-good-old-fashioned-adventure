@@ -108,6 +108,36 @@
       "role": "hazard shortcut, desert silhouettes, and optional ruin objectives"
     },
     {
+      "id": "mistmire",
+      "label": "Mistmire Marsh",
+      "maps": ["map:mistmire-marsh"],
+      "role": "the drowned road between the dunes and the castle"
+    },
+    {
+      "id": "crag",
+      "label": "The Crag Pass",
+      "maps": ["map:crag-pass"],
+      "role": "the high mountain pass above the drowned marsh"
+    },
+    {
+      "id": "harbour",
+      "label": "Saltmarsh Harbour",
+      "maps": ["map:saltmarsh-harbour"],
+      "role": "the salt-marsh harbour road along the sea wharves"
+    },
+    {
+      "id": "frostpeak",
+      "label": "The Frostpeak Climb",
+      "maps": ["map:frostpeak-climb"],
+      "role": "the frozen peak climb above the salt harbour"
+    },
+    {
+      "id": "ashlands",
+      "label": "The Ashlands Waste",
+      "maps": ["map:ashlands-waste"],
+      "role": "the burnt caldera waste below the castle wall"
+    },
+    {
       "id": "castle-approach",
       "label": "Siege Approach",
       "maps": ["map:castle-approach", "map:castle-yard"],
@@ -127,6 +157,11 @@
       "map:oldwood-forest",
       "map:deep-forest",
       "map:sunken-road",
+      "map:mistmire-marsh",
+      "map:crag-pass",
+      "map:saltmarsh-harbour",
+      "map:frostpeak-climb",
+      "map:ashlands-waste",
       "map:castle-approach",
       "map:castle-hall"
     ],
@@ -164,6 +199,26 @@
     "map:castle-hall": {
       "theme": "throne-wing",
       "rooms": ["map:castle-library", "map:castle-armory", "map:castle-throne-wing"]
+    },
+    "map:mistmire-marsh": {
+      "theme": "mistmire",
+      "rooms": ["map:mire-shallows", "map:mire-warren", "map:mire-heart"]
+    },
+    "map:crag-pass": {
+      "theme": "crag",
+      "rooms": ["map:crag-mouth", "map:scree-warren", "map:summit-roost"]
+    },
+    "map:saltmarsh-harbour": {
+      "theme": "harbour",
+      "rooms": ["map:tidewrack-cove", "map:smugglers-run", "map:drowned-hold"]
+    },
+    "map:frostpeak-climb": {
+      "theme": "frostpeak",
+      "rooms": ["map:glacier-maw", "map:rime-warren", "map:frostheart-vault"]
+    },
+    "map:ashlands-waste": {
+      "theme": "ashlands",
+      "rooms": ["map:cinder-mouth", "map:slag-warren", "map:magma-heart"]
     }
   }
 }

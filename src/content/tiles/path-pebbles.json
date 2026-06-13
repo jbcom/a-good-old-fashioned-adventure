@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:path-pebbles",
+  "kind": "tile",
+  "variantOf": "tile:path",
+  "solid": false,
+  "description": "Pebbled dirt — RPG Tiles Vector dirt cell scattered with stones, native 64px.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 512,
+    "y": 64,
+    "w": 64,
+    "h": 64
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

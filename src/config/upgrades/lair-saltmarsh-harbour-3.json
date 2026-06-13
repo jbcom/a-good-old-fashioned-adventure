@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-saltmarsh-harbour-3",
+  "label": "Plumb the Drowned Hold",
+  "category": "map",
+  "cost": {
+    "roses": 7,
+    "gems": 300
+  },
+  "prerequisites": ["upgrade:lair-saltmarsh-harbour-2"],
+  "lairRoom": {
+    "mapId": "map:saltmarsh-harbour",
+    "depth": 3,
+    "roomMap": "map:drowned-hold"
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Harbour lair room 3. Unlocking it relocates the princess deeper into the harbour deeps."
+}

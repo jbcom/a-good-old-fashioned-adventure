@@ -1,0 +1,155 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:mire-heart",
+  "kind": "map",
+  "name": "The Mire's Heart",
+  "size": { "cols": 50, "rows": 26 },
+  "baseTile": "tile:grass-roots",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain-scree" },
+    {
+      "op": "region",
+      "tile": "tile:water-reeds",
+      "x0": 2,
+      "x1": 16,
+      "y0": 2,
+      "y1": 10,
+      "note": "the reed-choked north shallows of the cavern bog"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-reeds",
+      "x0": 2,
+      "x1": 14,
+      "y0": 16,
+      "y1": 24,
+      "note": "the reed-choked south shallows"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path-moss",
+      "y": 12,
+      "x0": 2,
+      "x1": 47,
+      "note": "the sinking duckboard causeway to the heart-pool the line must hold"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path-moss",
+      "y": 13,
+      "x0": 2,
+      "x1": 47,
+      "note": "causeway, second course"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-reeds",
+      "x0": 18,
+      "x1": 31,
+      "y0": 2,
+      "y1": 10,
+      "note": "the reed-choked central shallows above the causeway"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-reeds",
+      "x0": 16,
+      "x1": 32,
+      "y0": 16,
+      "y1": 24,
+      "note": "the reed-choked shallows below the causeway"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 38,
+      "x1": 47,
+      "y0": 2,
+      "y1": 10,
+      "note": "the heart-pool's northern reach, black and still"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 38,
+      "x1": 47,
+      "y0": 16,
+      "y1": 24,
+      "note": "the heart-pool's southern reach where the mother-of-bogs broods"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass",
+      "x0": 40,
+      "x1": 47,
+      "y0": 10,
+      "y1": 16,
+      "note": "the green dais where the duckboard makes landfall — the climax stand"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 200 },
+  "spawns": {
+    "default": { "x": 48, "y": 200 },
+    "entry": { "x": 48, "y": 200 }
+  },
+  "entities": [
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 200,
+      "y": 208,
+      "note": "a reef of bones at the causeway's foot"
+    },
+    {
+      "ref": "prop:ruin-column",
+      "x": 300,
+      "y": 224,
+      "note": "a drowned column leaning over the dais"
+    },
+    {
+      "ref": "prop:dungeon-web",
+      "x": 360,
+      "y": 170,
+      "note": "the great web of the heart-pool arch"
+    },
+    {
+      "ref": "prop:ruin-mural",
+      "x": 520,
+      "y": 224,
+      "note": "a sunken mural of the bog before the dragon came"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 600,
+      "y": 224,
+      "contents": "Gold",
+      "note": "the bog-hoard's drowned coin"
+    },
+    {
+      "enemy": "bogmother-tyrant",
+      "x": 680,
+      "y": 200,
+      "note": "mistmire lair r3 CLIMAX: the bogmother-tyrant, the mother-of-bogs the marsh dragon set to brood the heart-pool. The deepest authored climax of the mire. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:heart-mouth", "x": 240, "y": 200, "note": "spawn zone — the causeway mouth" },
+    {
+      "id": "gate:heart-arch",
+      "x": 380,
+      "y": 176,
+      "note": "spawn zone — past the drowned arch, upper"
+    },
+    { "id": "gate:heart-fringe", "x": 420, "y": 264, "note": "spawn zone — the lower reed-fringe" },
+    { "id": "gate:heart-pool", "x": 620, "y": 200, "note": "spawn zone — the heart-pool dais" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:mire-heart-mouth",
+      "kind": "landmark",
+      "label": "The Mire's Heart",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 184, "x1": 80, "y1": 216 }
+    }
+  ]
+}

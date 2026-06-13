@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:water-glint",
+  "kind": "tile",
+  "variantOf": "tile:water",
+  "solid": true,
+  "description": "Glinting water — RPG Tiles Vector water cell, brighter ripple, native 64px.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 896,
+    "y": 64,
+    "w": 64,
+    "h": 64
+  },
+  "koota": {
+    "traits": ["Tile", "Solid", "AnimatedTile"]
+  }
+}

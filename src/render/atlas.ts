@@ -60,14 +60,11 @@ export function preloadSheetImages(): Promise<void> {
 }
 
 /**
- * Shared sheet-crop core: every consumer (sprite frame, prop state, tile
- * face) is a cached crop of a preloaded image, with the same
- * placeholder-until-ready / fail-loud-after discipline.
- */
-/**
- * Cached crop of a purchased sheet raster — the shared path for prop/tile
- * sheet states and the S-DAG-ICONS node emblems. Blits nothing (never stale)
- * while the sheet image is still preloading or unavailable (jsdom).
+ * Cached crop of a purchased sheet raster — the shared sheet-crop core for
+ * every consumer (sprite frame, prop state, tile face, S-DAG-ICONS node
+ * emblem), with the same placeholder-until-ready / fail-loud-after discipline.
+ * Blits nothing (never stale) while the sheet image is still preloading or
+ * unavailable (jsdom).
  */
 export function croppedSheetCanvas(
   ownerId: string,
@@ -78,8 +75,9 @@ export function croppedSheetCanvas(
   if (!image) {
     if (sheetsReady) throw new Error(`${ownerId}: sheet image missing: ${rect.image}`);
     // preload in flight (or impossible, e.g. jsdom) — blit nothing, never
-    // stale; cached per owner so the render loop doesn't churn textures
-    return baked(`${ownerId}|placeholder`, () => {
+    // stale; keyed per crop so a variable-size cell gets a correctly-sized
+    // placeholder (16px cells share, but the key stays correct if they ever differ)
+    return baked(`${cacheKey}|placeholder`, () => {
       const placeholder = document.createElement("canvas");
       placeholder.width = rect.w;
       placeholder.height = rect.h;
@@ -184,7 +182,13 @@ export function flashCanvas(spriteId: string, paletteId: string): HTMLCanvasElem
   });
 }
 
-/** Cached 16×16 tile face, rasterized from .pix rows, draw-ops, or purchased sheet. */
+/**
+ * Cached tile face, rasterized from .pix rows, draw-ops, or a purchased sheet.
+ * A sheet tile bakes at the source crop's NATIVE resolution (16 for roguelike,
+ * 64 for RPG Tiles Vector) — the ground compositor draws each tile at its own
+ * pixel size, so a high-res vector tile keeps its texture instead of being
+ * magnified into a flat blob.
+ */
 export function tileCanvas(tileId: string): HTMLCanvasElement {
   const tile = getTile(tileId);
   if (tile.sheet) {
@@ -194,4 +198,33 @@ export function tileCanvas(tileId: string): HTMLCanvasElement {
     if (tile.rows) return rasterizeRows(tile.rows, resolvePalette("palette:base"));
     return rasterizeDrawOps(tile.layers as DrawOp[], resolvePalette("palette:base"));
   });
+}
+
+/**
+ * Tile face at a specific (col,row) on the ground plane. For a `field` ground
+ * tile this samples a different native-resolution cell from the field block per
+ * board position — wrapping over the field's cols×rows — so a ground area shows
+ * the pack's variation instead of tiling one cell into visible seams. Non-field
+ * tiles ignore the position and return their single cached face.
+ */
+export function tileFieldCanvas(tileId: string, col: number, row: number): HTMLCanvasElement {
+  const tile = getTile(tileId);
+  const field = tile.sheet?.field;
+  // no field → render the single face; a truthy field guarantees tile.sheet
+  if (!field || !tile.sheet) return tileCanvas(tileId);
+  const fx = ((col % field.cols) + field.cols) % field.cols;
+  const fy = ((row % field.rows) + field.rows) % field.rows;
+  // advance by the stride (stepX/stepY), which defaults to the cell size but is
+  // larger for gapped sheets (Kenney's 17px stride over 16px cells) so a field
+  // cell lands on the next cell, never on the 1px separator between them
+  const stepX = field.stepX ?? tile.sheet.w;
+  const stepY = field.stepY ?? tile.sheet.h;
+  const rect = {
+    image: tile.sheet.image,
+    x: tile.sheet.x + fx * stepX,
+    y: tile.sheet.y + fy * stepY,
+    w: tile.sheet.w,
+    h: tile.sheet.h,
+  };
+  return croppedSheetCanvas(tileId, `${tileId}|field|${fx}x${fy}`, rect);
 }

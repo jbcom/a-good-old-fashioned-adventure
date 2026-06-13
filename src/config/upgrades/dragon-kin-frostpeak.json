@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-kin-frostpeak",
+  "label": "Rouse the Frost-Cousin",
+  "category": "enemy",
+  "cost": {
+    "roses": 7,
+    "gems": 235
+  },
+  "prerequisites": ["upgrade:dragon-kin-harbour"],
+  "enemyFamily": "dragon",
+  "unlocksEnemy": "dragon",
+  "dragonKin": {
+    "mapId": "map:frostpeak-climb",
+    "relation": "frost-cousin",
+    "hue": 210,
+    "roseYield": 8
+  },
+  "unlocks": ["upgrade:dragon-might-frostpeak", "upgrade:dragon-kin-ashlands"],
+  "track": "encounters",
+  "note": "Kin boss for frostpeak-climb, spliced between harbour and castle-approach."
+}

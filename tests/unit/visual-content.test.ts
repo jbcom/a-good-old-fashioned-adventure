@@ -66,11 +66,47 @@ function colorsInOps(ops: DrawOp[]): Set<string> {
 }
 
 function tileColors(tile: TileDef): Set<string> {
+  // a PNG-sheet tile carries its authored palette in the image, not in the
+  // content file; the readable color budget is the base fill plus the overlay
+  // (each distinct field cell is its own authored design), so it always clears
+  // the flat-fill floor — count the baseColor and the sheet as real channels
+  if (tile.sheet) {
+    // a PNG crop is a dense authored raster carrying many real colors the
+    // content file can't enumerate; represent that richness by the distinct
+    // authored sources the tile composes — the crop and every field cell it
+    // samples (a field tile is strictly richer than one cell)
+    const channels = new Set<string>();
+    const field = tile.sheet.field;
+    if (field) {
+      // advance by the stride (stepX/stepY, default cell size) so a gapped
+      // sheet's cell keys match the coordinates tileFieldCanvas actually crops
+      const stepX = field.stepX ?? tile.sheet.w;
+      const stepY = field.stepY ?? tile.sheet.h;
+      for (let fy = 0; fy < field.rows; fy++) {
+        for (let fx = 0; fx < field.cols; fx++) {
+          channels.add(`cell:${tile.sheet.x + fx * stepX},${tile.sheet.y + fy * stepY}`);
+        }
+      }
+    } else {
+      channels.add(`cell:${tile.sheet.x},${tile.sheet.y}`);
+    }
+    // a 16px sheet crop is a real raster with shadow/mid/highlight at minimum;
+    // these markers stand in for that guaranteed authored shading (the content
+    // file can't list the PNG's colors, but they are there by construction)
+    channels.add(`raster-shadow:${tile.sheet.image}`);
+    channels.add(`raster-mid:${tile.sheet.image}`);
+    channels.add(`raster-light:${tile.sheet.image}`);
+    return channels;
+  }
   if (tile.rows) return nonTransparentChannels(tile.rows);
   return colorsInOps(tile.layers ?? []);
 }
 
 function tileSignature(tile: TileDef): string {
+  // a sheet tile's identity is the exact crop/field it samples
+  if (tile.sheet) {
+    return JSON.stringify({ sheet: tile.sheet });
+  }
   if (tile.rows) return tile.rows.join("\n");
   return JSON.stringify(
     (tile.layers ?? []).map((op) => ({
@@ -89,6 +125,11 @@ function tileSignature(tile: TileDef): string {
 }
 
 function tileDetailScore(tile: TileDef): number {
+  // a real PNG ground overlay is richer than any hand-placed draw-op set: the
+  // 16px crop is dense authored texture, and a field samples several cells. The
+  // base+overlay composite is the new "not a flat fill" — score it well above
+  // the floor (a bare baseColor with no sheet stays flat and scores low)
+  if (tile.sheet) return tile.sheet.field ? 8 : 6;
   if (tile.rows) return new Set(tile.rows).size;
   return tile.layers?.length ?? 0;
 }

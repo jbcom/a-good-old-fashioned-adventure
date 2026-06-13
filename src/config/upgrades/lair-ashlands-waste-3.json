@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-ashlands-waste-3",
+  "label": "Quench the Magma Heart",
+  "category": "map",
+  "cost": {
+    "roses": 7,
+    "gems": 320
+  },
+  "prerequisites": ["upgrade:lair-ashlands-waste-2"],
+  "lairRoom": {
+    "mapId": "map:ashlands-waste",
+    "depth": 3,
+    "roomMap": "map:magma-heart"
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Ashlands lair room 3. Unlocking it relocates the princess deeper into the magma deeps."
+}

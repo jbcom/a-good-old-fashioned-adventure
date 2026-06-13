@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:ruin-mosaic",
+  "kind": "tile",
+  "solid": false,
+  "description": "Ruin mosaic — Retro Textures tan tile floor (64px), old patterned paving.",
+  "sheet": {
+    "image": "tilemaps/retro/floor_tiles_tan_large.png",
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 64
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

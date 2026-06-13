@@ -1,0 +1,179 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:tidewrack-cove",
+  "kind": "map",
+  "name": "Tidewrack Cove",
+  "size": {
+    "cols": 46,
+    "rows": 22
+  },
+  "baseTile": "tile:sand",
+  "bgmTheme": "dungeon",
+  "generation": [
+    {
+      "op": "border",
+      "tile": "tile:mountain-ledge"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 2,
+      "x1": 12,
+      "y0": 2,
+      "y1": 7,
+      "note": "the cove's deep tide-channel, upper"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-reeds",
+      "x0": 2,
+      "x1": 10,
+      "y0": 15,
+      "y1": 20,
+      "note": "the brackish lower shallows"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 33,
+      "x1": 43,
+      "y0": 14,
+      "y1": 20,
+      "note": "the rear tide-pool of the first wrack-nest"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:wood-bridge",
+      "y": 10,
+      "x0": 2,
+      "x1": 43,
+      "note": "the wrecked boardwalk the line picks east along"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:wood-bridge",
+      "y": 11,
+      "x0": 2,
+      "x1": 43,
+      "note": "boardwalk, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 14,
+      "y0": 2,
+      "y1": 8,
+      "note": "a sea-stack pinching the boardwalk (the gap below is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 28,
+      "y0": 14,
+      "y1": 19,
+      "note": "a second stack off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:sand-pebbles",
+      "x0": 35,
+      "x1": 43,
+      "y0": 8,
+      "y1": 13,
+      "note": "the shingle of the first wrack-nest at the boardwalk's end"
+    }
+  ],
+  "playerSpawn": {
+    "x": 48,
+    "y": 168
+  },
+  "spawns": {
+    "default": {
+      "x": 48,
+      "y": 168
+    },
+    "entry": {
+      "x": 48,
+      "y": 168
+    }
+  },
+  "entities": [
+    {
+      "ref": "prop:sand-sail-wreck",
+      "x": 150,
+      "y": 132,
+      "note": "a hull split open across the boardwalk"
+    },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 120,
+      "y": 144,
+      "note": "drowned sailors' bones raked into the shallows"
+    },
+    {
+      "ref": "prop:barrel",
+      "x": 260,
+      "y": 132,
+      "note": "a cargo cask jammed against a sea-stack"
+    },
+    {
+      "ref": "prop:broken-cart",
+      "x": 380,
+      "y": 290,
+      "note": "a dray washed up by the lower flank"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 560,
+      "y": 132,
+      "contents": "Gold",
+      "note": "a smuggler's strongbox cached in the wrack"
+    },
+    {
+      "enemy": "wrack-lurker",
+      "x": 600,
+      "y": 168,
+      "note": "harbour lair r1 CLIMAX: a wrack-lurker, the drowned thing that haunts the boardwalk, holds the first wrack-nest. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    {
+      "id": "gate:cove-mouth",
+      "x": 220,
+      "y": 168,
+      "note": "spawn zone — the boardwalk mouth"
+    },
+    {
+      "id": "gate:cove-stack",
+      "x": 330,
+      "y": 148,
+      "note": "spawn zone — past the sea-stack, upper"
+    },
+    {
+      "id": "gate:cove-shallow",
+      "x": 360,
+      "y": 216,
+      "note": "spawn zone — the lower shallows flank"
+    },
+    {
+      "id": "gate:cove-nest",
+      "x": 560,
+      "y": 168,
+      "note": "spawn zone — the first wrack-nest"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:tidewrack-cove-landmark",
+      "kind": "landmark",
+      "label": "Tidewrack Cove",
+      "sfx": "interact",
+      "zone": {
+        "x0": 32,
+        "y0": 152,
+        "x1": 80,
+        "y1": 184
+      }
+    }
+  ]
+}

@@ -1,0 +1,176 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:crag-mouth",
+  "kind": "map",
+  "name": "The Crag Mouth",
+  "size": { "cols": 46, "rows": 22 },
+  "baseTile": "tile:stone-floor",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain-crag" },
+    {
+      "op": "region",
+      "tile": "tile:mountain-scree",
+      "x0": 2,
+      "x1": 12,
+      "y0": 2,
+      "y1": 7,
+      "note": "a talus fan spilled into the cave mouth, upper"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain-scree",
+      "x0": 2,
+      "x1": 10,
+      "y0": 15,
+      "y1": 20,
+      "note": "lower talus"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-glint",
+      "x0": 4,
+      "x1": 11,
+      "y0": 2,
+      "y1": 7,
+      "note": "a frozen melt-tarn glinting in the cave mouth, upper"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass-tufts",
+      "x0": 14,
+      "x1": 24,
+      "y0": 14,
+      "y1": 20,
+      "note": "a wind-grass shelf clinging to the lower ledge"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass-flowers",
+      "x0": 25,
+      "x1": 33,
+      "y0": 2,
+      "y1": 7,
+      "note": "an alpine bloom-patch on the upper shelf"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain-scree",
+      "x0": 35,
+      "x1": 43,
+      "y0": 14,
+      "y1": 20,
+      "note": "the rear rock-fall apron"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor",
+      "y": 10,
+      "x0": 2,
+      "x1": 43,
+      "note": "the worn ledge-walk the line scrambles east along"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor",
+      "y": 11,
+      "x0": 2,
+      "x1": 43,
+      "note": "ledge-walk, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 14,
+      "y0": 2,
+      "y1": 8,
+      "note": "a rock pillar pinching the ledge (the gap below is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 28,
+      "y0": 14,
+      "y1": 19,
+      "note": "a second pillar off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:stone-floor-cracked",
+      "x0": 35,
+      "x1": 43,
+      "y0": 8,
+      "y1": 13,
+      "note": "the cracked-flag terrace of the first eyrie at the ledge's end"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 168 },
+  "spawns": {
+    "default": { "x": 48, "y": 168 },
+    "entry": { "x": 48, "y": 168 }
+  },
+  "entities": [
+    {
+      "ref": "prop:stump",
+      "x": 150,
+      "y": 132,
+      "note": "a wind-killed krummholz stump in the cave mouth"
+    },
+    {
+      "ref": "prop:wind-ribbon-cairn",
+      "x": 120,
+      "y": 264,
+      "note": "a climbers' cairn raked down the talus"
+    },
+    {
+      "ref": "prop:broken-cart",
+      "x": 260,
+      "y": 132,
+      "note": "a survey-cart the brood toppled off the ledge"
+    },
+    {
+      "ref": "prop:wind-ribbon-cairn",
+      "x": 380,
+      "y": 290,
+      "note": "a second bone-rake by the eyrie"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 560,
+      "y": 132,
+      "contents": "Gold",
+      "note": "a lost climber's cache, dragged to the nest"
+    },
+    {
+      "enemy": "crag-stalker",
+      "x": 600,
+      "y": 168,
+      "note": "crag lair r1 CLIMAX: a crag-stalker, the cliff-cat that haunts the ledge, holds the first eyrie. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:crag-mouth-low", "x": 220, "y": 168, "note": "spawn zone — the ledge mouth" },
+    {
+      "id": "gate:crag-mouth-pillar",
+      "x": 330,
+      "y": 148,
+      "note": "spawn zone — past the rock pillar, upper"
+    },
+    {
+      "id": "gate:crag-mouth-talus",
+      "x": 360,
+      "y": 216,
+      "note": "spawn zone — the lower talus flank"
+    },
+    { "id": "gate:crag-mouth-eyrie", "x": 560, "y": 168, "note": "spawn zone — the first eyrie" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:crag-mouth-landmark",
+      "kind": "landmark",
+      "label": "The Crag Mouth",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 152, "x1": 80, "y1": 184 }
+    }
+  ]
+}

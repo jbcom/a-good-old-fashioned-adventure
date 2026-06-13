@@ -45,13 +45,21 @@ import {
   propCanvas,
   sheetFrameCanvas,
   spriteCanvas,
-  tileCanvas,
+  tileFieldCanvas,
 } from "./atlas";
 import { createDioramaMaterial, setDioramaTexture } from "./materials";
 import { channelsOf, fadeOut, playMotion, releaseMotion, restartMotion } from "./motion";
 import { iframeAlpha, spritePose, threatScale } from "./pose";
 
+// world grid spacing in WORLD units — must stay 16 to match the sim, which
+// places every entity/collision/rail coordinate at 16px per tile.
 const TILE = 16;
+// the ground TEXTURE is supersampled: each world tile bakes GROUND_RES px wide,
+// so a high-res vector tile (64px, RPG Tiles Vector) keeps its full texture on
+// the same physical plane instead of being downsampled to 16px and magnified
+// into a flat blob. The plane geometry stays in world units; only the texture
+// canvas is denser. 64 = the richest terrain pack's native cell size.
+const GROUND_RES = 64;
 const textures = new WeakMap<HTMLCanvasElement, CanvasTexture>();
 
 function textureFor(canvas: HTMLCanvasElement): CanvasTexture {
@@ -70,15 +78,37 @@ function textureFor(canvas: HTMLCanvasElement): CanvasTexture {
 function composeGround(world: World): HTMLCanvasElement {
   const runtime = world.get(MapRuntime);
   if (!runtime) throw new Error("no MapRuntime");
+  // supersampled ground texture: GROUND_RES px per world tile so high-res
+  // vector terrain keeps its texture; the plane geometry stays in world units
   const canvas = document.createElement("canvas");
-  canvas.width = runtime.cols * TILE;
-  canvas.height = runtime.rows * TILE;
+  canvas.width = runtime.cols * GROUND_RES;
+  canvas.height = runtime.rows * GROUND_RES;
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("2d context unavailable");
-  ctx.imageSmoothingEnabled = false;
+  // smooth the high-res vector terrain when it scales; pixel packs are near 1:1
+  // at GROUND_RES=64 so this only softens sub-pixel edges, never blurs detail
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
   for (let row = 0; row < runtime.rows; row++) {
     for (let col = 0; col < runtime.cols; col++) {
-      ctx.drawImage(tileCanvas(runtime.grid[row][col]), col * TILE, row * TILE);
+      // field ground tiles sample a per-(col,row) cell so the ground shows the
+      // pack's variation rather than a seamed repeat; each tile bakes at its own
+      // native resolution and is scaled to fill the GROUND_RES cell. Guard a
+      // malformed/ragged grid row so a missing cell skips rather than crashes.
+      const tileId = runtime.grid[row]?.[col];
+      if (!tileId) continue;
+      const face = tileFieldCanvas(tileId, col, row);
+      ctx.drawImage(
+        face,
+        0,
+        0,
+        face.width,
+        face.height,
+        col * GROUND_RES,
+        row * GROUND_RES,
+        GROUND_RES,
+        GROUND_RES,
+      );
     }
   }
   return canvas;
@@ -124,12 +154,17 @@ class SceneSync {
       disposeGroundMesh(this.ground.mesh);
     }
     const canvas = composeGround(world);
+    // the plane is in WORLD units (cols×TILE) to match entity coords; the
+    // supersampled texture is mapped across it, so detail rises without moving
+    // anything off the ground
+    const worldW = runtime.cols * TILE;
+    const worldH = runtime.rows * TILE;
     const mesh = new Mesh(
-      new PlaneGeometry(canvas.width, canvas.height),
+      new PlaneGeometry(worldW, worldH),
       createDioramaMaterial(textureFor(canvas), { role: "ground" }),
     );
     mesh.rotation.x = -Math.PI / 2;
-    mesh.position.set(canvas.width / 2, 0, canvas.height / 2);
+    mesh.position.set(worldW / 2, 0, worldH / 2);
     scene.add(mesh);
     this.ground = { mapId: runtime.mapId, rev: runtime.rev, mesh };
   }

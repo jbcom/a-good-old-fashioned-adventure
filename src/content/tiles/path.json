@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:path",
+  "kind": "tile",
+  "solid": false,
+  "description": "Dirt path — the RPG Tiles Vector pack's opaque 64px dirt fill (public/assets/tilemaps/rpg-terrain.png, the pure-brown centre block at cols 8-9, rows 0-1). Soft-shaded cobbled dirt authored into the raster, scaled at native resolution so a worn road reads with depth, matching the grass. The 2×2 field varies the road instead of repeating one cell.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 512,
+    "y": 0,
+    "w": 64,
+    "h": 64,
+    "field": { "cols": 2, "rows": 2 }
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

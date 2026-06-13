@@ -1,0 +1,132 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:mire-shallows",
+  "kind": "map",
+  "name": "The Mire Shallows",
+  "size": { "cols": 46, "rows": 22 },
+  "baseTile": "tile:grass",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain-ledge" },
+    {
+      "op": "region",
+      "tile": "tile:grass-flowers",
+      "x0": 2,
+      "x1": 16,
+      "y0": 2,
+      "y1": 8,
+      "note": "the bloomed sedge of the open upper reed-flat"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass-tufts",
+      "x0": 2,
+      "x1": 14,
+      "y0": 13,
+      "y1": 20,
+      "note": "the tufted lower reed-flat"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass-roots",
+      "x0": 24,
+      "x1": 33,
+      "y0": 13,
+      "y1": 20,
+      "note": "a root-knotted hummock mid-flat"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor",
+      "y": 10,
+      "x0": 2,
+      "x1": 43,
+      "note": "the built stone causeway the line wades east along — the kin's first reed-tunnel"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor",
+      "y": 11,
+      "x0": 2,
+      "x1": 43,
+      "note": "causeway, second course"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-reeds",
+      "x0": 33,
+      "x1": 39,
+      "y0": 3,
+      "y1": 7,
+      "note": "the standing water of the first nesting reed-bed"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass-flowers",
+      "x0": 35,
+      "x1": 43,
+      "y0": 13,
+      "y1": 19,
+      "note": "the bloomed hummock of the first nest at the reed-tunnel's end"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 168 },
+  "spawns": {
+    "default": { "x": 48, "y": 168 },
+    "entry": { "x": 48, "y": 168 }
+  },
+  "entities": [
+    {
+      "ref": "prop:fallen-log",
+      "x": 150,
+      "y": 132,
+      "note": "a bog-log slumped across the duckboard"
+    },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 120,
+      "y": 264,
+      "note": "drowned bones — the brood's first kills, sunk in the reeds"
+    },
+    {
+      "ref": "prop:dungeon-web",
+      "x": 260,
+      "y": 132,
+      "note": "marsh-gnat web strung across the upper flank"
+    },
+    {
+      "ref": "prop:mossy-waystone",
+      "x": 230,
+      "y": 280,
+      "note": "a milestone the mire swallowed to the cap"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 560,
+      "y": 132,
+      "contents": "Gold",
+      "note": "a peddler's strongbox lost to the sink"
+    },
+    {
+      "enemy": "mire-lurker",
+      "x": 600,
+      "y": 168,
+      "note": "mistmire lair r1 CLIMAX: a mire-lurker, the bog-serpent that drowns the duckboard, coils in the first reed-bed. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:mire-mouth", "x": 220, "y": 168, "note": "spawn zone — the reed-tunnel mouth" },
+    { "id": "gate:mire-flank", "x": 330, "y": 148, "note": "spawn zone — past the bog-log, upper" },
+    { "id": "gate:mire-sink", "x": 360, "y": 216, "note": "spawn zone — the lower sink-flank" },
+    { "id": "gate:mire-nest", "x": 560, "y": 168, "note": "spawn zone — the first reed-bed nest" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:mire-shallows-mouth",
+      "kind": "landmark",
+      "label": "The Mire Shallows' mouth",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 152, "x1": 80, "y1": 184 }
+    }
+  ]
+}

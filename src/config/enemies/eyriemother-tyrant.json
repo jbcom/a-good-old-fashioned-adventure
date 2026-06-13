@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "eyriemother-tyrant",
+  "name": "Eyriemother Tyrant",
+  "sprite": "sprite:vulture",
+  "palette": "palette:base",
+  "hp": 78,
+  "speed": 36,
+  "hitbox": {
+    "w": 14,
+    "h": 14
+  },
+  "behavior": "guard",
+  "guard": {
+    "aggroRange": 88,
+    "deaggroRange": 128,
+    "leashRange": 150,
+    "stance": {
+      "guard": 1.0,
+      "open": 1.3,
+      "damageMultiplier": 0.45,
+      "moveFactor": 0.5
+    }
+  },
+  "miniboss": true
+}

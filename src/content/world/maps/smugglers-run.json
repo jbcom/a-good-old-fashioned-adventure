@@ -1,0 +1,144 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:smugglers-run",
+  "kind": "map",
+  "name": "The Smugglers' Run",
+  "size": { "cols": 48, "rows": 24 },
+  "baseTile": "tile:wood-bridge",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 2,
+      "x1": 14,
+      "y0": 2,
+      "y1": 9,
+      "note": "the flooded boat-channel of the upper run"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 33,
+      "x1": 45,
+      "y0": 15,
+      "y1": 22,
+      "note": "the lower boat-channel"
+    },
+    {
+      "op": "region",
+      "tile": "tile:sand",
+      "x0": 2,
+      "x1": 12,
+      "y0": 16,
+      "y1": 22,
+      "note": "a shingle landing on the lower run"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:shop-floor",
+      "y": 11,
+      "x0": 2,
+      "x1": 45,
+      "note": "the plank gantry the line forces through the smugglers' run"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:shop-floor",
+      "y": 12,
+      "x0": 2,
+      "x1": 45,
+      "note": "gantry, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 15,
+      "y0": 2,
+      "y1": 8,
+      "note": "a piling-cluster pinching the gantry (the gap below is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 30,
+      "y0": 15,
+      "y1": 21,
+      "note": "a second piling-cluster off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:tavern-floor",
+      "x0": 37,
+      "x1": 45,
+      "y0": 10,
+      "y1": 14,
+      "note": "the plank floor of the smugglers' den where the second crew berths"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 184 },
+  "spawns": {
+    "default": { "x": 48, "y": 184 },
+    "entry": { "x": 48, "y": 184 }
+  },
+  "entities": [
+    {
+      "ref": "prop:barrel",
+      "x": 180,
+      "y": 290,
+      "note": "a contraband cask lashed to the gantry"
+    },
+    {
+      "ref": "prop:supply-crate",
+      "x": 300,
+      "y": 150,
+      "note": "a run of smuggled crates"
+    },
+    {
+      "ref": "prop:broken-cart",
+      "x": 240,
+      "y": 210,
+      "note": "a hand-truck abandoned mid-run"
+    },
+    {
+      "ref": "prop:barrel",
+      "x": 420,
+      "y": 300,
+      "note": "a second cask by the den"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 600,
+      "y": 200,
+      "contents": "Gold",
+      "note": "the smugglers' coin, stashed under the den floor"
+    },
+    {
+      "enemy": "run-boss",
+      "x": 632,
+      "y": 184,
+      "note": "harbour lair r2 CLIMAX: a run-boss, the wrecker-captain who owns the gantry, holds the smugglers' den. The princess relocates deeper into the harbour. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:run-mouth", "x": 230, "y": 184, "note": "spawn zone — the gantry mouth" },
+    { "id": "gate:run-piling", "x": 360, "y": 160, "note": "spawn zone — past the pilings, upper" },
+    {
+      "id": "gate:run-landing",
+      "x": 400,
+      "y": 240,
+      "note": "spawn zone — the lower shingle landing"
+    },
+    { "id": "gate:run-den", "x": 600, "y": 184, "note": "spawn zone — the smugglers' den" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:smugglers-run-landmark",
+      "kind": "landmark",
+      "label": "The Smugglers' Run",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 168, "x1": 80, "y1": 200 }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-frostpeak-climb-1",
+  "label": "Brave the Glacier Maw",
+  "category": "map",
+  "cost": {
+    "roses": 5,
+    "gems": 142
+  },
+  "prerequisites": ["upgrade:frostpeak-ascent"],
+  "lairRoom": {
+    "mapId": "map:frostpeak-climb",
+    "depth": 1,
+    "roomMap": "map:glacier-maw"
+  },
+  "unlocks": ["upgrade:lair-frostpeak-climb-2"],
+  "track": "roads",
+  "note": "Frostpeak lair room 1. Unlocking it relocates the princess deeper into the peak."
+}

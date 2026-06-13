@@ -1,14 +1,14 @@
 import { describe, expect, it } from "vitest";
 import basePalette from "../../src/content/palettes/base.json";
 import swaps from "../../src/content/palettes/swaps.json";
-import { getCharacterSprite, props, sprites } from "../../src/lib/content/registry";
+import { getCharacterSprite, props, sprites, tiles } from "../../src/lib/content/registry";
 import { isSheetSprite, resolveSheetFrame } from "../../src/lib/content/sheetSprite";
 import {
   preloadSheetImages,
   propCanvas,
   sheetFrameCanvas,
   spriteCanvas,
-  tileCanvas,
+  tileFieldCanvas,
 } from "../../src/render/atlas";
 
 /** Real-browser pixel readback: palette swaps must recolor EXACTLY the
@@ -18,6 +18,13 @@ function pixelsOf(canvas: HTMLCanvasElement): Uint8ClampedArray {
   const ctx = canvas.getContext("2d");
   if (!ctx) throw new Error("2d context unavailable");
   return ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+}
+
+/** Fraction of pixels that are (near-)opaque — the no-black-ground-tile gate. */
+function opaqueFraction(data: Uint8ClampedArray): number {
+  let opaque = 0;
+  for (let i = 3; i < data.length; i += 4) if (data[i] > 240) opaque++;
+  return opaque / (data.length / 4);
 }
 
 function hexToRgb(hex: string): [number, number, number] {
@@ -91,10 +98,19 @@ describe("props and tiles bake from content", () => {
     expect(data.some((v, i) => i % 4 === 3 && v > 0)).toBe(true);
   });
 
-  it("water tile fills deep sea blue", () => {
-    const water = pixelsOf(tileCanvas("tile:water"));
-    const deepSea = hexToRgb(basePalette.colors.l.hex);
-    expect([water[0], water[1], water[2]]).toEqual(deepSea);
+  it("water tile bakes the RPG Tiles Vector water PNG (blue-dominant, opaque)", async () => {
+    await preloadSheetImages();
+    const data = pixelsOf(tileFieldCanvas("tile:water", 0, 0));
+    let r = 0;
+    let b = 0;
+    const n = data.length / 4;
+    for (let i = 0; i < data.length; i += 4) {
+      r += data[i];
+      b += data[i + 2];
+    }
+    // a fully opaque tile (no map background bleeds through) whose blue beats red
+    expect(opaqueFraction(data)).toBeGreaterThan(0.95);
+    expect(b / n).toBeGreaterThan(r / n);
   });
 });
 
@@ -122,6 +138,81 @@ describe("purchased sheet sprites bake real pixels", () => {
         ).toBeGreaterThan(0.05);
       }
     }
+  });
+});
+
+describe("RPG Tiles Vector terrain (native-resolution PNG ground)", () => {
+  it("grass bakes the 64px RPG grass PNG — opaque, green-dominant, textured", async () => {
+    await preloadSheetImages();
+    const face = tileFieldCanvas("tile:grass", 0, 0);
+    // the tile bakes at the source's NATIVE resolution (64px), never magnified
+    expect(face.width).toBe(64);
+    expect(face.height).toBe(64);
+    const data = pixelsOf(face);
+
+    // fully opaque — no map background bleeds through the ground (the bug that
+    // showed as a black square when a crop landed on an empty sheet region)
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    const n = data.length / 4;
+    for (let i = 0; i < data.length; i += 4) {
+      r += data[i];
+      g += data[i + 1];
+      b += data[i + 2];
+    }
+    expect(opaqueFraction(data)).toBeGreaterThan(0.98);
+
+    // green-dominant grass (the PNG carries the authored colour, not a fill)
+    r /= n;
+    g /= n;
+    b /= n;
+    expect(g).toBeGreaterThan(r);
+    expect(g).toBeGreaterThan(b);
+
+    // real texture, not a flat fill — the cell carries varied luma (blade tufts)
+    let lo = 255;
+    let hi = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      const luma = 0.3 * data[i] + 0.6 * data[i + 1] + 0.1 * data[i + 2];
+      lo = Math.min(lo, luma);
+      hi = Math.max(hi, luma);
+    }
+    expect(hi - lo).toBeGreaterThan(20);
+  });
+
+  it("every ground sheet tile crop is fully opaque (no empty-sheet black tiles)", async () => {
+    await preloadSheetImages();
+    // covers EVERY ground/floor sheet tile: a transparent crop (empty sheet
+    // region, or a field cell that lands on a gutter/separator) renders as a
+    // black ground tile — this guard catches that whole class across all the
+    // terrain/dungeon/interior-floor packs under tilemaps/
+    for (const tile of tiles.values()) {
+      if (!tile.sheet?.image.startsWith("tilemaps/")) continue;
+      const field = tile.sheet.field ?? { cols: 1, rows: 1 };
+      for (let fy = 0; fy < field.rows; fy++) {
+        for (let fx = 0; fx < field.cols; fx++) {
+          const data = pixelsOf(tileFieldCanvas(tile.id, fx, fy));
+          expect(
+            opaqueFraction(data),
+            `${tile.id} field cell ${fx},${fy} must be opaque`,
+          ).toBeGreaterThan(0.9);
+        }
+      }
+    }
+  });
+
+  it("a field tile samples different cells per board position", async () => {
+    await preloadSheetImages();
+    // wrapping over the 2×2 field block: (0,0) and (1,1) are distinct cells,
+    // so the ground varies instead of repeating one tiled cell
+    const a = pixelsOf(tileFieldCanvas("tile:grass", 0, 0));
+    const c = pixelsOf(tileFieldCanvas("tile:grass", 1, 1));
+    let diff = 0;
+    for (let i = 0; i < a.length; i += 4) {
+      if (a[i] !== c[i] || a[i + 1] !== c[i + 1] || a[i + 2] !== c[i + 2]) diff++;
+    }
+    expect(diff).toBeGreaterThan(0);
   });
 });
 

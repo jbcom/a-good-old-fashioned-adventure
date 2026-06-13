@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:ruin-floor",
+  "kind": "tile",
+  "solid": false,
+  "description": "Ruined stone floor — Retro Textures weathered stone slab (64px).",
+  "sheet": {
+    "image": "tilemaps/retro/floor_stone.png",
+    "x": 0,
+    "y": 0,
+    "w": 64,
+    "h": 64
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

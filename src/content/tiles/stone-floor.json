@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:stone-floor",
+  "kind": "tile",
+  "solid": false,
+  "description": "Dungeon stone floor — a clean readable Kenney Roguelike Dungeon slab (public/assets/MANIFEST.json#kenney-roguelike-dungeon, tilemaps/kenney-dungeon.png, 16px cells on a 17px stride). Replaces the near-black .pix stone-floor that read as unlit static; this warm light-grey slab is legible at game scale. The 2×1 field samples the two plain-floor cells (cols 9-10, row 2) so the floor varies subtly without a single repeated cell; the cracked/shattered/ratmarked variants carry the wear.",
+  "sheet": {
+    "image": "tilemaps/kenney-dungeon.png",
+    "x": 153,
+    "y": 34,
+    "w": 16,
+    "h": 16,
+    "field": {
+      "cols": 2,
+      "rows": 1,
+      "stepX": 17
+    }
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

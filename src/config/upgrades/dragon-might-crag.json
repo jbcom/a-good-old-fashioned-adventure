@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-might-crag",
+  "label": "Step-Cousin Unleashed",
+  "category": "enemy",
+  "cost": {
+    "roses": 5,
+    "gems": 72
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.8,
+  "prerequisites": ["upgrade:dragon-kin-crag"],
+  "enemyFamily": "dragon",
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Dragon-track combat buff (docs/RAIL-COMMAND.md §The Dragon track BUFFS the dragon): each rank widens the sunken-road kin volley (multi-attack), grows its fireball AoE, adds HP, and raises the roses the rescue pays. Rose-OR-gem, ranked — invest to make a stronger antagonist that pays more. (crag kin) (crag kin)"
+}

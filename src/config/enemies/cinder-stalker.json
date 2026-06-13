@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "cinder-stalker",
+  "name": "Cinder Stalker",
+  "sprite": "sprite:wild-boar-dark",
+  "palette": "palette:base",
+  "hp": 56,
+  "speed": 30,
+  "hitbox": {
+    "w": 13,
+    "h": 13
+  },
+  "behavior": "guard",
+  "guard": {
+    "aggroRange": 88,
+    "deaggroRange": 128,
+    "leashRange": 150,
+    "stance": {
+      "guard": 1.0,
+      "open": 1.3,
+      "damageMultiplier": 0.45,
+      "moveFactor": 0.5
+    }
+  },
+  "miniboss": true
+}

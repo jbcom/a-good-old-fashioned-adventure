@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-mistmire-marsh-2",
+  "label": "Breach the Sunken Warren",
+  "category": "map",
+  "cost": {
+    "roses": 5,
+    "gems": 160
+  },
+  "prerequisites": ["upgrade:lair-mistmire-marsh-1"],
+  "lairRoom": {
+    "mapId": "map:mistmire-marsh",
+    "depth": 2,
+    "roomMap": "map:mire-warren"
+  },
+  "unlocks": ["upgrade:lair-mistmire-marsh-3"],
+  "track": "roads",
+  "note": "Mistmire lair room 2. Unlocking it relocates the princess deeper into the marsh. Rose-OR-gem, rising along the lair."
+}

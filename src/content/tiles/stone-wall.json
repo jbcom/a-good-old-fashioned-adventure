@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:stone-wall",
+  "kind": "tile",
+  "solid": true,
+  "description": "Stone wall — the RPG Tiles Vector pack's opaque 64px grey masonry brick (public/assets/tilemaps/rpg-terrain.png, col 15, rows 3-4) as an impassable castle/dungeon wall at native resolution, distinct from the mountain rock cells. The 1×2 field varies the courses (both cells confirmed fully opaque). Solid so the rail and player cannot pass.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 960,
+    "y": 192,
+    "w": 64,
+    "h": 64,
+    "field": { "cols": 1, "rows": 2 }
+  },
+  "koota": {
+    "traits": ["Tile", "Solid"]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "snow-adder",
+  "name": "Snow Adder",
+  "sprite": "sprite:snake",
+  "palette": "palette:base",
+  "family": "snow-adder",
+  "hp": 22,
+  "speed": 34,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "patrol"
+}

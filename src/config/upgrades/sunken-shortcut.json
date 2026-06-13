@@ -8,10 +8,6 @@
   },
   "prerequisites": ["upgrade:rogue-shortcut"],
   "routePack": "sunken-road",
-  "unlocks": [
-    "upgrade:sunken-salvage",
-    "upgrade:castle-approach-siege",
-    "upgrade:lair-sunken-road-1"
-  ],
+  "unlocks": ["upgrade:sunken-salvage", "upgrade:mistmire-causeway", "upgrade:lair-sunken-road-1"],
   "track": "roads"
 }

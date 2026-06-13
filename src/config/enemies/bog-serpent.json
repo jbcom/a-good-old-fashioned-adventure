@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "bog-serpent",
+  "name": "Bog Serpent",
+  "sprite": "sprite:snake",
+  "palette": "palette:base",
+  "family": "bog-serpent",
+  "hp": 18,
+  "speed": 36,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "patrol"
+}

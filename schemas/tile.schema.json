@@ -24,7 +24,19 @@
         "x": { "type": "integer", "minimum": 0 },
         "y": { "type": "integer", "minimum": 0 },
         "w": { "type": "integer", "minimum": 1 },
-        "h": { "type": "integer", "minimum": 1 }
+        "h": { "type": "integer", "minimum": 1 },
+        "field": {
+          "type": "object",
+          "description": "A multi-cell GROUND FIELD: the (x,y) rect is the top-left of a cols×rows block of w×h cells in the PNG, and the renderer samples a per-(col,row) cell from that block (wrapping) so a ground area reproduces the pack's variation instead of tiling one cell into visible seams. The cell size (w,h) is the source's NATIVE resolution (e.g. 64 for the RPG Tiles Vector pack) — tiles bake at native res so the texture never magnifies into a flat blob. stepX/stepY are the per-cell ADVANCE in px and default to w/h; set them larger than w/h for sheets with a gutter between cells (e.g. the Kenney dungeon sheet's 17px stride over 16px cells) so a field cell never crops the separator.",
+          "required": ["cols", "rows"],
+          "properties": {
+            "cols": { "type": "integer", "minimum": 1 },
+            "rows": { "type": "integer", "minimum": 1 },
+            "stepX": { "type": "integer", "minimum": 1 },
+            "stepY": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     },

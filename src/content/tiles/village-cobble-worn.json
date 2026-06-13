@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:village-cobble-worn",
+  "kind": "tile",
+  "solid": false,
+  "description": "Worn village cobble — RPG Tiles Vector cobbled-dirt cell, native 64px.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 448,
+    "y": 0,
+    "w": 64,
+    "h": 64
+  },
+  "variantOf": "tile:village-cobble",
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:water",
+  "kind": "tile",
+  "solid": true,
+  "description": "Water — the RPG Tiles Vector pack's opaque 64px water fill (public/assets/tilemaps/rpg-terrain.png, the cyan cobble-ripple centre block at cols 13-14, rows 0-1). Soft-shaded rippled water authored into the raster at native resolution. The 2×2 field varies the surface instead of repeating one cell. Solid + AnimatedTile so the rail treats it as impassable while the renderer can shimmer it.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 832,
+    "y": 0,
+    "w": 64,
+    "h": 64,
+    "field": { "cols": 2, "rows": 2 }
+  },
+  "koota": {
+    "traits": ["Tile", "Solid", "AnimatedTile"]
+  }
+}

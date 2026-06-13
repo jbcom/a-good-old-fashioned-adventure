@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:frostpeak-ascent",
+  "label": "Scale the Frostpeak",
+  "category": "route",
+  "cost": {
+    "roses": 7,
+    "gems": 156
+  },
+  "prerequisites": ["upgrade:harbour-road"],
+  "routePack": "frostpeak",
+  "unlocks": ["upgrade:lair-frostpeak-climb-1", "upgrade:ashlands-crossing"],
+  "track": "roads",
+  "note": "The frozen peak climb above the salt harbour. Unlocking it opens the climb and gates the castle siege behind it."
+}

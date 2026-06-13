@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "slag-rat",
+  "name": "Slag Rat",
+  "sprite": "sprite:rat",
+  "palette": "palette:base",
+  "family": "slag-rat",
+  "hp": 18,
+  "speed": 42,
+  "hitbox": {
+    "w": 11,
+    "h": 11
+  },
+  "behavior": "patrol"
+}

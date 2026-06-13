@@ -106,13 +106,28 @@ outlined sprites, shine pixels, cobblestone marks, plank bridges, mountain snow
 caps, chests, castles, projectile sparks, and palette-swapped roles. The
 content rewrite must keep that specificity and raise it:
 
-- No required terrain tile should be a single flat fill. Grass, path, sand,
-  water, stone, wall, and bridge tiles need at least a ground color, a shadow
-  mark, and authored detail pixels.
-- Repeated exterior terrain should be built from terrain families, not one
-  token tile. Grass, path, leaf litter, sand, castle road, and village cobble
-  require four to eight precise 16-bit variants arranged by deterministic
-  chunks, so the road reads as patched ground rather than noise or flat carpet.
+- No required terrain tile should be a single flat fill, and no terrain may
+  read as a giant magnified mono-color blob. Ground is real authored texture —
+  either hand-placed detail pixels (`.pix`) or a **purchased PNG ground pack**.
+  Solid color fills are forbidden: the packs supply the texture, the code never
+  invents a base color.
+- Outdoor terrain uses **RPG Tiles Vector** (Kenney CC0, `tilemaps/rpg-terrain.png`)
+  — opaque 64px soft-shaded tiles (grass/dirt/water fills, autotile edges, grey
+  stone). Indoor/dungeon uses the **Kenney Roguelike Dungeon** sheet. The code
+  fits the PNGs, not the reverse.
+- SCALE is the rule that keeps ground from reading flat: each tile bakes at its
+  source's NATIVE resolution and the ground texture is supersampled
+  (`GROUND_RES` px per world tile, see `src/render/GameStage.tsx`), so a high-res
+  vector tile keeps its full texture instead of one cell magnified into a flat
+  blob. The world plane stays in sim units (16px/tile) so entities and collision
+  stay aligned; only the texture canvas is denser. Packs of different native
+  sizes are each scaled to their correct on-screen size — consistency of a single
+  tile size is not a goal; right-sizing each asset is.
+- Repeated exterior terrain is built from terrain families, not one token tile.
+  Grass, path, water, mountain, castle road, etc. each carry four to eight
+  variants — distinct opaque PNG cells sampled by a `field` (a different cell per
+  board position) — so the ground shows the pack's variation rather than a seamed
+  repeat or flat carpet.
 - Hubs must tell the story visually. A village needs facade props, trees,
   roadside furniture, and interior furniture before it can be considered a
   real place.
