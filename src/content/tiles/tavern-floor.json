@@ -1,17 +1,16 @@
 {
   "$schema": "../../../schemas/tile.schema.json",
-  "id": "tile:sand-pebbles",
+  "id": "tile:tavern-floor",
   "kind": "tile",
   "solid": false,
-  "description": "Pebbled sand-stone — Retro Textures stone floor (64px).",
+  "description": "Tavern floorboards — Retro Textures wide wood plank floor (64px).",
   "sheet": {
-    "image": "tilemaps/retro/floor_stone_sand_inset.png",
+    "image": "tilemaps/retro/floor_wood_planks_wide.png",
     "x": 0,
     "y": 0,
     "w": 64,
     "h": 64
   },
-  "variantOf": "tile:sand",
   "koota": {
     "traits": ["Tile"]
   }

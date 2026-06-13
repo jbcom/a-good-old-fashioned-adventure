@@ -1387,6 +1387,77 @@
           "height": 832
         }
       ]
+    },
+    {
+      "id": "retro-textures-fantasy",
+      "title": "Retro Textures Fantasy — 64px tileable interior floors/walls",
+      "author": "Kenney (kenney.nl)",
+      "source": "itch.io / kenney.nl (CC0)",
+      "url": "https://kenney.nl/assets",
+      "license": "CC0 1.0 (public domain)",
+      "mappedUse": "High-res 64px interior floor textures: stone, wood planks, tan/blue tile, sand, dirt, grass — scale-matched to RPG Tiles Vector outdoor terrain for shop/tavern/ruin/castle floors + a true sand.",
+      "files": [
+        {
+          "path": "tilemaps/retro/floor_ground_dirt.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_ground_grass.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_ground_sand.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_stone.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_stone_pattern.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_tiles_blue_small.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_tiles_tan_large.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_wood_planks.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_wood_planks_wide.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_stone_sand_random.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_stone_sand_inset.png",
+          "width": 64,
+          "height": 64
+        },
+        {
+          "path": "tilemaps/retro/floor_tiles_sand_large.png",
+          "width": 64,
+          "height": 64
+        }
+      ]
     }
   ]
 }

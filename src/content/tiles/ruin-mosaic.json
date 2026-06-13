@@ -1,17 +1,16 @@
 {
   "$schema": "../../../schemas/tile.schema.json",
-  "id": "tile:sand-pebbles",
+  "id": "tile:ruin-mosaic",
   "kind": "tile",
   "solid": false,
-  "description": "Pebbled sand-stone — Retro Textures stone floor (64px).",
+  "description": "Ruin mosaic — Retro Textures tan tile floor (64px), old patterned paving.",
   "sheet": {
-    "image": "tilemaps/retro/floor_stone_sand_inset.png",
+    "image": "tilemaps/retro/floor_tiles_tan_large.png",
     "x": 0,
     "y": 0,
     "w": 64,
     "h": 64
   },
-  "variantOf": "tile:sand",
   "koota": {
     "traits": ["Tile"]
   }

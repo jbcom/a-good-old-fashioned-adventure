@@ -1,17 +1,16 @@
 {
   "$schema": "../../../schemas/tile.schema.json",
-  "id": "tile:sand-pebbles",
+  "id": "tile:ruin-floor",
   "kind": "tile",
   "solid": false,
-  "description": "Pebbled sand-stone — Retro Textures stone floor (64px).",
+  "description": "Ruined stone floor — Retro Textures weathered stone slab (64px).",
   "sheet": {
-    "image": "tilemaps/retro/floor_stone_sand_inset.png",
+    "image": "tilemaps/retro/floor_stone.png",
     "x": 0,
     "y": 0,
     "w": 64,
     "h": 64
   },
-  "variantOf": "tile:sand",
   "koota": {
     "traits": ["Tile"]
   }

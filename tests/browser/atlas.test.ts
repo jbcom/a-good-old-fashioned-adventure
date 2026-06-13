@@ -180,12 +180,12 @@ describe("RPG Tiles Vector terrain (native-resolution PNG ground)", () => {
 
   it("every ground sheet tile crop is fully opaque (no empty-sheet black tiles)", async () => {
     await preloadSheetImages();
-    // covers BOTH ground sheets: a transparent crop (empty sheet region, or a
-    // field cell that lands on a gutter/separator) renders as a black ground
-    // tile — this guard catches that class for the terrain AND dungeon packs
-    const groundSheets = new Set(["tilemaps/rpg-terrain.png", "tilemaps/kenney-dungeon.png"]);
+    // covers EVERY ground/floor sheet tile: a transparent crop (empty sheet
+    // region, or a field cell that lands on a gutter/separator) renders as a
+    // black ground tile — this guard catches that whole class across all the
+    // terrain/dungeon/interior-floor packs under tilemaps/
     for (const tile of tiles.values()) {
-      if (!tile.sheet || !groundSheets.has(tile.sheet.image)) continue;
+      if (!tile.sheet?.image.startsWith("tilemaps/")) continue;
       const field = tile.sheet.field ?? { cols: 1, rows: 1 };
       for (let fy = 0; fy < field.rows; fy++) {
         for (let fx = 0; fx < field.cols; fx++) {
