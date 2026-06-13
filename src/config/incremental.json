@@ -120,6 +120,12 @@
       "role": "the high mountain pass above the drowned marsh"
     },
     {
+      "id": "harbour",
+      "label": "Saltmarsh Harbour",
+      "maps": ["map:saltmarsh-harbour"],
+      "role": "the salt-marsh harbour road along the sea wharves"
+    },
+    {
       "id": "castle-approach",
       "label": "Siege Approach",
       "maps": ["map:castle-approach", "map:castle-yard"],
@@ -141,6 +147,7 @@
       "map:sunken-road",
       "map:mistmire-marsh",
       "map:crag-pass",
+      "map:saltmarsh-harbour",
       "map:castle-approach",
       "map:castle-hall"
     ],
@@ -186,6 +193,10 @@
     "map:crag-pass": {
       "theme": "crag",
       "rooms": ["map:crag-mouth", "map:scree-warren", "map:summit-roost"]
+    },
+    "map:saltmarsh-harbour": {
+      "theme": "harbour",
+      "rooms": ["map:tidewrack-cove", "map:smugglers-run", "map:drowned-hold"]
     }
   }
 }

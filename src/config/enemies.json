@@ -98,10 +98,26 @@
       "archetypes": ["crag-vulture", "scree-adder", "cliff-bat", "crypt-bat"]
     },
     {
+      "id": "region:harbour",
+      "label": "Saltmarsh Harbour",
+      "tier": 4,
+      "threat": 11,
+      "maps": ["map:saltmarsh-harbour"],
+      "archetypes": ["harbour-gull", "dock-rat", "tide-eel", "crag-vulture"]
+    },
+    {
+      "id": "region:harbour-lair",
+      "label": "The Harbour Deeps",
+      "tier": 4,
+      "threat": 12,
+      "maps": ["map:tidewrack-cove", "map:smugglers-run", "map:drowned-hold"],
+      "archetypes": ["harbour-gull", "dock-rat", "tide-eel", "crypt-bat"]
+    },
+    {
       "id": "region:sunken-crypt",
       "label": "The Sunken Crypt (sunken-road lair)",
       "tier": 4,
-      "threat": 11,
+      "threat": 13,
       "maps": ["map:desert-ruins", "map:castle-dungeon", "map:crypt-vault"],
       "archetypes": ["dune-adder", "carrion-raven", "crypt-bat", "crypt-skeleton", "crypt-sentry"]
     },
@@ -109,7 +125,7 @@
       "id": "region:siege-warcamp",
       "label": "The Siege Warcamp (castle-approach lair)",
       "tier": 4,
-      "threat": 12,
+      "threat": 14,
       "maps": ["map:castle-yard"],
       "archetypes": [
         "forest-orc",
@@ -123,7 +139,7 @@
       "id": "region:dungeon",
       "label": "Obsidian Throne Dungeon",
       "tier": 4,
-      "threat": 13,
+      "threat": 15,
       "maps": [
         "map:castle-hall",
         "map:castle-library",

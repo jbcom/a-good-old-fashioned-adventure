@@ -16,7 +16,7 @@
     "hue": 30,
     "roseYield": 7
   },
-  "unlocks": ["upgrade:dragon-might-crag", "upgrade:dragon-kin-castle-approach"],
+  "unlocks": ["upgrade:dragon-might-crag", "upgrade:dragon-kin-harbour"],
   "track": "encounters",
   "note": "Kin boss for crag-pass, spliced between mistmire and castle-approach."
 }

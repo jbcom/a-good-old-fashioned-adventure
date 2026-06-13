@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-saltmarsh-harbour-1",
+  "label": "Comb Tidewrack Cove",
+  "category": "map",
+  "cost": {
+    "roses": 5,
+    "gems": 135
+  },
+  "prerequisites": ["upgrade:harbour-road"],
+  "lairRoom": {
+    "mapId": "map:saltmarsh-harbour",
+    "depth": 1,
+    "roomMap": "map:tidewrack-cove"
+  },
+  "unlocks": ["upgrade:lair-saltmarsh-harbour-2"],
+  "track": "roads",
+  "note": "Harbour lair room 1. Unlocking it relocates the princess deeper into the harbour deeps."
+}

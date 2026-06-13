@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:harbour-road",
+  "label": "Walk the Harbour Road",
+  "category": "route",
+  "cost": {
+    "roses": 6,
+    "gems": 148
+  },
+  "prerequisites": ["upgrade:crag-ascent"],
+  "routePack": "harbour",
+  "unlocks": ["upgrade:lair-saltmarsh-harbour-1", "upgrade:castle-approach-siege"],
+  "track": "roads",
+  "note": "The salt-marsh harbour road along the sea wharves. Unlocking it opens the harbour and gates the castle siege behind it."
+}

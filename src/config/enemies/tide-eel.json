@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "tide-eel",
+  "name": "Tide Eel",
+  "sprite": "sprite:snake",
+  "palette": "palette:base",
+  "family": "tide-eel",
+  "hp": 20,
+  "speed": 38,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "patrol"
+}
