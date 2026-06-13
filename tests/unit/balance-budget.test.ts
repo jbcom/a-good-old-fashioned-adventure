@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { enemies, incremental } from "../../src/lib/config";
-import { getMap } from "../../src/lib/content/registry";
 import { nodeRanks, rankCost } from "../../src/sim/incrementalProgress";
 import { familyArchetypeIds } from "../harness/families";
 
@@ -35,20 +34,23 @@ function nodeDepths(): Map<string, number> {
 }
 
 /**
- * Expected coin income for one ordinary run at a given graph depth: the
- * baseline route's trash bounties plus one miniboss purse per depth tier the
- * player has opened. Deliberately conservative — real runs also drop hearts,
- * pay first-clear roses, and bank elite bonuses.
+ * Expected coin income for one ordinary run at a given graph depth. In the
+ * ZONE model (docs/RAIL-COMMAND.md §maps are zones, not enemies) maps no longer
+ * author trash — income comes from WAVE kills (the unlocked permutation spawned
+ * at the map's gates) plus a miniboss purse per depth tier opened. A run at a
+ * given depth has unlocked roughly `depth` enemy nodes, so its waves field a
+ * comparable trash count; we model a conservative baseline of felled wave trash
+ * scaling gently with depth, plus the miniboss purse. Deliberately conservative
+ * — real runs also drop hearts, pay first-clear roses, and bank elite bonuses.
  */
+const BASELINE_WAVE_KILLS = 6;
 function runIncomeAtDepth(depth: number): number {
-  const startMap = getMap(incremental.loop.startMap);
-  const guardian = "dragon-guardian";
-  const trashCount = startMap.entities.filter(
-    (entity) => entity.enemy && entity.enemy !== guardian,
-  ).length;
-  const trashIncome = trashCount * (incremental.runRewards.enemyDefeated.base ?? 0);
+  // a player at this depth has unlocked enemies, so waves spawn and pay; the
+  // kill count grows gently with depth (more unlocks → denser waves)
+  const waveKills = BASELINE_WAVE_KILLS + Math.max(0, depth);
+  const waveIncome = waveKills * (incremental.runRewards.enemyDefeated.base ?? 0);
   const purse = incremental.runRewards.minibossDefeated.base ?? 0;
-  return trashIncome + Math.max(0, depth) * purse;
+  return waveIncome + Math.max(0, depth) * purse;
 }
 
 describe("S9.10 no-sharp-edges balance budget", () => {
@@ -125,21 +127,22 @@ describe("S13.2 adversarial warband trade", () => {
     // something, but only count ranks (spawnBounty) reinforce — a major like
     // dragon-wake must never clone its boss.
     expect(warbands.length).toBeGreaterThan(0);
-    // In the multi-map model (docs/RAIL-COMMAND.md §Map DAG) each unlockable
-    // enemy belongs to one spine map, so a bounty family must field on SOME
-    // spine map — not necessarily the start map (the start map intentionally
-    // begins with no enemies; later antagonists live on later maps).
-    const spineMaps = incremental.mapDag.order.map((id) => getMap(id));
+    // In the ZONE model (docs/RAIL-COMMAND.md §maps are zones, not enemies) maps
+    // no longer author trash — enemies spawn from a region's archetype pool
+    // INTERSECTED with the unlocked set, at the map's wave gates. So a bounty
+    // family must appear in SOME region's archetype pool (so its waves can
+    // spawn and the bounty rank can pay off), not as a hardcoded map entity.
+    const regionPool = new Set(enemies.difficultyCurve.flatMap((r) => r.archetypes));
     for (const node of familyNodes) {
       const tagged = familyArchetypeIds(node.enemyFamily ?? "");
       expect(tagged.length, `${node.id} family ${node.enemyFamily} tags nothing`).toBeGreaterThan(
         0,
       );
       if (!(node.spawnBounty ?? 0)) continue;
-      const fielded = spineMaps.some((map) =>
-        map.entities.some((entity) => entity.enemy && tagged.includes(entity.enemy)),
+      const inAPool = tagged.some((id) => regionPool.has(id));
+      expect(inAPool, `${node.enemyFamily} is in no region pool — its waves can't spawn`).toBe(
+        true,
       );
-      expect(fielded, `${node.enemyFamily} has no spawn on any spine map`).toBe(true);
       expect(nodeRanks(node), `${node.id} bounty nodes are count ranks`).toBeGreaterThan(1);
     }
   });

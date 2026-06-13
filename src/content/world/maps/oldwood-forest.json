@@ -314,25 +314,10 @@
       "note": "Caddoc Wick tends the last lantern before Deep Forest"
     },
     {
-      "enemy": "oldwood-raider",
-      "x": 470,
-      "y": 210
-    },
-    {
-      "enemy": "forest-orc",
-      "x": 620,
-      "y": 390
-    },
-    {
-      "enemy": "thorn-shaman",
-      "x": 760,
-      "y": 156
-    },
-    {
       "enemy": "bramble-tyrant",
       "x": 520,
       "y": 150,
-      "note": "Oldwood miniboss holding the upper thicket off the road"
+      "note": "Oldwood miniboss holding the upper thicket off the road — the one authored combatant; trash is permuted from the unlocked set via the wave gates"
     }
   ],
   "composition": {

@@ -179,36 +179,6 @@
       "note": "east shoulder shade"
     },
     {
-      "enemy": "forest-orc",
-      "x": 136,
-      "y": 880
-    },
-    {
-      "enemy": "oldwood-raider",
-      "x": 168,
-      "y": 712
-    },
-    {
-      "enemy": "forest-orc",
-      "x": 280,
-      "y": 600
-    },
-    {
-      "enemy": "orc-scout",
-      "x": 280,
-      "y": 480
-    },
-    {
-      "enemy": "forest-orc",
-      "x": 136,
-      "y": 320
-    },
-    {
-      "enemy": "oldwood-raider",
-      "x": 200,
-      "y": 136
-    },
-    {
       "enemy": "dragon-guardian",
       "x": 216,
       "y": 128,

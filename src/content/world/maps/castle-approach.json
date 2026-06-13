@@ -252,20 +252,10 @@
       "dir": 1
     },
     {
-      "enemy": "gate-sentry",
-      "x": 880,
-      "y": 430
-    },
-    {
       "enemy": "banner-knight",
       "x": 1010,
-      "y": 252
-    },
-    {
-      "enemy": "gatehouse-vulture",
-      "x": 820,
-      "y": 300,
-      "note": "wheeling over the siege litter before the gate"
+      "y": 252,
+      "note": "Castle Approach miniboss at the gate — the one authored combatant; trash is permuted from the unlocked set via the wave gates"
     },
     {
       "ref": "prop:war-banner",

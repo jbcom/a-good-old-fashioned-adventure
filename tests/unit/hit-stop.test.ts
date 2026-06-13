@@ -1,28 +1,25 @@
 import { describe, expect, it } from "vitest";
 import { combat } from "../../src/lib/config";
-import { createGameWorld, instantiateMap, spawnProjectile } from "../../src/sim/factories";
+import {
+  createGameWorld,
+  instantiateMap,
+  spawnEnemy,
+  spawnProjectile,
+} from "../../src/sim/factories";
 import { playerAttack } from "../../src/sim/systems/combat";
 import { step } from "../../src/sim/tick";
-import {
-  Clock,
-  FxBurst,
-  FxStats,
-  HitStop,
-  IsEnemy,
-  IsPlayer,
-  Transform,
-} from "../../src/sim/traits";
+import { Clock, FxBurst, FxStats, HitStop, IsPlayer, Transform } from "../../src/sim/traits";
 
 function bootBesideOrc() {
   const world = createGameWorld(81);
   instantiateMap(world, "map:rescue-route", { classId: "knight" });
   const player = world.queryFirst(IsPlayer);
-  const orc = [...world.query(IsEnemy, Transform)].find(
-    (entity) => entity.get(IsEnemy)?.archetypeId === "forest-orc",
-  );
-  if (!player || !orc) throw new Error("missing actors");
-  const ot = orc.get(Transform);
-  player.set(Transform, { x: (ot?.x ?? 0) - 12, y: ot?.y ?? 0 });
+  if (!player) throw new Error("missing player");
+  // maps no longer author trash (zone model) — spawn the orc directly beside
+  // the knight to test the combat feedback against a known archetype
+  const pt = player.get(Transform);
+  const orc = spawnEnemy(world, "forest-orc", (pt?.x ?? 0) + 12, pt?.y ?? 0);
+  player.set(Transform, { x: (orc.get(Transform)?.x ?? 0) - 12, y: orc.get(Transform)?.y ?? 0 });
   return { world, player };
 }
 

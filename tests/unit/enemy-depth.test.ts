@@ -43,18 +43,21 @@ describe("S6.5 regional enemy depth", () => {
     expect(enemies.archetypes["banner-knight"]).toMatchObject({ behavior: "guard" });
   });
 
-  it("places new regional archetypes on the expanded route maps", () => {
-    const enemyIds = (mapId: string) =>
-      getMap(mapId)
-        .entities.map((entity) => entity.enemy)
-        .filter(Boolean);
+  it("each region's pool covers its archetypes (zone-spawned, not authored)", () => {
+    // In the ZONE model (docs/RAIL-COMMAND.md §maps are zones, not enemies) maps
+    // no longer author trash — a map's enemies are the region pool ∩ unlocked,
+    // spawned at the wave gates. So we assert the REGION pools carry the right
+    // archetypes for each tier, not that maps hardcode them.
+    const pool = (regionId: string) =>
+      enemies.difficultyCurve.find((r) => r.id === regionId)?.archetypes ?? [];
 
-    expect(enemyIds("map:oldwood-forest")).toEqual(
+    expect(pool("region:oldwood")).toEqual(
       expect.arrayContaining(["oldwood-raider", "thorn-shaman"]),
     );
-    expect(enemyIds("map:deep-forest")).toEqual(expect.arrayContaining(["bramble-stalker"]));
-    expect(enemyIds("map:castle-approach")).toEqual(
-      expect.arrayContaining(["gate-sentry", "banner-knight"]),
-    );
+    expect(pool("region:deep-forest")).toEqual(expect.arrayContaining(["bramble-stalker"]));
+    expect(pool("region:castle-approach")).toEqual(expect.arrayContaining(["gate-sentry"]));
+    // banner-knight is a miniboss (authored climax, not a wave archetype); it is
+    // NOT in the wave pool, but it must exist as an archetype
+    expect(enemies.archetypes["banner-knight"]).toMatchObject({ miniboss: true });
   });
 });

@@ -57,10 +57,26 @@
     "entry": { "x": 48, "y": 208 }
   },
   "entities": [
-    { "ref": "prop:glowcap-ring", "x": 140, "y": 180, "note": "a glowcap ring at the den mouth" },
-    { "ref": "prop:fallen-log", "x": 300, "y": 230, "note": "a great fallen trunk" },
-    { "ref": "prop:broadleaf-tree", "x": 420, "y": 160, "note": "the canopy over the nest" },
-    { "ref": "prop:bramble-hedge", "x": 360, "y": 240, "note": "thorns walling the den heart" },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 140,
+      "y": 180,
+      "note": "gnawed bones at the den mouth"
+    },
+    { "ref": "prop:dungeon-web", "x": 300, "y": 230, "note": "webbing strung between the thorns" },
+    {
+      "ref": "prop:mossy-waystone",
+      "x": 420,
+      "y": 160,
+      "note": "an old waystone the den swallowed"
+    },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 360,
+      "y": 240,
+      "note": "a second bone-midden in the heart"
+    },
+    { "ref": "prop:stump", "x": 240, "y": 168, "note": "a hewn stump marking the beast-trail" },
     {
       "ref": "prop:chest",
       "x": 640,

@@ -320,25 +320,8 @@
     {
       "enemy": "desert-wyrm",
       "x": 360,
-      "y": 304
-    },
-    {
-      "enemy": "dune-adder",
-      "x": 260,
-      "y": 290,
-      "note": "road ambusher between the wreck picker and the wyrm"
-    },
-    {
-      "enemy": "dune-adder",
-      "x": 420,
-      "y": 330,
-      "note": "second adder past the sandstone arch"
-    },
-    {
-      "enemy": "carrion-raven",
-      "x": 300,
-      "y": 250,
-      "note": "circling the wyrm-rib stakes"
+      "y": 304,
+      "note": "Sunken Road miniboss — the one authored combatant; trash is permuted from the unlocked set via the wave gates"
     }
   ],
   "composition": {

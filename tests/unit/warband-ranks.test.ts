@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { enemies, incremental } from "../../src/lib/config";
-import { collides } from "../../src/sim/collision";
+import { incremental } from "../../src/lib/config";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import { applyIncrementalEventReward } from "../../src/sim/incrementalProgress";
+import { waveSize } from "../../src/sim/systems/waves";
 import { IncrementalProgress, IsEnemy, Transform } from "../../src/sim/traits";
 import { familyArchetypeIds } from "../harness/families";
 
@@ -41,34 +41,17 @@ describe("S13.1 warband ranks reinforce the field", () => {
     expect(familyArchetypes().size).toBeGreaterThan(0);
   });
 
-  it("adds one family spawn per owned rank", () => {
-    const baseline = familyCount(bootWithRanks(0));
-    expect(baseline).toBeGreaterThan(0);
-    expect(familyCount(bootWithRanks(1))).toBe(baseline + 1);
-    expect(familyCount(bootWithRanks(3))).toBe(baseline + 3);
-  });
-
-  it("places reinforcements deterministically on walkable ground near their hosts", () => {
-    const read = () =>
-      [...bootWithRanks(3).query(IsEnemy, Transform)]
-        .filter((e) => (e.get(IsEnemy)?.bounty ?? 0) > 0)
-        .map((e) => {
-          const t = e.get(Transform);
-          return `${t?.x},${t?.y}`;
-        })
-        .sort();
-    const first = read();
-    expect(first).toHaveLength(3);
-    expect(read()).toEqual(first);
-
-    const world = bootWithRanks(3);
-    for (const e of [...world.query(IsEnemy, Transform)]) {
-      const info = e.get(IsEnemy);
-      if ((info?.bounty ?? 0) <= 0) continue;
-      const t = e.get(Transform);
-      const hitbox = enemies.archetypes[info?.archetypeId ?? ""].hitbox;
-      expect(collides(world, t?.x ?? 0, t?.y ?? 0, hitbox.w, hitbox.h)).toBe(false);
-    }
+  it("adds one wave spawn per owned warband rank (zone model)", () => {
+    // In the ZONE model (docs/RAIL-COMMAND.md §maps are zones, not enemies) the
+    // warband ranks no longer place reinforcements beside authored hosts — maps
+    // have no authored trash. Instead each owned rank makes every WAVE one
+    // enemy bigger (waveSize = base + warbandRanks), so the line faces a denser
+    // permutation of the unlocked set. That is the live reinforcement mechanic.
+    expect(waveSize(1, 0)).toBe(1);
+    expect(waveSize(1, 1)).toBe(2);
+    expect(waveSize(1, 3)).toBe(4);
+    // the rank bonus is additive at every wave number, not just the first
+    expect(waveSize(5, 3) - waveSize(5, 0)).toBe(3);
   });
 
   it("pays the node's bounty on top of the standard kill reward", () => {
