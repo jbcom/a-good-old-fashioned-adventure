@@ -37,6 +37,23 @@ describe("S6.5 regional enemy depth", () => {
     }
   });
 
+  it("assigns every map to at most one difficultyCurve region", () => {
+    // waveArchetypes resolves a map's region via `.find` (first match wins), so
+    // a map listed in two regions silently shadows the later one — and a reorder
+    // of difficultyCurve would change that map's waves out from under it. Assert
+    // the partition is clean so no map's wave pool is ambiguous.
+    const seen = new Map<string, string>();
+    const dupes: string[] = [];
+    for (const region of enemies.difficultyCurve) {
+      for (const mapId of region.maps) {
+        const prior = seen.get(mapId);
+        if (prior) dupes.push(`${mapId} in both ${prior} and ${region.id}`);
+        else seen.set(mapId, region.id);
+      }
+    }
+    expect(dupes, `maps double-listed across regions: ${dupes.join(", ")}`).toEqual([]);
+  });
+
   it("assigns distinct regional behavior families", () => {
     expect(enemies.archetypes["oldwood-raider"]).toMatchObject({ behavior: "patrol" });
     expect(enemies.archetypes["thorn-shaman"]).toMatchObject({ behavior: "caster" });

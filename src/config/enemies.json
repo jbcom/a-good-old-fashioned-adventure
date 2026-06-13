@@ -96,7 +96,6 @@
         "map:castle-hall",
         "map:castle-library",
         "map:castle-armory",
-        "map:castle-dungeon",
         "map:castle-throne-wing"
       ],
       "archetypes": ["crypt-skeleton", "crypt-sentry", "crypt-bat", "carrion-raven"]
