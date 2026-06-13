@@ -1,6 +1,6 @@
 ---
 title: Balance Paper-Playtests
-updated: 2026-06-12
+updated: 2026-06-13
 status: current
 domain: quality
 ---
@@ -188,3 +188,71 @@ The personas above are HYPOTHESES about feel; the statistical harness
 dimensions (F2). Each finding becomes a harness assertion: F-offense (every
 reachable class state has a line), F-smooth (no antagonist unlock spikes
 the curve), F-solvable (every reachable state farms a foothold).
+
+## Round 2 — the complete system (2026-06-13, post economy + lairs + AUTO)
+
+The first-round findings (F0-F6) predate the economy overhaul. With the
+three-currency flywheel, the enemy DAG, the dragon kin/track, the Dragon's
+Lair, and AUTO all shipped, the personas walk a different game. Re-running
+them against the live config:
+
+**Prior findings, resolved:**
+- F0 (no difficulty curve) — RESOLVED in shape: the enemy DAG now gates
+  pressure; an enemy-light roster faces only the kin holder, and unlocking
+  trash raises difficulty AND income. The curve EXISTS; tuning it smooth is
+  S19.1b's job.
+- F1 (wizard no unlock) — RESOLVED: wizard-focus (rose class) + wizard-arcana
+  (coin connector) exist.
+- F2 (no per-enemy unlock) — RESOLVED: six unlock-<enemy> gem majors with
+  per-enemy coin bounty connectors; waves filter by the unlocked set.
+- F3 (root offers only knight-vigor) — PARTIALLY RESOLVED: the root now
+  reaches more coin sinks via the enemy bounties once an enemy is unlocked;
+  the very first purchase is still constrained (gem-gated majors), see N1.
+- F5 (composite rose cliff) — REFRAMED: composites cost gems now (majors), not
+  roses; roses are the self-contained dragon-track currency. The cliff moved
+  off the mandatory path entirely (the anti-block guarantee).
+
+**P5 — The Hoarder (gems-first, never touches roses).** Plays the anti-block
+guarantee literally: farms gems off the first dragon + trash, never engages
+the rose/dragon track. Buys maps and classes on gems, ability ranks on coins.
+FINDING N1: this player NEVER needs roses and the game stays fully playable —
+exactly as designed. But the dragon track is then INVISIBLE to them; nothing
+signposts "you could unlock a dragon for more roses → more princesses." The
+flywheel's entrance needs a nudge (a tooltip/quest beat when the first kin
+node becomes affordable) or the hoarder never discovers the rose loop. Not a
+balance bug — a discoverability gap.
+
+**P6 — The Lair-Diver (chases the Dragon's Lair).** Unlocks the sunken-road
+lair (4R/70G entrance) to push the princess into the crypt. FINDING N2: the
+lair entrance is rose-OR-gem at 70 gems — a STEEP gem price for a player who
+hasn't engaged roses. Against the lair's payoff (a deeper, harder room that's
+"more fun and crazy"), 70 gems may underprice the rose path's appeal: a
+rose-rich player pays 4R (trivial), a gem-only player pays 70G (a real grind).
+The OR-cost ratio (4R vs 70G ≈ 1:17) is steeper than the dragon track's ~1:6 —
+intentional (lairs are deeper commitments) but worth a balance pass once the
+harness models lair runs.
+
+**P7 — The Auto-Farmer (lets AUTO run the spine).** Clears map 1 manually,
+then presses AUTO every session. FINDING N3: AUTO chains the unlocked spine
+and banks each run, stopping at the first loss — a clean farming loop. The
+risk: AUTO makes manual play optional once the spine is beatable, so the
+HAND-played experience must stay the richer one (better feel, the only way to
+see the maps at full fidelity). AUTO is correctly a convenience/farm, not the
+primary loop — but the design should ensure manual play always pays at least
+as well per-run as AUTO (today they use the same sim, so they're equal; if
+manual ever pays less, players optimize into AUTO and stop seeing the game).
+
+**P8 — The Curious Over-Reacher (unlocks maps 2-4 out of FOMO).** The humane
+guarantee under test: unlocks several maps fast, spread thin. FINDING N4:
+with the enemy DAG, an over-reached player on a late map faces only that
+map's kin holder (enemies not yet unlocked there) — so a late map is actually
+EASIER than a fully-built early map, not harder. This INVERTS the intended
+"each map crazier than the last" feeling for the over-reacher: they can limp
+through bare late maps. The fix is the kin holder + authored escalation
+(S19.2) making even a bare late map's dragon a real wall — which AUTO's
+stop-at-loss then respects (the over-reacher's AUTO halts at the map they
+can't yet handle, a clear signal of where to invest).
+
+These N-findings feed the next stages: N1 → a discoverability beat for the
+rose loop; N2 → lair OR-cost ratio pass in S19.1b; N3 → keep manual play
+the richest loop (S20 polish); N4 → late-map kin walls + escalation (S19.2).
