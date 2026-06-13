@@ -157,6 +157,8 @@ interface UiSnapshot {
   /** The wave number the gates have released (0 before the first wave). */
   wave: number;
   frontY: number;
+  /** The fielded line's frontmost position (rail-aware minimap marker). */
+  frontX: number;
   withered: number;
   fxSpawned: number;
   playerPose: string;
@@ -230,6 +232,7 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   lineByClass: {},
   wave: 0,
   frontY: 0,
+  frontX: 0,
   withered: 0,
   fxSpawned: 0,
   playerPose: "idle",
@@ -387,6 +390,7 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
   const inventory = player?.get(Inventory);
   const transform = player?.get(Transform);
   const vitals = lineVitals(world);
+  const front = frontline(world);
   const mapId = runtime?.mapId ?? "";
   const base: UiSnapshot = {
     mapId,
@@ -415,7 +419,8 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     lineMaxHp: vitals.maxHp,
     lineByClass: vitals.byClass,
     wave: currentWave(world),
-    frontY: frontline(world)?.y ?? 0,
+    frontY: front?.y ?? 0,
+    frontX: front?.x ?? 0,
     withered: [...world.query(IsEnemy, Withered)].filter(
       (enemy) => (enemy.get(Withered)?.left ?? 0) > 0,
     ).length,
@@ -1014,6 +1019,15 @@ function Minimap({ snapshot }: { snapshot: UiSnapshot }) {
       4,
       4,
     );
+    // the rail FRONT: a bright cross marking the line's foremost reach, so the
+    // minimap reads as the rail's advance, not just exploration
+    if (snapshot.frontX || snapshot.frontY) {
+      const fx = Math.floor((snapshot.frontX / engine.tileSize) * sx);
+      const fy = Math.floor((snapshot.frontY / engine.tileSize) * sy);
+      ctx.fillStyle = ui.theme.accentGold;
+      ctx.fillRect(fx - 3, fy, 7, 1);
+      ctx.fillRect(fx, fy - 3, 1, 7);
+    }
     ctx.fillStyle = ui.theme.accentGold;
     ctx.fillRect(canvas.width - 10, 4, 5, 5);
   }, [snapshot]);
