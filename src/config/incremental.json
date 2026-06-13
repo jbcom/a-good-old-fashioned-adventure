@@ -135,6 +135,16 @@
     "castleMap": "map:castle-hall"
   },
   "mapLairs": {
+    "map:oldwood-forest": {
+      "theme": "captured-village",
+      "rooms": [
+        "map:village",
+        "map:village-house",
+        "map:village-shop",
+        "map:village-stable",
+        "map:village-tavern"
+      ]
+    },
     "map:deep-forest": {
       "theme": "netherrealm-portal",
       "rooms": ["map:castle-library", "map:castle-yard"]
