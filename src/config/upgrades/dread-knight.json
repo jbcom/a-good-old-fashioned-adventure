@@ -5,7 +5,7 @@
   "category": "class",
   "track": "characters",
   "cost": {
-    "roses": 9
+    "gems": 72
   },
   "prerequisites": ["upgrade:warlock-pact", "upgrade:knight-vigor"],
   "classId": "dread-knight",

@@ -125,19 +125,21 @@ describe("S13.2 adversarial warband trade", () => {
     // something, but only count ranks (spawnBounty) reinforce — a major like
     // dragon-wake must never clone its boss.
     expect(warbands.length).toBeGreaterThan(0);
-    const startMap = getMap(incremental.loop.startMap);
+    // In the multi-map model (docs/RAIL-COMMAND.md §Map DAG) each unlockable
+    // enemy belongs to one spine map, so a bounty family must field on SOME
+    // spine map — not necessarily the start map (the start map intentionally
+    // begins with no enemies; later antagonists live on later maps).
+    const spineMaps = incremental.mapDag.order.map((id) => getMap(id));
     for (const node of familyNodes) {
       const tagged = familyArchetypeIds(node.enemyFamily ?? "");
       expect(tagged.length, `${node.id} family ${node.enemyFamily} tags nothing`).toBeGreaterThan(
         0,
       );
       if (!(node.spawnBounty ?? 0)) continue;
-      const fielded = startMap.entities.some(
-        (entity) => entity.enemy && tagged.includes(entity.enemy),
+      const fielded = spineMaps.some((map) =>
+        map.entities.some((entity) => entity.enemy && tagged.includes(entity.enemy)),
       );
-      expect(fielded, `${node.enemyFamily} has no spawn on ${incremental.loop.startMap}`).toBe(
-        true,
-      );
+      expect(fielded, `${node.enemyFamily} has no spawn on any spine map`).toBe(true);
       expect(nodeRanks(node), `${node.id} bounty nodes are count ranks`).toBeGreaterThan(1);
     }
   });

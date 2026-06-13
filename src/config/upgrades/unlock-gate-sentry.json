@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:unlock-gate-sentry",
+  "label": "Post the Gate Sentries",
+  "category": "enemy",
+  "cost": {
+    "gems": 24
+  },
+  "prerequisites": ["upgrade:unlock-bramble-stalker"],
+  "unlocksEnemy": "gate-sentry",
+  "unlocks": ["upgrade:sentry-bounty"],
+  "track": "encounters",
+  "note": "A guard antagonist on the sunken road and castle approach."
+}

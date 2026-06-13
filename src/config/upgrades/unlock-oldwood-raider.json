@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:unlock-oldwood-raider",
+  "label": "Rouse the Raiders",
+  "category": "enemy",
+  "cost": {
+    "gems": 8
+  },
+  "prerequisites": ["upgrade:unlock-forest-orc"],
+  "unlocksEnemy": "oldwood-raider",
+  "unlocks": ["upgrade:raider-bounty", "upgrade:unlock-thorn-shaman"],
+  "track": "encounters",
+  "note": "A sturdier raider joins the forest waves."
+}

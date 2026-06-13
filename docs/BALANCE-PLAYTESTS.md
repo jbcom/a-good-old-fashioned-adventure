@@ -157,6 +157,30 @@ can assert it has no jagged steps.
 Smaller findings (F1-F5) from the config walk remain valid and are tracked
 above; F0 supersedes them in priority.
 
+**F6 — THE ENEMY DAG NOW GATES PRESSURE, AND THE GATING IS UNEVEN ACROSS
+THE SPINE (2026-06-12, post S21.4 wiring).** With `waveArchetypes` now
+filtering region trash by the unlocked set, a minimal 3-class roster that
+has unlocked NO enemies plays each spine map differently — exactly the
+curve F0 was missing, but not yet tuned flat-to-rising:
+  - `rescue-route`/`oldwood`/`sunken-road`/`castle-approach`: line advances,
+    fells the authored boss/cast it can reach, banks coins — playable.
+  - `deep-forest`: line STALEMATES at advance 0.495 against the kin boss
+    (3 classes can't break it in 90s) — a legitimate non-winning run that
+    still farms (2 kills, 21 coins). This is the canon's "a win is not
+    always guaranteed" working as intended.
+  - `castle-hall` (the LAST map): line reaches the princess UNOPPOSED
+    (advance 1.0, 0 kills, 0 coins) because its enemies AND kin are gated
+    behind unlocks the roster hasn't bought. The final map should be the
+    hardest, not a free walk — this is F0's tail: escalation must be
+    authored so the LATE spine is not trivially clearable by a bare roster.
+The proposal: the per-map kin boss (now config: `dragon-kin-*` nodes) must
+spawn as the map's holder so even an enemy-light roster faces the kin wall
+at every map; the statistical suite (S19.1b) then samples WITH varying
+unlock sets to prove the win-rate curve rises smoothly map-over-map. The
+dragon track DAG (rose-OR-gem unlock + might ranks) and the kin rose-yield
+scaling are now wired; the remaining gap is spawning the unlocked kin as
+the per-map holder and authoring late-spine escalation (S19.2).
+
 ## Harness validation plan
 
 The personas above are HYPOTHESES about feel; the statistical harness

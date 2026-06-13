@@ -2,6 +2,7 @@ import type { World } from "koota";
 import type { IncrementalUpgradeNode } from "../lib/config";
 import { enemies, incremental } from "../lib/config";
 import { getMap } from "../lib/content/registry";
+import { currentMap } from "./mapProgression";
 import {
   type GameEvent,
   IncrementalProgress,
@@ -70,10 +71,11 @@ export function upgradeMaxHpBonus(
 export function rankCost(
   node: IncrementalUpgradeNode,
   ownedRanks: number,
-): { coins: number; roses: number } {
+): { coins: number; gems: number; roses: number } {
   const factor = (node.rankCostGrowth ?? 1) ** ownedRanks;
   return {
     coins: Math.round((node.cost.coins ?? 0) * factor),
+    gems: Math.round((node.cost.gems ?? 0) * factor),
     roses: Math.round((node.cost.roses ?? 0) * factor),
   };
 }
@@ -120,6 +122,7 @@ function sanitizeIdList(input: unknown, allowed: Set<string>): string[] {
 export function initialIncrementalProgress(startingCoins = 0): IncrementalProgressState {
   return {
     coins: Math.max(0, Math.floor(startingCoins)),
+    gems: 0,
     roses: 0,
     rescueCount: 0,
     purchasedUpgradeIds: [incremental.upgradeGraph.root],
@@ -128,6 +131,7 @@ export function initialIncrementalProgress(startingCoins = 0): IncrementalProgre
     unlockedClassIds: [incremental.classes.starting],
     unlockedRoutePackIds: [],
     currentRunCoinsEarned: 0,
+    currentRunGemsEarned: 0,
     currentRunRosesEarned: 0,
     currentRunRoadIds: [],
     activeRoutePackId: "baseline",
@@ -156,6 +160,7 @@ export function sanitizeIncrementalProgress(
       : "baseline";
   return {
     coins: Math.min(integer(data.coins, fallbackCoins), WALLET_CAP),
+    gems: Math.min(integer(data.gems), WALLET_CAP),
     roses: Math.min(integer(data.roses), WALLET_CAP),
     rescueCount: integer(data.rescueCount),
     purchasedUpgradeIds,
@@ -166,6 +171,7 @@ export function sanitizeIncrementalProgress(
       : [incremental.classes.starting, ...unlockedClassIds],
     unlockedRoutePackIds,
     currentRunCoinsEarned: integer(data.currentRunCoinsEarned),
+    currentRunGemsEarned: integer(data.currentRunGemsEarned),
     currentRunRosesEarned: integer(data.currentRunRosesEarned),
     currentRunRoadIds: Array.isArray(data.currentRunRoadIds)
       ? data.currentRunRoadIds.filter((id): id is string => typeof id === "string").slice(0, 256)
@@ -189,6 +195,7 @@ function sanitizeLastRun(input: unknown): IncrementalProgressState["lastRun"] {
   return {
     result,
     coinsEarned: integer(data.coinsEarned),
+    gemsEarned: integer(data.gemsEarned),
     rosesEarned: integer(data.rosesEarned),
     rescuedPrincess: data.rescuedPrincess === true,
     routePackId,
@@ -207,7 +214,7 @@ function setProgress(world: World, next: IncrementalProgressState): void {
   world.set(IncrementalProgress, next);
 }
 
-function bankSfx(world: World, name: "coin" | "rose"): void {
+function bankSfx(world: World, name: "coin" | "rose" | "pickup"): void {
   world.get(Outbox)?.sfx.push(name);
 }
 
@@ -237,6 +244,18 @@ export function bankCoins(world: World, amount: number): void {
   bankSfx(world, "coin");
 }
 
+/** Bank gems — the dragon-hoard currency (docs/RAIL-COMMAND.md §Three currencies). */
+export function bankGems(world: World, amount: number): void {
+  if (amount <= 0) return;
+  const progress = currentProgress(world);
+  setProgress(world, {
+    ...progress,
+    gems: progress.gems + amount,
+    currentRunGemsEarned: progress.currentRunGemsEarned + amount,
+  });
+  bankSfx(world, "pickup");
+}
+
 /**
  * Shop-side conversion: moves coins without touching the earned ledger
  * (a sale is not income; a purchase is not negative income). Returns the
@@ -263,6 +282,26 @@ function addRoses(world: World, amount: number): IncrementalProgressState {
   return next;
 }
 
+/**
+ * Roses the princess pays for the kin felled on this run (docs/RAIL-COMMAND.md
+ * §dragon's kin + §dragon upgrades cost roses): the kin node's base roseYield,
+ * raised by each purchased `dragon-might` rank for that map. A stronger
+ * antagonist pays a richer rescue — the flywheel that makes a dragon upgrade a
+ * rose INVESTMENT. Returns 0 when the map's kin is not yet unlocked (the
+ * earliest runs, where the lone holder pays only the base princess rose).
+ */
+function kinRoseYield(progress: IncrementalProgressState): number {
+  const mapId = currentMap(progress);
+  const kinNode = incremental.upgradeGraph.nodes.find((node) => node.dragonKin?.mapId === mapId);
+  if (!kinNode || !progress.purchasedUpgradeIds.includes(kinNode.id)) return 0;
+  const base = Math.max(0, Math.floor(kinNode.dragonKin?.roseYield ?? 0));
+  const mightNode = incremental.upgradeGraph.nodes.find(
+    (node) => node.id === `upgrade:dragon-might-${mapId.replace(/^map:/, "")}`,
+  );
+  const mightRanks = mightNode ? purchasedRank(progress, mightNode) : 0;
+  return base + mightRanks;
+}
+
 export function grantRunReward(world: World, rewardId: string): void {
   const reward = incremental.runRewards[rewardId];
   if (!reward) return;
@@ -270,9 +309,15 @@ export function grantRunReward(world: World, rewardId: string): void {
     bankCoins(world, reward.base ?? 0);
     return;
   }
+  if (reward.currency === "gems") {
+    bankGems(world, reward.base ?? 0);
+    return;
+  }
 
-  const next = addRoses(world, reward.base ?? 0);
+  let next = addRoses(world, reward.base ?? 0);
   if (rewardId !== "princessRescued") return;
+  // the princess pays extra for a stronger felled kin (the rose flywheel)
+  next = addRoses(world, kinRoseYield(next));
   const rescueCount = next.rescueCount + 1;
   setProgress(world, {
     ...next,
@@ -280,11 +325,13 @@ export function grantRunReward(world: World, rewardId: string): void {
     // the run closes here: its earned totals live on in lastRun only — a
     // save/refresh before the next run must not inherit them
     currentRunCoinsEarned: 0,
+    currentRunGemsEarned: 0,
     currentRunRosesEarned: 0,
     currentRunRoadIds: [],
     lastRun: {
       result: "victory",
       coinsEarned: next.currentRunCoinsEarned,
+      gemsEarned: next.currentRunGemsEarned,
       rosesEarned: next.currentRunRosesEarned,
       rescuedPrincess: true,
       routePackId: next.activeRoutePackId,
@@ -302,7 +349,11 @@ export function applyIncrementalEventReward(world: World, event: GameEvent): voi
   grantRunReward(world, "enemyDefeated");
   // warband reinforcements carry a bounty: the adversarial trade pays
   if (bounty > 0) bankCoins(world, bounty);
-  if (!archetypeId || !enemies.archetypes[archetypeId]?.miniboss) return;
+  const archetype = archetypeId ? enemies.archetypes[archetypeId] : undefined;
+  // dragon-kin (bosses + minibosses) drop gems from their hoard — the
+  // dragon-hoard currency that buys the majors (docs/RAIL-COMMAND.md)
+  if (archetype?.boss || archetype?.miniboss) grantRunReward(world, "dragonGems");
+  if (!archetypeId || !archetype?.miniboss) return;
 
   // minibosses always pay a purse; the FIRST clean clear pays a rose
   grantRunReward(world, "minibossDefeated");
@@ -357,11 +408,13 @@ export function recordDeathPayout(world: World): IncrementalProgressState {
     ...progress,
     // mirror the victory path: closing the run zeroes the live counters
     currentRunCoinsEarned: 0,
+    currentRunGemsEarned: 0,
     currentRunRosesEarned: 0,
     currentRunRoadIds: [],
     lastRun: {
       result: "gameover",
       coinsEarned: progress.currentRunCoinsEarned,
+      gemsEarned: progress.currentRunGemsEarned,
       rosesEarned: progress.currentRunRosesEarned,
       rescuedPrincess: false,
       routePackId: progress.activeRoutePackId,
@@ -378,6 +431,7 @@ export interface UpgradePurchaseResult {
   reason?: "missing" | "purchased" | "locked" | "currency";
   message: string;
   coins: number;
+  gems: number;
   roses: number;
 }
 
@@ -389,11 +443,28 @@ function canReachNode(progress: IncrementalProgressState, node: IncrementalUpgra
   return node.prerequisites.every((id) => progress.purchasedUpgradeIds.includes(id));
 }
 
-function hasCurrency(
+/**
+ * Resolve a node's price into what's actually charged (docs/RAIL-COMMAND.md
+ * §Three currencies — dual-cost). A node listing BOTH roses AND gems is an
+ * OR-cost (the dragon track): pay roses when affordable (the cheap shortcut),
+ * else gems (the painful fallback) — so a rose-poor gem-rich player is never
+ * blocked. Single-currency costs (coins connectors, gem majors) pass through.
+ */
+export function resolvePayment(
   progress: IncrementalProgressState,
-  price: { coins: number; roses: number },
-): boolean {
-  return progress.coins >= price.coins && progress.roses >= price.roses;
+  price: { coins: number; gems: number; roses: number },
+): { coins: number; gems: number; roses: number } | null {
+  const isOrCost = price.roses > 0 && price.gems > 0;
+  if (isOrCost) {
+    if (progress.roses >= price.roses) return { coins: price.coins, gems: 0, roses: price.roses };
+    if (progress.gems >= price.gems) return { coins: price.coins, gems: price.gems, roses: 0 };
+    return null;
+  }
+  return progress.coins >= price.coins &&
+    progress.gems >= price.gems &&
+    progress.roses >= price.roses
+    ? price
+    : null;
 }
 
 function addUnique(values: string[], value?: string): string[] {
@@ -412,6 +483,7 @@ export function purchaseUpgradeNode(world: World, nodeId: string): UpgradePurcha
       reason: "missing",
       message: "That vow has not been written yet.",
       coins: progress.coins,
+      gems: progress.gems,
       roses: progress.roses,
     };
   }
@@ -428,6 +500,7 @@ export function purchaseUpgradeNode(world: World, nodeId: string): UpgradePurcha
           ? `${node.label} is already at full rank.`
           : `${node.label} is already part of the tale.`,
       coins: progress.coins,
+      gems: progress.gems,
       roses: progress.roses,
     };
   }
@@ -439,18 +512,27 @@ export function purchaseUpgradeNode(world: World, nodeId: string): UpgradePurcha
       reason: "locked",
       message: `${node.label} needs a connected vow first.`,
       coins: progress.coins,
+      gems: progress.gems,
       roses: progress.roses,
     };
   }
   const price = rankCost(node, ownedRanks);
-  if (!hasCurrency(progress, price)) {
+  const payment = resolvePayment(progress, price);
+  if (!payment) {
+    const parts = [
+      price.coins ? `${price.coins} coins` : "",
+      price.gems ? `${price.gems} gems` : "",
+      price.roses ? `${price.roses} roses` : "",
+    ].filter(Boolean);
+    const joiner = price.roses > 0 && price.gems > 0 ? " or " : " and ";
     return {
       ok: false,
       nodeId: node.id,
       label: node.label,
       reason: "currency",
-      message: `${node.label} asks for ${price.coins} coins and ${price.roses} roses.`,
+      message: `${node.label} asks for ${parts.join(joiner)}.`,
       coins: progress.coins,
+      gems: progress.gems,
       roses: progress.roses,
     };
   }
@@ -458,8 +540,9 @@ export function purchaseUpgradeNode(world: World, nodeId: string): UpgradePurcha
   const nextRank = ownedRanks + 1;
   const next = {
     ...progress,
-    coins: progress.coins - price.coins,
-    roses: progress.roses - price.roses,
+    coins: progress.coins - payment.coins,
+    gems: progress.gems - payment.gems,
+    roses: progress.roses - payment.roses,
     purchasedUpgradeIds:
       ownedRanks === 0 ? [...progress.purchasedUpgradeIds, node.id] : progress.purchasedUpgradeIds,
     upgradeRanks:
@@ -480,6 +563,7 @@ export function purchaseUpgradeNode(world: World, nodeId: string): UpgradePurcha
     label: node.label,
     message,
     coins: next.coins,
+    gems: next.gems,
     roses: next.roses,
   };
 }

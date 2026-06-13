@@ -4,7 +4,7 @@
   "label": "Siege Approach",
   "category": "map",
   "cost": {
-    "roses": 4
+    "gems": 32
   },
   "prerequisites": ["upgrade:sunken-shortcut"],
   "routePack": "castle-approach",

@@ -12,6 +12,8 @@ export interface CommandPerception {
   units: number;
   enemies: number;
   coins: number;
+  gems: number;
+  roses: number;
   frontY: number;
   timeScale: number;
 }
@@ -44,6 +46,8 @@ export class CommanderGovernor {
       units: Number(data.units ?? 0),
       enemies: Number(data.enemies ?? 0),
       coins: Number(data.coins ?? 0),
+      gems: Number(data.gems ?? 0),
+      roses: Number(data.roses ?? 0),
       frontY: Number(data.frontY ?? 0),
       timeScale: Number(data.timeScale ?? 1),
     };

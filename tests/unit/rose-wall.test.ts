@@ -3,27 +3,33 @@ import { incremental } from "../../src/lib/config";
 
 /**
  * No rose walls (user mandate 2026-06-12): "be very careful not to block a
- * sub-tree on roses — once you unlock a new node all of its children should
- * be coins. New maps, enemies, classes have increasing rose costs, but the
- * upgrades for each node should be coins, otherwise you could create a
- * situation where they get stuck or feel like they have to grind."
+ * sub-tree on roses … otherwise you could create a situation where they get
+ * stuck or feel like they have to grind." Later refined into the
+ * three-currency flywheel: "what if dragons could be unlocked by either an
+ * increasing number of roses OR a big painfully increasing number of gems …
+ * that makes roses a shortcut but not a hardblock."
  *
- * The enforceable invariant: every rose node (a branching point — new map/
- * enemy/class) must offer a COIN sink the player can farm toward, EITHER as
- * a direct coin child OR via its nearest map ancestor (the dragon sub-tree
- * is intentionally all-rose — dragon upgrades cost roses because they earn
- * more roses, docs/RAIL-COMMAND.md §Dragon upgrades cost ROSES — and is
- * wall-free because the sibling map-economy path is coin-priced).
+ * The enforceable invariant: every rose node must have an always-farmable
+ * escape so it is never a hard deadlock. Three ways a rose node qualifies:
+ *   1. OR-cost — it also carries a GEM price (the dragon-track dual cost).
+ *      Gems are always farmable off any felled kin, so a gem alternative is
+ *      by itself a complete anti-block guarantee (docs/RAIL-COMMAND.md
+ *      §dual-cost / §anti-block guarantee).
+ *   2. A direct COIN child to farm toward.
+ *   3. A coin sink via its nearest map/route ancestor.
  */
 const { nodes } = incremental.upgradeGraph;
 const byId = new Map(nodes.map((n) => [n.id, n]));
 const isRose = (n: (typeof nodes)[number]) => (n.cost?.roses ?? 0) > 0;
 const isCoin = (n: (typeof nodes)[number]) => (n.cost?.coins ?? 0) > 0;
+/** OR-cost: a rose node that also lists a gem price is never a hard wall. */
+const hasGemAlternative = (n: (typeof nodes)[number]) => (n.cost?.gems ?? 0) > 0;
 
 function coinChildren(node: (typeof nodes)[number]): boolean {
   return (node.unlocks ?? [])
     .map((id) => byId.get(id))
-    .some((k) => Boolean(k) && isCoin(k!) && !isRose(k!));
+    .filter((k): k is (typeof nodes)[number] => Boolean(k))
+    .some((k) => isCoin(k) && !isRose(k));
 }
 
 /** The nearest map/route ancestor — the dragon sub-tree's coin-bearing root. */
@@ -46,10 +52,12 @@ describe("no rose walls", () => {
   it("every rose node has a coin sink (direct or via its map ancestor)", () => {
     for (const node of nodes) {
       if (!isRose(node)) continue;
+      // OR-cost dragon-track nodes carry a gem fallback — never a hard wall.
+      if (hasGemAlternative(node)) continue;
       const kids = (node.unlocks ?? []).filter((id) => byId.has(id));
       if (kids.length === 0) continue; // leaf rose node — terminal, fine
       const directCoin = coinChildren(node);
-      // dragon/sub-tree rose nodes are wall-free if a map ancestor is farmable
+      // sub-tree rose nodes are wall-free if a map ancestor is farmable
       const ancestorCoin = (() => {
         const map = nearestMapAncestor(node);
         return Boolean(map && coinChildren(map));

@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-kin-deep-forest",
+  "label": "Wake the Sister",
+  "category": "enemy",
+  "cost": {
+    "roses": 4,
+    "gems": 60
+  },
+  "prerequisites": ["upgrade:dragon-kin-oldwood-forest"],
+  "enemyFamily": "dragon",
+  "unlocksEnemy": "dragon",
+  "dragonKin": {
+    "mapId": "map:deep-forest",
+    "relation": "sister",
+    "hue": 285,
+    "roseYield": 5
+  },
+  "unlocks": ["upgrade:dragon-might-deep-forest", "upgrade:dragon-kin-sunken-road"],
+  "track": "encounters",
+  "note": "Kin boss for deep-forest. Rose-OR-gem dual cost (roses logarithmic shortcut, gems exponential fallback — docs/RAIL-COMMAND.md §dual-cost)."
+}

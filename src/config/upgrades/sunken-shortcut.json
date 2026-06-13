@@ -4,7 +4,7 @@
   "label": "Sunken Road Shortcut",
   "category": "route",
   "cost": {
-    "roses": 3
+    "gems": 24
   },
   "prerequisites": ["upgrade:rogue-shortcut"],
   "routePack": "sunken-road",

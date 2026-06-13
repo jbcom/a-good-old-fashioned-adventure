@@ -4,7 +4,7 @@
   "label": "Rogue Shortcut",
   "category": "class",
   "cost": {
-    "roses": 2
+    "gems": 16
   },
   "prerequisites": ["upgrade:oldwood-bend"],
   "classId": "rogue",

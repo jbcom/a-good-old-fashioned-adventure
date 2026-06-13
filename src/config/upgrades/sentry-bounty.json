@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:sentry-bounty",
+  "label": "Sentry Bounty",
+  "category": "economy",
+  "cost": {
+    "coins": 30
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.7,
+  "prerequisites": ["upgrade:unlock-gate-sentry"],
+  "enemyFamily": "gate-sentry",
+  "spawnBounty": 5,
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Each rank pays more coins per gate-sentry felled — the income the enemy unlock promises, and the coin sink that keeps the antagonist chain wall-free."
+}

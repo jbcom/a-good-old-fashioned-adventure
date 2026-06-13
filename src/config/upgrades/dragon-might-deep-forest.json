@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-might-deep-forest",
+  "label": "Sister's Might",
+  "category": "enemy",
+  "cost": {
+    "roses": 4,
+    "gems": 36
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.8,
+  "prerequisites": ["upgrade:dragon-kin-deep-forest"],
+  "enemyFamily": "dragon",
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Strengthens the deep-forest kin: each rank adds a phase/hp tier and raises the roses the princess pays for felling it (docs/RAIL-COMMAND.md §dragon upgrades cost roses). Rose-OR-gem, ranked."
+}

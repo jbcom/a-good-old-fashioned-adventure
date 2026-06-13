@@ -13,9 +13,25 @@ import {
   WaveState,
 } from "../../src/sim/traits";
 
+/**
+ * rescue-route's region trash (region:oldwood) is gated behind the enemy DAG
+ * (docs/RAIL-COMMAND.md §enemy DAG): the first map starts with NO enemies
+ * unlocked, so waves stay empty until the player buys an unlock node. These
+ * tests exercise the wave MACHINE, so they seed one unlocked trash archetype.
+ */
+function unlockTrash(world: ReturnType<typeof createGameWorld>) {
+  const progress = world.get(IncrementalProgress);
+  if (!progress) throw new Error("no progress");
+  world.set(IncrementalProgress, {
+    ...progress,
+    purchasedUpgradeIds: [...progress.purchasedUpgradeIds, "upgrade:unlock-forest-orc"],
+  });
+}
+
 function field(seed = 51) {
   const world = createGameWorld(seed);
   instantiateMap(world, "map:rescue-route", { classId: "knight" });
+  unlockTrash(world);
   // rail-command field: no player pawn, no authored cast in the way
   world.queryFirst(IsPlayer)?.destroy();
   for (const e of [...world.query(IsEnemy)]) e.destroy();

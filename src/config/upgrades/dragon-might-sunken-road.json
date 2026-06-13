@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-might-sunken-road",
+  "label": "Step-Cousin's Might",
+  "category": "enemy",
+  "cost": {
+    "roses": 5,
+    "gems": 72
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.8,
+  "prerequisites": ["upgrade:dragon-kin-sunken-road"],
+  "enemyFamily": "dragon",
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Strengthens the sunken-road kin: each rank adds a phase/hp tier and raises the roses the princess pays for felling it (docs/RAIL-COMMAND.md §dragon upgrades cost roses). Rose-OR-gem, ranked."
+}

@@ -5,7 +5,7 @@
   "category": "class",
   "track": "characters",
   "cost": {
-    "roses": 3
+    "gems": 24
   },
   "prerequisites": ["upgrade:bard-road-song"],
   "classId": "priest",

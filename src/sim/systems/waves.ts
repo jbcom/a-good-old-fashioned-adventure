@@ -40,10 +40,28 @@ function ownedWarbandRanks(world: World): number {
   return total;
 }
 
-/** Trash archetypes of the map's region — bosses stay placed, never waved. */
-function waveArchetypes(mapId: string): string[] {
+/** Every archetype the player has unlocked via an enemy-DAG node. */
+function unlockedEnemies(world: World): Set<string> {
+  const owned = new Set(world.get(IncrementalProgress)?.purchasedUpgradeIds ?? []);
+  const unlocked = new Set<string>();
+  for (const node of incremental.upgradeGraph.nodes) {
+    if (node.unlocksEnemy && owned.has(node.id)) unlocked.add(node.unlocksEnemy);
+  }
+  return unlocked;
+}
+
+/**
+ * Trash archetypes that spawn in this map's waves: the region's trash
+ * INTERSECTED with what the player has unlocked (the enemy DAG dial — the
+ * first run unlocks none, so the boss alone holds the princess; the player
+ * adds antagonists to raise difficulty AND income). Bosses are never waved.
+ */
+function waveArchetypes(mapId: string, world: World): string[] {
   const region = enemies.difficultyCurve.find((entry) => entry.maps.includes(mapId));
-  return (region?.archetypes ?? []).filter((id) => !enemies.archetypes[id]?.miniboss);
+  const unlocked = unlockedEnemies(world);
+  return (region?.archetypes ?? []).filter(
+    (id) => !enemies.archetypes[id]?.miniboss && unlocked.has(id),
+  );
 }
 
 export function waveStep(world: World): void {
@@ -77,7 +95,7 @@ export function waveStep(world: World): void {
   const current = world.get(WaveState);
   if (!current) return;
   const wave = current.wave + 1;
-  const archetypes = waveArchetypes(mapId);
+  const archetypes = waveArchetypes(mapId, world);
   if (archetypes.length === 0) return;
   const gate = gates[(wave - 1) % gates.length];
   const size = waveSize(wave, ownedWarbandRanks(world));

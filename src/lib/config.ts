@@ -82,7 +82,7 @@ export interface ClassDef {
   temperament?: ClassTemperament;
 }
 
-export type IncrementalCurrencyId = "coins" | "roses";
+export type IncrementalCurrencyId = "coins" | "gems" | "roses";
 
 export interface IncrementalCurrencyDef {
   label: string;
@@ -107,6 +107,22 @@ export interface IncrementalUpgradeNode {
   classId?: string;
   routePack?: string;
   enemyFamily?: string;
+  /** Archetype this node activates in the map's waves (the enemy DAG dial). */
+  unlocksEnemy?: string;
+  /**
+   * Per-map kin boss (docs/RAIL-COMMAND.md §dragon's kin). Present on the
+   * dragon-unlock node of a map's sub-tree: the map's guardian, recolored
+   * from the green High Dragon by `hue`, with a tracked `relation` modifier
+   * (brother/uncle/step-cousin…) that the rescue dialogue quips about.
+   */
+  dragonKin?: {
+    mapId: string;
+    relation: string;
+    /** target hue (deg) the green dragon ramp is rotated to for this kin */
+    hue: number;
+    /** roses the princess pays for felling this kin on the run */
+    roseYield?: number;
+  };
   /** Coins each warband reinforcement pays on defeat, beyond enemyDefeated. */
   spawnBounty?: number;
   ability?: string;

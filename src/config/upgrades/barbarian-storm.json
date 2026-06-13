@@ -5,7 +5,7 @@
   "category": "class",
   "track": "characters",
   "cost": {
-    "roses": 4
+    "gems": 32
   },
   "prerequisites": ["upgrade:knight-vigor"],
   "classId": "barbarian",

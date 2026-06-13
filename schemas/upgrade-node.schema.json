@@ -13,8 +13,10 @@
     },
     "cost": {
       "type": "object",
+      "description": "Currency price. A node listing BOTH roses and gems is an OR-cost (pay either) — the dragon-track convention from docs/RAIL-COMMAND.md §dual-cost.",
       "properties": {
         "coins": { "type": "integer", "minimum": 0 },
+        "gems": { "type": "integer", "minimum": 0 },
         "roses": { "type": "integer", "minimum": 0 }
       },
       "additionalProperties": false
@@ -32,8 +34,21 @@
     "track": { "type": "string" },
     "classId": { "type": "string" },
     "enemyFamily": { "type": "string" },
+    "unlocksEnemy": { "type": "string" },
     "spawnBounty": { "type": "number" },
     "routePack": { "type": "string" },
+    "dragonKin": {
+      "type": "object",
+      "description": "Per-map kin boss (docs/RAIL-COMMAND.md §dragon's kin). The map's guardian recolored from the green High Dragon, with a tracked relation modifier for the rescue quip.",
+      "required": ["mapId", "relation", "hue"],
+      "properties": {
+        "mapId": { "type": "string", "pattern": "^map:[a-z0-9-]+$" },
+        "relation": { "type": "string" },
+        "hue": { "type": "number", "minimum": 0, "maximum": 360 },
+        "roseYield": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
     "effect": {
       "type": "object",
       "properties": {

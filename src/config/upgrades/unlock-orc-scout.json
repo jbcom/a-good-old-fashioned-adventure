@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:unlock-orc-scout",
+  "label": "Send the Scouts",
+  "category": "enemy",
+  "cost": {
+    "gems": 16
+  },
+  "prerequisites": ["upgrade:unlock-thorn-shaman"],
+  "unlocksEnemy": "orc-scout",
+  "unlocks": ["upgrade:scout-bounty", "upgrade:unlock-bramble-stalker"],
+  "track": "encounters",
+  "note": "A fast scout joins the deep-forest waves."
+}

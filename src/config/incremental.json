@@ -54,6 +54,10 @@
     "minibossDefeated": {
       "currency": "coins",
       "base": 15
+    },
+    "dragonGems": {
+      "currency": "gems",
+      "base": 4
     }
   },
   "upgradeGraph": {

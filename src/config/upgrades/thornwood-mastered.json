@@ -4,7 +4,7 @@
   "label": "Thornwood Mastered",
   "category": "map",
   "cost": {
-    "roses": 2
+    "gems": 16
   },
   "prerequisites": ["upgrade:oldwood-bend"],
   "routePack": "deep-forest",

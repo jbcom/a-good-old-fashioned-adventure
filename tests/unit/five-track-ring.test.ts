@@ -38,7 +38,7 @@ describe("S9.11 five-track ring", () => {
 
     expect(lockedTracks).toEqual(["castle"]);
     const castleEntry = nodes.find((node) => node.id === trackEntries.castle);
-    expect(castleEntry?.cost.roses ?? 0, "castle gate is a rose major").toBeGreaterThan(0);
+    expect(castleEntry?.cost.gems ?? 0, "castle gate is a gem major").toBeGreaterThan(0);
     expect(
       castleEntry?.prerequisites.every((id) => id !== root),
       "castle gate sits deeper than the root",

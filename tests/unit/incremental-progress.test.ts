@@ -126,15 +126,17 @@ describe("incremental progression state", () => {
       reason: "currency",
     });
 
+    // class-unlock majors price in GEMS now (the dragon-hoard currency that
+    // buys breadth — docs/RAIL-COMMAND.md §Three currencies)
     world.set(IncrementalProgress, {
       ...(world.get(IncrementalProgress) ?? sanitizeIncrementalProgress({}, 0)),
-      roses: 2,
+      gems: 10,
     });
     const bought = purchaseUpgradeNode(world, "upgrade:ranger-trail");
     expect(bought).toMatchObject({
       ok: true,
       nodeId: "upgrade:ranger-trail",
-      roses: 1,
+      gems: 2,
     });
     expect(world.get(IncrementalProgress)).toMatchObject({
       purchasedUpgradeIds: ["upgrade:first-vow", "upgrade:ranger-trail"],

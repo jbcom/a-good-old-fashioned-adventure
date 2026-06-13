@@ -61,6 +61,7 @@ import {
   purchaseUpgradeNode,
   rankCost,
   recordDeathPayout,
+  resolvePayment,
   restoreIncrementalProgress,
   rosterFor,
   sanitizeIncrementalProgress,
@@ -434,6 +435,7 @@ function saveRowFromSnapshot(current: UiSnapshot) {
       playerX: current.playerX,
       playerY: current.playerY,
       coins: current.incrementalProgress.coins,
+      gems: current.incrementalProgress.gems,
       roses: current.incrementalProgress.roses,
       rescueCount: current.incrementalProgress.rescueCount,
       purchasedUpgradeIds: current.incrementalProgress.purchasedUpgradeIds,
@@ -470,7 +472,9 @@ function upgradeNodeState(
   const reachable = node.prerequisites.every((id) => progress.purchasedUpgradeIds.includes(id));
   if (!reachable) return "locked";
   const price = rankCost(node, ownedRanks);
-  if (progress.coins < price.coins || progress.roses < price.roses) {
+  // resolvePayment honors the dragon-track OR-cost (pay roses or gems), so a
+  // rose-OR-gem node is affordable when EITHER currency covers it.
+  if (resolvePayment(progress, price) === null) {
     return "unaffordable";
   }
   return "available";
@@ -486,10 +490,14 @@ function upgradeCostLabel(
     return maxRanks > 1 ? `Full · ${ownedRanks}/${maxRanks}` : "Owned";
   }
   const price = rankCost(node, ownedRanks);
-  const costs = [price.coins ? `${price.coins}C` : "", price.roses ? `${price.roses}R` : ""].filter(
-    Boolean,
-  );
-  const cost = costs.length ? costs.join(" ") : "Root";
+  const costs = [
+    price.coins ? `${price.coins}C` : "",
+    price.gems ? `${price.gems}G` : "",
+    price.roses ? `${price.roses}R` : "",
+  ].filter(Boolean);
+  // a rose-OR-gem dragon node reads "2R or 12G" (pay either); others join with ·
+  const orCost = price.roses > 0 && price.gems > 0;
+  const cost = costs.length ? costs.join(orCost ? " or " : " ") : "Root";
   return maxRanks > 1 ? `${cost} · ${ownedRanks}/${maxRanks}` : cost;
 }
 
@@ -515,7 +523,9 @@ function nextVow(progress: IncrementalProgressState): IncrementalUpgradeNode | n
   for (const node of RING_NODES) {
     if (upgradeNodeState(progress, node) !== "available") continue;
     const price = rankCost(node, purchasedRank(progress, node));
-    const weight = price.coins + price.roses * 20;
+    // gems and roses are rarer than coins, so weight them up when picking the
+    // cheapest signposted next vow (roses rarest, gems next, coins common)
+    const weight = price.coins + price.gems * 12 + price.roses * 20;
     if (weight < bestPrice) {
       bestPrice = weight;
       best = node;
@@ -799,6 +809,7 @@ function Hud({
           value={snapshot.xp}
         />
         <CurrencyToken label="C" value={snapshot.incrementalProgress.coins} testId="hud-coins" />
+        <CurrencyToken label="G" value={snapshot.incrementalProgress.gems} testId="hud-gems" />
         <CurrencyToken label="R" value={snapshot.incrementalProgress.roses} testId="hud-roses" />
         <span className="map-token">{snapshot.mapName}</span>
         <button
@@ -1051,9 +1062,13 @@ function ResultsPanel({
             Earned {run?.coinsEarned ?? snapshot.incrementalProgress.currentRunCoinsEarned}C
           </span>
           <span>
+            Earned {run?.gemsEarned ?? snapshot.incrementalProgress.currentRunGemsEarned}G
+          </span>
+          <span>
             Earned {run?.rosesEarned ?? snapshot.incrementalProgress.currentRunRosesEarned}R
           </span>
           <span>Total {snapshot.incrementalProgress.coins}C</span>
+          <span>Total {snapshot.incrementalProgress.gems}G</span>
           <span>Total {snapshot.incrementalProgress.roses}R</span>
           <span>Rescues {snapshot.incrementalProgress.rescueCount}</span>
         </div>
@@ -1922,6 +1937,7 @@ export function App({
       "data-max-hp": String(snapshot.maxHp),
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
       "data-coins": String(snapshot.incrementalProgress.coins),
+      "data-gems": String(snapshot.incrementalProgress.gems),
       "data-roses": String(snapshot.incrementalProgress.roses),
       "data-rescue-count": String(snapshot.incrementalProgress.rescueCount),
       "data-purchased-upgrades": snapshot.incrementalProgress.purchasedUpgradeIds.join(","),

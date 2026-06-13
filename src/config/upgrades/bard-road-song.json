@@ -4,7 +4,7 @@
   "label": "Bard's Road Song",
   "category": "class",
   "cost": {
-    "roses": 3
+    "gems": 24
   },
   "prerequisites": ["upgrade:thornwood-mastered"],
   "classId": "bard",

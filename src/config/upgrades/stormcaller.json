@@ -5,7 +5,7 @@
   "category": "class",
   "track": "characters",
   "cost": {
-    "roses": 9
+    "gems": 72
   },
   "prerequisites": ["upgrade:barbarian-storm", "upgrade:sorcerer-emberweave"],
   "classId": "stormcaller",

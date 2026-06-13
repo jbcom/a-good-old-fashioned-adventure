@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-kin-rescue-route",
+  "label": "Wake the Brother",
+  "category": "enemy",
+  "cost": {
+    "roses": 2,
+    "gems": 12
+  },
+  "prerequisites": ["upgrade:dragon-wake"],
+  "enemyFamily": "dragon",
+  "unlocksEnemy": "dragon",
+  "dragonKin": {
+    "mapId": "map:rescue-route",
+    "relation": "brother",
+    "hue": 130,
+    "roseYield": 3
+  },
+  "unlocks": ["upgrade:dragon-might-rescue-route", "upgrade:dragon-kin-oldwood-forest"],
+  "track": "encounters",
+  "note": "First kin boss. Rose-OR-gem (docs/RAIL-COMMAND.md §dual-cost): roses are the logarithmic shortcut, gems the exponential fallback. Cheeky nod: 'Oh, I'm not the dragon with your princess — that's my brother.'"
+}

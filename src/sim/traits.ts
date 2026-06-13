@@ -144,6 +144,7 @@ export const EventQueue = trait(() => ({ events: [] as GameEvent[] }));
 export interface IncrementalLastRun {
   result: "victory" | "gameover";
   coinsEarned: number;
+  gemsEarned: number;
   rosesEarned: number;
   rescuedPrincess: boolean;
   routePackId: string;
@@ -151,6 +152,9 @@ export interface IncrementalLastRun {
 
 export interface IncrementalProgressState {
   coins: number;
+  /** dragon-hoard currency (docs/RAIL-COMMAND.md §Three currencies): from
+   * dragon-kin, spends on the majors (new maps/classes). */
+  gems: number;
   roses: number;
   rescueCount: number;
   purchasedUpgradeIds: string[];
@@ -159,6 +163,7 @@ export interface IncrementalProgressState {
   unlockedClassIds: string[];
   unlockedRoutePackIds: string[];
   currentRunCoinsEarned: number;
+  currentRunGemsEarned: number;
   currentRunRosesEarned: number;
   /** road-waypoint zones already paid this run (map:trigger keys). */
   currentRunRoadIds: string[];
@@ -169,6 +174,7 @@ export interface IncrementalProgressState {
 export const IncrementalProgress = trait(
   (): IncrementalProgressState => ({
     coins: 0,
+    gems: 0,
     roses: 0,
     rescueCount: 0,
     purchasedUpgradeIds: [],
@@ -177,6 +183,7 @@ export const IncrementalProgress = trait(
     unlockedClassIds: [],
     unlockedRoutePackIds: [],
     currentRunCoinsEarned: 0,
+    currentRunGemsEarned: 0,
     currentRunRosesEarned: 0,
     currentRunRoadIds: [],
     activeRoutePackId: "baseline",

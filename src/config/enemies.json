@@ -50,7 +50,7 @@
       "name": "Oldwood Bandit",
       "sprite": "sprite:bandit-swordsman",
       "palette": "palette:orc",
-      "family": "orc",
+      "family": "forest-orc",
       "hp": 20,
       "speed": 32,
       "hitbox": {
@@ -69,13 +69,14 @@
         "w": 12,
         "h": 12
       },
-      "behavior": "patrol"
+      "behavior": "patrol",
+      "family": "oldwood-raider"
     },
     "orc-scout": {
       "name": "Bandit Scout",
       "sprite": "sprite:rogue",
       "palette": "palette:orc",
-      "family": "orc",
+      "family": "orc-scout",
       "hp": 15,
       "speed": 45,
       "hitbox": {
@@ -128,7 +129,8 @@
           "life": 2.8
         },
         "sfx": "magic"
-      }
+      },
+      "family": "thorn-shaman"
     },
     "bramble-stalker": {
       "name": "Bramble Stalker",
@@ -144,7 +146,8 @@
       "ambush": {
         "triggerRange": 76,
         "deaggroRange": 150
-      }
+      },
+      "family": "bramble-stalker"
     },
     "desert-wyrm": {
       "name": "Desert Wyrm",
@@ -210,7 +213,8 @@
         "aggroRange": 110,
         "deaggroRange": 140,
         "leashRange": 96
-      }
+      },
+      "family": "gate-sentry"
     },
     "banner-knight": {
       "name": "Banner Knight",

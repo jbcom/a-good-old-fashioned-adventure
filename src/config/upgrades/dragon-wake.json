@@ -4,10 +4,14 @@
   "label": "Dragon Wake",
   "category": "enemy",
   "cost": {
-    "roses": 2
+    "gems": 16
   },
   "prerequisites": ["upgrade:first-vow"],
   "enemyFamily": "dragon",
-  "unlocks": ["upgrade:orc-warband", "upgrade:sorcerer-cinder"],
+  "unlocks": [
+    "upgrade:sorcerer-cinder",
+    "upgrade:unlock-forest-orc",
+    "upgrade:dragon-kin-rescue-route"
+  ],
   "track": "encounters"
 }

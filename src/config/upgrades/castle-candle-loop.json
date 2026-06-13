@@ -4,7 +4,7 @@
   "label": "Candlelit Castle Loop",
   "category": "route",
   "cost": {
-    "roses": 5
+    "gems": 40
   },
   "prerequisites": ["upgrade:sorcerer-cinder"],
   "routePack": "castle-interior",

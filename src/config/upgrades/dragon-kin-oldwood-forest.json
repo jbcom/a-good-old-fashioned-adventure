@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-kin-oldwood-forest",
+  "label": "Wake the Uncle",
+  "category": "enemy",
+  "cost": {
+    "roses": 3,
+    "gems": 28
+  },
+  "prerequisites": ["upgrade:dragon-kin-rescue-route"],
+  "enemyFamily": "dragon",
+  "unlocksEnemy": "dragon",
+  "dragonKin": {
+    "mapId": "map:oldwood-forest",
+    "relation": "uncle",
+    "hue": 35,
+    "roseYield": 4
+  },
+  "unlocks": ["upgrade:dragon-might-oldwood-forest", "upgrade:dragon-kin-deep-forest"],
+  "track": "encounters",
+  "note": "Kin boss for oldwood-forest. Rose-OR-gem dual cost (roses logarithmic shortcut, gems exponential fallback — docs/RAIL-COMMAND.md §dual-cost)."
+}

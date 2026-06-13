@@ -5,7 +5,7 @@
   "category": "class",
   "track": "characters",
   "cost": {
-    "roses": 8
+    "gems": 64
   },
   "prerequisites": ["upgrade:priest-vows", "upgrade:sorcerer-cinder"],
   "classId": "shaman",

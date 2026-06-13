@@ -63,6 +63,11 @@ it("commands a rail run: deploy, push, bank, retire stronger", async () => {
     .poll(() => commander.perceive().mapName, { timeout: 10_000 })
     .toBe("map:rescue-route");
 
+  // the HUD shows all three currencies (coins, the dragon-hoard gems, roses)
+  await expect.element(page.getByTestId("hud-coins")).toBeVisible();
+  await expect.element(page.getByTestId("hud-gems")).toBeVisible();
+  await expect.element(page.getByTestId("hud-roses")).toBeVisible();
+
   // one gesture starts the war: the knight lands, the first wave answers
   await commander.deploy("knight");
   await expect.poll(() => commander.perceive().units, { timeout: 5000 }).toBe(1);

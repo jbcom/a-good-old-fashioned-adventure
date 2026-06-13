@@ -4,7 +4,7 @@
   "label": "Wizard Focus",
   "category": "class",
   "cost": {
-    "roses": 1
+    "gems": 8
   },
   "prerequisites": ["upgrade:ranger-trail"],
   "classId": "wizard",

@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-might-rescue-route",
+  "label": "Brother's Might",
+  "category": "enemy",
+  "cost": {
+    "roses": 2,
+    "gems": 7
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.8,
+  "prerequisites": ["upgrade:dragon-kin-rescue-route"],
+  "enemyFamily": "dragon",
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Strengthens the rescue-route kin: each rank adds a phase/hp tier and raises the roses the princess pays for felling it (docs/RAIL-COMMAND.md §dragon upgrades cost roses). Rose-OR-gem, ranked."
+}
