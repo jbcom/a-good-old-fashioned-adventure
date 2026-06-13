@@ -88,6 +88,15 @@ The census's remaining gaps now have purchased candidates on disk:
   dragon's direction blocks and the Elthen single-row sheets, so
   SheetAnimDef needs per-direction row addressing (directionRows:
   {right/up/left/down → row index}) before these wire up.
+- **Kenney audition verdicts (2026-06-12):** Dungeon USED (floor wear
+  slices, derived dark to survive the obsidian clash); Interior USED
+  (candelabra/sconce/painting/shelves/archive case — lit pieces sit
+  naturally in dark rooms); City REJECTED (modern era: cars, traffic
+  signage — period clash with Errant Storybook); Characters REJECTED
+  (modular paper-doll layers, single-frame, no skeleton bodies — crypt
+  skeletons stay bespoke .pix or await a purchased skeleton pack);
+  Explosion + Rune queued for the fx pass; Foliage/Brick/RTS/RPG-vector
+  still pending their scale audition.
 - **Kenney roguelike family** (License.txt CC0-style packs): Dungeon +
   Interior tilesheets attack the census's worst tile counts (dungeon 3
   families, interior 6); City pack (1040 tiles) feeds village/city props;
