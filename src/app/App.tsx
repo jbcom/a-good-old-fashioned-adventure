@@ -691,20 +691,19 @@ function CurrencyToken({ label, value, testId }: { label: string; value: number;
 function UnitChips({ snapshot }: { snapshot: UiSnapshot }) {
   const classes = Object.keys(snapshot.lineByClass).sort();
   return (
-    <div className="unit-chips" data-testid="unit-chips" role="list" aria-label="Fielded units">
+    <ul className="unit-chips" data-testid="unit-chips" aria-label="Fielded units">
       {classes.map((classId) => {
         const slot = snapshot.lineByClass[classId];
         const pct = slot.maxHp > 0 ? Math.round((slot.hp / slot.maxHp) * 100) : 0;
         const chipLabel = `${classId} ×${slot.count} — ${pct}% hp`;
         return (
-          <span
+          <li
             key={classId}
             className="unit-chip"
             data-testid={`unit-chip-${classId}`}
             data-class={classId}
             data-count={slot.count}
             data-hp-percent={pct}
-            role="listitem"
             aria-label={chipLabel}
             title={chipLabel}
           >
@@ -713,10 +712,10 @@ function UnitChips({ snapshot }: { snapshot: UiSnapshot }) {
             </span>
             <span className="unit-chip-count">{slot.count}</span>
             <span className="unit-chip-pip" style={{ width: `${pct}%` }} />
-          </span>
+          </li>
         );
       })}
-    </div>
+    </ul>
   );
 }
 

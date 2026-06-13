@@ -15,8 +15,9 @@ function fieldWave(placementRank: number) {
   instantiateMap(world, "map:oldwood-forest", { classId: "knight", withPlayer: false });
   // unlock forest-orc + its bounty + placement at the given rank
   const progress = world.get(IncrementalProgress);
+  if (!progress) throw new Error("no IncrementalProgress on the world");
   world.set(IncrementalProgress, {
-    ...progress!,
+    ...progress,
     purchasedUpgradeIds: [
       "upgrade:first-vow",
       "upgrade:dragon-wake",

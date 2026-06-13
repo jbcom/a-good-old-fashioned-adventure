@@ -256,7 +256,8 @@ export function lineVitals(world: World): {
     hp += Math.max(0, health.hp);
     maxHp += health.maxHp;
     count += 1;
-    const slot = (byClass[info.classId] ??= { count: 0, hp: 0, maxHp: 0 });
+    if (!byClass[info.classId]) byClass[info.classId] = { count: 0, hp: 0, maxHp: 0 };
+    const slot = byClass[info.classId];
     slot.count += 1;
     slot.hp += Math.max(0, health.hp);
     slot.maxHp += health.maxHp;

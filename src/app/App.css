@@ -451,13 +451,16 @@
   white-space: nowrap;
 }
 
-/* Per-class unit chips with a live-hp pip. */
+/* Per-class unit chips with a live-hp pip (a semantic ul/li, list chrome reset). */
 .unit-chips {
   display: flex;
   align-items: center;
   gap: 5px;
   flex: 0 1 auto;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .unit-chip {
