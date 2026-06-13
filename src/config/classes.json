@@ -1,7 +1,13 @@
 {
   "$schema": "../../schemas/config.schema.json",
-  "roster": ["knight"],
-  "companionRoster": ["knight", "ranger", "wizard"],
+  "roster": [
+    "knight"
+  ],
+  "companionRoster": [
+    "knight",
+    "ranger",
+    "wizard"
+  ],
   "classes": {
     "knight": {
       "sprite": "sprite:fighter",
@@ -47,7 +53,11 @@
         "kind": "leap",
         "label": "LEAP",
         "backwardDistance": 45,
-        "spreadAngles": [-0.15, 0, 0.15],
+        "spreadAngles": [
+          -0.15,
+          0,
+          0.15
+        ],
         "spreadSpeed": 140,
         "spreadLife": 1.5,
         "cooldown": 1,
@@ -98,7 +108,7 @@
     },
     "rogue": {
       "playable": false,
-      "sprite": "sprite:hero",
+      "sprite": "sprite:rogue",
       "palette": "palette:rogue",
       "attack": {
         "kind": "melee",
@@ -162,7 +172,7 @@
     },
     "sorcerer": {
       "playable": false,
-      "sprite": "sprite:hero",
+      "sprite": "sprite:hooded-rogue",
       "palette": "palette:sorcerer",
       "attack": {
         "kind": "projectile",
