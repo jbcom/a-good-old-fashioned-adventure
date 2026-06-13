@@ -304,6 +304,8 @@ export function enemyAIStep(world: World, dt: number): void {
             } else {
               phase = "roar";
               left += phases.roar;
+              // the telegraph is audible now too (audio/sfx/boss-roar.mp3)
+              world.get(Outbox)?.sfx.push("boss-roar");
             }
           }
           enemy.set(Choreo, { phase, left });
