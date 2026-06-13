@@ -259,6 +259,18 @@ the richest loop (S20 polish); N4 → late-map kin walls + escalation (S19.2).
 
 **N1 RESOLVED (2026-06-13, commit d9d9232):** roseLoopHint surfaces a
 results-screen nudge when a dragon-kin node is reached-but-unowned, so the
-gems-first player discovers the rose flywheel instead of never finding it. N2
-(lair OR-cost ratio) and N4 (late-map escalation) remain for the harness/
-content stages; N3 (manual stays richest) is a standing S20 design constraint.
+gems-first player discovers the rose flywheel instead of never finding it.
+
+**N2 RESOLVED-AS-DESIGNED (2026-06-13, OR-cost ratio audit):** the rose:gem
+ratio is SUPPOSED to escalate with depth (roses logarithmic, gems exponential
+— docs/RAIL-COMMAND.md §dual-cost). Measured across the live config the
+dragon-kin ratios climb 1:6 (rescue-route) → 1:9 → 1:15 → 1:24 → 1:40 → 1:69
+(castle-hall) — the intended curve. N2's worry ("lairs at 1:17 vs the dragon
+track's 1:6") compared the lair against the FIRST kin; the right comparison is
+the SAME-MAP kin. The sunken-road lair (1:17.5–21.7) sits at/below its kin
+(1:24); the deep-forest lair (1:15–19.2) matches its kin (1:15). So the lairs
+are aligned with their contemporaneous dragon-track ratio, not anomalous — no
+re-tune needed; the audit is the validation.
+
+N4 (late-map escalation) remains for the content stage; N3 (manual stays
+richest) is a standing S20 design constraint.
