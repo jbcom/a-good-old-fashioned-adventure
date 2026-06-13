@@ -14,6 +14,7 @@ import { recordDeathPayout } from "../incrementalProgress";
 import { reduceEvent } from "../quests";
 import {
   Choreo,
+  Health,
   IncrementalProgress,
   IsEnemy,
   IsNpc,
@@ -161,6 +162,42 @@ export function railAxis(world: World): "north" | "east" {
 function axisProgress(axis: "north" | "east", x: number, y: number, height: number): number {
   // north: progress grows as y shrinks (climbing up); east: as x grows
   return axis === "east" ? x : height - y;
+}
+
+/**
+ * Aggregate vitals of the whole fielded line (docs/RAIL-COMMAND.md §the line):
+ * the HUD commands a LINE, not a hero, so it reads the SUM of every unit's hp
+ * over the sum of their maxHp, plus a per-class breakdown (count + live hp) for
+ * the unit chips. Returns zeros when no unit is fielded.
+ */
+export function lineVitals(world: World): {
+  hp: number;
+  maxHp: number;
+  count: number;
+  byClass: Record<string, { count: number; hp: number; maxHp: number }>;
+} {
+  let hp = 0;
+  let maxHp = 0;
+  let count = 0;
+  const byClass: Record<string, { count: number; hp: number; maxHp: number }> = {};
+  for (const unit of world.query(IsUnit, Health)) {
+    const health = unit.get(Health);
+    const info = unit.get(IsUnit);
+    if (!health || !info) continue;
+    hp += Math.max(0, health.hp);
+    maxHp += health.maxHp;
+    count += 1;
+    const slot = (byClass[info.classId] ??= { count: 0, hp: 0, maxHp: 0 });
+    slot.count += 1;
+    slot.hp += Math.max(0, health.hp);
+    slot.maxHp += health.maxHp;
+  }
+  return { hp, maxHp, count, byClass };
+}
+
+/** The current wave number the gates have released (0 before the first wave). */
+export function currentWave(world: World): number {
+  return world.get(WaveState)?.wave ?? 0;
 }
 
 /** Front line: the unit furthest along the rail axis (axis-agnostic). */
