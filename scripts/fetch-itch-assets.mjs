@@ -29,9 +29,17 @@ const LIBRARY = join(ROOT, ".itch-cache", "library.json");
 
 const DRY = process.argv.includes("--dry");
 
-const KEY = readFileSync(join(ROOT, ".env"), "utf8").match(/ITCH_API_KEY=(\S+)/)?.[1];
+// the API key comes from the environment first; the .env file is a local
+// convenience read ONLY if present (existsSync guard avoids an ENOENT crash)
+function readApiKey() {
+  if (process.env.ITCH_API_KEY) return process.env.ITCH_API_KEY;
+  const envPath = join(ROOT, ".env");
+  if (!existsSync(envPath)) return undefined;
+  return readFileSync(envPath, "utf8").match(/ITCH_API_KEY=(\S+)/)?.[1];
+}
+const KEY = readApiKey();
 if (!KEY) {
-  console.error("ITCH_API_KEY missing from .env");
+  console.error("ITCH_API_KEY missing — set the env var or add it to .env");
   process.exit(1);
 }
 

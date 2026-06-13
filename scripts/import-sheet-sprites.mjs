@@ -17,8 +17,11 @@ import { mkdirSync, readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 
 const repoRoot = resolve(import.meta.dirname, "..");
-const asepriteBin =
-  process.env.ASEPRITE_BIN ?? "/Applications/Aseprite.app/Contents/MacOS/Aseprite";
+// ASEPRITE_BIN wins; otherwise a per-platform default (macOS app bundle, or the
+// `aseprite` on PATH for Linux/Windows) so this isn't macOS-only
+const defaultAsepriteBin =
+  process.platform === "darwin" ? "/Applications/Aseprite.app/Contents/MacOS/Aseprite" : "aseprite";
+const asepriteBin = process.env.ASEPRITE_BIN ?? defaultAsepriteBin;
 const importerLua = resolve(repoRoot, "scripts/aseprite/import-sheet-sprite.lua");
 const assetsDir = resolve(repoRoot, "public/assets");
 const outDir = resolve(repoRoot, "raw-assets/aseprite");
@@ -62,19 +65,27 @@ for (const file of readdirSync(defsDir)) {
 
   const plan = `${def.frameSize.w}x${def.frameSize.h};${entries.join("|")}`;
   const out = resolve(outDir, `${slug}.aseprite`);
-  execFileSync(
-    asepriteBin,
-    [
-      "-b",
-      "--script-param",
-      `plan=${plan}`,
-      "--script-param",
-      `assets=${assetsDir}`,
-      "--script-param",
-      `out=${out}`,
-      "--script",
-      importerLua,
-    ],
-    { stdio: "inherit" },
-  );
+  try {
+    execFileSync(
+      asepriteBin,
+      [
+        "-b",
+        "--script-param",
+        `plan=${plan}`,
+        "--script-param",
+        `assets=${assetsDir}`,
+        "--script-param",
+        `out=${out}`,
+        "--script",
+        importerLua,
+      ],
+      { stdio: "inherit" },
+    );
+  } catch (err) {
+    // a missing/failing Aseprite binary throws a raw ENOENT/exit — surface a
+    // usable message (set ASEPRITE_BIN) instead of an opaque stack trace
+    throw new Error(
+      `Aseprite import failed for "${slug}" via "${asepriteBin}". Set ASEPRITE_BIN to your Aseprite executable. Original: ${err instanceof Error ? err.message : String(err)}`,
+    );
+  }
 }
