@@ -14,6 +14,8 @@ import {
   upgradeMaxHpBonus,
 } from "./incrementalProgress";
 import { buildGrid } from "./mapgen";
+import { deepestLairRoom, lairParentMap } from "./mapProgression";
+import { railAxis } from "./systems/waves";
 import {
   AimDirection,
   CameraState,
@@ -370,7 +372,45 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
       spawnProp(world, spawn.ref, px, py);
     }
   }
+  injectLairKin(world, mapId);
   spawnWarbandReinforcements(world, familyHosts);
+}
+
+/**
+ * Relocate the dragon into the lair (docs/RAIL-COMMAND.md §Each map's FOUR
+ * sub-tracks): when this map is a lair room that holds the princess and the
+ * parent map's KIN is unlocked, the dragon relocates in too — spawn the kin
+ * boss at the room's rail goal (its far end), recolored and buffed like any
+ * kin holder. When the dragon is NOT unlocked, the lair just holds the
+ * princess (no boss injected here).
+ */
+function injectLairKin(world: World, mapId: string): void {
+  const parentMap = lairParentMap(mapId);
+  if (!parentMap) return;
+  const progress = world.get(IncrementalProgress) ?? initialIncrementalProgress();
+  // only the deepest unlocked room hosts the princess + dragon
+  if (deepestLairRoom(progress, parentMap)?.roomMap !== mapId) return;
+  const kin = kinForMap(progress, parentMap);
+  if (!kin) return; // dragon not unlocked → lair holds only the princess
+
+  // place the kin at the rail goal edge (where the princess waits): for a
+  // north-climbing rail the goal is the top (y→0), for an east rail the far
+  // right (x→width). One tile in from the edge so the boss is fully on-map.
+  const runtime = world.get(MapRuntime);
+  if (!runtime) return;
+  const axis = railAxis(world);
+  const width = runtime.cols * TILE;
+  const height = runtime.rows * TILE;
+  const goal =
+    axis === "east" ? { x: width - TILE * 2, y: height / 2 } : { x: width / 2, y: TILE * 2 };
+  const boss = spawnEnemy(world, "dragon-guardian", goal.x, goal.y);
+  boss.add(KinIdentity({ relation: kin.relation, mapId: parentMap }));
+  const dragonArchetype = enemies.archetypes["dragon-guardian"];
+  boss.set(SpriteRef, { spriteId: kin.spriteId, paletteId: dragonArchetype.palette });
+  const buff = dragonBuffFor(progress, parentMap);
+  if (buff.extraBolts > 0 || buff.aoeRadius > 0 || buff.rewardMult !== 1) {
+    boss.add(DragonBuff(buff));
+  }
 }
 
 /**

@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { incremental } from "../../src/lib/config";
 import { runRail } from "../../src/sim/battleHarness";
+import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import { initialIncrementalProgress } from "../../src/sim/incrementalProgress";
 import { deepestLairRoom, princessMap } from "../../src/sim/mapProgression";
+import { IncrementalProgress, IsEnemy, KinIdentity } from "../../src/sim/traits";
 
 /**
  * The Dragon's Lair (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks): a
@@ -80,6 +82,65 @@ describe("dragon's lair", () => {
         `${roomMap} neither won nor farmed`,
       ).toBe(true);
     }
+  });
+
+  it("relocates the DRAGON into the deepest lair room when its kin is unlocked", () => {
+    // pick the deepest lair room of a map whose kin can be unlocked
+    const lairNodes = incremental.upgradeGraph.nodes.filter((n) => n.lairRoom);
+    const deepest = lairNodes.reduce((a, b) =>
+      (a.lairRoom?.depth ?? 0) >= (b.lairRoom?.depth ?? 0) ? a : b,
+    );
+    const parentMap = deepest.lairRoom?.mapId as string;
+    const roomMap = deepest.lairRoom?.roomMap as string;
+    const kinNode = incremental.upgradeGraph.nodes.find((n) => n.dragonKin?.mapId === parentMap);
+    expect(kinNode, "the lair's parent map has a kin").toBeTruthy();
+
+    // unlock the lair (all rooms) AND the kin, then instantiate the deepest room
+    const lairRoomIds = lairNodes.filter((n) => n.lairRoom?.mapId === parentMap).map((n) => n.id);
+    const world = createGameWorld(12);
+    instantiateMap(world, roomMap, { classId: "knight" });
+    const base = world.get(IncrementalProgress);
+    if (!base) throw new Error("no progress");
+    const unlocked = {
+      ...base,
+      purchasedUpgradeIds: [...base.purchasedUpgradeIds, ...lairRoomIds, kinNode?.id as string],
+      // unlock all route packs so currentMap reaches the parent map
+      unlockedRoutePackIds: incremental.routePacks.map((p) => p.id),
+    };
+    world.set(IncrementalProgress, unlocked);
+    instantiateMap(world, roomMap, { classId: "knight" });
+
+    // the kin dragon now holds the princess in the deepest lair room
+    const kinBoss = [...world.query(IsEnemy, KinIdentity)].filter(
+      (e) => e.get(KinIdentity)?.mapId === parentMap,
+    );
+    expect(kinBoss.length, "the dragon relocated into the lair").toBeGreaterThan(0);
+  });
+
+  it("the lair holds only the princess when the dragon is NOT unlocked", () => {
+    const lairNodes = incremental.upgradeGraph.nodes.filter((n) => n.lairRoom);
+    const deepest = lairNodes.reduce((a, b) =>
+      (a.lairRoom?.depth ?? 0) >= (b.lairRoom?.depth ?? 0) ? a : b,
+    );
+    const parentMap = deepest.lairRoom?.mapId as string;
+    const roomMap = deepest.lairRoom?.roomMap as string;
+    const lairRoomIds = lairNodes.filter((n) => n.lairRoom?.mapId === parentMap).map((n) => n.id);
+
+    const world = createGameWorld(13);
+    instantiateMap(world, roomMap, { classId: "knight" });
+    const base = world.get(IncrementalProgress);
+    if (!base) throw new Error("no progress");
+    // unlock the lair but NOT the kin
+    world.set(IncrementalProgress, {
+      ...base,
+      purchasedUpgradeIds: [...base.purchasedUpgradeIds, ...lairRoomIds],
+    });
+    instantiateMap(world, roomMap, { classId: "knight" });
+
+    const kinBoss = [...world.query(IsEnemy, KinIdentity)].filter(
+      (e) => e.get(KinIdentity)?.mapId === parentMap,
+    );
+    expect(kinBoss.length, "no dragon injected without its kin unlocked").toBe(0);
   });
 
   it("lair rooms form a clean depth chain (1, 2, …) per map", () => {

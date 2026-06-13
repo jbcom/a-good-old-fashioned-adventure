@@ -73,6 +73,19 @@ export function princessMap(progress: IncrementalProgressState): string {
   return here;
 }
 
+/**
+ * The spine map whose Dragon's Lair contains `roomMap`, or null if `roomMap`
+ * is not a lair room. Lets a lair room learn which map's kin holds the
+ * princess there (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks).
+ */
+export function lairParentMap(roomMap: string): string | null {
+  const lairs = incremental.mapLairs ?? {};
+  for (const [mapId, lair] of Object.entries(lairs)) {
+    if (lair.rooms.includes(roomMap)) return mapId;
+  }
+  return null;
+}
+
 /** True when the player has unlocked the entire spine (the castle is reachable). */
 export function spineComplete(progress: IncrementalProgressState): boolean {
   const order = incremental.mapDag.order;
