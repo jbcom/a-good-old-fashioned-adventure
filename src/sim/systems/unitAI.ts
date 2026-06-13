@@ -294,12 +294,20 @@ export function unitAIStep(world: World, dt: number): void {
         }
       } else {
         // no threat in sight: march the designed route (docs/RAIL-COMMAND.md)
-        const mapId = world.get(MapRuntime)?.mapId ?? "";
+        const runtime = world.get(MapRuntime);
+        const mapId = runtime?.mapId ?? "";
         const axis = railAxis(world);
         const ahead = mapId ? nextRailPoint(getRail(mapId, axis), transform, axis) : null;
         if (ahead) {
           brain.seek.active = true;
           brain.seek.target.set(ahead.x, ahead.y, 0);
+        } else if (runtime) {
+          // no authored waypoints: march straight toward the axis goal edge
+          // (east edge or north edge) holding the current cross-axis lane
+          brain.seek.active = true;
+          const goalX = axis === "east" ? runtime.cols * 16 - 24 : transform.x;
+          const goalY = axis === "east" ? transform.y : 24;
+          brain.seek.target.set(goalX, goalY, 0);
         }
       }
     }
