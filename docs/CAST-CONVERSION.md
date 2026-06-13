@@ -71,13 +71,17 @@ read; the princess keeps her bespoke sprite (identity-bearing, audit:
 clear), Gwydion takes the Old Grey Mage. dungeon-guard takes Guard
 Swordsman. Companion knight/ranger/wizard follow their classes.
 
-## FX phase-out
+## FX (decision 2026-06-12)
 
-effects.pix projectiles/swings retire in favor of the pack's slash +
-staff swing fx and elemental bursts (fire/ice/lightning at three
-intensities); S20.2's deploy puff / heal glow / wither wisp come from the
-spellcasting set. Pickups stay .pix (tiny, clear, palette-swapped by
-item rarity — sheets don't recolor).
+Projectiles and swing fx JOIN THE SURVIVORS: the six elemental projectile
+types differentiate by palette swap (magma/sand/shadow/thorn ride one
+grid), the audit rates effects.pix clear, and purchased strips neither
+recolor nor animate through the static projectile path — replacing
+audit-clear art would cost animation plumbing for a downgrade in
+differentiation. The Electric Lemon elemental strips and the Kenney
+Explosion/Rune packs instead feed S20.2's NEW fx surfaces (deploy puff,
+charge dust, heal glow, wither wisp) where no bespoke art exists at all.
+Pickups stay .pix (tiny, clear, palette-swapped by item rarity).
 
 ## Survivors (bespoke .pix stays, justified)
 
