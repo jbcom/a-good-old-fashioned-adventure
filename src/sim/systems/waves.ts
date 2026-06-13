@@ -11,8 +11,12 @@ import { enemies, incremental } from "../../lib/config";
 import { getMap } from "../../lib/content/registry";
 import { spawnEnemy } from "../factories";
 import { recordDeathPayout } from "../incrementalProgress";
+import { reduceEvent } from "../quests";
 import {
+  Choreo,
   IncrementalProgress,
+  IsEnemy,
+  IsNpc,
   IsPlayer,
   IsUnit,
   MapRuntime,
@@ -88,6 +92,35 @@ export function waveStep(world: World): void {
     spawned.add(WaveSpawned({ wave }));
   }
   world.set(WaveState, { wave, engaged: true });
+}
+
+/**
+ * Rail-mode rescue (docs/RAIL-COMMAND.md §Endgame): with the line engaged,
+ * no pawn in the field, the map's choreographed boss dead, and the front
+ * within rescueRadius of Princess Amber, reduce the freed dialogue event
+ * directly — the quest engine pays the rose and ends the run in victory
+ * exactly as if a pawn had spoken to her.
+ */
+export function rescueStep(world: World): void {
+  const state = world.get(WaveState);
+  if (!state?.engaged) return;
+  if (world.queryFirst(IsPlayer)) return;
+  // any living choreographed enemy means the boss still stands
+  if (world.queryFirst(IsEnemy, Choreo)) return;
+  let princess: { x: number; y: number } | null = null;
+  for (const npc of world.query(IsNpc, Transform)) {
+    if (npc.get(IsNpc)?.charId === "char:princess-amber") {
+      const t = npc.get(Transform);
+      if (t) princess = { x: t.x, y: t.y };
+      break;
+    }
+  }
+  if (!princess) return;
+  const front = frontline(world);
+  if (!front) return;
+  if (Math.hypot(front.x - princess.x, front.y - princess.y) > incremental.loop.rescueRadius)
+    return;
+  reduceEvent(world, { type: "dlg", event: "dlg:princess-amber.freed:seen" });
 }
 
 /** Front line: the northmost living unit's position (rail runs south→north). */

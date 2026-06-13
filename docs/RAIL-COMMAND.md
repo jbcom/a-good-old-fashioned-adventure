@@ -172,6 +172,19 @@ the field — command state replaces it).
    old button journeys are replaced by the commander journeys — one commit,
    all gates green before and after.
 
+## Endgame (S19.1 lock)
+
+Boss engagement needs no new mechanism: enemyAI already targets the
+nearest allied unit when no pawn exists, and boss choreography aggros on
+that same distance — the front walking into the boss's range IS the
+engagement. The rescue re-keys off the front: when the line is engaged,
+no pawn exists, the map's choreographed boss is dead, and the front
+stands within `incremental.loop.rescueRadius` of Princess Amber, the sim
+reduces the `dlg:princess-amber.freed:seen` quest event directly — the
+quest engine advances unchanged (rose, victory, results into the DAG
+shop), exactly as if a pawn had spoken to her. The princess stays an
+authored NPC; nothing about her content changes.
+
 ## Testing shape
 
 PlayerGovernor becomes a CommanderGovernor: it perceives the public dataset

@@ -129,6 +129,8 @@ export interface IncrementalConfig {
     coreRunRequiresCastleInterior: boolean;
     resultsMode: "upgrade-graph";
     targetGameplayAreaPercentPhone: number;
+    /** rail-mode rescue trigger distance (docs/RAIL-COMMAND.md §Endgame) */
+    rescueRadius: number;
   };
   currencies: Record<IncrementalCurrencyId, IncrementalCurrencyDef>;
   runRewards: Record<
