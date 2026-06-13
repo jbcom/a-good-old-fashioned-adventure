@@ -2,6 +2,8 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
+import { props, sprites, tiles } from "../../src/lib/content/registry";
+import { isSheetSprite } from "../../src/lib/content/sheetSprite";
 
 /**
  * Integrity gate for purchased/imported assets (docs/PIXEL-ART-AUDIT.md §SA.0):
@@ -101,5 +103,29 @@ describe("asset manifest", () => {
     expect(onDisk.length).toBeGreaterThan(0);
     const orphans = onDisk.filter((p) => !manifested.has(p));
     expect(orphans, "media on disk with no manifest entry (license/use unrecorded)").toEqual([]);
+  });
+
+  it("every tile/prop/sprite sheet image a content file references is manifested", () => {
+    // disk→manifest is checked above; this is the content→manifest direction: a
+    // tile pointing at an unmanifested image would ship an unlicensed asset that
+    // both the disk walk (file exists) and the opacity guard (loads from disk)
+    // miss. Close that gap by validating every sheet image used by content.
+    const manifested = new Set(allFiles.map((f) => f.path));
+    const referenced = new Set<string>();
+    for (const tile of tiles.values()) if (tile.sheet) referenced.add(tile.sheet.image);
+    for (const prop of props.values()) {
+      for (const state of Object.values(prop.states)) {
+        if (state.sheet) referenced.add(state.sheet.image);
+      }
+    }
+    for (const sprite of sprites.values()) {
+      if (!isSheetSprite(sprite)) continue;
+      for (const anim of Object.values(sprite.animations)) referenced.add(anim.image);
+    }
+    const unmanifested = [...referenced].filter((img) => !manifested.has(img));
+    expect(
+      unmanifested,
+      "content references a sheet image with no manifest entry (license/use unrecorded)",
+    ).toEqual([]);
   });
 });
