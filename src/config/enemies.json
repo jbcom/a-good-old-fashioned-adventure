@@ -68,7 +68,7 @@
     {
       "id": "region:mistmire",
       "label": "Mistmire Marsh",
-      "tier": 3,
+      "tier": 4,
       "threat": 7,
       "maps": ["map:mistmire-marsh"],
       "archetypes": ["bog-serpent", "fen-raven", "mire-boar", "dune-adder"]
@@ -114,10 +114,26 @@
       "archetypes": ["harbour-gull", "dock-rat", "tide-eel", "crypt-bat"]
     },
     {
+      "id": "region:frostpeak",
+      "label": "The Frostpeak Climb",
+      "tier": 4,
+      "threat": 13,
+      "maps": ["map:frostpeak-climb"],
+      "archetypes": ["frost-raven", "rime-bat", "snow-adder", "crag-vulture"]
+    },
+    {
+      "id": "region:frostpeak-lair",
+      "label": "The Frostpeak Vault",
+      "tier": 4,
+      "threat": 14,
+      "maps": ["map:glacier-maw", "map:rime-warren", "map:frostheart-vault"],
+      "archetypes": ["frost-raven", "rime-bat", "snow-adder", "crypt-bat"]
+    },
+    {
       "id": "region:sunken-crypt",
       "label": "The Sunken Crypt (sunken-road lair)",
       "tier": 4,
-      "threat": 13,
+      "threat": 15,
       "maps": ["map:desert-ruins", "map:castle-dungeon", "map:crypt-vault"],
       "archetypes": ["dune-adder", "carrion-raven", "crypt-bat", "crypt-skeleton", "crypt-sentry"]
     },
@@ -125,7 +141,7 @@
       "id": "region:siege-warcamp",
       "label": "The Siege Warcamp (castle-approach lair)",
       "tier": 4,
-      "threat": 14,
+      "threat": 16,
       "maps": ["map:castle-yard"],
       "archetypes": [
         "forest-orc",
@@ -139,7 +155,7 @@
       "id": "region:dungeon",
       "label": "Obsidian Throne Dungeon",
       "tier": 4,
-      "threat": 15,
+      "threat": 17,
       "maps": [
         "map:castle-hall",
         "map:castle-library",

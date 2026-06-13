@@ -1,0 +1,149 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:glacier-maw",
+  "kind": "map",
+  "name": "The Glacier Maw",
+  "size": { "cols": 46, "rows": 22 },
+  "baseTile": "tile:castle-road-cracked",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain-ledge" },
+    {
+      "op": "region",
+      "tile": "tile:water-glint",
+      "x0": 2,
+      "x1": 12,
+      "y0": 2,
+      "y1": 7,
+      "note": "a glittering ice-wall sheeting the maw, upper"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 2,
+      "x1": 10,
+      "y0": 15,
+      "y1": 20,
+      "note": "a black crevasse split below the walk"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-glint",
+      "x0": 33,
+      "x1": 43,
+      "y0": 14,
+      "y1": 20,
+      "note": "the iced rear of the first frost-nest"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:castle-road",
+      "y": 10,
+      "x0": 2,
+      "x1": 43,
+      "note": "the rimed ledge-walk the line picks east along"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:castle-road",
+      "y": 11,
+      "x0": 2,
+      "x1": 43,
+      "note": "ledge-walk, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 14,
+      "y0": 2,
+      "y1": 8,
+      "note": "an ice-pillar pinching the walk (the gap below is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 28,
+      "y0": 14,
+      "y1": 19,
+      "note": "a second ice-pillar off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:castle-road-cracked",
+      "x0": 35,
+      "x1": 43,
+      "y0": 8,
+      "y1": 13,
+      "note": "the rime-cracked terrace of the first frost-nest at the maw's end"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 168 },
+  "spawns": {
+    "default": { "x": 48, "y": 168 },
+    "entry": { "x": 48, "y": 168 }
+  },
+  "entities": [
+    {
+      "ref": "prop:wind-ribbon-cairn",
+      "x": 150,
+      "y": 132,
+      "note": "a frozen cairn jammed in the maw"
+    },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 120,
+      "y": 264,
+      "note": "frost-kept bones raked into the crevasse"
+    },
+    {
+      "ref": "prop:dungeon-web",
+      "x": 260,
+      "y": 132,
+      "note": "a rime-web sheeting the upper flank"
+    },
+    {
+      "ref": "prop:stump",
+      "x": 380,
+      "y": 290,
+      "note": "a krummholz snag frozen to the ledge"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 560,
+      "y": 132,
+      "contents": "Gold",
+      "note": "a lost expedition's strongbox, frozen in"
+    },
+    {
+      "enemy": "glacier-stalker",
+      "x": 600,
+      "y": 168,
+      "note": "frostpeak lair r1 CLIMAX: a glacier-stalker, the rime-beast that haunts the maw, holds the first frost-nest. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:maw-mouth", "x": 220, "y": 168, "note": "spawn zone — the maw mouth" },
+    {
+      "id": "gate:maw-pillar",
+      "x": 330,
+      "y": 148,
+      "note": "spawn zone — past the ice-pillar, upper"
+    },
+    {
+      "id": "gate:maw-crevasse",
+      "x": 360,
+      "y": 216,
+      "note": "spawn zone — the lower crevasse flank"
+    },
+    { "id": "gate:maw-nest", "x": 560, "y": 168, "note": "spawn zone — the first frost-nest" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:glacier-maw-landmark",
+      "kind": "landmark",
+      "label": "The Glacier Maw",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 152, "x1": 80, "y1": 184 }
+    }
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:rime-warren",
+  "kind": "map",
+  "name": "The Rime Warren",
+  "size": {
+    "cols": 48,
+    "rows": 24
+  },
+  "baseTile": "tile:stone-floor-cracked",
+  "bgmTheme": "dungeon",
+  "generation": [
+    {
+      "op": "border",
+      "tile": "tile:stone-wall"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-glint",
+      "x0": 2,
+      "x1": 14,
+      "y0": 2,
+      "y1": 9,
+      "note": "the iced-over upper gallery of the rime warren"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-glint",
+      "x0": 33,
+      "x1": 45,
+      "y0": 15,
+      "y1": 22,
+      "note": "the iced lower gallery"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain-ledge",
+      "x0": 2,
+      "x1": 12,
+      "y0": 16,
+      "y1": 22,
+      "note": "a fluted ice-ledge on the lower flank"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor-worn",
+      "y": 11,
+      "x0": 2,
+      "x1": 45,
+      "note": "the rimed warren-walk the line forces through the ice galleries"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor-worn",
+      "y": 12,
+      "x0": 2,
+      "x1": 45,
+      "note": "warren-walk, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 15,
+      "y0": 2,
+      "y1": 8,
+      "note": "a collapsed ice-pier pinching the walk (the gap below is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 30,
+      "y0": 15,
+      "y1": 21,
+      "note": "a second ice-pier off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:stone-floor-moss",
+      "x0": 37,
+      "x1": 45,
+      "y0": 10,
+      "y1": 14,
+      "note": "the lichened floor of the second frost-nest deep in the warren"
+    }
+  ],
+  "playerSpawn": {
+    "x": 48,
+    "y": 184
+  },
+  "spawns": {
+    "default": {
+      "x": 48,
+      "y": 184
+    },
+    "entry": {
+      "x": 48,
+      "y": 184
+    }
+  },
+  "entities": [
+    {
+      "ref": "prop:supply-crate",
+      "x": 180,
+      "y": 290,
+      "note": "a depot-crate frosted to the warren floor"
+    },
+    {
+      "ref": "prop:broken-cart",
+      "x": 300,
+      "y": 150,
+      "note": "a wrecked sled across the upper ice-pier"
+    },
+    {
+      "ref": "prop:barrel",
+      "x": 240,
+      "y": 210,
+      "note": "a fuel-cask iced mid-warren"
+    },
+    {
+      "ref": "prop:fallen-log",
+      "x": 420,
+      "y": 300,
+      "note": "a krummholz snag wedged by the nest"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 600,
+      "y": 200,
+      "contents": "Gold",
+      "note": "a climber's cache, frozen under the nest floor"
+    },
+    {
+      "enemy": "rime-tyrant",
+      "x": 632,
+      "y": 184,
+      "note": "frostpeak lair r2 CLIMAX: a rime-tyrant, the ice-brute that walls the galleries, holds the second frost-nest. The princess relocates deeper into the peak. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    {
+      "id": "gate:rime-mouth",
+      "x": 230,
+      "y": 184,
+      "note": "spawn zone — the warren-walk mouth"
+    },
+    {
+      "id": "gate:rime-pier",
+      "x": 360,
+      "y": 160,
+      "note": "spawn zone — past the ice-pier, upper"
+    },
+    {
+      "id": "gate:rime-ledge",
+      "x": 400,
+      "y": 240,
+      "note": "spawn zone — the lower ice-ledge"
+    },
+    {
+      "id": "gate:rime-nest",
+      "x": 600,
+      "y": 184,
+      "note": "spawn zone — the second frost-nest"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:rime-warren-landmark",
+      "kind": "landmark",
+      "label": "The Rime Warren",
+      "sfx": "interact",
+      "zone": {
+        "x0": 32,
+        "y0": 168,
+        "x1": 80,
+        "y1": 200
+      }
+    }
+  ]
+}

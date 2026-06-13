@@ -27,6 +27,8 @@ describe("S6.5 regional enemy depth", () => {
       "region:crag-lair",
       "region:harbour",
       "region:harbour-lair",
+      "region:frostpeak",
+      "region:frostpeak-lair",
       "region:sunken-crypt",
       "region:siege-warcamp",
       "region:dungeon",

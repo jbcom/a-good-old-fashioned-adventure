@@ -1,0 +1,171 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:frostheart-vault",
+  "kind": "map",
+  "name": "The Frostheart Vault",
+  "size": { "cols": 50, "rows": 26 },
+  "baseTile": "tile:ruin-mosaic",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "region",
+      "tile": "tile:water-glint",
+      "x0": 2,
+      "x1": 18,
+      "y0": 2,
+      "y1": 10,
+      "note": "the glittering ice-sheet flooring the north of the vault"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-glint",
+      "x0": 2,
+      "x1": 16,
+      "y0": 16,
+      "y1": 24,
+      "note": "the south ice-sheet"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-glint",
+      "x0": 18,
+      "x1": 30,
+      "y0": 2,
+      "y1": 10,
+      "note": "the central ice-sheet above the causeway"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-glint",
+      "x0": 16,
+      "x1": 31,
+      "y0": 16,
+      "y1": 24,
+      "note": "the ice-sheet below the causeway"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor-worn",
+      "y": 12,
+      "x0": 2,
+      "x1": 47,
+      "note": "the salted stone causeway to the frostheart the line must hold"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor-worn",
+      "y": 13,
+      "x0": 2,
+      "x1": 47,
+      "note": "causeway, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 17,
+      "y0": 2,
+      "y1": 9,
+      "note": "a frozen arch pinching the causeway (the gap is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 33,
+      "y0": 16,
+      "y1": 23,
+      "note": "a second arch off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 38,
+      "x1": 47,
+      "y0": 2,
+      "y1": 10,
+      "note": "the frostheart's north meltwell, black and still"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 38,
+      "x1": 47,
+      "y0": 16,
+      "y1": 24,
+      "note": "the meltwell where the dragon's frost-mother broods"
+    },
+    {
+      "op": "region",
+      "tile": "tile:ruin-mosaic",
+      "x0": 40,
+      "x1": 47,
+      "y0": 10,
+      "y1": 16,
+      "note": "the frostheart dais where the causeway makes landfall — the climax stand"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 200 },
+  "spawns": {
+    "default": { "x": 48, "y": 200 },
+    "entry": { "x": 48, "y": 200 }
+  },
+  "entities": [
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 200,
+      "y": 208,
+      "note": "a reef of frosted bones at the causeway's foot"
+    },
+    {
+      "ref": "prop:wind-ribbon-cairn",
+      "x": 300,
+      "y": 224,
+      "note": "a frozen cairn leaning on the causeway"
+    },
+    {
+      "ref": "prop:dungeon-web",
+      "x": 360,
+      "y": 170,
+      "note": "the great rime-web of the frozen arch"
+    },
+    {
+      "ref": "prop:ruin-mural",
+      "x": 520,
+      "y": 224,
+      "note": "a frost-glazed mural of the peak before the dragon came"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 600,
+      "y": 224,
+      "contents": "Gold",
+      "note": "the frostheart-hoard's ice-locked coin"
+    },
+    {
+      "enemy": "frostmother-tyrant",
+      "x": 680,
+      "y": 200,
+      "note": "frostpeak lair r3 CLIMAX: the frostmother-tyrant, the frost-mother the peak dragon set to brood the frostheart. The deepest authored climax of the peak. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:vault-mouth", "x": 240, "y": 200, "note": "spawn zone — the causeway mouth" },
+    {
+      "id": "gate:vault-arch",
+      "x": 380,
+      "y": 176,
+      "note": "spawn zone — past the frozen arch, upper"
+    },
+    { "id": "gate:vault-flow", "x": 420, "y": 264, "note": "spawn zone — the lower ice-flow" },
+    { "id": "gate:vault-heart", "x": 620, "y": 200, "note": "spawn zone — the frostheart dais" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:frostheart-vault-landmark",
+      "kind": "landmark",
+      "label": "The Frostheart Vault",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 184, "x1": 80, "y1": 216 }
+    }
+  ]
+}

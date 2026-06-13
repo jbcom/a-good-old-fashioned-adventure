@@ -9,7 +9,7 @@
   },
   "prerequisites": ["upgrade:crag-ascent"],
   "routePack": "harbour",
-  "unlocks": ["upgrade:lair-saltmarsh-harbour-1", "upgrade:castle-approach-siege"],
+  "unlocks": ["upgrade:lair-saltmarsh-harbour-1", "upgrade:frostpeak-ascent"],
   "track": "roads",
   "note": "The salt-marsh harbour road along the sea wharves. Unlocking it opens the harbour and gates the castle siege behind it."
 }

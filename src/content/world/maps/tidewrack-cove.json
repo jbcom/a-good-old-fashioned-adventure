@@ -3,11 +3,17 @@
   "id": "map:tidewrack-cove",
   "kind": "map",
   "name": "Tidewrack Cove",
-  "size": { "cols": 46, "rows": 22 },
+  "size": {
+    "cols": 46,
+    "rows": 22
+  },
   "baseTile": "tile:sand",
   "bgmTheme": "dungeon",
   "generation": [
-    { "op": "border", "tile": "tile:mountain-ledge" },
+    {
+      "op": "border",
+      "tile": "tile:mountain-ledge"
+    },
     {
       "op": "region",
       "tile": "tile:water-deep",
@@ -77,10 +83,19 @@
       "note": "the shingle of the first wrack-nest at the boardwalk's end"
     }
   ],
-  "playerSpawn": { "x": 48, "y": 168 },
+  "playerSpawn": {
+    "x": 48,
+    "y": 168
+  },
   "spawns": {
-    "default": { "x": 48, "y": 168 },
-    "entry": { "x": 48, "y": 168 }
+    "default": {
+      "x": 48,
+      "y": 168
+    },
+    "entry": {
+      "x": 48,
+      "y": 168
+    }
   },
   "entities": [
     {
@@ -92,7 +107,7 @@
     {
       "ref": "prop:dungeon-bone-pile",
       "x": 120,
-      "y": 264,
+      "y": 144,
       "note": "drowned sailors' bones raked into the shallows"
     },
     {
@@ -122,7 +137,12 @@
     }
   ],
   "waveGates": [
-    { "id": "gate:cove-mouth", "x": 220, "y": 168, "note": "spawn zone — the boardwalk mouth" },
+    {
+      "id": "gate:cove-mouth",
+      "x": 220,
+      "y": 168,
+      "note": "spawn zone — the boardwalk mouth"
+    },
     {
       "id": "gate:cove-stack",
       "x": 330,
@@ -135,7 +155,12 @@
       "y": 216,
       "note": "spawn zone — the lower shallows flank"
     },
-    { "id": "gate:cove-nest", "x": 560, "y": 168, "note": "spawn zone — the first wrack-nest" }
+    {
+      "id": "gate:cove-nest",
+      "x": 560,
+      "y": 168,
+      "note": "spawn zone — the first wrack-nest"
+    }
   ],
   "triggers": [
     {
@@ -143,7 +168,12 @@
       "kind": "landmark",
       "label": "Tidewrack Cove",
       "sfx": "interact",
-      "zone": { "x0": 32, "y0": 152, "x1": 80, "y1": 184 }
+      "zone": {
+        "x0": 32,
+        "y0": 152,
+        "x1": 80,
+        "y1": 184
+      }
     }
   ]
 }

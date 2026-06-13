@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-frostpeak-climb-3",
+  "label": "Crack the Frostheart Vault",
+  "category": "map",
+  "cost": {
+    "roses": 7,
+    "gems": 310
+  },
+  "prerequisites": ["upgrade:lair-frostpeak-climb-2"],
+  "lairRoom": {
+    "mapId": "map:frostpeak-climb",
+    "depth": 3,
+    "roomMap": "map:frostheart-vault"
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Frostpeak lair room 3. Unlocking it relocates the princess deeper into the peak."
+}

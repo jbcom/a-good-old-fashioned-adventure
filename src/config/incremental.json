@@ -126,6 +126,12 @@
       "role": "the salt-marsh harbour road along the sea wharves"
     },
     {
+      "id": "frostpeak",
+      "label": "The Frostpeak Climb",
+      "maps": ["map:frostpeak-climb"],
+      "role": "the frozen peak climb above the salt harbour"
+    },
+    {
       "id": "castle-approach",
       "label": "Siege Approach",
       "maps": ["map:castle-approach", "map:castle-yard"],
@@ -148,6 +154,7 @@
       "map:mistmire-marsh",
       "map:crag-pass",
       "map:saltmarsh-harbour",
+      "map:frostpeak-climb",
       "map:castle-approach",
       "map:castle-hall"
     ],
@@ -197,6 +204,10 @@
     "map:saltmarsh-harbour": {
       "theme": "harbour",
       "rooms": ["map:tidewrack-cove", "map:smugglers-run", "map:drowned-hold"]
+    },
+    "map:frostpeak-climb": {
+      "theme": "frostpeak",
+      "rooms": ["map:glacier-maw", "map:rime-warren", "map:frostheart-vault"]
     }
   }
 }

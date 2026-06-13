@@ -44,21 +44,21 @@
     },
     {
       "op": "region",
-      "tile": "tile:grass-flowers",
+      "tile": "tile:water-reeds",
       "x0": 18,
-      "x1": 30,
+      "x1": 31,
       "y0": 2,
       "y1": 10,
-      "note": "a bloomed sedge-bank above the causeway"
+      "note": "the reed-choked central shallows above the causeway"
     },
     {
       "op": "region",
-      "tile": "tile:grass-tufts",
+      "tile": "tile:water-reeds",
       "x0": 16,
-      "x1": 31,
+      "x1": 32,
       "y0": 16,
       "y1": 24,
-      "note": "a tufted hummock-bank below the causeway"
+      "note": "the reed-choked shallows below the causeway"
     },
     {
       "op": "region",

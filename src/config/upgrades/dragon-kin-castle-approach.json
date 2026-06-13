@@ -7,7 +7,7 @@
     "roses": 6,
     "gems": 240
   },
-  "prerequisites": ["upgrade:dragon-kin-harbour"],
+  "prerequisites": ["upgrade:dragon-kin-frostpeak"],
   "enemyFamily": "dragon",
   "unlocksEnemy": "dragon",
   "dragonKin": {
