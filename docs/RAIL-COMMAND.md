@@ -255,12 +255,30 @@ sub-path is always coin-priced and farmable. The map node thus offers
 both: coins to grow your line and the map's yield, roses to grow the
 dragon and your future rose income.
 
-**Rose income is not all-or-nothing.** Because roses are rare, the economy
-must have more sources than full rescues alone: a partial/failed run can
-still pay SOME roses (advancing far enough up the rail, or unlocking a
-map's dragon, yields fractional rose income). This smooths the scarcity —
-a player who pushes deep but falls short still earns toward the next rose
-gate, so progress never fully stalls on a single hard boss.
+**Three currencies (the resolution).** There was a contradiction in the
+draft economy: roses come from the PRINCESS at the rescue, but we also
+wanted partial/failed runs to pay "some roses" — yet if you never reach
+the princess, no one hands you a rose. A third currency resolves it
+cleanly with a NON-OVERLAPPING source, and that is what makes three
+currencies pull their weight rather than being roses-with-extra-steps:
+
+- **Coins** (common): trash kills, checkpoint crossings. Spend: class/map
+  economy upgrades — the always-farmable line. Earned every run, win or lose.
+- **Dragonglass** (uncommon — the dragon currency): farmed by damaging and
+  felling DRAGON-KIN, including on partial runs that whittle or kill the
+  map's dragon without completing the rescue. Spend: the dragon sub-tree
+  (strengthen a map's dragon → it pays more glass AND more roses). This is
+  what a deep-but-failed run banks toward the dragon loop.
+- **Roses** (rare): given ONLY by the princess, ONLY on a full rescue.
+  Spend: the major new-thing unlocks (new maps, new classes, new dragons).
+  The scarce prize that gates real progression.
+
+This makes the dragon a self-coherent loop (glass in → stronger dragon →
+more glass + more roses out) WITHOUT muddying roses, and it gives partial
+runs a real reward (coins + glass) that is NOT roses — so "you always farm
+something" holds, the rescue stays the rose prize, and a hard boss never
+fully stalls because every attempt still banks glass toward making it
+beatable.
 
 ## The player's curve — why the DAGs are shaped this way
 
