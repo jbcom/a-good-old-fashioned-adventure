@@ -78,8 +78,16 @@ The census's remaining gaps now have purchased candidates on disk:
   → gate-sentry, castle guards, village ambience;
   `warriors_rogues_mages` (57 sheets: mages incl. hooded variants → forest
   shaman/thorn-shaman bodies, rogues → oldwood raiders, warriors → orc
-  tier); `heavy-knight` (4 sheets incl. thrust/dash attacks) → elite or
-  banner-knight uplevel. Style-check at zoom required before wiring.
+  tier; bonus weapon-swing and elemental spell fx strips); `heavy-knight`
+  (4 sheets incl. thrust/dash attacks) → elite or banner-knight uplevel.
+  **Audition verdicts (read at zoom 2026-06-12): hooded mage CLEAR —
+  16px outlined chibi, proportion-compatible with the .pix hero; Heavy
+  Knight CLEAR — 32px elite with baked attack swooshes.** Layout note:
+  these sheets are vertical 4-column strips where DIRECTIONS live on
+  separate rows (RPG-Maker convention) — a third convention beside the
+  dragon's direction blocks and the Elthen single-row sheets, so
+  SheetAnimDef needs per-direction row addressing (directionRows:
+  {right/up/left/down → row index}) before these wire up.
 - **Kenney roguelike family** (License.txt CC0-style packs): Dungeon +
   Interior tilesheets attack the census's worst tile counts (dungeon 3
   families, interior 6); City pack (1040 tiles) feeds village/city props;
