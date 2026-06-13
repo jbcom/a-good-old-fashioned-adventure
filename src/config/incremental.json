@@ -135,6 +135,10 @@
     "castleMap": "map:castle-hall"
   },
   "mapLairs": {
+    "map:deep-forest": {
+      "theme": "netherrealm-portal",
+      "rooms": ["map:castle-library", "map:castle-yard"]
+    },
     "map:sunken-road": {
       "theme": "sunken-crypt",
       "rooms": ["map:desert-ruins", "map:castle-dungeon"]

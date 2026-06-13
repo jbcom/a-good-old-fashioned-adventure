@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-deep-forest-2",
+  "label": "Cross the Nether Threshold",
+  "category": "map",
+  "cost": {
+    "roses": 6,
+    "gems": 115
+  },
+  "prerequisites": ["upgrade:lair-deep-forest-1"],
+  "lairRoom": {
+    "mapId": "map:deep-forest",
+    "depth": 2,
+    "roomMap": "map:castle-yard"
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Deeper Dragon's Lair room: the princess relocates across the nether threshold. Rose-OR-gem, growing along the lair (roses logarithmic, gems exponential)."
+}

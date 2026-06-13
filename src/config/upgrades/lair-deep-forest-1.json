@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-deep-forest-1",
+  "label": "Tear the Netherrealm Portal",
+  "category": "map",
+  "cost": {
+    "roses": 4,
+    "gems": 60
+  },
+  "prerequisites": ["upgrade:thornwood-mastered"],
+  "lairRoom": {
+    "mapId": "map:deep-forest",
+    "depth": 1,
+    "roomMap": "map:castle-library"
+  },
+  "unlocks": ["upgrade:lair-deep-forest-2"],
+  "track": "roads",
+  "note": "Dragon's Lair entrance (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks): a netherrealm portal opens behind Thornwood — the princess relocates into its first room. Rose-OR-gem (roses logarithmic shortcut, gems exponential fallback)."
+}

@@ -8,6 +8,6 @@
   },
   "prerequisites": ["upgrade:oldwood-bend"],
   "routePack": "deep-forest",
-  "unlocks": ["upgrade:thornwood-tithe", "upgrade:bard-road-song"],
+  "unlocks": ["upgrade:thornwood-tithe", "upgrade:bard-road-song", "upgrade:lair-deep-forest-1"],
   "track": "roads"
 }
