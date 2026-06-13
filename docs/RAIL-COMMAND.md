@@ -185,6 +185,32 @@ quest engine advances unchanged (rose, victory, results into the DAG
 shop), exactly as if a pawn had spoken to her. The princess stays an
 authored NPC; nothing about her content changes.
 
+## The player's curve — why the DAGs are shaped this way
+
+The intended experience, start to escalation:
+
+The very first run is the same model as every run, just the shortest,
+simplest map with NO enemies unlocked: the player throws out a knight, it
+walks the rail, fights the dragon, frees the princess. *Easy!* That ease
+is a gentle trap — it's what makes the upgrade screen land. The player
+sees the DAG and realizes: if I unlock the earliest enemy (a peasant, a
+bandit), each one I fell pays extra coins. Now I have a rose too — I could
+unlock a ranger. But I smoked the dragon... another map? I'll save that.
+Let me just unlock the bandit and farm more coins. Now ONE bandit starts
+mid-map and marches the moment I place my knight — a little harder, the
+knight's more battered, but I still smoked the dragon. I'll add the
+ranged. Add another bandit. Oh — my ranger isn't as good here, it's
+cramped, the bandits hit it too quick. That push-and-pull of opposing
+elements is what makes the player look at the next map ("a bit bigger!")
+and want it.
+
+So the enemy DAG is a player-chosen difficulty dial that ALSO raises the
+coin/rose income: each unlocked antagonist makes the current map harder
+AND richer, and the friction it creates against the player's current
+class tools is the pressure that sells the next class, the next rank, and
+ultimately the next (bigger, crazier) map. Balance is making every step
+of that push-pull feel earned — never a cliff, never trivial.
+
 ## DAG alignment theory (S19.1b lock — the three progressions move together)
 
 This is an INCREMENTAL game, so the whole structure falls out of one rule:
