@@ -60,7 +60,12 @@ export function preloadSheetImages(): Promise<void> {
  * face) is a cached crop of a preloaded image, with the same
  * placeholder-until-ready / fail-loud-after discipline.
  */
-function croppedSheetCanvas(
+/**
+ * Cached crop of a purchased sheet raster — the shared path for prop/tile
+ * sheet states and the S-DAG-ICONS node emblems. Blits nothing (never stale)
+ * while the sheet image is still preloading or unavailable (jsdom).
+ */
+export function croppedSheetCanvas(
   ownerId: string,
   cacheKey: string,
   rect: { image: string; x: number; y: number; w: number; h: number },

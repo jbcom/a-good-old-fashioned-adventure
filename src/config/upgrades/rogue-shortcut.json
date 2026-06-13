@@ -9,5 +9,12 @@
   "prerequisites": ["upgrade:oldwood-bend"],
   "classId": "rogue",
   "unlocks": ["upgrade:rogue-knives", "upgrade:sunken-shortcut"],
-  "track": "characters"
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 144,
+    "y": 560,
+    "w": 16,
+    "h": 16
+  }
 }

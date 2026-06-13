@@ -12,5 +12,12 @@
   "classId": "sorcerer",
   "unlocks": ["upgrade:stormcaller"],
   "note": "Coin-ranked sorcerer track deepening the rose-unlocked class.",
-  "track": "characters"
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 64,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
 }

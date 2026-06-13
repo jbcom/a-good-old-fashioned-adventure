@@ -10,5 +10,12 @@
   "unlocksEnemy": "crypt-skeleton",
   "unlocks": ["upgrade:skeleton-bounty", "upgrade:unlock-crypt-sentry"],
   "track": "encounters",
-  "note": "A risen chaser of the dungeon and sunken vault — each one felled pays its bounty."
+  "note": "A risen chaser of the dungeon and sunken vault — each one felled pays its bounty.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 144,
+    "y": 496,
+    "w": 16,
+    "h": 16
+  }
 }

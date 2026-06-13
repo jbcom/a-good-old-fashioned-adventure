@@ -15,5 +15,12 @@
   "effect": {
     "maxHp": 12
   },
-  "note": "The spirits hold tighter: more shaman health per rank."
+  "note": "The spirits hold tighter: more shaman health per rank.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 112,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
 }

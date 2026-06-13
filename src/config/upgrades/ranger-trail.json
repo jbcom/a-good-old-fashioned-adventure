@@ -9,5 +9,12 @@
   "prerequisites": ["upgrade:first-vow"],
   "classId": "ranger",
   "unlocks": ["upgrade:ranger-craft", "upgrade:ranger-leap-rose", "upgrade:wizard-focus"],
-  "track": "characters"
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 176,
+    "y": 560,
+    "w": 16,
+    "h": 16
+  }
 }

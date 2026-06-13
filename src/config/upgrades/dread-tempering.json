@@ -15,5 +15,12 @@
   "effect": {
     "maxHp": 14
   },
-  "note": "The fused plate hardens: more dread knight health per rank."
+  "note": "The fused plate hardens: more dread knight health per rank.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 64,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
 }

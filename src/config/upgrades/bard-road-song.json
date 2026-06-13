@@ -9,5 +9,12 @@
   "prerequisites": ["upgrade:thornwood-mastered"],
   "classId": "bard",
   "unlocks": ["upgrade:bard-meter", "upgrade:princess-boon", "upgrade:priest-vows"],
-  "track": "characters"
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 64,
+    "y": 560,
+    "w": 16,
+    "h": 16
+  }
 }

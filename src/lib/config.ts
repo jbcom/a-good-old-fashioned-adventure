@@ -150,6 +150,14 @@ export interface IncrementalUpgradeNode {
   ranks?: number;
   rankCostGrowth?: number;
   effect?: { maxHp?: number; unitCount?: number; checkpointBonus?: number };
+  /**
+   * A purchased-sheet emblem crop (S-DAG-ICONS hybrid). When present, the
+   * node's DAG emblem is this raster crop instead of a bespoke emblem-<slug>.pix
+   * grid. Generic node types (economy/class/plain-enemy/ability) carry a sheet
+   * icon here; identity nodes (dragon/lair/relic/route/named-boss) keep their
+   * bespoke .pix and omit it.
+   */
+  iconRef?: { image: string; x: number; y: number; w: number; h: number };
   note?: string;
 }
 

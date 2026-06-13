@@ -12,5 +12,12 @@
   "classId": "bard",
   "unlocks": [],
   "note": "Coin-ranked bard track deepening the rose-unlocked class.",
-  "track": "characters"
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 96,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
 }

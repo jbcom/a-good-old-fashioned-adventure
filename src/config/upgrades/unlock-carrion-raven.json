@@ -10,5 +10,12 @@
   "unlocksEnemy": "carrion-raven",
   "unlocks": ["upgrade:raven-bounty", "upgrade:unlock-gatehouse-vulture"],
   "track": "encounters",
-  "note": "A wheeling scavenger that harries the line from the flanks across the crypt and dungeon — each one felled pays its bounty."
+  "note": "A wheeling scavenger that harries the line from the flanks across the crypt and dungeon — each one felled pays its bounty.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 112,
+    "y": 456,
+    "w": 16,
+    "h": 16
+  }
 }

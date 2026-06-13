@@ -10,5 +10,12 @@
   "unlocksEnemy": "orc-scout",
   "unlocks": ["upgrade:scout-bounty", "upgrade:unlock-bramble-stalker"],
   "track": "encounters",
-  "note": "A fast scout joins the deep-forest waves."
+  "note": "A fast scout joins the deep-forest waves.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 80,
+    "y": 496,
+    "w": 16,
+    "h": 16
+  }
 }

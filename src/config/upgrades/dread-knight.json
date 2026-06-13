@@ -10,5 +10,12 @@
   "prerequisites": ["upgrade:warlock-pact", "upgrade:knight-vigor"],
   "classId": "dread-knight",
   "unlocks": ["upgrade:dread-tempering"],
-  "note": "Knight and pact fused: a charge that carries the wither — every blow debuffs."
+  "note": "Knight and pact fused: a charge that carries the wither — every blow debuffs.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 80,
+    "y": 560,
+    "w": 16,
+    "h": 16
+  }
 }

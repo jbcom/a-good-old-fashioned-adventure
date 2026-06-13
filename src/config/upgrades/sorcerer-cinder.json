@@ -14,5 +14,12 @@
     "upgrade:warlock-pact",
     "upgrade:shaman"
   ],
-  "track": "characters"
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 224,
+    "y": 560,
+    "w": 16,
+    "h": 16
+  }
 }

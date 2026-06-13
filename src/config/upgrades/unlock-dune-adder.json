@@ -10,5 +10,12 @@
   "unlocksEnemy": "dune-adder",
   "unlocks": ["upgrade:adder-bounty", "upgrade:unlock-carrion-raven"],
   "track": "encounters",
-  "note": "A coiled ambusher haunting the sunken road's ruins and the desert lair — each one felled pays its bounty."
+  "note": "A coiled ambusher haunting the sunken road's ruins and the desert lair — each one felled pays its bounty.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 176,
+    "y": 456,
+    "w": 16,
+    "h": 16
+  }
 }

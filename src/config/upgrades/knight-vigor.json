@@ -15,5 +15,12 @@
   },
   "unlocks": ["upgrade:barbarian-storm", "upgrade:dread-knight"],
   "note": "Coin-ranked knight track: extra health per rank for the starting class.",
-  "track": "characters"
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 80,
+    "y": 592,
+    "w": 16,
+    "h": 16
+  }
 }

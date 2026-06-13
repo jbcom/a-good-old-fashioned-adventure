@@ -10,5 +10,12 @@
   "unlocksEnemy": "bramble-stalker",
   "unlocks": ["upgrade:stalker-bounty", "upgrade:unlock-gate-sentry"],
   "track": "encounters",
-  "note": "An ambush antagonist for the deep forest."
+  "note": "An ambush antagonist for the deep forest.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 176,
+    "y": 496,
+    "w": 16,
+    "h": 16
+  }
 }

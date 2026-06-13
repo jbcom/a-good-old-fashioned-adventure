@@ -10,5 +10,12 @@
   "unlocksEnemy": "gate-sentry",
   "unlocks": ["upgrade:sentry-bounty", "upgrade:unlock-dune-adder"],
   "track": "encounters",
-  "note": "A guard antagonist on the sunken road and castle approach."
+  "note": "A guard antagonist on the sunken road and castle approach.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 192,
+    "y": 496,
+    "w": 16,
+    "h": 16
+  }
 }

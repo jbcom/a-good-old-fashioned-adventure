@@ -69,6 +69,19 @@
       },
       "additionalProperties": false
     },
+    "iconRef": {
+      "type": "object",
+      "description": "A purchased-sheet emblem crop (S-DAG-ICONS hybrid). When present, the node's DAG emblem is this crop from a sheet raster instead of a bespoke emblem-<slug>.pix grid. Generic node types (economy/class/plain-enemy/ability) use sheet icons; identity nodes (dragon/lair/relic/route/named-boss) keep their bespoke .pix and omit this.",
+      "required": ["image", "x", "y", "w", "h"],
+      "properties": {
+        "image": { "type": "string" },
+        "x": { "type": "integer", "minimum": 0 },
+        "y": { "type": "integer", "minimum": 0 },
+        "w": { "type": "integer", "minimum": 1 },
+        "h": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
     "note": { "type": "string" }
   },
   "additionalProperties": false

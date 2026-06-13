@@ -14,5 +14,12 @@
   },
   "unlocks": [],
   "track": "roads",
-  "note": "Coin sink for the deep-forest unlock — no rose node may dead-end into another rose (grind-trap rule, user 2026-06-12). Each rank richens this map's checkpoint yield."
+  "note": "Coin sink for the deep-forest unlock \u2014 no rose node may dead-end into another rose (grind-trap rule, user 2026-06-12). Each rank richens this map's checkpoint yield.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 112,
+    "y": 608,
+    "w": 16,
+    "h": 16
+  }
 }

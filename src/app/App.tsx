@@ -42,7 +42,7 @@ import {
   readViewport,
   resolveDeviceProfile,
 } from "../platform/deviceProfile";
-import { spriteCanvas } from "../render/atlas";
+import { croppedSheetCanvas, spriteCanvas } from "../render/atlas";
 import { GameStage } from "../render/GameStage";
 import { spritePose } from "../render/pose";
 import { autoChain } from "../sim/autoRun";
@@ -1153,12 +1153,22 @@ function emblemSpriteId(nodeId: string): string {
   return nodeId.replace(/^upgrade:/, "sprite:emblem-");
 }
 
-function EmblemThumb({ nodeId }: { nodeId: string }) {
+function EmblemThumb({
+  nodeId,
+  iconRef,
+}: {
+  nodeId: string;
+  iconRef?: { image: string; x: number; y: number; w: number; h: number };
+}) {
   const ref = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
     const target = ref.current;
     if (!target) return;
-    const source = spriteCanvas(emblemSpriteId(nodeId), "palette:base");
+    // S-DAG-ICONS hybrid: a node with an iconRef draws a purchased-sheet crop;
+    // otherwise it falls back to its bespoke emblem-<slug>.pix grid.
+    const source = iconRef
+      ? croppedSheetCanvas(nodeId, `emblem|${nodeId}|icon`, iconRef)
+      : spriteCanvas(emblemSpriteId(nodeId), "palette:base");
     if (source.width === 0 || source.height === 0) return; // missing sprite: leave blank loudly in tests, not 0x0
     target.width = source.width;
     target.height = source.height;
@@ -1166,7 +1176,7 @@ function EmblemThumb({ nodeId }: { nodeId: string }) {
     if (!ctx) return;
     ctx.imageSmoothingEnabled = false;
     ctx.drawImage(source, 0, 0);
-  }, [nodeId]);
+  }, [nodeId, iconRef]);
   return <canvas className="emblem-thumb" ref={ref} />;
 }
 
@@ -1278,7 +1288,7 @@ function UpgradeWebPanel({
                       aria-pressed={selectedIndex === index}
                       {...tileEvents(index)}
                     >
-                      <EmblemThumb nodeId={node.id} />
+                      <EmblemThumb nodeId={node.id} iconRef={node.iconRef} />
                       <RankPips progress={snapshot.incrementalProgress} node={node} />
                     </button>
                   );
@@ -1288,7 +1298,7 @@ function UpgradeWebPanel({
           ))}
         </fieldset>
         <div className="upgrade-detail upgrade-tooltip" data-testid="upgrade-detail">
-          <EmblemThumb nodeId={selectedNode.id} />
+          <EmblemThumb nodeId={selectedNode.id} iconRef={selectedNode.iconRef} />
           <div className="upgrade-tooltip-body">
             <strong>{selectedNode.label}</strong>
             <span className="upgrade-tooltip-meta">

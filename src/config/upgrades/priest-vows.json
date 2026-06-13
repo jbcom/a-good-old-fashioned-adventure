@@ -10,5 +10,12 @@
   "prerequisites": ["upgrade:bard-road-song"],
   "classId": "priest",
   "unlocks": ["upgrade:shaman", "upgrade:priest-procession"],
-  "note": "A healer joins the line: the heal-beam channels into the most wounded ally."
+  "note": "A healer joins the line: the heal-beam channels into the most wounded ally.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 208,
+    "y": 560,
+    "w": 16,
+    "h": 16
+  }
 }

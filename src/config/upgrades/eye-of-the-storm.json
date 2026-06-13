@@ -15,5 +15,12 @@
   "effect": {
     "maxHp": 12
   },
-  "note": "Calm in the whirl: more stormcaller health per rank."
+  "note": "Calm in the whirl: more stormcaller health per rank.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 176,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
 }

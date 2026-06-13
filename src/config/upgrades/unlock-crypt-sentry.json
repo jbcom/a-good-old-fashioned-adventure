@@ -10,5 +10,12 @@
   "unlocksEnemy": "crypt-sentry",
   "unlocks": ["upgrade:crypt-sentry-bounty"],
   "track": "encounters",
-  "note": "The deepest trash antagonist — a relentless dungeon guard of the Obsidian Throne. Each one felled pays its bounty."
+  "note": "The deepest trash antagonist — a relentless dungeon guard of the Obsidian Throne. Each one felled pays its bounty.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 192,
+    "y": 496,
+    "w": 16,
+    "h": 16
+  }
 }

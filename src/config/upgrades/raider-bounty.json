@@ -13,5 +13,12 @@
   "spawnBounty": 2,
   "unlocks": [],
   "track": "encounters",
-  "note": "Each rank pays more coins per oldwood-raider felled — the income the enemy unlock promises, and the coin sink that keeps the antagonist chain wall-free."
+  "note": "Each rank pays more coins per oldwood-raider felled \u2014 the income the enemy unlock promises, and the coin sink that keeps the antagonist chain wall-free.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 112,
+    "y": 608,
+    "w": 16,
+    "h": 16
+  }
 }

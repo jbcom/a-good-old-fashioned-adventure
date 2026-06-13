@@ -10,5 +10,12 @@
   "prerequisites": ["upgrade:sorcerer-cinder"],
   "classId": "warlock",
   "unlocks": ["upgrade:dread-knight", "upgrade:warband-of-one"],
-  "note": "The withering field slows and weakens every enemy inside it."
+  "note": "The withering field slows and weakens every enemy inside it.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 208,
+    "y": 560,
+    "w": 16,
+    "h": 16
+  }
 }

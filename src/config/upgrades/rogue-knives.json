@@ -12,5 +12,12 @@
   "classId": "rogue",
   "unlocks": [],
   "note": "Coin-ranked rogue track deepening the rose-unlocked class.",
-  "track": "characters"
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 160,
+    "y": 592,
+    "w": 16,
+    "h": 16
+  }
 }

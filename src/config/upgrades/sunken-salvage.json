@@ -14,5 +14,12 @@
   },
   "unlocks": [],
   "track": "roads",
-  "note": "Coin sink for the sunken-road unlock — closes the second rose wall. Each rank richens this map's salvage yield."
+  "note": "Coin sink for the sunken-road unlock \u2014 closes the second rose wall. Each rank richens this map's salvage yield.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 112,
+    "y": 608,
+    "w": 16,
+    "h": 16
+  }
 }

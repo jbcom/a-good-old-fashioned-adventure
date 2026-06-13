@@ -10,5 +10,12 @@
   "unlocksEnemy": "barrow-rat",
   "unlocks": ["upgrade:rat-bounty"],
   "track": "encounters",
-  "note": "A swarming cave-dweller — fast, fragile, many. It thickens the oldwood waves (and gives the roadside-barrow lair a fourth antagonist beyond the orc/raider/shaman trio), paying extra coins per kill."
+  "note": "A swarming cave-dweller — fast, fragile, many. It thickens the oldwood waves (and gives the roadside-barrow lair a fourth antagonist beyond the orc/raider/shaman trio), paying extra coins per kill.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 192,
+    "y": 456,
+    "w": 16,
+    "h": 16
+  }
 }

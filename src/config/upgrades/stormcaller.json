@@ -10,5 +10,12 @@
   "prerequisites": ["upgrade:barbarian-storm", "upgrade:sorcerer-emberweave"],
   "classId": "stormcaller",
   "unlocks": ["upgrade:eye-of-the-storm"],
-  "note": "Wizard and storm fused: the whirl looses bolts at everything in range."
+  "note": "Wizard and storm fused: the whirl looses bolts at everything in range.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 208,
+    "y": 560,
+    "w": 16,
+    "h": 16
+  }
 }

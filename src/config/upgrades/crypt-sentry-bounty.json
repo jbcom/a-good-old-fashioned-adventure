@@ -13,5 +13,12 @@
   "spawnBounty": 5,
   "unlocks": [],
   "track": "encounters",
-  "note": "Each rank pays more coins per crypt-sentry felled — the deepest antagonist's income, and the coin sink that keeps the chain wall-free."
+  "note": "Each rank pays more coins per crypt-sentry felled \u2014 the deepest antagonist's income, and the coin sink that keeps the chain wall-free.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 112,
+    "y": 608,
+    "w": 16,
+    "h": 16
+  }
 }

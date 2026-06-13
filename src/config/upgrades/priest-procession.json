@@ -15,5 +15,12 @@
   "effect": {
     "unitCount": 1
   },
-  "note": "Another vow taken: one more priest walks the line per rank."
+  "note": "Another vow taken: one more priest walks the line per rank.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 160,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
 }

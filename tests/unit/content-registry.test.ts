@@ -25,13 +25,13 @@ describe("registries are fully populated", () => {
     expect(tiles.size).toBe(48);
     // 69 authored props + 8 mega-sheet slicer props (dungeon + approach)
     expect(props.size).toBe(82);
-    // 133 .pix sprites + 43 JSON sheet-sprites (src/content/sprites/*.json:
-    // purchased animal/character/dragon-kin slices). +9 from the uniform
-    // room-guardian rule (SC.G): a bespoke boss-* design for each lair room
-    // that lacked an authored climax (barrow-digger, nest-overseer,
-    // hearth-stalker, plunder-boss, pen-warden, grove-warden, warren-chief,
-    // ruin-revenant, vault-keeper).
-    expect(sprites.size).toBe(176);
+    // 81 .pix sprites + 43 JSON sheet-sprites (src/content/sprites/*.json:
+    // purchased animal/character/dragon-kin slices). S-DAG-ICONS retired 52
+    // generic-node .pix emblems (15 economy + 11 class + 13 enemy-unlock + 13
+    // ability) — those nodes now carry an iconRef crop from the roguelike sheet.
+    // The bespoke .pix that remain are identity emblems (dragon/lair/relic/
+    // route/named-boss/rose-major) the hybrid keeps hand-drawn.
+    expect(sprites.size).toBe(124);
     expect(animations.size).toBe(7);
     expect(maps.size).toBe(24);
     expect(quests.size).toBe(21);
@@ -87,12 +87,25 @@ describe("registries are fully populated", () => {
     }
   });
 
-  it("every upgrade node carries a bespoke emblem sprite", () => {
+  it("every upgrade node carries an emblem — a bespoke .pix OR a sheet iconRef", () => {
     // the DAG is a wall of designs, never a wall of text
-    // (docs/DESIGN-SYSTEM.md §upgrade emblems)
+    // (docs/DESIGN-SYSTEM.md §upgrade emblems). S-DAG-ICONS hybrid: identity
+    // nodes (dragon/lair/relic/route) keep a bespoke emblem-<slug>.pix; generic
+    // nodes (economy/class/plain-enemy/ability) carry an iconRef sheet crop.
+    // Every node must have exactly one of the two.
     for (const node of incremental.upgradeGraph.nodes) {
       const emblemId = node.id.replace(/^upgrade:/, "sprite:emblem-");
-      expect(sprites.has(emblemId), `${node.id} has no emblem ${emblemId}`).toBe(true);
+      const hasBespoke = sprites.has(emblemId);
+      const hasIcon = node.iconRef !== undefined;
+      expect(
+        hasBespoke || hasIcon,
+        `${node.id} has neither a bespoke emblem ${emblemId} nor an iconRef`,
+      ).toBe(true);
+      // not both — a node migrated to an iconRef should have its .pix retired
+      expect(
+        !(hasBespoke && hasIcon),
+        `${node.id} has BOTH a bespoke emblem and an iconRef — retire the .pix`,
+      ).toBe(true);
     }
   });
 });

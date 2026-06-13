@@ -10,5 +10,12 @@
   "prerequisites": ["upgrade:knight-vigor"],
   "classId": "barbarian",
   "unlocks": ["upgrade:stormcaller", "upgrade:bloodline"],
-  "note": "The blade storm strikes everything in its whirl — the knight keeps the shield."
+  "note": "The blade storm strikes everything in its whirl — the knight keeps the shield.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 160,
+    "y": 560,
+    "w": 16,
+    "h": 16
+  }
 }

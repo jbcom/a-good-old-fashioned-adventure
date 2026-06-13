@@ -12,5 +12,12 @@
   "classId": "ranger",
   "unlocks": [],
   "note": "Coin-ranked ranger track deepening the rose-unlocked class.",
-  "track": "characters"
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 144,
+    "y": 592,
+    "w": 16,
+    "h": 16
+  }
 }

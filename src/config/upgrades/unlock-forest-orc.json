@@ -15,5 +15,12 @@
     "upgrade:unlock-barrow-rat"
   ],
   "track": "encounters",
-  "note": "The first antagonist: a single weak orc joins the oldwood waves, paying extra coins per kill."
+  "note": "The first antagonist: a single weak orc joins the oldwood waves, paying extra coins per kill.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 160,
+    "y": 496,
+    "w": 16,
+    "h": 16
+  }
 }

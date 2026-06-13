@@ -15,5 +15,12 @@
   },
   "unlocks": [],
   "track": "characters",
-  "note": "The wizard's own coin sub-track — only reachable after the wizard itself (DAG integrity: no class upgrades before the class node)."
+  "note": "The wizard's own coin sub-track — only reachable after the wizard itself (DAG integrity: no class upgrades before the class node).",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 144,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
 }

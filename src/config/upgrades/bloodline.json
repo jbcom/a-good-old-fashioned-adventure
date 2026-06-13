@@ -15,5 +15,12 @@
   "effect": {
     "unitCount": 1
   },
-  "note": "Kin answer the storm: one more barbarian per rank."
+  "note": "Kin answer the storm: one more barbarian per rank.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 192,
+    "y": 592,
+    "w": 16,
+    "h": 16
+  }
 }

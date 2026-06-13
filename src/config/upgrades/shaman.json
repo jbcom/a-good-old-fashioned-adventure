@@ -10,5 +10,12 @@
   "prerequisites": ["upgrade:priest-vows", "upgrade:sorcerer-cinder"],
   "classId": "shaman",
   "unlocks": ["upgrade:spirit-roots"],
-  "note": "Priest and cinder fused: bursts that scorch enemies and mend allies standing inside."
+  "note": "Priest and cinder fused: bursts that scorch enemies and mend allies standing inside.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 224,
+    "y": 560,
+    "w": 16,
+    "h": 16
+  }
 }

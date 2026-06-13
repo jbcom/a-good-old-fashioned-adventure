@@ -10,5 +10,12 @@
   "unlocksEnemy": "thorn-shaman",
   "unlocks": ["upgrade:shaman-bounty", "upgrade:unlock-orc-scout"],
   "track": "encounters",
-  "note": "A caster antagonist — pressure the line wants ranged remediation for."
+  "note": "A caster antagonist — pressure the line wants ranged remediation for.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 80,
+    "y": 496,
+    "w": 16,
+    "h": 16
+  }
 }
