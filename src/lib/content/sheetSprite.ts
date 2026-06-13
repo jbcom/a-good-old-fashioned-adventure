@@ -8,10 +8,12 @@ import type { AnySpriteDef, SheetAnimDef, SheetSpriteDef } from "./types";
 
 export type SheetDirection = "right" | "up" | "left" | "down";
 
+/** Type guard: true if def is a purchased PNG sheet sprite (not character-sprite). */
 export function isSheetSprite(def: AnySpriteDef): def is SheetSpriteDef {
   return def.kind === "sheet-sprite";
 }
 
+/** Query state to resolve a frame from a sheet sprite definition. */
 export interface SheetFrameQuery {
   /** pose name from spritePose() — the .pix vocabulary (idle, walk-0, walk-up-1, attack, hurt) */
   pose: string;
@@ -26,6 +28,7 @@ export interface SheetFrameQuery {
   t: number;
 }
 
+/** Resolved frame: animation block, direction, source rect, and mirror flag. */
 export interface SheetFrame {
   animName: string;
   anim: SheetAnimDef;
@@ -45,6 +48,7 @@ function normalizePose(pose: string): { key: string; forcedDir: SheetDirection |
   return { key: framed ? framed[1] : pose, forcedDir: null };
 }
 
+/** Map sim state (pose/choreo/facing/move/clock) onto a frame inside the sheet sprite. */
 export function resolveSheetFrame(def: SheetSpriteDef, query: SheetFrameQuery): SheetFrame {
   const phaseMapped = query.choreoPhase !== "" && def.poseMap[query.choreoPhase] !== undefined;
   const { key, forcedDir } = normalizePose(phaseMapped ? query.choreoPhase : query.pose);

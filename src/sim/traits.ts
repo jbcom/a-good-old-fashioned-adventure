@@ -10,13 +10,21 @@
 import { trait } from "koota";
 
 // — entity traits —
+/** World position and size of an entity. */
 export const Transform = trait({ x: 0, y: 0 });
+/** Facing direction: 1 for right, -1 for left. */
 export const Facing = trait({ dir: 1 });
+/** Collision box dimensions for hit detection. */
 export const Hitbox = trait({ w: 10, h: 10 });
+/** Current and maximum hit points. */
 export const Health = trait({ hp: 1, maxHp: 1 });
+/** Movement speed scalar. */
 export const Speed = trait({ value: 0 });
+/** Desired movement direction this frame. */
 export const MoveIntent = trait({ x: 0, y: 0 });
+/** Targeting direction for attacks and abilities. */
 export const AimDirection = trait({ x: 1, y: 0 });
+/** Visual representation: sprite ID and palette override. */
 export const SpriteRef = trait({ spriteId: "", paletteId: "" });
 
 /** Short-lived combat/motion feedback burst: swing arcs, death dissolves. */
@@ -29,6 +37,7 @@ export interface FxBurstState {
   total: number;
 }
 
+/** Animates short-lived combat/motion feedback bursts: swing arcs, death dissolves, trails. */
 export const FxBurst = trait(
   (): FxBurstState => ({
     kind: "swing",
@@ -70,23 +79,31 @@ export const KinIdentity = trait({ relation: "", mapId: "" });
  * dragon is a stronger antagonist that pays more — the rose flywheel.
  */
 export const DragonBuff = trait({ extraBolts: 0, aoeRadius: 0, rewardMult: 1 });
+/** Interactive prop instance: which prop definition and current interaction state. */
 export const PropRef = trait({ propId: "", state: "default" });
+/** NPC patrol route: waypoints, current target, and movement speed. */
 export const NpcPatrol = trait(() => ({
   points: [] as { x: number; y: number }[],
   targetIndex: 0,
   speed: 0,
 }));
 
+/** Player character class reference. */
 export const IsPlayer = trait({ classId: "" });
 /** Rail-command allied unit: fights autonomously by class temperament. */
 export const IsUnit = trait({ classId: "" });
+/** NPC dialogue character reference. */
 export const IsNpc = trait({ charId: "" });
-/** bounty: extra coins this spawn pays on defeat (warband reinforcements). */
+/** Enemy archetype and loot bounty (warband reinforcements pay extra). */
 export const IsEnemy = trait({ archetypeId: "", bounty: 0 });
+/** Pickup item and quantity value. */
 export const IsPickup = trait({ itemId: "", value: 0 });
+/** Marks an entity as blocking collision. */
 export const IsSolid = trait();
 
+/** Loot container: items to drop and opened state. */
 export const LootContainer = trait({ contents: "", opened: false });
+/** Interaction state: verb, one-time flag, used status, audio/animation feedback, dialogue. */
 export const Interactable = trait({
   verb: "",
   once: false,
@@ -96,19 +113,27 @@ export const Interactable = trait({
   dialogueBank: "",
   dialogueSlot: "",
 });
+/** Animation and serial for the inspection pulse feedback effect. */
 export const InspectionPulse = trait({ anim: "", serial: 0 });
 
+/** Experience and leveling state. */
 export const Level = trait({ level: 1, xp: 0, nextXp: 50 });
+/** Combat cooldown counters for attacks, dashes, and hit-stun frames. */
 export const CombatTimers = trait({ attack: 0, dash: 0, dashCooldown: 0, iframes: 0 });
 /** Footstep cadence: distance travelled since the last footstep cue. */
 export const Footsteps = trait({ travelled: 0 });
+/** Active shield state. */
 export const ShieldState = trait({ active: false });
+/** Hit-flash feedback counter. */
 export const HitFlash = trait({ left: 0 });
 
+/** Flying projectile: type, velocity, lifespan, trail effect, and source origin. */
 export const Projectile = trait({ type: "", vx: 0, vy: 0, life: 0, trail: 0, fromPlayer: false });
+/** Item inventory keyed by itemId with counts. */
 export const Inventory = trait(() => ({ items: {} as Record<string, number> }));
 
 // — world-level resources —
+/** Active map runtime: tile grid, dimensions, and revision counter for recomposition. */
 export const MapRuntime = trait(() => ({
   mapId: "",
   cols: 0,
@@ -117,8 +142,11 @@ export const MapRuntime = trait(() => ({
   /** bumped whenever a tile mutates (e.g. bridge repair) so renderers recompose */
   rev: 0,
 }));
+/** Boolean flag state keyed by flag ID. */
 export const FlagState = trait(() => ({ values: {} as Record<string, boolean> }));
+/** Random number generator state seeded for determinism. */
 export const RngState = trait({ seed: 1 });
+/** Simulation time and delta-time for frame-independent updates. */
 export const Clock = trait({ t: 0, dt: 0 });
 /** World resource: remaining hit-stop — sim time freezes while it drains. */
 export const HitStop = trait({ left: 0 });
@@ -128,11 +156,14 @@ export const HitStop = trait({ left: 0 });
  * spawns carry WaveSpawned so authored map enemies never gate the cycle.
  */
 export const WaveState = trait({ wave: 0, engaged: false });
+/** Marks spawned enemies as belonging to a specific wave. */
 export const WaveSpawned = trait({ wave: 0 });
 /** Units deployed this run, by class — roster spending is sim state. */
 export const RosterPlaced = trait(() => ({ counts: {} as Record<string, number> }));
+/** Camera position and screen-shake intensity. */
 export const CameraState = trait({ x: 0, y: 0, shake: 0 });
 
+/** Gameplay event for quest tracking, rewards, and progression. */
 export interface GameEvent {
   type:
     | "enemy:defeated"
@@ -158,8 +189,10 @@ export interface GameEvent {
   y?: number;
 }
 
+/** World resource: game events queued for processing each frame. */
 export const EventQueue = trait(() => ({ events: [] as GameEvent[] }));
 
+/** Last completed run summary for post-game display. */
 export interface IncrementalLastRun {
   result: "victory" | "gameover";
   coinsEarned: number;
@@ -169,6 +202,7 @@ export interface IncrementalLastRun {
   routePackId: string;
 }
 
+/** Persistent player progression: currency, unlocks, and meta-upgrades. */
 export interface IncrementalProgressState {
   coins: number;
   /** dragon-hoard currency (docs/RAIL-COMMAND.md §Three currencies): from
@@ -193,6 +227,7 @@ export interface IncrementalProgressState {
   lastRun: IncrementalLastRun | null;
 }
 
+/** World resource: persistent player progression wrapped in a trait. */
 export const IncrementalProgress = trait(
   (): IncrementalProgressState => ({
     coins: 0,
@@ -214,16 +249,19 @@ export const IncrementalProgress = trait(
   }),
 );
 
+/** Map transition request with optional spawn point override. */
 export interface MapLoadRequest {
   mapId: string;
   spawnId?: string;
 }
 
+/** Quest state: current stage and counter progress. */
 export interface ActiveQuest {
   stage: string;
   counters: Record<string, number>;
 }
 
+/** World resource: active and completed quests. */
 export const QuestLog = trait(() => ({
   active: {} as Record<string, ActiveQuest>,
   completed: [] as string[],

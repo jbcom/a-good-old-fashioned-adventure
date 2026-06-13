@@ -1,5 +1,6 @@
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
+/** Drizzle schema for save-slot records. */
 export const saveSlots = sqliteTable("save_slots", {
   id: integer("id").primaryKey(),
   classId: text("class_id").notNull(),
@@ -14,6 +15,7 @@ export const saveSlots = sqliteTable("save_slots", {
   updatedAt: integer("updated_at", { mode: "timestamp_ms" }).notNull(),
 });
 
+/** Drizzle schema for event replay log; cascades on slot deletion. */
 export const saveEvents = sqliteTable("save_events", {
   id: integer("id").primaryKey({ autoIncrement: true }),
   slotId: integer("slot_id")
@@ -24,7 +26,11 @@ export const saveEvents = sqliteTable("save_events", {
   createdAt: integer("created_at", { mode: "timestamp_ms" }).notNull(),
 });
 
+/** Inferred select type for saveSlots. */
 export type SaveSlotRow = typeof saveSlots.$inferSelect;
+/** Inferred insert type for saveSlots. */
 export type NewSaveSlotRow = typeof saveSlots.$inferInsert;
+/** Inferred select type for saveEvents. */
 export type SaveEventRow = typeof saveEvents.$inferSelect;
+/** Inferred insert type for saveEvents. */
 export type NewSaveEventRow = typeof saveEvents.$inferInsert;

@@ -1,6 +1,9 @@
+/** SQLite database name for save data. */
 export const SAVE_DB_NAME = "good-old-fashioned-adventure";
+/** Current schema version; increment on breaking changes. */
 export const SAVE_DB_VERSION = 1;
 
+/** DDL statements to initialize or upgrade the save database. */
 export const SAVE_MIGRATIONS = [
   `CREATE TABLE IF NOT EXISTS save_slots (
     id INTEGER PRIMARY KEY,

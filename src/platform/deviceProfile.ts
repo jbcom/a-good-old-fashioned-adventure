@@ -1,7 +1,9 @@
 import type { DeviceInfo } from "@capacitor/device";
 
+/** Categorization of render budget tier based on device and viewport. */
 export type DeviceProfile = "phone" | "tablet" | "desktop";
 
+/** Viewport dimensions and pointer capability. */
 export interface ViewportInfo {
   width: number;
   height: number;
@@ -9,11 +11,13 @@ export interface ViewportInfo {
   coarsePointer: boolean;
 }
 
+/** Subset of Capacitor DeviceInfo needed for profile classification. */
 export type DeviceInfoLike = Pick<DeviceInfo, "model" | "platform">;
 
 const TABLET_SHORT_EDGE = 700;
 const TABLET_LONG_EDGE = 960;
 
+/** Extracts viewport dimensions and pointer mode from window; defaults to 1280×720 desktop. */
 export function readViewport(win: Window | undefined = globalThis.window): ViewportInfo {
   if (!win) {
     return { width: 1280, height: 720, devicePixelRatio: 1, coarsePointer: false };
@@ -26,6 +30,7 @@ export function readViewport(win: Window | undefined = globalThis.window): Viewp
   };
 }
 
+/** Classifies device tier by native platform, viewport size, and pointer capability. */
 export function classifyDeviceProfile(
   device: DeviceInfoLike,
   viewport: ViewportInfo,
@@ -42,6 +47,7 @@ export function classifyDeviceProfile(
   return shortEdge < 600 ? "phone" : "desktop";
 }
 
+/** Queries Capacitor Device API and classifies the profile; falls back to "web" platform on error. */
 export async function resolveDeviceProfile(): Promise<DeviceProfile> {
   const viewport = readViewport();
   try {

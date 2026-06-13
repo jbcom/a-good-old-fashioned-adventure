@@ -7,6 +7,7 @@ import type { NewSaveEventRow, NewSaveSlotRow, SaveSlotRow } from "./schema";
 type SqlValue = string | number | null;
 type SqlRow = Record<string, SqlValue>;
 
+/** Queryable metadata from a saved game slot. */
 export interface SaveSlotSummary {
   id: number;
   classId: string;
@@ -21,6 +22,7 @@ export interface SaveSlotSummary {
   updatedAt: number;
 }
 
+/** Abstraction for save-slot persistence and event replay logging. */
 export interface SaveRepository {
   initialize(): Promise<void>;
   latestSlot(): Promise<SaveSlotSummary | null>;
@@ -64,6 +66,7 @@ function isExistingConnectionError(error: unknown): boolean {
   return /already|exist|connection/i.test(message);
 }
 
+/** SQLite persistence via Capacitor/CapacitorSQLite with write-queue serialization. */
 export class CapacitorSaveRepository implements SaveRepository {
   private initialized = false;
   private initializePromise: Promise<void> | null = null;
@@ -176,6 +179,7 @@ export class CapacitorSaveRepository implements SaveRepository {
   }
 }
 
+/** In-memory save-slot storage for tests and server-side contexts. */
 export class MemorySaveRepository implements SaveRepository {
   private slots = new Map<number, SaveSlotRow>();
   private events: NewSaveEventRow[] = [];
@@ -227,12 +231,14 @@ export class MemorySaveRepository implements SaveRepository {
 
 let repository: SaveRepository | null = null;
 
+/** Returns the active save repository, instantiating once based on environment. */
 export function getSaveRepository(): SaveRepository {
   repository ??=
     typeof window === "undefined" ? new MemorySaveRepository() : new CapacitorSaveRepository();
   return repository;
 }
 
+/** Replaces the save repository for test isolation; pass null to reset. */
 export function setSaveRepositoryForTests(next: SaveRepository | null): void {
   repository = next;
 }

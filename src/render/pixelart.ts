@@ -6,6 +6,7 @@
 import basePalette from "../content/palettes/base.json";
 import swapsFile from "../content/palettes/swaps.json";
 
+/** Character key → hex color (e.g., "@r" → "#ff0000"). */
 export type PaletteMap = Record<string, string>;
 
 export function resolvePalette(paletteId: string): PaletteMap {
@@ -17,6 +18,7 @@ export function resolvePalette(paletteId: string): PaletteMap {
   return { ...palette, ...swap };
 }
 
+/** Convert palette character (@r) to hex, or pass through if already hex. */
 export function resolveColor(color: string, palette: PaletteMap): string {
   if (!color.startsWith("@")) return color;
   const hex = palette[color.slice(1)];
@@ -34,7 +36,7 @@ function makeCanvas(w: number, h: number): [HTMLCanvasElement, CanvasRenderingCo
   return [canvas, ctx];
 }
 
-/** Rasterize a character/prop pixel grid (rows of palette chars). */
+/** Rasterize a sprite as rows of palette characters (. = transparent) onto a 1px-per-char canvas. */
 export function rasterizeRows(rows: string[], palette: PaletteMap): HTMLCanvasElement {
   const h = rows.length;
   const w = rows[0]?.length ?? 0;
@@ -52,6 +54,7 @@ export function rasterizeRows(rows: string[], palette: PaletteMap): HTMLCanvasEl
   return canvas;
 }
 
+/** Single draw operation for procedural tile/prop rendering. */
 export interface DrawOp {
   op: "fill" | "rect" | "triangle" | "repeat-rect";
   color: string;
@@ -65,7 +68,7 @@ export interface DrawOp {
   count?: number;
 }
 
-/** Rasterize a tile/prop-state draw-op list onto a size×size canvas. */
+/** Execute draw-op list (fill, rect, triangle, repeat-rect) onto a square canvas. */
 export function rasterizeDrawOps(ops: DrawOp[], palette: PaletteMap, size = 16): HTMLCanvasElement {
   const [canvas, ctx] = makeCanvas(size, size);
   for (const op of ops) {
