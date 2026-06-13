@@ -23,7 +23,7 @@ import {
 } from "./incrementalProgress";
 import { frontline, railAxis } from "./systems/waves";
 import { step } from "./tick";
-import { IncrementalProgress, IsEnemy, IsUnit, MapRuntime } from "./traits";
+import { Health, IncrementalProgress, IsEnemy, IsUnit, MapRuntime } from "./traits";
 
 export interface RunScenario {
   /** map to fight on (any map id — bypasses the route DAG for isolation) */
@@ -38,6 +38,13 @@ export interface RunScenario {
   seed: number;
   /** safety cap so a stalemate resolves (default 120s of sim) */
   maxTicks?: number;
+  /**
+   * Autotuner trial knobs (docs/RAIL-COMMAND.md §autotuning): multiply unit or
+   * enemy HP at spawn for this run WITHOUT mutating config — so the tuner can
+   * A/B test stat deltas headlessly. Default 1 (no change). 1.1 = +10% HP.
+   */
+  unitHpScale?: number;
+  enemyHpScale?: number;
 }
 
 export interface RunResult {
@@ -80,6 +87,30 @@ export function runRail(scenario: RunScenario): RunResult {
   });
   instantiateMap(world, scenario.mapId, { classId: scenario.unlockedClassIds[0] ?? "knight" });
 
+  // autotuner HP scaling (no config mutation): rescale each frame for newly
+  // spawned entities (waves, replenished units) we haven't touched yet
+  const unitHpScale = scenario.unitHpScale ?? 1;
+  const enemyHpScale = scenario.enemyHpScale ?? 1;
+  const scaled = new Set<number>();
+  const applyHpScales = () => {
+    if (unitHpScale === 1 && enemyHpScale === 1) return;
+    for (const e of world.query(IsUnit, Health)) {
+      const id = e as unknown as number;
+      if (scaled.has(id)) continue;
+      scaled.add(id);
+      const h = e.get(Health);
+      if (h) e.set(Health, { hp: h.hp * unitHpScale, maxHp: h.maxHp * unitHpScale });
+    }
+    for (const e of world.query(IsEnemy, Health)) {
+      const id = e as unknown as number;
+      if (scaled.has(id)) continue;
+      scaled.add(id);
+      const h = e.get(Health);
+      if (h) e.set(Health, { hp: h.hp * enemyHpScale, maxHp: h.maxHp * enemyHpScale });
+    }
+  };
+  applyHpScales();
+
   const { cols, rows } = mapSize(world);
   const axis = railAxis(world);
   // advance is measured along the rail axis: north climbs y→0, east runs x→width
@@ -95,6 +126,7 @@ export function runRail(scenario: RunScenario): RunResult {
 
   for (; ticks < maxTicks; ticks++) {
     unitsFielded += replenish(world, scenario.unlockedClassIds);
+    applyHpScales();
     step(world);
 
     // count felled enemies by tracking which ids disappear
