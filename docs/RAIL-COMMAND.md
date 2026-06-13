@@ -230,6 +230,24 @@ dragon and the map (coins) → the dragon now holds the princess → fell it
 for the rose → unlock the NEXT map. Each step keeps the rose boss fresh
 and the coin sinks flowing.
 
+**The principled rose-wall exception.** The no-rose-wall rule (every rose
+node must offer a coin child) is NOT "no rose child ever" — it is "always
+offer a coin sink too." The map sub-tree is the canonical healthy case: a
+map node has BOTH a coin sub-path (its yield/economy ranks the player can
+always farm toward) AND a rose-gated sub-path (the dragon unlock, which
+itself pays MORE future roses). The player is never stuck — coins are
+always spendable — and may OPTIONALLY invest roses in the map's dragon to
+grow their future rose income. A node with one coin path and one rose path
+is therefore correct by design; the gate permits it (it requires only a
+coin child, not all-coin children).
+
+**Rose income is not all-or-nothing.** Because roses are rare, the economy
+must have more sources than full rescues alone: a partial/failed run can
+still pay SOME roses (advancing far enough up the rail, or unlocking a
+map's dragon, yields fractional rose income). This smooths the scarcity —
+a player who pushes deep but falls short still earns toward the next rose
+gate, so progress never fully stalls on a single hard boss.
+
 ## The player's curve — why the DAGs are shaped this way
 
 The intended experience, start to escalation:
