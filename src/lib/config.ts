@@ -148,6 +148,17 @@ export interface IncrementalUpgradeNode {
   };
   /** Coins each warband reinforcement pays on defeat, beyond enemyDefeated. */
   spawnBounty?: number;
+  /**
+   * Per-enemy spawn-placement track (S21.4, docs/RAIL-COMMAND.md §enemy
+   * placement): each owned rank adds one more candidate spawn gate this enemy
+   * can roll among (rank N = up to N of the map's waveGates, by slice order)
+   * AND multiplies its coin bounty by `coinMultiplierPerRank` per rank.
+   */
+  placement?: {
+    enemy: string;
+    /** coin-bounty multiplier added per owned rank (more spread = more reward) */
+    coinMultiplierPerRank: number;
+  };
   ability?: string;
   ranks?: number;
   rankCostGrowth?: number;

@@ -41,6 +41,60 @@ function ownedWarbandRanks(world: World): number {
   return total;
 }
 
+/**
+ * The coin bounty a wave-spawned enemy of this archetype carries: the owned
+ * spawnBounty ranks of its family (the enemy-DAG bounty connectors). In the zone
+ * model the familyHosts reinforcement path is dead (maps author no trash), so
+ * THIS is where bounty ranks pay — on every wave kill of the matching family.
+ */
+function familyBounty(world: World, enemyId: string): number {
+  const archetype = enemies.archetypes[enemyId];
+  const family = archetype?.family;
+  if (!family) return 0;
+  const ranks = world.get(IncrementalProgress)?.upgradeRanks ?? {};
+  let total = 0;
+  for (const node of incremental.upgradeGraph.nodes) {
+    if (node.enemyFamily === family && node.spawnBounty) {
+      total += (ranks[node.id] ?? 0) * node.spawnBounty;
+    }
+  }
+  return total;
+}
+
+/**
+ * Per-enemy spawn-placement (S21.4): the owned rank count and coin multiplier
+ * for an archetype's placement node. Rank 0 (no node owned) means the enemy
+ * spawns from a single gate at the default bounty; each rank adds a candidate
+ * gate AND multiplies the coin bounty.
+ */
+function placementFor(world: World, enemyId: string): { rank: number; coinMult: number } {
+  const ranks = world.get(IncrementalProgress)?.upgradeRanks ?? {};
+  for (const node of incremental.upgradeGraph.nodes) {
+    if (node.placement?.enemy === enemyId) {
+      const rank = ranks[node.id] ?? 0;
+      return { rank, coinMult: 1 + rank * node.placement.coinMultiplierPerRank };
+    }
+  }
+  return { rank: 0, coinMult: 1 };
+}
+
+/**
+ * Pick the spawn gate for an enemy instance from its unlocked placement set.
+ * At placement rank 0 the enemy holds the wave's single rotating gate (the
+ * baseline — a wave musters from one slice, the gate rotating per wave). Each
+ * placement rank lets THIS enemy's instances also fan out to additional gates
+ * (the next slices in authored order — flank/lane/rear), so a wider-placed
+ * enemy spreads across more board slices within the wave. Deterministic and
+ * positional (no RNG): rank N spreads the wave's copies over N+1 gates anchored
+ * at the wave's base gate.
+ */
+function placementGate<T>(gates: T[], rank: number, wave: number, index: number): T {
+  if (gates.length === 0) throw new Error("placementGate: no gates");
+  const base = (wave - 1) % gates.length;
+  const reach = Math.min(gates.length, rank + 1);
+  return gates[(base + (index % reach)) % gates.length];
+}
+
 /** Every archetype the player has unlocked via an enemy-DAG node. */
 function unlockedEnemies(world: World): Set<string> {
   const owned = new Set(world.get(IncrementalProgress)?.purchasedUpgradeIds ?? []);
@@ -101,16 +155,27 @@ export function waveStep(world: World): void {
   const wave = current.wave + 1;
   const archetypes = waveArchetypes(mapId, world);
   if (archetypes.length === 0) return;
-  const gate = gates[(wave - 1) % gates.length];
   const size = waveSize(wave, ownedWarbandRanks(world));
   for (let i = 0; i < size; i++) {
     const archetypeId = archetypes[(wave - 1 + i) % archetypes.length];
+    // S21.4 placement: each enemy rolls its spawn gate from its unlocked
+    // placement set (more ranks → more board slices), and carries a coin
+    // multiplier so a wider-spread enemy pays more per kill
+    const placement = placementFor(world, archetypeId);
+    const gate = placementGate(gates, placement.rank, wave, i);
     const spawned = spawnEnemy(
       world,
       archetypeId,
       gate.x + (i % 3) * 18,
       gate.y - Math.floor(i / 3) * 18,
     );
+    // the wave enemy carries its family's owned bounty (this is where bounty
+    // ranks pay in the zone model), scaled by the placement coin multiplier
+    const bounty = Math.round(familyBounty(world, archetypeId) * placement.coinMult);
+    if (bounty > 0) {
+      const tag = spawned.get(IsEnemy);
+      if (tag) spawned.set(IsEnemy, { ...tag, bounty });
+    }
     spawned.add(WaveSpawned({ wave }));
   }
   // S20.3 audio: a horn sounds as each fresh wave releases from the gates

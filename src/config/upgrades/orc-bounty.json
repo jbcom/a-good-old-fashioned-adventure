@@ -11,7 +11,7 @@
   "prerequisites": ["upgrade:unlock-forest-orc"],
   "enemyFamily": "forest-orc",
   "spawnBounty": 2,
-  "unlocks": [],
+  "unlocks": ["upgrade:placement-forest-orc"],
   "track": "encounters",
   "note": "Each rank pays more coins per forest-orc felled \u2014 the income the enemy unlock promises, and the coin sink that keeps the antagonist chain wall-free.",
   "iconRef": {

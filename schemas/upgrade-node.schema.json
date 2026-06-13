@@ -36,6 +36,16 @@
     "enemyFamily": { "type": "string" },
     "unlocksEnemy": { "type": "string" },
     "spawnBounty": { "type": "number" },
+    "placement": {
+      "type": "object",
+      "description": "Per-enemy spawn-placement track (S21.4, docs/RAIL-COMMAND.md §enemy placement). Each rank adds one more candidate spawn gate this enemy can roll among (rank N = up to N of the map's waveGates, by slice order) AND multiplies its coin bounty (more spread = more reward). A coin-priced ranked node.",
+      "required": ["enemy", "coinMultiplierPerRank"],
+      "properties": {
+        "enemy": { "type": "string" },
+        "coinMultiplierPerRank": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "additionalProperties": false
+    },
     "routePack": { "type": "string" },
     "dragonKin": {
       "type": "object",
