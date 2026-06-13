@@ -93,8 +93,11 @@ function composeGround(world: World): HTMLCanvasElement {
     for (let col = 0; col < runtime.cols; col++) {
       // field ground tiles sample a per-(col,row) cell so the ground shows the
       // pack's variation rather than a seamed repeat; each tile bakes at its own
-      // native resolution and is scaled to fill the GROUND_RES cell
-      const face = tileFieldCanvas(runtime.grid[row][col], col, row);
+      // native resolution and is scaled to fill the GROUND_RES cell. Guard a
+      // malformed/ragged grid row so a missing cell skips rather than crashes.
+      const tileId = runtime.grid[row]?.[col];
+      if (!tileId) continue;
+      const face = tileFieldCanvas(tileId, col, row);
       ctx.drawImage(
         face,
         0,

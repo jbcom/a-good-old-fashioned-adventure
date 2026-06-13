@@ -4,7 +4,7 @@
   "kind": "tile",
   "variantOf": "tile:stone-floor",
   "solid": false,
-  "description": "Cracked stone slab — Kenney Roguelike Dungeon cell (tilemaps/kenney-dungeon.png, 16px on 17px stride; col 11, row 3). The deep fracture reads against the legible stone-floor base, matching the dungeon-floor family.",
+  "description": "Cracked stone slab — Kenney Roguelike Dungeon cell (tilemaps/kenney-dungeon.png, 16px on 17px stride; col 10, row 3). The deep fracture reads against the legible stone-floor base, matching the dungeon-floor family.",
   "sheet": {
     "image": "tilemaps/kenney-dungeon.png",
     "x": 170,
