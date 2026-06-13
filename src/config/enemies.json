@@ -92,7 +92,13 @@
       "label": "Obsidian Throne Dungeon",
       "tier": 4,
       "threat": 9,
-      "maps": ["map:castle-hall", "map:castle-library", "map:castle-armory", "map:castle-dungeon"],
+      "maps": [
+        "map:castle-hall",
+        "map:castle-library",
+        "map:castle-armory",
+        "map:castle-dungeon",
+        "map:castle-throne-wing"
+      ],
       "archetypes": ["crypt-skeleton", "crypt-sentry", "crypt-bat", "carrion-raven"]
     }
   ]

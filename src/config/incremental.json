@@ -160,6 +160,10 @@
     "map:castle-approach": {
       "theme": "siege-warcamp",
       "rooms": ["map:castle-yard"]
+    },
+    "map:castle-hall": {
+      "theme": "throne-wing",
+      "rooms": ["map:castle-library", "map:castle-armory", "map:castle-throne-wing"]
     }
   }
 }

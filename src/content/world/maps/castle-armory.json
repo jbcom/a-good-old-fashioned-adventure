@@ -16,104 +16,123 @@
     },
     {
       "op": "row-span",
-      "tile": "tile:castle-road",
-      "y": 14,
-      "x0": 4,
-      "x1": 27
+      "tile": "tile:ruin-floor",
+      "y": 11,
+      "x0": 2,
+      "x1": 29,
+      "note": "the boot-worn drill lane the line pushes east along"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:ruin-floor",
+      "y": 12,
+      "x0": 2,
+      "x1": 29,
+      "note": "drill lane, second course"
     },
     {
       "op": "col-span",
-      "tile": "tile:castle-road",
-      "x": 16,
-      "y0": 5,
-      "y1": 21
+      "tile": "tile:stone-wall",
+      "x": 13,
+      "y0": 2,
+      "y1": 7,
+      "note": "a weapon-rack bay walling off the upper court (the run threads the lower gap)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 21,
+      "y0": 16,
+      "y1": 21,
+      "note": "a second rack bay off the lower flank"
     },
     {
       "op": "region",
       "tile": "tile:village-cobble",
-      "x0": 12,
-      "x1": 20,
-      "y0": 12,
-      "y1": 16,
-      "note": "standard display stones"
-    },
-    {
-      "op": "region",
-      "tile": "tile:ruin-floor",
-      "x0": 4,
+      "x0": 5,
       "x1": 11,
-      "y0": 17,
-      "y1": 21,
-      "note": "boot-worn sparring square"
+      "y0": 15,
+      "y1": 20,
+      "note": "the standard display stones, south of the lane"
     },
     {
       "op": "region",
-      "tile": "tile:ruin-floor",
-      "x0": 21,
-      "x1": 27,
-      "y0": 5,
-      "y1": 9,
-      "note": "drill court worn by a hundred summers"
+      "tile": "tile:stone-floor-cracked",
+      "x0": 22,
+      "x1": 28,
+      "y0": 8,
+      "y1": 15,
+      "note": "the sentinel's post — slab cracked where the hollow armor stamps its watch"
     }
   ],
   "playerSpawn": {
-    "x": 256,
-    "y": 120
+    "x": 48,
+    "y": 184
   },
   "spawns": {
     "default": {
-      "x": 256,
-      "y": 120
+      "x": 48,
+      "y": 184
     },
     "entry": {
-      "x": 256,
-      "y": 120
+      "x": 48,
+      "y": 184
+    },
+    "from-hall": {
+      "x": 48,
+      "y": 184
     }
   },
   "entities": [
     {
       "ref": "prop:weapon-rack",
-      "x": 180,
-      "y": 214,
+      "x": 150,
+      "y": 144,
       "note": "old spears and tourney swords"
     },
     {
       "ref": "prop:weapon-rack",
-      "x": 340,
-      "y": 214,
+      "x": 150,
+      "y": 248,
       "note": "shield hooks and blunt lances"
     },
     {
       "ref": "prop:castle-banner",
-      "x": 256,
-      "y": 238,
+      "x": 250,
+      "y": 144,
       "note": "armory standard"
     },
     {
-      "ref": "prop:castle-lantern",
-      "x": 116,
-      "y": 150,
-      "note": "low oil lantern"
+      "ref": "prop:barrel",
+      "x": 300,
+      "y": 256,
+      "note": "quiver barrel off the lower flank"
     },
     {
-      "ref": "prop:barrel",
-      "x": 402,
-      "y": 260,
-      "note": "quiver barrel"
+      "ref": "prop:castle-lantern",
+      "x": 360,
+      "y": 144,
+      "note": "low oil lantern by the post"
     },
     {
       "enemy": "armory-sentinel",
-      "x": 88,
-      "y": 330,
-      "note": "Castle Interior miniboss: hollow armor waking in the corner"
+      "x": 408,
+      "y": 184,
+      "note": "throne-wing lair r2 CLIMAX: the hollow armor wakes on its cracked post at the lane's end. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
     },
     {
       "ref": "prop:chest",
-      "x": 340,
-      "y": 330,
+      "x": 430,
+      "y": 144,
       "contents": "RoyalGold",
       "note": "armory pay-chest behind the sentinel's post"
     }
+  ],
+  "waveGates": [
+    { "id": "gate:drill-mouth", "x": 200, "y": 184, "note": "spawn zone — the drill-lane mouth" },
+    { "id": "gate:rack-upper", "x": 240, "y": 160, "note": "spawn zone — past the upper rack bay" },
+    { "id": "gate:rack-lower", "x": 320, "y": 216, "note": "spawn zone — the lower rack flank" },
+    { "id": "gate:sentinel-post", "x": 380, "y": 184, "note": "spawn zone — the sentinel's post" }
   ],
   "triggers": [
     {
@@ -124,10 +143,10 @@
       "toSpawn": "from-armory",
       "sfx": "interact",
       "zone": {
-        "x0": 220,
-        "y0": 0,
-        "x1": 292,
-        "y1": 76
+        "x0": 0,
+        "y0": 156,
+        "x1": 28,
+        "y1": 212
       }
     },
     {

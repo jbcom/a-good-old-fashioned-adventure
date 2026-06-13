@@ -8,6 +8,6 @@
   },
   "prerequisites": ["upgrade:sorcerer-cinder"],
   "routePack": "castle-interior",
-  "unlocks": [],
+  "unlocks": ["upgrade:lair-castle-hall-1"],
   "track": "castle"
 }
