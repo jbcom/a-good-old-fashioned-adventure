@@ -24,6 +24,9 @@ export interface TileDef {
   solid: boolean;
   layers?: DrawOp[];
   rows?: string[];
+  /** purchased-sheet crop (slicer manifest) — same second raster source
+   * props and sprites carry; palette swaps never apply */
+  sheet?: { image: string; x: number; y: number; w: number; h: number };
   koota: { traits: string[] };
 }
 

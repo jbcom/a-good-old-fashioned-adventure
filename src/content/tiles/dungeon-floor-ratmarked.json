@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:dungeon-floor-ratmarked",
+  "kind": "tile",
+  "variantOf": "tile:stone-floor",
+  "solid": false,
+  "description": "A rat silhouette scurries the slab \u2014 Kenney dungeon cell (public/assets/MANIFEST.json#kenney-roguelike-dungeon). Audition variant for the castle dungeon's three-family tile poverty. Derived dark-palette slice (CC0 permits derivation) so the shapes sit in the dungeon's obsidian ramp.",
+  "sheet": {
+    "image": "tilemaps/kenney-dungeon-dark.png",
+    "x": 32,
+    "y": 0,
+    "w": 16,
+    "h": 16
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

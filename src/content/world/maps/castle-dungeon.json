@@ -161,5 +161,26 @@
       "slot": "taunt",
       "once": true
     }
+  ],
+  "terrainVariants": [
+    {
+      "baseTile": "tile:stone-floor",
+      "variants": [
+        "tile:stone-floor",
+        "tile:stone-floor",
+        "tile:stone-floor",
+        "tile:stone-floor",
+        "tile:dungeon-floor-worn",
+        "tile:dungeon-floor-cracked",
+        "tile:dungeon-floor-shattered",
+        "tile:dungeon-floor-ratmarked"
+      ],
+      "chunk": {
+        "w": 4,
+        "h": 4
+      },
+      "seed": 7,
+      "note": "Kenney-derived dark slices at 50% chunk density (schema caps 8 variants); each slice appears once per 8 chunks"
+    }
   ]
 }

@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:dungeon-floor-cracked",
+  "kind": "tile",
+  "variantOf": "tile:stone-floor",
+  "solid": false,
+  "description": "Light crack web across the stone \u2014 Kenney dungeon cell (public/assets/MANIFEST.json#kenney-roguelike-dungeon). Audition variant for the castle dungeon's three-family tile poverty. Derived dark-palette slice (CC0 permits derivation) so the shapes sit in the dungeon's obsidian ramp.",
+  "sheet": {
+    "image": "tilemaps/kenney-dungeon-dark.png",
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 16
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

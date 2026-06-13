@@ -5,7 +5,7 @@
  * sprites): palette-keyed .pix rows, and purchased PNG sheets whose images
  * preload once at boot so every bake stays synchronous.
  */
-import { getProp, getSprite, getTile, props, sprites } from "../lib/content/registry";
+import { getProp, getSprite, getTile, props, sprites, tiles } from "../lib/content/registry";
 import { isSheetSprite, resolveSheetFrame, type SheetFrame } from "../lib/content/sheetSprite";
 import type { SheetSpriteDef } from "../lib/content/types";
 import { type DrawOp, rasterizeDrawOps, rasterizeRows, resolvePalette } from "./pixelart";
@@ -37,6 +37,9 @@ export function preloadSheetImages(): Promise<void> {
       for (const state of Object.values(prop.states)) {
         if (state.sheet) paths.add(state.sheet.image);
       }
+    }
+    for (const tile of tiles.values()) {
+      if (tile.sheet) paths.add(tile.sheet.image);
     }
     await Promise.all(
       [...paths].map(async (path) => {
@@ -179,10 +182,33 @@ export function flashCanvas(spriteId: string, paletteId: string): HTMLCanvasElem
   });
 }
 
-/** Tile face (16×16 draw-ops at the base palette). */
+/** Tile face (16×16 .pix rows, draw-ops, or a purchased-sheet cell). */
 export function tileCanvas(tileId: string): HTMLCanvasElement {
+  const tile = getTile(tileId);
+  if (tile.sheet) {
+    const rect = tile.sheet;
+    const image = sheetImages.get(rect.image);
+    if (!image) {
+      if (sheetsReady) throw new Error(`${tileId}: sheet image missing: ${rect.image}`);
+      return baked(`${tileId}|placeholder`, () => {
+        const placeholder = document.createElement("canvas");
+        placeholder.width = rect.w;
+        placeholder.height = rect.h;
+        return placeholder;
+      });
+    }
+    return baked(`${tileId}|sheet`, () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = rect.w;
+      canvas.height = rect.h;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("2d context unavailable");
+      ctx.imageSmoothingEnabled = false;
+      ctx.drawImage(image, rect.x, rect.y, rect.w, rect.h, 0, 0, rect.w, rect.h);
+      return canvas;
+    });
+  }
   return baked(`${tileId}|palette:base`, () => {
-    const tile = getTile(tileId);
     if (tile.rows) return rasterizeRows(tile.rows, resolvePalette("palette:base"));
     return rasterizeDrawOps(tile.layers as DrawOp[], resolvePalette("palette:base"));
   });

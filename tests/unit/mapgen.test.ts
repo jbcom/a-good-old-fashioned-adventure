@@ -66,18 +66,28 @@ describe("dungeon generation", () => {
 
   it("places prison bars with playable five-tile doorways", () => {
     expect(grid[10][16]).toBe("tile:prison-bars");
-    expect(grid[16][16]).toBe("tile:stone-floor");
-    expect(grid[16][32]).toBe("tile:stone-floor");
-    expect(grid[14][16]).toBe("tile:stone-floor");
-    expect(grid[15][16]).toBe("tile:stone-floor");
-    expect(grid[17][16]).toBe("tile:stone-floor");
-    expect(grid[18][16]).toBe("tile:stone-floor");
-    expect(grid[16][14]).toBe("tile:stone-floor");
-    expect(grid[16][15]).toBe("tile:stone-floor");
-    expect(grid[16][17]).toBe("tile:stone-floor");
-    expect(grid[16][18]).toBe("tile:stone-floor");
-    expect(grid[15][32]).toBe("tile:stone-floor");
-    expect(grid[17][32]).toBe("tile:stone-floor");
+    // terrain variants may dress a doorway slab — walkable stone FAMILY is the contract
+    const stoneFamily = (t: string) => {
+      const def = getTile(t);
+      expect(def.variantOf ?? t, t).toBe("tile:stone-floor");
+      expect(def.solid).toBe(false);
+    };
+    for (const [r, c] of [
+      [16, 16],
+      [16, 32],
+      [14, 16],
+      [15, 16],
+      [17, 16],
+      [18, 16],
+      [16, 14],
+      [16, 15],
+      [16, 17],
+      [16, 18],
+      [15, 32],
+      [17, 32],
+    ] as const) {
+      stoneFamily(grid[r][c]);
+    }
   });
 });
 
