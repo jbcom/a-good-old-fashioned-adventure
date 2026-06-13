@@ -335,6 +335,73 @@ roses are the optional flywheel that accelerates it. Partial runs always
 farm coins and gems from any dragon-kin damaged, so every attempt advances
 the mandatory tracks even when the rescue fails.
 
+## Each map's FOUR independent sub-tracks (user direction 2026-06-12/13)
+
+Each map carries FOUR independent sub-tracks. The **Dragon track** and the
+**Dragon's Lair** are SEPARATE tracks with different jobs — not one
+generalized into the other:
+
+```
+map-N  (gem major — "unlock this map")
+ ├── map-N economy/yield ranks     (coins — the always-farmable sink)
+ ├── map-N line/encounter ranks    (coins/gems — enemy DAG, placement, waves)
+ ├── map-N DRAGON track            (rose-OR-gem — unlock + BUFF the kin)
+ │    ├── dragon-unlock  (the map's kin holder appears)
+ │    └── dragon buffs   (AoE fireball, multi-attack, extra phases…)
+ │                       → a buffed dragon pays MORE rewards (roses)
+ └── map-N DRAGON'S LAIR           (rose-OR-gem — a themed multi-room dungeon)
+      ├── lair room 1  → unlock the lair; relocate the princess into it
+      ├── lair room 2  → another room, deeper
+      ├── …
+      └── lair room K  → the deepest room (the princess sits here)
+```
+
+**The Dragon track BUFFS the dragon for more rewards.** It unlocks the map's
+kin holder, then layers combat buffs onto it — AoE fireball, multi-attack,
+extra phases, more HP. A buffed dragon is a stronger antagonist that pays MORE
+roses on the rescue (the flywheel: invest roses/gems to strengthen the dragon,
+earn more roses back). This is the strength-and-reward track.
+
+**The Dragon's Lair is a themed multi-room DUNGEON.** Independent of the dragon
+track. Each map's lair has a theme (underground cave, netherrealm portal,
+castle, sunken crypt…); each upgrade unlocks another ROOM — a real playable
+rail. **When the lair is unlocked, the princess relocates into it; if the
+map's DRAGON is also unlocked, the dragon relocates in too. If the dragon is
+NOT unlocked, the lair just moves the princess** (she waits in the dungeon, no
+kin holder). The princess always sits at the deepest unlocked room.
+
+Both tracks are rose-OR-gem priced (roses logarithmic shortcut, gems
+exponential fallback — never a hard wall), keeping the anti-block guarantee.
+
+**Scale target: ~10 maps × ~5-room lairs ≈ 60 playable spaces** (10 overworld
+rails + ~50 dungeon rooms). A room is a real playable rail; the lair is a
+vertical dungeon hanging off its map. Systems are built to this scale now;
+content is authored toward it incrementally.
+
+**Kin count follows map count.** The family tree grows with the maps (10+
+relatives across the spine), not a fixed six. The castle is not special-cased —
+it is a map whose lair theme is "castle interior" and whose deepest room holds
+the princess.
+
+## AUTO — headless auto-advance to your frontier (user direction 2026-06-12)
+
+A third top-bar control beside the fast-forward tiers (§Fast-forward): **AUTO**.
+Distinct from fast-forward (which speeds the CURRENT run): AUTO runs the
+headless battle simulation (the same pure-sim harness the balance suite uses,
+runRail) across maps automatically, advancing the player from their current
+position toward their **last-unlocked frontier**, and presents results
+immediately — no manual play. If you last reached 5-4, AUTO attempts to
+auto-clear up to 5-4 with your current roster/upgrades.
+
+Crucially, **AUTO can LOSE.** If the simulated line falls, AUTO simply stops and
+shows the results screen for that run — which is still a good farm (the partial
+run banked coins/gems, the always-advance floor). So AUTO is both a convenience
+(skip replaying cleared content) and a farming tool (let it run, take whatever
+it earns). It is unlocked once the player has cleared enough to have a frontier
+to auto toward — mirroring the fast-forward unlock pattern. Determinism: AUTO
+uses the same seeded sim as the harness, so a given state auto-plays
+reproducibly.
+
 ## The player's curve — why the DAGs are shaped this way
 
 The intended experience, start to escalation:
