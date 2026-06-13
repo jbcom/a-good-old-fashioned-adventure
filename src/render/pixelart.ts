@@ -9,6 +9,7 @@ import swapsFile from "../content/palettes/swaps.json";
 /** Character key → hex color (e.g., "@r" → "#ff0000"). */
 export type PaletteMap = Record<string, string>;
 
+/** Resolve a palette id to its character→hex color map, applying swaps. */
 export function resolvePalette(paletteId: string): PaletteMap {
   const palette: PaletteMap = {};
   for (const [ch, def] of Object.entries(basePalette.colors)) palette[ch] = def.hex;

@@ -32,6 +32,7 @@ const CLASS_GOALS: Record<string, Evaluator> = {
   stormcaller,
 };
 
+/** Pick a unit's combat goal from its class evaluator and field view. */
 export function chooseGoal(classId: string, view: FieldView): UnitGoal {
   const evaluator = CLASS_GOALS[classId] ?? engageNearest;
   return evaluator(view);

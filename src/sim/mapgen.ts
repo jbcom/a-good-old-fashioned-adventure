@@ -32,6 +32,7 @@ import type { TerrainVariantRule } from "../lib/content/types";
 
 export type { TerrainVariantRule } from "../lib/content/types";
 
+/** Inputs to procedural map generation — size, base tile, and ops. */
 export interface MapGenInput {
   size: { cols: number; rows: number };
   baseTile: string;

@@ -8,6 +8,7 @@ import type { Rng } from "../rng";
 import { CameraState, IsPlayer, Transform } from "../traits";
 import { frontline } from "./waves";
 
+/** Per-tick: track the camera to the advancing front line. */
 export function updateCamera(world: World, rng: Rng): void {
   const camera = world.get(CameraState);
   if (!camera) return;

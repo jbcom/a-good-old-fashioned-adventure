@@ -159,6 +159,7 @@ function nearestAllyTo(
   return best;
 }
 
+/** Per-tick: drive enemy targeting, movement, and attacks. */
 export function enemyAIStep(world: World, dt: number): void {
   pruneDead(world);
   const defaults = enemies.aiDefaults;

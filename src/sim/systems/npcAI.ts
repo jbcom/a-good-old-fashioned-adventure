@@ -40,6 +40,7 @@ function pruneDead(world: World): void {
   }
 }
 
+/** Per-tick: drive ambient NPC wander and idle behavior. */
 export function npcAIStep(world: World, dt: number): void {
   pruneDead(world);
   for (const npc of [...world.query(IsNpc, NpcPatrol, Transform, Speed, MoveIntent)]) {

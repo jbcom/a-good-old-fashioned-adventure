@@ -66,6 +66,7 @@ const RELIEF_BY_ROLE: Record<DioramaMaterialRole, number> = {
   spark: 0.24,
 };
 
+/** Build a role-tuned diorama material (ground/sprite/spark relief). */
 export function createDioramaMaterial(
   texture: Texture,
   {

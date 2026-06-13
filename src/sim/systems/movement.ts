@@ -36,6 +36,7 @@ function footstepSurface(tileId: string): string {
   return "stone";
 }
 
+/** Per-tick: integrate velocity into position for all moving entities. */
 export function moveEntities(world: World, dt: number): void {
   const runtime = world.get(MapRuntime);
   if (!runtime || runtime.mapId === "") return;

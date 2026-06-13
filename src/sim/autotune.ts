@@ -21,6 +21,7 @@ export interface LadderRung {
   scenario: Omit<RunScenario, "seed" | "unitHpScale" | "enemyHpScale">;
 }
 
+/** Per-trial autotuner result — the HP scales tried and their imbalance. */
 export interface TrialMetrics {
   /** enemy HP multiplier tried */
   enemyHpScale: number;
@@ -32,6 +33,7 @@ export interface TrialMetrics {
   winRates: number[];
 }
 
+/** Autotuner's recommendation — baseline vs best trial and the gain. */
 export interface TuneProposal {
   baseline: TrialMetrics;
   best: TrialMetrics;

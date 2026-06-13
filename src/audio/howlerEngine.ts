@@ -31,6 +31,7 @@ export interface GameAudioEngine {
 
 const asset = (path: string) => `/assets/${path}`;
 
+/** Build the howler-backed game audio engine (music, sfx, fades, mute). */
 export function createGameAudioEngine(): GameAudioEngine {
   const howls = new Map<string, Howl>();
   const fadeTimers = new Set<ReturnType<typeof setTimeout>>();

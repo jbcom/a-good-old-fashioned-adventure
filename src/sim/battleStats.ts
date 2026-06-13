@@ -7,6 +7,7 @@
  */
 import { type RunResult, type RunScenario, runRail } from "./battleHarness";
 
+/** Distribution summary over seeded samples of one scenario. */
 export interface ScenarioStats {
   label: string;
   samples: number;
@@ -46,6 +47,7 @@ export function sampleScenario(
   };
 }
 
+/** Jagged-difficulty audit — spikes between adjacent states and outliers. */
 export interface SpikeReport {
   spikes: { from: string; to: string; deltaWinRate: number; deltaAdvance: number }[];
   outliers: string[];

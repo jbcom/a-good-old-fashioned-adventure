@@ -24,6 +24,7 @@ import {
 import { currentMap } from "./mapProgression";
 import type { IncrementalProgressState } from "./traits";
 
+/** Outcome of a single simulated AUTO run on one map. */
 export interface AutoRunResult {
   /** the map this run played */
   mapId: string;
@@ -35,6 +36,7 @@ export interface AutoRunResult {
   enemiesFelled: number;
 }
 
+/** Outcome of an AUTO chain — every run played from one press. */
 export interface AutoChainResult {
   /** every run AUTO played this press, in order */
   runs: AutoRunResult[];

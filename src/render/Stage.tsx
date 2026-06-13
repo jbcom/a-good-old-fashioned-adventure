@@ -78,6 +78,7 @@ function Billboard({ actor }: { actor: StageActor }) {
   );
 }
 
+/** Three.js scene root — ground plane, sprites, and diorama lighting. */
 export function Stage({
   groundCanvas,
   worldW,

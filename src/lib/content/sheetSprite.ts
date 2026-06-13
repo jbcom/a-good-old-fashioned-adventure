@@ -6,6 +6,7 @@
  */
 import type { AnySpriteDef, SheetAnimDef, SheetSpriteDef } from "./types";
 
+/** Facing direction selecting a sheet sprite's row of frames. */
 export type SheetDirection = "right" | "up" | "left" | "down";
 
 /** Type guard: true if def is a purchased PNG sheet sprite (not character-sprite). */

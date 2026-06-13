@@ -39,6 +39,7 @@ function tickTimers(world: World, dt: number): void {
   }
 }
 
+/** Advance the whole sim one deterministic tick. */
 export function step(world: World, dt: number = SIM_DT): void {
   // hit-stop: impact freezes the whole sim for a beat — deterministic crunch
   const stop = world.get(HitStop);

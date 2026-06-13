@@ -64,6 +64,7 @@ function waveArchetypes(mapId: string, world: World): string[] {
   );
 }
 
+/** Per-tick: advance enemy wave spawning along the rail. */
 export function waveStep(world: World): void {
   const mapId = world.get(MapRuntime)?.mapId ?? "";
   if (!mapId) return;

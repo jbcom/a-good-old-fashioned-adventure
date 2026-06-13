@@ -25,6 +25,7 @@ import { frontline, railAxis } from "./systems/waves";
 import { step } from "./tick";
 import { Health, IncrementalProgress, IsEnemy, IsUnit, MapRuntime } from "./traits";
 
+/** Headless rail-fight inputs — map, roster, upgrades, seed, and tuning knobs. */
 export interface RunScenario {
   /** map to fight on (any map id — bypasses the route DAG for isolation) */
   mapId: string;
@@ -47,6 +48,7 @@ export interface RunScenario {
   enemyHpScale?: number;
 }
 
+/** Resolved outcome of one headless rail fight. */
 export interface RunResult {
   /** did the front reach the rail's end (the princess) */
   reachedEnd: boolean;

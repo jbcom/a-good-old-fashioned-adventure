@@ -176,6 +176,7 @@ function buildFieldView(world: World, self: { x: number; y: number }): FieldView
   return { self, enemies: enemyList, allies: allyList };
 }
 
+/** Per-tick: drive ally unit goals, movement, and attacks. */
 export function unitAIStep(world: World, dt: number): void {
   pruneDead(world);
   for (const unit of [...world.query(IsUnit, Transform, Speed, MoveIntent)]) {

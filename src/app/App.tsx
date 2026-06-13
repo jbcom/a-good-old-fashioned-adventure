@@ -1350,6 +1350,7 @@ function UnitToolbox({
   );
 }
 
+/** Root React component — wires sim, render, audio, and save persistence. */
 export function App({
   saveRepository = getSaveRepository(),
 }: {

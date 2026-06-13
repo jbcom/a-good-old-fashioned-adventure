@@ -77,14 +77,17 @@ function normalizedAim(player: Entity): { x: number; y: number } {
   return { x: aim.x / len, y: aim.y / len };
 }
 
+/** Compute melee damage at a given level. */
 export function meleeDamage(level: number): number {
   return combat.damage.melee.base + level * combat.damage.melee.perLevel;
 }
 
+/** Compute arrow damage at a given level. */
 export function arrowDamage(level: number): number {
   return combat.damage.arrow.base + level * combat.damage.arrow.perLevel;
 }
 
+/** Apply damage and knockback to an enemy, killing it if HP hits zero. */
 export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: number): void {
   const health = enemy.get(Health);
   const transform = enemy.get(Transform);
@@ -157,6 +160,7 @@ export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: 
   }
 }
 
+/** Apply damage to the player, granting iframes after the hit. */
 export function damagePlayer(world: World, amount: number, iframes: number): void {
   const player = world.queryFirst(IsPlayer);
   if (!player) return;
@@ -242,6 +246,7 @@ export function playerAttack(world: World): void {
   }
 }
 
+/** Open a chest, spilling its loot into the world. */
 export function openChest(world: World, chest: Entity): void {
   const loot = chest.get(LootContainer);
   if (!loot || loot.opened) return;

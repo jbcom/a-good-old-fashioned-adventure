@@ -271,6 +271,7 @@ export function spawnFx(
   return world.spawn(FxBurst({ ...state, total: state.left }), Transform({ x, y }));
 }
 
+/** Spec for spawning a projectile — position, velocity, lifetime, source. */
 export interface ProjectileSpawn {
   type: string;
   x: number;
@@ -290,6 +291,7 @@ export function spawnProjectile(world: World, spec: ProjectileSpawn): Entity {
   return world.spawn(Projectile({ ...rest, trail: 0 }), Transform({ x, y }));
 }
 
+/** Options for instantiating a class unit into the world. */
 export interface InstantiateOptions {
   classId: string;
   spawnId?: string;
