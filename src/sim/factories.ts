@@ -7,7 +7,12 @@ import { createWorld, type Entity, type World } from "koota";
 import { classes, enemies, incremental, player as playerConfig } from "../lib/config";
 import { flags, getCharacter, getMap, getProp } from "../lib/content/registry";
 import { collides } from "./collision";
-import { initialIncrementalProgress, kinForMap, upgradeMaxHpBonus } from "./incrementalProgress";
+import {
+  dragonBuffFor,
+  initialIncrementalProgress,
+  kinForMap,
+  upgradeMaxHpBonus,
+} from "./incrementalProgress";
 import { buildGrid } from "./mapgen";
 import {
   AimDirection,
@@ -15,6 +20,7 @@ import {
   Choreo,
   Clock,
   CombatTimers,
+  DragonBuff,
   EventQueue,
   Facing,
   FlagState,
@@ -311,13 +317,28 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
       // entity so the rescue quip knows whose relative just fell.
       const archetype = enemies.archetypes[spawn.enemy];
       if (archetype?.boss && archetype.family === "dragon") {
-        const kin = kinForMap(
-          world.get(IncrementalProgress) ?? initialIncrementalProgress(),
-          mapId,
-        );
+        const progress = world.get(IncrementalProgress) ?? initialIncrementalProgress();
+        const kin = kinForMap(progress, mapId);
         if (kin) {
           enemyEntity.add(KinIdentity({ relation: kin.relation, mapId }));
           enemyEntity.set(SpriteRef, { spriteId: kin.spriteId, paletteId: archetype.palette });
+          // the dragon track's combat buffs (multi-attack volley, fireball AoE,
+          // richer reward) scale with the purchased dragon-might rank
+          const buff = dragonBuffFor(progress, mapId);
+          if (buff.extraBolts > 0 || buff.aoeRadius > 0 || buff.rewardMult !== 1) {
+            enemyEntity.add(DragonBuff(buff));
+            if (buff.extraBolts > 0) {
+              const health = enemyEntity.get(Health);
+              if (health) {
+                // a buffed dragon is also tankier — +25% hp per might rank
+                const hpMult = 1 + (buff.rewardMult - 1) * 0.5;
+                enemyEntity.set(Health, {
+                  hp: Math.round(health.hp * hpMult),
+                  maxHp: Math.round(health.maxHp * hpMult),
+                });
+              }
+            }
+          }
         }
       }
       const family = enemies.archetypes[spawn.enemy]?.family;

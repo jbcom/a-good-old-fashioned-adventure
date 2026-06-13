@@ -13,6 +13,7 @@ import { combat as combatConfig, enemies } from "../../lib/config";
 import { spawnProjectile } from "../factories";
 import {
   Choreo,
+  DragonBuff,
   Facing,
   IsEnemy,
   IsPlayer,
@@ -98,6 +99,24 @@ function castAt(
       fromPlayer: false,
     });
   }
+}
+
+/**
+ * Widen a boss volley by the dragon-track buff (docs/RAIL-COMMAND.md §The
+ * Dragon track BUFFS the dragon): each extra bolt pair adds two wider-angled
+ * bolts around the base spread — the multi-attack buff. Returns the base
+ * spread unchanged when the boss carries no DragonBuff.
+ */
+function buffedSpread(base: number[] | undefined, extraBolts: number): number[] {
+  const spread = base ?? [0];
+  if (extraBolts <= 0) return spread;
+  const widest = Math.max(0.2, ...spread.map((a) => Math.abs(a)));
+  const extra: number[] = [];
+  for (let pair = 1; pair <= Math.floor(extraBolts / 2); pair++) {
+    const angle = widest + pair * 0.22;
+    extra.push(-angle, angle);
+  }
+  return [...spread, ...extra];
 }
 
 function seekTo(ai: EnemyAi, target: { x: number; y: number }): true {
@@ -297,7 +316,15 @@ export function enemyAIStep(world: World, dt: number): void {
             if (phase === "roar") {
               phase = "volley";
               left += phases.volley;
-              castAt(world, transform, playerPos, spec.projectile, spec.sfx, spec.spreadAngles);
+              const buff = enemy.get(DragonBuff);
+              castAt(
+                world,
+                transform,
+                playerPos,
+                spec.projectile,
+                spec.sfx,
+                buffedSpread(spec.spreadAngles, buff?.extraBolts ?? 0),
+              );
             } else if (phase === "volley") {
               phase = "lull";
               left += phases.lull;
@@ -314,7 +341,15 @@ export function enemyAIStep(world: World, dt: number): void {
           useSteering = seekTo(ai, playerPos);
           if (ai.castCooldown <= 0) {
             ai.castCooldown = spec.cooldown;
-            castAt(world, transform, playerPos, spec.projectile, spec.sfx, spec.spreadAngles);
+            const buff = enemy.get(DragonBuff);
+            castAt(
+              world,
+              transform,
+              playerPos,
+              spec.projectile,
+              spec.sfx,
+              buffedSpread(spec.spreadAngles, buff?.extraBolts ?? 0),
+            );
           }
         }
         break;

@@ -62,6 +62,14 @@ export const Choreo = trait({ phase: "", left: 0 });
  * dragon-guardian (no kin unlocked).
  */
 export const KinIdentity = trait({ relation: "", mapId: "" });
+/**
+ * Dragon-track combat buff (docs/RAIL-COMMAND.md §The Dragon track BUFFS the
+ * dragon). Applied to a kin boss from the purchased dragon-might ranks for its
+ * map: `extraBolts` widens the volley (multi-attack), `aoeRadius` arms a
+ * fireball burst, `rewardMult` scales the roses the rescue pays. A buffed
+ * dragon is a stronger antagonist that pays more — the rose flywheel.
+ */
+export const DragonBuff = trait({ extraBolts: 0, aoeRadius: 0, rewardMult: 1 });
 export const PropRef = trait({ propId: "", state: "default" });
 export const NpcPatrol = trait(() => ({
   points: [] as { x: number; y: number }[],

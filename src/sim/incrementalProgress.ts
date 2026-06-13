@@ -148,6 +148,32 @@ export function kinSlug(relation: string): string {
   return relation.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
 }
 
+/**
+ * The dragon-track combat buff for a map's kin (docs/RAIL-COMMAND.md §The
+ * Dragon track BUFFS the dragon): derived from the purchased dragon-might rank
+ * for that map. Each rank widens the volley (multi-attack), grows the fireball
+ * AoE, and raises the reward multiplier — a stronger antagonist that pays more.
+ * Returns the neutral buff (no extra bolts, no AoE, 1× reward) when unranked.
+ */
+export function dragonBuffFor(
+  progress: IncrementalProgressState,
+  mapId: string,
+): { extraBolts: number; aoeRadius: number; rewardMult: number } {
+  const slug = mapId.replace(/^map:/, "");
+  const mightNode = incremental.upgradeGraph.nodes.find(
+    (node) => node.id === `upgrade:dragon-might-${slug}`,
+  );
+  const ranks = mightNode ? purchasedRank(progress, mightNode) : 0;
+  return {
+    // each rank adds a bolt pair to the volley (multi-attack)
+    extraBolts: ranks * 2,
+    // each rank arms a wider fireball burst on the volley
+    aoeRadius: ranks * 18,
+    // each rank raises the roses the rescue pays (the flywheel)
+    rewardMult: 1 + ranks * 0.5,
+  };
+}
+
 function sanitizeIdList(input: unknown, allowed: Set<string>): string[] {
   if (!Array.isArray(input)) return [];
   const result: string[] = [];
@@ -339,11 +365,10 @@ function kinRoseYield(progress: IncrementalProgressState): number {
   const kin = kinForMap(progress, mapId);
   if (!kin) return 0;
   const base = Math.max(0, Math.floor(kin.roseYield));
-  const mightNode = incremental.upgradeGraph.nodes.find(
-    (node) => node.id === `upgrade:dragon-might-${mapId.replace(/^map:/, "")}`,
-  );
-  const mightRanks = mightNode ? purchasedRank(progress, mightNode) : 0;
-  return base + mightRanks;
+  // a buffed dragon pays more (docs/RAIL-COMMAND.md §The Dragon track BUFFS the
+  // dragon): the dragon-track rewardMult scales the rescue rose — the flywheel
+  const { rewardMult } = dragonBuffFor(progress, mapId);
+  return Math.round(base * rewardMult);
 }
 
 export function grantRunReward(world: World, rewardId: string): void {
