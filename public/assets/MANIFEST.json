@@ -361,6 +361,16 @@
           "path": "enemies/caped-warrior.png",
           "width": 128,
           "height": 640
+        },
+        {
+          "path": "units/paladin.png",
+          "width": 128,
+          "height": 384
+        },
+        {
+          "path": "units/heavy-knight.png",
+          "width": 128,
+          "height": 384
         }
       ]
     },

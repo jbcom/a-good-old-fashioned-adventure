@@ -196,7 +196,7 @@
       }
     },
     "priest": {
-      "sprite": "sprite:priest",
+      "sprite": "sprite:paladin",
       "palette": "palette:base",
       "attack": {
         "kind": "melee",
@@ -266,7 +266,7 @@
       }
     },
     "dread-knight": {
-      "sprite": "sprite:dread-knight",
+      "sprite": "sprite:heavy-knight",
       "palette": "palette:base",
       "attack": {
         "kind": "melee",
