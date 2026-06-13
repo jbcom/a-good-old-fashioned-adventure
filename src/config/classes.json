@@ -30,7 +30,7 @@
       }
     },
     "ranger": {
-      "sprite": "sprite:hero",
+      "sprite": "sprite:archer",
       "palette": "palette:ranger",
       "attack": {
         "kind": "projectile",

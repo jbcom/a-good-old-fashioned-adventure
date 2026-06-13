@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:archer",
+  "kind": "sheet-sprite",
+  "description": "Electric Lemon Warrior Archer combat sheet (public/assets/MANIFEST.json#electric-lemon-rpg-characters) \u2014 the ranger's body (docs/CAST-CONVERSION.md). 32px frames, E/W/S/N rows: bow-shoot block rows 0-3 (backs confirmed by skin-pixel probe at rows 3/7), run block rows 4-7. Idle is the run row at a ready shuffle.",
+  "frameSize": {
+    "w": 32,
+    "h": 32
+  },
+  "anchor": {
+    "x": 16,
+    "y": 30
+  },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "heroes/archer.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 4,
+        "left": 5,
+        "down": 6,
+        "up": 7
+      },
+      "fps": 2
+    },
+    "walk": {
+      "image": "heroes/archer.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 4,
+        "left": 5,
+        "down": 6,
+        "up": 7
+      },
+      "fps": 10
+    },
+    "attack": {
+      "image": "heroes/archer.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 0,
+        "left": 1,
+        "down": 2,
+        "up": 3
+      },
+      "fps": 12,
+      "loop": false
+    },
+    "hurt": {
+      "image": "heroes/archer.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 4,
+        "left": 5,
+        "down": 6,
+        "up": 7
+      },
+      "fps": 6
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

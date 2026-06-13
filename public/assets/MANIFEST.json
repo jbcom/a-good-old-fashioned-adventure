@@ -245,7 +245,8 @@
       "files": [
         { "path": "enemies/hooded-mage.png", "width": 64, "height": 256 },
         { "path": "heroes/fighter.png", "width": 128, "height": 640 },
-        { "path": "heroes/grey-mage.png", "width": 64, "height": 256 }
+        { "path": "heroes/grey-mage.png", "width": 64, "height": 256 },
+        { "path": "heroes/archer.png", "width": 128, "height": 256 }
       ]
     },
     {
