@@ -50,8 +50,9 @@ describe("spawnPlayer", () => {
     const world = createGameWorld();
     const player = spawnPlayer(world, "wizard", 10, 20);
     expect(player.get(Health)).toMatchObject({ hp: 100, maxHp: 100 });
+    // the wizard wears the Electric Lemon grey mage (docs/CAST-CONVERSION.md)
     expect(player.get(SpriteRef)).toMatchObject({
-      spriteId: "sprite:hero",
+      spriteId: "sprite:grey-mage",
       paletteId: "palette:wizard",
     });
   });

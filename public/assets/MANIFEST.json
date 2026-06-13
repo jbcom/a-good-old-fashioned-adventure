@@ -244,7 +244,8 @@
       "mappedUse": "SA.5 cast conversion (docs/CAST-CONVERSION.md) — pack convention is 12 animation states x 4 directions, 4 frames per animation (combat sheets pack some attacks two-directions-per-row at 2 frames). Keepers so far: hooded mage (forest/thorn shamans), sword & shield fighter (the knight). Remaining warriors/rogues/citizens/heavy-knight stay in raw-assets until their cast slots wire up.",
       "files": [
         { "path": "enemies/hooded-mage.png", "width": 64, "height": 256 },
-        { "path": "heroes/fighter.png", "width": 128, "height": 640 }
+        { "path": "heroes/fighter.png", "width": 128, "height": 640 },
+        { "path": "heroes/grey-mage.png", "width": 64, "height": 256 }
       ]
     },
     {

@@ -218,7 +218,7 @@ it("renders the High Dragon boss sheet in the candlelit hall", async () => {
 
 it("renders the five new region trash bodies in one lineup", async () => {
   const world = createGameWorld(3);
-  instantiateMap(world, "map:sunken-road", { classId: "knight" });
+  instantiateMap(world, "map:sunken-road", { classId: "wizard" });
   // lineup left-to-right beside the player spawn: every Elthen body crops
   // from its own sheet rows — one shot validates all five defs
   spawnEnemy(world, "dune-adder", 64, 260);

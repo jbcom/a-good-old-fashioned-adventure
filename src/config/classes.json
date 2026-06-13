@@ -64,7 +64,7 @@
       }
     },
     "wizard": {
-      "sprite": "sprite:hero",
+      "sprite": "sprite:grey-mage",
       "palette": "palette:wizard",
       "attack": {
         "kind": "projectile",
