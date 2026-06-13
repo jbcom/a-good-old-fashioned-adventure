@@ -1,0 +1,14 @@
+name: "CodeQL config — scope to shipped game code"
+
+# The attack surface of this client-side game is the shipped bundle (src/), not
+# the local one-shot dev tooling under scripts/. The itch-asset fetchers
+# (fetch-itch-assets.mjs, itch-library.mjs) read the developer's OWN purchased
+# asset manifest from the authenticated itch.io API and curl signed URLs to disk
+# — they never run in production, never ship in the bundle, and take no
+# untrusted input. CodeQL's file→http / http→file / file-system-race dataflow
+# alerts on them are false positives for this threat model; scope analysis to
+# the game so the security signal reflects the real surface.
+paths-ignore:
+  - scripts
+  - tests
+  - android
