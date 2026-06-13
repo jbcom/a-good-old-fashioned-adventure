@@ -1,15 +1,18 @@
 /**
  * AUTO — headless auto-advance (docs/RAIL-COMMAND.md §AUTO). A shipped feature
  * (distinct from fast-forward, which speeds the live run): AUTO plays the
- * player's current frontier map through the headless rail sim and banks the
- * result into the live progress immediately — no manual play.
+ * player's unlocked maps through the headless rail sim and banks the results
+ * into the live progress immediately — no manual play.
  *
- * It can WIN (the line reaches the princess → rescue pays roses) or LOSE (the
- * line falls → the partial run's farmed coins/gems still bank — a good farm).
- * Either way it ends on the results screen. Deterministic: a given progress +
- * seed auto-plays reproducibly, the same pure-sim the balance suite uses.
+ * A run can WIN (the line reaches the princess → rescue pays roses) or LOSE
+ * (the line falls → the partial run's farmed coins/gems still bank — a good
+ * farm). AUTO chains across the unlocked spine toward the frontier and stops at
+ * the first loss; either way it ends on the results screen. Deterministic: a
+ * given progress + seed auto-plays reproducibly, the same pure-sim the balance
+ * suite uses.
  */
 import type { World } from "koota";
+import { incremental } from "../lib/config";
 import { runRail } from "./battleHarness";
 import {
   bankCoins,
@@ -19,9 +22,10 @@ import {
   recordDeathPayout,
 } from "./incrementalProgress";
 import { currentMap } from "./mapProgression";
+import type { IncrementalProgressState } from "./traits";
 
 export interface AutoRunResult {
-  /** the frontier map AUTO played */
+  /** the map this run played */
   mapId: string;
   /** did the simulated line reach the princess */
   won: boolean;
@@ -31,22 +35,23 @@ export interface AutoRunResult {
   enemiesFelled: number;
 }
 
-/**
- * Play the player's current frontier map headlessly and bank the outcome into
- * the live world. Returns what the run earned. The live progress advances
- * exactly as a real run would: a win grants the rescue (roses + rescueCount);
- * a loss records the death payout. The simulated farm (coins/gems the harness
- * banked as the line felled enemies) is transferred to the live wallet — the
- * harness starts its world at zero currency, so its result IS the earned delta.
- */
-export function autoRun(world: World, seed: number): AutoRunResult {
-  const mapId = currentMap(currentProgress(world));
+export interface AutoChainResult {
+  /** every run AUTO played this press, in order */
+  runs: AutoRunResult[];
+  /** the deepest map AUTO reached (the last one it played) */
+  reachedMap: string;
+  /** did AUTO win every map up to the frontier (no loss stopped it) */
+  clearedFrontier: boolean;
+}
 
+/** Play one map headlessly and bank its outcome into the live world. */
+function autoRunMap(world: World, mapId: string, seed: number): AutoRunResult {
+  const progress = currentProgress(world);
   const result = runRail({
     mapId,
-    unlockedClassIds: currentProgress(world).unlockedClassIds,
-    purchasedUpgradeIds: currentProgress(world).purchasedUpgradeIds,
-    upgradeRanks: currentProgress(world).upgradeRanks,
+    unlockedClassIds: progress.unlockedClassIds,
+    purchasedUpgradeIds: progress.purchasedUpgradeIds,
+    upgradeRanks: progress.upgradeRanks,
     seed,
   });
 
@@ -56,7 +61,6 @@ export function autoRun(world: World, seed: number): AutoRunResult {
 
   if (result.reachedEnd) {
     // the line reached the princess: the rescue pays its roses (+ kin yield)
-    // and closes the run in victory — grantRunReward mirrors the live path
     grantRunReward(world, "princessRescued");
   } else {
     // the line fell: the partial farm is already banked; close in defeat
@@ -71,5 +75,46 @@ export function autoRun(world: World, seed: number): AutoRunResult {
     gemsEarned: result.gems,
     rosesEarned: lastRun?.rosesEarned ?? 0,
     enemiesFelled: result.enemiesFelled,
+  };
+}
+
+/** The unlocked spine prefix the player can auto toward (start → frontier). */
+function unlockedSpine(progress: IncrementalProgressState): string[] {
+  const frontier = currentMap(progress);
+  const order = incremental.mapDag.order;
+  const end = order.indexOf(frontier);
+  return end < 0 ? [order[0]] : order.slice(0, end + 1);
+}
+
+/**
+ * AUTO a single map (the current frontier) — the minimal press. Kept for
+ * callers/tests that want one run; the HUD uses autoChain.
+ */
+export function autoRun(world: World, seed: number): AutoRunResult {
+  return autoRunMap(world, currentMap(currentProgress(world)), seed);
+}
+
+/**
+ * AUTO across the unlocked spine toward the frontier (docs/RAIL-COMMAND.md
+ * §AUTO — "if you last got to 5-4 you could run auto and might automatically
+ * get to there"). Plays each unlocked map in order, banking every run, and
+ * STOPS at the first loss (a loss is still a farm). Each map gets a distinct
+ * seed derived from the base so the chain stays deterministic.
+ */
+export function autoChain(world: World, seed: number): AutoChainResult {
+  const spine = unlockedSpine(currentProgress(world));
+  const runs: AutoRunResult[] = [];
+  for (let i = 0; i < spine.length; i++) {
+    const run = autoRunMap(world, spine[i], seed + i);
+    runs.push(run);
+    if (!run.won) {
+      // a loss stops the chain here — the partial farm already banked
+      return { runs, reachedMap: spine[i], clearedFrontier: false };
+    }
+  }
+  return {
+    runs,
+    reachedMap: spine[spine.length - 1] ?? currentMap(currentProgress(world)),
+    clearedFrontier: true,
   };
 }

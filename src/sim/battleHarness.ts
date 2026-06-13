@@ -143,7 +143,7 @@ function finish(
   enemiesFelled: number,
 ): RunResult {
   const progress = world.get(IncrementalProgress);
-  return {
+  const result: RunResult = {
     reachedEnd: outcome === "reached-end",
     advance: Math.max(0, Math.min(1, advance)),
     ticks,
@@ -154,6 +154,10 @@ function finish(
     roses: progress?.roses ?? 0,
     outcome,
   };
+  // koota caps live worlds at 16; the harness world is throwaway, so destroy it
+  // once its tallies are read (AUTO chains many runs per press — they'd pile up)
+  world.destroy();
+  return result;
 }
 
 function mapSize(world: World): { cols: number; rows: number } {

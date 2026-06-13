@@ -45,7 +45,7 @@ import {
 import { spriteCanvas } from "../render/atlas";
 import { GameStage } from "../render/GameStage";
 import { spritePose } from "../render/pose";
-import { autoRun } from "../sim/autoRun";
+import { autoChain } from "../sim/autoRun";
 import { deployUnit, placedCounts, remainingFor } from "../sim/deploy";
 import {
   emitDialogueChoice,
@@ -1632,14 +1632,17 @@ export function App({
   const runAuto = useCallback(() => {
     const activeWorld = worldRef.current;
     if (!activeWorld) return;
-    // a per-press seed keeps repeated AUTO runs varied but reproducible
+    // a per-press seed keeps repeated AUTO chains varied but reproducible
     autoSeedRef.current += 1;
-    const result = autoRun(activeWorld, autoSeedRef.current);
+    // AUTO chains across the unlocked spine toward the frontier, stopping at
+    // the first loss (docs/RAIL-COMMAND.md §AUTO)
+    const chain = autoChain(activeWorld, autoSeedRef.current * 1000);
     refreshSnapshot(activeWorld, { persist: true });
     setPanelOpen(false);
     setShopState(null);
     setPaused(false);
-    setMode(result.won ? "results" : "gameover");
+    // cleared the whole frontier → rescue results; a loss stopped it → gameover
+    setMode(chain.clearedFrontier ? "results" : "gameover");
   }, [refreshSnapshot]);
 
   const openUpgradeGraph = useCallback(() => {
