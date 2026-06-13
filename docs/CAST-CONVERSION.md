@@ -103,8 +103,7 @@ terrain.pix until the Kenney dungeon/interior audition lands.
 
 ## Execution order
 
-1. Classes: knight → fighter LANDED (sprite:fighter, rows pinned: runs 8-11 E/W/S/N confirmed by skin-pixel probe — row 11 backview; attacks 2f packed two-dirs-per-row on rows 0-1; directionRows generalized to {row,col} cells). ranger/wizard next (touches
-   classes.json, hero rendering, class picker UI, companions).
+1. Classes — COMPLETE: knight → sprite:fighter, wizard → sprite:grey-mage, ranger → sprite:archer (all three playable bodies purchased; rows pinned per sheet with skin-pixel back-row confirmation; directionRows generalized to {row,col} cells for two-directions-per-row attack packing; companions inherit class sprites automatically; 33 browser + 722 unit tests green, players verified in stage screenshots and runtime SpriteRef assertions).
 2. Guards + bandit rewrite (gate-sentry, orc family + quest copy).
 3. Units (paladin/axe/heavy-knight/mages + fx).
 4. Citizens → named NPCs (per-body zoom assignment).
