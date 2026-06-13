@@ -21,7 +21,7 @@ import {
   rosterFor,
   sanitizeIncrementalProgress,
 } from "./incrementalProgress";
-import { frontline } from "./systems/waves";
+import { frontline, railAxis } from "./systems/waves";
 import { step } from "./tick";
 import { IncrementalProgress, IsEnemy, IsUnit, MapRuntime } from "./traits";
 
@@ -76,14 +76,18 @@ export function runRail(scenario: RunScenario): RunResult {
   });
   instantiateMap(world, scenario.mapId, { classId: scenario.unlockedClassIds[0] ?? "knight" });
 
-  const { rows } = mapSize(world);
-  const railLength = rows * 16;
-  const startFront = railLength; // front begins at the south edge
+  const { cols, rows } = mapSize(world);
+  const axis = railAxis(world);
+  // advance is measured along the rail axis: north climbs y→0, east runs x→width
+  const railLength = axis === "east" ? cols * 16 : rows * 16;
   let unitsFielded = 0;
   let enemiesFelledTotal = 0;
   let seenEnemyIds = new Set<number>();
   let bestAdvance = 0;
   let ticks = 0;
+
+  const advanceOf = (front: { x: number; y: number }) =>
+    axis === "east" ? front.x / railLength : (railLength - front.y) / railLength;
 
   for (; ticks < maxTicks; ticks++) {
     unitsFielded += replenish(world, scenario.unlockedClassIds);
@@ -96,14 +100,14 @@ export function runRail(scenario: RunScenario): RunResult {
     seenEnemyIds = liveEnemies;
 
     const front = frontline(world);
-    if (front) bestAdvance = Math.max(bestAdvance, (startFront - front.y) / railLength);
+    if (front) bestAdvance = Math.max(bestAdvance, advanceOf(front));
 
     // the line fell with no toolbox left → the run is over
     if (world.query(IsUnit).length === 0 && !canReplenish(world, scenario.unlockedClassIds)) {
       return finish(world, "line-fell", bestAdvance, ticks, unitsFielded, enemiesFelledTotal);
     }
-    // the front reached the north end (the princess) → reached the end
-    if (front && front.y <= 80) {
+    // the front reached the far end (the princess) → reached the end
+    if (front && advanceOf(front) >= 0.92) {
       return finish(world, "reached-end", 1, ticks, unitsFielded, enemiesFelledTotal);
     }
   }

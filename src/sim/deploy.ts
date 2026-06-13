@@ -5,11 +5,12 @@
  * HUD read the same counts.
  */
 import type { Entity, World } from "koota";
+import { getMap } from "../lib/content/registry";
 import { collides } from "./collision";
 import { spawnUnit } from "./factories";
 import { rosterFor } from "./incrementalProgress";
 import { getRail } from "./rail";
-import { frontline } from "./systems/waves";
+import { frontline, railAxis } from "./systems/waves";
 import { IncrementalProgress, MapRuntime, RosterPlaced } from "./traits";
 
 export function placedCounts(world: World): Record<string, number> {
@@ -27,17 +28,27 @@ export function remainingFor(world: World, classId: string): number {
 /** Where a drop lands: the rail band just south of the front (or the rail's southern start). */
 export function deployPosition(world: World): { x: number; y: number } {
   const mapId = world.get(MapRuntime)?.mapId ?? "";
-  const rail = mapId ? getRail(mapId) : [];
-  const south = rail[0] ?? { x: 160, y: 900 };
+  const axis = railAxis(world);
+  // the rail's START — a road waypoint if authored, else the map's spawn (so
+  // horizontal maps with no waypoints still deploy on the road, not at a
+  // hardcoded south point off the map)
+  const rail = mapId ? getRail(mapId, axis) : [];
+  const start = rail[0] ?? (mapId ? getMap(mapId).playerSpawn : { x: 160, y: 900 });
   const front = frontline(world);
-  const anchor = front ?? south;
+  const anchor = front ?? start;
   const placedTotal = Object.values(placedCounts(world)).reduce((a, b) => a + b, 0);
-  // stagger drops so the line forms instead of stacking; probe for open
-  // ground so a drop never lands inside a wall
-  const base = {
-    x: anchor.x + (placedTotal % 3) * 16 - 16,
-    y: anchor.y + 28 + Math.floor(placedTotal / 3) * 14,
-  };
+  // stagger drops toward the REAR of the axis (behind the front) so the line
+  // forms; probe for open ground so a drop never lands inside a wall
+  const base =
+    axis === "east"
+      ? {
+          x: anchor.x - 28 - Math.floor(placedTotal / 3) * 14,
+          y: anchor.y + (placedTotal % 3) * 16 - 16,
+        }
+      : {
+          x: anchor.x + (placedTotal % 3) * 16 - 16,
+          y: anchor.y + 28 + Math.floor(placedTotal / 3) * 14,
+        };
   const probes: ReadonlyArray<readonly [number, number]> = [
     [0, 0],
     [16, 0],

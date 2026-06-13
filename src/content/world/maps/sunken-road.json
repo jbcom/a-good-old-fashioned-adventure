@@ -426,5 +426,27 @@
         "y1": 332
       }
     }
+  ],
+  "waveGates": [
+    {
+      "id": "gate:west-edge",
+      "x": 287,
+      "y": 300
+    },
+    {
+      "id": "gate:mid-road",
+      "x": 466,
+      "y": 300
+    },
+    {
+      "id": "gate:east-bend",
+      "x": 627,
+      "y": 300
+    },
+    {
+      "id": "gate:far-pass",
+      "x": 788,
+      "y": 300
+    }
   ]
 }
