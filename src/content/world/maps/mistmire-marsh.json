@@ -1,0 +1,299 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:mistmire-marsh",
+  "kind": "map",
+  "name": "Mistmire Marsh",
+  "size": {
+    "cols": 28,
+    "rows": 60
+  },
+  "baseTile": "tile:grass",
+  "bgmTheme": "overworld",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain" },
+    {
+      "op": "region",
+      "tile": "tile:water",
+      "x0": 1,
+      "x1": 8,
+      "y0": 2,
+      "y1": 14,
+      "note": "the broad western mere — a flanking bog pool, clear of the central causeway"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water",
+      "x0": 22,
+      "x1": 26,
+      "y0": 6,
+      "y1": 20,
+      "note": "the eastern fen, flanking the head reach"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water",
+      "x0": 1,
+      "x1": 7,
+      "y0": 22,
+      "y1": 34,
+      "note": "the western sink-mere"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water",
+      "x0": 23,
+      "x1": 26,
+      "y0": 28,
+      "y1": 42,
+      "note": "the eastern bog pool"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water",
+      "x0": 1,
+      "x1": 8,
+      "y0": 44,
+      "y1": 57,
+      "note": "the southern sink the road skirts"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water",
+      "x0": 22,
+      "x1": 26,
+      "y0": 48,
+      "y1": 57,
+      "note": "the south-eastern slough"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:path",
+      "x": 13,
+      "y0": 48,
+      "y1": 57,
+      "note": "the plank causeway up from the sink"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 48,
+      "x0": 13,
+      "x1": 20,
+      "note": "east jog onto the sedge island"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:path",
+      "x": 20,
+      "y0": 34,
+      "y1": 48
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 34,
+      "x0": 11,
+      "x1": 20
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:path",
+      "x": 11,
+      "y0": 18,
+      "y1": 34
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path",
+      "y": 18,
+      "x0": 11,
+      "x1": 16
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:path",
+      "x": 16,
+      "y0": 6,
+      "y1": 18,
+      "note": "the final reach to the hummock where the kin waits"
+    },
+    {
+      "op": "region",
+      "tile": "tile:castle-road",
+      "x0": 14,
+      "x1": 18,
+      "y0": 3,
+      "y1": 6,
+      "note": "the dry stone hummock at the marsh's head"
+    }
+  ],
+  "terrainVariants": [
+    {
+      "baseTile": "tile:grass",
+      "variants": ["tile:grass", "tile:grass-tufts", "tile:grass-flowers", "tile:grass-roots"],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 711,
+      "note": "reed-flats and sedge between the pools"
+    },
+    {
+      "baseTile": "tile:water",
+      "variants": ["tile:water", "tile:water-glint", "tile:water-reeds", "tile:water-deep"],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 712,
+      "note": "open bog water, reeds, and the deep sinks"
+    },
+    {
+      "baseTile": "tile:path",
+      "variants": ["tile:path", "tile:path-ruts", "tile:path-pebbles", "tile:path-moss"],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 713,
+      "note": "the muddied plank causeway"
+    },
+    {
+      "baseTile": "tile:mountain",
+      "variants": [
+        "tile:mountain",
+        "tile:mountain-crag",
+        "tile:mountain-scree",
+        "tile:mountain-ledge"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 714,
+      "note": "the fen's rocky rim"
+    },
+    {
+      "baseTile": "tile:castle-road",
+      "variants": [
+        "tile:castle-road",
+        "tile:castle-road-cracked",
+        "tile:castle-road-moss",
+        "tile:castle-road-worn"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 715,
+      "note": "the dry hummock's old paving"
+    }
+  ],
+  "playerSpawn": {
+    "x": 216,
+    "y": 912
+  },
+  "spawns": {
+    "default": { "x": 216, "y": 912 },
+    "entry": { "x": 216, "y": 912 },
+    "from-sunken-road": { "x": 216, "y": 912 }
+  },
+  "entities": [
+    {
+      "ref": "prop:signpost",
+      "x": 232,
+      "y": 904,
+      "note": "the marsh causeway begins"
+    },
+    {
+      "ref": "prop:fallen-log",
+      "x": 208,
+      "y": 600,
+      "note": "a bog-fallen willow half-sunk by the causeway"
+    },
+    {
+      "ref": "prop:sunken-pillar-shadow",
+      "x": 120,
+      "y": 540,
+      "note": "a drowned milestone's shadow under the western mere"
+    },
+    {
+      "ref": "prop:stump",
+      "x": 290,
+      "y": 470,
+      "note": "a rotted willow-stump on the sedge island"
+    },
+    {
+      "ref": "prop:bramble-hedge",
+      "x": 200,
+      "y": 360,
+      "note": "a thornbrake walling the central reed-flat"
+    },
+    {
+      "ref": "prop:fallen-log",
+      "x": 250,
+      "y": 300,
+      "note": "a second sunk log on the firm reach"
+    },
+    {
+      "enemy": "dragon-guardian",
+      "x": 256,
+      "y": 120,
+      "withoutRoutePack": "castle-interior",
+      "note": "the marsh dragon holds the hummock until the castle opens"
+    },
+    {
+      "ref": "char:princess-amber",
+      "x": 256,
+      "y": 72,
+      "dir": 1,
+      "withoutRoutePack": "castle-interior",
+      "note": "Princess Amber waits on the dry hummock until the castle opens"
+    },
+    {
+      "ref": "prop:castle-gatehouse",
+      "x": 256,
+      "y": 64,
+      "requiresRoutePack": "castle-interior",
+      "note": "the princess is in another castle: the gate stands on the old hummock"
+    },
+    {
+      "enemy": "banner-knight",
+      "x": 256,
+      "y": 136,
+      "requiresRoutePack": "castle-interior",
+      "note": "the marsh summit becomes a waypoint guarded by its champion"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:marsh-castle-gate",
+      "kind": "portal",
+      "label": "Through the castle gate",
+      "toMap": "map:castle-hall",
+      "toSpawn": "rescue-gate",
+      "sfx": "interact",
+      "requiresRoutePack": "castle-interior",
+      "zone": { "x0": 232, "y0": 40, "x1": 280, "y1": 76 }
+    },
+    {
+      "id": "trigger:marsh-sink-bend",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the bend out of the southern sink",
+      "zone": { "x0": 180, "y0": 720, "x1": 260, "y1": 780 }
+    },
+    {
+      "id": "trigger:marsh-reed-jog",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the east jog across the reed-flat",
+      "zone": { "x0": 260, "y0": 520, "x1": 340, "y1": 580 }
+    },
+    {
+      "id": "trigger:marsh-west-reach",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the western reach below the mere",
+      "zone": { "x0": 150, "y0": 300, "x1": 230, "y1": 360 }
+    },
+    {
+      "id": "trigger:marsh-hummock-straight",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the last straight to the hummock",
+      "zone": { "x0": 220, "y0": 140, "x1": 300, "y1": 200 }
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:marsh-sink", "x": 200, "y": 800 },
+    { "id": "gate:marsh-reed-flat", "x": 300, "y": 540 },
+    { "id": "gate:marsh-west-reach", "x": 190, "y": 340 },
+    { "id": "gate:marsh-hummock", "x": 256, "y": 190 }
+  ]
+}

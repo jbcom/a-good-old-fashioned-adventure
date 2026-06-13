@@ -250,7 +250,14 @@ describe("incremental rescue loop contract", () => {
   it("maps route packs to existing bespoke content slices", () => {
     const packs = new Set(incremental.routePacks.map((pack) => pack.id));
     expect(packs).toEqual(
-      new Set(["oldwood", "deep-forest", "sunken-road", "castle-approach", "castle-interior"]),
+      new Set([
+        "oldwood",
+        "deep-forest",
+        "sunken-road",
+        "mistmire",
+        "castle-approach",
+        "castle-interior",
+      ]),
     );
 
     for (const pack of incremental.routePacks) {

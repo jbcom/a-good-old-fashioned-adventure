@@ -1,0 +1,158 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:mire-warren",
+  "kind": "map",
+  "name": "The Sunken Warren",
+  "size": { "cols": 48, "rows": 24 },
+  "baseTile": "tile:ruin-floor",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 2,
+      "x1": 14,
+      "y0": 2,
+      "y1": 9,
+      "note": "the great flooded under-vault filling the north-west of the warren"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-reeds",
+      "x0": 2,
+      "x1": 10,
+      "y0": 15,
+      "y1": 22,
+      "note": "the reed-grown lower cistern"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 33,
+      "x1": 45,
+      "y0": 15,
+      "y1": 22,
+      "note": "the drowned eastern sump"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:ruin-mosaic",
+      "y": 11,
+      "x0": 2,
+      "x1": 45,
+      "note": "the mosaic warren-walk the line forces through the flooded vaults"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:ruin-mosaic",
+      "y": 12,
+      "x0": 2,
+      "x1": 45,
+      "note": "warren-walk, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 15,
+      "y0": 2,
+      "y1": 8,
+      "note": "a collapsed vault-pier pinching the walk (the gap below is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 30,
+      "y0": 15,
+      "y1": 21,
+      "note": "a second pier, fallen off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-reeds",
+      "x0": 35,
+      "x1": 41,
+      "y0": 3,
+      "y1": 8,
+      "note": "a reed-grown cistern where the dig broke the cellar wall"
+    },
+    {
+      "op": "region",
+      "tile": "tile:ruin-mosaic",
+      "x0": 37,
+      "x1": 45,
+      "y0": 10,
+      "y1": 14,
+      "note": "the tiled floor of the drowned shrine where the second brood dens"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 184 },
+  "spawns": {
+    "default": { "x": 48, "y": 184 },
+    "entry": { "x": 48, "y": 184 }
+  },
+  "entities": [
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 180,
+      "y": 290,
+      "note": "an ossuary heap raked from the flooded vaults"
+    },
+    {
+      "ref": "prop:dungeon-web",
+      "x": 300,
+      "y": 150,
+      "note": "vault-web across the upper pier"
+    },
+    {
+      "ref": "prop:ruin-column",
+      "x": 240,
+      "y": 200,
+      "note": "a toppled shrine-column the warren dens beneath"
+    },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 420,
+      "y": 300,
+      "note": "a second heap by the drowned shrine"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 600,
+      "y": 200,
+      "contents": "Gold",
+      "note": "votive coin silted into the shrine floor"
+    },
+    {
+      "enemy": "warren-drowner",
+      "x": 632,
+      "y": 184,
+      "note": "mistmire lair r2 CLIMAX: a warren-drowner, the bloated bog-brute that floods the vaults, holds the drowned shrine. The princess relocates deeper into the mire. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:warren-mouth", "x": 230, "y": 184, "note": "spawn zone — the warren-walk mouth" },
+    {
+      "id": "gate:warren-pier",
+      "x": 360,
+      "y": 160,
+      "note": "spawn zone — past the vault-pier, upper"
+    },
+    {
+      "id": "gate:warren-vault",
+      "x": 400,
+      "y": 240,
+      "note": "spawn zone — the flooded under-vault"
+    },
+    { "id": "gate:warren-shrine", "x": 600, "y": 184, "note": "spawn zone — the drowned shrine" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:mire-warren-mouth",
+      "kind": "landmark",
+      "label": "The Sunken Warren's mouth",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 168, "x1": 80, "y1": 200 }
+    }
+  ]
+}

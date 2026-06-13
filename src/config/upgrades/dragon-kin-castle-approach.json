@@ -7,7 +7,7 @@
     "roses": 6,
     "gems": 240
   },
-  "prerequisites": ["upgrade:dragon-kin-sunken-road"],
+  "prerequisites": ["upgrade:dragon-kin-mistmire"],
   "enemyFamily": "dragon",
   "unlocksEnemy": "dragon",
   "dragonKin": {

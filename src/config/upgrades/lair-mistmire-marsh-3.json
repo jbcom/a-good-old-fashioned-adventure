@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-mistmire-marsh-3",
+  "label": "Drain the Mire's Heart",
+  "category": "map",
+  "cost": {
+    "roses": 6,
+    "gems": 240
+  },
+  "prerequisites": ["upgrade:lair-mistmire-marsh-2"],
+  "lairRoom": {
+    "mapId": "map:mistmire-marsh",
+    "depth": 3,
+    "roomMap": "map:mire-heart"
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Mistmire lair room 3. Unlocking it relocates the princess deeper into the marsh. Rose-OR-gem, rising along the lair."
+}

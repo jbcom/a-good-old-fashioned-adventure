@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-mistmire-marsh-1",
+  "label": "Wade the Mire Shallows",
+  "category": "map",
+  "cost": {
+    "roses": 4,
+    "gems": 100
+  },
+  "prerequisites": ["upgrade:mistmire-causeway"],
+  "lairRoom": {
+    "mapId": "map:mistmire-marsh",
+    "depth": 1,
+    "roomMap": "map:mire-shallows"
+  },
+  "unlocks": ["upgrade:lair-mistmire-marsh-2"],
+  "track": "roads",
+  "note": "Mistmire lair room 1. Unlocking it relocates the princess deeper into the marsh. Rose-OR-gem, rising along the lair."
+}

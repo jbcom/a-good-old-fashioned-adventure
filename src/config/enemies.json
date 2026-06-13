@@ -66,10 +66,26 @@
       "archetypes": ["gate-sentry", "gatehouse-vulture", "dune-adder"]
     },
     {
+      "id": "region:mistmire",
+      "label": "Mistmire Marsh",
+      "tier": 3,
+      "threat": 7,
+      "maps": ["map:mistmire-marsh"],
+      "archetypes": ["bog-serpent", "fen-raven", "mire-boar", "dune-adder"]
+    },
+    {
+      "id": "region:mistmire-lair",
+      "label": "The Mistmire Lair",
+      "tier": 4,
+      "threat": 8,
+      "maps": ["map:mire-shallows", "map:mire-warren", "map:mire-heart"],
+      "archetypes": ["bog-serpent", "fen-raven", "mire-boar", "crypt-bat"]
+    },
+    {
       "id": "region:sunken-crypt",
       "label": "The Sunken Crypt (sunken-road lair)",
       "tier": 4,
-      "threat": 7,
+      "threat": 9,
       "maps": ["map:desert-ruins", "map:castle-dungeon", "map:crypt-vault"],
       "archetypes": ["dune-adder", "carrion-raven", "crypt-bat", "crypt-skeleton", "crypt-sentry"]
     },
@@ -77,7 +93,7 @@
       "id": "region:siege-warcamp",
       "label": "The Siege Warcamp (castle-approach lair)",
       "tier": 4,
-      "threat": 8,
+      "threat": 10,
       "maps": ["map:castle-yard"],
       "archetypes": [
         "forest-orc",
@@ -91,7 +107,7 @@
       "id": "region:dungeon",
       "label": "Obsidian Throne Dungeon",
       "tier": 4,
-      "threat": 9,
+      "threat": 11,
       "maps": [
         "map:castle-hall",
         "map:castle-library",

@@ -21,6 +21,8 @@ describe("S6.5 regional enemy depth", () => {
       "region:deep-forest",
       "region:thornwood-hollow",
       "region:castle-approach",
+      "region:mistmire",
+      "region:mistmire-lair",
       "region:sunken-crypt",
       "region:siege-warcamp",
       "region:dungeon",

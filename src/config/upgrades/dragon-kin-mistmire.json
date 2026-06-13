@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-kin-mistmire",
+  "label": "Rouse the Bog-Brother",
+  "category": "enemy",
+  "cost": {
+    "roses": 5,
+    "gems": 190
+  },
+  "prerequisites": ["upgrade:dragon-kin-sunken-road"],
+  "enemyFamily": "dragon",
+  "unlocksEnemy": "dragon",
+  "dragonKin": {
+    "mapId": "map:mistmire-marsh",
+    "relation": "bog-brother",
+    "hue": 140,
+    "roseYield": 6
+  },
+  "unlocks": ["upgrade:dragon-might-mistmire", "upgrade:dragon-kin-castle-approach"],
+  "track": "encounters",
+  "note": "Kin boss for mistmire-marsh, spliced between sunken-road and castle-approach. Rose-OR-gem dual cost."
+}

@@ -108,6 +108,12 @@
       "role": "hazard shortcut, desert silhouettes, and optional ruin objectives"
     },
     {
+      "id": "mistmire",
+      "label": "Mistmire Marsh",
+      "maps": ["map:mistmire-marsh"],
+      "role": "the drowned road between the dunes and the castle"
+    },
+    {
       "id": "castle-approach",
       "label": "Siege Approach",
       "maps": ["map:castle-approach", "map:castle-yard"],
@@ -127,6 +133,7 @@
       "map:oldwood-forest",
       "map:deep-forest",
       "map:sunken-road",
+      "map:mistmire-marsh",
       "map:castle-approach",
       "map:castle-hall"
     ],
@@ -164,6 +171,10 @@
     "map:castle-hall": {
       "theme": "throne-wing",
       "rooms": ["map:castle-library", "map:castle-armory", "map:castle-throne-wing"]
+    },
+    "map:mistmire-marsh": {
+      "theme": "mistmire",
+      "rooms": ["map:mire-shallows", "map:mire-warren", "map:mire-heart"]
     }
   }
 }
