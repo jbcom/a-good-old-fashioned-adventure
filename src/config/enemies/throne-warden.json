@@ -14,7 +14,7 @@
   "guard": {
     "aggroRange": 120,
     "deaggroRange": 170,
-    "leashRange": 120,
+    "leashRange": 200,
     "stance": {
       "guard": 1.3,
       "open": 1.6,

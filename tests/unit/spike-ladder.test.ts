@@ -166,6 +166,35 @@ describe("S19.1b spike-detection ladder", () => {
     expect(inversions, `difficulty inversions: ${inversions.join(", ")}`).toEqual([]);
   }, 120_000);
 
+  it("every Dragon's Lair room is solvable with a viable roster (no lair soft-lock)", () => {
+    // SC.B lair balance gate (docs/INCREMENTAL-RESCUE-LOOP.md §lairs): the
+    // always-advance floor extends into every lair room, not just the spine.
+    // A reasonable 3-class roster must clear its way through each hand-authored
+    // lair room — no room is a dead wall. Difficulty rises room-over-room via
+    // the DENSE wave-farm rate (verified per-room at authoring time), not by
+    // walling a sparse line; so the floor asserted here is solvability, exactly
+    // as the spine floor above. Derived from mapLairs so new lairs auto-enrol.
+    const roster = {
+      unlockedClassIds: ["knight", "ranger", "wizard"],
+      purchasedUpgradeIds: [
+        "upgrade:first-vow",
+        "upgrade:ranger-trail",
+        "upgrade:wizard-focus",
+        "upgrade:warband-of-one",
+      ],
+      upgradeRanks: { "upgrade:warband-of-one": 4 },
+    };
+    for (const lair of Object.values(incremental.mapLairs ?? {})) {
+      for (const roomMap of lair.rooms) {
+        const stats = sampleScenario(roomMap, { ...roster, mapId: roomMap }, SEEDS);
+        expect(
+          stats.minAdvance,
+          `${roomMap} (${lair.theme} lair) has an unsolvable worst run`,
+        ).toBeGreaterThan(0.15);
+      }
+    }
+  }, 120_000);
+
   it("antagonist-vs-remediation: no enemy unlock is reachable before an offensive line", () => {
     // the DAG-alignment invariant (docs/RAIL-COMMAND.md §DAG alignment): every
     // enemy-unlock node sits behind the offensive core, so a player who can

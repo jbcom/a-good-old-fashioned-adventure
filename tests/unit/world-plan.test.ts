@@ -66,6 +66,27 @@ function inside(zone: PortalTrigger["zone"], pos: { x: number; y: number }): boo
   return !!zone && pos.x >= zone.x0 && pos.x <= zone.x1 && pos.y >= zone.y0 && pos.y <= zone.y1;
 }
 
+describe("portal integrity (every door lands somewhere real)", () => {
+  it("every portal across every map resolves to an existing spawn on its target", () => {
+    // Catches the missing-return-spawn class of bug at the SOURCE (a portal's
+    // toSpawn naming a key the target map doesn't define) — not just for the
+    // hand-listed road pairs below but for EVERY map, so new lair rooms and
+    // their return doors are covered automatically.
+    const missing: string[] = [];
+    for (const m of maps.values()) {
+      for (const portal of portals(m.id)) {
+        if (!portal.toMap) continue;
+        const target = map(portal.toMap);
+        const spawnKey = portal.toSpawn ?? "default";
+        if (!target.spawns?.[spawnKey]) {
+          missing.push(`${m.id} ${portal.id} → ${portal.toMap}:${spawnKey}`);
+        }
+      }
+    }
+    expect(missing, `portals to undefined spawns:\n${missing.join("\n")}`).toEqual([]);
+  });
+});
+
 describe("S6 world plan content", () => {
   it("prioritizes authored pixel diorama vocabulary over imported asset dependency", () => {
     const worldDoc = readFileSync(resolve(process.cwd(), "docs/WORLD.md"), "utf8");
