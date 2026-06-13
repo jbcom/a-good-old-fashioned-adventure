@@ -197,7 +197,7 @@
     },
     "gate-sentry": {
       "name": "Gate Sentry",
-      "sprite": "sprite:hero",
+      "sprite": "sprite:guard-spearman",
       "palette": "palette:sentry",
       "hp": 55,
       "speed": 38,
