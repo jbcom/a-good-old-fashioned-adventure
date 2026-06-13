@@ -128,6 +128,35 @@ harness models full runs).
   rusher wants — so difficulty rises by a small step, never +3 wave size
   at once.
 
+## Harness-measured findings (2026-06-12, runRail across the spine)
+
+The headless harness now plays the real loop, so the persona hypotheses
+above are testable. The headline result is decisive:
+
+**F0 — THE GAME HAS NO DIFFICULTY CURVE YET.** A LONE KNIGHT clears every
+spine map at 100% win-rate, advance 1.0 (measured: rescue-route, oldwood,
+deep-forest, sunken-road all 100%). Adding ranger, wizard, the warband,
+barbarian changes nothing — still 100% everywhere. The curve is flat at
+trivial. This is not a spike (the design's enemy: jaggedness) but its
+opposite — NO pressure at all. The cause is structural and confirms the
+user's design instinct: enemies do not scale with player progression, and
+the per-enemy unlock dial (S21.4 enemy DAG) does not exist yet, so:
+  - waves spawn but the line out-paces them (the march fallback runs the
+    front to the goal before waves accumulate);
+  - no antagonist-vs-remediation pressure exists, so there is no push-pull,
+    no reason to upgrade, no reason to want the next map.
+
+**This makes S21.4 (the enemy DAG) the critical-path balance feature, not
+a late polish item.** Until enemies are an unlockable, scaling difficulty
+dial, the statistical spike-detection (S19.1b) has nothing to detect — a
+flat-100% curve is trivially "smooth." The playtest's primary
+contribution is proving the build order: the enemy DAG must precede
+meaningful balance tuning. Win-rate must first become a CURVE before we
+can assert it has no jagged steps.
+
+Smaller findings (F1-F5) from the config walk remain valid and are tracked
+above; F0 supersedes them in priority.
+
 ## Harness validation plan
 
 The personas above are HYPOTHESES about feel; the statistical harness
