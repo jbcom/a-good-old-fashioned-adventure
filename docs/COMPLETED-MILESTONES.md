@@ -303,3 +303,8 @@ Key lessons: the enemy-DAG coin flywheel was BROKEN in the zone model — bounty
 
 ### S22.2 Sim performance budget (the deterministic half)
 - [x] sim-perf-budget.test.ts fields a worst-case board (24 units + 40 enemies) and asserts the sim step stays well inside the 60fps frame (measured ~0.69ms/step, under the 8ms half-frame ceiling). Plus the S20.R refreshSnapshot RAF-gate (no O(units)×2 per frame on menus). The render draw-audit + heap stability + on-device APK boot are the S22.1 device half.
+
+### S22.1 Android — on a real emulator (user mandate: ship to Android)
+- [x] pnpm build → cap:sync → gradlew assembleDebug (73MB APK) → installed + booted on the Pixel_6_android-33 emulator. The rail game RUNS: landing parchment, then New Game launches the rail (the LINE/WAVE HUD, the road rail through the forest, toolbox + minimap render); touch works; safe areas honored. FOUND + FIXED an Android-only bug: the latestSlot SQLite query passed no `values` array, which the native CapacitorSQLite plugin requires ("Query: Must provide an Array of Strings") — the browser sql.js shim is lenient, so it only failed on-device, breaking Continue/save-load. Added `values: []` + a source-level gate; verified on-device Continue is enabled after a save.
+
+Key lesson: on-device testing finds what the browser shim hides — the native CapacitorSQLite plugin requires a values array on every query/run, but the web sql.js shim is lenient, so the save-load bug was invisible until the APK booted on the emulator. Build the APK and boot it; "tests pass" ≠ "the app runs on the device."
