@@ -10,6 +10,7 @@ import { FlagState, MapRuntime } from "./traits";
 
 const TILE = 16;
 
+/** Check if a pixel position hits a solid tile (respects flag-gated triggers). */
 export function isSolidTileAt(world: World, px: number, py: number): boolean {
   const runtime = world.get(MapRuntime);
   if (!runtime || runtime.mapId === "") return true;

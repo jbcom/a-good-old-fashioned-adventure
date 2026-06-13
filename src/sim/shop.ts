@@ -5,6 +5,7 @@ import { pushEvent } from "./events";
 import { adjustCoins, currentProgress } from "./incrementalProgress";
 import { Inventory, IsPlayer, Outbox } from "./traits";
 
+/** Result of a buy/sell transaction including status, item info, and ledger impact. */
 export interface ShopTransactionResult {
   ok: boolean;
   verb: "buy" | "sell";
@@ -70,6 +71,7 @@ function result(
   };
 }
 
+/** Purchase one item from a listing, spending incremental coins. */
 export function buyShopListing(
   world: World,
   shopId: string,
@@ -108,6 +110,7 @@ export function buyShopListing(
   return result(true, "buy", shop, listing, nextGold, nextCount, `Bought ${listing.label}.`);
 }
 
+/** Sell one item to a listing, gaining coins. */
 export function sellShopListing(
   world: World,
   shopId: string,

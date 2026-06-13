@@ -13,10 +13,12 @@ import { getRail } from "./rail";
 import { frontline, railAxis } from "./systems/waves";
 import { IncrementalProgress, MapRuntime, RosterPlaced } from "./traits";
 
+/** Count deployed units per class. */
 export function placedCounts(world: World): Record<string, number> {
   return world.get(RosterPlaced)?.counts ?? {};
 }
 
+/** How many units of a class remain unplaced in the roster. */
 export function remainingFor(world: World, classId: string): number {
   const progress = world.get(IncrementalProgress);
   if (!progress) return 0;

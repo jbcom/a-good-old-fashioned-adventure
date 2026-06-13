@@ -17,6 +17,7 @@ import { rescueStep, waveStep } from "./systems/waves";
 import { Clock, CombatTimers, HitFlash, HitStop } from "./traits";
 import { rngFor } from "./worldRng";
 
+/** Fixed timestep for deterministic sim. */
 export const SIM_DT = 1 / 60;
 
 export { rngFor } from "./worldRng";

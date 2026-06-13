@@ -9,11 +9,13 @@
     {
       "when_changed": ["src/audio/**"],
       "require_changed": ["tests/audio/**", "tests/browser/**"],
+      "or_explicit_skip": "// no-audio-impact: <≥10 word reason>",
       "block_message": "Audio change without audio graph test."
     },
     {
       "when_changed": ["src/sim/**", "src/engine/**", "src/systems/**"],
       "require_changed": ["tests/unit/**", "tests/browser/**"],
+      "or_explicit_skip": "// no-sim-behavior: <≥10 word reason>",
       "block_message": "Sim/engine change without unit or browser test."
     },
     {

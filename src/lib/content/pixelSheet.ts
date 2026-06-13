@@ -40,6 +40,7 @@ interface DraftSprite {
 
 type DraftAsset = DraftTile | DraftProp | DraftSprite;
 
+/** Parsed pixel-sheet output: arrays of tile, prop, and sprite definitions. */
 export interface ParsedPixelSheet {
   tiles: TileDef[];
   props: PropDef[];
@@ -188,6 +189,7 @@ function finalizeSprite(draft: DraftSprite, path: string): SpriteDef {
   };
 }
 
+/** Parse a .pix pixel-sheet document into tile, prop, and sprite definitions. */
 export function parsePixelSheet(source: string, path = "<pixel-sheet>"): ParsedPixelSheet {
   const tiles: TileDef[] = [];
   const props: PropDef[] = [];

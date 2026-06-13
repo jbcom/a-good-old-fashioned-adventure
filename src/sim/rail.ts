@@ -11,6 +11,7 @@ import { pushEvent } from "./events";
 import { frontline, railAxis } from "./systems/waves";
 import { MapRuntime } from "./traits";
 
+/** Road waypoint center along the rail's advance axis. */
 export interface RailPoint {
   triggerId: string;
   x: number;

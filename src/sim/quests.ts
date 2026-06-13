@@ -19,6 +19,7 @@ import {
   QuestLog,
 } from "./traits";
 
+/** Activate a quest if not already started. */
 export function startQuest(world: World, questId: string): void {
   const quest = getQuest(questId);
   const log = world.get(QuestLog);
@@ -83,10 +84,12 @@ function conditionMet(
   return false;
 }
 
+/** Context passed to effect handlers (position info for spawns). */
 export interface EffectContext {
   eventPos?: { x: number; y: number };
 }
 
+/** Apply quest stage effects (flags, tiles, spawns, map loads, endgame). */
 export function applyEffects(
   world: World,
   effects: Record<string, unknown>[],

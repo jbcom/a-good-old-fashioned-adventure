@@ -392,7 +392,7 @@ export function unitAIStep(world: World, dt: number): void {
   }
 }
 
-/** Touch damage for units mirrors the player's armed-contact rule. */
+/** Apply armed-contact damage to units from enemies, respecting iframes. */
 export function unitTouchDamage(world: World, dt: number): void {
   for (const unit of [...world.query(IsUnit, Health, Transform, CombatTimers)]) {
     const timers = unit.get(CombatTimers);

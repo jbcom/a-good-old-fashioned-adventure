@@ -10,6 +10,7 @@
 import { Howl, Howler } from "howler";
 import { audio } from "../lib/config";
 
+/** Audio engine debug snapshot: label, ready state, mute status, theme, sfx count. */
 export interface AudioDebugState {
   label: string;
   ready: boolean;
@@ -18,6 +19,7 @@ export interface AudioDebugState {
   sfxPlayed: number;
 }
 
+/** Game audio engine: music/ambient fade-swap and fire-and-forget SFX via howler.js. */
 export interface GameAudioEngine {
   resumeFromGesture(): Promise<void>;
   setTheme(theme: string): void;

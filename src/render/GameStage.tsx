@@ -396,6 +396,7 @@ function WorldScene({ world }: { world: World }) {
   return null;
 }
 
+/** Live HD-2D game renderer: reconciles Koota world state to billboards and ground plane per frame. */
 export function GameStage({ world }: { world: World }) {
   // idempotent; sheet frames blit transparent until decode completes
   void preloadSheetImages();

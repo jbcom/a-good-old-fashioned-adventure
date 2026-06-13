@@ -28,6 +28,7 @@ function walkFrame(world: World): number {
   return Math.floor(t * combat.feedback.walkFrameFps) % 2;
 }
 
+/** Resolve the current pose frame (idle, walk-0, walk-up-1, attack, hurt) from sim state. */
 export function spritePose(world: World, entity: Entity, spriteId: string | undefined): string {
   if (!spriteId) return "idle";
   const timers = entity.get(CombatTimers);

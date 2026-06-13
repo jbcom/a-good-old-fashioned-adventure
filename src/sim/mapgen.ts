@@ -64,6 +64,7 @@ function applyTerrainVariants(grid: string[][], rules: TerrainVariantRule[]): vo
   }
 }
 
+/** Interpret a map definition's generation ops into a rows×cols grid of tile IDs. */
 export function buildGrid(def: MapGenInput): string[][] {
   const { cols, rows } = def.size;
   const grid: string[][] = Array.from({ length: rows }, () => Array(cols).fill(def.baseTile));

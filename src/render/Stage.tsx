@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { CanvasTexture, NearestFilter, type PerspectiveCamera, SRGBColorSpace } from "three";
 import { createDioramaMaterial } from "./materials";
 
+/** Create a nearest-filtered, sRGB CanvasTexture for pixel art rendering. */
 export function pixelTexture(canvas: HTMLCanvasElement): CanvasTexture {
   const texture = new CanvasTexture(canvas);
   texture.magFilter = NearestFilter;
@@ -18,6 +19,7 @@ export function pixelTexture(canvas: HTMLCanvasElement): CanvasTexture {
   return texture;
 }
 
+/** Stage actor: a sprite instance with canvas, world position, and optional flip. */
 export interface StageActor {
   id: string;
   canvas: HTMLCanvasElement;
@@ -27,6 +29,7 @@ export interface StageActor {
   flip?: boolean;
 }
 
+/** Props for the Stage component: ground canvas, world size, and actor list. */
 export interface StageProps {
   groundCanvas: HTMLCanvasElement;
   /** Ground size in world px (1 texel = 1 world unit). */

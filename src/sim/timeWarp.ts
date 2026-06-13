@@ -8,6 +8,7 @@
 import { engine } from "../lib/config";
 import type { IncrementalProgressState } from "./traits";
 
+/** Battle-speed tier with scale, label, and unlock condition. */
 export interface TimeWarpTier {
   scale: number;
   label: string;
