@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:raider-bounty",
+  "label": "Raider Bounty",
+  "category": "economy",
+  "cost": {
+    "coins": 16
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.7,
+  "prerequisites": ["upgrade:unlock-oldwood-raider"],
+  "enemyFamily": "oldwood-raider",
+  "spawnBounty": 2,
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Each rank pays more coins per oldwood-raider felled \u2014 the income the enemy unlock promises, and the coin sink that keeps the antagonist chain wall-free.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 112,
+    "y": 608,
+    "w": 16,
+    "h": 16
+  }
+}

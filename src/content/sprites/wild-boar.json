@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:wild-boar",
+  "kind": "sheet-sprite",
+  "description": "Light-coat wild boar from the Elthen pack (public/assets/MANIFEST.json#elthen-wild-boar), 32px side-view rows facing left. Forest region trash body (SA.3 gap 1); rows 4-5 (spin, rest) stay unmapped until a sim state needs them.",
+  "frameSize": { "w": 32, "h": 32 },
+  "anchor": { "x": 16, "y": 30 },
+  "directionOrder": ["right", "up", "left", "down"],
+  "facing": { "nativeDir": "left" },
+  "animations": {
+    "idle": {
+      "image": "enemies/boar.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "row": 0,
+      "fps": 6
+    },
+    "walk": {
+      "image": "enemies/boar.png",
+      "framesPerDirection": 8,
+      "directional": false,
+      "row": 1,
+      "fps": 12
+    },
+    "attack": {
+      "image": "enemies/boar.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "row": 2,
+      "fps": 10
+    },
+    "hurt": {
+      "image": "enemies/boar.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "row": 3,
+      "fps": 10
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

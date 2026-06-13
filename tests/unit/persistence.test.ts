@@ -62,7 +62,6 @@ describe("save persistence architecture", () => {
     const repository = new MemorySaveRepository();
     const snapshotJson = JSON.stringify({
       coins: 15,
-      gold: 15,
       roses: 3,
       rescueCount: 1,
       purchasedUpgradeIds: ["upgrade:first-vow"],
@@ -165,5 +164,39 @@ describe("vitest browser configuration", () => {
       .find((project) => project?.test?.name === "browser");
     expect(browserProject?.test?.fileParallelism).toBe(false);
     expect(browserProject?.test?.browser?.fileParallelism).toBe(false);
+  });
+
+  it("passes a values ARRAY to every native SQLite query/run (S22.1 on-device)", () => {
+    // The native CapacitorSQLite plugin REQUIRES a `values` array on every
+    // query/run, even parameterless ones ("Query: Must provide an Array of
+    // Strings") — the browser sql.js shim is lenient, so a missing values only
+    // fails ON-DEVICE (it broke Continue/load-save on the Android emulator). The
+    // browser suite can't catch it; this source-level gate does. We brace-match
+    // each call's options object (robust to nested literals) and require a
+    // `values:` whose value is an ARRAY literal — `values: [` — so neither a
+    // missing values NOR `values: undefined` slips through.
+    const src = readFileSync(resolve(process.cwd(), "src/persistence/saveRepository.ts"), "utf8");
+    const calls: string[] = [];
+    const re = /CapacitorSQLite\.(query|run)\(\{/g;
+    for (let m = re.exec(src); m; m = re.exec(src)) {
+      // brace-match from the opening `{` to its true close, ignoring nesting
+      let depth = 0;
+      let i = m.index + m[0].length - 1; // at the opening `{`
+      const start = i;
+      for (; i < src.length; i++) {
+        if (src[i] === "{") depth++;
+        else if (src[i] === "}") {
+          depth--;
+          if (depth === 0) break;
+        }
+      }
+      calls.push(src.slice(start, i + 1));
+    }
+    expect(calls.length, "found query/run calls").toBeGreaterThan(0);
+    for (const call of calls) {
+      expect(call, `a CapacitorSQLite query/run lacks a values array:\n${call}`).toMatch(
+        /values:\s*\[/,
+      );
+    }
   });
 });

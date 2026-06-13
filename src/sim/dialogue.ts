@@ -26,6 +26,7 @@ function slotMatches(world: World, slot: DialogueSlot): boolean {
   return true;
 }
 
+/** Resolved dialogue bank, node key, and the node's content. */
 export interface ResolvedDialogue {
   bankId: string;
   nodeKey: string;

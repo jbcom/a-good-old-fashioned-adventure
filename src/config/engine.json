@@ -2,6 +2,17 @@
   "$schema": "../../schemas/config.schema.json",
   "tileSize": 16,
   "maxTimestep": 0.1,
+  "timeWarp": {
+    "comment": "Top-bar fast-forward (user mandate 2026-06-12). 1x is always available; 5x unlocks with the Battle Tempo major; 10x/50x/100x unlock with Tempo Mastery connector ranks 1/2/3. unlockRank null means node ownership alone unlocks the tier; a number means that node must have at least that rank. Tests force any tier. maxStepsPerFrame caps the burst so a 100x frame can never lock the loop — at 50fps render and SIM_DT=1/60, 100x wants ~120 steps/frame, well under the cap.",
+    "tiers": [
+      { "scale": 1, "label": "1x", "unlock": null, "unlockRank": null },
+      { "scale": 5, "label": "5x", "unlock": "upgrade:battle-tempo", "unlockRank": null },
+      { "scale": 10, "label": "10x", "unlock": "upgrade:tempo-mastery", "unlockRank": 1 },
+      { "scale": 50, "label": "50x", "unlock": "upgrade:tempo-mastery", "unlockRank": 2 },
+      { "scale": 100, "label": "100x", "unlock": "upgrade:tempo-mastery", "unlockRank": 3 }
+    ],
+    "maxStepsPerFrame": 240
+  },
   "camera": {
     "followLerp": 0.12,
     "shakeDecay": 0.9

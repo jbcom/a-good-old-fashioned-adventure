@@ -51,7 +51,15 @@
     "projectileTrailHz": 18,
     "projectileTrailDuration": 0.18,
     "roarThrobScale": 0.3,
-    "guardCrouchScale": 0.9
+    "guardCrouchScale": 0.9,
+    "deployPuffDuration": 0.4,
+    "chargeDustDuration": 0.22,
+    "chargeDustHz": 8,
+    "bladeArcDuration": 0.28,
+    "healGlowDuration": 0.5,
+    "witherTintDuration": 0.45,
+    "witherTintHz": 3,
+    "fxAudioNote": "Only the deploy puff has a paired audio cue (deploy thunk). charge-dust, blade-arc, heal-glow, and wither-tint are INTENTIONALLY audio-silent: charge dust fires ~8Hz/unit (audio would spam), the others are persistent/ambient marks. Do not add cues for them in a future audio pass."
   },
   "projectileSprites": {
     "arrow": "sprite:proj-arrow",
@@ -60,5 +68,10 @@
     "sandball": "sprite:proj-sandball",
     "shadowbolt": "sprite:proj-shadowbolt",
     "thornbolt": "sprite:proj-thornbolt"
+  },
+  "wither": {
+    "duration": 2.5,
+    "speedFactor": 0.55,
+    "damageTakenFactor": 1.35
   }
 }

@@ -9,18 +9,21 @@
  */
 import type { Entity, World } from "koota";
 import { FleeBehavior, SeekBehavior, Vector3, Vehicle } from "yuka";
-import { enemies } from "../../lib/config";
+import { combat as combatConfig, enemies } from "../../lib/config";
 import { spawnProjectile } from "../factories";
 import {
   Choreo,
+  DragonBuff,
   Facing,
   IsEnemy,
   IsPlayer,
+  IsUnit,
   MoveIntent,
   Outbox,
   Speed,
   Threat,
   Transform,
+  Withered,
 } from "../traits";
 
 interface EnemyAi {
@@ -98,6 +101,24 @@ function castAt(
   }
 }
 
+/**
+ * Widen a boss volley by the dragon-track buff (docs/RAIL-COMMAND.md §The
+ * Dragon track BUFFS the dragon): each extra bolt pair adds two wider-angled
+ * bolts around the base spread — the multi-attack buff. Returns the base
+ * spread unchanged when the boss carries no DragonBuff.
+ */
+function buffedSpread(base: number[] | undefined, extraBolts: number): number[] {
+  const spread = base ?? [0];
+  if (extraBolts <= 0) return spread;
+  const widest = Math.max(0.2, ...spread.map((a) => Math.abs(a)));
+  const extra: number[] = [];
+  for (let pair = 1; pair <= Math.floor(extraBolts / 2); pair++) {
+    const angle = widest + pair * 0.22;
+    extra.push(-angle, angle);
+  }
+  return [...spread, ...extra];
+}
+
 function seekTo(ai: EnemyAi, target: { x: number; y: number }): true {
   ai.seek.active = true;
   ai.seek.target.set(target.x, target.y, 0);
@@ -117,11 +138,30 @@ function returnToPost(
   return seekTo(ai, { x: ai.origX, y: ai.origY });
 }
 
+/**
+ * The threat an enemy reacts to: the player pawn when present, otherwise
+ * the nearest rail-command unit (docs/RAIL-COMMAND.md — units are allies
+ * in the same targeting sense the player was).
+ */
+function nearestAllyTo(
+  world: World,
+  from: { x: number; y: number },
+): { x: number; y: number } | null {
+  const playerPos = world.queryFirst(IsPlayer)?.get(Transform);
+  if (playerPos) return playerPos;
+  let best: { x: number; y: number; dist: number } | null = null;
+  for (const unit of world.query(IsUnit, Transform)) {
+    const t = unit.get(Transform);
+    if (!t) continue;
+    const dist = Math.hypot(t.x - from.x, t.y - from.y);
+    if (!best || dist < best.dist) best = { x: t.x, y: t.y, dist };
+  }
+  return best;
+}
+
+/** Per-tick: drive enemy targeting, movement, and attacks. */
 export function enemyAIStep(world: World, dt: number): void {
   pruneDead(world);
-  const player = world.queryFirst(IsPlayer);
-  const playerPos = player?.get(Transform);
-  if (!playerPos) return;
   const defaults = enemies.aiDefaults;
 
   for (const enemy of [...world.query(IsEnemy, Transform, Speed, MoveIntent)]) {
@@ -131,6 +171,19 @@ export function enemyAIStep(world: World, dt: number): void {
     if (!info || !transform || !speed) continue;
     const archetype = enemies.archetypes[info.archetypeId];
     if (!archetype) continue;
+    // the wither decays on the enemy's own clock — never gated behind
+    // having a target (an unopposed survivor must still shed the debuff)
+    const witherNow = enemy.get(Withered);
+    if (witherNow && witherNow.left > 0) {
+      // the tint-refresh cadence counts down alongside the debuff so the haze
+      // re-blooms periodically while the enemy stays withered (S20.3)
+      enemy.set(Withered, {
+        left: Math.max(0, witherNow.left - dt),
+        tintLeft: Math.max(0, witherNow.tintLeft - dt),
+      });
+    }
+    const playerPos = nearestAllyTo(world, transform);
+    if (!playerPos) continue;
 
     const ai = aiFor(world, enemy, transform.x, transform.y);
     ai.castCooldown = Math.max(0, ai.castCooldown - dt);
@@ -269,13 +322,23 @@ export function enemyAIStep(world: World, dt: number): void {
             if (phase === "roar") {
               phase = "volley";
               left += phases.volley;
-              castAt(world, transform, playerPos, spec.projectile, spec.sfx, spec.spreadAngles);
+              const buff = enemy.get(DragonBuff);
+              castAt(
+                world,
+                transform,
+                playerPos,
+                spec.projectile,
+                spec.sfx,
+                buffedSpread(spec.spreadAngles, buff?.extraBolts ?? 0),
+              );
             } else if (phase === "volley") {
               phase = "lull";
               left += phases.lull;
             } else {
               phase = "roar";
               left += phases.roar;
+              // the telegraph is audible now too (audio/sfx/boss-roar.mp3)
+              world.get(Outbox)?.sfx.push("boss-roar");
             }
           }
           enemy.set(Choreo, { phase, left });
@@ -284,7 +347,15 @@ export function enemyAIStep(world: World, dt: number): void {
           useSteering = seekTo(ai, playerPos);
           if (ai.castCooldown <= 0) {
             ai.castCooldown = spec.cooldown;
-            castAt(world, transform, playerPos, spec.projectile, spec.sfx, spec.spreadAngles);
+            const buff = enemy.get(DragonBuff);
+            castAt(
+              world,
+              transform,
+              playerPos,
+              spec.projectile,
+              spec.sfx,
+              buffedSpread(spec.spreadAngles, buff?.extraBolts ?? 0),
+            );
           }
         }
         break;
@@ -302,17 +373,26 @@ export function enemyAIStep(world: World, dt: number): void {
       }
     }
 
+    // the wither slows: drag the stride while the debuff holds
+    if ((enemy.get(Withered)?.left ?? 0) > 0) {
+      intentScale *= combatConfig.wither.speedFactor;
+    }
     enemy.set(MoveIntent, { x: intentX * intentScale, y: intentY * intentScale });
     if (intentX !== 0) enemy.set(Facing, { dir: intentX > 0 ? 1 : -1 });
     else if (dx !== 0) enemy.set(Facing, { dir: dx > 0 ? 1 : -1 });
 
     // telegraphs: touch damage arms after a visible wind-up near the player;
-    // ranged enemies flash through the last beat before each shot
+    // ranged enemies flash through the last beat before each shot. A
+    // touchHarmless enemy (the lectern wraith) never arms — standing inside
+    // it is safe; only its attacks threaten.
     const threat = enemy.get(Threat);
     if (threat) {
       const windup = enemies.aiDefaults.windup;
       let { windupLeft, armed } = threat;
-      if (dist <= windup.armRange) {
+      if (archetype.touchHarmless) {
+        armed = false;
+        windupLeft = windup.duration;
+      } else if (dist <= windup.armRange) {
         if (!armed) {
           windupLeft = Math.max(0, windupLeft - dt);
           if (windupLeft === 0) armed = true;

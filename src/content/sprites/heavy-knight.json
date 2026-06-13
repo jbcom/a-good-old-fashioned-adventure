@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:heavy-knight",
+  "kind": "sheet-sprite",
+  "description": "Electric Lemon 12-row combat sheet (public/assets/MANIFEST.json#electric-lemon-rpg-characters): doubled attack rows per direction 0-7 (jab mounted), stance/walk rows 8-11 (helmeted \u2014 series convention, validated by the browser pixel gate). The dread-knight unit's body \u2014 straight fit; thrust/dash attack sheets remain in raw-assets.",
+  "frameSize": {
+    "w": 32,
+    "h": 32
+  },
+  "anchor": {
+    "x": 16,
+    "y": 30
+  },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "units/heavy-knight.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 8,
+        "left": 9,
+        "down": 10,
+        "up": 11
+      },
+      "fps": 2
+    },
+    "walk": {
+      "image": "units/heavy-knight.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 8,
+        "left": 9,
+        "down": 10,
+        "up": 11
+      },
+      "fps": 10
+    },
+    "attack": {
+      "image": "units/heavy-knight.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 0,
+        "left": 2,
+        "down": 4,
+        "up": 6
+      },
+      "fps": 12,
+      "loop": false
+    },
+    "hurt": {
+      "image": "units/heavy-knight.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 8,
+        "left": 9,
+        "down": 10,
+        "up": 11
+      },
+      "fps": 6
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:caped-warrior",
+  "kind": "sheet-sprite",
+  "description": "Electric Lemon warrior series combat sheet (public/assets/MANIFEST.json#electric-lemon-rpg-characters), 32px, 20 rows: doubled attack rows per direction 0-7 (jab mounted), stance 8-11, walk 12-15, third block 16-19 reserved (dash/guard \u2014 pin when a sim state consumes it). Backs confirmed by series skin-probe (rows 6-7/11/15/19). The Shadow Warlord's body \u2014 the dark cape IS the silhouette (creative rewrite, dragon palette swap retired).",
+  "frameSize": {
+    "w": 32,
+    "h": 32
+  },
+  "anchor": {
+    "x": 16,
+    "y": 30
+  },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "enemies/caped-warrior.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 8,
+        "left": 9,
+        "down": 10,
+        "up": 11
+      },
+      "fps": 2
+    },
+    "walk": {
+      "image": "enemies/caped-warrior.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 12,
+        "left": 13,
+        "down": 14,
+        "up": 15
+      },
+      "fps": 10
+    },
+    "attack": {
+      "image": "enemies/caped-warrior.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 0,
+        "left": 2,
+        "down": 4,
+        "up": 6
+      },
+      "fps": 12,
+      "loop": false
+    },
+    "hurt": {
+      "image": "enemies/caped-warrior.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 8,
+        "left": 9,
+        "down": 10,
+        "up": 11
+      },
+      "fps": 6
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:road-provisions",
+  "label": "Road Provisions",
+  "category": "relic",
+  "cost": {
+    "coins": 12
+  },
+  "ranks": 5,
+  "rankCostGrowth": 1.5,
+  "prerequisites": ["upgrade:oldwood-bend"],
+  "unlocks": [],
+  "note": "Coin-ranked run conveniences that compress repeated travel without skipping the rescue.",
+  "track": "vows"
+}

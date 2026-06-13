@@ -32,6 +32,7 @@ import type { TerrainVariantRule } from "../lib/content/types";
 
 export type { TerrainVariantRule } from "../lib/content/types";
 
+/** Inputs to procedural map generation — size, base tile, and ops. */
 export interface MapGenInput {
   size: { cols: number; rows: number };
   baseTile: string;
@@ -64,6 +65,7 @@ function applyTerrainVariants(grid: string[][], rules: TerrainVariantRule[]): vo
   }
 }
 
+/** Interpret a map definition's generation ops into a rows×cols grid of tile IDs. */
 export function buildGrid(def: MapGenInput): string[][] {
   const { cols, rows } = def.size;
   const grid: string[][] = Array.from({ length: rows }, () => Array(cols).fill(def.baseTile));

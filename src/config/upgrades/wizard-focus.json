@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:wizard-focus",
+  "label": "Wizard Focus",
+  "category": "class",
+  "cost": {
+    "gems": 8
+  },
+  "prerequisites": ["upgrade:ranger-trail"],
+  "classId": "wizard",
+  "unlocks": ["upgrade:wizard-arcana"],
+  "track": "characters",
+  "note": "Completes the offense-first starting trio (melee→ranged→spells): the wizard is the third core body, a rose class-major hung off the ranger so the ranged line precedes the spell line. Its coin sub-track (wizard-arcana) is the connector.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 144,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
+}

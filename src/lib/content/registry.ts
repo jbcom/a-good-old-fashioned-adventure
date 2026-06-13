@@ -9,6 +9,7 @@
 import { parsePixelSheet } from "./pixelSheet";
 import type {
   AnimationDef,
+  AnySpriteDef,
   CharacterDef,
   DialogueBankDef,
   FlagDef,
@@ -52,8 +53,10 @@ const pixelSheetSprites = Object.entries(pixelSheetModules).flatMap(
   ([path, source]) => parsePixelSheet(source, path).sprites,
 );
 
+/** ID-keyed tiles from JSON and .pix sheets. */
 export const tiles = byId([...Object.values(tileModules), ...pixelSheetTiles]);
 
+/** ID-keyed props from JSON and .pix sheets. */
 export const props = byId([
   ...Object.values(
     glob<PropDef>(
@@ -63,15 +66,17 @@ export const props = byId([
   ...pixelSheetProps,
 ]);
 
+/** ID-keyed sprites from JSON and .pix sheets (character/sheet-sprite). */
 export const sprites = byId([
   ...Object.values(
-    glob<SpriteDef>(
+    glob<AnySpriteDef>(
       import.meta.glob("/src/content/sprites/*.json", { eager: true, import: "default" }),
     ),
   ),
   ...pixelSheetSprites,
 ]);
 
+/** ID-keyed animations (sprite frame sequences). */
 export const animations = byId(
   Object.values(
     glob<AnimationDef>(
@@ -80,6 +85,7 @@ export const animations = byId(
   ),
 );
 
+/** ID-keyed world maps. */
 export const maps = byId(
   Object.values(
     glob<MapDef>(
@@ -88,6 +94,7 @@ export const maps = byId(
   ),
 );
 
+/** ID-keyed quests. */
 export const quests = byId(
   Object.values(
     glob<QuestDef>(
@@ -96,6 +103,7 @@ export const quests = byId(
   ),
 );
 
+/** ID-keyed dialogue banks (NPC conversations). */
 export const dialogueBanks = byId(
   Object.values(
     glob<DialogueBankDef>(
@@ -104,6 +112,7 @@ export const dialogueBanks = byId(
   ),
 );
 
+/** ID-keyed shops (merchant inventories). */
 export const shops = byId(
   Object.values(
     glob<ShopDef>(
@@ -116,12 +125,15 @@ import castFile from "../../content/story/characters.json";
 import flagsFile from "../../content/story/flags.json";
 import itemsFile from "../../content/story/items.json";
 
+/** ID-keyed characters (NPCs and player). */
 export const characters = new Map<string, CharacterDef>(
   Object.entries(castFile.characters as Record<string, CharacterDef>),
 );
+/** ID-keyed items (loot, currency, consumables). */
 export const items = new Map<string, ItemDef>(
   Object.entries(itemsFile.items as Record<string, ItemDef>),
 );
+/** ID-keyed flags (save state/quest progress). */
 export const flags = new Map<string, FlagDef>(
   Object.entries(flagsFile.flags as Record<string, FlagDef>),
 );
@@ -132,14 +144,32 @@ function lookup<T>(registry: Map<string, T>, id: string, kind: string): T {
   return def;
 }
 
+/** Fetch a tile by ID; fails loud if not found. */
 export const getTile = (id: string) => lookup(tiles, id, "tile");
+/** Fetch a prop by ID; fails loud if not found. */
 export const getProp = (id: string) => lookup(props, id, "prop");
+/** Fetch a sprite by ID; fails loud if not found. */
 export const getSprite = (id: string) => lookup(sprites, id, "sprite");
+/** Narrowing lookup for consumers that need .pix rows/frames/palette swaps
+ * (rasterizers, recolor tests) — fails loud on a purchased sheet sprite. */
+export const getCharacterSprite = (id: string): SpriteDef => {
+  const def = getSprite(id);
+  if (def.kind !== "character-sprite") throw new Error(`${id} is not a character-sprite`);
+  return def;
+};
+/** Fetch an animation by ID; fails loud if not found. */
 export const getAnimation = (id: string) => lookup(animations, id, "animation");
+/** Fetch a map by ID; fails loud if not found. */
 export const getMap = (id: string) => lookup(maps, id, "map");
+/** Fetch a quest by ID; fails loud if not found. */
 export const getQuest = (id: string) => lookup(quests, id, "quest");
+/** Fetch a dialogue bank by ID; fails loud if not found. */
 export const getDialogueBank = (id: string) => lookup(dialogueBanks, id, "dialogue bank");
+/** Fetch a shop by ID; fails loud if not found. */
 export const getShop = (id: string) => lookup(shops, id, "shop");
+/** Fetch a character by ID; fails loud if not found. */
 export const getCharacter = (id: string) => lookup(characters, id, "character");
+/** Fetch an item by ID; fails loud if not found. */
 export const getItem = (id: string) => lookup(items, id, "item");
+/** Fetch a flag by ID; fails loud if not found. */
 export const getFlag = (id: string) => lookup(flags, id, "flag");

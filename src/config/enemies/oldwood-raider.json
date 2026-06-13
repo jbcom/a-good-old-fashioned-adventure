@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "oldwood-raider",
+  "name": "Briar Raider",
+  "sprite": "sprite:hooded-rogue",
+  "palette": "palette:raider",
+  "hp": 24,
+  "speed": 36,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "patrol",
+  "family": "oldwood-raider"
+}

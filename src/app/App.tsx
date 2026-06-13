@@ -1,11 +1,19 @@
 import { animate } from "animejs";
 import type { Entity, World } from "koota";
-import { type CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  type CSSProperties,
+  type PointerEvent as ReactPointerEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   type AudioDebugState,
-  createToneAudioEngine,
-  type ToneAudioEngine,
-} from "../audio/toneEngine";
+  createGameAudioEngine,
+  type GameAudioEngine,
+} from "../audio/howlerEngine";
 import ui from "../config/ui.json";
 import { classes, engine, type IncrementalUpgradeNode, incremental } from "../lib/config";
 import {
@@ -34,9 +42,11 @@ import {
   readViewport,
   resolveDeviceProfile,
 } from "../platform/deviceProfile";
-import { spriteCanvas } from "../render/atlas";
+import { croppedSheetCanvas, spriteCanvas } from "../render/atlas";
 import { GameStage } from "../render/GameStage";
 import { spritePose } from "../render/pose";
+import { autoChain } from "../sim/autoRun";
+import { deployUnit, placedCounts, remainingFor } from "../sim/deploy";
 import {
   emitDialogueChoice,
   emitDialogueSeen,
@@ -46,23 +56,27 @@ import {
 import { pushEvent } from "../sim/events";
 import { createGameWorld, instantiateMap } from "../sim/factories";
 import {
+  currentProgress,
   nodeRanks,
   purchasedRank,
   purchaseUpgradeNode,
   rankCost,
+  recordDeathPayout,
+  resolvePayment,
   restoreIncrementalProgress,
+  roseLoopHint,
+  rosterFor,
   sanitizeIncrementalProgress,
-  syncProgressCoinsFromPlayer,
   type UpgradePurchaseResult,
 } from "../sim/incrementalProgress";
+import { currentMap } from "../sim/mapProgression";
 import { applyEffects, autoStartQuests, questLogLines } from "../sim/quests";
 import { buyShopListing, type ShopTransactionResult, sellShopListing } from "../sim/shop";
-import { playerAbility, playerAttack } from "../sim/systems/combat";
+import { currentWave, frontline, lineVitals } from "../sim/systems/waves";
 import { SIM_DT, step } from "../sim/tick";
+import { nextTier } from "../sim/timeWarp";
 import {
-  AimDirection,
   Choreo,
-  Facing,
   FlagState,
   FxStats,
   Health,
@@ -74,20 +88,21 @@ import {
   IsEnemy,
   IsNpc,
   IsPlayer,
+  IsUnit,
   Level,
   MapRuntime,
   MoveIntent,
   Outbox,
-  PlayerGold,
   Projectile,
   PropRef,
   QuestLog,
   SpriteRef,
   Transform,
+  Withered,
 } from "../sim/traits";
 import "./App.css";
 
-type Mode = "landing" | "title" | "playing" | "results" | "upgrade" | "gameover";
+type Mode = "landing" | "playing" | "results" | "upgrade" | "gameover";
 type Direction = "up" | "down" | "left" | "right";
 
 interface DialogueState {
@@ -126,13 +141,25 @@ interface UiSnapshot {
   level: number;
   xp: number;
   nextXp: number;
-  gold: number;
   incrementalProgress: IncrementalProgressState;
   inventory: Record<string, number>;
   playerX: number;
   playerY: number;
   enemies: number;
   projectiles: number;
+  units: number;
+  unitsPlaced: Record<string, number>;
+  /** Aggregate vitals of the fielded LINE (rail HUD): sum hp over sum maxHp. */
+  lineHp: number;
+  lineMaxHp: number;
+  /** Per-class live line breakdown for the unit chips. */
+  lineByClass: Record<string, { count: number; hp: number; maxHp: number }>;
+  /** The wave number the gates have released (0 before the first wave). */
+  wave: number;
+  frontY: number;
+  /** The fielded line's frontmost position (rail-aware minimap marker). */
+  frontX: number;
+  withered: number;
   fxSpawned: number;
   playerPose: string;
   bossPhase: string;
@@ -171,7 +198,6 @@ interface StartOptions {
   level?: number;
   hp?: number;
   maxHp?: number;
-  gold?: number;
   incrementalProgress?: IncrementalProgressState;
   inventory?: Record<string, number>;
 }
@@ -193,13 +219,21 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   level: 1,
   xp: 0,
   nextXp: 1,
-  gold: 0,
   incrementalProgress: sanitizeIncrementalProgress({}, 0),
   inventory: {},
   playerX: 0,
   playerY: 0,
   enemies: 0,
   projectiles: 0,
+  units: 0,
+  unitsPlaced: {},
+  lineHp: 0,
+  lineMaxHp: 0,
+  lineByClass: {},
+  wave: 0,
+  frontY: 0,
+  frontX: 0,
+  withered: 0,
   fxSpawned: 0,
   playerPose: "idle",
   bossPhase: "",
@@ -226,13 +260,6 @@ keyMap.p = "pause";
 
 function normalizeKey(key: string): string {
   return key.length === 1 ? key.toLowerCase() : key;
-}
-
-function directionVector(input: InputState) {
-  return {
-    x: (input.right ? 1 : 0) - (input.left ? 1 : 0),
-    y: (input.down ? 1 : 0) - (input.up ? 1 : 0),
-  };
 }
 
 function playerOf(world: World): Entity | undefined {
@@ -265,9 +292,7 @@ function numeric(input: unknown): number | undefined {
   return Number.isFinite(value) ? value : undefined;
 }
 
-function parseSavedSnapshot(
-  json: string,
-): Pick<StartOptions, "gold" | "incrementalProgress" | "inventory"> {
+function parseSavedSnapshot(json: string): Pick<StartOptions, "incrementalProgress" | "inventory"> {
   try {
     const parsed = JSON.parse(json) as {
       coins?: unknown;
@@ -293,7 +318,6 @@ function parseSavedSnapshot(
       coins ?? 0,
     );
     return {
-      gold: incrementalProgress.coins,
       incrementalProgress,
       inventory: cleanInventory(parsed.inventory),
     };
@@ -362,10 +386,11 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
   const playerTag = player?.get(IsPlayer);
   const health = player?.get(Health);
   const level = player?.get(Level);
-  const gold = player?.get(PlayerGold);
-  const incrementalProgress = syncProgressCoinsFromPlayer(world);
+  const incrementalProgress = currentProgress(world);
   const inventory = player?.get(Inventory);
   const transform = player?.get(Transform);
+  const vitals = lineVitals(world);
+  const front = frontline(world);
   const mapId = runtime?.mapId ?? "";
   const base: UiSnapshot = {
     mapId,
@@ -376,7 +401,6 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     level: level?.level ?? 1,
     xp: level?.xp ?? 0,
     nextXp: level?.nextXp ?? 1,
-    gold: gold?.value ?? 0,
     incrementalProgress: {
       ...incrementalProgress,
       purchasedUpgradeIds: [...incrementalProgress.purchasedUpgradeIds],
@@ -389,6 +413,17 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     playerY: transform?.y ?? 0,
     enemies: [...world.query(IsEnemy)].length,
     projectiles: [...world.query(Projectile)].length,
+    units: [...world.query(IsUnit)].length,
+    unitsPlaced: { ...placedCounts(world) },
+    lineHp: vitals.hp,
+    lineMaxHp: vitals.maxHp,
+    lineByClass: vitals.byClass,
+    wave: currentWave(world),
+    frontY: front?.y ?? 0,
+    frontX: front?.x ?? 0,
+    withered: [...world.query(IsEnemy, Withered)].filter(
+      (enemy) => (enemy.get(Withered)?.left ?? 0) > 0,
+    ).length,
     fxSpawned: world.get(FxStats)?.spawned ?? 0,
     playerPose: player
       ? spritePose(world, player, player.get(SpriteRef)?.spriteId ?? "sprite:hero")
@@ -423,7 +458,7 @@ function saveRowFromSnapshot(current: UiSnapshot) {
       playerX: current.playerX,
       playerY: current.playerY,
       coins: current.incrementalProgress.coins,
-      gold: current.incrementalProgress.coins,
+      gems: current.incrementalProgress.gems,
       roses: current.incrementalProgress.roses,
       rescueCount: current.incrementalProgress.rescueCount,
       purchasedUpgradeIds: current.incrementalProgress.purchasedUpgradeIds,
@@ -460,7 +495,9 @@ function upgradeNodeState(
   const reachable = node.prerequisites.every((id) => progress.purchasedUpgradeIds.includes(id));
   if (!reachable) return "locked";
   const price = rankCost(node, ownedRanks);
-  if (progress.coins < price.coins || progress.roses < price.roses) {
+  // resolvePayment honors the dragon-track OR-cost (pay roses or gems), so a
+  // rose-OR-gem node is affordable when EITHER currency covers it.
+  if (resolvePayment(progress, price) === null) {
     return "unaffordable";
   }
   return "available";
@@ -476,10 +513,14 @@ function upgradeCostLabel(
     return maxRanks > 1 ? `Full · ${ownedRanks}/${maxRanks}` : "Owned";
   }
   const price = rankCost(node, ownedRanks);
-  const costs = [price.coins ? `${price.coins}C` : "", price.roses ? `${price.roses}R` : ""].filter(
-    Boolean,
-  );
-  const cost = costs.length ? costs.join(" ") : "Root";
+  const costs = [
+    price.coins ? `${price.coins}C` : "",
+    price.gems ? `${price.gems}G` : "",
+    price.roses ? `${price.roses}R` : "",
+  ].filter(Boolean);
+  // a rose-OR-gem dragon node reads "2R or 12G" (pay either); others join with ·
+  const orCost = price.roses > 0 && price.gems > 0;
+  const cost = costs.length ? costs.join(orCost ? " or " : " ") : "Root";
   return maxRanks > 1 ? `${cost} · ${ownedRanks}/${maxRanks}` : cost;
 }
 
@@ -505,13 +546,33 @@ function nextVow(progress: IncrementalProgressState): IncrementalUpgradeNode | n
   for (const node of RING_NODES) {
     if (upgradeNodeState(progress, node) !== "available") continue;
     const price = rankCost(node, purchasedRank(progress, node));
-    const weight = price.coins + price.roses * 20;
+    // gems and roses are rarer than coins, so weight them up when picking the
+    // cheapest signposted next vow (roses rarest, gems next, coins common)
+    const weight = price.coins + price.gems * 12 + price.roses * 20;
     if (weight < bestPrice) {
       bestPrice = weight;
       best = node;
     }
   }
   return best;
+}
+
+/**
+ * The Mario nod (docs/RAIL-COMMAND.md §dragon's kin): once the player has met
+ * more than one of the dragon's relatives, the rescued princess quips about
+ * the growing family tree. Empty until at least one kin has been felled.
+ */
+function kinQuip(defeatedKinRelations: string[]): string {
+  const kin = defeatedKinRelations.filter(Boolean);
+  if (kin.length === 0) return "";
+  if (kin.length === 1) {
+    return `"Oh — that one wasn't the dragon with the hoard. That was the ${kin[0]}."`;
+  }
+  const list =
+    kin.length === 2
+      ? kin.join(" and the ")
+      : `${kin.slice(0, -1).join(", the ")}, and the ${kin[kin.length - 1]}`;
+  return `"You've met the ${list} now. It is, I'm afraid, a very large family."`;
 }
 
 function nearestDialogue(world: World): NpcDialogueHit | null {
@@ -558,32 +619,6 @@ function nearestReadableProp(world: World): ReadablePropHit | null {
     if (dist < 34 && (!best || dist < best.dist)) best = { entity, interaction, dist };
   }
   return best;
-}
-
-function aimAtNearestEnemy(world: World, maxDistance = 340) {
-  const player = playerOf(world);
-  const pt = player?.get(Transform);
-  if (!player || !pt) return;
-  let best: { dx: number; dy: number; dist: number } | null = null;
-  for (const enemy of world.query(IsEnemy, Transform)) {
-    const et = enemy.get(Transform);
-    if (!et) continue;
-    const dx = et.x - pt.x;
-    const dy = et.y - pt.y;
-    const dist = Math.hypot(dx, dy);
-    if (dist <= maxDistance && (!best || dist < best.dist)) best = { dx, dy, dist };
-  }
-  if (!best) return;
-  player.set(AimDirection, { x: best.dx, y: best.dy });
-  if (best.dx !== 0) player.set(Facing, { dir: best.dx > 0 ? 1 : -1 });
-}
-
-function applyInputToWorld(world: World, input: InputState) {
-  const player = playerOf(world);
-  if (!player) return;
-  const intent = directionVector(input);
-  player.set(MoveIntent, intent);
-  if (intent.x !== 0 || intent.y !== 0) player.set(AimDirection, intent);
 }
 
 function insideZone(map: MapDef, x: number, y: number, triggerId: string): boolean {
@@ -647,6 +682,43 @@ function CurrencyToken({ label, value, testId }: { label: string; value: number;
   );
 }
 
+/**
+ * The fielded line's per-class roster (rail HUD): one chip per class with units
+ * in play, showing its count and an aggregate hp pip. Sorted by class id for a
+ * stable order. Empty when no line is fielded (the chips appear as the line
+ * deploys). docs/RAIL-COMMAND.md §the line.
+ */
+function UnitChips({ snapshot }: { snapshot: UiSnapshot }) {
+  const classes = Object.keys(snapshot.lineByClass).sort();
+  return (
+    <ul className="unit-chips" data-testid="unit-chips" aria-label="Fielded units">
+      {classes.map((classId) => {
+        const slot = snapshot.lineByClass[classId];
+        const pct = slot.maxHp > 0 ? Math.round((slot.hp / slot.maxHp) * 100) : 0;
+        const chipLabel = `${classId} ×${slot.count} — ${pct}% hp`;
+        return (
+          <li
+            key={classId}
+            className="unit-chip"
+            data-testid={`unit-chip-${classId}`}
+            data-class={classId}
+            data-count={slot.count}
+            data-hp-percent={pct}
+            aria-label={chipLabel}
+            title={chipLabel}
+          >
+            <span className="unit-chip-glyph" aria-hidden="true">
+              {classId.slice(0, 1).toUpperCase()}
+            </span>
+            <span className="unit-chip-count">{slot.count}</span>
+            <span className="unit-chip-pip" style={{ width: `${pct}%` }} />
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 function usePanelEntrance(signature: string) {
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -668,13 +740,6 @@ function usePanelEntrance(signature: string) {
 }
 
 /** Knight holds the center of the picker until the full roster aligns. */
-function centeredRoster(unlocked: string[]): string[] {
-  if (!unlocked.includes("knight")) return unlocked;
-  const others = unlocked.filter((classId) => classId !== "knight");
-  const before = Math.floor(others.length / 2);
-  return [...others.slice(0, before), "knight", ...others.slice(before)];
-}
-
 function ClassSpriteThumb({ classId }: { classId: string }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
@@ -690,46 +755,6 @@ function ClassSpriteThumb({ classId }: { classId: string }) {
     ctx.drawImage(source, 0, 0);
   }, [classId]);
   return <canvas className="class-thumb" ref={ref} />;
-}
-
-function TitleScreen({
-  roster,
-  selected,
-  onSelect,
-  onStart,
-}: {
-  roster: string[];
-  selected: string;
-  onSelect: (classId: string) => void;
-  onStart: () => void;
-}) {
-  const panelRef = usePanelEntrance("title");
-  return (
-    <section className="title-screen" data-testid="title-screen">
-      <div className="title-panel" data-testid="title-panel" ref={panelRef}>
-        <h1>A GOOD OLD FASHIONED ADVENTURE</h1>
-        <p className="dialogue-line">Begin as a knight. New callings wait in the upgrade graph.</p>
-        <div className="class-row">
-          {roster.map((classId) => (
-            <button
-              className="class-button"
-              data-testid={`class-${classId}`}
-              type="button"
-              key={classId}
-              aria-pressed={selected === classId}
-              onClick={() => onSelect(classId)}
-            >
-              <ClassSpriteThumb classId={classId} />
-              <span className="class-name">{classId}</span>
-            </button>
-          ))}
-        </div>
-        <button className="menu-button" data-testid="start-button" type="button" onClick={onStart}>
-          A START
-        </button>
-      </div>
-    </section>
-  );
 }
 
 function LandingScreen({
@@ -821,6 +846,9 @@ function Hud({
   panelOpen,
   paused,
   muted,
+  timeScale,
+  onCycleSpeed,
+  onAuto,
   onTogglePanel,
   onTogglePause,
   onToggleMute,
@@ -831,35 +859,64 @@ function Hud({
   panelOpen: boolean;
   paused: boolean;
   muted: boolean;
+  timeScale: number;
+  onCycleSpeed: () => void;
+  onAuto: () => void;
   onTogglePanel: () => void;
   onTogglePause: () => void;
   onToggleMute: () => void;
   onRetire: () => void;
 }) {
-  const hpPercent = Math.max(0, Math.round((snapshot.hp / snapshot.maxHp) * 100));
+  // the rail HUD commands a LINE, not a hero: the vitals bar aggregates every
+  // fielded unit's hp, the wave chip tracks the gate pressure, and the unit
+  // chips show the per-class roster with live hp (docs/RAIL-COMMAND.md §the line)
+  const linePercent =
+    snapshot.lineMaxHp > 0 ? Math.round((snapshot.lineHp / snapshot.lineMaxHp) * 100) : 0;
   return (
     <div className="hud" data-testid="hud">
       <header className="top-hud" data-testid="top-hud">
-        <strong>{snapshot.classId.toUpperCase()}</strong>
-        <span>LV {snapshot.level}</span>
-        <span>HP {hpPercent}%</span>
-        <meter
-          className="meter hp-meter wide-meter"
-          aria-label="HP"
-          min={0}
-          max={snapshot.maxHp}
-          value={Math.max(0, snapshot.hp)}
-        />
-        <meter
-          className="meter xp-meter wide-meter"
-          aria-label="XP"
-          min={0}
-          max={snapshot.nextXp}
-          value={snapshot.xp}
-        />
+        <div className="line-vitals" data-testid="line-vitals" data-line-percent={linePercent}>
+          <span className="line-vitals-label">LINE</span>
+          <meter
+            className="meter line-meter wide-meter"
+            aria-label="Line vitals"
+            min={0}
+            max={Math.max(1, snapshot.lineMaxHp)}
+            value={Math.max(0, snapshot.lineHp)}
+          />
+          <span className="line-vitals-count">{snapshot.units}</span>
+        </div>
+        <span className="wave-chip" data-testid="wave-chip">
+          WAVE {snapshot.wave}
+        </span>
+        <UnitChips snapshot={snapshot} />
         <CurrencyToken label="C" value={snapshot.incrementalProgress.coins} testId="hud-coins" />
+        <CurrencyToken label="G" value={snapshot.incrementalProgress.gems} testId="hud-gems" />
         <CurrencyToken label="R" value={snapshot.incrementalProgress.roses} testId="hud-roses" />
         <span className="map-token">{snapshot.mapName}</span>
+        <button
+          className="hud-speed"
+          data-testid="hud-speed"
+          data-time-scale={String(timeScale)}
+          type="button"
+          aria-label={`Battle speed ${timeScale}x`}
+          onClick={onCycleSpeed}
+        >
+          {timeScale}×
+        </button>
+        {snapshot.incrementalProgress.rescueCount > 0 && (
+          // AUTO unlocks once the player has cleared a map (a frontier exists
+          // to auto toward) — docs/RAIL-COMMAND.md §AUTO
+          <button
+            className="hud-auto"
+            data-testid="hud-auto"
+            type="button"
+            aria-label="Auto-play the frontier map"
+            onClick={onAuto}
+          >
+            AUTO
+          </button>
+        )}
         <button
           className="hud-menu"
           data-testid="hud-menu"
@@ -964,6 +1021,15 @@ function Minimap({ snapshot }: { snapshot: UiSnapshot }) {
       4,
       4,
     );
+    // the rail FRONT: a bright cross marking the line's foremost reach, so the
+    // minimap reads as the rail's advance, not just exploration
+    if (snapshot.frontX || snapshot.frontY) {
+      const fx = Math.floor((snapshot.frontX / engine.tileSize) * sx);
+      const fy = Math.floor((snapshot.frontY / engine.tileSize) * sy);
+      ctx.fillStyle = ui.theme.accentGold;
+      ctx.fillRect(fx - 3, fy, 7, 1);
+      ctx.fillRect(fx, fy - 3, 1, 7);
+    }
     ctx.fillStyle = ui.theme.accentGold;
     ctx.fillRect(canvas.width - 10, 4, 5, 5);
   }, [snapshot]);
@@ -1095,14 +1161,23 @@ function ResultsPanel({
         <p className="dialogue-line">
           The road folds back into the book. Spend the spoils, then tell the tale again.
         </p>
+        {run?.rescuedPrincess && kinQuip(snapshot.incrementalProgress.defeatedKinRelations) && (
+          <p className="dialogue-line" data-testid="kin-quip">
+            {kinQuip(snapshot.incrementalProgress.defeatedKinRelations)}
+          </p>
+        )}
         <div className="result-ledger" data-testid="result-ledger">
           <span>
             Earned {run?.coinsEarned ?? snapshot.incrementalProgress.currentRunCoinsEarned}C
           </span>
           <span>
+            Earned {run?.gemsEarned ?? snapshot.incrementalProgress.currentRunGemsEarned}G
+          </span>
+          <span>
             Earned {run?.rosesEarned ?? snapshot.incrementalProgress.currentRunRosesEarned}R
           </span>
           <span>Total {snapshot.incrementalProgress.coins}C</span>
+          <span>Total {snapshot.incrementalProgress.gems}G</span>
           <span>Total {snapshot.incrementalProgress.roses}R</span>
           <span>Rescues {snapshot.incrementalProgress.rescueCount}</span>
         </div>
@@ -1113,6 +1188,11 @@ function ResultsPanel({
               snapshot.incrementalProgress,
               nextVow(snapshot.incrementalProgress) as IncrementalUpgradeNode,
             )}
+          </p>
+        )}
+        {roseLoopHint(snapshot.incrementalProgress) && (
+          <p className="dialogue-line" data-testid="rose-loop-hint">
+            {roseLoopHint(snapshot.incrementalProgress)}
           </p>
         )}
         <div className="result-actions">
@@ -1138,6 +1218,63 @@ function ResultsPanel({
   );
 }
 
+function emblemSpriteId(nodeId: string): string {
+  return nodeId.replace(/^upgrade:/, "sprite:emblem-");
+}
+
+function EmblemThumb({
+  nodeId,
+  iconRef,
+}: {
+  nodeId: string;
+  iconRef?: { image: string; x: number; y: number; w: number; h: number };
+}) {
+  const ref = useRef<HTMLCanvasElement | null>(null);
+  useEffect(() => {
+    const target = ref.current;
+    if (!target) return;
+    // S-DAG-ICONS hybrid: a node with an iconRef draws a purchased-sheet crop;
+    // otherwise it falls back to its bespoke emblem-<slug>.pix grid.
+    const source = iconRef
+      ? croppedSheetCanvas(nodeId, `emblem|${nodeId}|icon`, iconRef)
+      : spriteCanvas(emblemSpriteId(nodeId), "palette:base");
+    if (source.width === 0 || source.height === 0) return; // missing sprite: leave blank loudly in tests, not 0x0
+    target.width = source.width;
+    target.height = source.height;
+    const ctx = target.getContext("2d");
+    if (!ctx) return;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(source, 0, 0);
+  }, [nodeId, iconRef]);
+  return <canvas className="emblem-thumb" ref={ref} />;
+}
+
+function RankPips({
+  progress,
+  node,
+}: {
+  progress: IncrementalProgressState;
+  node: IncrementalUpgradeNode;
+}) {
+  const total = nodeRanks(node);
+  if (total <= 1) return null;
+  const owned = purchasedRank(progress, node);
+  return (
+    <span className="rank-pips" role="img" aria-label={`rank ${owned} of ${total}`}>
+      {Array.from({ length: total }, (_, i) => (
+        <span
+          className="rank-pip"
+          data-filled={i < owned ? "true" : "false"}
+          // biome-ignore lint/suspicious/noArrayIndexKey: pips are positional by definition
+          key={i}
+        />
+      ))}
+    </span>
+  );
+}
+
+const UPGRADE_HOLD_MS = 350;
+
 function UpgradeWebPanel({
   snapshot,
   selectedIndex,
@@ -1154,9 +1291,46 @@ function UpgradeWebPanel({
   onBack: () => void;
 }) {
   const panelRef = usePanelEntrance("upgrade-graph");
+  const holdTimer = useRef<number | null>(null);
   const selectedNode = RING_NODES[selectedIndex] ?? RING_NODES[0];
+  const selectedState = upgradeNodeState(snapshot.incrementalProgress, selectedNode);
+
+  const clearHold = useCallback(() => {
+    if (holdTimer.current !== null) window.clearTimeout(holdTimer.current);
+    holdTimer.current = null;
+  }, []);
+  useEffect(() => clearHold, [clearHold]);
+
+  // tooltip triggers (docs/DESIGN-SYSTEM.md §upgrade emblems): mouse hover
+  // selects instantly; touch selects on a ~350ms hold; a held pointer
+  // dragged across tiles scrubs the selection (capture released so moves
+  // land on the tile under the finger)
+  const tileEvents = (index: number) => ({
+    onClick: () => onSelect(index),
+    onPointerEnter: (event: ReactPointerEvent) => {
+      if (event.pointerType === "mouse") onSelect(index);
+    },
+    onPointerDown: (event: ReactPointerEvent) => {
+      if (!event.isPrimary) return; // single-active-pointer: secondary touches are ignored
+      try {
+        (event.currentTarget as Element).releasePointerCapture(event.pointerId);
+      } catch {}
+      clearHold();
+      holdTimer.current = window.setTimeout(() => onSelect(index), UPGRADE_HOLD_MS);
+    },
+    onPointerUp: clearHold,
+    onPointerCancel: clearHold,
+    onPointerMove: (event: ReactPointerEvent) => {
+      if (event.buttons > 0) onSelect(index);
+    },
+  });
+
   return (
-    <section className="upgrade-screen" data-testid="upgrade-screen">
+    <section
+      className="upgrade-screen"
+      data-testid="upgrade-screen"
+      data-selected-node={selectedNode.id}
+    >
       <div className="upgrade-panel" data-testid="upgrade-panel" ref={panelRef}>
         <p className="manuscript-kicker">The Vow Graph</p>
         <h1>Upgrade Graph</h1>
@@ -1164,37 +1338,45 @@ function UpgradeWebPanel({
           <span>{snapshot.incrementalProgress.coins} Coins</span>
           <span>{snapshot.incrementalProgress.roses} Roses</span>
         </div>
-        <div className="upgrade-graph-list" role="listbox" aria-label="Upgrade Graph">
+        <fieldset className="upgrade-graph-list" aria-label="Upgrade Graph">
           {incremental.upgradeGraph.ringOrder.map((track) => (
             <div className="upgrade-track" data-testid={`upgrade-track-${track}`} key={track}>
               <h2 className="upgrade-track-label">{track}</h2>
-              {RING_NODES.map((node, index) => {
-                if (node.track !== track) return null;
-                const state = upgradeNodeState(snapshot.incrementalProgress, node);
-                return (
-                  <button
-                    className="upgrade-node"
-                    data-state={state}
-                    data-testid={upgradeTestId(node.id)}
-                    type="button"
-                    key={node.id}
-                    aria-pressed={selectedIndex === index}
-                    onClick={() => onSelect(index)}
-                  >
-                    <span className="upgrade-node-label">{node.label}</span>
-                    <span>{node.category}</span>
-                    <span>{upgradeCostLabel(snapshot.incrementalProgress, node)}</span>
-                    <span>{state}</span>
-                  </button>
-                );
-              })}
+              <div className="upgrade-tile-row">
+                {RING_NODES.map((node, index) => {
+                  if (node.track !== track) return null;
+                  const state = upgradeNodeState(snapshot.incrementalProgress, node);
+                  return (
+                    <button
+                      className="upgrade-tile"
+                      data-state={state}
+                      data-testid={upgradeTestId(node.id)}
+                      type="button"
+                      key={node.id}
+                      aria-label={node.label}
+                      aria-pressed={selectedIndex === index}
+                      {...tileEvents(index)}
+                    >
+                      <EmblemThumb nodeId={node.id} iconRef={node.iconRef} />
+                      <RankPips progress={snapshot.incrementalProgress} node={node} />
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           ))}
-        </div>
-        <div className="upgrade-detail" data-testid="upgrade-detail">
-          <strong>{selectedNode.label}</strong>
-          <span>{upgradeCostLabel(snapshot.incrementalProgress, selectedNode)}</span>
-          <p>{message || "Up/down chooses a vow. A buys. B returns to results."}</p>
+        </fieldset>
+        <div className="upgrade-detail upgrade-tooltip" data-testid="upgrade-detail">
+          <EmblemThumb nodeId={selectedNode.id} iconRef={selectedNode.iconRef} />
+          <div className="upgrade-tooltip-body">
+            <strong>{selectedNode.label}</strong>
+            <span className="upgrade-tooltip-meta">
+              {selectedNode.track} · {upgradeCostLabel(snapshot.incrementalProgress, selectedNode)}
+              {" · "}
+              {selectedState}
+            </span>
+            <p>{message || selectedNode.note || "A buys. B returns to results."}</p>
+          </div>
         </div>
         <div className="result-actions">
           <button className="menu-button" data-testid="upgrade-buy" type="button" onClick={onBuy}>
@@ -1209,72 +1391,51 @@ function UpgradeWebPanel({
   );
 }
 
-function VirtualPad({
-  setDirection,
-  pressA,
-  setB,
+function UnitToolbox({
+  world,
+  snapshot,
+  onArm,
+  onDisarm,
 }: {
-  setDirection: (dir: Direction, pressed: boolean) => void;
-  pressA: () => void;
-  setB: (pressed: boolean) => void;
+  world: World;
+  snapshot: UiSnapshot;
+  onArm: (classId: string) => void;
+  onDisarm: () => void;
 }) {
-  const bindDir = (dir: Direction) => ({
-    onPointerDown: () => setDirection(dir, true),
-    onPointerUp: () => setDirection(dir, false),
-    onPointerCancel: () => setDirection(dir, false),
-    onPointerLeave: () => setDirection(dir, false),
-  });
+  const roster = rosterFor(snapshot.incrementalProgress);
   return (
-    <div className="virtual-pad" data-testid="virtual-pad">
-      <div className="dpad">
-        <button className="pad-button pad-up" data-testid="pad-up" type="button" {...bindDir("up")}>
-          ↑
-        </button>
-        <button
-          className="pad-button pad-left"
-          data-testid="pad-left"
-          type="button"
-          {...bindDir("left")}
-        >
-          ←
-        </button>
-        <button
-          className="pad-button pad-right"
-          data-testid="pad-right"
-          type="button"
-          {...bindDir("right")}
-        >
-          →
-        </button>
-        <button
-          className="pad-button pad-down"
-          data-testid="pad-down"
-          type="button"
-          {...bindDir("down")}
-        >
-          ↓
-        </button>
-      </div>
-      <div className="face-buttons">
-        <button
-          className="face-button secondary"
-          data-testid="button-b"
-          type="button"
-          onPointerDown={() => setB(true)}
-          onPointerUp={() => setB(false)}
-          onPointerCancel={() => setB(false)}
-          onPointerLeave={() => setB(false)}
-        >
-          B
-        </button>
-        <button className="face-button" data-testid="button-a" type="button" onClick={pressA}>
-          A
-        </button>
-      </div>
+    <div className="unit-toolbox" data-testid="unit-toolbox">
+      {roster.map(({ classId }) => {
+        const remaining = remainingFor(world, classId);
+        return (
+          <button
+            className="toolbox-panel"
+            data-testid={`toolbox-panel-${classId}`}
+            data-remaining={remaining}
+            type="button"
+            key={classId}
+            aria-label={`Deploy ${classId} (${remaining} left)`}
+            disabled={remaining <= 0}
+            onPointerDown={(event) => {
+              // releasing capture lets the drop land on the stage; synthetic
+              // pointers have no capture and would throw InvalidPointerId
+              try {
+                (event.currentTarget as Element).releasePointerCapture(event.pointerId);
+              } catch {}
+              onArm(classId);
+            }}
+            onPointerUp={onDisarm}
+          >
+            <ClassSpriteThumb classId={classId} />
+            <span className="toolbox-count">{remaining}</span>
+          </button>
+        );
+      })}
     </div>
   );
 }
 
+/** Root React component — wires sim, render, audio, and save persistence. */
 export function App({
   saveRepository = getSaveRepository(),
 }: {
@@ -1282,17 +1443,13 @@ export function App({
 } = {}) {
   const repositoryRef = useRef(saveRepository);
   const [mode, setMode] = useState<Mode>("landing");
-  const [selectedClass, setSelectedClass] = useState("knight");
   const [latestSave, setLatestSave] = useState<SaveSlotSummary | null>(null);
-  const pickerRoster = useMemo(() => {
-    if (!latestSave) return centeredRoster(classes.roster);
-    const saved = parseSavedSnapshot(latestSave.snapshotJson);
-    return centeredRoster(saved.incrementalProgress?.unlockedClassIds ?? classes.roster);
-  }, [latestSave]);
   const [settings, setSettings] = useState<GameSettings>(DEFAULT_SETTINGS);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [world, setWorld] = useState<World | null>(null);
   const worldRef = useRef<World | null>(null);
+  // AUTO run seed counter — each press varies the seeded headless sim
+  const autoSeedRef = useRef(0);
 
   // koota caps live worlds at 16: every run replaces the world, so the old
   // one must be destroyed or long sessions crash
@@ -1317,6 +1474,10 @@ export function App({
   const [panelOpen, setPanelOpen] = useState(false);
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(DEFAULT_SETTINGS.muted);
+  // battle fast-forward (top bar); the loop reads the ref so a speed
+  // change applies without re-arming the animation frame
+  const [timeScale, setTimeScale] = useState(1);
+  const timeScaleRef = useRef(1);
   const [inspectionFeedback, setInspectionFeedback] =
     useState<InspectionFeedbackState>(EMPTY_INSPECTION_FEEDBACK);
   const [deviceProfile, setDeviceProfile] = useState<DeviceProfile>(() =>
@@ -1325,21 +1486,24 @@ export function App({
   const pausePanelRef = usePanelEntrance(paused && mode === "playing" ? "pause-open" : "pause");
   const endPanelRef = usePanelEntrance(mode === "gameover" ? mode : "end");
   const [audioDebug, setAudioDebug] = useState<AudioDebugState>({
-    label: "Tone",
+    label: "howler",
     ready: false,
     muted: false,
     theme: "",
     sfxPlayed: 0,
   });
   const inputRef = useRef<InputState>(emptyInput());
+  /** input observability: journeys assert presses actually reach the sim */
+  const inputStats = useRef({ aPresses: 0, attackCalls: 0, drops: 0, deploys: 0, dragArms: 0 });
+  const dragClassRef = useRef<string | null>(null);
   const snapshotRef = useRef<UiSnapshot>(EMPTY_SNAPSHOT);
-  const audioRef = useRef<ToneAudioEngine | null>(null);
+  const audioRef = useRef<GameAudioEngine | null>(null);
   const mapIntroSeenRef = useRef(new Set<string>());
   const zoneEnteredRef = useRef(new Set<string>());
   const exploredRef = useRef(new Map<string, Set<string>>());
 
   useEffect(() => {
-    audioRef.current = createToneAudioEngine();
+    audioRef.current = createGameAudioEngine();
     setAudioDebug(audioRef.current.debugState());
     return () => audioRef.current?.dispose();
   }, []);
@@ -1428,7 +1592,8 @@ export function App({
     (nextWorld: World, mapId: string, classId: string, spawnId?: string) => {
       inputRef.current = emptyInput();
       setShopState(null);
-      instantiateMap(nextWorld, mapId, { classId, spawnId });
+      // rail command: the field has no player pawn — units are the allies
+      instantiateMap(nextWorld, mapId, { classId, spawnId, withPlayer: false });
       zoneEnteredRef.current.clear();
       audioRef.current?.setTheme(getMap(mapId).bgmTheme);
       pushEvent(nextWorld, { type: "map:entered", mapId });
@@ -1442,8 +1607,11 @@ export function App({
 
   const startGame = useCallback(
     (options: StartOptions = {}) => {
-      const classId = options.classId ?? selectedClass;
-      const mapId = options.mapId ?? incremental.loop.startMap;
+      const classId = options.classId ?? incremental.classes.starting;
+      // a run plays the player's furthest unlocked map (map DAG — no jumping);
+      // an explicit options.mapId (continue/test seam) still wins
+      const startProgress = options.incrementalProgress ?? snapshotRef.current.incrementalProgress;
+      const mapId = options.mapId ?? currentMap(startProgress);
       const nextWorld = createGameWorld(19);
       autoStartQuests(nextWorld);
       adoptWorld(nextWorld);
@@ -1459,7 +1627,7 @@ export function App({
       if (options.incrementalProgress) {
         // restore before spawning so rank effects (e.g. Knight's Vigor max HP)
         // shape the new run's player
-        restoreIncrementalProgress(nextWorld, options.incrementalProgress, options.gold ?? 0);
+        restoreIncrementalProgress(nextWorld, options.incrementalProgress);
       }
       loadMap(nextWorld, mapId, classId, options.spawnId);
       const player = playerOf(nextWorld);
@@ -1477,16 +1645,26 @@ export function App({
           nextXp: currentLevel?.nextXp ?? 50,
         });
       }
-      if (player && options.gold !== undefined) {
-        player.set(PlayerGold, { value: options.gold });
-      }
       if (player && options.inventory !== undefined) {
         player.set(Inventory, { items: options.inventory });
       }
       refreshSnapshot(nextWorld, { persist: true });
+      // a fresh run starts at real time
+      timeScaleRef.current = 1;
+      setTimeScale(1);
     },
-    [adoptWorld, audioDebug, loadMap, refreshSnapshot, selectedClass],
+    [adoptWorld, audioDebug, loadMap, refreshSnapshot],
   );
+
+  // keep the loop's ref in lockstep with the rendered scale
+  useEffect(() => {
+    timeScaleRef.current = timeScale;
+  }, [timeScale]);
+
+  const cycleSpeed = useCallback(() => {
+    const progress = snapshotRef.current.incrementalProgress;
+    setTimeScale((current) => nextTier(progress, current).scale);
+  }, []);
 
   const continueGame = useCallback(() => {
     if (!latestSave) return;
@@ -1499,7 +1677,6 @@ export function App({
       level: latestSave.level,
       hp: latestSave.hp,
       maxHp: latestSave.maxHp,
-      gold: saved.gold,
       incrementalProgress: saved.incrementalProgress,
       inventory: saved.inventory,
     });
@@ -1521,11 +1698,38 @@ export function App({
   }, [mode]);
 
   const retireRun = useCallback(() => {
+    // retiring closes the run like any other end: the ledger banks
+    const activeWorld = worldRef.current;
+    if (activeWorld) {
+      recordDeathPayout(activeWorld);
+      refreshSnapshot(activeWorld, { persist: true });
+    }
     setPanelOpen(false);
     setShopState(null);
     setPaused(false);
     setMode("gameover");
-  }, []);
+  }, [refreshSnapshot]);
+
+  /**
+   * AUTO (docs/RAIL-COMMAND.md §AUTO): play the frontier map headlessly and
+   * jump to results immediately. Banks the farm whether it wins or loses — a
+   * win shows the rescue results, a loss the gameover ledger (still a farm).
+   */
+  const runAuto = useCallback(() => {
+    const activeWorld = worldRef.current;
+    if (!activeWorld) return;
+    // a per-press seed keeps repeated AUTO chains varied but reproducible
+    autoSeedRef.current += 1;
+    // AUTO chains across the unlocked spine toward the frontier, stopping at
+    // the first loss (docs/RAIL-COMMAND.md §AUTO)
+    const chain = autoChain(activeWorld, autoSeedRef.current * 1000);
+    refreshSnapshot(activeWorld, { persist: true });
+    setPanelOpen(false);
+    setShopState(null);
+    setPaused(false);
+    // cleared the whole frontier → rescue results; a loss stopped it → gameover
+    setMode(chain.clearedFrontier ? "results" : "gameover");
+  }, [refreshSnapshot]);
 
   const openUpgradeGraph = useCallback(() => {
     const current = snapshotRef.current.incrementalProgress;
@@ -1540,12 +1744,12 @@ export function App({
     const current = snapshotRef.current;
     startGame({
       classId: current.classId || "knight",
-      gold: current.incrementalProgress.coins,
       inventory: current.inventory,
       incrementalProgress: {
         ...current.incrementalProgress,
         currentRunCoinsEarned: 0,
         currentRunRosesEarned: 0,
+        currentRunRoadIds: [],
       },
     });
   }, [startGame]);
@@ -1569,7 +1773,8 @@ export function App({
         );
       }
       if (requestedMap) {
-        const classId = playerOf(activeWorld)?.get(IsPlayer)?.classId ?? selectedClass;
+        const classId =
+          playerOf(activeWorld)?.get(IsPlayer)?.classId ?? incremental.classes.starting;
         loadMap(activeWorld, requestedMap.mapId, classId, requestedMap.spawnId);
       }
       if (endGame) {
@@ -1579,7 +1784,7 @@ export function App({
       }
       refreshSnapshot(activeWorld, { persist: !!endGame });
     },
-    [loadMap, refreshSnapshot, selectedClass],
+    [loadMap, refreshSnapshot],
   );
 
   const updateShopFromResult = useCallback((result: ShopTransactionResult) => {
@@ -1668,9 +1873,10 @@ export function App({
   }, [clearOutbox, dialogue, world]);
 
   const pressA = useCallback(() => {
+    inputStats.current.aPresses += 1;
     if (paused) return;
     if (mode === "landing") {
-      setMode("title");
+      startGame();
       return;
     }
     if (mode === "results") {
@@ -1684,10 +1890,6 @@ export function App({
     if (mode === "gameover") {
       // death pays out: the next run keeps the banked wallet
       startNextRun();
-      return;
-    }
-    if (mode === "title") {
-      startGame();
       return;
     }
     if (!world) return;
@@ -1736,8 +1938,6 @@ export function App({
       clearOutbox(world);
       return;
     }
-    aimAtNearestEnemy(world);
-    playerAttack(world);
     clearOutbox(world);
   }, [
     advanceDialogue,
@@ -1777,7 +1977,6 @@ export function App({
         if (pressed) handleShopSell();
         return;
       }
-      playerAbility(world, pressed);
       clearOutbox(world);
     },
     [clearOutbox, dialogue, handleShopSell, mode, paused, shopState, world],
@@ -1817,16 +2016,6 @@ export function App({
       else if (action === "b" && !event.repeat) setB(true);
       else if (action !== "a" && action !== "b" && action !== "pause" && !event.repeat)
         setDirection(action, true);
-      if (mode === "title" && action === "left") {
-        if (pickerRoster.length === 0) return;
-        const idx = pickerRoster.indexOf(selectedClass);
-        setSelectedClass(pickerRoster[(idx + pickerRoster.length - 1) % pickerRoster.length]);
-      }
-      if (mode === "title" && action === "right") {
-        if (pickerRoster.length === 0) return;
-        const idx = pickerRoster.indexOf(selectedClass);
-        setSelectedClass(pickerRoster[(idx + 1) % pickerRoster.length]);
-      }
     };
     const onKeyUp = (event: KeyboardEvent) => {
       const action = keyMap[normalizeKey(event.key)];
@@ -1841,7 +2030,7 @@ export function App({
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("keyup", onKeyUp);
     };
-  }, [mode, pickerRoster, pressA, selectedClass, setB, setDirection, togglePause]);
+  }, [mode, pressA, setB, setDirection, togglePause]);
 
   useEffect(() => {
     if (!world || mode !== "playing") return;
@@ -1851,19 +2040,29 @@ export function App({
     const frame = (now: number) => {
       const dt = Math.min(engine.maxTimestep, (now - last) / 1000);
       last = now;
+      let stepped = false;
       if (!dialogue && !paused && !shopState && mode === "playing") {
-        acc += dt;
-        while (acc >= SIM_DT) {
-          applyInputToWorld(world, inputRef.current);
+        acc += dt * timeScaleRef.current;
+        // the burst is capped so a 100x frame can never lock the loop
+        let budget = engine.timeWarp.maxStepsPerFrame;
+        while (acc >= SIM_DT && budget > 0) {
           step(world, SIM_DT);
           handleZoneTriggers(world, zoneEnteredRef.current);
           clearOutbox(world);
           acc -= SIM_DT;
+          budget -= 1;
+          stepped = true;
         }
+        if (budget === 0) acc = 0; // drop the overflow rather than spiral
       } else {
         playerOf(world)?.set(MoveIntent, { x: 0, y: 0 });
       }
-      refreshSnapshot(world);
+      // the snapshot is UI state — it only needs refreshing when the sim
+      // actually advanced this frame. Menus, pause, dialogue, and gameover get
+      // their snapshot from the explicit refreshSnapshot calls on those
+      // transitions, so skipping here avoids two O(units) world passes (lineVitals
+      // + frontline) every RAF frame while nothing is moving.
+      if (stepped) refreshSnapshot(world);
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);
@@ -1882,13 +2081,26 @@ export function App({
       "data-fx-spawned": String(snapshot.fxSpawned),
       "data-player-pose": snapshot.playerPose,
       "data-boss-phase": snapshot.bossPhase,
+      "data-units": String(snapshot.units),
+      "data-front-y": snapshot.frontY.toFixed(1),
+      "data-front-x": snapshot.frontX.toFixed(1),
+      "data-wave": String(snapshot.wave),
+      "data-withered": String(snapshot.withered),
+      "data-a-presses": String(inputStats.current.aPresses),
+      "data-attack-calls": String(inputStats.current.attackCalls),
+      "data-drops": String(inputStats.current.drops),
+      "data-drag-arms": String(inputStats.current.dragArms),
+      "data-deploys": String(inputStats.current.deploys),
       "data-max-hp": String(snapshot.maxHp),
       "data-hp": String(Math.max(0, Math.ceil(snapshot.hp))),
-      "data-gold": String(snapshot.incrementalProgress.coins),
       "data-coins": String(snapshot.incrementalProgress.coins),
+      "data-gems": String(snapshot.incrementalProgress.gems),
       "data-roses": String(snapshot.incrementalProgress.roses),
       "data-rescue-count": String(snapshot.incrementalProgress.rescueCount),
       "data-purchased-upgrades": snapshot.incrementalProgress.purchasedUpgradeIds.join(","),
+      "data-upgrade-ranks": Object.entries(snapshot.incrementalProgress.upgradeRanks)
+        .map(([id, owned]) => `${id}:${owned}`)
+        .join(","),
       "data-unlocked-classes": snapshot.incrementalProgress.unlockedClassIds.join(","),
       "data-unlocked-route-packs": snapshot.incrementalProgress.unlockedRoutePackIds.join(","),
       "data-selected-upgrade":
@@ -1896,6 +2108,7 @@ export function App({
       "data-inventory": JSON.stringify(snapshot.inventory),
       "data-paused": String(paused),
       "data-muted": String(muted),
+      "data-time-scale": String(timeScale),
       "data-device-profile": deviceProfile,
       "data-sfx-played": String(audioDebug.sfxPlayed),
       "data-inspection-pulses": String(inspectionFeedback.pulses),
@@ -1909,6 +2122,7 @@ export function App({
       mode,
       muted,
       paused,
+      timeScale,
       snapshot.bossPhase,
       snapshot.classId,
       snapshot.enemies,
@@ -1922,6 +2136,11 @@ export function App({
       snapshot.playerX,
       snapshot.playerY,
       snapshot.projectiles,
+      snapshot.units,
+      snapshot.frontY,
+      snapshot.frontX,
+      snapshot.wave,
+      snapshot.withered,
       selectedUpgradeIndex,
     ],
   );
@@ -1960,26 +2179,29 @@ export function App({
           latestSave={latestSave}
           settings={settings}
           settingsOpen={settingsOpen}
-          onNewGame={() => setMode("title")}
+          onNewGame={() => startGame()}
           onContinue={continueGame}
           onToggleSettings={() => setSettingsOpen((open) => !open)}
           onToggleMute={() => setMuted((value) => !value)}
         />
       )}
       {world && (
-        <div className="world-stage-shell" data-testid="world-stage-shell">
+        <div
+          className="world-stage-shell"
+          data-testid="world-stage-shell"
+          onPointerUp={() => {
+            inputStats.current.drops += 1;
+            const classId = dragClassRef.current;
+            dragClassRef.current = null;
+            if (!classId || mode !== "playing") return;
+            if (deployUnit(world, classId)) inputStats.current.deploys += 1;
+            refreshSnapshot(world);
+          }}
+        >
           <GameStage world={world} />
         </div>
       )}
-      {mode === "title" && (
-        <TitleScreen
-          roster={pickerRoster}
-          selected={selectedClass}
-          onSelect={setSelectedClass}
-          onStart={() => startGame()}
-        />
-      )}
-      {world && mode !== "title" && (
+      {world && (
         <>
           <Hud
             snapshot={snapshot}
@@ -1987,12 +2209,27 @@ export function App({
             panelOpen={panelOpen}
             paused={paused}
             muted={muted}
+            timeScale={timeScale}
+            onCycleSpeed={cycleSpeed}
+            onAuto={runAuto}
             onTogglePanel={() => setPanelOpen((open) => !open)}
             onTogglePause={togglePause}
             onToggleMute={() => setMuted((value) => !value)}
             onRetire={retireRun}
           />
-          <VirtualPad setDirection={setDirection} pressA={pressA} setB={setB} />
+          {mode === "playing" && (
+            <UnitToolbox
+              world={world}
+              snapshot={snapshot}
+              onArm={(classId) => {
+                dragClassRef.current = classId;
+                inputStats.current.dragArms += 1;
+              }}
+              onDisarm={() => {
+                dragClassRef.current = null;
+              }}
+            />
+          )}
         </>
       )}
       {dialogue && <DialogueBox dialogue={dialogue} onAdvance={advanceDialogue} />}

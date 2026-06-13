@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-oldwood-1",
+  "label": "Storm the Captured Village",
+  "category": "map",
+  "cost": {
+    "roses": 3,
+    "gems": 30
+  },
+  "prerequisites": ["upgrade:oldwood-bend"],
+  "lairRoom": {
+    "mapId": "map:oldwood-forest",
+    "depth": 1,
+    "roomMap": "map:village"
+  },
+  "unlocks": ["upgrade:lair-oldwood-2"],
+  "track": "roads",
+  "note": "Dragon's Lair entrance (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks): beyond the Oldwood the dragon has nested in a village and enslaved its people. Storming the square relocates the princess into the nest's first room. Rose-OR-gem (roses logarithmic shortcut, gems exponential fallback)."
+}

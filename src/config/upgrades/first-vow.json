@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:first-vow",
+  "label": "First Vow",
+  "category": "relic",
+  "cost": {},
+  "prerequisites": [],
+  "unlocks": [
+    "upgrade:knight-vigor",
+    "upgrade:oldwood-bend",
+    "upgrade:ranger-trail",
+    "upgrade:dragon-wake",
+    "upgrade:battle-tempo"
+  ],
+  "track": "vows"
+}

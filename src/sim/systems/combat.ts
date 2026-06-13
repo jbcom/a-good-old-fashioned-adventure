@@ -10,7 +10,7 @@ import { getItem } from "../../lib/content/registry";
 import { collides } from "../collision";
 import { pushEvent } from "../events";
 import { spawnFx, spawnPickup, spawnProjectile } from "../factories";
-import { recordDeathPayout } from "../incrementalProgress";
+import { bankCoins, recordDeathPayout } from "../incrementalProgress";
 import {
   AimDirection,
   CameraState,
@@ -26,16 +26,17 @@ import {
   IsEnemy,
   IsPickup,
   IsPlayer,
+  KinIdentity,
   Level,
   LootContainer,
   Outbox,
-  PlayerGold,
   Projectile,
   PropRef,
   ShieldState,
   SpriteRef,
   Threat,
   Transform,
+  Withered,
 } from "../traits";
 import { rngFor } from "../worldRng";
 
@@ -76,38 +77,55 @@ function normalizedAim(player: Entity): { x: number; y: number } {
   return { x: aim.x / len, y: aim.y / len };
 }
 
+/** Compute melee damage at a given level. */
 export function meleeDamage(level: number): number {
   return combat.damage.melee.base + level * combat.damage.melee.perLevel;
 }
 
+/** Compute arrow damage at a given level. */
 export function arrowDamage(level: number): number {
   return combat.damage.arrow.base + level * combat.damage.arrow.perLevel;
 }
 
+/** Apply damage and knockback to an enemy, killing it if HP hits zero. */
 export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: number): void {
   const health = enemy.get(Health);
   const transform = enemy.get(Transform);
   if (!health || !transform) return;
+  const archetype = enemies.archetypes[enemy.get(IsEnemy)?.archetypeId ?? ""];
 
   // choreographed bosses soak damage outside their open windows: the dragon
   // is only fully vulnerable in its lull, a stance fighter while not guarding
   const choreo = enemy.get(Choreo);
   if (choreo && choreo.phase !== "") {
-    const archetype = enemies.archetypes[enemy.get(IsEnemy)?.archetypeId ?? ""];
     const phases = archetype?.boss?.phases;
     if (phases && choreo.phase !== "lull") dmg *= phases.armorMultiplier;
     const stance = archetype?.guard?.stance;
     if (stance && choreo.phase === "guard") dmg *= stance.damageMultiplier;
   }
 
+  // the wither softens: a withered enemy takes amplified damage
+  // (single consumption point — damageEnemy IS every damage path)
+  if ((enemy.get(Withered)?.left ?? 0) > 0) dmg *= combat.wither.damageTakenFactor;
+
   const hp = health.hp - dmg;
-  enemy.set(Transform, { ...transform, x: transform.x + knockDir * combat.knockback.enemyOnHit });
+  // anchored guardians hold their post: blows never slide them off it —
+  // an immovable turret can otherwise be knocked beyond sword reach
+  if (!archetype?.knockbackImmune) {
+    enemy.set(Transform, {
+      ...transform,
+      x: transform.x + knockDir * combat.knockback.enemyOnHit,
+    });
+  }
   if (enemy.has(HitFlash)) enemy.set(HitFlash, { left: combat.feedback.enemyHitFlashDuration });
   else enemy.add(HitFlash({ left: combat.feedback.enemyHitFlashDuration }));
   shake(world, combat.screenShake.onEnemyHit);
 
   if (hp <= 0) {
     const archetypeId = enemy.get(IsEnemy)?.archetypeId ?? "";
+    const bounty = enemy.get(IsEnemy)?.bounty ?? 0;
+    // capture the kin relation before destroy so the rescue quip can track it
+    const kinRelation = enemy.get(KinIdentity)?.relation ?? "";
     const maxHp = health.maxHp;
     const { x, y } = transform;
     const ghost = enemy.get(SpriteRef);
@@ -135,13 +153,14 @@ export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: 
         spawnPickup(world, roll.item, x + (roll.offsetX ?? 0), y, 0);
       }
     }
-    pushEvent(world, { type: "enemy:defeated", archetypeId, x, y });
+    pushEvent(world, { type: "enemy:defeated", archetypeId, bounty, kinRelation, x, y });
   } else {
     enemy.set(Health, { hp, maxHp: health.maxHp });
     sfx(world, "hurt");
   }
 }
 
+/** Apply damage to the player, granting iframes after the hit. */
 export function damagePlayer(world: World, amount: number, iframes: number): void {
   const player = world.queryFirst(IsPlayer);
   if (!player) return;
@@ -227,6 +246,7 @@ export function playerAttack(world: World): void {
   }
 }
 
+/** Open a chest, spilling its loot into the world. */
 export function openChest(world: World, chest: Entity): void {
   const loot = chest.get(LootContainer);
   if (!loot || loot.opened) return;
@@ -261,8 +281,9 @@ export function applyItemPickup(world: World, itemId: string, value: number): vo
       if (flags) flags.values[op.setFlag as string] = true;
     }
     if ("grantGold" in op) {
-      const gold = player.get(PlayerGold);
-      if (gold) player.set(PlayerGold, { value: gold.value + value });
+      // treasure banks straight into the single incremental wallet —
+      // a death after a good haul still pays (death-pays-out rule)
+      bankCoins(world, value);
     }
     if ("maxHpUp" in op) {
       const health = player.get(Health);
@@ -387,10 +408,15 @@ export function combatStep(world: World, dt: number): void {
     if (dist < combat.hitboxes.touchRadius) {
       if (player.get(ShieldState)?.active) {
         const facing = player.get(Facing);
-        enemy.set(Transform, {
-          ...et,
-          x: et.x - (facing?.dir ?? 1) * combat.knockback.enemyOffShield,
-        });
+        // anchored guardians shrug the shield off too — knockbackImmune
+        // holds on every displacement path, not just sword blows
+        const archetype = enemies.archetypes[enemy.get(IsEnemy)?.archetypeId ?? ""];
+        if (!archetype?.knockbackImmune) {
+          enemy.set(Transform, {
+            ...et,
+            x: et.x - (facing?.dir ?? 1) * combat.knockback.enemyOffShield,
+          });
+        }
         sfx(world, "shield");
       } else {
         damagePlayer(world, combat.damage.enemyTouch, 0.5);

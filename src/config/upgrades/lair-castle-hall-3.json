@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-castle-hall-3",
+  "label": "Storm the Throne Wing",
+  "category": "map",
+  "cost": {
+    "roses": 9,
+    "gems": 300
+  },
+  "prerequisites": ["upgrade:lair-castle-hall-2"],
+  "lairRoom": {
+    "mapId": "map:castle-hall",
+    "depth": 3,
+    "roomMap": "map:castle-throne-wing"
+  },
+  "unlocks": [],
+  "track": "castle",
+  "note": "Dragon's Lair heart (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks): the deepest room on the spine — the great-elder dragon's throne wing, where the throne-warden holds the dais and the princess is caged above it. Storming the wing relocates the princess HERE (deepest room); once the great-elder kin is unlocked he relocates to this room and overlays the warden climax. The final, costliest lair node. Rose-OR-gem (roses logarithmic shortcut, gems exponential fallback)."
+}

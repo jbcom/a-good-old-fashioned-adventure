@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "barrow-rat",
+  "name": "Barrow Rat",
+  "sprite": "sprite:rat",
+  "palette": "palette:base",
+  "family": "barrow-rat",
+  "hp": 8,
+  "speed": 48,
+  "hitbox": {
+    "w": 8,
+    "h": 8
+  },
+  "behavior": "patrol"
+}

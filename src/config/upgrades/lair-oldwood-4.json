@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-oldwood-4",
+  "label": "Free the Stable Captives",
+  "category": "map",
+  "cost": {
+    "roses": 6,
+    "gems": 150
+  },
+  "prerequisites": ["upgrade:lair-oldwood-3"],
+  "lairRoom": {
+    "mapId": "map:oldwood-forest",
+    "depth": 4,
+    "roomMap": "map:village-stable"
+  },
+  "unlocks": ["upgrade:lair-oldwood-5"],
+  "track": "roads",
+  "note": "Captured-village lair, room 4: the stables where the dragon pens the villagers it has enslaved. Breaking the line here frees captives and pushes the princess toward the nest's heart. Rose-OR-gem, growing along the lair."
+}

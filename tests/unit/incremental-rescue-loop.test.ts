@@ -121,28 +121,45 @@ describe("incremental rescue loop contract", () => {
     expect(coinNodes).toBeGreaterThanOrEqual(5);
   });
 
-  it("prices majors in roses and connector ranks in coins", () => {
+  it("prices by the three-currency model: majors in gems, connectors in coins, dragon track rose-OR-gem", () => {
+    // docs/RAIL-COMMAND.md §Three currencies: new things (maps/classes/enemies)
+    // cost GEMS; multi-rank connectors cost COINS; the dragon track is an
+    // OR-cost (roses AND gems both listed — pay either).
     const nodes = incremental.upgradeGraph.nodes;
     let coinRankTotal = 0;
-    let roseMajors = 0;
+    let gemMajors = 0;
     for (const node of nodes) {
       if (node.id === incremental.upgradeGraph.root) continue;
       const ranks = node.ranks ?? 1;
+      const isOrCost = (node.cost.roses ?? 0) > 0 && (node.cost.gems ?? 0) > 0;
+      if (isOrCost) {
+        // the dragon track: rose shortcut OR gem fallback — both listed
+        continue;
+      }
       if (ranks > 1) {
         // multi-rank connectors are pure coin tracks with growing per-rank cost
         expect(node.cost.coins ?? 0, `${node.id} ranks need coin pricing`).toBeGreaterThan(0);
         expect(node.cost.roses ?? 0, `${node.id} ranks must not cost roses`).toBe(0);
         expect(node.rankCostGrowth ?? 1, `${node.id} needs growing rank cost`).toBeGreaterThan(1);
         coinRankTotal += ranks;
-      } else {
-        // single-purchase nodes are the majors: rose-priced branching points
-        expect(node.cost.roses ?? 0, `${node.id} majors unlock with roses`).toBeGreaterThan(0);
+      } else if (["enemy", "map", "route", "class"].includes(node.category)) {
+        // new-thing majors unlock with gems, not coins
+        expect(node.cost.gems ?? 0, `${node.id} majors unlock with gems`).toBeGreaterThan(0);
         expect(node.cost.coins ?? 0, `${node.id} majors must not cost coins`).toBe(0);
-        roseMajors += 1;
+        gemMajors += 1;
+      } else {
+        // remaining single-purchase nodes (relic/ability boons like
+        // battle-tempo, princess-boon, ranger-leap-rose) must still carry a
+        // coherent single-currency price — never an empty or multi-currency
+        // cost outside the dragon track's OR-cost (reviewer Issue 2).
+        const currencies = [node.cost.coins ?? 0, node.cost.gems ?? 0, node.cost.roses ?? 0].filter(
+          (amount) => amount > 0,
+        );
+        expect(currencies.length, `${node.id} needs exactly one currency price`).toBe(1);
       }
     }
-    // significantly more coin-based incremental steps than rose majors
-    expect(coinRankTotal).toBeGreaterThanOrEqual(Math.ceil(roseMajors * 1.5));
+    // significantly more coin-based incremental steps than gem majors
+    expect(coinRankTotal).toBeGreaterThanOrEqual(Math.ceil(gemMajors * 1.5));
   });
 
   it("gives every class including the knight its own coin-funded ranked track", () => {
@@ -221,8 +238,12 @@ describe("incremental rescue loop contract", () => {
     for (const classId of incremental.classes.unlockable) {
       expect(classes.classes, classId).toHaveProperty(classId);
       expect(classes.roster, `${classId} should require upgrade unlock`).not.toContain(classId);
-      const unlockNode = incremental.upgradeGraph.nodes.find((node) => node.classId === classId);
-      expect(unlockNode?.category, `${classId} needs class node`).toBe("class");
+      // the class-GRANTING node (category:class), not just any node tagged with
+      // the classId — order-independent now nodes glob from per-file dir
+      const grantingNode = incremental.upgradeGraph.nodes.find(
+        (node) => node.classId === classId && node.category === "class",
+      );
+      expect(grantingNode, `${classId} needs exactly one class-granting node`).toBeDefined();
     }
   });
 

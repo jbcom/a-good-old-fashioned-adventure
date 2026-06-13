@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { combat } from "../../src/lib/config";
-import { getSprite } from "../../src/lib/content/registry";
+import { getCharacterSprite } from "../../src/lib/content/registry";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import { damageEnemy, playerAttack } from "../../src/sim/systems/combat";
 import { step } from "../../src/sim/tick";
@@ -22,7 +22,7 @@ describe("S9.16 combat and motion feel", () => {
     const fx = bursts[0].get(FxBurst);
     expect(fx?.kind).toBe("swing");
     expect(fx?.total).toBe(combat.feedback.swingFxDuration);
-    expect(getSprite(fx?.spriteId ?? "").rows.length).toBeGreaterThan(0);
+    expect(getCharacterSprite(fx?.spriteId ?? "").rows.length).toBeGreaterThan(0);
     expect(world.get(FxStats)?.spawned).toBe(1);
 
     step(world, combat.feedback.swingFxDuration + 0.05);

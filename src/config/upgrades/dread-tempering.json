@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dread-tempering",
+  "label": "Dread Tempering",
+  "category": "ability",
+  "track": "characters",
+  "cost": {
+    "coins": 40
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.6,
+  "prerequisites": ["upgrade:dread-knight"],
+  "classId": "dread-knight",
+  "unlocks": [],
+  "effect": {
+    "maxHp": 14
+  },
+  "note": "The fused plate hardens: more dread knight health per rank.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 64,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
+}

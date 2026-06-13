@@ -185,17 +185,14 @@ describe("authored pixel-art richness", () => {
       ]),
     );
 
+    // the interiors are now captured-village lair rooms (the dragon's nest); each
+    // keeps its storybook prop vocabulary, dressed to the ransacked theme
     expect([...propRefs(getMap("map:village-house"))]).toContain("prop:table");
     expect([...propRefs(getMap("map:village-shop"))]).toEqual(
-      expect.arrayContaining(["prop:barrel", "prop:shop-shelf", "prop:shop-ledger"]),
+      expect.arrayContaining(["prop:barrel", "prop:shop-shelf", "prop:table"]),
     );
     expect([...propRefs(getMap("map:village-tavern"))]).toEqual(
-      expect.arrayContaining([
-        "prop:table",
-        "prop:tavern-bench",
-        "prop:hearth-song-board",
-        "prop:story-quilt",
-      ]),
+      expect.arrayContaining(["prop:table", "prop:tavern-bench", "prop:story-quilt"]),
     );
     expect([...propRefs(getMap("map:village-stable"))]).toEqual(
       expect.arrayContaining([

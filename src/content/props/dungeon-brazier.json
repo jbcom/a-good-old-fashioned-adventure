@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:dungeon-brazier",
+  "kind": "prop",
+  "description": "Lit stone brazier sliced from the Backterria mega-sheet (Fantasy props row) — dungeon light source breaking the bare-corridor read.",
+  "grid": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 16 },
+  "solid": true,
+  "states": {
+    "default": {
+      "sheet": { "image": "tilemaps/roguelike.png", "x": 80, "y": 368, "w": 16, "h": 16 }
+    }
+  },
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

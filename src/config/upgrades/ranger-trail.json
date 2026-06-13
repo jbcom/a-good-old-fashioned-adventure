@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:ranger-trail",
+  "label": "Ranger Trail",
+  "category": "class",
+  "cost": {
+    "gems": 8
+  },
+  "prerequisites": ["upgrade:first-vow"],
+  "classId": "ranger",
+  "unlocks": ["upgrade:ranger-craft", "upgrade:ranger-leap-rose", "upgrade:wizard-focus"],
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 176,
+    "y": 560,
+    "w": 16,
+    "h": 16
+  }
+}

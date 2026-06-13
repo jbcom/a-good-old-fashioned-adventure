@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-sunken-road-2",
+  "label": "Delve the Crypt Depths",
+  "category": "map",
+  "cost": {
+    "roses": 6,
+    "gems": 130
+  },
+  "prerequisites": ["upgrade:lair-sunken-road-1"],
+  "lairRoom": {
+    "mapId": "map:sunken-road",
+    "depth": 2,
+    "roomMap": "map:castle-dungeon"
+  },
+  "unlocks": ["upgrade:lair-sunken-road-3"],
+  "track": "roads",
+  "note": "Deeper Dragon's Lair room: the princess relocates further into the crypt. Rose-OR-gem, growing along the lair (roses logarithmic, gems exponential)."
+}

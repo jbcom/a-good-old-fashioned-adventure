@@ -3,6 +3,7 @@
  * every roll goes through a stream created from the world's RngState so
  * playthroughs replay exactly.
  */
+/** Deterministic random generator with next(), int(), and chance() methods. */
 export interface Rng {
   /** [0, 1) */
   next(): number;
@@ -12,6 +13,7 @@ export interface Rng {
   chance(p: number): boolean;
 }
 
+/** Create a deterministic RNG from a seed. */
 export function createRng(seed: number): Rng {
   let state = seed >>> 0;
   const next = () => {

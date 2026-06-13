@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "cellar-rat",
+  "name": "Cellar Rat",
+  "sprite": "sprite:rat",
+  "palette": "palette:base",
+  "family": "rat",
+  "hp": 14,
+  "speed": 40,
+  "hitbox": {
+    "w": 10,
+    "h": 8
+  },
+  "behavior": "patrol"
+}

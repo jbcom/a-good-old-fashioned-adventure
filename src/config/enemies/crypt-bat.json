@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "crypt-bat",
+  "name": "Crypt Bat",
+  "sprite": "sprite:bat",
+  "palette": "palette:base",
+  "family": "crypt-bat",
+  "hp": 10,
+  "speed": 52,
+  "hitbox": {
+    "w": 8,
+    "h": 8
+  },
+  "behavior": "patrol"
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:bard-meter",
+  "label": "Bard's Marching Meter",
+  "category": "ability",
+  "cost": {
+    "coins": 35
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.6,
+  "prerequisites": ["upgrade:bard-road-song"],
+  "classId": "bard",
+  "unlocks": [],
+  "note": "Coin-ranked bard track deepening the rose-unlocked class.",
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 96,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
+}

@@ -11,7 +11,8 @@
     "startMap": "map:rescue-route",
     "coreRunRequiresCastleInterior": false,
     "resultsMode": "upgrade-graph",
-    "targetGameplayAreaPercentPhone": 80
+    "targetGameplayAreaPercentPhone": 80,
+    "rescueRadius": 48
   },
   "currencies": {
     "coins": {
@@ -53,281 +54,14 @@
     "minibossDefeated": {
       "currency": "coins",
       "base": 15
+    },
+    "dragonGems": {
+      "currency": "gems",
+      "base": 4
     }
   },
   "upgradeGraph": {
     "root": "upgrade:first-vow",
-    "nodes": [
-      {
-        "id": "upgrade:first-vow",
-        "label": "First Vow",
-        "category": "relic",
-        "cost": {},
-        "prerequisites": [],
-        "unlocks": [
-          "upgrade:knight-vigor",
-          "upgrade:oldwood-bend",
-          "upgrade:ranger-trail",
-          "upgrade:dragon-wake"
-        ],
-        "track": "vows"
-      },
-      {
-        "id": "upgrade:knight-vigor",
-        "label": "Knight's Vigor",
-        "category": "ability",
-        "cost": {
-          "coins": 10
-        },
-        "ranks": 5,
-        "rankCostGrowth": 1.6,
-        "prerequisites": ["upgrade:first-vow"],
-        "classId": "knight",
-        "effect": {
-          "maxHp": 10
-        },
-        "unlocks": [],
-        "note": "Coin-ranked knight track: extra health per rank for the starting class.",
-        "track": "characters"
-      },
-      {
-        "id": "upgrade:oldwood-bend",
-        "label": "Oldwood Bend",
-        "category": "route",
-        "cost": {
-          "roses": 1
-        },
-        "prerequisites": ["upgrade:first-vow"],
-        "routePack": "oldwood",
-        "unlocks": [
-          "upgrade:road-provisions",
-          "upgrade:thornwood-mastered",
-          "upgrade:rogue-shortcut"
-        ],
-        "track": "roads"
-      },
-      {
-        "id": "upgrade:ranger-trail",
-        "label": "Ranger Trail",
-        "category": "class",
-        "cost": {
-          "roses": 1
-        },
-        "prerequisites": ["upgrade:first-vow"],
-        "classId": "ranger",
-        "unlocks": ["upgrade:ranger-craft", "upgrade:ranger-leap-rose"],
-        "track": "characters"
-      },
-      {
-        "id": "upgrade:dragon-wake",
-        "label": "Dragon Wake",
-        "category": "enemy",
-        "cost": {
-          "roses": 2
-        },
-        "prerequisites": ["upgrade:first-vow"],
-        "enemyFamily": "dragon",
-        "unlocks": ["upgrade:orc-warband", "upgrade:sorcerer-cinder"],
-        "track": "encounters"
-      },
-      {
-        "id": "upgrade:road-provisions",
-        "label": "Road Provisions",
-        "category": "relic",
-        "cost": {
-          "coins": 12
-        },
-        "ranks": 5,
-        "rankCostGrowth": 1.5,
-        "prerequisites": ["upgrade:oldwood-bend"],
-        "unlocks": [],
-        "note": "Coin-ranked run conveniences that compress repeated travel without skipping the rescue.",
-        "track": "vows"
-      },
-      {
-        "id": "upgrade:ranger-craft",
-        "label": "Ranger Fieldcraft",
-        "category": "ability",
-        "cost": {
-          "coins": 20
-        },
-        "ranks": 3,
-        "rankCostGrowth": 1.6,
-        "prerequisites": ["upgrade:ranger-trail"],
-        "classId": "ranger",
-        "unlocks": [],
-        "note": "Coin-ranked ranger track deepening the rose-unlocked class.",
-        "track": "characters"
-      },
-      {
-        "id": "upgrade:orc-warband",
-        "label": "Orc Warband",
-        "category": "enemy",
-        "cost": {
-          "coins": 25
-        },
-        "ranks": 3,
-        "rankCostGrowth": 1.7,
-        "prerequisites": ["upgrade:dragon-wake"],
-        "enemyFamily": "orc",
-        "unlocks": [],
-        "note": "Adversarial coin rank: one more orc on route maps per rank \u2014 harder roads, but every orc pays coins.",
-        "track": "encounters"
-      },
-      {
-        "id": "upgrade:thornwood-mastered",
-        "label": "Thornwood Mastered",
-        "category": "map",
-        "cost": {
-          "roses": 2
-        },
-        "prerequisites": ["upgrade:oldwood-bend"],
-        "routePack": "deep-forest",
-        "unlocks": ["upgrade:bard-road-song"],
-        "track": "roads"
-      },
-      {
-        "id": "upgrade:rogue-shortcut",
-        "label": "Rogue Shortcut",
-        "category": "class",
-        "cost": {
-          "roses": 2
-        },
-        "prerequisites": ["upgrade:oldwood-bend"],
-        "classId": "rogue",
-        "unlocks": ["upgrade:rogue-knives", "upgrade:sunken-shortcut"],
-        "track": "characters"
-      },
-      {
-        "id": "upgrade:ranger-leap-rose",
-        "label": "Princess-Fletched Leap",
-        "category": "ability",
-        "cost": {
-          "roses": 3
-        },
-        "prerequisites": ["upgrade:ranger-trail"],
-        "classId": "ranger",
-        "ability": "leap",
-        "unlocks": [],
-        "track": "characters"
-      },
-      {
-        "id": "upgrade:sorcerer-cinder",
-        "label": "Sorcerer Cinder",
-        "category": "class",
-        "cost": {
-          "roses": 3
-        },
-        "prerequisites": ["upgrade:dragon-wake"],
-        "classId": "sorcerer",
-        "unlocks": ["upgrade:sorcerer-emberweave", "upgrade:castle-candle-loop"],
-        "track": "characters"
-      },
-      {
-        "id": "upgrade:rogue-knives",
-        "label": "Rogue Knife Work",
-        "category": "ability",
-        "cost": {
-          "coins": 30
-        },
-        "ranks": 3,
-        "rankCostGrowth": 1.6,
-        "prerequisites": ["upgrade:rogue-shortcut"],
-        "classId": "rogue",
-        "unlocks": [],
-        "note": "Coin-ranked rogue track deepening the rose-unlocked class.",
-        "track": "characters"
-      },
-      {
-        "id": "upgrade:bard-road-song",
-        "label": "Bard's Road Song",
-        "category": "class",
-        "cost": {
-          "roses": 3
-        },
-        "prerequisites": ["upgrade:thornwood-mastered"],
-        "classId": "bard",
-        "unlocks": ["upgrade:bard-meter", "upgrade:princess-boon"],
-        "track": "characters"
-      },
-      {
-        "id": "upgrade:sunken-shortcut",
-        "label": "Sunken Road Shortcut",
-        "category": "route",
-        "cost": {
-          "roses": 3
-        },
-        "prerequisites": ["upgrade:rogue-shortcut"],
-        "routePack": "sunken-road",
-        "unlocks": ["upgrade:castle-approach-siege"],
-        "track": "roads"
-      },
-      {
-        "id": "upgrade:sorcerer-emberweave",
-        "label": "Sorcerer Emberweave",
-        "category": "ability",
-        "cost": {
-          "coins": 40
-        },
-        "ranks": 3,
-        "rankCostGrowth": 1.6,
-        "prerequisites": ["upgrade:sorcerer-cinder"],
-        "classId": "sorcerer",
-        "unlocks": [],
-        "note": "Coin-ranked sorcerer track deepening the rose-unlocked class.",
-        "track": "characters"
-      },
-      {
-        "id": "upgrade:bard-meter",
-        "label": "Bard's Marching Meter",
-        "category": "ability",
-        "cost": {
-          "coins": 35
-        },
-        "ranks": 3,
-        "rankCostGrowth": 1.6,
-        "prerequisites": ["upgrade:bard-road-song"],
-        "classId": "bard",
-        "unlocks": [],
-        "note": "Coin-ranked bard track deepening the rose-unlocked class.",
-        "track": "characters"
-      },
-      {
-        "id": "upgrade:castle-approach-siege",
-        "label": "Siege Approach",
-        "category": "map",
-        "cost": {
-          "roses": 4
-        },
-        "prerequisites": ["upgrade:sunken-shortcut"],
-        "routePack": "castle-approach",
-        "unlocks": [],
-        "track": "roads"
-      },
-      {
-        "id": "upgrade:castle-candle-loop",
-        "label": "Candlelit Castle Loop",
-        "category": "route",
-        "cost": {
-          "roses": 5
-        },
-        "prerequisites": ["upgrade:sorcerer-cinder"],
-        "routePack": "castle-interior",
-        "unlocks": [],
-        "track": "castle"
-      },
-      {
-        "id": "upgrade:princess-boon",
-        "label": "Princess Boon",
-        "category": "relic",
-        "cost": {
-          "roses": 4
-        },
-        "prerequisites": ["upgrade:bard-road-song"],
-        "unlocks": [],
-        "track": "vows"
-      }
-    ],
     "ringOrder": ["vows", "characters", "encounters", "roads", "castle"],
     "trackEntries": {
       "vows": "upgrade:first-vow",
@@ -340,7 +74,19 @@
   },
   "classes": {
     "starting": "knight",
-    "unlockable": ["ranger", "rogue", "bard", "sorcerer"]
+    "unlockable": [
+      "ranger",
+      "wizard",
+      "rogue",
+      "bard",
+      "sorcerer",
+      "priest",
+      "warlock",
+      "barbarian",
+      "dread-knight",
+      "shaman",
+      "stormcaller"
+    ]
   },
   "routePacks": [
     {
@@ -373,5 +119,51 @@
       "maps": ["map:castle-hall", "map:castle-library", "map:castle-armory"],
       "role": "rose-gated side loop with scribe and heraldic objectives"
     }
-  ]
+  ],
+  "mapDag": {
+    "comment": "Successive map progression (docs/RAIL-COMMAND.md §Map DAG — no jumping): an ordered list of route maps. A run plays the player's furthest UNLOCKED map; clearing it (felling the kin boss) unlocks the next via its gem major. The princess always sits at the last unlocked map; the castle node relocates the castle to the last map and the princess into it. Side maps (interiors) hang off their route map and are not part of the linear spine.",
+    "order": [
+      "map:rescue-route",
+      "map:oldwood-forest",
+      "map:deep-forest",
+      "map:sunken-road",
+      "map:castle-approach",
+      "map:castle-hall"
+    ],
+    "princessAtLastUnlocked": true,
+    "castleNode": "upgrade:castle-candle-loop",
+    "castleMap": "map:castle-hall"
+  },
+  "mapLairs": {
+    "map:rescue-route": {
+      "theme": "roadside-barrow",
+      "rooms": ["map:barrow-mouth", "map:barrow-deep"]
+    },
+    "map:oldwood-forest": {
+      "theme": "captured-village",
+      "rooms": [
+        "map:village",
+        "map:village-house",
+        "map:village-shop",
+        "map:village-stable",
+        "map:village-tavern"
+      ]
+    },
+    "map:deep-forest": {
+      "theme": "thornwood-hollow",
+      "rooms": ["map:thornwood-grove", "map:thornwood-warren", "map:thornwood-deep"]
+    },
+    "map:sunken-road": {
+      "theme": "sunken-crypt",
+      "rooms": ["map:desert-ruins", "map:castle-dungeon", "map:crypt-vault"]
+    },
+    "map:castle-approach": {
+      "theme": "siege-warcamp",
+      "rooms": ["map:castle-yard"]
+    },
+    "map:castle-hall": {
+      "theme": "throne-wing",
+      "rooms": ["map:castle-library", "map:castle-armory", "map:castle-throne-wing"]
+    }
+  }
 }

@@ -4,9 +4,15 @@
   "companionRoster": ["knight", "ranger", "wizard"],
   "classes": {
     "knight": {
-      "sprite": "sprite:hero",
+      "sprite": "sprite:fighter",
       "palette": "palette:knight",
-      "attack": { "kind": "melee", "reach": 42, "arcHeight": 24, "cooldown": 0.32 },
+      "attack": {
+        "kind": "melee",
+        "reach": 42,
+        "arcHeight": 24,
+        "cooldown": 0.32,
+        "voice": "attack-blade"
+      },
       "ability": {
         "kind": "shield",
         "label": "SHIELD",
@@ -15,18 +21,29 @@
         "deflectsProjectiles": true,
         "contactKnockback": 18,
         "sfx": "shield"
+      },
+      "temperament": {
+        "verb": "charge",
+        "engage": 34,
+        "chargeSpeedMultiplier": 1.7,
+        "hp": 80,
+        "speed": 52
       }
     },
     "ranger": {
-      "sprite": "sprite:hero",
+      "sprite": "sprite:archer",
       "palette": "palette:ranger",
       "attack": {
         "kind": "projectile",
         "projectile": "arrow",
         "speed": 180,
-        "life": 2.0,
-        "muzzleOffset": { "x": 10, "y": -6 },
-        "cooldown": 0.32
+        "life": 2,
+        "muzzleOffset": {
+          "x": 10,
+          "y": -6
+        },
+        "cooldown": 0.32,
+        "voice": "attack-blade"
       },
       "ability": {
         "kind": "leap",
@@ -35,22 +52,33 @@
         "spreadAngles": [-0.15, 0, 0.15],
         "spreadSpeed": 140,
         "spreadLife": 1.5,
-        "cooldown": 1.0,
+        "cooldown": 1,
         "iframes": 0.25,
         "dashDuration": 0.25,
         "sfx": "dash"
+      },
+      "temperament": {
+        "verb": "hold-range",
+        "engage": 120,
+        "keepDistance": 72,
+        "hp": 55,
+        "speed": 34
       }
     },
     "wizard": {
-      "sprite": "sprite:hero",
+      "sprite": "sprite:grey-mage",
       "palette": "palette:wizard",
       "attack": {
         "kind": "projectile",
         "projectile": "magic-bolt",
         "speed": 160,
-        "life": 2.0,
-        "muzzleOffset": { "x": 10, "y": -6 },
-        "cooldown": 0.4
+        "life": 2,
+        "muzzleOffset": {
+          "x": 10,
+          "y": -6
+        },
+        "cooldown": 0.4,
+        "voice": "attack-arcane"
       },
       "ability": {
         "kind": "blink",
@@ -62,13 +90,26 @@
         "dashDuration": 0.2,
         "trailParticles": 4,
         "sfx": "dash"
+      },
+      "temperament": {
+        "verb": "hold-range",
+        "engage": 110,
+        "keepDistance": 64,
+        "hp": 50,
+        "speed": 32
       }
     },
     "rogue": {
       "playable": false,
-      "sprite": "sprite:hero",
+      "sprite": "sprite:rogue",
       "palette": "palette:rogue",
-      "attack": { "kind": "melee", "reach": 18, "arcHeight": 24, "cooldown": 0.16 },
+      "attack": {
+        "kind": "melee",
+        "reach": 18,
+        "arcHeight": 24,
+        "cooldown": 0.16,
+        "voice": "attack-blade"
+      },
       "ability": {
         "kind": "blink",
         "label": "CLOAK",
@@ -79,19 +120,31 @@
         "dashDuration": 0.2,
         "trailParticles": 4,
         "sfx": "dash"
+      },
+      "temperament": {
+        "verb": "flank",
+        "engage": 30,
+        "lateralOffset": 44,
+        "chargeSpeedMultiplier": 1.5,
+        "hp": 60,
+        "speed": 58
       }
     },
     "bard": {
       "playable": false,
-      "sprite": "sprite:hero",
+      "sprite": "sprite:red-mage",
       "palette": "palette:bard",
       "attack": {
         "kind": "projectile",
         "projectile": "song-note",
         "speed": 140,
         "life": 1.8,
-        "muzzleOffset": { "x": 10, "y": -6 },
-        "cooldown": 0.48
+        "muzzleOffset": {
+          "x": 10,
+          "y": -6
+        },
+        "cooldown": 0.48,
+        "voice": "attack-arcane"
       },
       "ability": {
         "kind": "shield",
@@ -101,19 +154,32 @@
         "deflectsProjectiles": true,
         "contactKnockback": 10,
         "sfx": "shield"
+      },
+      "temperament": {
+        "verb": "aura",
+        "engage": 150,
+        "auraRadius": 64,
+        "healPerPulse": 2,
+        "pulsePeriod": 2,
+        "hp": 55,
+        "speed": 36
       }
     },
     "sorcerer": {
       "playable": false,
-      "sprite": "sprite:hero",
+      "sprite": "sprite:hooded-rogue",
       "palette": "palette:sorcerer",
       "attack": {
         "kind": "projectile",
         "projectile": "cinder-bolt",
         "speed": 150,
         "life": 2.2,
-        "muzzleOffset": { "x": 10, "y": -6 },
-        "cooldown": 0.5
+        "muzzleOffset": {
+          "x": 10,
+          "y": -6
+        },
+        "cooldown": 0.5,
+        "voice": "attack-fire"
       },
       "ability": {
         "kind": "blink",
@@ -125,6 +191,159 @@
         "dashDuration": 0.22,
         "trailParticles": 5,
         "sfx": "dash"
+      },
+      "temperament": {
+        "verb": "aoe",
+        "engage": 100,
+        "keepDistance": 56,
+        "blastRadius": 30,
+        "hp": 50,
+        "speed": 28
+      }
+    },
+    "priest": {
+      "sprite": "sprite:paladin",
+      "palette": "palette:base",
+      "attack": {
+        "kind": "melee",
+        "reach": 24,
+        "cooldown": 0.8,
+        "voice": "attack-shout"
+      },
+      "ability": {
+        "kind": "shield",
+        "label": "WARD",
+        "sfx": "shield"
+      },
+      "temperament": {
+        "verb": "heal-beam",
+        "engage": 140,
+        "keepDistance": 80,
+        "hp": 50,
+        "speed": 30,
+        "healPerPulse": 4,
+        "pulsePeriod": 0.6,
+        "auraRadius": 140
+      }
+    },
+    "warlock": {
+      "sprite": "sprite:hooded-mage",
+      "palette": "palette:base",
+      "attack": {
+        "kind": "projectile",
+        "projectile": "shadowbolt",
+        "cooldown": 1.1,
+        "speed": 120,
+        "life": 1.6,
+        "voice": "attack-arcane"
+      },
+      "ability": {
+        "kind": "blink",
+        "label": "PACT",
+        "sfx": "magic"
+      },
+      "temperament": {
+        "verb": "debuff-aura",
+        "engage": 120,
+        "keepDistance": 70,
+        "hp": 52,
+        "speed": 30,
+        "auraRadius": 70
+      }
+    },
+    "barbarian": {
+      "sprite": "sprite:axe-warrior",
+      "palette": "palette:base",
+      "attack": {
+        "kind": "melee",
+        "reach": 34,
+        "cooldown": 0.5,
+        "voice": "attack-blade"
+      },
+      "ability": {
+        "kind": "leap",
+        "label": "ROAR",
+        "sfx": "slash"
+      },
+      "temperament": {
+        "verb": "blade-storm",
+        "engage": 30,
+        "chargeSpeedMultiplier": 1.5,
+        "hp": 85,
+        "speed": 50,
+        "blastRadius": 34
+      }
+    },
+    "dread-knight": {
+      "sprite": "sprite:heavy-knight",
+      "palette": "palette:base",
+      "attack": {
+        "kind": "melee",
+        "reach": 42,
+        "cooldown": 0.4,
+        "voice": "attack-blade"
+      },
+      "ability": {
+        "kind": "shield",
+        "label": "DREAD",
+        "sfx": "shield"
+      },
+      "temperament": {
+        "verb": "charge",
+        "engage": 36,
+        "chargeSpeedMultiplier": 1.7,
+        "hp": 110,
+        "speed": 52,
+        "withersOnHit": true
+      }
+    },
+    "shaman": {
+      "sprite": "sprite:skullcap-warrior",
+      "palette": "palette:base",
+      "attack": {
+        "kind": "melee",
+        "reach": 26,
+        "cooldown": 0.9,
+        "voice": "attack-fire"
+      },
+      "ability": {
+        "kind": "blink",
+        "label": "SPIRIT",
+        "sfx": "magic"
+      },
+      "temperament": {
+        "verb": "aoe",
+        "engage": 100,
+        "keepDistance": 56,
+        "hp": 62,
+        "speed": 30,
+        "blastRadius": 32,
+        "healPerPulse": 5,
+        "auraRadius": 32
+      }
+    },
+    "stormcaller": {
+      "sprite": "sprite:grey-mage",
+      "palette": "palette:base",
+      "attack": {
+        "kind": "projectile",
+        "projectile": "magic-bolt",
+        "cooldown": 0.6,
+        "speed": 150,
+        "life": 1.4,
+        "voice": "attack-storm"
+      },
+      "ability": {
+        "kind": "leap",
+        "label": "TEMPEST",
+        "sfx": "magic"
+      },
+      "temperament": {
+        "verb": "storm-volley",
+        "engage": 110,
+        "hp": 75,
+        "speed": 44,
+        "blastRadius": 110
       }
     }
   }

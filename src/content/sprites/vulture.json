@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:vulture",
+  "kind": "sheet-sprite",
+  "description": "Elthen vulture (public/assets/MANIFEST.json#elthen-vulture), 32px rows facing left. Castle-approach trash body: perched idle, takeoff flight, feather-shedding swoop attack, collapse death. The 10-frame carrion-peck row stays unmapped until ambience consumes it.",
+  "frameSize": { "w": 32, "h": 32 },
+  "anchor": { "x": 16, "y": 30 },
+  "directionOrder": ["right", "up", "left", "down"],
+  "facing": { "nativeDir": "left" },
+  "animations": {
+    "idle": {
+      "image": "enemies/vulture.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "row": 0,
+      "fps": 5
+    },
+    "walk": {
+      "image": "enemies/vulture.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 1,
+      "fps": 10
+    },
+    "attack": {
+      "image": "enemies/vulture.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 3,
+      "fps": 12
+    },
+    "hurt": {
+      "image": "enemies/vulture.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "row": 4,
+      "fps": 8
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

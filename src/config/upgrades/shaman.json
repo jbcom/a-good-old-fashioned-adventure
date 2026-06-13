@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:shaman",
+  "label": "Shaman",
+  "category": "class",
+  "track": "characters",
+  "cost": {
+    "gems": 64
+  },
+  "prerequisites": ["upgrade:priest-vows", "upgrade:sorcerer-cinder"],
+  "classId": "shaman",
+  "unlocks": ["upgrade:spirit-roots"],
+  "note": "Priest and cinder fused: bursts that scorch enemies and mend allies standing inside.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 96,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
+}

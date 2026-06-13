@@ -1,0 +1,114 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:thornwood-deep",
+  "kind": "map",
+  "name": "The Sister's Den",
+  "size": { "cols": 50, "rows": 26 },
+  "baseTile": "tile:leaf-litter-roots",
+  "bgmTheme": "deep-forest",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain" },
+    {
+      "op": "row-span",
+      "tile": "tile:grass-roots",
+      "y": 13,
+      "x0": 2,
+      "x1": 47,
+      "note": "the root-run the line drives east along to the den"
+    },
+    {
+      "op": "region",
+      "tile": "tile:leaf-litter-glowcap",
+      "x0": 4,
+      "x1": 14,
+      "y0": 4,
+      "y1": 22,
+      "note": "glowcap-lit forewarren"
+    },
+    {
+      "op": "region",
+      "tile": "tile:leaf-litter-vein",
+      "x0": 36,
+      "x1": 47,
+      "y0": 5,
+      "y1": 21,
+      "note": "the veined heart where the sister nests"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 24,
+      "y0": 2,
+      "y1": 9,
+      "note": "a thorn-crag pinch (upper gap is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 24,
+      "y0": 17,
+      "y1": 23,
+      "note": "thorn-crag lower"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 208 },
+  "spawns": {
+    "default": { "x": 48, "y": 208 },
+    "entry": { "x": 48, "y": 208 }
+  },
+  "entities": [
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 140,
+      "y": 180,
+      "note": "gnawed bones at the den mouth"
+    },
+    { "ref": "prop:dungeon-web", "x": 300, "y": 230, "note": "webbing strung between the thorns" },
+    {
+      "ref": "prop:mossy-waystone",
+      "x": 420,
+      "y": 160,
+      "note": "an old waystone the den swallowed"
+    },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 360,
+      "y": 240,
+      "note": "a second bone-midden in the heart"
+    },
+    { "ref": "prop:stump", "x": 240, "y": 168, "note": "a hewn stump marking the beast-trail" },
+    {
+      "ref": "prop:chest",
+      "x": 640,
+      "y": 180,
+      "contents": "Gold",
+      "note": "the sister's bone-and-coin hoard"
+    },
+    {
+      "enemy": "bramble-tyrant",
+      "x": 660,
+      "y": 220,
+      "note": "thornwood-hollow r3 CLIMAX: the Bramble Tyrant — the sister's beast-lieutenant holds the den. The ONE authored combatant (a miniboss, the lair's fixed climax); the trash around it is permuted from the player's unlocked set via the wave gates."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:den-mouth", "x": 200, "y": 208, "note": "spawn zone — the den mouth" },
+    {
+      "id": "gate:den-pinch",
+      "x": 360,
+      "y": 168,
+      "note": "spawn zone — past the thorn-crag pinch"
+    },
+    { "id": "gate:den-low", "x": 420, "y": 244, "note": "spawn zone — the lower veined lane" },
+    { "id": "gate:den-heart", "x": 560, "y": 208, "note": "spawn zone — before the Tyrant's nest" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:den-heart",
+      "kind": "landmark",
+      "label": "The Sister's nest",
+      "sfx": "interact",
+      "zone": { "x0": 600, "y0": 160, "x1": 680, "y1": 240 }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:bat",
+  "kind": "sheet-sprite",
+  "description": "Elthen bat (public/assets/MANIFEST.json#elthen-bat), 16x24 cells, camera-facing flier — no nativeDir, never mirrors. Dungeon trash body: one wing cycle serves idle/travel (attack runs it faster), row 2 is the death tumble. Row 1 (fly-away back view) stays unmapped until vertical travel reads matter.",
+  "frameSize": { "w": 16, "h": 24 },
+  "anchor": { "x": 8, "y": 20 },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "enemies/bat.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 0,
+      "fps": 10
+    },
+    "walk": {
+      "image": "enemies/bat.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 0,
+      "fps": 12
+    },
+    "attack": {
+      "image": "enemies/bat.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 0,
+      "fps": 14
+    },
+    "hurt": {
+      "image": "enemies/bat.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 2,
+      "fps": 10
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

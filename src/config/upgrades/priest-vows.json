@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:priest-vows",
+  "label": "Priest's Vows",
+  "category": "class",
+  "track": "characters",
+  "cost": {
+    "gems": 24
+  },
+  "prerequisites": ["upgrade:bard-road-song"],
+  "classId": "priest",
+  "unlocks": ["upgrade:shaman", "upgrade:priest-procession"],
+  "note": "A healer joins the line: the heal-beam channels into the most wounded ally.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 160,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
+}

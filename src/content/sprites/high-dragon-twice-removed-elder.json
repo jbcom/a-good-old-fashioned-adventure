@@ -1,0 +1,79 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:high-dragon-twice-removed-elder",
+  "kind": "sheet-sprite",
+  "description": "Dragon-kin (twice-removed elder) — the High Dragon recolored offline to its kin hue (scripts/bake-dragon-kin.mjs). Reads the baked PNG set under bosses/dragon-kin/twice-removed-elder/. docs/RAIL-COMMAND.md §dragon's kin.",
+  "frameSize": {
+    "w": 96,
+    "h": 96
+  },
+  "anchor": {
+    "x": 48,
+    "y": 88
+  },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "bosses/dragon-kin/twice-removed-elder/idle.png",
+      "framesPerDirection": 8,
+      "directional": true,
+      "fps": 8
+    },
+    "walk": {
+      "image": "bosses/dragon-kin/twice-removed-elder/walk.png",
+      "framesPerDirection": 6,
+      "directional": true,
+      "fps": 10
+    },
+    "melee": {
+      "image": "bosses/dragon-kin/twice-removed-elder/melee.png",
+      "framesPerDirection": 6,
+      "directional": true,
+      "fps": 12
+    },
+    "firebreath": {
+      "image": "bosses/dragon-kin/twice-removed-elder/firebreath.png",
+      "framesPerDirection": 16,
+      "directional": true,
+      "fps": 12
+    },
+    "launch": {
+      "image": "bosses/dragon-kin/twice-removed-elder/launch.png",
+      "framesPerDirection": 8,
+      "directional": true,
+      "fps": 10
+    },
+    "hover": {
+      "image": "bosses/dragon-kin/twice-removed-elder/hover.png",
+      "framesPerDirection": 6,
+      "directional": true,
+      "fps": 8
+    },
+    "fly": {
+      "image": "bosses/dragon-kin/twice-removed-elder/fly.png",
+      "framesPerDirection": 6,
+      "directional": true,
+      "fps": 10
+    },
+    "death": {
+      "image": "bosses/dragon-kin/twice-removed-elder/death.png",
+      "framesPerDirection": 9,
+      "directional": false,
+      "fps": 8,
+      "loop": false
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "melee",
+    "hurt": "idle",
+    "death": "death",
+    "roar": "launch",
+    "volley": "firebreath",
+    "lull": "hover"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

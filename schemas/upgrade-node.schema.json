@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/upgrade-node.schema.json",
+  "title": "Upgrade DAG node (one file per node, globbed into incremental.upgradeGraph.nodes)",
+  "type": "object",
+  "required": ["id", "label", "category", "cost", "prerequisites", "unlocks", "track"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "type": "string", "pattern": "^upgrade:[a-z0-9-]+$" },
+    "label": { "type": "string" },
+    "category": {
+      "enum": ["relic", "class", "ability", "enemy", "map", "route", "economy"]
+    },
+    "cost": {
+      "type": "object",
+      "description": "Currency price. A node listing BOTH roses and gems is an OR-cost (pay either) — the dragon-track convention from docs/RAIL-COMMAND.md §dual-cost.",
+      "properties": {
+        "coins": { "type": "integer", "minimum": 0 },
+        "gems": { "type": "integer", "minimum": 0 },
+        "roses": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "ranks": { "type": "integer", "minimum": 1 },
+    "rankCostGrowth": { "type": "number", "exclusiveMinimum": 1 },
+    "prerequisites": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^upgrade:[a-z0-9-]+$" }
+    },
+    "unlocks": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^upgrade:[a-z0-9-]+$" }
+    },
+    "track": { "type": "string" },
+    "classId": { "type": "string" },
+    "enemyFamily": { "type": "string" },
+    "unlocksEnemy": { "type": "string" },
+    "spawnBounty": { "type": "number" },
+    "placement": {
+      "type": "object",
+      "description": "Per-enemy spawn-placement track (S21.4, docs/RAIL-COMMAND.md §enemy placement). Each rank adds one more candidate spawn gate this enemy can roll among (rank N = up to N of the map's waveGates, by slice order) AND multiplies its coin bounty (more spread = more reward). A coin-priced ranked node.",
+      "required": ["enemy", "coinMultiplierPerRank"],
+      "properties": {
+        "enemy": { "type": "string" },
+        "coinMultiplierPerRank": { "type": "number", "exclusiveMinimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "routePack": { "type": "string" },
+    "dragonKin": {
+      "type": "object",
+      "description": "Per-map kin boss (docs/RAIL-COMMAND.md §dragon's kin). The map's guardian recolored from the green High Dragon, with a tracked relation modifier for the rescue quip.",
+      "required": ["mapId", "relation", "hue"],
+      "properties": {
+        "mapId": { "type": "string", "pattern": "^map:[a-z0-9-]+$" },
+        "relation": { "type": "string" },
+        "hue": { "type": "number", "minimum": 0, "maximum": 360 },
+        "roseYield": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "lairRoom": {
+      "type": "object",
+      "description": "Dragon's Lair room (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks). Present on a lair room-unlock node: which map's lair, the room depth (1 = entrance), and the playable rail map the room loads.",
+      "required": ["mapId", "depth", "roomMap"],
+      "properties": {
+        "mapId": { "type": "string", "pattern": "^map:[a-z0-9-]+$" },
+        "depth": { "type": "integer", "minimum": 1 },
+        "roomMap": { "type": "string", "pattern": "^map:[a-z0-9-]+$" }
+      },
+      "additionalProperties": false
+    },
+    "effect": {
+      "type": "object",
+      "properties": {
+        "maxHp": { "type": "number" },
+        "unitCount": { "type": "number" },
+        "checkpointBonus": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "iconRef": {
+      "type": "object",
+      "description": "A purchased-sheet emblem crop (S-DAG-ICONS hybrid). When present, the node's DAG emblem is this crop from a sheet raster instead of a bespoke emblem-<slug>.pix grid. Generic node types (economy/class/plain-enemy/ability) use sheet icons; identity nodes (dragon/lair/relic/route/named-boss) keep their bespoke .pix and omit this.",
+      "required": ["image", "x", "y", "w", "h"],
+      "properties": {
+        "image": { "type": "string" },
+        "x": { "type": "integer", "minimum": 0 },
+        "y": { "type": "integer", "minimum": 0 },
+        "w": { "type": "integer", "minimum": 1 },
+        "h": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "note": { "type": "string" }
+  },
+  "additionalProperties": false
+}

@@ -19,6 +19,7 @@ import {
   QuestLog,
 } from "./traits";
 
+/** Activate a quest if not already started. */
 export function startQuest(world: World, questId: string): void {
   const quest = getQuest(questId);
   const log = world.get(QuestLog);
@@ -83,10 +84,12 @@ function conditionMet(
   return false;
 }
 
+/** Context passed to effect handlers (position info for spawns). */
 export interface EffectContext {
   eventPos?: { x: number; y: number };
 }
 
+/** Apply quest stage effects (flags, tiles, spawns, map loads, endgame). */
 export function applyEffects(
   world: World,
   effects: Record<string, unknown>[],
@@ -150,6 +153,9 @@ export function applyEffects(
       grantRunReward(world, effect.grantRunReward);
     }
     if (typeof effect.endGame === "string" && outbox) {
+      // S20.3 audio: the victory stinger on a rescue; collapse is sounded at the
+      // wave-collapse site (a quest-driven gameover is rare — guard either way)
+      outbox.sfx.push(effect.endGame === "victory" ? "victory" : "collapse");
       outbox.endGame = effect.endGame as "victory" | "gameover";
     }
   }
@@ -168,7 +174,7 @@ function counterMatches(
 /** Reduce one event into every active quest. */
 export function reduceEvent(world: World, event: GameEvent): void {
   const log = world.get(QuestLog);
-  applyIncrementalEventReward(world, event.type, event.archetypeId);
+  applyIncrementalEventReward(world, event);
   if (!log) return;
 
   // startOn: quests that begin when a map is entered

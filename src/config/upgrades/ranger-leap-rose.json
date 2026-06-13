@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:ranger-leap-rose",
+  "label": "Princess-Fletched Leap",
+  "category": "ability",
+  "cost": {
+    "roses": 3
+  },
+  "prerequisites": ["upgrade:ranger-trail"],
+  "classId": "ranger",
+  "ability": "leap",
+  "unlocks": [],
+  "track": "characters"
+}

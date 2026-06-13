@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:sorcerer-cinder",
+  "label": "Sorcerer Cinder",
+  "category": "class",
+  "cost": {
+    "gems": 24
+  },
+  "prerequisites": ["upgrade:dragon-wake"],
+  "classId": "sorcerer",
+  "unlocks": [
+    "upgrade:sorcerer-emberweave",
+    "upgrade:castle-candle-loop",
+    "upgrade:warlock-pact",
+    "upgrade:shaman"
+  ],
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 64,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
+}

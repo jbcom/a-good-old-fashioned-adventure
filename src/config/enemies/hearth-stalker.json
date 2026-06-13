@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "hearth-stalker",
+  "name": "Hearth Stalker",
+  "sprite": "sprite:boss-hearth-stalker",
+  "palette": "palette:base",
+  "hp": 50,
+  "speed": 38,
+  "hitbox": {
+    "w": 13,
+    "h": 13
+  },
+  "behavior": "guard",
+  "guard": {
+    "aggroRange": 100,
+    "deaggroRange": 144,
+    "leashRange": 160,
+    "stance": {
+      "guard": 0.9,
+      "open": 1.4,
+      "damageMultiplier": 0.45,
+      "moveFactor": 0.55
+    }
+  },
+  "miniboss": true
+}

@@ -1,0 +1,23 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:rogue-knives",
+  "label": "Rogue Knife Work",
+  "category": "ability",
+  "cost": {
+    "coins": 30
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.6,
+  "prerequisites": ["upgrade:rogue-shortcut"],
+  "classId": "rogue",
+  "unlocks": [],
+  "note": "Coin-ranked rogue track deepening the rose-unlocked class.",
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 160,
+    "y": 592,
+    "w": 16,
+    "h": 16
+  }
+}

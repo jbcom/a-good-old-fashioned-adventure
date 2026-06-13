@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-kin-sunken-road",
+  "label": "Wake the Step-Cousin",
+  "category": "enemy",
+  "cost": {
+    "roses": 5,
+    "gems": 120
+  },
+  "prerequisites": ["upgrade:dragon-kin-deep-forest"],
+  "enemyFamily": "dragon",
+  "unlocksEnemy": "dragon",
+  "dragonKin": {
+    "mapId": "map:sunken-road",
+    "relation": "step-cousin",
+    "hue": 200,
+    "roseYield": 6
+  },
+  "unlocks": ["upgrade:dragon-might-sunken-road", "upgrade:dragon-kin-castle-approach"],
+  "track": "encounters",
+  "note": "Kin boss for sunken-road. Rose-OR-gem dual cost (roses logarithmic shortcut, gems exponential fallback — docs/RAIL-COMMAND.md §dual-cost)."
+}

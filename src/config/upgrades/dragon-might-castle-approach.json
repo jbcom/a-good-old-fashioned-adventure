@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-might-castle-approach",
+  "label": "Great-Aunt Unleashed",
+  "category": "enemy",
+  "cost": {
+    "roses": 6,
+    "gems": 144
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.8,
+  "prerequisites": ["upgrade:dragon-kin-castle-approach"],
+  "enemyFamily": "dragon",
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Dragon-track combat buff (docs/RAIL-COMMAND.md §The Dragon track BUFFS the dragon): each rank widens the castle-approach kin volley (multi-attack), grows its fireball AoE, adds HP, and raises the roses the rescue pays. Rose-OR-gem, ranked — invest to make a stronger antagonist that pays more."
+}

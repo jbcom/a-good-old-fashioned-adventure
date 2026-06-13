@@ -1,0 +1,117 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:crypt-vault",
+  "kind": "map",
+  "name": "The Sunken Vault",
+  "size": { "cols": 46, "rows": 24 },
+  "baseTile": "tile:stone-floor-moss",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor-cracked",
+      "y": 11,
+      "x0": 2,
+      "x1": 43,
+      "note": "the cracked processional the line wades east along"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 4,
+      "x1": 14,
+      "y0": 3,
+      "y1": 9,
+      "note": "a flooded reliquary pool (impassable — the line skirts it on the processional)"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 20,
+      "x1": 28,
+      "y0": 14,
+      "y1": 20,
+      "note": "a second drowned chamber on the lower side"
+    },
+    {
+      "op": "region",
+      "tile": "tile:ruin-mosaic",
+      "x0": 33,
+      "x1": 43,
+      "y0": 6,
+      "y1": 17,
+      "note": "the mosaic reliquary heart where the step-cousin coils"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 184 },
+  "spawns": {
+    "default": { "x": 48, "y": 184 },
+    "entry": { "x": 48, "y": 184 }
+  },
+  "entities": [
+    { "ref": "prop:ruin-column", "x": 160, "y": 130, "note": "a toppled reliquary column" },
+    {
+      "ref": "prop:dungeon-brazier",
+      "x": 280,
+      "y": 184,
+      "note": "a guttering brazier on the processional"
+    },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 360,
+      "y": 230,
+      "note": "the drowned dead piled by the second pool"
+    },
+    {
+      "ref": "prop:mossy-waystone",
+      "x": 440,
+      "y": 150,
+      "note": "a sunken waystone marking the reliquary"
+    },
+    { "ref": "prop:ruin-column", "x": 500, "y": 220, "note": "a second fallen column" },
+    {
+      "ref": "prop:chest",
+      "x": 600,
+      "y": 160,
+      "contents": "Gold",
+      "note": "the vault's drowned offerings"
+    },
+    {
+      "enemy": "vault-keeper",
+      "x": 620,
+      "y": 200,
+      "note": "sunken-crypt lair r3 CLIMAX: the vault-keeper, the undead warden of the flooded reliquary, holds the deepest vault. The one authored combatant (a bespoke miniboss, not wave-pool trash); the host is permuted from the unlocked set via the wave gates."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:vault-entry", "x": 220, "y": 184, "note": "spawn zone — the processional entry" },
+    {
+      "id": "gate:vault-pool",
+      "x": 320,
+      "y": 130,
+      "note": "spawn zone — the upper reliquary walk"
+    },
+    {
+      "id": "gate:vault-low",
+      "x": 380,
+      "y": 236,
+      "note": "spawn zone — the drowned lower chamber edge"
+    },
+    {
+      "id": "gate:vault-heart",
+      "x": 540,
+      "y": 184,
+      "note": "spawn zone — before the mosaic reliquary heart"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:vault-heart",
+      "kind": "landmark",
+      "label": "The Sunken Vault reliquary",
+      "sfx": "interact",
+      "zone": { "x0": 528, "y0": 152, "x1": 608, "y1": 216 }
+    }
+  ]
+}

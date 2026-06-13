@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-wake",
+  "label": "Dragon Wake",
+  "category": "enemy",
+  "cost": {
+    "gems": 16
+  },
+  "prerequisites": ["upgrade:first-vow"],
+  "enemyFamily": "dragon",
+  "unlocks": [
+    "upgrade:sorcerer-cinder",
+    "upgrade:unlock-forest-orc",
+    "upgrade:dragon-kin-rescue-route",
+    "upgrade:lair-rescue-route-1"
+  ],
+  "track": "encounters"
+}

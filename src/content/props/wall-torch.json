@@ -1,0 +1,30 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:wall-torch",
+  "kind": "prop",
+  "description": "Burning wall torch sliced from the Kenney Roguelike Interior pack (public/assets/MANIFEST.json#kenney-roguelike-interior) \u2014 candlelit castle-interior dressing.",
+  "grid": {
+    "w": 16,
+    "h": 16
+  },
+  "anchor": {
+    "x": 8,
+    "y": 16
+  },
+  "solid": false,
+  "states": {
+    "default": {
+      "sheet": {
+        "image": "tilemaps/kenney-interior.png",
+        "x": 340,
+        "y": 102,
+        "w": 16,
+        "h": 16
+      }
+    }
+  },
+  "defaultPalette": "palette:base",
+  "koota": {
+    "traits": ["Transform", "Sprite", "DepthSorted"]
+  }
+}

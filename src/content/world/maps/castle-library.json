@@ -3,33 +3,148 @@
   "id": "map:castle-library",
   "kind": "map",
   "name": "Castle Library",
-  "size": { "cols": 32, "rows": 24 },
+  "size": {
+    "cols": 32,
+    "rows": 24
+  },
   "baseTile": "tile:stone-floor",
   "bgmTheme": "interior",
   "generation": [
-    { "op": "border", "tile": "tile:stone-wall" },
-    { "op": "row-span", "tile": "tile:castle-road", "y": 14, "x0": 4, "x1": 27 },
-    { "op": "col-span", "tile": "tile:castle-road", "x": 20, "y0": 6, "y1": 21 },
+    {
+      "op": "border",
+      "tile": "tile:stone-wall"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:castle-road",
+      "y": 11,
+      "x0": 2,
+      "x1": 29,
+      "note": "the archive aisle the line pushes east along, between the stacks"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:castle-road",
+      "y": 12,
+      "x0": 2,
+      "x1": 29,
+      "note": "aisle, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 12,
+      "y0": 2,
+      "y1": 7,
+      "note": "a tall shelf-stack jutting into the aisle (the run threads the lower gap)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 20,
+      "y0": 16,
+      "y1": 21,
+      "note": "a second stack off the lower flank"
+    },
     {
       "op": "region",
-      "tile": "tile:village-cobble",
-      "x0": 14,
-      "x1": 25,
-      "y0": 5,
-      "y1": 10,
-      "note": "archive reading rug"
+      "tile": "tile:royal-rug",
+      "x0": 22,
+      "x1": 28,
+      "y0": 8,
+      "y1": 15,
+      "note": "the sealed-archive reading floor at the aisle's end, where the shade keeps its lectern"
     }
   ],
-  "playerSpawn": { "x": 320, "y": 236 },
+  "playerSpawn": {
+    "x": 48,
+    "y": 184
+  },
   "spawns": {
-    "default": { "x": 320, "y": 236 },
-    "entry": { "x": 320, "y": 236 }
+    "default": {
+      "x": 48,
+      "y": 184
+    },
+    "entry": {
+      "x": 48,
+      "y": 184
+    },
+    "from-hall": {
+      "x": 48,
+      "y": 184
+    }
   },
   "entities": [
-    { "ref": "prop:castle-shelf", "x": 170, "y": 160, "note": "western shelf of family books" },
-    { "ref": "prop:castle-shelf", "x": 330, "y": 160, "note": "archive shelf with seal records" },
-    { "ref": "prop:castle-lantern", "x": 250, "y": 156, "note": "archive lantern" },
-    { "ref": "prop:table", "x": 318, "y": 230, "note": "reading table" }
+    {
+      "ref": "prop:castle-shelf",
+      "x": 130,
+      "y": 144,
+      "note": "western shelf of family books"
+    },
+    {
+      "ref": "prop:library-shelf",
+      "x": 170,
+      "y": 144,
+      "note": "phials and scrolls by the reading desks"
+    },
+    {
+      "ref": "prop:library-shelf",
+      "x": 130,
+      "y": 248,
+      "note": "lower shelf run by the stacks"
+    },
+    {
+      "ref": "prop:castle-lantern",
+      "x": 250,
+      "y": 144,
+      "note": "archive lantern"
+    },
+    {
+      "ref": "prop:archive-case",
+      "x": 290,
+      "y": 248,
+      "note": "the dark archive looms off the lower flank"
+    },
+    {
+      "ref": "prop:table",
+      "x": 360,
+      "y": 144,
+      "note": "the sealed reading table"
+    },
+    {
+      "enemy": "lectern-shade",
+      "x": 408,
+      "y": 184,
+      "note": "throne-wing lair r1 CLIMAX: the archivist wraith holds the sealed archive at the aisle's end. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
+    },
+    {
+      "ref": "prop:chest",
+      "x": 430,
+      "y": 144,
+      "contents": "RoyalGold",
+      "note": "royal stacks strongbox \u2014 branch detours outpay the road"
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:aisle-mouth", "x": 200, "y": 184, "note": "spawn zone \u2014 the aisle mouth" },
+    {
+      "id": "gate:stack-upper",
+      "x": 240,
+      "y": 160,
+      "note": "spawn zone \u2014 past the upper shelf-stack"
+    },
+    {
+      "id": "gate:stack-lower",
+      "x": 320,
+      "y": 216,
+      "note": "spawn zone \u2014 the lower stack flank"
+    },
+    {
+      "id": "gate:archive-floor",
+      "x": 380,
+      "y": 184,
+      "note": "spawn zone \u2014 the sealed-archive reading floor"
+    }
   ],
   "triggers": [
     {
@@ -39,13 +154,23 @@
       "toMap": "map:castle-hall",
       "toSpawn": "from-library",
       "sfx": "interact",
-      "zone": { "x0": 280, "y0": 326, "x1": 360, "y1": 384 }
+      "zone": {
+        "x0": 0,
+        "y0": 156,
+        "x1": 28,
+        "y1": 212
+      }
     },
     {
       "id": "trigger:library-archive",
       "kind": "story-zone",
       "label": "Sealed archive lectern",
-      "zone": { "x0": 256, "y0": 96, "x1": 384, "y1": 168 }
+      "zone": {
+        "x0": 256,
+        "y0": 96,
+        "x1": 384,
+        "y1": 168
+      }
     }
   ]
 }

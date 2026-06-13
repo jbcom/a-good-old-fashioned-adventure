@@ -50,8 +50,9 @@ describe("spawnPlayer", () => {
     const world = createGameWorld();
     const player = spawnPlayer(world, "wizard", 10, 20);
     expect(player.get(Health)).toMatchObject({ hp: 100, maxHp: 100 });
+    // the wizard wears the Electric Lemon grey mage (docs/CAST-CONVERSION.md)
     expect(player.get(SpriteRef)).toMatchObject({
-      spriteId: "sprite:hero",
+      spriteId: "sprite:grey-mage",
       paletteId: "palette:wizard",
     });
   });
@@ -122,7 +123,10 @@ describe("instantiateMap — transition preserves the player", () => {
 
     const npcs = [...world.query(IsNpc)].map((e) => e.get(IsNpc)?.charId);
     expect(npcs).toEqual(["char:princess-amber"]);
-    expect([...world.query(IsEnemy)]).toHaveLength(4);
+    // zone model (docs/RAIL-COMMAND.md §maps are zones): the dungeon authors
+    // ONLY its boss climax (shadow-warlord); trash is permuted from the
+    // unlocked set at the wave gates, not hardcoded
+    expect([...world.query(IsEnemy)]).toHaveLength(1);
     expect(world.get(MapRuntime)?.mapId).toBe("map:castle-dungeon");
   });
 });
@@ -138,7 +142,9 @@ describe("instantiateMap — named spawns", () => {
 
     expect(world.get(MapRuntime)?.mapId).toBe("map:village-house");
     expect(world.queryFirst(IsPlayer)).toBe(player);
-    expect(player?.get(Transform)).toMatchObject({ x: 192, y: 180 });
+    // village-house is now the captured-village lair's room 2 — its entry spawn
+    // sits at the west edge so the line marches the ransacked hall east
+    expect(player?.get(Transform)).toMatchObject({ x: 48, y: 176 });
     expect(player?.get(Health)).toMatchObject({ hp: 44, maxHp: 100 });
   });
 

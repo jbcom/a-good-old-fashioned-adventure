@@ -2,8 +2,9 @@ import { StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, expect, it } from "vitest";
 import { page } from "vitest/browser";
+import { preloadSheetImages } from "../../src/render/atlas";
 import { GameStage } from "../../src/render/GameStage";
-import { createGameWorld, instantiateMap } from "../../src/sim/factories";
+import { createGameWorld, instantiateMap, spawnEnemy } from "../../src/sim/factories";
 import { autoStartQuests } from "../../src/sim/quests";
 import { step } from "../../src/sim/tick";
 import { CameraState, IsPlayer, Transform } from "../../src/sim/traits";
@@ -179,5 +180,76 @@ it("renders the S6 castle approach exterior staging", async () => {
     .toBeTruthy();
   await new Promise((resolve) => setTimeout(resolve, 600));
   const path = await page.screenshot({ path: "game-stage-castle-approach.png" });
+  expect(path).toBeTruthy();
+});
+
+it("renders the High Dragon boss sheet in the candlelit hall", async () => {
+  const world = createGameWorld(3);
+  instantiateMap(world, "map:castle-hall", { classId: "knight" });
+  // the route-pack gate normally controls this spawn; the render contract
+  // under test is the purchased 96px sheet, so place the boss directly
+  spawnEnemy(world, "dragon-guardian", 732, 268);
+  // side-view row sheet beside the directional strips: one shot proves both
+  // backends (and the mirror path — stalker placed right of the player)
+  spawnEnemy(world, "bramble-stalker", 680, 300);
+  world.queryFirst(IsPlayer)?.set(Transform, { x: 700, y: 290 });
+  world.set(CameraState, { x: 716, y: 278, shake: 0 });
+  for (let i = 0; i < 30; i++) step(world);
+
+  container = mountStageContainer();
+  root = createRoot(container);
+  root.render(
+    <StrictMode>
+      <GameStage world={world} />
+    </StrictMode>,
+  );
+
+  await expect
+    .poll(() => container?.querySelector<HTMLCanvasElement>("canvas[data-ready='1']"), {
+      timeout: 10_000,
+    })
+    .toBeTruthy();
+  // the purchased strips decode asynchronously — hold for the real frames
+  await preloadSheetImages();
+  await new Promise((resolve) => setTimeout(resolve, 600));
+  const path = await page.screenshot({ path: "game-stage-boss-hall.png" });
+  expect(path).toBeTruthy();
+});
+
+it("renders the five new region trash bodies in one lineup", async () => {
+  const world = createGameWorld(3);
+  instantiateMap(world, "map:sunken-road", { classId: "wizard" });
+  // lineup left-to-right beside the player spawn: every Elthen body crops
+  // from its own sheet rows — one shot validates all five defs
+  spawnEnemy(world, "dune-adder", 64, 260);
+  spawnEnemy(world, "carrion-raven", 104, 256);
+  spawnEnemy(world, "gatehouse-vulture", 148, 286);
+  spawnEnemy(world, "crypt-bat", 76, 330);
+  spawnEnemy(world, "cellar-rat", 132, 334);
+  // direction-row humanoid beside the animals — third layout convention
+  spawnEnemy(world, "forest-shaman", 168, 262);
+  spawnEnemy(world, "gate-sentry", 40, 300);
+  spawnEnemy(world, "orc-scout", 210, 280);
+  spawnEnemy(world, "oldwood-raider", 240, 320);
+  world.queryFirst(IsPlayer)?.set(Transform, { x: 180, y: 360 });
+  world.set(CameraState, { x: 110, y: 300, shake: 0 });
+  for (let i = 0; i < 30; i++) step(world);
+
+  container = mountStageContainer();
+  root = createRoot(container);
+  root.render(
+    <StrictMode>
+      <GameStage world={world} />
+    </StrictMode>,
+  );
+
+  await expect
+    .poll(() => container?.querySelector<HTMLCanvasElement>("canvas[data-ready='1']"), {
+      timeout: 10_000,
+    })
+    .toBeTruthy();
+  await preloadSheetImages();
+  await new Promise((resolve) => setTimeout(resolve, 600));
+  const path = await page.screenshot({ path: "game-stage-trash-menagerie.png" });
   expect(path).toBeTruthy();
 });

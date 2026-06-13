@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:rat",
+  "kind": "sheet-sprite",
+  "description": "Elthen rat (public/assets/MANIFEST.json#elthen-rat), 32px rows facing left (rows 4-7 are baked mirrors, skipped). Dungeon trash body: sit-and-flick idle, scurry travel, red-eye lunge attack, flatten death. Audit note: dark coat — contrast on dungeon floors checked at the stage screenshot.",
+  "frameSize": { "w": 32, "h": 32 },
+  "anchor": { "x": 16, "y": 30 },
+  "directionOrder": ["right", "up", "left", "down"],
+  "facing": { "nativeDir": "left" },
+  "animations": {
+    "idle": {
+      "image": "enemies/rat.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 0,
+      "fps": 6
+    },
+    "walk": {
+      "image": "enemies/rat.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 2,
+      "fps": 12
+    },
+    "attack": {
+      "image": "enemies/rat.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 1,
+      "fps": 12
+    },
+    "hurt": {
+      "image": "enemies/rat.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 3,
+      "fps": 10
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

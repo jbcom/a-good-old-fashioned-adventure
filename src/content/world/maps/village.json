@@ -296,7 +296,34 @@
         ]
       }
     },
-    { "ref": "prop:chest", "x": 712, "y": 270, "contents": "Gold" }
+    { "ref": "prop:chest", "x": 712, "y": 270, "contents": "Gold" },
+    {
+      "enemy": "nest-overseer",
+      "x": 800,
+      "y": 272,
+      "note": "captured-village lair r1 CLIMAX: the orc nest-overseer drives the enslaved square. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
+    }
+  ],
+  "waveGates": [
+    {
+      "id": "gate:square-mid",
+      "x": 320,
+      "y": 280,
+      "note": "spawn zone — the village square (the dragon's raiders muster here, from the unlocked set)"
+    },
+    {
+      "id": "gate:square-high",
+      "x": 440,
+      "y": 240,
+      "note": "spawn zone — the upper lane by the houses"
+    },
+    { "id": "gate:square-low", "x": 480, "y": 322, "note": "spawn zone — the lower market lane" },
+    {
+      "id": "gate:road-east",
+      "x": 700,
+      "y": 280,
+      "note": "spawn zone — the road east, the way deeper into the nest"
+    }
   ],
   "composition": {
     "routeWindows": [

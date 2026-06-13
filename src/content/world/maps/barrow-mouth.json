@@ -1,0 +1,146 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:barrow-mouth",
+  "kind": "map",
+  "name": "The Roadside Barrow",
+  "size": { "cols": 46, "rows": 22 },
+  "baseTile": "tile:dungeon-floor-ratmarked",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain-crag" },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor-cracked",
+      "y": 10,
+      "x0": 2,
+      "x1": 43,
+      "note": "the dug-out crawlway the line pushes east along — the brother's first tunnel"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor-cracked",
+      "y": 11,
+      "x0": 2,
+      "x1": 43,
+      "note": "crawlway floor, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 13,
+      "y0": 2,
+      "y1": 7,
+      "note": "a rib of unbroken rock pinching the tunnel (the low gap is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 27,
+      "y0": 14,
+      "y1": 19,
+      "note": "a second rock rib, this one off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass-roots",
+      "x0": 5,
+      "x1": 11,
+      "y0": 14,
+      "y1": 19,
+      "note": "roots and turf clawed down from the road above, south of the crawlway"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water",
+      "x0": 33,
+      "x1": 39,
+      "y0": 3,
+      "y1": 7,
+      "note": "a cold seep pool where the dig struck the water table"
+    },
+    {
+      "op": "region",
+      "tile": "tile:path-pebbles",
+      "x0": 35,
+      "x1": 43,
+      "y0": 9,
+      "y1": 13,
+      "note": "the gravel apron of the first nesting hollow at the tunnel's end"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 168 },
+  "spawns": {
+    "default": { "x": 48, "y": 168 },
+    "entry": { "x": 48, "y": 168 }
+  },
+  "entities": [
+    {
+      "ref": "prop:fallen-log",
+      "x": 150,
+      "y": 132,
+      "note": "a road timber that slumped into the dig"
+    },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 120,
+      "y": 264,
+      "note": "gnawed bones — the brood's first kills, dragged below the road"
+    },
+    {
+      "ref": "prop:dungeon-web",
+      "x": 260,
+      "y": 132,
+      "note": "cave-web strung across the upper flank"
+    },
+    {
+      "ref": "prop:mossy-waystone",
+      "x": 230,
+      "y": 280,
+      "note": "a milestone the dig swallowed whole"
+    },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 380,
+      "y": 290,
+      "note": "a second ossuary heap by the hollow"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 560,
+      "y": 132,
+      "contents": "Gold",
+      "note": "a carter's strongbox, pulled down with him"
+    },
+    {
+      "enemy": "barrow-digger",
+      "x": 600,
+      "y": 168,
+      "note": "roadside-barrow lair r1 CLIMAX: a barrow-digger, the brute that clawed this crawlway, holds the first hollow. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:barrow-mouth", "x": 220, "y": 168, "note": "spawn zone — the crawlway mouth" },
+    {
+      "id": "gate:barrow-rib",
+      "x": 330,
+      "y": 148,
+      "note": "spawn zone — past the rock rib, upper"
+    },
+    { "id": "gate:barrow-low", "x": 360, "y": 216, "note": "spawn zone — the lower root-flank" },
+    {
+      "id": "gate:barrow-hollow",
+      "x": 560,
+      "y": 168,
+      "note": "spawn zone — the first nesting hollow"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:barrow-mouth",
+      "kind": "landmark",
+      "label": "The Roadside Barrow's mouth",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 152, "x1": 80, "y1": 184 }
+    }
+  ]
+}

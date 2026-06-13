@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/sheet-sprite.schema.json",
+  "title": "Purchased PNG sheet sprite (pre-rendered strips, no palette swaps)",
+  "type": "object",
+  "required": [
+    "id",
+    "kind",
+    "frameSize",
+    "anchor",
+    "directionOrder",
+    "animations",
+    "poseMap",
+    "koota"
+  ],
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "type": "string", "pattern": "^sprite:[a-z0-9-]+$" },
+    "kind": { "const": "sheet-sprite" },
+    "description": { "type": "string" },
+    "frameSize": {
+      "type": "object",
+      "required": ["w", "h"],
+      "properties": {
+        "w": { "type": "integer", "minimum": 1 },
+        "h": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "anchor": {
+      "type": "object",
+      "required": ["x", "y"],
+      "properties": { "x": { "type": "number" }, "y": { "type": "number" } }
+    },
+    "directionOrder": {
+      "type": "array",
+      "items": { "enum": ["right", "up", "left", "down"] },
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "facing": {
+      "type": "object",
+      "required": ["nativeDir"],
+      "properties": { "nativeDir": { "enum": ["right", "left"] } },
+      "additionalProperties": false
+    },
+    "animations": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["image", "framesPerDirection", "directional", "fps"],
+        "properties": {
+          "image": { "type": "string", "pattern": "^[a-z0-9/_.-]+\\.png$" },
+          "framesPerDirection": { "type": "integer", "minimum": 1 },
+          "directional": { "type": "boolean" },
+          "fps": { "type": "number", "exclusiveMinimum": 0 },
+          "loop": { "type": "boolean" },
+          "row": { "type": "integer", "minimum": 0 },
+          "directionRows": {
+            "type": "object",
+            "required": ["right", "up", "left", "down"],
+            "additionalProperties": false,
+            "patternProperties": {
+              "^(right|up|left|down)$": {
+                "oneOf": [
+                  { "type": "integer", "minimum": 0 },
+                  {
+                    "type": "object",
+                    "required": ["row", "col"],
+                    "properties": {
+                      "row": { "type": "integer", "minimum": 0 },
+                      "col": { "type": "integer", "minimum": 0 }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "poseMap": {
+      "type": "object",
+      "required": ["idle"],
+      "additionalProperties": { "type": "string" }
+    },
+    "koota": {
+      "type": "object",
+      "required": ["traits"],
+      "properties": {
+        "traits": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "crypt-sentry",
+  "name": "Crypt Sentry",
+  "sprite": "sprite:hero",
+  "palette": "palette:skeleton",
+  "hp": 40,
+  "speed": 40,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "chase",
+  "relentless": true,
+  "family": "crypt-sentry"
+}

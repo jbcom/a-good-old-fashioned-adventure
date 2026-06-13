@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "thorn-shaman",
+  "name": "Thorn Shaman",
+  "sprite": "sprite:hooded-mage",
+  "palette": "palette:thorn-shaman",
+  "hp": 28,
+  "speed": 22,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "caster",
+  "caster": {
+    "attackRange": 132,
+    "keepDistance": 64,
+    "cooldown": 2.2,
+    "projectile": {
+      "type": "thornbolt",
+      "speed": 68,
+      "life": 2.8
+    },
+    "sfx": "magic"
+  },
+  "family": "thorn-shaman"
+}

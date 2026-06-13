@@ -6,14 +6,18 @@
 import type { World } from "koota";
 import { drainEvents } from "./events";
 import { reduceEvent } from "./quests";
+import { railStep } from "./rail";
 import { updateCamera } from "./systems/camera";
 import { combatStep } from "./systems/combat";
 import { enemyAIStep } from "./systems/enemyAI";
 import { moveEntities } from "./systems/movement";
 import { npcAIStep } from "./systems/npcAI";
+import { unitAIStep, unitTouchDamage } from "./systems/unitAI";
+import { rescueStep, waveStep } from "./systems/waves";
 import { Clock, CombatTimers, HitFlash, HitStop } from "./traits";
 import { rngFor } from "./worldRng";
 
+/** Fixed timestep for deterministic sim. */
 export const SIM_DT = 1 / 60;
 
 export { rngFor } from "./worldRng";
@@ -35,6 +39,7 @@ function tickTimers(world: World, dt: number): void {
   }
 }
 
+/** Advance the whole sim one deterministic tick. */
 export function step(world: World, dt: number = SIM_DT): void {
   // hit-stop: impact freezes the whole sim for a beat — deterministic crunch
   const stop = world.get(HitStop);
@@ -48,9 +53,14 @@ export function step(world: World, dt: number = SIM_DT): void {
   if (clock) world.set(Clock, { t: clock.t + dt, dt });
   tickTimers(world, dt);
   enemyAIStep(world, dt);
+  unitAIStep(world, dt);
   npcAIStep(world, dt);
   moveEntities(world, dt);
   combatStep(world, dt);
+  unitTouchDamage(world, dt);
+  waveStep(world);
+  rescueStep(world);
+  railStep(world);
   for (const event of drainEvents(world)) reduceEvent(world, event);
   updateCamera(world, rngFor(world));
 }

@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "bramble-tyrant",
+  "name": "Bramble Tyrant",
+  "sprite": "sprite:boss-bramble-tyrant",
+  "palette": "palette:base",
+  "hp": 90,
+  "speed": 26,
+  "hitbox": {
+    "w": 14,
+    "h": 14
+  },
+  "behavior": "caster",
+  "miniboss": true,
+  "caster": {
+    "attackRange": 100,
+    "keepDistance": 60,
+    "cooldown": 1.8,
+    "projectile": {
+      "type": "thornbolt",
+      "speed": 70,
+      "life": 2.2
+    },
+    "sfx": "magic"
+  }
+}

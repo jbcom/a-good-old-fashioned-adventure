@@ -1,0 +1,74 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:grey-mage",
+  "kind": "sheet-sprite",
+  "description": "Electric Lemon Old Grey Mage, combat sheet (public/assets/MANIFEST.json#electric-lemon-rpg-characters) \u2014 the wizard's body (docs/CAST-CONVERSION.md). Same convention as the hooded mage: 16px, 4 frames, E/W/S/N rows per state (staff swing 0-3, cast 4-7, combat idle 8-11, combat walk 12-15).",
+  "frameSize": {
+    "w": 16,
+    "h": 16
+  },
+  "anchor": {
+    "x": 8,
+    "y": 15
+  },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "heroes/grey-mage.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 8,
+        "left": 9,
+        "down": 10,
+        "up": 11
+      },
+      "fps": 5
+    },
+    "walk": {
+      "image": "heroes/grey-mage.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 12,
+        "left": 13,
+        "down": 14,
+        "up": 15
+      },
+      "fps": 8
+    },
+    "attack": {
+      "image": "heroes/grey-mage.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 4,
+        "left": 5,
+        "down": 6,
+        "up": 7
+      },
+      "fps": 10
+    },
+    "hurt": {
+      "image": "heroes/grey-mage.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 0,
+        "left": 1,
+        "down": 2,
+        "up": 3
+      },
+      "fps": 10
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

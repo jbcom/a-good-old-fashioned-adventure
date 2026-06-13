@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:unlock-gatehouse-vulture",
+  "label": "Loose the Gatehouse Vultures",
+  "category": "enemy",
+  "cost": {
+    "gems": 40
+  },
+  "prerequisites": ["upgrade:unlock-carrion-raven"],
+  "unlocksEnemy": "gatehouse-vulture",
+  "unlocks": ["upgrade:vulture-bounty", "upgrade:unlock-crypt-bat"],
+  "track": "encounters",
+  "note": "A guard-bird wheeling over the castle approach's siege litter — each one felled pays its bounty.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 128,
+    "y": 456,
+    "w": 16,
+    "h": 16
+  }
+}

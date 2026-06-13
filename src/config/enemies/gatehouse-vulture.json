@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "gatehouse-vulture",
+  "name": "Gatehouse Vulture",
+  "sprite": "sprite:vulture",
+  "palette": "palette:base",
+  "family": "gatehouse-vulture",
+  "hp": 24,
+  "speed": 44,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "guard",
+  "guard": {
+    "aggroRange": 120,
+    "deaggroRange": 150,
+    "leashRange": 100
+  }
+}

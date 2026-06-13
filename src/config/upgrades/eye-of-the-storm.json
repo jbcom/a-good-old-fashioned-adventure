@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:eye-of-the-storm",
+  "label": "Eye of the Storm",
+  "category": "ability",
+  "track": "characters",
+  "cost": {
+    "coins": 42
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.6,
+  "prerequisites": ["upgrade:stormcaller"],
+  "classId": "stormcaller",
+  "unlocks": [],
+  "effect": {
+    "maxHp": 12
+  },
+  "note": "Calm in the whirl: more stormcaller health per rank.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 176,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
+}

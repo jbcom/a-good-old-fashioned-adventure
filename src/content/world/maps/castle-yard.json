@@ -3,47 +3,171 @@
   "id": "map:castle-yard",
   "kind": "map",
   "name": "Castle Yard",
-  "size": { "cols": 48, "rows": 34 },
-  "baseTile": "tile:grass",
+  "size": {
+    "cols": 48,
+    "rows": 34
+  },
+  "baseTile": "tile:castle-road",
   "bgmTheme": "castle-approach",
   "generation": [
-    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "border",
+      "tile": "tile:stone-wall"
+    },
     {
       "op": "region",
-      "tile": "tile:castle-road",
-      "x0": 5,
-      "x1": 43,
-      "y0": 13,
-      "y1": 20,
-      "note": "worn yard paving between gate and hall"
+      "tile": "tile:grass",
+      "x0": 1,
+      "x1": 12,
+      "y0": 25,
+      "y1": 32,
+      "note": "untrodden turf in the south-west corner — grass through the broken pavers"
     },
-    { "op": "row-span", "tile": "tile:stone-floor", "y": 16, "x0": 1, "x1": 46 },
-    { "op": "row-span", "tile": "tile:stone-floor", "y": 17, "x0": 1, "x1": 46 },
-    { "op": "row-span", "tile": "tile:stone-floor", "y": 18, "x0": 1, "x1": 46 },
+    {
+      "op": "region",
+      "tile": "tile:grass",
+      "x0": 1,
+      "x1": 8,
+      "y0": 1,
+      "y1": 5,
+      "note": "weeds at the north-west wall foot"
+    },
+    {
+      "op": "region",
+      "tile": "tile:stone-floor",
+      "x0": 1,
+      "x1": 46,
+      "y0": 13,
+      "y1": 21,
+      "note": "the dressed-stone marching lane — the rail spine across the muster yard"
+    },
     {
       "op": "region",
       "tile": "tile:stone-wall",
-      "x0": 37,
+      "x0": 35,
       "x1": 45,
-      "y0": 6,
-      "y1": 9,
-      "note": "hall silhouette above the yard"
+      "y0": 4,
+      "y1": 10,
+      "note": "the great-hall silhouette looming over the north-east of the yard"
+    },
+    {
+      "op": "region",
+      "tile": "tile:castle-road",
+      "x0": 36,
+      "x1": 44,
+      "y0": 10,
+      "y1": 12,
+      "note": "the keep-step approach below the hall"
+    },
+    {
+      "op": "set",
+      "tile": "tile:grass",
+      "at": [22, 8],
+      "note": "a single tuft pushing up between siege-staging stones"
+    },
+    {
+      "op": "set",
+      "tile": "tile:grass",
+      "at": [28, 26],
+      "note": "grass in a cracked paver south of the lane"
     }
   ],
-  "playerSpawn": { "x": 96, "y": 272 },
+  "playerSpawn": {
+    "x": 96,
+    "y": 272
+  },
   "spawns": {
-    "default": { "x": 96, "y": 272 },
-    "entry": { "x": 96, "y": 272 },
-    "from-hall": { "x": 696, "y": 272 }
+    "default": {
+      "x": 96,
+      "y": 272
+    },
+    "entry": {
+      "x": 96,
+      "y": 272
+    },
+    "from-hall": {
+      "x": 696,
+      "y": 272
+    }
   },
   "entities": [
-    { "ref": "prop:castle-banner", "x": 236, "y": 212, "note": "weathered king's banner" },
-    { "ref": "prop:castle-banner", "x": 548, "y": 212, "note": "half-furled queen's banner" },
-    { "ref": "prop:castle-lantern", "x": 320, "y": 236, "note": "yard lantern" },
-    { "ref": "prop:castle-lantern", "x": 612, "y": 236, "note": "hall threshold lantern" },
-    { "ref": "prop:barrel", "x": 180, "y": 322, "note": "rain barrel by the gate" },
-    { "ref": "prop:barrel", "x": 660, "y": 324, "note": "supply barrel near the hall" },
-    { "enemy": "gate-sentry", "x": 560, "y": 430 }
+    {
+      "ref": "prop:castle-banner",
+      "x": 236,
+      "y": 212,
+      "note": "weathered king's banner"
+    },
+    {
+      "ref": "prop:castle-banner",
+      "x": 548,
+      "y": 212,
+      "note": "half-furled queen's banner"
+    },
+    {
+      "ref": "prop:castle-lantern",
+      "x": 320,
+      "y": 236,
+      "note": "yard lantern"
+    },
+    {
+      "ref": "prop:castle-lantern",
+      "x": 612,
+      "y": 236,
+      "note": "hall threshold lantern"
+    },
+    {
+      "ref": "prop:barrel",
+      "x": 180,
+      "y": 322,
+      "note": "rain barrel by the gate"
+    },
+    {
+      "ref": "prop:barrel",
+      "x": 660,
+      "y": 324,
+      "note": "supply barrel near the hall"
+    },
+    {
+      "enemy": "banner-knight",
+      "x": 600,
+      "y": 280,
+      "note": "siege-warcamp lair CLIMAX: the warcamp commander, a banner-knight, holds the muster yard. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
+    },
+    {
+      "ref": "char:castle-watchman",
+      "x": 200,
+      "y": 200,
+      "patrol": {
+        "points": [
+          {
+            "x": 200,
+            "y": 200
+          },
+          {
+            "x": 380,
+            "y": 200
+          }
+        ],
+        "speed": 18
+      },
+      "note": "yard patrol east-west"
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:yard-gate", "x": 280, "y": 272, "note": "spawn zone — the yard gate" },
+    {
+      "id": "gate:yard-north",
+      "x": 400,
+      "y": 208,
+      "note": "spawn zone — the north muster rank, on the top edge of the dressed-stone lane"
+    },
+    {
+      "id": "gate:yard-south",
+      "x": 380,
+      "y": 336,
+      "note": "spawn zone — the south siege-works, on the bottom edge of the dressed-stone lane"
+    },
+    { "id": "gate:yard-keep", "x": 500, "y": 272, "note": "spawn zone — before the keep steps" }
   ],
   "triggers": [
     {
@@ -53,7 +177,12 @@
       "toMap": "map:castle-approach",
       "toSpawn": "from-yard",
       "sfx": "interact",
-      "zone": { "x0": 0, "y0": 244, "x1": 28, "y1": 304 }
+      "zone": {
+        "x0": 0,
+        "y0": 244,
+        "x1": 28,
+        "y1": 304
+      }
     },
     {
       "id": "trigger:hall-entry",
@@ -62,7 +191,12 @@
       "toMap": "map:castle-hall",
       "toSpawn": "entry",
       "sfx": "interact",
-      "zone": { "x0": 726, "y0": 244, "x1": 768, "y1": 304 }
+      "zone": {
+        "x0": 726,
+        "y0": 244,
+        "x1": 768,
+        "y1": 304
+      }
     }
   ]
 }

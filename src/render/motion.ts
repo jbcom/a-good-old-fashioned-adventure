@@ -7,6 +7,7 @@
 import { animate, type JSAnimation } from "animejs";
 import { getAnimation } from "../lib/content/registry";
 
+/** Per-entity animation channels: translateX, translateY, alpha for sprite motion. */
 export interface MotionChannels {
   translateX: number;
   translateY: number;
@@ -77,10 +78,12 @@ export function restartMotion(id: number, animId: string | null): MotionChannels
   return startMotion(id, animId, true);
 }
 
+/** Retrieve the current motion channels for an entity without starting an animation. */
 export function channelsOf(id: number): MotionChannels {
   return rigFor(id).channels;
 }
 
+/** Cancel any running animation and free the entity's rig from memory. */
 export function releaseMotion(id: number): void {
   const rig = rigs.get(id);
   if (rig) {

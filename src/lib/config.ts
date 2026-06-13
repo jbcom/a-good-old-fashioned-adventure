@@ -13,6 +13,7 @@ import playerJson from "../config/player.json";
 import progressionJson from "../config/progression.json";
 import uiJson from "../config/ui.json";
 
+/** Shape of a class attack (melee or projectile with damage/cooldown params). */
 export interface ClassAttack {
   kind: "melee" | "projectile";
   reach?: number;
@@ -22,8 +23,11 @@ export interface ClassAttack {
   speed?: number;
   life?: number;
   muzzleOffset?: { x: number; y: number };
+  /** Per-class attack sfx recipe (S20.3): the verb's distinct attack voice. */
+  voice?: string;
 }
 
+/** Shape of a class ability (shield, leap, or blink with activation/cooldown params). */
 export interface ClassAbility {
   kind: "shield" | "leap" | "blink";
   label: string;
@@ -44,16 +48,49 @@ export interface ClassAbility {
   sfx: string;
 }
 
+/** Rail-command unit temperament (docs/RAIL-COMMAND.md §sim model). */
+export interface ClassTemperament {
+  verb:
+    | "charge"
+    | "hold-range"
+    | "aoe"
+    | "flank"
+    | "aura"
+    | "heal-beam"
+    | "debuff-aura"
+    | "blade-storm"
+    | "storm-volley";
+  /** range at which the unit's attack engages */
+  engage: number;
+  /** sight range: enemies beyond it don't interrupt the rail march */
+  perception?: number;
+  hp: number;
+  speed: number;
+  keepDistance?: number;
+  chargeSpeedMultiplier?: number;
+  blastRadius?: number;
+  lateralOffset?: number;
+  auraRadius?: number;
+  healPerPulse?: number;
+  pulsePeriod?: number;
+  /** dread-knight composite: every blow applies the Withered debuff */
+  withersOnHit?: boolean;
+}
+
+/** Complete player or NPC class definition (sprite, palette, attack, ability, temperament). */
 export interface ClassDef {
   playable?: boolean;
   sprite: string;
   palette: string;
   attack: ClassAttack;
   ability: ClassAbility;
+  temperament?: ClassTemperament;
 }
 
-export type IncrementalCurrencyId = "coins" | "roses";
+/** Enumeration of incremental-loop currency types. */
+export type IncrementalCurrencyId = "coins" | "gems" | "roses";
 
+/** Currency definition including rarity, sources, and HUD priority. */
 export interface IncrementalCurrencyDef {
   label: string;
   shortLabel: string;
@@ -64,12 +101,14 @@ export interface IncrementalCurrencyDef {
   hudPriority: number;
 }
 
+/** Enumeration of upgrade-graph track names. */
 export type IncrementalTrackId = "vows" | "characters" | "encounters" | "roads" | "castle";
 
+/** Single node in the upgrade DAG: unlocks classes, enemies, routes, relics, or economy. */
 export interface IncrementalUpgradeNode {
   id: string;
   label: string;
-  category: "route" | "enemy" | "class" | "ability" | "map" | "relic";
+  category: "route" | "enemy" | "class" | "ability" | "map" | "relic" | "economy";
   track: IncrementalTrackId;
   cost: Partial<Record<IncrementalCurrencyId, number>>;
   prerequisites: string[];
@@ -77,13 +116,65 @@ export interface IncrementalUpgradeNode {
   classId?: string;
   routePack?: string;
   enemyFamily?: string;
+  /** Archetype this node activates in the map's waves (the enemy DAG dial). */
+  unlocksEnemy?: string;
+  /**
+   * Per-map kin boss (docs/RAIL-COMMAND.md §dragon's kin). Present on the
+   * dragon-unlock node of a map's sub-tree: the map's guardian, recolored
+   * from the green High Dragon by `hue`, with a tracked `relation` modifier
+   * (brother/uncle/step-cousin…) that the rescue dialogue quips about.
+   */
+  dragonKin?: {
+    mapId: string;
+    relation: string;
+    /** target hue (deg) the green dragon ramp is rotated to for this kin */
+    hue: number;
+    /** roses the princess pays for felling this kin on the run */
+    roseYield?: number;
+  };
+  /**
+   * Dragon's Lair room (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks).
+   * Present on a lair room-unlock node: which map's lair this belongs to, the
+   * room's depth (1 = the lair entrance that relocates the princess in), and
+   * the playable rail map id for that room. Unlocking deeper rooms moves the
+   * princess (and the dragon, if its kin is unlocked) to the deepest room.
+   */
+  lairRoom?: {
+    mapId: string;
+    /** 1-based room depth along the lair (room 1 is the entrance) */
+    depth: number;
+    /** the playable rail map this room loads */
+    roomMap: string;
+  };
+  /** Coins each warband reinforcement pays on defeat, beyond enemyDefeated. */
+  spawnBounty?: number;
+  /**
+   * Per-enemy spawn-placement track (S21.4, docs/RAIL-COMMAND.md §enemy
+   * placement): each owned rank adds one more candidate spawn gate this enemy
+   * can roll among (rank N = up to N of the map's waveGates, by slice order)
+   * AND multiplies its coin bounty by `coinMultiplierPerRank` per rank.
+   */
+  placement?: {
+    enemy: string;
+    /** coin-bounty multiplier added per owned rank (more spread = more reward) */
+    coinMultiplierPerRank: number;
+  };
   ability?: string;
   ranks?: number;
   rankCostGrowth?: number;
-  effect?: { maxHp?: number };
+  effect?: { maxHp?: number; unitCount?: number; checkpointBonus?: number };
+  /**
+   * A purchased-sheet emblem crop (S-DAG-ICONS hybrid). When present, the
+   * node's DAG emblem is this raster crop instead of a bespoke emblem-<slug>.pix
+   * grid. Generic node types (economy/class/plain-enemy/ability) carry a sheet
+   * icon here; identity nodes (dragon/lair/relic/route/named-boss) keep their
+   * bespoke .pix and omit it.
+   */
+  iconRef?: { image: string; x: number; y: number; w: number; h: number };
   note?: string;
 }
 
+/** Root shape: currencies, upgrade DAG, map DAG, route packs, class roster, and dragon lairs. */
 export interface IncrementalConfig {
   loop: {
     id: string;
@@ -97,6 +188,8 @@ export interface IncrementalConfig {
     coreRunRequiresCastleInterior: boolean;
     resultsMode: "upgrade-graph";
     targetGameplayAreaPercentPhone: number;
+    /** rail-mode rescue trigger distance (docs/RAIL-COMMAND.md §Endgame) */
+    rescueRadius: number;
   };
   currencies: Record<IncrementalCurrencyId, IncrementalCurrencyDef>;
   runRewards: Record<
@@ -120,16 +213,38 @@ export interface IncrementalConfig {
     maps: string[];
     role: string;
   }[];
+  mapDag: {
+    /** ordered linear spine of route maps — runs play the furthest unlocked */
+    order: string[];
+    princessAtLastUnlocked: boolean;
+    castleNode: string;
+    castleMap: string;
+  };
+  /**
+   * Per-map Dragon's Lair (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks):
+   * a themed multi-room dungeon hanging off a spine map. `theme` names the
+   * dungeon flavor (cave/netherrealm/castle/crypt…); `rooms` is the ordered
+   * playable room rail maps (room 1 first). The lair-unlock node relocates the
+   * princess into room 1; each deeper room node moves her further in.
+   */
+  mapLairs?: Record<string, { theme: string; rooms: string[] }>;
 }
 
+/** Enemy type archetype (sprite, ai behavior, hp/speed, attack shape). */
 export interface EnemyArchetype {
   name: string;
   sprite: string;
   palette: string;
+  /** Warband family tag: enemyFamily rank nodes reinforce matching spawns. */
+  family?: string;
   hp: number;
   speed: number;
   hitbox: { w: number; h: number };
   behavior: "patrol" | "chase" | "caster" | "turret" | "boss" | "ambush" | "guard";
+  /** Contact never arms: this enemy threatens only through its attacks. */
+  touchHarmless?: boolean;
+  /** Blows never displace it: anchored guardians hold their post. */
+  knockbackImmune?: boolean;
   miniboss?: boolean;
   relentless?: boolean;
   ambush?: {
@@ -175,33 +290,81 @@ export interface EnemyArchetype {
   };
 }
 
+/** Engine configuration (frame rate, physics, global timing). */
 export const engine = engineJson;
+/** Player configuration (starting stats, damage, knockback). */
 export const player = playerJson;
+/** Class roster and class definitions (playable and NPC archetypes). */
 export const classes = classesJson as unknown as {
   roster: string[];
   companionRoster?: string[];
   classes: Record<string, ClassDef>;
 };
+/** Combat rules (balance, stagger, timing). */
 export const combat = combatJson;
+/** Progression config (XP curves, level rewards). */
 export const progression = progressionJson;
-export const incremental = incrementalJson as unknown as IncrementalConfig;
+// Upgrade nodes live one-per-file under src/config/upgrades/ (split from the
+// incremental.json monolith) and are globbed + merged back into the graph at
+// build time — the merged shape is identical to the old inline `nodes` array,
+// so no consumer changes. Ordering is stable (sorted by id) for determinism.
+const upgradeNodeModules = import.meta.glob<IncrementalUpgradeNode>("/src/config/upgrades/*.json", {
+  eager: true,
+  import: "default",
+});
+const upgradeNodes = Object.entries(upgradeNodeModules)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([, node]) => {
+    // strip the per-file $schema pointer; it is editor tooling, not graph data
+    const { $schema: _schema, ...rest } = node as IncrementalUpgradeNode & { $schema?: string };
+    return rest as IncrementalUpgradeNode;
+  });
+
+/** Incremental-loop config: currencies, upgrade DAG, routes, lairs, dragon kin. */
+export const incremental = {
+  ...(incrementalJson as unknown as IncrementalConfig),
+  upgradeGraph: {
+    ...(incrementalJson as unknown as IncrementalConfig).upgradeGraph,
+    nodes: upgradeNodes,
+  },
+} as IncrementalConfig;
+/** Drop tables and loot distribution. */
 export const drops = dropsJson;
-export const enemies = enemiesJson as unknown as {
-  aiDefaults: {
-    aggroRange: number;
-    deaggroRange: number;
-    patrolRange: number;
-    windup: { duration: number; armRange: number; disarmRange: number; castFlash: number };
-  };
-  difficultyCurve: {
-    id: string;
-    label: string;
-    tier: number;
-    threat: number;
-    maps: string[];
-    archetypes: string[];
-  }[];
-  archetypes: Record<string, EnemyArchetype>;
+// Enemy archetypes live one-per-file under src/config/enemies/ (split from the
+// enemies.json monolith, mirroring the upgrade-node split) and are globbed +
+// merged into the archetypes map at build. aiDefaults + difficultyCurve stay
+// in enemies.json. The merged shape is identical to the old inline map, so no
+// consumer changes; the per-file `id`/`$schema` are stripped on merge.
+const enemyArchetypeModules = import.meta.glob<EnemyArchetype & { id: string; $schema?: string }>(
+  "/src/config/enemies/*.json",
+  { eager: true, import: "default" },
+);
+const enemyArchetypes: Record<string, EnemyArchetype> = {};
+for (const mod of Object.values(enemyArchetypeModules)) {
+  const { id, $schema: _schema, ...archetype } = mod;
+  enemyArchetypes[id] = archetype as EnemyArchetype;
+}
+/** Enemy archetypes, AI defaults, and difficulty curve. */
+export const enemies = {
+  ...(enemiesJson as unknown as {
+    aiDefaults: {
+      aggroRange: number;
+      deaggroRange: number;
+      patrolRange: number;
+      windup: { duration: number; armRange: number; disarmRange: number; castFlash: number };
+    };
+    difficultyCurve: {
+      id: string;
+      label: string;
+      tier: number;
+      threat: number;
+      maps: string[];
+      archetypes: string[];
+    }[];
+  }),
+  archetypes: enemyArchetypes,
 };
+/** Audio settings (sfx, music, volume, attenuation). */
 export const audio = audioJson;
+/** UI theme, colors, fonts, and layout. */
 export const ui = uiJson;

@@ -1,291 +1,79 @@
 {
   "$schema": "../../schemas/config.schema.json",
-  "sfx": {
-    "slash": {
-      "osc": "triangle",
-      "freq": [
-        {
-          "t": 0,
-          "v": 440
-        },
-        {
-          "t": 0.12,
-          "v": 80,
-          "ramp": "exp"
-        }
-      ],
-      "gain": [
-        {
-          "t": 0,
-          "v": 0.12
-        },
-        {
-          "t": 0.12,
-          "v": 0.01,
-          "ramp": "exp"
-        }
-      ],
-      "duration": 0.12
-    },
-    "magic": {
-      "osc": "sine",
-      "freq": [
-        {
-          "t": 0,
-          "v": 800
-        },
-        {
-          "t": 0.3,
-          "v": 200,
-          "ramp": "exp"
-        }
-      ],
-      "gain": [
-        {
-          "t": 0,
-          "v": 0.1
-        },
-        {
-          "t": 0.3,
-          "v": 0.01,
-          "ramp": "exp"
-        }
-      ],
-      "duration": 0.3
-    },
-    "dash": {
-      "osc": "sawtooth",
-      "freq": [
-        {
-          "t": 0,
-          "v": 200
-        },
-        {
-          "t": 0.1,
-          "v": 1000,
-          "ramp": "exp"
-        }
-      ],
-      "gain": [
-        {
-          "t": 0,
-          "v": 0.06
-        },
-        {
-          "t": 0.1,
-          "v": 0.01,
-          "ramp": "exp"
-        }
-      ],
-      "duration": 0.1
-    },
-    "hurt": {
-      "osc": "sawtooth",
-      "freq": [
-        {
-          "t": 0,
-          "v": 150
-        },
-        {
-          "t": 0.05,
-          "v": 80
-        }
-      ],
-      "gain": [
-        {
-          "t": 0,
-          "v": 0.18
-        },
-        {
-          "t": 0.25,
-          "v": 0.01,
-          "ramp": "exp"
-        }
-      ],
-      "duration": 0.25
-    },
-    "shield": {
-      "osc": "sine",
-      "freq": [
-        {
-          "t": 0,
-          "v": 600
-        },
-        {
-          "t": 0.05,
-          "v": 650
-        }
-      ],
-      "gain": [
-        {
-          "t": 0,
-          "v": 0.1
-        },
-        {
-          "t": 0.15,
-          "v": 0.01,
-          "ramp": "exp"
-        }
-      ],
-      "duration": 0.15
-    },
-    "interact": {
-      "osc": "triangle",
-      "freq": [
-        {
-          "t": 0,
-          "v": 392.0
-        },
-        {
-          "t": 0.08,
-          "v": 523.25
-        }
-      ],
-      "gain": [
-        {
-          "t": 0,
-          "v": 0.08
-        },
-        {
-          "t": 0.2,
-          "v": 0.01,
-          "ramp": "exp"
-        }
-      ],
-      "duration": 0.2
-    },
-    "inspect": {
-      "osc": "triangle",
-      "arpeggio": {
-        "notes": [329.63, 392.0, 523.25],
-        "stepTime": 0.055,
-        "noteGain": 0.045,
-        "noteDecay": 0.13
-      }
-    },
-    "pickup": {
-      "osc": "sine",
-      "freq": [
-        {
-          "t": 0,
-          "v": 330
-        },
-        {
-          "t": 0.08,
-          "v": 440
-        }
-      ],
-      "gain": [
-        {
-          "t": 0,
-          "v": 0.08
-        },
-        {
-          "t": 0.15,
-          "v": 0.01,
-          "ramp": "exp"
-        }
-      ],
-      "duration": 0.15
-    },
-    "coin": {
-      "osc": "triangle",
-      "freq": [
-        {
-          "t": 0,
-          "v": 523.25
-        },
-        {
-          "t": 0.06,
-          "v": 783.99
-        }
-      ],
-      "gain": [
-        {
-          "t": 0,
-          "v": 0.07
-        },
-        {
-          "t": 0.18,
-          "v": 0.01,
-          "ramp": "exp"
-        }
-      ],
-      "duration": 0.18
-    },
-    "levelUp": {
-      "osc": "triangle",
-      "arpeggio": {
-        "notes": [261.63, 329.63, 392.0, 523.25, 659.25, 783.99, 1046.5],
-        "stepTime": 0.08,
-        "noteGain": 0.08,
-        "noteDecay": 0.24
-      }
-    },
-    "chest": {
-      "osc": "square",
-      "arpeggio": {
-        "notes": [392.0, 523.25, 659.25, 783.99],
-        "stepTime": 0.08,
-        "noteGain": 0.05,
-        "noteDecay": 0.16
-      }
-    },
-    "victory": {
-      "osc": "square",
-      "sequence": {
-        "notes": [523.25, 523.25, 523.25, 523.25, 659.25, 587.33, 659.25, 783.99],
-        "durations": [0.12, 0.12, 0.12, 0.24, 0.24, 0.12, 0.12, 0.6],
-        "noteGain": 0.06
-      }
-    },
-    "rose": {
-      "osc": "sine",
-      "sequence": {
-        "notes": [659.25, 880.0, 1046.5],
-        "durations": [0.12, 0.12, 0.3],
-        "noteGain": 0.06
-      }
-    }
+  "comment": "howler.js sample map (user mandate 2026-06-12: full switch from ToneJS/procedural to the purchased library). Every path lives under public/assets/ and is manifested in public/assets/MANIFEST.json; tests/unit/audio-engine.test.ts verifies each file exists. music keys match map bgmTheme values plus the new surfaces (menu/combat/prebattle/miniboss/boss); ambient keys mirror music keys — a theme may omit its ambient bed (interior rooms sit in silence under the music).",
+  "music": {
+    "overworld": "audio/music/overworld.m4a",
+    "village": "audio/music/village.m4a",
+    "interior": "audio/music/interior.m4a",
+    "forest": "audio/music/forest.m4a",
+    "deep-forest": "audio/music/deep-forest.m4a",
+    "sunken-road": "audio/music/sunken-road.m4a",
+    "castle-approach": "audio/music/castle-approach.m4a",
+    "dungeon": "audio/music/dungeon.m4a",
+    "menu": "audio/music/menu.m4a",
+    "combat": "audio/music/combat.m4a",
+    "prebattle": "audio/music/prebattle.m4a",
+    "miniboss": "audio/music/miniboss.m4a",
+    "boss": "audio/music/boss.m4a"
   },
-  "bgm": {
-    "stepMs": 280,
-    "osc": "triangle",
-    "noteGain": 0.015,
-    "noteDuration": 0.22,
-    "themes": {
-      "overworld": [
-        329.63, 349.23, 392.0, 440.0, 392.0, 349.23, 329.63, 293.66, 329.63, 329.63, 349.23, 392.0,
-        440.0, 493.88, 523.25, 493.88
-      ],
-      "village": [
-        392.0, 440.0, 493.88, 523.25, 493.88, 440.0, 392.0, 329.63, 349.23, 392.0, 440.0, 392.0,
-        329.63, 293.66, 329.63, 392.0
-      ],
-      "interior": [
-        261.63, 329.63, 392.0, 329.63, 293.66, 349.23, 440.0, 349.23, 261.63, 329.63, 392.0, 493.88,
-        440.0, 392.0, 329.63, 293.66
-      ],
-      "forest": [
-        293.66, 329.63, 392.0, 349.23, 293.66, 261.63, 293.66, 349.23, 329.63, 392.0, 440.0, 392.0,
-        329.63, 293.66, 261.63, 246.94
-      ],
-      "deep-forest": [
-        220.0, 261.63, 329.63, 293.66, 246.94, 220.0, 196.0, 220.0, 246.94, 293.66, 349.23, 293.66,
-        261.63, 220.0, 196.0, 174.61
-      ],
-      "sunken-road": [
-        174.61, 220.0, 261.63, 293.66, 261.63, 220.0, 174.61, 146.83, 196.0, 246.94, 293.66, 329.63,
-        293.66, 246.94, 196.0, 174.61
-      ],
-      "castle-approach": [
-        196.0, 246.94, 293.66, 392.0, 369.99, 293.66, 246.94, 196.0, 220.0, 277.18, 329.63, 440.0,
-        392.0, 329.63, 277.18, 220.0
-      ],
-      "dungeon": [
-        110.0, 116.54, 130.81, 116.54, 146.83, 130.81, 110.0, 98.0, 110.0, 110.0, 146.83, 130.81,
-        164.81, 146.83, 110.0, 116.54
-      ]
-    }
+  "ambient": {
+    "overworld": "audio/ambient/river.mp3",
+    "village": "audio/ambient/market.mp3",
+    "forest": "audio/ambient/forest.mp3",
+    "deep-forest": "audio/ambient/shadow-room.m4a",
+    "sunken-road": "audio/ambient/desert.mp3",
+    "castle-approach": "audio/ambient/mountain.mp3",
+    "dungeon": "audio/ambient/dungeon.mp3"
+  },
+  "volumes": {
+    "music": 0.55,
+    "ambient": 0.3,
+    "sfx": 0.8,
+    "themeFadeMs": 600
+  },
+  "sfx": {
+    "slash": "audio/sfx/slash.mp3",
+    "magic": "audio/sfx/magic.mp3",
+    "dash": "audio/sfx/dash.mp3",
+    "hurt": "audio/sfx/hurt.mp3",
+    "shield": "audio/sfx/shield.mp3",
+    "interact": "audio/ui/click.mp3",
+    "inspect": "audio/ui/popup.mp3",
+    "pickup": "audio/sfx/pickup.mp3",
+    "coin": "audio/ui/coin.mp3",
+    "levelUp": "audio/stingers/levelup.mp3",
+    "chest": "audio/sfx/chest.mp3",
+    "victory": "audio/stingers/victory.mp3",
+    "rose": "audio/sfx/rose.mp3",
+    "teleport": "audio/sfx/teleport.mp3",
+    "explosion": "audio/sfx/explosion.mp3",
+    "boss-roar": "audio/sfx/boss-roar.mp3",
+    "spell-fire": "audio/sfx/spell-fire.mp3",
+    "spell-ice": "audio/sfx/spell-ice.mp3",
+    "spell-electric": "audio/sfx/spell-electric.mp3",
+    "footstep-grass": "audio/sfx/footstep-grass.mp3",
+    "footstep-sand": "audio/sfx/footstep-sand.mp3",
+    "footstep-stone": "audio/sfx/footstep-stone.mp3",
+    "footstep-wood": "audio/sfx/footstep-wood.mp3",
+    "footstep-water": "audio/sfx/footstep-water.mp3",
+    "footstep-armor": "audio/sfx/footstep-armor.mp3",
+    "jump": "audio/sfx/jump.mp3",
+    "land": "audio/sfx/land.mp3",
+    "ui-confirm": "audio/ui/confirm.mp3",
+    "ui-cancel": "audio/ui/cancel.mp3",
+    "ui-hover": "audio/ui/hover.mp3",
+    "ui-error": "audio/ui/error.mp3",
+    "ui-unlock": "audio/ui/unlock.mp3",
+    "ui-notification": "audio/ui/notification.mp3",
+    "ui-achievement": "audio/ui/achievement.mp3",
+    "deploy": "audio/sfx/land.mp3",
+    "wave-horn": "audio/ui/notification.mp3",
+    "collapse": "audio/ui/error.mp3",
+    "attack-blade": "audio/sfx/slash.mp3",
+    "attack-arcane": "audio/sfx/magic.mp3",
+    "attack-fire": "audio/sfx/spell-fire.mp3",
+    "attack-storm": "audio/sfx/spell-electric.mp3",
+    "attack-frost": "audio/sfx/spell-ice.mp3",
+    "attack-shout": "audio/sfx/boss-roar.mp3"
   }
 }

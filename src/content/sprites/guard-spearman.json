@@ -1,0 +1,75 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:guard-spearman",
+  "kind": "sheet-sprite",
+  "description": "Electric Lemon Guard Spearman combat sheet (public/assets/MANIFEST.json#electric-lemon-rpg-characters) \u2014 the gate-sentry's body and the castle guard ambience body (docs/CAST-CONVERSION.md). 32px, E/W/S/N: doubled attack rows per direction (jab row + lunge row: E 0-1, W 2-3, S 4-5, N 6-7, backs confirmed by skin probe), stance/walk rows 8-11.",
+  "frameSize": {
+    "w": 32,
+    "h": 32
+  },
+  "anchor": {
+    "x": 16,
+    "y": 30
+  },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "enemies/guard-spearman.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 8,
+        "left": 9,
+        "down": 10,
+        "up": 11
+      },
+      "fps": 2
+    },
+    "walk": {
+      "image": "enemies/guard-spearman.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 8,
+        "left": 9,
+        "down": 10,
+        "up": 11
+      },
+      "fps": 10
+    },
+    "attack": {
+      "image": "enemies/guard-spearman.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 0,
+        "left": 2,
+        "down": 4,
+        "up": 6
+      },
+      "fps": 12,
+      "loop": false
+    },
+    "hurt": {
+      "image": "enemies/guard-spearman.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 8,
+        "left": 9,
+        "down": 10,
+        "up": 11
+      },
+      "fps": 6
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

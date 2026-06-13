@@ -274,30 +274,10 @@
       ]
     },
     {
-      "enemy": "orc-scout",
-      "x": 500,
-      "y": 220
-    },
-    {
-      "enemy": "bramble-stalker",
-      "x": 680,
-      "y": 184
-    },
-    {
-      "enemy": "thorn-shaman",
-      "x": 900,
-      "y": 450
-    },
-    {
-      "enemy": "forest-shaman",
-      "x": 840,
-      "y": 398
-    },
-    {
       "enemy": "glowcap-matron",
       "x": 560,
-      "y": 480,
-      "note": "Deep Forest miniboss in the southern glowcap hollow"
+      "y": 300,
+      "note": "Deep Forest miniboss in the southern glowcap hollow — the one authored combatant; trash is permuted from the unlocked set via the wave gates (this also retires the N4 kiting-caster cluster, which is now a permutation)"
     },
     {
       "ref": "prop:glowcap-ring",
@@ -389,6 +369,28 @@
         "x1": 1088,
         "y1": 332
       }
+    }
+  ],
+  "waveGates": [
+    {
+      "id": "gate:west-edge",
+      "x": 348,
+      "y": 300
+    },
+    {
+      "id": "gate:mid-road",
+      "x": 566,
+      "y": 300
+    },
+    {
+      "id": "gate:east-bend",
+      "x": 762,
+      "y": 300
+    },
+    {
+      "id": "gate:far-pass",
+      "x": 957,
+      "y": 300
     }
   ]
 }

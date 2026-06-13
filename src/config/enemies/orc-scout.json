@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "orc-scout",
+  "name": "Bandit Scout",
+  "sprite": "sprite:rogue",
+  "palette": "palette:orc",
+  "family": "orc-scout",
+  "hp": 15,
+  "speed": 45,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "patrol"
+}

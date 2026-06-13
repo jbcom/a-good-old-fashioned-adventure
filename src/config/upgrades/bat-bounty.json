@@ -1,0 +1,24 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:bat-bounty",
+  "label": "Crypt Bat Bounty",
+  "category": "economy",
+  "cost": {
+    "coins": 18
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.7,
+  "prerequisites": ["upgrade:unlock-crypt-bat"],
+  "enemyFamily": "crypt-bat",
+  "spawnBounty": 2,
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Each rank pays more coins per crypt-bat felled \u2014 the income the unlock promises, and the coin sink that keeps the antagonist chain wall-free.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 112,
+    "y": 608,
+    "w": 16,
+    "h": 16
+  }
+}

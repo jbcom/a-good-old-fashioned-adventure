@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:wild-boar-dark",
+  "kind": "sheet-sprite",
+  "description": "Shaggy dark-coat wild boar variant (rows 6-9 of the Elthen sheet) — the Bramble Stalker's body. Pixel-authored variant, not a palette swap (sheets never recolor).",
+  "frameSize": { "w": 32, "h": 32 },
+  "anchor": { "x": 16, "y": 30 },
+  "directionOrder": ["right", "up", "left", "down"],
+  "facing": { "nativeDir": "left" },
+  "animations": {
+    "idle": {
+      "image": "enemies/boar.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "row": 6,
+      "fps": 6
+    },
+    "walk": {
+      "image": "enemies/boar.png",
+      "framesPerDirection": 8,
+      "directional": false,
+      "row": 7,
+      "fps": 12
+    },
+    "attack": {
+      "image": "enemies/boar.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "row": 8,
+      "fps": 10
+    },
+    "hurt": {
+      "image": "enemies/boar.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "row": 9,
+      "fps": 10
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

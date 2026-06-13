@@ -1,5 +1,6 @@
 import { Color, DoubleSide, ShaderMaterial, type Texture } from "three";
 
+/** Diorama vertex shader: passes UV and world position to fragment shader. */
 export const DIORAMA_VERTEX_SHADER = `
   varying vec2 vUv;
   varying vec3 vWorldPosition;
@@ -12,6 +13,7 @@ export const DIORAMA_VERTEX_SHADER = `
   }
 `;
 
+/** Diorama fragment shader: renders vellum-paper texture with relief, grain, and per-role lighting. */
 export const DIORAMA_FRAGMENT_SHADER = `
   uniform sampler2D uMap;
   uniform vec3 uVellumLight;
@@ -64,6 +66,7 @@ const RELIEF_BY_ROLE: Record<DioramaMaterialRole, number> = {
   spark: 0.24,
 };
 
+/** Build a role-tuned diorama material (ground/sprite/spark relief). */
 export function createDioramaMaterial(
   texture: Texture,
   {
@@ -94,6 +97,7 @@ export function createDioramaMaterial(
   return material;
 }
 
+/** Update the texture uniform on a diorama material and mark it for update. */
 export function setDioramaTexture(material: ShaderMaterial, texture: Texture): void {
   material.uniforms.uMap.value = texture;
   material.needsUpdate = true;

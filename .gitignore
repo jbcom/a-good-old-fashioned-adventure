@@ -1,4 +1,4 @@
-# agent-state cache (re-derivable; directive.md + decisions.ndjson stay tracked)
+# ── agent-state cache (re-derivable; directive.md + decisions.ndjson stay tracked)
 .agent-state/digest.md
 .agent-state/cursor.md
 .agent-state/.indexed-sha
@@ -8,16 +8,34 @@
 .agent-state/batch.json
 .claude/state/
 
-# deps / build (arcade-game dialect)
+# ── deps / build (arcade-game dialect)
 node_modules/
 dist/
 tsconfig.tsbuildinfo
 .local/
+coverage/
+*.log
 
-# screenshot scratch output from browser tests
+# ── test scratch output and regenerated visual evidence (local-only)
+docs/evidence/
 tests/browser/*.png
 tests/browser/__screenshots__/
 .vitest-attachments/
 .playwright-cli/
 output/
 output/playwright/
+
+# ── secrets / local config
+.env
+.env.*
+
+# ── purchased-asset working area: raw downloads, extractions, generated
+#    aseprite masters and animation previews. NOTHING under raw-assets/ is
+#    ever tracked — curated keepers are promoted to public/assets/ with a
+#    MANIFEST.json entry (tests/unit/asset-manifest.test.ts enforces it).
+raw-assets/
+.itch-cache/
+
+# ── OS noise
+.DS_Store
+Thumbs.db

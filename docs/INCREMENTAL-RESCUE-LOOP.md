@@ -43,6 +43,22 @@ story, not from grinding ordinary enemies. Coin rewards should be frequent
 enough to make a failed run useful; rose rewards should make a successful or
 well-played run memorable.
 
+Travel itself pays: route maps carry `road-waypoint` trigger zones along
+their authored path, and the first crossing of each segment per run banks
+`runRewards.roadTravelled` coins (`currentRunRoadIds` tracks crossings and
+resets when a run closes). A run that dies halfway still banked the road it
+walked — the gentlest expression of death-pays-out. Every `runRewards` key
+must have a live grant path; a unit gate fails the build when config promises
+income that nothing grants.
+
+There is exactly ONE coin wallet: `IncrementalProgress.coins`. Chest gold,
+enemy bounties, and shop transactions all read and write it directly — there
+is no separate per-run purse. Treasure banks the moment it is opened (so a
+death after a good haul still pays, per the death-pays-out rule), and a shop
+purchase mid-run spends real savings, which is the intended risk/reward
+choice. The pre-pivot `PlayerGold` trait was a second wallet whose contents
+evaporated at run end; it is removed, not bridged.
+
 ### Death pays out
 
 The player never has to finish. That is the point of the dual currencies: a
@@ -134,6 +150,15 @@ count (one more orc on the route maps per rank) makes every run harder, but
 every extra orc is more coins per run. Adversarial ranks are the loop's
 self-balancing throttle: the player chooses when to raise the danger in
 exchange for income, instead of the game imposing a difficulty curve.
+
+Mechanically: an upgrade node with `enemyFamily` and owned `ranks` adds one
+reinforcement per rank when a map instantiates. Enemy archetypes carry a
+`family` tag in `enemies.json`; reinforcements spawn at deterministic offsets
+beside that family's authored spawns on the map (collision-probed so they
+land on walkable ground), so the same save always produces the same field.
+Each reinforcement carries the node's `spawnBounty` — paid in coins on top of
+the standard `enemyDefeated` reward when it falls. The bounty is what makes
+the adversarial trade rational: harder roads, but every extra orc pays.
 
 ### Bosses are placed; trash is fodder
 

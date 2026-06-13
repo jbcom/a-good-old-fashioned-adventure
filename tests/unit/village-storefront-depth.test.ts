@@ -14,7 +14,14 @@ import type { MapDef, PropDef, PropState } from "../../src/lib/content/types";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import { buyShopListing, sellShopListing } from "../../src/sim/shop";
 import { step } from "../../src/sim/tick";
-import { Inventory, IsNpc, NpcPatrol, PlayerGold, Transform } from "../../src/sim/traits";
+import {
+  IncrementalProgress,
+  Inventory,
+  IsNpc,
+  IsPlayer,
+  NpcPatrol,
+  Transform,
+} from "../../src/sim/traits";
 
 const storefrontProps = [
   "prop:shop-awning",
@@ -125,8 +132,8 @@ describe("S8.18 Hearthwake shop-and-street depth", () => {
 
   it("buys and sells the road-cart ribbon through the generic shop reducer", () => {
     const world = bootVillageWorld();
-    const player = world.queryFirst(PlayerGold);
-    if (!player) throw new Error("expected player with gold");
+    const player = world.queryFirst(IsPlayer);
+    if (!player) throw new Error("expected player");
 
     const bought = buyShopListing(world, "shop:road-cart-counter", "wayfarer-ribbon");
     expect(bought).toMatchObject({
@@ -136,7 +143,7 @@ describe("S8.18 Hearthwake shop-and-street depth", () => {
       gold: 10,
       inventoryCount: 1,
     });
-    expect(player.get(PlayerGold)?.value).toBe(10);
+    expect(world.get(IncrementalProgress)?.coins).toBe(10);
     expect(player.get(Inventory)?.items["item:wayfarer-ribbon"]).toBe(1);
 
     const sold = sellShopListing(world, "shop:road-cart-counter", "wayfarer-ribbon");
@@ -147,7 +154,7 @@ describe("S8.18 Hearthwake shop-and-street depth", () => {
       gold: 11,
       inventoryCount: 0,
     });
-    expect(player.get(PlayerGold)?.value).toBe(11);
+    expect(world.get(IncrementalProgress)?.coins).toBe(11);
     expect(player.get(Inventory)?.items["item:wayfarer-ribbon"]).toBeUndefined();
   });
 

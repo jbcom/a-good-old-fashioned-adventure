@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-oldwood-3",
+  "label": "Break the Looted Market",
+  "category": "map",
+  "cost": {
+    "roses": 5,
+    "gems": 90
+  },
+  "prerequisites": ["upgrade:lair-oldwood-2"],
+  "lairRoom": {
+    "mapId": "map:oldwood-forest",
+    "depth": 3,
+    "roomMap": "map:village-shop"
+  },
+  "unlocks": ["upgrade:lair-oldwood-4"],
+  "track": "roads",
+  "note": "Captured-village lair, room 3: the market stalls the minions have turned into a barricaded toll-gate over the captives' goods. Rose-OR-gem, growing along the lair (roses logarithmic, gems exponential)."
+}

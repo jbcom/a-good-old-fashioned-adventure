@@ -4,7 +4,7 @@
  * exercise the Stage with genuine content.
  */
 import overworldDef from "../../src/content/world/maps/overworld.json";
-import { getSprite } from "../../src/lib/content/registry";
+import { getCharacterSprite } from "../../src/lib/content/registry";
 import { tileCanvas } from "../../src/render/atlas";
 import { rasterizeRows, resolvePalette } from "../../src/render/pixelart";
 import type { StageActor } from "../../src/render/Stage";
@@ -44,9 +44,9 @@ function tileCanvasFor(tileId: string): HTMLCanvasElement {
 }
 
 export function buildDemoActors(): StageActor[] {
-  const heroSprite = getSprite("sprite:hero");
-  const dragonSprite = getSprite("sprite:dragon");
-  const princessSprite = getSprite("sprite:princess");
+  const heroSprite = getCharacterSprite("sprite:hero");
+  const dragonSprite = getCharacterSprite("sprite:dragon");
+  const princessSprite = getCharacterSprite("sprite:princess");
   const sprite = (rows: string[], paletteId: string) =>
     rasterizeRows(rows, resolvePalette(paletteId));
   return [

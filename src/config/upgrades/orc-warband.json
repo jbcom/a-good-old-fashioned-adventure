@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:orc-warband",
+  "label": "Bandit Warband",
+  "category": "enemy",
+  "cost": {
+    "coins": 25
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.7,
+  "prerequisites": ["upgrade:unlock-forest-orc"],
+  "enemyFamily": "forest-orc",
+  "spawnBounty": 4,
+  "unlocks": [],
+  "note": "Adversarial coin rank: one more orc on route maps per rank — harder roads, but every orc pays coins.",
+  "track": "encounters"
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:placement-forest-orc",
+  "label": "Orc Warpaths",
+  "category": "economy",
+  "cost": {
+    "coins": 24
+  },
+  "ranks": 4,
+  "rankCostGrowth": 1.7,
+  "prerequisites": ["upgrade:orc-bounty"],
+  "placement": {
+    "enemy": "forest-orc",
+    "coinMultiplierPerRank": 0.25
+  },
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Per-enemy spawn-placement (docs/RAIL-COMMAND.md §enemy placement): each rank opens another warpath the forest-orc can muster from — up to N+1 of the map's gates (mouth → flank → lane → rear), spreading the orcs across more board slices AND paying +25% coins per orc felled (a wider front is a richer one). The placement track is the coin flywheel's depth dial.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 112,
+    "y": 608,
+    "w": 16,
+    "h": 16
+  }
+}

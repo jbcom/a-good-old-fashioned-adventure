@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-might-oldwood-forest",
+  "label": "Uncle Unleashed",
+  "category": "enemy",
+  "cost": {
+    "roses": 3,
+    "gems": 17
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.8,
+  "prerequisites": ["upgrade:dragon-kin-oldwood-forest"],
+  "enemyFamily": "dragon",
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Dragon-track combat buff (docs/RAIL-COMMAND.md §The Dragon track BUFFS the dragon): each rank widens the oldwood-forest kin volley (multi-attack), grows its fireball AoE, adds HP, and raises the roses the rescue pays. Rose-OR-gem, ranked — invest to make a stronger antagonist that pays more."
+}

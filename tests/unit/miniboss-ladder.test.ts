@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { enemies, incremental } from "../../src/lib/config";
-import { getMap, getSprite } from "../../src/lib/content/registry";
+import { getCharacterSprite, getMap } from "../../src/lib/content/registry";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import {
   applyIncrementalEventReward,
@@ -24,7 +24,7 @@ describe("S9.8 miniboss ladder", () => {
       for (const id of minibosses) {
         const archetype = enemies.archetypes[id];
         expect(archetype.sprite, `${id} needs a bespoke design`).toMatch(/^sprite:boss-/);
-        expect(getSprite(archetype.sprite).rows.length).toBeGreaterThan(0);
+        expect(getCharacterSprite(archetype.sprite).rows.length).toBeGreaterThan(0);
       }
     }
     // the dragon remains the final guardian, not a miniboss
@@ -38,19 +38,19 @@ describe("S9.8 miniboss ladder", () => {
     const before = world.get(IncrementalProgress);
     const coins0 = before?.coins ?? 0;
 
-    applyIncrementalEventReward(world, "enemy:defeated", "desert-wyrm");
+    applyIncrementalEventReward(world, { type: "enemy:defeated", archetypeId: "desert-wyrm" });
     const first = world.get(IncrementalProgress);
     expect(first?.coins).toBe(coins0 + 3 + 15);
     expect(first?.roses).toBe(1);
     expect(first?.defeatedMinibossIds).toContain("desert-wyrm");
 
-    applyIncrementalEventReward(world, "enemy:defeated", "desert-wyrm");
+    applyIncrementalEventReward(world, { type: "enemy:defeated", archetypeId: "desert-wyrm" });
     const second = world.get(IncrementalProgress);
     expect(second?.coins).toBe(coins0 + 2 * (3 + 15));
     expect(second?.roses).toBe(1);
 
     // trash mobs stay plain bounties
-    applyIncrementalEventReward(world, "enemy:defeated", "forest-orc");
+    applyIncrementalEventReward(world, { type: "enemy:defeated", archetypeId: "forest-orc" });
     expect(world.get(IncrementalProgress)?.coins).toBe(coins0 + 2 * 18 + 3);
   });
 

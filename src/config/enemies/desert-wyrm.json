@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "desert-wyrm",
+  "name": "Desert Wyrm",
+  "sprite": "sprite:boss-desert-wyrm",
+  "palette": "palette:base",
+  "hp": 80,
+  "speed": 42,
+  "hitbox": {
+    "w": 16,
+    "h": 16
+  },
+  "behavior": "turret",
+  "turret": {
+    "attackRange": 140,
+    "cooldown": 1.8,
+    "projectile": {
+      "type": "sandball",
+      "speed": 80,
+      "life": 2.5
+    },
+    "sfx": "slash"
+  },
+  "miniboss": true
+}

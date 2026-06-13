@@ -1,8 +1,15 @@
 import { describe, expect, it } from "vitest";
 import basePalette from "../../src/content/palettes/base.json";
 import swaps from "../../src/content/palettes/swaps.json";
-import { getSprite } from "../../src/lib/content/registry";
-import { propCanvas, spriteCanvas, tileCanvas } from "../../src/render/atlas";
+import { getCharacterSprite, props, sprites } from "../../src/lib/content/registry";
+import { isSheetSprite, resolveSheetFrame } from "../../src/lib/content/sheetSprite";
+import {
+  preloadSheetImages,
+  propCanvas,
+  sheetFrameCanvas,
+  spriteCanvas,
+  tileCanvas,
+} from "../../src/render/atlas";
 
 /** Real-browser pixel readback: palette swaps must recolor EXACTLY the
  * swapped channels and leave every other pixel byte-identical. */
@@ -25,7 +32,7 @@ describe("palette swap correctness (pixel compare)", () => {
   it("ranger swap recolors only S/s/R/r channels of the hero grid", () => {
     const knight = pixelsOf(spriteCanvas("sprite:hero", "palette:knight"));
     const ranger = pixelsOf(spriteCanvas("sprite:hero", "palette:ranger"));
-    const rows = getSprite("sprite:hero").rows;
+    const rows = getCharacterSprite("sprite:hero").rows;
     const swap = swaps.swaps["palette:ranger"] as Record<string, string>;
     const swappedChannels = new Set(Object.keys(swap));
 
@@ -53,7 +60,7 @@ describe("palette swap correctness (pixel compare)", () => {
 
   it("skeleton swap turns armor bone-white", () => {
     const skeleton = pixelsOf(spriteCanvas("sprite:hero", "palette:skeleton"));
-    const rows = getSprite("sprite:hero").rows;
+    const rows = getCharacterSprite("sprite:hero").rows;
     const bone = hexToRgb("#eef0f2");
     const y = rows.findIndex((r) => r.includes("S"));
     const x = rows[y].indexOf("S");
@@ -88,5 +95,50 @@ describe("props and tiles bake from content", () => {
     const water = pixelsOf(tileCanvas("tile:water"));
     const deepSea = hexToRgb(basePalette.colors.l.hex);
     expect([water[0], water[1], water[2]]).toEqual(deepSea);
+  });
+});
+
+describe("purchased sheet sprites bake real pixels", () => {
+  it("every sheet sprite's poses crop non-empty frames", async () => {
+    await preloadSheetImages();
+    for (const def of [...sprites.values()].filter(isSheetSprite)) {
+      for (const pose of Object.keys(def.poseMap)) {
+        const frame = resolveSheetFrame(def, {
+          pose,
+          choreoPhase: "",
+          facingDir: 1,
+          moveX: 0,
+          moveY: 0,
+          t: 0,
+        });
+        const data = pixelsOf(sheetFrameCanvas(def, frame));
+        let opaque = 0;
+        for (let i = 3; i < data.length; i += 4) if (data[i] > 0) opaque++;
+        // a wrong row offset or direction block crops dead sheet area —
+        // demand a real silhouette, not a sliver
+        expect(
+          opaque / (def.frameSize.w * def.frameSize.h),
+          `${def.id} pose ${pose} (${frame.anim.image} @${frame.sourceX},${frame.sourceY})`,
+        ).toBeGreaterThan(0.05);
+      }
+    }
+  });
+});
+
+describe("sheet-sliced props bake real pixels", () => {
+  it("every sheet prop state crops a non-empty cell", async () => {
+    await preloadSheetImages();
+    for (const def of props.values()) {
+      for (const [state, propState] of Object.entries(def.states)) {
+        if (!propState.sheet) continue;
+        const data = pixelsOf(propCanvas(def.id, state));
+        let opaque = 0;
+        for (let i = 3; i < data.length; i += 4) if (data[i] > 0) opaque++;
+        expect(
+          opaque / (propState.sheet.w * propState.sheet.h),
+          `${def.id} state ${state} @${propState.sheet.x},${propState.sheet.y}`,
+        ).toBeGreaterThan(0.05);
+      }
+    }
   });
 });

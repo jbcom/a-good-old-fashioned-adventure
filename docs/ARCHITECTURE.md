@@ -1,6 +1,6 @@
 ---
 title: Architecture
-updated: 2026-06-11
+updated: 2026-06-13
 status: current
 domain: technical
 ---
@@ -8,7 +8,7 @@ domain: technical
 # Architecture
 
 Layered: **content** (JSON, schema-validated) → **sim** (pure TS, Koota
-ECS, deterministic) → **presentation** (r3f world stage, DOM UI, ToneJS
+ECS, deterministic) → **presentation** (r3f world stage, DOM UI, howler.js
 audio, AnimeJS motion) → **shell** (Vite web, Capacitor Android; see
 `docs/PLATFORM.md`).
 
@@ -19,9 +19,9 @@ src/sim/       pure simulation: mapgen, movement, collision, combat, quests,
                events, yuka AI. No DOM, no Math.random (seeded RNG facade),
                no performance.now (clock facade).
 src/render/    pixel rasterization, atlases, the r3f world stage
-src/audio/     ToneJS engine built from config/audio.json recipes
+src/audio/     howler.js engine built from config/audio.json recipes (purchased library)
 src/persistence/ Drizzle schema, Capacitor SQLite save repository, Preferences settings
-src/ui/        React DOM: landing, HUD, dialogue, menus, minimap, virtual pad
+src/ui/        React DOM: landing, rail HUD (line-vitals/wave/unit-chips), dialogue, menus, minimap, toolbox
 src/app/       composition root
 ```
 
@@ -85,9 +85,9 @@ into state (see CONTENT-ARCHITECTURE.md §story).
   Chromium with GPU flags. CI runs the browser job on macOS with
   `VITEST_BROWSER_HEADLESS=false` so the headed/GPU contract matches local
   validation. The **playthrough test** drives the real app purely through
-  synthetic input (keyboard/pointer on the virtual pad) and must traverse the
-  full current player journey, including results and upgrade-graph controls; it
-  grows with every feature.
+  synthetic input (the CommanderGovernor places units by tapping the toolbox and
+  the rail) and must traverse the full current player journey, including results
+  and upgrade-graph controls; it grows with every feature.
 - `tests/harness/playerGovernor*.ts` — a test-side GOAP player governor
   documented in `docs/PLAYER-GOVERNOR.md`. It perceives public UI, presses
   real player controls, and never writes sim state.

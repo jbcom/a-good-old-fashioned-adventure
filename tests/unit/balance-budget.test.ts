@@ -1,43 +1,56 @@
 import { describe, expect, it } from "vitest";
 import { enemies, incremental } from "../../src/lib/config";
-import { getMap } from "../../src/lib/content/registry";
 import { nodeRanks, rankCost } from "../../src/sim/incrementalProgress";
+import { familyArchetypeIds } from "../harness/families";
 
 const { nodes, root } = incremental.upgradeGraph;
 
-/** Topological depth of each node from the root vow (prerequisite chain length). */
+/**
+ * Topological depth from the root vow. Affordability follows the DEEPEST
+ * prerequisite: a composite gated on two parents cannot be reached before
+ * its later parent, so depth = 1 + max(prerequisite depths).
+ */
 function nodeDepths(): Map<string, number> {
-  const depths = new Map<string, number>([[root, 0]]);
   const byId = new Map(nodes.map((node) => [node.id, node]));
-  const queue = [root];
-  while (queue.length > 0) {
-    const id = queue.shift() as string;
-    const depth = depths.get(id) ?? 0;
-    for (const next of byId.get(id)?.unlocks ?? []) {
-      if (!depths.has(next)) {
-        depths.set(next, depth + 1);
-        queue.push(next);
-      }
-    }
-  }
+  const depths = new Map<string, number>();
+  const visiting = new Set<string>();
+  const resolve = (id: string): number => {
+    const known = depths.get(id);
+    if (known !== undefined) return known;
+    if (visiting.has(id)) throw new Error(`cycle through ${id}`);
+    visiting.add(id);
+    const node = byId.get(id);
+    const prereqs = node?.prerequisites ?? [];
+    const depth =
+      id === root || prereqs.length === 0
+        ? 0
+        : 1 + Math.max(...prereqs.map((prereq) => resolve(prereq)));
+    visiting.delete(id);
+    depths.set(id, depth);
+    return depth;
+  };
+  for (const node of nodes) resolve(node.id);
   return depths;
 }
 
 /**
- * Expected coin income for one ordinary run at a given graph depth: the
- * baseline route's trash bounties plus one miniboss purse per depth tier the
- * player has opened. Deliberately conservative — real runs also drop hearts,
- * pay first-clear roses, and bank elite bonuses.
+ * Expected coin income for one ordinary run at a given graph depth. In the
+ * ZONE model (docs/RAIL-COMMAND.md §maps are zones, not enemies) maps no longer
+ * author trash — income comes from WAVE kills (the unlocked permutation spawned
+ * at the map's gates) plus a miniboss purse per depth tier opened. A run at a
+ * given depth has unlocked roughly `depth` enemy nodes, so its waves field a
+ * comparable trash count; we model a conservative baseline of felled wave trash
+ * scaling gently with depth, plus the miniboss purse. Deliberately conservative
+ * — real runs also drop hearts, pay first-clear roses, and bank elite bonuses.
  */
+const BASELINE_WAVE_KILLS = 6;
 function runIncomeAtDepth(depth: number): number {
-  const startMap = getMap(incremental.loop.startMap);
-  const guardian = "dragon-guardian";
-  const trashCount = startMap.entities.filter(
-    (entity) => entity.enemy && entity.enemy !== guardian,
-  ).length;
-  const trashIncome = trashCount * (incremental.runRewards.enemyDefeated.base ?? 0);
+  // a player at this depth has unlocked enemies, so waves spawn and pay; the
+  // kill count grows gently with depth (more unlocks → denser waves)
+  const waveKills = BASELINE_WAVE_KILLS + Math.max(0, depth);
+  const waveIncome = waveKills * (incremental.runRewards.enemyDefeated.base ?? 0);
   const purse = incremental.runRewards.minibossDefeated.base ?? 0;
-  return trashIncome + Math.max(0, depth) * purse;
+  return waveIncome + Math.max(0, depth) * purse;
 }
 
 describe("S9.10 no-sharp-edges balance budget", () => {
@@ -98,6 +111,62 @@ describe("S9.10 no-sharp-edges balance budget", () => {
         tiers[i].threat,
         `${tiers[i].id} must out-threaten ${tiers[i - 1].id}`,
       ).toBeGreaterThan(tiers[i - 1].threat);
+    }
+  });
+});
+
+describe("S13.2 adversarial warband trade", () => {
+  const familyNodes = nodes.filter((node) => node.enemyFamily);
+  const warbands = familyNodes.filter((node) => (node.spawnBounty ?? 0) > 0);
+
+  it("wires every bounty rank to spawned, tagged archetypes", () => {
+    // an unconsumed family node is a dead purchase — exactly the bug S13.1
+    // fixed. Every bounty family must tag at least one archetype, and the
+    // start map must field one so the rank visibly changes a run. Families
+    // without a bounty are taxonomy on rose majors and must still tag
+    // something, but only count ranks (spawnBounty) reinforce — a major like
+    // dragon-wake must never clone its boss.
+    expect(warbands.length).toBeGreaterThan(0);
+    // In the ZONE model (docs/RAIL-COMMAND.md §maps are zones, not enemies) maps
+    // no longer author trash — enemies spawn from a region's archetype pool
+    // INTERSECTED with the unlocked set, at the map's wave gates. So a bounty
+    // family must appear in SOME region's archetype pool (so its waves can
+    // spawn and the bounty rank can pay off), not as a hardcoded map entity.
+    const regionPool = new Set(enemies.difficultyCurve.flatMap((r) => r.archetypes));
+    for (const node of familyNodes) {
+      const tagged = familyArchetypeIds(node.enemyFamily ?? "");
+      expect(tagged.length, `${node.id} family ${node.enemyFamily} tags nothing`).toBeGreaterThan(
+        0,
+      );
+      if (!(node.spawnBounty ?? 0)) continue;
+      const inAPool = tagged.some((id) => regionPool.has(id));
+      expect(inAPool, `${node.enemyFamily} is in no region pool — its waves can't spawn`).toBe(
+        true,
+      );
+      expect(nodeRanks(node), `${node.id} bounty nodes are count ranks`).toBeGreaterThan(1);
+    }
+  });
+
+  it("keeps every rank's payback gradual: bounded runs, no sharp edges", () => {
+    const killReward = incremental.runRewards.enemyDefeated.base ?? 0;
+    for (const node of warbands) {
+      // one reinforcement dies once per run: marginal income per rank per run
+      const marginal = killReward + (node.spawnBounty ?? 0);
+      let previousPayback = 0;
+      for (let owned = 0; owned < nodeRanks(node); owned++) {
+        const payback = rankCost(node, owned).coins / marginal;
+        expect(
+          payback,
+          `${node.id} rank ${owned + 1} takes ${payback.toFixed(1)} runs to pay back`,
+        ).toBeLessThanOrEqual(12);
+        if (previousPayback > 0) {
+          expect(
+            payback,
+            `${node.id} rank ${owned + 1} payback spikes vs rank ${owned}`,
+          ).toBeLessThanOrEqual(previousPayback * 2);
+        }
+        previousPayback = payback;
+      }
     }
   });
 });

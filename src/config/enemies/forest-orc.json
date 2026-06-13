@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "forest-orc",
+  "name": "Oldwood Bandit",
+  "sprite": "sprite:bandit-swordsman",
+  "palette": "palette:orc",
+  "family": "forest-orc",
+  "hp": 20,
+  "speed": 32,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "patrol"
+}

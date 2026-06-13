@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:unlock-bramble-stalker",
+  "label": "Loose the Bramble Stalkers",
+  "category": "enemy",
+  "cost": {
+    "gems": 24
+  },
+  "prerequisites": ["upgrade:unlock-orc-scout"],
+  "unlocksEnemy": "bramble-stalker",
+  "unlocks": ["upgrade:stalker-bounty", "upgrade:unlock-gate-sentry"],
+  "track": "encounters",
+  "note": "An ambush antagonist for the deep forest.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 176,
+    "y": 496,
+    "w": 16,
+    "h": 16
+  }
+}

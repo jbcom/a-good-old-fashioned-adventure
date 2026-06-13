@@ -1,0 +1,167 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:castle-throne-wing",
+  "kind": "map",
+  "name": "The Throne Wing",
+  "size": { "cols": 50, "rows": 26 },
+  "baseTile": "tile:stone-floor",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "region",
+      "tile": "tile:royal-rug",
+      "x0": 2,
+      "x1": 47,
+      "y0": 11,
+      "y1": 14,
+      "note": "the long throne-aisle carpet the line advances east along, toward the dais"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 15,
+      "y0": 2,
+      "y1": 8,
+      "note": "a pillar-rank narrowing the wing (the run threads the lower colonnade)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 15,
+      "y0": 17,
+      "y1": 23,
+      "note": "the pillar-rank's lower span"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 30,
+      "y0": 2,
+      "y1": 7,
+      "note": "a second pillar-rank"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 30,
+      "y0": 18,
+      "y1": 23,
+      "note": "second rank, lower span"
+    },
+    {
+      "op": "region",
+      "tile": "tile:castle-road",
+      "x0": 39,
+      "x1": 47,
+      "y0": 8,
+      "y1": 17,
+      "note": "the raised dais flagstone where the great-elder's warden holds the throne"
+    },
+    {
+      "op": "region",
+      "tile": "tile:prison-bars",
+      "x0": 43,
+      "x1": 46,
+      "y0": 3,
+      "y1": 6,
+      "note": "the barred royal cage above the dais — where the princess is kept on relocation"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 200 },
+  "spawns": {
+    "default": { "x": 48, "y": 200 },
+    "entry": { "x": 48, "y": 200 },
+    "from-hall": { "x": 48, "y": 200 }
+  },
+  "entities": [
+    {
+      "ref": "prop:war-banner",
+      "x": 150,
+      "y": 156,
+      "note": "the dragon's war-banner hung over the king's"
+    },
+    {
+      "ref": "prop:candelabra",
+      "x": 200,
+      "y": 264,
+      "note": "a guttering candelabra off the lower colonnade"
+    },
+    {
+      "ref": "prop:framed-painting",
+      "x": 300,
+      "y": 156,
+      "note": "a slashed royal portrait"
+    },
+    {
+      "ref": "prop:candelabra",
+      "x": 420,
+      "y": 264,
+      "note": "dais candelabra"
+    },
+    {
+      "ref": "prop:castle-banner",
+      "x": 470,
+      "y": 156,
+      "note": "the queen's standard, half-burned"
+    },
+    {
+      "enemy": "throne-warden",
+      "x": 660,
+      "y": 200,
+      "note": "throne-wing lair r3 CLIMAX (depth 3, the deepest room — the princess+kin room): the throne-warden, the great-elder dragon's hand, holds the dais. The one authored combatant; once the great-elder kin is unlocked he relocates HERE and overlays the warden. The toughest garrison on the spine is permuted from the unlocked set via the wave gates."
+    },
+    {
+      "ref": "prop:throne-door",
+      "x": 740,
+      "y": 156,
+      "note": "the sealed throne-door behind the dais — the great-elder's lair-heart"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 700,
+      "y": 264,
+      "contents": "RoyalGold",
+      "note": "the throne-wing hoard"
+    }
+  ],
+  "waveGates": [
+    {
+      "id": "gate:aisle-mouth",
+      "x": 240,
+      "y": 200,
+      "note": "spawn zone — the throne-aisle mouth"
+    },
+    {
+      "id": "gate:colonnade-upper",
+      "x": 360,
+      "y": 168,
+      "note": "spawn zone — the upper colonnade"
+    },
+    {
+      "id": "gate:colonnade-lower",
+      "x": 420,
+      "y": 248,
+      "note": "spawn zone — the lower colonnade"
+    },
+    { "id": "gate:dais-foot", "x": 580, "y": 200, "note": "spawn zone — the foot of the dais" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:hall-return",
+      "kind": "portal",
+      "label": "Door back to Castle Hall",
+      "toMap": "map:castle-hall",
+      "toSpawn": "from-throne-wing",
+      "sfx": "interact",
+      "zone": { "x0": 0, "y0": 172, "x1": 28, "y1": 228 }
+    },
+    {
+      "id": "trigger:throne-dais",
+      "kind": "landmark",
+      "label": "The great-elder's dais",
+      "sfx": "interact",
+      "zone": { "x0": 624, "y0": 160, "x1": 720, "y1": 240 }
+    }
+  ]
+}

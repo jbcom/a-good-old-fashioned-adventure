@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:rogue-shortcut",
+  "label": "Rogue Shortcut",
+  "category": "class",
+  "cost": {
+    "gems": 16
+  },
+  "prerequisites": ["upgrade:oldwood-bend"],
+  "classId": "rogue",
+  "unlocks": ["upgrade:rogue-knives", "upgrade:sunken-shortcut"],
+  "track": "characters",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 144,
+    "y": 560,
+    "w": 16,
+    "h": 16
+  }
+}

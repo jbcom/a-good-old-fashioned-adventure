@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-deep-forest-1",
+  "label": "Enter the Thornwood Hollow",
+  "category": "map",
+  "cost": {
+    "roses": 4,
+    "gems": 60
+  },
+  "prerequisites": ["upgrade:thornwood-mastered"],
+  "lairRoom": {
+    "mapId": "map:deep-forest",
+    "depth": 1,
+    "roomMap": "map:thornwood-grove"
+  },
+  "unlocks": ["upgrade:lair-deep-forest-2"],
+  "track": "roads",
+  "note": "Dragon's Lair entrance (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks): deep behind Thornwood a hollow opens — an old overgrown ruin the forest swallowed, now the sister-dragon's hunting den. The princess relocates into its first room. Rose-OR-gem (roses logarithmic shortcut, gems exponential fallback)."
+}

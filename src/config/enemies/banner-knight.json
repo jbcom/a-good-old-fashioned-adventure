@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "banner-knight",
+  "name": "Banner Knight",
+  "sprite": "sprite:boss-banner-knight",
+  "palette": "palette:base",
+  "hp": 70,
+  "speed": 34,
+  "hitbox": {
+    "w": 14,
+    "h": 14
+  },
+  "behavior": "guard",
+  "guard": {
+    "aggroRange": 100,
+    "deaggroRange": 140,
+    "leashRange": 104,
+    "stance": {
+      "guard": 1.1,
+      "open": 1.4,
+      "damageMultiplier": 0.35,
+      "moveFactor": 0.4
+    }
+  },
+  "miniboss": true
+}

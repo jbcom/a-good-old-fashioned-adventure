@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-sunken-road-1",
+  "label": "Open the Sunken Crypt",
+  "category": "map",
+  "cost": {
+    "roses": 4,
+    "gems": 70
+  },
+  "prerequisites": ["upgrade:sunken-shortcut"],
+  "lairRoom": {
+    "mapId": "map:sunken-road",
+    "depth": 1,
+    "roomMap": "map:desert-ruins"
+  },
+  "unlocks": ["upgrade:lair-sunken-road-2"],
+  "track": "roads",
+  "note": "Dragon's Lair entrance (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks): unlocking it relocates the princess into the crypt's first room. Rose-OR-gem (roses logarithmic shortcut, gems exponential fallback)."
+}

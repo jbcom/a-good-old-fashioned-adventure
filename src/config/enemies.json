@@ -17,8 +17,22 @@
       "label": "Oldwood Forest",
       "tier": 1,
       "threat": 2,
-      "maps": ["map:oldwood-forest"],
-      "archetypes": ["forest-orc", "oldwood-raider", "thorn-shaman"]
+      "maps": ["map:oldwood-forest", "map:rescue-route", "map:barrow-mouth", "map:barrow-deep"],
+      "archetypes": ["forest-orc", "oldwood-raider", "thorn-shaman", "barrow-rat"]
+    },
+    {
+      "id": "region:captured-village",
+      "label": "The Captured Village (oldwood lair)",
+      "tier": 2,
+      "threat": 3,
+      "maps": [
+        "map:village",
+        "map:village-house",
+        "map:village-shop",
+        "map:village-stable",
+        "map:village-tavern"
+      ],
+      "archetypes": ["forest-orc", "oldwood-raider", "orc-scout", "gate-sentry", "carrion-raven"]
     },
     {
       "id": "region:deep-forest",
@@ -29,328 +43,62 @@
       "archetypes": ["orc-scout", "thorn-shaman", "bramble-stalker"]
     },
     {
+      "id": "region:thornwood-hollow",
+      "label": "The Thornwood Hollow (deep-forest lair)",
+      "tier": 3,
+      "threat": 5,
+      "maps": ["map:thornwood-grove", "map:thornwood-warren", "map:thornwood-deep"],
+      "archetypes": [
+        "forest-orc",
+        "oldwood-raider",
+        "orc-scout",
+        "bramble-stalker",
+        "carrion-raven",
+        "thorn-shaman"
+      ]
+    },
+    {
       "id": "region:castle-approach",
       "label": "Castle Approach",
       "tier": 3,
       "threat": 6,
-      "maps": ["map:sunken-road", "map:castle-approach", "map:castle-yard"],
-      "archetypes": ["desert-wyrm", "gate-sentry", "banner-knight"]
+      "maps": ["map:sunken-road", "map:castle-approach"],
+      "archetypes": ["gate-sentry", "gatehouse-vulture", "dune-adder"]
+    },
+    {
+      "id": "region:sunken-crypt",
+      "label": "The Sunken Crypt (sunken-road lair)",
+      "tier": 4,
+      "threat": 7,
+      "maps": ["map:desert-ruins", "map:castle-dungeon", "map:crypt-vault"],
+      "archetypes": ["dune-adder", "carrion-raven", "crypt-bat", "crypt-skeleton", "crypt-sentry"]
+    },
+    {
+      "id": "region:siege-warcamp",
+      "label": "The Siege Warcamp (castle-approach lair)",
+      "tier": 4,
+      "threat": 8,
+      "maps": ["map:castle-yard"],
+      "archetypes": [
+        "forest-orc",
+        "oldwood-raider",
+        "gate-sentry",
+        "gatehouse-vulture",
+        "orc-scout"
+      ]
     },
     {
       "id": "region:dungeon",
       "label": "Obsidian Throne Dungeon",
       "tier": 4,
       "threat": 9,
-      "maps": ["map:castle-hall", "map:castle-library", "map:castle-armory", "map:castle-dungeon"],
-      "archetypes": ["crypt-skeleton", "crypt-sentry", "shadow-warlord"]
+      "maps": [
+        "map:castle-hall",
+        "map:castle-library",
+        "map:castle-armory",
+        "map:castle-throne-wing"
+      ],
+      "archetypes": ["crypt-skeleton", "crypt-sentry", "crypt-bat", "carrion-raven"]
     }
-  ],
-  "archetypes": {
-    "forest-orc": {
-      "name": "Forest Orc",
-      "sprite": "sprite:dragon",
-      "palette": "palette:orc",
-      "hp": 20,
-      "speed": 32,
-      "hitbox": {
-        "w": 12,
-        "h": 12
-      },
-      "behavior": "patrol"
-    },
-    "oldwood-raider": {
-      "name": "Oldwood Raider",
-      "sprite": "sprite:dragon",
-      "palette": "palette:raider",
-      "hp": 24,
-      "speed": 36,
-      "hitbox": {
-        "w": 12,
-        "h": 12
-      },
-      "behavior": "patrol"
-    },
-    "orc-scout": {
-      "name": "Orc Scout",
-      "sprite": "sprite:dragon",
-      "palette": "palette:orc",
-      "hp": 15,
-      "speed": 45,
-      "hitbox": {
-        "w": 12,
-        "h": 12
-      },
-      "behavior": "patrol"
-    },
-    "forest-shaman": {
-      "name": "Forest Shaman",
-      "sprite": "sprite:dragon",
-      "palette": "palette:orc",
-      "hp": 25,
-      "speed": 20,
-      "hitbox": {
-        "w": 12,
-        "h": 12
-      },
-      "behavior": "caster",
-      "caster": {
-        "attackRange": 140,
-        "keepDistance": 60,
-        "cooldown": 2.4,
-        "projectile": {
-          "type": "magmaball",
-          "speed": 60,
-          "life": 3.0
-        },
-        "sfx": "magic"
-      }
-    },
-    "thorn-shaman": {
-      "name": "Thorn Shaman",
-      "sprite": "sprite:dragon",
-      "palette": "palette:thorn-shaman",
-      "hp": 28,
-      "speed": 22,
-      "hitbox": {
-        "w": 12,
-        "h": 12
-      },
-      "behavior": "caster",
-      "caster": {
-        "attackRange": 132,
-        "keepDistance": 64,
-        "cooldown": 2.2,
-        "projectile": {
-          "type": "thornbolt",
-          "speed": 68,
-          "life": 2.8
-        },
-        "sfx": "magic"
-      }
-    },
-    "bramble-stalker": {
-      "name": "Bramble Stalker",
-      "sprite": "sprite:dragon",
-      "palette": "palette:bramble",
-      "hp": 34,
-      "speed": 54,
-      "hitbox": {
-        "w": 12,
-        "h": 12
-      },
-      "behavior": "ambush",
-      "ambush": {
-        "triggerRange": 76,
-        "deaggroRange": 150
-      }
-    },
-    "desert-wyrm": {
-      "name": "Desert Wyrm",
-      "sprite": "sprite:boss-desert-wyrm",
-      "palette": "palette:base",
-      "hp": 80,
-      "speed": 42,
-      "hitbox": {
-        "w": 16,
-        "h": 16
-      },
-      "behavior": "turret",
-      "turret": {
-        "attackRange": 140,
-        "cooldown": 1.8,
-        "projectile": {
-          "type": "sandball",
-          "speed": 80,
-          "life": 2.5
-        },
-        "sfx": "slash"
-      },
-      "miniboss": true
-    },
-    "crypt-skeleton": {
-      "name": "Crypt Skeleton",
-      "sprite": "sprite:hero",
-      "palette": "palette:skeleton",
-      "hp": 35,
-      "speed": 48,
-      "hitbox": {
-        "w": 12,
-        "h": 12
-      },
-      "behavior": "chase",
-      "relentless": true
-    },
-    "crypt-sentry": {
-      "name": "Crypt Sentry",
-      "sprite": "sprite:hero",
-      "palette": "palette:skeleton",
-      "hp": 40,
-      "speed": 40,
-      "hitbox": {
-        "w": 12,
-        "h": 12
-      },
-      "behavior": "chase",
-      "relentless": true
-    },
-    "gate-sentry": {
-      "name": "Gate Sentry",
-      "sprite": "sprite:hero",
-      "palette": "palette:sentry",
-      "hp": 55,
-      "speed": 38,
-      "hitbox": {
-        "w": 12,
-        "h": 12
-      },
-      "behavior": "guard",
-      "guard": {
-        "aggroRange": 110,
-        "deaggroRange": 140,
-        "leashRange": 96
-      }
-    },
-    "banner-knight": {
-      "name": "Banner Knight",
-      "sprite": "sprite:boss-banner-knight",
-      "palette": "palette:base",
-      "hp": 70,
-      "speed": 34,
-      "hitbox": {
-        "w": 14,
-        "h": 14
-      },
-      "behavior": "guard",
-      "guard": {
-        "aggroRange": 100,
-        "deaggroRange": 140,
-        "leashRange": 104,
-        "stance": {
-          "guard": 1.1,
-          "open": 1.4,
-          "damageMultiplier": 0.35,
-          "moveFactor": 0.4
-        }
-      },
-      "miniboss": true
-    },
-    "shadow-warlord": {
-      "name": "Shadow Warlord",
-      "sprite": "sprite:dragon",
-      "palette": "palette:boss",
-      "hp": 160,
-      "speed": 52,
-      "hitbox": {
-        "w": 18,
-        "h": 18
-      },
-      "behavior": "boss",
-      "boss": {
-        "aggroRange": 160,
-        "cooldown": 1.4,
-        "spreadAngles": [-0.25, 0, 0.25],
-        "projectile": {
-          "type": "shadowbolt",
-          "speed": 90,
-          "life": 3.0
-        },
-        "sfx": "magic"
-      }
-    },
-    "bramble-tyrant": {
-      "name": "Bramble Tyrant",
-      "sprite": "sprite:boss-bramble-tyrant",
-      "palette": "palette:base",
-      "hp": 90,
-      "speed": 26,
-      "hitbox": {
-        "w": 14,
-        "h": 14
-      },
-      "behavior": "caster",
-      "miniboss": true,
-      "caster": {
-        "attackRange": 100,
-        "keepDistance": 60,
-        "cooldown": 1.8,
-        "projectile": {
-          "type": "thornbolt",
-          "speed": 70,
-          "life": 2.2
-        },
-        "sfx": "magic"
-      }
-    },
-    "glowcap-matron": {
-      "name": "Glowcap Matron",
-      "sprite": "sprite:boss-glowcap-matron",
-      "palette": "palette:base",
-      "hp": 80,
-      "speed": 22,
-      "hitbox": {
-        "w": 14,
-        "h": 14
-      },
-      "behavior": "caster",
-      "miniboss": true,
-      "caster": {
-        "attackRange": 100,
-        "keepDistance": 56,
-        "cooldown": 1.7,
-        "projectile": {
-          "type": "shadowbolt",
-          "speed": 70,
-          "life": 2.2
-        },
-        "sfx": "magic"
-      }
-    },
-    "armory-sentinel": {
-      "name": "Armory Sentinel",
-      "sprite": "sprite:boss-armory-sentinel",
-      "palette": "palette:base",
-      "hp": 100,
-      "speed": 40,
-      "hitbox": {
-        "w": 14,
-        "h": 14
-      },
-      "behavior": "guard",
-      "miniboss": true,
-      "guard": {
-        "aggroRange": 60,
-        "deaggroRange": 120,
-        "leashRange": 80
-      }
-    },
-    "dragon-guardian": {
-      "name": "Route Dragon",
-      "sprite": "sprite:dragon",
-      "palette": "palette:boss",
-      "hp": 60,
-      "speed": 44,
-      "hitbox": {
-        "w": 18,
-        "h": 18
-      },
-      "behavior": "boss",
-      "boss": {
-        "aggroRange": 140,
-        "cooldown": 1.6,
-        "spreadAngles": [-0.2, 0.2],
-        "projectile": {
-          "type": "shadowbolt",
-          "speed": 80,
-          "life": 2.5
-        },
-        "sfx": "magic",
-        "phases": {
-          "roar": 0.9,
-          "volley": 0.9,
-          "lull": 1.4,
-          "armorMultiplier": 0.5
-        }
-      }
-    }
-  }
+  ]
 }

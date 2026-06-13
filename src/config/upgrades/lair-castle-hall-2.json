@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-castle-hall-2",
+  "label": "Clear the Castle Armory",
+  "category": "map",
+  "cost": {
+    "roses": 7,
+    "gems": 240
+  },
+  "prerequisites": ["upgrade:lair-castle-hall-1"],
+  "lairRoom": {
+    "mapId": "map:castle-hall",
+    "depth": 2,
+    "roomMap": "map:castle-armory"
+  },
+  "unlocks": ["upgrade:lair-castle-hall-3"],
+  "track": "castle",
+  "note": "Dragon's Lair depths (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks): the throne wing's armory, where the hollow sentinel wakes on its cracked post. Clearing the drill-lane drives the princess deeper into the wing. Rose-OR-gem (roses logarithmic shortcut, gems exponential fallback)."
+}

@@ -6,12 +6,14 @@ import type { World } from "koota";
 import { engine } from "../../lib/config";
 import type { Rng } from "../rng";
 import { CameraState, IsPlayer, Transform } from "../traits";
+import { frontline } from "./waves";
 
+/** Per-tick: track the camera to the advancing front line. */
 export function updateCamera(world: World, rng: Rng): void {
-  const player = world.queryFirst(IsPlayer);
   const camera = world.get(CameraState);
-  if (!player || !camera) return;
-  const target = player.get(Transform);
+  if (!camera) return;
+  // rail command: with no player pawn the camera follows the front line
+  const target = world.queryFirst(IsPlayer)?.get(Transform) ?? frontline(world);
   if (!target) return;
 
   let { x, y, shake } = camera;

@@ -15,7 +15,14 @@ import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import { startQuest } from "../../src/sim/quests";
 import { buyShopListing, sellShopListing } from "../../src/sim/shop";
 import { step } from "../../src/sim/tick";
-import { FlagState, Inventory, IsPlayer, Outbox, PlayerGold, QuestLog } from "../../src/sim/traits";
+import {
+  FlagState,
+  IncrementalProgress,
+  Inventory,
+  IsPlayer,
+  Outbox,
+  QuestLog,
+} from "../../src/sim/traits";
 
 function docs(path: string): string {
   return readFileSync(resolve(process.cwd(), path), "utf8");
@@ -54,9 +61,13 @@ describe("S8.2 shop economy contract", () => {
 
     expect(characters.get("char:threadseller")?.dialogue).toBe("dlgbank:threadseller");
     expect(dialogueBanks.has("dlgbank:threadseller")).toBe(true);
+    // village-shop is now the captured-village lair's "looted market" room; the
+    // keeper + threadseller are held captive there, the shelves toppled. The
+    // shop ECONOMY (Brindle's Counter listings above) is unchanged — only the
+    // map dressing shifted to the ransacked theme.
     const shopRefs = getMap("map:village-shop").entities.map((entity) => entity.ref);
     expect(shopRefs).toEqual(
-      expect.arrayContaining(["prop:shop-shelf", "prop:shop-ledger", "char:threadseller"]),
+      expect.arrayContaining(["prop:shop-shelf", "char:shopkeeper", "char:threadseller"]),
     );
   });
 });
@@ -111,7 +122,7 @@ describe("shop runtime", () => {
   it("buys and sells through player gold and inventory traits", () => {
     const { world, player } = playerState();
 
-    expect(player.get(PlayerGold)?.value).toBe(12);
+    expect(world.get(IncrementalProgress)?.coins).toBe(12);
     expect(player.get(Inventory)?.items).toEqual({});
 
     const bought = buyShopListing(world, "shop:brindle-counter", "travel-cake");
@@ -122,7 +133,7 @@ describe("shop runtime", () => {
       gold: 6,
       inventoryCount: 1,
     });
-    expect(player.get(PlayerGold)?.value).toBe(6);
+    expect(world.get(IncrementalProgress)?.coins).toBe(6);
     expect(player.get(Inventory)?.items["item:travel-cake"]).toBe(1);
     expect(world.get(Outbox)?.sfx).toContain("coin");
 
@@ -134,13 +145,14 @@ describe("shop runtime", () => {
       gold: 9,
       inventoryCount: 0,
     });
-    expect(player.get(PlayerGold)?.value).toBe(9);
+    expect(world.get(IncrementalProgress)?.coins).toBe(9);
     expect(player.get(Inventory)?.items["item:travel-cake"]).toBeUndefined();
   });
 
   it("refuses purchases without enough gold and does not mint inventory", () => {
     const { world, player } = playerState();
-    player.set(PlayerGold, { value: 0 });
+    const progress = world.get(IncrementalProgress);
+    if (progress) world.set(IncrementalProgress, { ...progress, coins: 0 });
 
     const result = buyShopListing(world, "shop:brindle-counter", "mending-plaster");
 
@@ -166,7 +178,7 @@ describe("shop runtime", () => {
       gold: 8,
       inventoryCount: 1,
     });
-    expect(player.get(PlayerGold)?.value).toBe(8);
+    expect(world.get(IncrementalProgress)?.coins).toBe(8);
     expect(player.get(Inventory)?.items["item:oat-bundle"]).toBe(1);
 
     const sold = sellShopListing(world, "shop:oswin-stable-counter", "oat-bundle");
@@ -177,7 +189,7 @@ describe("shop runtime", () => {
       gold: 10,
       inventoryCount: 0,
     });
-    expect(player.get(PlayerGold)?.value).toBe(10);
+    expect(world.get(IncrementalProgress)?.coins).toBe(10);
     expect(player.get(Inventory)?.items["item:oat-bundle"]).toBeUndefined();
   });
 

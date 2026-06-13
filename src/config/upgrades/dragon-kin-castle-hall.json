@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-kin-castle-hall",
+  "label": "Wake the Twice-Removed Elder",
+  "category": "enemy",
+  "cost": {
+    "roses": 7,
+    "gems": 480
+  },
+  "prerequisites": ["upgrade:dragon-kin-castle-approach"],
+  "enemyFamily": "dragon",
+  "unlocksEnemy": "dragon",
+  "dragonKin": {
+    "mapId": "map:castle-hall",
+    "relation": "twice-removed elder",
+    "hue": 50,
+    "roseYield": 9
+  },
+  "unlocks": ["upgrade:dragon-might-castle-hall"],
+  "track": "encounters",
+  "note": "Kin boss for castle-hall. Rose-OR-gem dual cost (roses logarithmic shortcut, gems exponential fallback — docs/RAIL-COMMAND.md §dual-cost)."
+}

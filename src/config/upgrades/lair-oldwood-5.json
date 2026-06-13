@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-oldwood-5",
+  "label": "Storm the Nest-Tavern",
+  "category": "map",
+  "cost": {
+    "roses": 8,
+    "gems": 250
+  },
+  "prerequisites": ["upgrade:lair-oldwood-4"],
+  "lairRoom": {
+    "mapId": "map:oldwood-forest",
+    "depth": 5,
+    "roomMap": "map:village-tavern"
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Captured-village lair, the deepest room: the tavern the dragon has made the heart of its nest. The princess (and the oldwood kin, if unlocked) waits here. Rose-OR-gem at the lair's steepest step (roses logarithmic, gems exponential)."
+}

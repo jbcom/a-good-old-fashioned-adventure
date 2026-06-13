@@ -4,7 +4,15 @@ import { threatScale } from "../../src/render/pose";
 import { createGameWorld, instantiateMap, spawnEnemy } from "../../src/sim/factories";
 import { damageEnemy } from "../../src/sim/systems/combat";
 import { step } from "../../src/sim/tick";
-import { Choreo, Health, IsEnemy, IsPlayer, Projectile, Transform } from "../../src/sim/traits";
+import {
+  Choreo,
+  Health,
+  IsEnemy,
+  IsPlayer,
+  Outbox,
+  Projectile,
+  Transform,
+} from "../../src/sim/traits";
 
 const dragonPhases = enemies.archetypes["dragon-guardian"].boss?.phases;
 const knightStance = enemies.archetypes["banner-knight"].guard?.stance;
@@ -35,6 +43,17 @@ describe("S12.5 dragon-guardian phases", () => {
 
     step(world, dragonPhases.lull + 0.01);
     expect(boss.get(Choreo)?.phase).toBe("roar");
+  });
+
+  it("the roar is audible: re-entering the roar phase queues the boss-roar cue", () => {
+    const { world } = bootWith("dragon-guardian", 60);
+    const outbox = world.get(Outbox);
+    if (!outbox) throw new Error("no outbox");
+    step(world, dragonPhases.roar + 0.01);
+    step(world, dragonPhases.volley + 0.01);
+    outbox.sfx.length = 0;
+    step(world, dragonPhases.lull + 0.01);
+    expect(outbox.sfx).toContain("boss-roar");
   });
 
   it("fires the spread exactly once, on entering the volley", () => {

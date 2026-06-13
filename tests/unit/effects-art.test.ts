@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { combat, drops, enemies } from "../../src/lib/config";
-import { getSprite, items } from "../../src/lib/content/registry";
+import { getCharacterSprite, items } from "../../src/lib/content/registry";
 
 describe("S9.15 no bare quads in the world", () => {
   it("gives every world pickup an authored sprite", () => {
@@ -13,7 +13,7 @@ describe("S9.15 no bare quads in the world", () => {
         expect(droppable.has(itemId), `${itemId} drops in the world but has no pickup`).toBe(false);
         continue;
       }
-      const sprite = getSprite(item.pickup.sprite);
+      const sprite = getCharacterSprite(item.pickup.sprite);
       expect(sprite.rows.length, itemId).toBeGreaterThan(0);
       expect(sprite.recolorChannels.length, itemId).toBeGreaterThanOrEqual(3);
     }
@@ -32,7 +32,7 @@ describe("S9.15 no bare quads in the world", () => {
     for (const type of types) {
       const spriteId = combat.projectileSprites[type as keyof typeof combat.projectileSprites];
       expect(spriteId, `projectile ${type} needs an authored sprite`).toBeTruthy();
-      const sprite = getSprite(spriteId);
+      const sprite = getCharacterSprite(spriteId);
       expect(sprite.rows.length, type).toBeGreaterThan(0);
     }
   });

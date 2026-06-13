@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "ruin-revenant",
+  "name": "Ruin Revenant",
+  "sprite": "sprite:boss-ruin-revenant",
+  "palette": "palette:base",
+  "hp": 80,
+  "speed": 30,
+  "hitbox": {
+    "w": 14,
+    "h": 14
+  },
+  "behavior": "guard",
+  "guard": {
+    "aggroRange": 108,
+    "deaggroRange": 156,
+    "leashRange": 178,
+    "stance": {
+      "guard": 1.15,
+      "open": 1.45,
+      "damageMultiplier": 0.38,
+      "moveFactor": 0.45
+    }
+  },
+  "miniboss": true
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "throne-warden",
+  "name": "Throne Warden",
+  "sprite": "sprite:boss-throne-warden",
+  "palette": "palette:base",
+  "hp": 120,
+  "speed": 30,
+  "hitbox": {
+    "w": 16,
+    "h": 16
+  },
+  "behavior": "guard",
+  "guard": {
+    "aggroRange": 120,
+    "deaggroRange": 170,
+    "leashRange": 200,
+    "stance": {
+      "guard": 1.3,
+      "open": 1.6,
+      "damageMultiplier": 0.3,
+      "moveFactor": 0.35
+    }
+  },
+  "miniboss": true
+}

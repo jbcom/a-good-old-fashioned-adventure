@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:battle-tempo",
+  "label": "Battle Tempo",
+  "category": "relic",
+  "cost": {
+    "roses": 1
+  },
+  "prerequisites": ["upgrade:first-vow"],
+  "unlocks": ["upgrade:tempo-mastery"],
+  "track": "vows",
+  "note": "The tempo major: opens the top-bar fast-forward at 5x and the Tempo Mastery connector."
+}

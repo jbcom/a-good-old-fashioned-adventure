@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:unlock-forest-orc",
+  "label": "Stir the Forest Orcs",
+  "category": "enemy",
+  "cost": {
+    "gems": 8
+  },
+  "prerequisites": ["upgrade:dragon-wake"],
+  "unlocksEnemy": "forest-orc",
+  "unlocks": [
+    "upgrade:orc-bounty",
+    "upgrade:orc-warband",
+    "upgrade:unlock-oldwood-raider",
+    "upgrade:unlock-barrow-rat"
+  ],
+  "track": "encounters",
+  "note": "The first antagonist: a single weak orc joins the oldwood waves, paying extra coins per kill.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 160,
+    "y": 496,
+    "w": 16,
+    "h": 16
+  }
+}

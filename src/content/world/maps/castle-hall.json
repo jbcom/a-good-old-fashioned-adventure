@@ -86,6 +86,10 @@
       "x": 500,
       "y": 344
     },
+    "from-throne-wing": {
+      "x": 640,
+      "y": 272
+    },
     "rescue-gate": {
       "x": 96,
       "y": 272
@@ -160,6 +164,71 @@
       "dir": -1,
       "requiresRoutePack": "castle-interior",
       "note": "Princess Amber relocated before the throne door"
+    },
+    {
+      "ref": "prop:candelabra",
+      "x": 700,
+      "y": 250,
+      "note": "flanking the approach to the throne door"
+    },
+    {
+      "ref": "prop:candelabra",
+      "x": 764,
+      "y": 250,
+      "note": "second flank"
+    },
+    {
+      "ref": "prop:wall-torch",
+      "x": 400,
+      "y": 180,
+      "note": "hall sconce"
+    },
+    {
+      "ref": "prop:wall-torch",
+      "x": 560,
+      "y": 180,
+      "note": "second sconce"
+    },
+    {
+      "ref": "prop:framed-painting",
+      "x": 320,
+      "y": 176,
+      "note": "an ancestor watches the hall"
+    },
+    {
+      "ref": "char:castle-watchman",
+      "x": 420,
+      "y": 300,
+      "patrol": {
+        "points": [
+          {
+            "x": 420,
+            "y": 300
+          },
+          {
+            "x": 420,
+            "y": 200
+          }
+        ],
+        "speed": 16
+      },
+      "note": "hall patrol north-south"
+    }
+  ],
+  "waveGates": [
+    {
+      "id": "gate:hall-entry",
+      "x": 320,
+      "y": 272,
+      "note": "spawn zone — the candlelit hall entry"
+    },
+    { "id": "gate:hall-high", "x": 460, "y": 220, "note": "spawn zone — the upper colonnade" },
+    { "id": "gate:hall-low", "x": 500, "y": 330, "note": "spawn zone — the lower aisle" },
+    {
+      "id": "gate:hall-throne",
+      "x": 640,
+      "y": 272,
+      "note": "spawn zone — before the dragon's throne dais"
     }
   ],
   "triggers": [

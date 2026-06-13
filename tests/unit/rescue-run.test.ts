@@ -34,10 +34,12 @@ describe("S9.4 rescue-route runtime slice", () => {
     expect((princess?.y ?? 0) < (dragon?.y ?? 0)).toBe(true);
     expect((dragon?.y ?? 0) < map.playerSpawn.y).toBe(true);
     expect(map.playerSpawn.y).toBeGreaterThan(map.size.rows * 16 * 0.9);
-    const trash = map.entities.filter(
-      (entity) => entity.enemy && entity.enemy !== "dragon-guardian",
-    );
-    expect(trash.length).toBeGreaterThanOrEqual(5);
+    // In the ZONE model (docs/RAIL-COMMAND.md §maps are zones, not enemies) the
+    // route no longer authors trash — the dragon is the one authored combatant,
+    // and trash spawns from the unlocked set at the map's wave gates. So we
+    // assert the spawn ZONES exist (the enemy-DAG surface), not a hardcoded
+    // trash count.
+    expect((map.waveGates ?? []).length, "the route declares trash spawn zones").toBeGreaterThan(0);
   });
 
   it("keeps the route inside the phone-session length budget", () => {

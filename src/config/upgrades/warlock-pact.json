@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:warlock-pact",
+  "label": "Warlock's Pact",
+  "category": "class",
+  "track": "characters",
+  "cost": {
+    "gems": 24
+  },
+  "prerequisites": ["upgrade:sorcerer-cinder"],
+  "classId": "warlock",
+  "unlocks": ["upgrade:dread-knight", "upgrade:warband-of-one"],
+  "note": "The withering field slows and weakens every enemy inside it.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 112,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
+}

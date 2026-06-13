@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:priest-procession",
+  "label": "Priest Procession",
+  "category": "ability",
+  "track": "characters",
+  "cost": {
+    "coins": 30
+  },
+  "ranks": 2,
+  "rankCostGrowth": 1.8,
+  "prerequisites": ["upgrade:priest-vows"],
+  "classId": "priest",
+  "unlocks": [],
+  "effect": {
+    "unitCount": 1
+  },
+  "note": "Another vow taken: one more priest walks the line per rank.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 160,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
+}

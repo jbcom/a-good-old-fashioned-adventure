@@ -2,37 +2,98 @@
   "$schema": "../../../../schemas/map.schema.json",
   "id": "map:village-shop",
   "kind": "map",
-  "name": "Hearthwake Shop",
-  "size": { "cols": 24, "rows": 18 },
+  "name": "The Looted Market",
+  "size": { "cols": 46, "rows": 22 },
   "baseTile": "tile:shop-floor",
   "bgmTheme": "interior",
   "generation": [
     { "op": "border", "tile": "tile:stone-wall" },
-    { "op": "row-span", "tile": "tile:path", "y": 15, "x0": 9, "x1": 15 },
     {
       "op": "row-span",
       "tile": "tile:wood-bridge",
       "y": 6,
-      "x0": 4,
-      "x1": 19,
-      "note": "counter plank"
+      "x0": 6,
+      "x1": 40,
+      "note": "the long market counter the line fights beneath"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:wood-bridge",
+      "y": 16,
+      "x0": 6,
+      "x1": 40,
+      "note": "the lower stall plank"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 16,
+      "y0": 3,
+      "y1": 8,
+      "note": "an upper barricade — the line passes below it on the rail row (11)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 30,
+      "y0": 14,
+      "y1": 19,
+      "note": "a lower barricade — the line passes above it on the rail row"
     }
   ],
-  "playerSpawn": { "x": 192, "y": 224 },
+  "playerSpawn": { "x": 48, "y": 176 },
   "spawns": {
-    "default": { "x": 192, "y": 224 },
-    "entry": { "x": 192, "y": 224 }
+    "default": { "x": 48, "y": 176 },
+    "entry": { "x": 48, "y": 176 }
   },
   "entities": [
-    { "ref": "prop:shop-shelf", "x": 72, "y": 132, "note": "left shelf of travel goods" },
-    { "ref": "prop:shop-shelf", "x": 312, "y": 132, "note": "right shelf of herbs and thread" },
-    { "ref": "prop:table", "x": 128, "y": 132, "note": "display counter" },
-    { "ref": "prop:shop-ledger", "x": 192, "y": 152, "note": "visible price ledger" },
-    { "ref": "prop:barrel", "x": 260, "y": 160, "note": "supply barrel" },
-    { "ref": "char:shopkeeper", "x": 192, "y": 132, "dir": -1 },
-    { "ref": "char:threadseller", "x": 104, "y": 176, "dir": 1 },
-    { "ref": "char:gwydion", "x": 192, "y": 116, "dir": -1 },
-    { "ref": "prop:chest", "x": 92, "y": 92, "contents": "HPUp" }
+    { "ref": "prop:shop-shelf", "x": 140, "y": 120, "note": "toppled shelf, goods strewn" },
+    { "ref": "prop:shop-shelf", "x": 560, "y": 120, "note": "stripped shelf" },
+    { "ref": "prop:table", "x": 300, "y": 120, "note": "the looted display counter" },
+    { "ref": "prop:barrel", "x": 240, "y": 240, "note": "barrel rolled into the lane" },
+    {
+      "ref": "char:shopkeeper",
+      "x": 640,
+      "y": 176,
+      "dir": -1,
+      "note": "the keeper, held behind his own counter"
+    },
+    {
+      "ref": "char:threadseller",
+      "x": 600,
+      "y": 244,
+      "dir": -1,
+      "note": "the threadseller, penned"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 360,
+      "y": 96,
+      "contents": "HPUp",
+      "note": "the keeper's strongbox the raiders missed"
+    },
+    {
+      "enemy": "plunder-boss",
+      "x": 600,
+      "y": 176,
+      "note": "captured-village lair r CLIMAX: the plunder-boss squats on the looted market's spoils. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:market-stalls", "x": 200, "y": 176, "note": "spawn zone — the looted stalls" },
+    { "id": "gate:market-low", "x": 280, "y": 232, "note": "spawn zone — the lower market lane" },
+    {
+      "id": "gate:market-counter",
+      "x": 480,
+      "y": 110,
+      "note": "spawn zone — atop the long counter (upper flank)"
+    },
+    {
+      "id": "gate:market-back",
+      "x": 560,
+      "y": 176,
+      "note": "spawn zone — before the captives' pen"
+    }
   ],
   "triggers": [
     {
@@ -42,7 +103,7 @@
       "toMap": "map:village",
       "toSpawn": "from-shop",
       "sfx": "interact",
-      "zone": { "x0": 144, "y0": 232, "x1": 248, "y1": 286 }
+      "zone": { "x0": 16, "y0": 160, "x1": 44, "y1": 200 }
     }
   ]
 }

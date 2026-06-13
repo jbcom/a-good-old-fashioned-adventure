@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "bramble-stalker",
+  "name": "Bramble Stalker",
+  "sprite": "sprite:wild-boar-dark",
+  "palette": "palette:bramble",
+  "hp": 34,
+  "speed": 54,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "ambush",
+  "ambush": {
+    "triggerRange": 76,
+    "deaggroRange": 150
+  },
+  "family": "bramble-stalker"
+}

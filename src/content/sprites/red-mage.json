@@ -1,0 +1,74 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:red-mage",
+  "kind": "sheet-sprite",
+  "description": "Electric Lemon Red Female Mage combat sheet (public/assets/MANIFEST.json#electric-lemon-rpg-characters) \u2014 the Spellsinger: the locked bard class reborn as a battle-chanter whose spells are verses (docs/CAST-CONVERSION.md creative rewrite; her song-note projectile and SONG aura were already in the class config). Same mage convention: staff swing 0-3, cast 4-7, combat idle 8-11, combat walk 12-15, E/W/S/N rows.",
+  "frameSize": {
+    "w": 16,
+    "h": 16
+  },
+  "anchor": {
+    "x": 8,
+    "y": 15
+  },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "heroes/red-mage.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 8,
+        "left": 9,
+        "down": 10,
+        "up": 11
+      },
+      "fps": 5
+    },
+    "walk": {
+      "image": "heroes/red-mage.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 12,
+        "left": 13,
+        "down": 14,
+        "up": 15
+      },
+      "fps": 8
+    },
+    "attack": {
+      "image": "heroes/red-mage.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 4,
+        "left": 5,
+        "down": 6,
+        "up": 7
+      },
+      "fps": 10
+    },
+    "hurt": {
+      "image": "heroes/red-mage.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 0,
+        "left": 1,
+        "down": 2,
+        "up": 3
+      },
+      "fps": 10
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

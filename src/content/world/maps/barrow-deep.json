@@ -1,0 +1,140 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:barrow-deep",
+  "kind": "map",
+  "name": "The Whelp's Nest",
+  "size": { "cols": 44, "rows": 24 },
+  "baseTile": "tile:dungeon-floor-shattered",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain" },
+    {
+      "op": "row-span",
+      "tile": "tile:sand-roots",
+      "y": 11,
+      "x0": 2,
+      "x1": 41,
+      "note": "the scorched, root-laced nest floor — the line pushes east to the whelp"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:sand-roots",
+      "y": 12,
+      "x0": 2,
+      "x1": 41,
+      "note": "nest floor, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain-ledge",
+      "x": 16,
+      "y0": 2,
+      "y1": 8,
+      "note": "a raw rock shelf the whelp shelters behind (the run threads the lower gap)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain-ledge",
+      "x": 16,
+      "y0": 16,
+      "y1": 21,
+      "note": "the rock shelf's lower spur"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water-deep",
+      "x0": 4,
+      "x1": 10,
+      "y0": 3,
+      "y1": 8,
+      "note": "a black sump where the dig flooded — the brood drinks here"
+    },
+    {
+      "op": "region",
+      "tile": "tile:sand",
+      "x0": 31,
+      "x1": 41,
+      "y0": 7,
+      "y1": 17,
+      "note": "the nest bowl proper — ash and dragon-sand heaped where the whelp coils"
+    },
+    {
+      "op": "region",
+      "tile": "tile:sand-ripple",
+      "x0": 24,
+      "x1": 29,
+      "y0": 17,
+      "y1": 21,
+      "note": "wind-rippled ash drifted against the gallery's south wall"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 184 },
+  "spawns": {
+    "default": { "x": 48, "y": 184 },
+    "entry": { "x": 48, "y": 184 }
+  },
+  "entities": [
+    {
+      "ref": "prop:dungeon-brazier",
+      "x": 150,
+      "y": 150,
+      "note": "a watch-fire the brood keeps at the gallery mouth"
+    },
+    {
+      "ref": "prop:stump",
+      "x": 200,
+      "y": 296,
+      "note": "a charred stump the whelp gnaws when the road is quiet"
+    },
+    {
+      "ref": "prop:desert-shrine",
+      "x": 300,
+      "y": 150,
+      "note": "a road-shrine the brood toppled into the nest, half-buried in ash"
+    },
+    {
+      "ref": "prop:dungeon-brazier",
+      "x": 540,
+      "y": 150,
+      "note": "the whelp's hoard-fire, banked high at the nest"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 620,
+      "y": 150,
+      "contents": "Gold",
+      "note": "the whelp's first hoard — a knot of road-toll coin"
+    },
+    {
+      "enemy": "barrow-whelp",
+      "x": 600,
+      "y": 184,
+      "note": "roadside-barrow lair CLIMAX (depth 2, the princess+kin room): a barrow-whelp — the brother-dragon's get — coils on the nest. The one authored combatant; once the brother kin is unlocked he relocates HERE (deepest room) and overlays the climax. The host is permuted from the unlocked set via the wave gates."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:nest-gallery", "x": 230, "y": 184, "note": "spawn zone — the gallery mouth" },
+    {
+      "id": "gate:nest-buttress",
+      "x": 300,
+      "y": 160,
+      "note": "spawn zone — past the buttress, upper"
+    },
+    { "id": "gate:nest-roots", "x": 380, "y": 312, "note": "spawn zone — the lower root-fall" },
+    {
+      "id": "gate:nest-rim",
+      "x": 540,
+      "y": 184,
+      "note": "spawn zone — the nest rim before the whelp"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:nest-mouth",
+      "kind": "landmark",
+      "label": "The Whelp's Nest",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 168, "x1": 80, "y1": 200 }
+    }
+  ]
+}

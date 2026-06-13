@@ -1,0 +1,12 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:princess-boon",
+  "label": "Princess Boon",
+  "category": "relic",
+  "cost": {
+    "roses": 4
+  },
+  "prerequisites": ["upgrade:bard-road-song"],
+  "unlocks": [],
+  "track": "vows"
+}

@@ -4,6 +4,7 @@ import { afterEach, expect, it } from "vitest";
 import { page, userEvent } from "vitest/browser";
 import { App } from "../../src/app/App";
 import { MemorySaveRepository } from "../../src/persistence/saveRepository";
+import { wait } from "../harness/wait";
 
 let container: HTMLDivElement | undefined;
 let root: Root | undefined;
@@ -35,8 +36,6 @@ function mountApp(repository = new MemorySaveRepository()) {
   );
 }
 
-const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 it("opens on an errant storybook landing page before class select", async () => {
   mountApp();
   await expect.element(page.getByTestId("landing-screen")).toBeVisible();
@@ -48,12 +47,9 @@ it("opens on an errant storybook landing page before class select", async () => 
   const landingPath = await page.screenshot({ path: "landing-storybook.png" });
   expect(landingPath).toBeTruthy();
   await userEvent.click(page.getByTestId("new-game-button"));
-  await expect.element(page.getByTestId("title-screen")).toBeVisible();
-  await expect.element(page.getByTestId("title-screen")).toHaveTextContent("upgrade graph");
-  await expect.element(page.getByTestId("class-knight")).toBeVisible();
-  await expect.element(page.getByTestId("class-ranger")).not.toBeInTheDocument();
-  const titlePath = await page.screenshot({ path: "title-storybook.png" });
-  expect(titlePath).toBeTruthy();
+  // rail command: New Game opens the field directly — toolbox up, no picker
+  await expect.element(page.getByTestId("world-stage-shell")).toBeVisible();
+  await expect.element(page.getByTestId("unit-toolbox")).toBeVisible();
 });
 
 it("enables continue when a save slot exists", async () => {
@@ -76,49 +72,7 @@ it("enables continue when a save slot exists", async () => {
   await expect.element(page.getByTestId("save-line")).toHaveTextContent("ranger");
   await userEvent.click(page.getByTestId("continue-button"));
   await expect.element(page.getByTestId("world-stage-shell")).toBeVisible();
+  await expect.element(page.getByTestId("unit-toolbox")).toBeVisible();
   const shell = page.getByTestId("game-shell").element() as HTMLElement;
-  expect(shell.dataset.classId).toBe("ranger");
   expect(shell.dataset.mapId).toBe("map:castle-dungeon");
-});
-
-it("centers the knight among unlocked classes with sprite thumbs", async () => {
-  const repository = new MemorySaveRepository();
-  await repository.upsertSlot({
-    id: 1,
-    classId: "knight",
-    mapId: "map:rescue-route",
-    playerX: 136,
-    playerY: 976,
-    level: 1,
-    hp: 100,
-    maxHp: 100,
-    questSummary: "Three callings answered",
-    snapshotJson: JSON.stringify({
-      coins: 0,
-      roses: 0,
-      purchasedUpgradeIds: ["upgrade:first-vow"],
-      unlockedClassIds: ["knight", "ranger", "rogue"],
-      unlockedRoutePackIds: [],
-    }),
-    updatedAt: new Date("2026-06-12T10:00:00Z"),
-  });
-
-  mountApp(repository);
-  await expect.element(page.getByTestId("landing-screen")).toBeVisible();
-  await userEvent.click(page.getByTestId("new-game-button"));
-  await expect.element(page.getByTestId("class-ranger")).toBeVisible();
-
-  const row = (page.getByTestId("title-panel").element() as HTMLElement).querySelector(
-    ".class-row",
-  );
-  const order = [...(row?.querySelectorAll("button") ?? [])].map((button) => button.dataset.testid);
-  expect(order).toEqual(["class-ranger", "class-knight", "class-rogue"]);
-  for (const button of row?.querySelectorAll("button") ?? []) {
-    expect(button.querySelector("canvas.class-thumb"), button.dataset.testid).toBeTruthy();
-  }
-
-  const pickerShot = await page.screenshot({
-    path: "../../docs/evidence/class-picker-unlocked.png",
-  });
-  expect(pickerShot).toBeTruthy();
 });

@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:tempo-mastery",
+  "label": "Tempo Mastery",
+  "category": "ability",
+  "cost": {
+    "coins": 30
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.8,
+  "prerequisites": ["upgrade:battle-tempo"],
+  "unlocks": [],
+  "track": "vows",
+  "note": "Each rank opens the next speed tier: rank 1 → 10x, rank 2 → 50x, rank 3 → 100x.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 176,
+    "y": 688,
+    "w": 16,
+    "h": 16
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:unlock-crypt-bat",
+  "label": "Wake the Crypt Bats",
+  "category": "enemy",
+  "cost": {
+    "gems": 46
+  },
+  "prerequisites": ["upgrade:unlock-gatehouse-vulture"],
+  "unlocksEnemy": "crypt-bat",
+  "unlocks": ["upgrade:bat-bounty", "upgrade:unlock-crypt-skeleton"],
+  "track": "encounters",
+  "note": "A swarming vermin of the sunken vault and dungeon dark — each one felled pays its bounty.",
+  "iconRef": {
+    "image": "tilemaps/roguelike.png",
+    "x": 96,
+    "y": 456,
+    "w": 16,
+    "h": 16
+  }
+}

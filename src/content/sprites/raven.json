@@ -1,0 +1,49 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:raven",
+  "kind": "sheet-sprite",
+  "description": "Elthen raven (public/assets/MANIFEST.json#elthen-raven), 32px rows facing left (rows 9-17 are baked mirrors, skipped). Sunken-road trash body: hop idle, flight travel, caw-flap attack, tumble death. Perch rows remain for prop-layer ambience later.",
+  "frameSize": { "w": 32, "h": 32 },
+  "anchor": { "x": 16, "y": 30 },
+  "directionOrder": ["right", "up", "left", "down"],
+  "facing": { "nativeDir": "left" },
+  "animations": {
+    "idle": {
+      "image": "enemies/raven.png",
+      "framesPerDirection": 8,
+      "directional": false,
+      "row": 0,
+      "fps": 8
+    },
+    "walk": {
+      "image": "enemies/raven.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 5,
+      "fps": 12
+    },
+    "attack": {
+      "image": "enemies/raven.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 2,
+      "fps": 10
+    },
+    "hurt": {
+      "image": "enemies/raven.png",
+      "framesPerDirection": 5,
+      "directional": false,
+      "row": 4,
+      "fps": 10
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

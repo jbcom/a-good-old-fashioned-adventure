@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "warren-chief",
+  "name": "Warren Chief",
+  "sprite": "sprite:boss-warren-chief",
+  "palette": "palette:base",
+  "hp": 66,
+  "speed": 34,
+  "hitbox": {
+    "w": 14,
+    "h": 14
+  },
+  "behavior": "guard",
+  "guard": {
+    "aggroRange": 104,
+    "deaggroRange": 150,
+    "leashRange": 170,
+    "stance": {
+      "guard": 1.0,
+      "open": 1.45,
+      "damageMultiplier": 0.4,
+      "moveFactor": 0.5
+    }
+  },
+  "miniboss": true
+}

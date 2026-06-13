@@ -3,11 +3,17 @@
   "id": "map:castle-dungeon",
   "kind": "map",
   "name": "Obsidian Throne Dungeon",
-  "size": { "cols": 48, "rows": 32 },
+  "size": {
+    "cols": 48,
+    "rows": 32
+  },
   "baseTile": "tile:stone-floor",
   "bgmTheme": "dungeon",
   "generation": [
-    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "border",
+      "tile": "tile:stone-wall"
+    },
     {
       "op": "col-span",
       "tile": "tile:prison-bars",
@@ -34,20 +40,130 @@
       "exceptCols": [14, 15, 16, 17, 18, 30, 31, 32, 33, 34]
     }
   ],
-  "playerSpawn": { "x": 80, "y": 250 },
+  "playerSpawn": {
+    "x": 80,
+    "y": 250
+  },
   "spawns": {
-    "default": { "x": 80, "y": 250 },
-    "entry": { "x": 80, "y": 250 }
+    "default": {
+      "x": 80,
+      "y": 250
+    },
+    "entry": {
+      "x": 80,
+      "y": 250
+    }
   },
   "entities": [
-    { "ref": "prop:chest", "x": 200, "y": 100, "contents": "Gold" },
-    { "ref": "prop:chest", "x": 220, "y": 400, "contents": "AttackUp" },
-    { "enemy": "crypt-skeleton", "x": 240, "y": 160 },
-    { "enemy": "crypt-skeleton", "x": 380, "y": 300 },
-    { "enemy": "crypt-sentry", "x": 420, "y": 100 },
-    { "enemy": "shadow-warlord", "x": 680, "y": 250 },
-    { "ref": "char:princess-amber", "x": 740, "y": 250, "dir": -1 }
+    {
+      "ref": "prop:chest",
+      "x": 200,
+      "y": 100,
+      "contents": "Gold"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 220,
+      "y": 400,
+      "contents": "AttackUp"
+    },
+    {
+      "enemy": "shadow-warlord",
+      "x": 680,
+      "y": 250,
+      "note": "sunken-crypt lair r2 CLIMAX: the Shadow Warlord holds the dungeon — the one authored combatant; trash is permuted from the unlocked set via the wave gates"
+    },
+    {
+      "ref": "char:princess-amber",
+      "x": 740,
+      "y": 250,
+      "dir": -1
+    },
+    {
+      "ref": "prop:dungeon-brazier",
+      "x": 210,
+      "y": 120,
+      "note": "torchlight against the bare corridor"
+    },
+    {
+      "ref": "prop:dungeon-brazier",
+      "x": 430,
+      "y": 120,
+      "note": "second brazier down the hall"
+    },
+    {
+      "ref": "prop:dungeon-web",
+      "x": 140,
+      "y": 180,
+      "note": "cobwebbed corner near the entry"
+    },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 320,
+      "y": 300,
+      "note": "what the rats left"
+    },
+    {
+      "ref": "prop:dungeon-cell-gate",
+      "x": 560,
+      "y": 200,
+      "note": "a barred cell on the way to the warlord"
+    },
+    {
+      "ref": "prop:dungeon-grave",
+      "x": 480,
+      "y": 380,
+      "note": "crypt marker by the south wall"
+    }
+  ],
+  "waveGates": [
+    {
+      "id": "gate:dungeon-entry",
+      "x": 280,
+      "y": 250,
+      "note": "spawn zone — the dungeon entry cells"
+    },
+    {
+      "id": "gate:dungeon-high",
+      "x": 420,
+      "y": 180,
+      "note": "spawn zone — the upper sentry corridor"
+    },
+    { "id": "gate:dungeon-low", "x": 380, "y": 330, "note": "spawn zone — the lower south wall" },
+    {
+      "id": "gate:dungeon-warlord",
+      "x": 580,
+      "y": 250,
+      "note": "spawn zone — before the Warlord's hall"
+    }
   ],
   "triggers": [],
-  "onEnter": [{ "dialogue": "dlgbank:dungeon-guard", "slot": "taunt", "once": true }]
+  "onEnter": [
+    {
+      "dialogue": "dlgbank:dungeon-guard",
+      "slot": "taunt",
+      "once": true
+    }
+  ],
+  "terrainVariants": [
+    {
+      "baseTile": "tile:stone-floor",
+      "variants": [
+        "tile:stone-floor",
+        "tile:stone-floor",
+        "tile:stone-floor",
+        "tile:stone-floor",
+        "tile:dungeon-floor-worn",
+        "tile:dungeon-floor-cracked",
+        "tile:dungeon-floor-shattered",
+        "tile:dungeon-floor-ratmarked"
+      ],
+      "chunk": {
+        "w": 4,
+        "h": 4
+      },
+      "seed": 7,
+      "note": "Kenney-derived dark slices at 50% chunk density (schema caps 8 variants); each slice appears once per 8 chunks"
+    }
+  ]
 }

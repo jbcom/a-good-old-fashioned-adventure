@@ -1,0 +1,54 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:fighter",
+  "kind": "sheet-sprite",
+  "description": "Electric Lemon Sword & Shield Fighter combat sheet (public/assets/MANIFEST.json#electric-lemon-rpg-characters) — the knight's body (docs/CAST-CONVERSION.md). 32px frames: runs on rows 8-11 (E/W/S/N, 4f), first attack state packed two-directions-per-row on rows 0-1 (2f per direction). Idle is the run row at a slow ready-shuffle. Bow kit rows 12-19 stay unmapped for a future knight bow moment.",
+  "frameSize": { "w": 32, "h": 32 },
+  "anchor": { "x": 16, "y": 30 },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "heroes/fighter.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": { "right": 8, "left": 9, "down": 10, "up": 11 },
+      "fps": 2
+    },
+    "walk": {
+      "image": "heroes/fighter.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": { "right": 8, "left": 9, "down": 10, "up": 11 },
+      "fps": 10
+    },
+    "attack": {
+      "image": "heroes/fighter.png",
+      "framesPerDirection": 2,
+      "directional": false,
+      "directionRows": {
+        "right": { "row": 0, "col": 2 },
+        "left": { "row": 0, "col": 0 },
+        "down": { "row": 1, "col": 0 },
+        "up": { "row": 1, "col": 2 }
+      },
+      "fps": 10,
+      "loop": false
+    },
+    "hurt": {
+      "image": "heroes/fighter.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": { "right": 8, "left": 9, "down": 10, "up": 11 },
+      "fps": 6
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:citizen-seza",
+  "kind": "sheet-sprite",
+  "description": "Electric Lemon citizen 'Seza' non-combat sheet (public/assets/MANIFEST.json#electric-lemon-rpg-characters). 16px, seven E/W/S/N blocks (backs at rows 3/7/11/15/19/23/27 by skin probe): idle block rows 0-3, walk block rows 4-7 mounted; remaining blocks (work/sit/sleep and the 28-30 specials) reserved for ambience states. Combat variant stays in raw-assets.",
+  "frameSize": {
+    "w": 16,
+    "h": 16
+  },
+  "anchor": {
+    "x": 8,
+    "y": 15
+  },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "npcs/seza.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 0,
+        "left": 1,
+        "down": 2,
+        "up": 3
+      },
+      "fps": 3
+    },
+    "walk": {
+      "image": "npcs/seza.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 4,
+        "left": 5,
+        "down": 6,
+        "up": 7
+      },
+      "fps": 8
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}
