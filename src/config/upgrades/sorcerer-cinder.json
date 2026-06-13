@@ -17,8 +17,8 @@
   "track": "characters",
   "iconRef": {
     "image": "tilemaps/roguelike.png",
-    "x": 224,
-    "y": 560,
+    "x": 64,
+    "y": 688,
     "w": 16,
     "h": 16
   }

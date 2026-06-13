@@ -72,7 +72,7 @@ import {
 import { currentMap } from "../sim/mapProgression";
 import { applyEffects, autoStartQuests, questLogLines } from "../sim/quests";
 import { buyShopListing, type ShopTransactionResult, sellShopListing } from "../sim/shop";
-import { frontline } from "../sim/systems/waves";
+import { currentWave, frontline, lineVitals } from "../sim/systems/waves";
 import { SIM_DT, step } from "../sim/tick";
 import { nextTier } from "../sim/timeWarp";
 import {
@@ -149,6 +149,13 @@ interface UiSnapshot {
   projectiles: number;
   units: number;
   unitsPlaced: Record<string, number>;
+  /** Aggregate vitals of the fielded LINE (rail HUD): sum hp over sum maxHp. */
+  lineHp: number;
+  lineMaxHp: number;
+  /** Per-class live line breakdown for the unit chips. */
+  lineByClass: Record<string, { count: number; hp: number; maxHp: number }>;
+  /** The wave number the gates have released (0 before the first wave). */
+  wave: number;
   frontY: number;
   withered: number;
   fxSpawned: number;
@@ -218,6 +225,10 @@ const EMPTY_SNAPSHOT: UiSnapshot = {
   projectiles: 0,
   units: 0,
   unitsPlaced: {},
+  lineHp: 0,
+  lineMaxHp: 0,
+  lineByClass: {},
+  wave: 0,
   frontY: 0,
   withered: 0,
   fxSpawned: 0,
@@ -375,6 +386,7 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
   const incrementalProgress = currentProgress(world);
   const inventory = player?.get(Inventory);
   const transform = player?.get(Transform);
+  const vitals = lineVitals(world);
   const mapId = runtime?.mapId ?? "";
   const base: UiSnapshot = {
     mapId,
@@ -399,6 +411,10 @@ function readSnapshot(world: World, exploredByMap: Map<string, Set<string>>): Ui
     projectiles: [...world.query(Projectile)].length,
     units: [...world.query(IsUnit)].length,
     unitsPlaced: { ...placedCounts(world) },
+    lineHp: vitals.hp,
+    lineMaxHp: vitals.maxHp,
+    lineByClass: vitals.byClass,
+    wave: currentWave(world),
     frontY: frontline(world)?.y ?? 0,
     withered: [...world.query(IsEnemy, Withered)].filter(
       (enemy) => (enemy.get(Withered)?.left ?? 0) > 0,
@@ -661,6 +677,41 @@ function CurrencyToken({ label, value, testId }: { label: string; value: number;
   );
 }
 
+/**
+ * The fielded line's per-class roster (rail HUD): one chip per class with units
+ * in play, showing its count and an aggregate hp pip. Sorted by class id for a
+ * stable order. Empty when no line is fielded (the chips appear as the line
+ * deploys). docs/RAIL-COMMAND.md §the line.
+ */
+function UnitChips({ snapshot }: { snapshot: UiSnapshot }) {
+  const classes = Object.keys(snapshot.lineByClass).sort();
+  return (
+    <div className="unit-chips" data-testid="unit-chips">
+      {classes.map((classId) => {
+        const slot = snapshot.lineByClass[classId];
+        const pct = slot.maxHp > 0 ? Math.round((slot.hp / slot.maxHp) * 100) : 0;
+        return (
+          <span
+            key={classId}
+            className="unit-chip"
+            data-testid={`unit-chip-${classId}`}
+            data-class={classId}
+            data-count={slot.count}
+            data-hp-percent={pct}
+            title={`${classId} ×${slot.count} — ${pct}% hp`}
+          >
+            <span className="unit-chip-glyph" aria-hidden="true">
+              {classId.slice(0, 1).toUpperCase()}
+            </span>
+            <span className="unit-chip-count">{slot.count}</span>
+            <span className="unit-chip-pip" style={{ width: `${pct}%` }} />
+          </span>
+        );
+      })}
+    </div>
+  );
+}
+
 function usePanelEntrance(signature: string) {
   const ref = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -809,27 +860,29 @@ function Hud({
   onToggleMute: () => void;
   onRetire: () => void;
 }) {
-  const hpPercent = Math.max(0, Math.round((snapshot.hp / snapshot.maxHp) * 100));
+  // the rail HUD commands a LINE, not a hero: the vitals bar aggregates every
+  // fielded unit's hp, the wave chip tracks the gate pressure, and the unit
+  // chips show the per-class roster with live hp (docs/RAIL-COMMAND.md §the line)
+  const linePercent =
+    snapshot.lineMaxHp > 0 ? Math.round((snapshot.lineHp / snapshot.lineMaxHp) * 100) : 0;
   return (
     <div className="hud" data-testid="hud">
       <header className="top-hud" data-testid="top-hud">
-        <strong>{snapshot.classId.toUpperCase()}</strong>
-        <span>LV {snapshot.level}</span>
-        <span>HP {hpPercent}%</span>
-        <meter
-          className="meter hp-meter wide-meter"
-          aria-label="HP"
-          min={0}
-          max={snapshot.maxHp}
-          value={Math.max(0, snapshot.hp)}
-        />
-        <meter
-          className="meter xp-meter wide-meter"
-          aria-label="XP"
-          min={0}
-          max={snapshot.nextXp}
-          value={snapshot.xp}
-        />
+        <div className="line-vitals" data-testid="line-vitals" data-line-percent={linePercent}>
+          <span className="line-vitals-label">LINE</span>
+          <meter
+            className="meter line-meter wide-meter"
+            aria-label="Line vitals"
+            min={0}
+            max={Math.max(1, snapshot.lineMaxHp)}
+            value={Math.max(0, snapshot.lineHp)}
+          />
+          <span className="line-vitals-count">{snapshot.units}</span>
+        </div>
+        <span className="wave-chip" data-testid="wave-chip">
+          WAVE {snapshot.wave}
+        </span>
+        <UnitChips snapshot={snapshot} />
         <CurrencyToken label="C" value={snapshot.incrementalProgress.coins} testId="hud-coins" />
         <CurrencyToken label="G" value={snapshot.incrementalProgress.gems} testId="hud-gems" />
         <CurrencyToken label="R" value={snapshot.incrementalProgress.roses} testId="hud-roses" />

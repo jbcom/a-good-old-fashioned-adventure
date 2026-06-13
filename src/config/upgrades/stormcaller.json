@@ -13,8 +13,8 @@
   "note": "Wizard and storm fused: the whirl looses bolts at everything in range.",
   "iconRef": {
     "image": "tilemaps/roguelike.png",
-    "x": 208,
-    "y": 560,
+    "x": 176,
+    "y": 688,
     "w": 16,
     "h": 16
   }

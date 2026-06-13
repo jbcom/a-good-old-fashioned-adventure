@@ -13,8 +13,8 @@
   "note": "Completes the offense-first starting trio (melee→ranged→spells): the wizard is the third core body, a rose class-major hung off the ranger so the ranged line precedes the spell line. Its coin sub-track (wizard-arcana) is the connector.",
   "iconRef": {
     "image": "tilemaps/roguelike.png",
-    "x": 208,
-    "y": 560,
+    "x": 144,
+    "y": 688,
     "w": 16,
     "h": 16
   }

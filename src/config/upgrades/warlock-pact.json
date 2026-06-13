@@ -13,8 +13,8 @@
   "note": "The withering field slows and weakens every enemy inside it.",
   "iconRef": {
     "image": "tilemaps/roguelike.png",
-    "x": 208,
-    "y": 560,
+    "x": 112,
+    "y": 688,
     "w": 16,
     "h": 16
   }

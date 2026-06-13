@@ -68,10 +68,18 @@ it("commands a rail run: deploy, push, bank, retire stronger", async () => {
   await expect.element(page.getByTestId("hud-gems")).toBeVisible();
   await expect.element(page.getByTestId("hud-roses")).toBeVisible();
 
+  // the rail HUD commands a LINE: the line-vitals aggregate and the wave chip
+  // are present (the hero HP/XP/LV display is gone — docs/RAIL-COMMAND.md §line)
+  await expect.element(page.getByTestId("line-vitals")).toBeVisible();
+  await expect.element(page.getByTestId("wave-chip")).toBeVisible();
+
   // one gesture starts the war: the knight lands, the first wave answers
   await commander.deploy("knight");
   await expect.poll(() => commander.perceive().units, { timeout: 5000 }).toBe(1);
   await expect.poll(() => commander.perceive().enemies, { timeout: 8000 }).toBeGreaterThan(0);
+
+  // the knight's unit chip appears once it's fielded, with a live-hp pip
+  await expect.element(page.getByTestId("unit-chip-knight")).toBeVisible();
 
   // the line pays its way: kills and checkpoints bank while we watch
   const coins0 = commander.perceive().coins;

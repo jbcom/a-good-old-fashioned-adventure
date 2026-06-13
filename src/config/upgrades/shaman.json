@@ -13,8 +13,8 @@
   "note": "Priest and cinder fused: bursts that scorch enemies and mend allies standing inside.",
   "iconRef": {
     "image": "tilemaps/roguelike.png",
-    "x": 224,
-    "y": 560,
+    "x": 96,
+    "y": 688,
     "w": 16,
     "h": 16
   }
