@@ -64,6 +64,7 @@ import {
   recordDeathPayout,
   resolvePayment,
   restoreIncrementalProgress,
+  roseLoopHint,
   rosterFor,
   sanitizeIncrementalProgress,
   type UpgradePurchaseResult,
@@ -1118,6 +1119,11 @@ function ResultsPanel({
               snapshot.incrementalProgress,
               nextVow(snapshot.incrementalProgress) as IncrementalUpgradeNode,
             )}
+          </p>
+        )}
+        {roseLoopHint(snapshot.incrementalProgress) && (
+          <p className="dialogue-line" data-testid="rose-loop-hint">
+            {roseLoopHint(snapshot.incrementalProgress)}
           </p>
         )}
         <div className="result-actions">

@@ -531,6 +531,29 @@ function canReachNode(progress: IncrementalProgressState, node: IncrementalUpgra
   return node.prerequisites.every((id) => progress.purchasedUpgradeIds.includes(id));
 }
 
+/**
+ * Rose-loop discoverability nudge (docs/BALANCE-PLAYTESTS.md §N1): a gems-first
+ * player can complete the whole mandatory game without ever discovering the
+ * dragon track, so it stays invisible. When the player has REACHED a dragon-kin
+ * unlock node (its prerequisites met) but owns NO kin yet, return a one-line
+ * hint pointing at the flywheel. Empty once any kin is unlocked.
+ */
+export function roseLoopHint(progress: IncrementalProgressState): string {
+  const nodes = incremental.upgradeGraph.nodes;
+  const ownsAnyKin = nodes.some(
+    (node) => node.dragonKin && progress.purchasedUpgradeIds.includes(node.id),
+  );
+  if (ownsAnyKin) return "";
+  const reachableKin = nodes.find(
+    (node) =>
+      node.dragonKin &&
+      !progress.purchasedUpgradeIds.includes(node.id) &&
+      canReachNode(progress, node),
+  );
+  if (!reachableKin) return "";
+  return "Wake a dragon's kin to start the rose flywheel — a felled kin pays roses, and roses unlock more dragons (and more princesses).";
+}
+
 /** Resolves OR-cost (rose-or-gem) nodes by checking affordability, returning payment or null if unreachable. */
 export function resolvePayment(
   progress: IncrementalProgressState,
