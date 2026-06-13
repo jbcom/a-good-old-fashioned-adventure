@@ -4,15 +4,13 @@
   "variantOf": "tile:grass",
   "kind": "tile",
   "solid": false,
-  "description": "Root-knotted grass — tile:grass's denser blade-dither (ground.png cells 0-1×2-3) over a darker, browner-green base so trodden, root-broken ground reads earthier than plain grass. Same base+overlay family; replaces the procedural .pix root clumps.",
-  "baseColor": "#324b26",
+  "description": "Grass variant — RPG Tiles Vector 64px grass cell (rpg-terrain.png) at a distinct centre cell for blade/tone variety; opaque, native-res, no flat fill.",
   "sheet": {
-    "image": "tilemaps/ground.png",
-    "x": 0,
-    "y": 32,
-    "w": 16,
-    "h": 16,
-    "field": { "cols": 2, "rows": 2 }
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 128,
+    "y": 0,
+    "w": 64,
+    "h": 64
   },
   "koota": {
     "traits": ["Tile"]

@@ -3,14 +3,13 @@
   "id": "tile:grass",
   "kind": "tile",
   "solid": false,
-  "description": "Grass — a warm storybook-green base (#3f5f2e) with The Ground pack's sparse blade-dither overlay on top (public/assets/tilemaps/ground.png, the ~67-alpha scatter at cells 0-1×0-1). The Ground's top rows are transparency-dither overlays meant to sit on a base color (NOT solid grass), so the tile composites baseColor THEN the cropped overlay — real PNG texture over a clean readable base, replacing the POC .pix grass. The field samples a 2×2 cell block so the scatter tiles seamlessly.",
-  "baseColor": "#3f5f2e",
+  "description": "Grass — the RPG Tiles Vector pack's opaque 64px grass fill (public/assets/tilemaps/rpg-terrain.png, the pure-green centre block at cols 3-4, rows 0-1). Soft-shaded green with scattered blade tufts authored into the raster, scaled to the world tile at native resolution so it reads as real ground, never a flat magnified cell. The 2×2 field samples four centre cells so a meadow varies instead of repeating one tile.",
   "sheet": {
-    "image": "tilemaps/ground.png",
-    "x": 0,
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 192,
     "y": 0,
-    "w": 16,
-    "h": 16,
+    "w": 64,
+    "h": 64,
     "field": { "cols": 2, "rows": 2 }
   },
   "koota": {

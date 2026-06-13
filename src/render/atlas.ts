@@ -78,8 +78,9 @@ export function croppedSheetCanvas(
   if (!image) {
     if (sheetsReady) throw new Error(`${ownerId}: sheet image missing: ${rect.image}`);
     // preload in flight (or impossible, e.g. jsdom) — blit nothing, never
-    // stale; cached per owner so the render loop doesn't churn textures
-    return baked(`${ownerId}|placeholder`, () => {
+    // stale; keyed per crop so a variable-size cell gets a correctly-sized
+    // placeholder (16px cells share, but the key stays correct if they ever differ)
+    return baked(`${cacheKey}|placeholder`, () => {
       const placeholder = document.createElement("canvas");
       placeholder.width = rect.w;
       placeholder.height = rect.h;
@@ -184,65 +185,17 @@ export function flashCanvas(spriteId: string, paletteId: string): HTMLCanvasElem
   });
 }
 
-/** Tile face size in px (the ground grid cell). */
-const TILE_PX = 16;
-
 /**
- * Composite a base color fill with a sheet overlay drawn on top — the terrain
- * model where a roguelike ~50%-alpha dither/cobble cell sits on a solid base
- * color (real PNG texture over a clean readable base). Returns a fresh canvas
- * keyed by the caller's cache key.
+ * Cached tile face, rasterized from .pix rows, draw-ops, or a purchased sheet.
+ * A sheet tile bakes at the source crop's NATIVE resolution (16 for roguelike,
+ * 64 for RPG Tiles Vector) — the ground compositor draws each tile at its own
+ * pixel size, so a high-res vector tile keeps its texture instead of being
+ * magnified into a flat blob.
  */
-function baseOverlayCanvas(
-  cacheKey: string,
-  baseColor: string,
-  overlay: HTMLCanvasElement,
-  w: number,
-  h: number,
-): HTMLCanvasElement {
-  return baked(cacheKey, () => {
-    const canvas = document.createElement("canvas");
-    canvas.width = w;
-    canvas.height = h;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) throw new Error("2d context unavailable");
-    ctx.imageSmoothingEnabled = false;
-    ctx.fillStyle = baseColor;
-    ctx.fillRect(0, 0, w, h);
-    ctx.drawImage(overlay, 0, 0);
-    return canvas;
-  });
-}
-
-/** Cached 16×16 tile face, rasterized from .pix rows, draw-ops, or purchased sheet. */
 export function tileCanvas(tileId: string): HTMLCanvasElement {
   const tile = getTile(tileId);
   if (tile.sheet) {
-    const crop = croppedSheetCanvas(tileId, `${tileId}|sheet`, tile.sheet);
-    // a baseColor draws under the sheet overlay (the roguelike dither model)
-    if (tile.baseColor) {
-      return baseOverlayCanvas(
-        `${tileId}|base+sheet`,
-        tile.baseColor,
-        crop,
-        tile.sheet.w,
-        tile.sheet.h,
-      );
-    }
-    return crop;
-  }
-  // a baseColor-only tile is a flat fill (no overlay) — a clean solid ground
-  if (tile.baseColor) {
-    return baked(`${tileId}|baseColor`, () => {
-      const canvas = document.createElement("canvas");
-      canvas.width = TILE_PX;
-      canvas.height = TILE_PX;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) throw new Error("2d context unavailable");
-      ctx.fillStyle = tile.baseColor as string;
-      ctx.fillRect(0, 0, TILE_PX, TILE_PX);
-      return canvas;
-    });
+    return croppedSheetCanvas(tileId, `${tileId}|sheet`, tile.sheet);
   }
   return baked(`${tileId}|palette:base`, () => {
     if (tile.rows) return rasterizeRows(tile.rows, resolvePalette("palette:base"));
@@ -252,11 +205,10 @@ export function tileCanvas(tileId: string): HTMLCanvasElement {
 
 /**
  * Tile face at a specific (col,row) on the ground plane. For a `field` ground
- * tile (a large dithered fill from The Ground pack) this samples a different
- * 16px cell from the field block per board position — wrapping over the
- * field's cols×rows — so the map reproduces the pack's seamless ground texture
- * instead of tiling one cell into visible square seams. Non-field tiles ignore
- * the position and return their single cached face.
+ * tile this samples a different native-resolution cell from the field block per
+ * board position — wrapping over the field's cols×rows — so a ground area shows
+ * the pack's variation instead of tiling one cell into visible seams. Non-field
+ * tiles ignore the position and return their single cached face.
  */
 export function tileFieldCanvas(tileId: string, col: number, row: number): HTMLCanvasElement {
   const tile = getTile(tileId);
@@ -271,15 +223,11 @@ export function tileFieldCanvas(tileId: string, col: number, row: number): HTMLC
     w: tile.sheet.w,
     h: tile.sheet.h,
   };
-  const crop = croppedSheetCanvas(tileId, `${tileId}|field|${fx}x${fy}`, rect);
-  if (tile.baseColor) {
-    return baseOverlayCanvas(
-      `${tileId}|base+field|${fx}x${fy}`,
-      tile.baseColor,
-      crop,
-      tile.sheet.w,
-      tile.sheet.h,
-    );
-  }
-  return crop;
+  return croppedSheetCanvas(tileId, `${tileId}|field|${fx}x${fy}`, rect);
+}
+
+/** Native pixel height of a tile's bake (sheet crop height, else the .pix grid). */
+export function tilePixelSize(tileId: string): number {
+  const tile = getTile(tileId);
+  return tile.sheet?.h ?? 16;
 }

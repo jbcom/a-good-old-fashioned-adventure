@@ -9,11 +9,6 @@
     "kind": { "const": "tile" },
     "variantOf": { "type": "string", "pattern": "^tile:[a-z0-9-]+$" },
     "solid": { "type": "boolean" },
-    "baseColor": {
-      "type": "string",
-      "pattern": "^#[0-9a-fA-F]{6}$",
-      "description": "Solid base fill drawn UNDER a sheet overlay. The roguelike terrain cells are ~50%-alpha dither/cobble overlays meant to sit on a base color (the .pix model: base + scattered detail). A tile with baseColor + sheet renders the base rect then the cropped overlay on top — real PNG ground texture over a clean readable base."
-    },
     "layers": { "$ref": "./draw-ops.schema.json#/$defs/opList" },
     "rows": {
       "type": "array",
@@ -32,7 +27,7 @@
         "h": { "type": "integer", "minimum": 1 },
         "field": {
           "type": "object",
-          "description": "A multi-cell GROUND FIELD: the (x,y) rect is the top-left of a cols×rows block of 16px cells in the PNG, and the renderer samples a per-(col,row) cell from that block (wrapping) so the map reproduces the pack's large seamless dithered ground instead of tiling one 16px cell into visible seams. For dithered-fill terrain (The Ground pack).",
+          "description": "A multi-cell GROUND FIELD: the (x,y) rect is the top-left of a cols×rows block of w×h cells in the PNG, and the renderer samples a per-(col,row) cell from that block (wrapping) so a ground area reproduces the pack's variation instead of tiling one cell into visible seams. The cell size (w,h) is the source's NATIVE resolution (e.g. 64 for the RPG Tiles Vector pack) — tiles bake at native res so the texture never magnifies into a flat blob.",
           "required": ["cols", "rows"],
           "properties": {
             "cols": { "type": "integer", "minimum": 1 },
@@ -50,10 +45,5 @@
       "properties": { "traits": { "type": "array", "items": { "type": "string" } } }
     }
   },
-  "anyOf": [
-    { "required": ["layers"] },
-    { "required": ["rows"] },
-    { "required": ["sheet"] },
-    { "required": ["baseColor"] }
-  ]
+  "anyOf": [{ "required": ["layers"] }, { "required": ["rows"] }, { "required": ["sheet"] }]
 }

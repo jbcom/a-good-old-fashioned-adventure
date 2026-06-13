@@ -4,15 +4,13 @@
   "variantOf": "tile:grass",
   "kind": "tile",
   "solid": false,
-  "description": "Flowering grass — tile:grass's sparse blade-dither (ground.png cells 0-1×0-1) over a slightly warmer, lighter green base so a bloomed patch reads brighter than plain grass while staying in the same overlay family. Replaces the bright procedural .pix flower clumps.",
-  "baseColor": "#4d6b34",
+  "description": "Grass variant — RPG Tiles Vector 64px grass cell (rpg-terrain.png) at a distinct centre cell for blade/tone variety; opaque, native-res, no flat fill.",
   "sheet": {
-    "image": "tilemaps/ground.png",
+    "image": "tilemaps/rpg-terrain.png",
     "x": 0,
     "y": 0,
-    "w": 16,
-    "h": 16,
-    "field": { "cols": 2, "rows": 2 }
+    "w": 64,
+    "h": 64
   },
   "koota": {
     "traits": ["Tile"]

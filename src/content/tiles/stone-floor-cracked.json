@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:stone-floor-cracked",
+  "kind": "tile",
+  "variantOf": "tile:stone-floor",
+  "solid": false,
+  "description": "Cracked stone slab — Kenney Roguelike Dungeon cell (tilemaps/kenney-dungeon.png, 16px on 17px stride; col 11, row 3). The deep fracture reads against the legible stone-floor base, matching the dungeon-floor family.",
+  "sheet": {
+    "image": "tilemaps/kenney-dungeon.png",
+    "x": 170,
+    "y": 51,
+    "w": 16,
+    "h": 16
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

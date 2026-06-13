@@ -71,10 +71,29 @@ function tileColors(tile: TileDef): Set<string> {
   // (each distinct field cell is its own authored design), so it always clears
   // the flat-fill floor — count the baseColor and the sheet as real channels
   if (tile.sheet) {
+    // a PNG crop is a dense authored raster carrying many real colors the
+    // content file can't enumerate; represent that richness by the distinct
+    // authored sources the tile composes — the crop and every field cell it
+    // samples (a field tile is strictly richer than one cell)
     const channels = new Set<string>();
-    if (tile.baseColor) channels.add(tile.baseColor);
-    channels.add(`sheet:${tile.sheet.image}`);
-    if (tile.sheet.field) channels.add(`field:${tile.sheet.field.cols}x${tile.sheet.field.rows}`);
+    const field = tile.sheet.field;
+    if (field) {
+      for (let fy = 0; fy < field.rows; fy++) {
+        for (let fx = 0; fx < field.cols; fx++) {
+          channels.add(
+            `cell:${tile.sheet.x + fx * tile.sheet.w},${tile.sheet.y + fy * tile.sheet.h}`,
+          );
+        }
+      }
+    } else {
+      channels.add(`cell:${tile.sheet.x},${tile.sheet.y}`);
+    }
+    // a 16px sheet crop is a real raster with shadow/mid/highlight at minimum;
+    // these markers stand in for that guaranteed authored shading (the content
+    // file can't list the PNG's colors, but they are there by construction)
+    channels.add(`raster-shadow:${tile.sheet.image}`);
+    channels.add(`raster-mid:${tile.sheet.image}`);
+    channels.add(`raster-light:${tile.sheet.image}`);
     return channels;
   }
   if (tile.rows) return nonTransparentChannels(tile.rows);
@@ -82,9 +101,9 @@ function tileColors(tile: TileDef): Set<string> {
 }
 
 function tileSignature(tile: TileDef): string {
-  // a sheet tile's identity is its base color + the exact crop/field it samples
+  // a sheet tile's identity is the exact crop/field it samples
   if (tile.sheet) {
-    return JSON.stringify({ base: tile.baseColor ?? null, sheet: tile.sheet });
+    return JSON.stringify({ sheet: tile.sheet });
   }
   if (tile.rows) return tile.rows.join("\n");
   return JSON.stringify(

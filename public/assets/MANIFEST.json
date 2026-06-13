@@ -1371,6 +1371,22 @@
           "height": 305
         }
       ]
+    },
+    {
+      "id": "rpg-tiles-vector",
+      "title": "RPG Tiles Vector (Kenney) — 64px soft-shaded outdoor terrain",
+      "author": "Kenney (kenney.nl)",
+      "source": "itch.io / kenney.nl (CC0)",
+      "url": "https://kenney.nl/assets/rpg-urban-pack",
+      "license": "CC0 1.0 (public domain)",
+      "mappedUse": "Outdoor terrain at native 64px: grass/dirt/water/stone fills + autotile edges, trees, walls, roofs, doors. The richest-resolution terrain pack — ground bakes at native res so it never magnifies into a flat fill.",
+      "files": [
+        {
+          "path": "tilemaps/rpg-terrain.png",
+          "width": 1280,
+          "height": 832
+        }
+      ]
     }
   ]
 }

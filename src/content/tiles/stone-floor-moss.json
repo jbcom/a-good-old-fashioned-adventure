@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:stone-floor-moss",
+  "kind": "tile",
+  "variantOf": "tile:stone-floor",
+  "solid": false,
+  "description": "A second clean stone slab for tonal variety in the floor field — Kenney Roguelike Dungeon plain-floor cell (tilemaps/kenney-dungeon.png, 16px on 17px stride; col 10, row 2), distinct from the base cell (col 9). The Kenney dungeon sheet authors only grey stone (no green moss floor), so this variant gives slab-to-slab variation rather than a wrong-tint moss; mossy reads come from props placed on the floor, not the tile.",
+  "sheet": {
+    "image": "tilemaps/kenney-dungeon.png",
+    "x": 170,
+    "y": 34,
+    "w": 16,
+    "h": 16
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

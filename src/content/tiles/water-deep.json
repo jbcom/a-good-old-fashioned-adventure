@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:water-deep",
+  "kind": "tile",
+  "variantOf": "tile:water",
+  "solid": true,
+  "description": "Deep water — RPG Tiles Vector water cell, darker centre, native 64px.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 832,
+    "y": 64,
+    "w": 64,
+    "h": 64
+  },
+  "koota": {
+    "traits": ["Tile", "Solid", "AnimatedTile"]
+  }
+}

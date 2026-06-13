@@ -1,14 +1,13 @@
 import { describe, expect, it } from "vitest";
 import basePalette from "../../src/content/palettes/base.json";
 import swaps from "../../src/content/palettes/swaps.json";
-import { getCharacterSprite, props, sprites } from "../../src/lib/content/registry";
+import { getCharacterSprite, props, sprites, tiles } from "../../src/lib/content/registry";
 import { isSheetSprite, resolveSheetFrame } from "../../src/lib/content/sheetSprite";
 import {
   preloadSheetImages,
   propCanvas,
   sheetFrameCanvas,
   spriteCanvas,
-  tileCanvas,
   tileFieldCanvas,
 } from "../../src/render/atlas";
 
@@ -92,10 +91,23 @@ describe("props and tiles bake from content", () => {
     expect(data.some((v, i) => i % 4 === 3 && v > 0)).toBe(true);
   });
 
-  it("water tile fills deep sea blue", () => {
-    const water = pixelsOf(tileCanvas("tile:water"));
-    const deepSea = hexToRgb(basePalette.colors.l.hex);
-    expect([water[0], water[1], water[2]]).toEqual(deepSea);
+  it("water tile bakes the RPG Tiles Vector water PNG (blue-dominant, opaque)", async () => {
+    await preloadSheetImages();
+    const data = pixelsOf(tileFieldCanvas("tile:water", 0, 0));
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    let opaque = 0;
+    const n = data.length / 4;
+    for (let i = 0; i < data.length; i += 4) {
+      r += data[i];
+      g += data[i + 1];
+      b += data[i + 2];
+      if (data[i + 3] > 240) opaque++;
+    }
+    // a fully opaque tile (no map background bleeds through) whose blue beats red
+    expect(opaque / n).toBeGreaterThan(0.95);
+    expect(b / n).toBeGreaterThan(r / n);
   });
 });
 
@@ -126,18 +138,18 @@ describe("purchased sheet sprites bake real pixels", () => {
   });
 });
 
-describe("baseColor + sheet overlay terrain (The Ground pack)", () => {
-  it("grass composites its green base UNDER the ground.png dither overlay", async () => {
+describe("RPG Tiles Vector terrain (native-resolution PNG ground)", () => {
+  it("grass bakes the 64px RPG grass PNG — opaque, green-dominant, textured", async () => {
     await preloadSheetImages();
-    const data = pixelsOf(tileFieldCanvas("tile:grass", 0, 0));
-    const [br, bg, bb] = hexToRgb("#3f5f2e");
+    const face = tileFieldCanvas("tile:grass", 0, 0);
+    // the tile bakes at the source's NATIVE resolution (64px), never magnified
+    expect(face.width).toBe(64);
+    expect(face.height).toBe(64);
+    const data = pixelsOf(face);
 
-    // every pixel is fully opaque — the base fill closes the overlay's
-    // transparency so no map-background bleeds through the grass
-    for (let i = 3; i < data.length; i += 4) expect(data[i]).toBe(255);
-
-    // the field is green-dominant (the base color shows through the sparse
-    // overlay): mean green channel beats red and blue, near the base tone
+    // fully opaque — no map background bleeds through the ground (the bug that
+    // showed as a black square when a crop landed on an empty sheet region)
+    let opaque = 0;
     let r = 0;
     let g = 0;
     let b = 0;
@@ -146,35 +158,51 @@ describe("baseColor + sheet overlay terrain (The Ground pack)", () => {
       r += data[i];
       g += data[i + 1];
       b += data[i + 2];
+      if (data[i + 3] > 240) opaque++;
     }
+    expect(opaque / n).toBeGreaterThan(0.98);
+
+    // green-dominant grass (the PNG carries the authored colour, not a fill)
     r /= n;
     g /= n;
     b /= n;
     expect(g).toBeGreaterThan(r);
     expect(g).toBeGreaterThan(b);
-    expect(Math.abs(g - bg)).toBeLessThan(40);
-    expect(Math.abs(r - br)).toBeLessThan(40);
-    expect(Math.abs(b - bb)).toBeLessThan(40);
 
-    // the overlay actually drew — the cell is NOT a uniform flat fill, it
-    // carries the dither texture (some pixels differ from the base)
-    let textured = 0;
+    // real texture, not a flat fill — the cell carries varied luma (blade tufts)
+    let lo = 255;
+    let hi = 0;
     for (let i = 0; i < data.length; i += 4) {
-      if (
-        Math.abs(data[i] - br) > 6 ||
-        Math.abs(data[i + 1] - bg) > 6 ||
-        Math.abs(data[i + 2] - bb) > 6
-      ) {
-        textured++;
+      const luma = 0.3 * data[i] + 0.6 * data[i + 1] + 0.1 * data[i + 2];
+      lo = Math.min(lo, luma);
+      hi = Math.max(hi, luma);
+    }
+    expect(hi - lo).toBeGreaterThan(20);
+  });
+
+  it("every RPG terrain tile crop is fully opaque (no empty-sheet black tiles)", async () => {
+    await preloadSheetImages();
+    for (const tile of tiles.values()) {
+      if (tile.sheet?.image !== "tilemaps/rpg-terrain.png") continue;
+      const field = tile.sheet.field ?? { cols: 1, rows: 1 };
+      for (let fy = 0; fy < field.rows; fy++) {
+        for (let fx = 0; fx < field.cols; fx++) {
+          const data = pixelsOf(tileFieldCanvas(tile.id, fx, fy));
+          let opaque = 0;
+          for (let i = 3; i < data.length; i += 4) if (data[i] > 240) opaque++;
+          expect(
+            opaque / (data.length / 4),
+            `${tile.id} field cell ${fx},${fy} must be opaque`,
+          ).toBeGreaterThan(0.9);
+        }
       }
     }
-    expect(textured).toBeGreaterThan(0);
   });
 
   it("a field tile samples different cells per board position", async () => {
     await preloadSheetImages();
     // wrapping over the 2×2 field block: (0,0) and (1,1) are distinct cells,
-    // so the dithered scatter does not repeat as one tiled cell
+    // so the ground varies instead of repeating one tiled cell
     const a = pixelsOf(tileFieldCanvas("tile:grass", 0, 0));
     const c = pixelsOf(tileFieldCanvas("tile:grass", 1, 1));
     let diff = 0;

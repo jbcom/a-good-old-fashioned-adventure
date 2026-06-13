@@ -26,15 +26,13 @@ export interface TileDef {
   solid: boolean;
   layers?: DrawOp[];
   rows?: string[];
-  /** Solid base fill drawn UNDER the sheet overlay (roguelike terrain cells are
-   * ~50%-alpha dither/cobble overlays meant to sit on a base color — the .pix
-   * model of base + scattered detail, now base color + PNG overlay). */
-  baseColor?: string;
   /** purchased-sheet crop (slicer manifest) — same second raster source
-   * props and sprites carry; palette swaps never apply. With `field`, the
-   * (x,y) is the top-left of a cols×rows block of 16px cells and the ground
-   * compositor samples a per-(col,row) cell so a dithered-fill ground tiles
-   * as the pack's large seamless field instead of one repeated cell. */
+   * props and sprites carry; palette swaps never apply. The (x,y,w,h) crop is
+   * the source's NATIVE resolution (16 for roguelike, 64 for RPG Tiles Vector)
+   * and the ground compositor bakes at native res so the texture never
+   * magnifies into a flat blob. With `field`, (x,y) is the top-left of a
+   * cols×rows block of w×h cells and the compositor samples a per-(col,row)
+   * cell so a ground area shows the pack's variation, not one repeated cell. */
   sheet?: {
     image: string;
     x: number;
