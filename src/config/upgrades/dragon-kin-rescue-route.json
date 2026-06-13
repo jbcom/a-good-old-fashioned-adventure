@@ -13,7 +13,7 @@
   "dragonKin": {
     "mapId": "map:rescue-route",
     "relation": "brother",
-    "hue": 130,
+    "hue": 60,
     "roseYield": 3
   },
   "unlocks": ["upgrade:dragon-might-rescue-route", "upgrade:dragon-kin-oldwood-forest"],

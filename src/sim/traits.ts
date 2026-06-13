@@ -53,6 +53,15 @@ export const Threat = trait({ windupLeft: 0, armed: false, casting: false });
  * renderer and tests read the same state (docs/DESIGN-SYSTEM.md).
  */
 export const Choreo = trait({ phase: "", left: 0 });
+/**
+ * Per-map kin boss identity (docs/RAIL-COMMAND.md §dragon's kin). Attached to a
+ * dragon-family boss when the active map's kin is unlocked: `relation` is the
+ * tracked modifier the rescue quip uses ("brother", "step-cousin"…). The kin's
+ * COLOR comes from its baked sheet (sprite:high-dragon-<slug>), not this trait —
+ * so the death/firebreath/idle frames all match. Absent on the bare
+ * dragon-guardian (no kin unlocked).
+ */
+export const KinIdentity = trait({ relation: "", mapId: "" });
 export const PropRef = trait({ propId: "", state: "default" });
 export const NpcPatrol = trait(() => ({
   points: [] as { x: number; y: number }[],
@@ -128,6 +137,8 @@ export interface GameEvent {
   archetypeId?: string;
   /** Extra coins carried by a warband reinforcement, paid on defeat. */
   bounty?: number;
+  /** Kin relation of a felled dragon-kin boss (docs/RAIL-COMMAND.md §kin). */
+  kinRelation?: string;
   itemId?: string;
   shopId?: string;
   listingId?: string;
@@ -160,6 +171,9 @@ export interface IncrementalProgressState {
   purchasedUpgradeIds: string[];
   upgradeRanks: Record<string, number>;
   defeatedMinibossIds: string[];
+  /** kin relations the player has felled (docs/RAIL-COMMAND.md §dragon's kin):
+   * drives the rescue quip ("you've met the brother and the uncle…"). */
+  defeatedKinRelations: string[];
   unlockedClassIds: string[];
   unlockedRoutePackIds: string[];
   currentRunCoinsEarned: number;
@@ -180,6 +194,7 @@ export const IncrementalProgress = trait(
     purchasedUpgradeIds: [],
     upgradeRanks: {},
     defeatedMinibossIds: [],
+    defeatedKinRelations: [],
     unlockedClassIds: [],
     unlockedRoutePackIds: [],
     currentRunCoinsEarned: 0,

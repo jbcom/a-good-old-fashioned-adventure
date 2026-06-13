@@ -147,6 +147,15 @@ describe("incremental rescue loop contract", () => {
         expect(node.cost.gems ?? 0, `${node.id} majors unlock with gems`).toBeGreaterThan(0);
         expect(node.cost.coins ?? 0, `${node.id} majors must not cost coins`).toBe(0);
         gemMajors += 1;
+      } else {
+        // remaining single-purchase nodes (relic/ability boons like
+        // battle-tempo, princess-boon, ranger-leap-rose) must still carry a
+        // coherent single-currency price — never an empty or multi-currency
+        // cost outside the dragon track's OR-cost (reviewer Issue 2).
+        const currencies = [node.cost.coins ?? 0, node.cost.gems ?? 0, node.cost.roses ?? 0].filter(
+          (amount) => amount > 0,
+        );
+        expect(currencies.length, `${node.id} needs exactly one currency price`).toBe(1);
       }
     }
     // significantly more coin-based incremental steps than gem majors

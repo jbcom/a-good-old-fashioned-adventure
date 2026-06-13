@@ -2,7 +2,7 @@ import type { World } from "koota";
 import type { IncrementalUpgradeNode } from "../lib/config";
 import { enemies, incremental } from "../lib/config";
 import { getMap } from "../lib/content/registry";
-import { currentMap } from "./mapProgression";
+import { princessMap } from "./mapProgression";
 import {
   type GameEvent,
   IncrementalProgress,
@@ -109,6 +109,45 @@ function knownMinibossIds(): Set<string> {
   );
 }
 
+/** Every kin relation the config declares (docs/RAIL-COMMAND.md §dragon's kin). */
+function knownKinRelations(): Set<string> {
+  const relations = new Set<string>();
+  for (const node of incremental.upgradeGraph.nodes) {
+    if (node.dragonKin?.relation) relations.add(node.dragonKin.relation);
+  }
+  return relations;
+}
+
+/**
+ * The kin boss the player has UNLOCKED for a map (docs/RAIL-COMMAND.md §dragon's
+ * kin): the dragonKin payload of that map's purchased dragon-kin node, or null
+ * when no kin is unlocked there (the bare dragon-guardian holds the princess).
+ */
+export function kinForMap(
+  progress: IncrementalProgressState,
+  mapId: string,
+): { relation: string; hue: number; mapId: string; roseYield: number; spriteId: string } | null {
+  const node = incremental.upgradeGraph.nodes.find(
+    (entry) => entry.dragonKin?.mapId === mapId && progress.purchasedUpgradeIds.includes(entry.id),
+  );
+  const kin = node?.dragonKin;
+  if (!kin) return null;
+  return {
+    relation: kin.relation,
+    hue: kin.hue,
+    mapId: kin.mapId,
+    roseYield: kin.roseYield ?? 0,
+    // the baked recolored sheet (scripts/bake-dragon-kin.mjs) — real art, not
+    // a runtime hue-rotate, so each kin is QC-able by reading its PNG set
+    spriteId: `sprite:high-dragon-${kinSlug(kin.relation)}`,
+  };
+}
+
+/** kebab-case slug used for a kin's baked sprite id and asset directory. */
+export function kinSlug(relation: string): string {
+  return relation.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+}
+
 function sanitizeIdList(input: unknown, allowed: Set<string>): string[] {
   if (!Array.isArray(input)) return [];
   const result: string[] = [];
@@ -128,6 +167,7 @@ export function initialIncrementalProgress(startingCoins = 0): IncrementalProgre
     purchasedUpgradeIds: [incremental.upgradeGraph.root],
     upgradeRanks: {},
     defeatedMinibossIds: [],
+    defeatedKinRelations: [],
     unlockedClassIds: [incremental.classes.starting],
     unlockedRoutePackIds: [],
     currentRunCoinsEarned: 0,
@@ -166,6 +206,7 @@ export function sanitizeIncrementalProgress(
     purchasedUpgradeIds,
     upgradeRanks: sanitizeUpgradeRanks(data.upgradeRanks, purchasedUpgradeIds),
     defeatedMinibossIds: sanitizeIdList(data.defeatedMinibossIds, knownMinibossIds()),
+    defeatedKinRelations: sanitizeIdList(data.defeatedKinRelations, knownKinRelations()),
     unlockedClassIds: unlockedClassIds.includes(incremental.classes.starting)
       ? unlockedClassIds
       : [incremental.classes.starting, ...unlockedClassIds],
@@ -291,10 +332,13 @@ function addRoses(world: World, amount: number): IncrementalProgressState {
  * earliest runs, where the lone holder pays only the base princess rose).
  */
 function kinRoseYield(progress: IncrementalProgressState): number {
-  const mapId = currentMap(progress);
-  const kinNode = incremental.upgradeGraph.nodes.find((node) => node.dragonKin?.mapId === mapId);
-  if (!kinNode || !progress.purchasedUpgradeIds.includes(kinNode.id)) return 0;
-  const base = Math.max(0, Math.floor(kinNode.dragonKin?.roseYield ?? 0));
+  // key off where the rescue ACTUALLY fires (the princess's map), not the
+  // furthest-unlocked map — they converge on the spine but diverge once the
+  // castle relocation moves the princess to castleMap (reviewer Issue 1).
+  const mapId = princessMap(progress);
+  const kin = kinForMap(progress, mapId);
+  if (!kin) return 0;
+  const base = Math.max(0, Math.floor(kin.roseYield));
   const mightNode = incremental.upgradeGraph.nodes.find(
     (node) => node.id === `upgrade:dragon-might-${mapId.replace(/^map:/, "")}`,
   );
@@ -353,6 +397,17 @@ export function applyIncrementalEventReward(world: World, event: GameEvent): voi
   // dragon-kin (bosses + minibosses) drop gems from their hoard — the
   // dragon-hoard currency that buys the majors (docs/RAIL-COMMAND.md)
   if (archetype?.boss || archetype?.miniboss) grantRunReward(world, "dragonGems");
+  // a felled kin boss records its relation so the rescue quip can track the
+  // family tree ("you've met the brother and the uncle…")
+  if (event.kinRelation) {
+    const progress = currentProgress(world);
+    if (!progress.defeatedKinRelations.includes(event.kinRelation)) {
+      setProgress(world, {
+        ...progress,
+        defeatedKinRelations: [...progress.defeatedKinRelations, event.kinRelation],
+      });
+    }
+  }
   if (!archetypeId || !archetype?.miniboss) return;
 
   // minibosses always pay a purse; the FIRST clean clear pays a rose

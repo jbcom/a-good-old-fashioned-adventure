@@ -26,6 +26,7 @@ import {
   IsEnemy,
   IsPickup,
   IsPlayer,
+  KinIdentity,
   Level,
   LootContainer,
   Outbox,
@@ -120,6 +121,8 @@ export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: 
   if (hp <= 0) {
     const archetypeId = enemy.get(IsEnemy)?.archetypeId ?? "";
     const bounty = enemy.get(IsEnemy)?.bounty ?? 0;
+    // capture the kin relation before destroy so the rescue quip can track it
+    const kinRelation = enemy.get(KinIdentity)?.relation ?? "";
     const maxHp = health.maxHp;
     const { x, y } = transform;
     const ghost = enemy.get(SpriteRef);
@@ -147,7 +150,7 @@ export function damageEnemy(world: World, enemy: Entity, dmg: number, knockDir: 
         spawnPickup(world, roll.item, x + (roll.offsetX ?? 0), y, 0);
       }
     }
-    pushEvent(world, { type: "enemy:defeated", archetypeId, bounty, x, y });
+    pushEvent(world, { type: "enemy:defeated", archetypeId, bounty, kinRelation, x, y });
   } else {
     enemy.set(Health, { hp, maxHp: health.maxHp });
     sfx(world, "hurt");

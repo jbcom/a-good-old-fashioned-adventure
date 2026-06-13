@@ -57,6 +57,7 @@
     "@vitest/browser-playwright": "^4.1.8",
     "drizzle-kit": "^0.31.10",
     "playwright": "^1.60.0",
+    "sharp": "^0.35.1",
     "typescript": "^6.0.3",
     "vite": "^8.0.16",
     "vitest": "^4.1.8"

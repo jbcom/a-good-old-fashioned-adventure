@@ -7,7 +7,7 @@ import { createWorld, type Entity, type World } from "koota";
 import { classes, enemies, incremental, player as playerConfig } from "../lib/config";
 import { flags, getCharacter, getMap, getProp } from "../lib/content/registry";
 import { collides } from "./collision";
-import { initialIncrementalProgress, upgradeMaxHpBonus } from "./incrementalProgress";
+import { initialIncrementalProgress, kinForMap, upgradeMaxHpBonus } from "./incrementalProgress";
 import { buildGrid } from "./mapgen";
 import {
   AimDirection,
@@ -34,6 +34,7 @@ import {
   IsPlayer,
   IsSolid,
   IsUnit,
+  KinIdentity,
   Level,
   LootContainer,
   MapRuntime,
@@ -303,7 +304,22 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
       continue;
     }
     if (spawn.enemy) {
-      spawnEnemy(world, spawn.enemy, spawn.x as number, spawn.y as number);
+      const enemyEntity = spawnEnemy(world, spawn.enemy, spawn.x as number, spawn.y as number);
+      // a dragon-family boss becomes the map's KIN holder when its kin is
+      // unlocked (docs/RAIL-COMMAND.md §dragon's kin): swap in the BAKED
+      // recolored kin sheet (real art, QC-able by reading the PNG) and tag the
+      // entity so the rescue quip knows whose relative just fell.
+      const archetype = enemies.archetypes[spawn.enemy];
+      if (archetype?.boss && archetype.family === "dragon") {
+        const kin = kinForMap(
+          world.get(IncrementalProgress) ?? initialIncrementalProgress(),
+          mapId,
+        );
+        if (kin) {
+          enemyEntity.add(KinIdentity({ relation: kin.relation, mapId }));
+          enemyEntity.set(SpriteRef, { spriteId: kin.spriteId, paletteId: archetype.palette });
+        }
+      }
       const family = enemies.archetypes[spawn.enemy]?.family;
       if (family) {
         const hosts = familyHosts.get(family) ?? [];

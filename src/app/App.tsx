@@ -534,6 +534,24 @@ function nextVow(progress: IncrementalProgressState): IncrementalUpgradeNode | n
   return best;
 }
 
+/**
+ * The Mario nod (docs/RAIL-COMMAND.md §dragon's kin): once the player has met
+ * more than one of the dragon's relatives, the rescued princess quips about
+ * the growing family tree. Empty until at least one kin has been felled.
+ */
+function kinQuip(defeatedKinRelations: string[]): string {
+  const kin = defeatedKinRelations.filter(Boolean);
+  if (kin.length === 0) return "";
+  if (kin.length === 1) {
+    return `"Oh — that one wasn't the dragon with the hoard. That was the ${kin[0]}."`;
+  }
+  const list =
+    kin.length === 2
+      ? kin.join(" and the ")
+      : `${kin.slice(0, -1).join(", the ")}, and the ${kin[kin.length - 1]}`;
+  return `"You've met the ${list} now. It is, I'm afraid, a very large family."`;
+}
+
 function nearestDialogue(world: World): NpcDialogueHit | null {
   const player = playerOf(world);
   const pt = player?.get(Transform);
@@ -1057,6 +1075,11 @@ function ResultsPanel({
         <p className="dialogue-line">
           The road folds back into the book. Spend the spoils, then tell the tale again.
         </p>
+        {run?.rescuedPrincess && kinQuip(snapshot.incrementalProgress.defeatedKinRelations) && (
+          <p className="dialogue-line" data-testid="kin-quip">
+            {kinQuip(snapshot.incrementalProgress.defeatedKinRelations)}
+          </p>
+        )}
         <div className="result-ledger" data-testid="result-ledger">
           <span>
             Earned {run?.coinsEarned ?? snapshot.incrementalProgress.currentRunCoinsEarned}C

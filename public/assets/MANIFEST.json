@@ -7,8 +7,8 @@
       "title": "High Dragon (+ Death Animation add-on)",
       "author": "Electric Lemon Games",
       "source": "itch.io (purchased; raws in raw-assets/itch/high-dragon/)",
-      "license": "Electric Lemon Games Public License \u2014 full text in bosses/dragon/LICENSE.txt. Use in for-profit/non-profit games permitted; attribution appreciated but not required; raw redistribution outside a game/application product forbidden. Committed here because public/assets/ is the shipped game payload itself (a web build serves these files verbatim).",
-      "mappedUse": "Boss-tier dragon for the rail-command arc \u2014 replaces the boss-scale uses of the .pix sprite:dragon grid flagged 'weak / green smear' in docs/PIXEL-ART-AUDIT.md. Trash-tier palette-swap uses of sprite:dragon are NOT covered; those need bespoke bodies per SA.3 gap 1.",
+      "license": "Electric Lemon Games Public License — full text in bosses/dragon/LICENSE.txt. Use in for-profit/non-profit games permitted; attribution appreciated but not required; raw redistribution outside a game/application product forbidden. Committed here because public/assets/ is the shipped game payload itself (a web build serves these files verbatim).",
+      "mappedUse": "Boss-tier dragon for the rail-command arc — replaces the boss-scale uses of the .pix sprite:dragon grid flagged 'weak / green smear' in docs/PIXEL-ART-AUDIT.md. Trash-tier palette-swap uses of sprite:dragon are NOT covered; those need bespoke bodies per SA.3 gap 1.",
       "frameSize": 96,
       "directionOrder": ["right", "up", "left", "down"],
       "notes": "Strips are laid out as 4 consecutive direction blocks (right block first; left block is an exact horizontal mirror of right) of framesPerDirection frames each, except death which is single-direction. *-no-shadow variants exist for the airborne/death animations so the renderer can own shadow placement.",
@@ -112,13 +112,602 @@
       ]
     },
     {
+      "id": "dragon-kin",
+      "title": "Dragon-kin (baked recolors of High Dragon)",
+      "author": "Electric Lemon Games (recolored offline by scripts/bake-dragon-kin.mjs)",
+      "source": "Derived from the high-dragon pack — one recolored set per spine map's kin.",
+      "license": "Inherits the High Dragon license (bosses/dragon-kin/<slug>/LICENSE.txt copied from source).",
+      "mappedUse": "Per-map dragon-kin bosses (docs/RAIL-COMMAND.md §dragon's kin): the green High Dragon hue-rotated to each kin's color, baked to disk so each set is QC-able by reading its PNGs. Referenced by sprite:high-dragon-<slug>.",
+      "frameSize": 96,
+      "directionOrder": ["right", "up", "left", "down"],
+      "notes": "Generated — do not hand-edit. Re-run scripts/bake-dragon-kin.mjs after changing any dragonKin hue.",
+      "files": [
+        {
+          "path": "bosses/dragon-kin/great-aunt/idle.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/great-aunt/walk.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/great-aunt/melee.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/great-aunt/firebreath.png",
+          "width": 6144,
+          "height": 96,
+          "frames": 64,
+          "directions": 4,
+          "framesPerDirection": 16
+        },
+        {
+          "path": "bosses/dragon-kin/great-aunt/fly.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/great-aunt/fly-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/great-aunt/hover.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/great-aunt/hover-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/great-aunt/launch.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/great-aunt/launch-no-shadow.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/great-aunt/death.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        },
+        {
+          "path": "bosses/dragon-kin/great-aunt/death-no-shadow.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        },
+        {
+          "path": "bosses/dragon-kin/twice-removed-elder/idle.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/twice-removed-elder/walk.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/twice-removed-elder/melee.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/twice-removed-elder/firebreath.png",
+          "width": 6144,
+          "height": 96,
+          "frames": 64,
+          "directions": 4,
+          "framesPerDirection": 16
+        },
+        {
+          "path": "bosses/dragon-kin/twice-removed-elder/fly.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/twice-removed-elder/fly-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/twice-removed-elder/hover.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/twice-removed-elder/hover-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/twice-removed-elder/launch.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/twice-removed-elder/launch-no-shadow.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/twice-removed-elder/death.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        },
+        {
+          "path": "bosses/dragon-kin/twice-removed-elder/death-no-shadow.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        },
+        {
+          "path": "bosses/dragon-kin/sister/idle.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/sister/walk.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/sister/melee.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/sister/firebreath.png",
+          "width": 6144,
+          "height": 96,
+          "frames": 64,
+          "directions": 4,
+          "framesPerDirection": 16
+        },
+        {
+          "path": "bosses/dragon-kin/sister/fly.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/sister/fly-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/sister/hover.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/sister/hover-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/sister/launch.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/sister/launch-no-shadow.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/sister/death.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        },
+        {
+          "path": "bosses/dragon-kin/sister/death-no-shadow.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        },
+        {
+          "path": "bosses/dragon-kin/uncle/idle.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/uncle/walk.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/uncle/melee.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/uncle/firebreath.png",
+          "width": 6144,
+          "height": 96,
+          "frames": 64,
+          "directions": 4,
+          "framesPerDirection": 16
+        },
+        {
+          "path": "bosses/dragon-kin/uncle/fly.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/uncle/fly-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/uncle/hover.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/uncle/hover-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/uncle/launch.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/uncle/launch-no-shadow.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/uncle/death.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        },
+        {
+          "path": "bosses/dragon-kin/uncle/death-no-shadow.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        },
+        {
+          "path": "bosses/dragon-kin/brother/idle.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/brother/walk.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/brother/melee.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/brother/firebreath.png",
+          "width": 6144,
+          "height": 96,
+          "frames": 64,
+          "directions": 4,
+          "framesPerDirection": 16
+        },
+        {
+          "path": "bosses/dragon-kin/brother/fly.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/brother/fly-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/brother/hover.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/brother/hover-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/brother/launch.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/brother/launch-no-shadow.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/brother/death.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        },
+        {
+          "path": "bosses/dragon-kin/brother/death-no-shadow.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        },
+        {
+          "path": "bosses/dragon-kin/step-cousin/idle.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/step-cousin/walk.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/step-cousin/melee.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/step-cousin/firebreath.png",
+          "width": 6144,
+          "height": 96,
+          "frames": 64,
+          "directions": 4,
+          "framesPerDirection": 16
+        },
+        {
+          "path": "bosses/dragon-kin/step-cousin/fly.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/step-cousin/fly-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/step-cousin/hover.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/step-cousin/hover-no-shadow.png",
+          "width": 2304,
+          "height": 96,
+          "frames": 24,
+          "directions": 4,
+          "framesPerDirection": 6
+        },
+        {
+          "path": "bosses/dragon-kin/step-cousin/launch.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/step-cousin/launch-no-shadow.png",
+          "width": 3072,
+          "height": 96,
+          "frames": 32,
+          "directions": 4,
+          "framesPerDirection": 8
+        },
+        {
+          "path": "bosses/dragon-kin/step-cousin/death.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        },
+        {
+          "path": "bosses/dragon-kin/step-cousin/death-no-shadow.png",
+          "width": 864,
+          "height": 96,
+          "frames": 9,
+          "directions": 1,
+          "framesPerDirection": 9
+        }
+      ]
+    },
+    {
       "id": "the-roguelike",
       "title": "The Roguelike v1.16.1 (mega-sheet)",
       "author": "Backterria",
-      "source": "itch.io (purchased; manual import \u2014 attribution baked into the sheet corners)",
+      "source": "itch.io (purchased; manual import — attribution baked into the sheet corners)",
       "url": "https://backterria.itch.io/the-roguelike",
       "license": "Backterria itch.io pack terms (see pack page at url); game-use licensed to purchaser. Sheet carries its own baked-in credit (backterria / the roguelike v1.16.1).",
-      "mappedUse": "16x16 category-columned mega-sheet (terrain, fortifications, creatures, items, weapons, armor, tools, props) \u2014 prime source for SA.3 region props, pickups/items, and prop breadth. Curation requires a slicer manifest mapping cell coords to asset ids before cells become addressable content.",
+      "mappedUse": "16x16 category-columned mega-sheet (terrain, fortifications, creatures, items, weapons, armor, tools, props) — prime source for SA.3 region props, pickups/items, and prop breadth. Curation requires a slicer manifest mapping cell coords to asset ids before cells become addressable content.",
       "files": [
         {
           "path": "tilemaps/roguelike.png",
@@ -134,7 +723,7 @@
       "source": "itch.io (purchased; manual import)",
       "url": "https://backterria.itch.io/the-ground",
       "license": "Backterria itch.io pack terms (see pack page at url); game-use licensed to purchaser.",
-      "mappedUse": "Terrain texture uplift candidate \u2014 autotile cliff/ledge pieces and dithered ground fills for the SA.2 terrain rework (sand + mountain families flagged weak).",
+      "mappedUse": "Terrain texture uplift candidate — autotile cliff/ledge pieces and dithered ground fills for the SA.2 terrain rework (sand + mountain families flagged weak).",
       "files": [
         {
           "path": "tilemaps/ground.png",
@@ -150,7 +739,7 @@
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
       "url": "https://elthen.itch.io/bat-sprite-pack",
       "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
-      "mappedUse": "SA.3 gap 1 \u2014 dungeon region trash-enemy body (16px fly cycle, hang, death).",
+      "mappedUse": "SA.3 gap 1 — dungeon region trash-enemy body (16px fly cycle, hang, death).",
       "files": [
         {
           "path": "enemies/bat.png",
@@ -166,7 +755,7 @@
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
       "url": "https://elthen.itch.io/2d-pixel-art-rat-sprites",
       "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
-      "mappedUse": "SA.3 gap 1 \u2014 dungeon region trash-enemy body (32px idle/walk/attack/death rows). Dark coat: verify contrast on dungeon floor tiles at wiring time.",
+      "mappedUse": "SA.3 gap 1 — dungeon region trash-enemy body (32px idle/walk/attack/death rows). Dark coat: verify contrast on dungeon floor tiles at wiring time.",
       "files": [
         {
           "path": "enemies/rat.png",
@@ -182,7 +771,7 @@
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
       "url": "https://elthen.itch.io/2d-pixel-art-naked-mole-rat-sprites",
       "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
-      "mappedUse": "SA.3 gap 1 \u2014 dungeon region trash-enemy body with dig/burrow rows; dirt-burrow.png is the burrow-mound fx sheet that pairs with the dig animation.",
+      "mappedUse": "SA.3 gap 1 — dungeon region trash-enemy body with dig/burrow rows; dirt-burrow.png is the burrow-mound fx sheet that pairs with the dig animation.",
       "files": [
         {
           "path": "enemies/naked-mole-rat.png",
@@ -203,7 +792,7 @@
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
       "url": "https://elthen.itch.io/2d-pixel-art-snake-sprites",
       "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
-      "mappedUse": "SA.3 gap 1 \u2014 sunken-road region trash-enemy body (32px slither/strike/coil/death rows).",
+      "mappedUse": "SA.3 gap 1 — sunken-road region trash-enemy body (32px slither/strike/coil/death rows).",
       "files": [
         {
           "path": "enemies/snake.png",
@@ -219,7 +808,7 @@
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
       "url": "https://elthen.itch.io/2d-pixel-art-cobra-sprites",
       "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
-      "mappedUse": "SA.3 gap 1 \u2014 castle-approach region trash-enemy body (32px hood-flare strike rows read as elite snake).",
+      "mappedUse": "SA.3 gap 1 — castle-approach region trash-enemy body (32px hood-flare strike rows read as elite snake).",
       "files": [
         {
           "path": "enemies/cobra.png",
@@ -235,7 +824,7 @@
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
       "url": "https://elthen.itch.io/2d-pixel-art-wild-boar-sprites",
       "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
-      "mappedUse": "SA.3 gap 1 \u2014 forest region trash-enemy body; sheet ships two coat variants (light + shaggy dark), covering forest AND deep-forest without a palette swap.",
+      "mappedUse": "SA.3 gap 1 — forest region trash-enemy body; sheet ships two coat variants (light + shaggy dark), covering forest AND deep-forest without a palette swap.",
       "files": [
         {
           "path": "enemies/boar.png",
@@ -251,7 +840,7 @@
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
       "url": "https://elthen.itch.io/2d-pixel-art-raven-sprites",
       "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
-      "mappedUse": "SA.3 gap 1 \u2014 sunken-road region trash-enemy body; richest bird sheet (hop, peck, takeoff, fly, land rows) \u2014 also a prop-layer ambience candidate (perched ravens on wrecks).",
+      "mappedUse": "SA.3 gap 1 — sunken-road region trash-enemy body; richest bird sheet (hop, peck, takeoff, fly, land rows) — also a prop-layer ambience candidate (perched ravens on wrecks).",
       "files": [
         {
           "path": "enemies/raven.png",
@@ -267,7 +856,7 @@
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
       "url": "https://elthen.itch.io/2d-pixel-art-vulture-sprites",
       "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
-      "mappedUse": "SA.3 gap 1 \u2014 castle-approach region trash-enemy body; carrion-peck frames fit the siege-litter tone.",
+      "mappedUse": "SA.3 gap 1 — castle-approach region trash-enemy body; carrion-peck frames fit the siege-litter tone.",
       "files": [
         {
           "path": "enemies/vulture.png",
@@ -283,7 +872,7 @@
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
       "url": "https://elthen.itch.io/2d-pixel-art-owl-sprites",
       "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
-      "mappedUse": "SA.3 gap 1 \u2014 forest region trash-enemy body (perched + flying rows); perch rows double as oldwood ambience props.",
+      "mappedUse": "SA.3 gap 1 — forest region trash-enemy body (perched + flying rows); perch rows double as oldwood ambience props.",
       "files": [
         {
           "path": "enemies/owl.png",
@@ -299,7 +888,7 @@
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs, raws in raw-assets/extracted/)",
       "url": "https://elthen.itch.io/2d-pixel-art-squirrel-sprites",
       "license": "Elthen itch.io pack terms (see pack page at url): commercial game use licensed to purchaser, no standalone redistribution/resale, attribution appreciated.",
-      "mappedUse": "SA.3 gap 1 \u2014 forest region trash/critter body (run, jump, climb rows); also overworld ambience.",
+      "mappedUse": "SA.3 gap 1 — forest region trash/critter body (run, jump, climb rows); also overworld ambience.",
       "files": [
         {
           "path": "enemies/squirrel.png",
@@ -315,7 +904,7 @@
       "source": "itch.io (purchased; raws in raw-assets/extracted/{citizens-guards-warriors,warriors_rogues_mages,heavy-knight}/)",
       "url": "https://electriclemon.itch.io/citizens-guards-warriors",
       "license": "Electric Lemon pack terms (pack page at url): attribution NOT necessary, no reselling/standalone distribution of the assets, commercial and non-commercial game use okay.",
-      "mappedUse": "SA.5 cast conversion (docs/CAST-CONVERSION.md) \u2014 pack convention is 12 animation states x 4 directions, 4 frames per animation (combat sheets pack some attacks two-directions-per-row at 2 frames). Keepers so far: hooded mage (forest/thorn shamans), sword & shield fighter (the knight). Remaining warriors/rogues/citizens/heavy-knight stay in raw-assets until their cast slots wire up.",
+      "mappedUse": "SA.5 cast conversion (docs/CAST-CONVERSION.md) — pack convention is 12 animation states x 4 directions, 4 frames per animation (combat sheets pack some attacks two-directions-per-row at 2 frames). Keepers so far: hooded mage (forest/thorn shamans), sword & shield fighter (the knight). Remaining warriors/rogues/citizens/heavy-knight stay in raw-assets until their cast slots wire up.",
       "files": [
         {
           "path": "enemies/hooded-mage.png",
@@ -466,12 +1055,12 @@
     },
     {
       "id": "pixelloops-fantasy-rpg",
-      "title": "RPG Fantasy Music Pack \u2013 10 Tavern & Adventure Tracks (GameLoops Vol 5)",
+      "title": "RPG Fantasy Music Pack – 10 Tavern & Adventure Tracks (GameLoops Vol 5)",
       "author": "PixelLoops",
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; m4a transcoded 128k AAC from the WAV masters in raw-assets/extracted/)",
       "url": "https://pixelloops.itch.io/game-loops-vol5-fantasy-rpg",
       "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
-      "mappedUse": "S20.3 theme replacements \u2014 provisional keepers picked by track semantics (docs/PIXEL-ART-AUDIT.md \u00a7SA.0(c) audio mapping); final pick is the in-game audition when the sample-player path lands.",
+      "mappedUse": "S20.3 theme replacements — provisional keepers picked by track semantics (docs/PIXEL-ART-AUDIT.md §SA.0(c) audio mapping); final pick is the in-game audition when the sample-player path lands.",
       "files": [
         {
           "path": "audio/music/overworld.m4a"
@@ -489,12 +1078,12 @@
     },
     {
       "id": "pixelloops-dark-ambient",
-      "title": "Dark Ambient Game Music Pack \u2013 Mystery & Horror Loops (GameLoops Vol 4)",
+      "title": "Dark Ambient Game Music Pack – Mystery & Horror Loops (GameLoops Vol 4)",
       "author": "PixelLoops",
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; m4a transcoded 128k AAC from the WAV masters in raw-assets/extracted/)",
       "url": "https://pixelloops.itch.io/game-loops-vol4-dark-ambient-mystery",
       "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
-      "mappedUse": "S20.3 theme replacements for the tension regions \u2014 provisional keepers, final pick at in-game audition.",
+      "mappedUse": "S20.3 theme replacements for the tension regions — provisional keepers, final pick at in-game audition.",
       "files": [
         {
           "path": "audio/music/deep-forest.m4a"
@@ -524,12 +1113,12 @@
     },
     {
       "id": "pixelloops-retro-dungeon",
-      "title": "Retro Dungeon Game Music Pack \u2013 12 Chiptune Loops",
+      "title": "Retro Dungeon Game Music Pack – 12 Chiptune Loops",
       "author": "PixelLoops",
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; m4a transcoded 128k AAC from the WAV masters in raw-assets/extracted/)",
       "url": "https://pixelloops.itch.io/retro-dungeon-game-music-pack-12-chiptune-loops",
       "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
-      "mappedUse": "S20.3 theme replacements for dungeon + sunken-road \u2014 provisional keepers, final pick at in-game audition.",
+      "mappedUse": "S20.3 theme replacements for dungeon + sunken-road — provisional keepers, final pick at in-game audition.",
       "files": [
         {
           "path": "audio/music/dungeon.m4a"
@@ -541,7 +1130,7 @@
     },
     {
       "id": "pixelloops-main-menu",
-      "title": "Calm Menu Music Pack \u2013 Perfect for Game Menus & UI (10 Loops)",
+      "title": "Calm Menu Music Pack – Perfect for Game Menus & UI (10 Loops)",
       "author": "PixelLoops",
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; m4a transcoded 128k AAC from the WAV masters in raw-assets/extracted/)",
       "url": "https://pixelloops.itch.io/main-menu-music-pack-10-calm-game-menu-loops-wav-mp3",
@@ -569,12 +1158,12 @@
     },
     {
       "id": "pixelloops-boss-battle",
-      "title": "Retro Boss Battle Music Pack \u2013 Chiptune Loops",
+      "title": "Retro Boss Battle Music Pack – Chiptune Loops",
       "author": "PixelLoops",
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; m4a transcoded 128k AAC from the WAV masters in raw-assets/extracted/)",
       "url": "https://pixelloops.itch.io/retro-chiptune-game-music-pack-12-boss-battle-loops",
       "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
-      "mappedUse": "S20.3 new surface: boss choreography beds \u2014 prebattle tension, miniboss, final-phase boss.",
+      "mappedUse": "S20.3 new surface: boss choreography beds — prebattle tension, miniboss, final-phase boss.",
       "files": [
         {
           "path": "audio/music/prebattle.m4a"
@@ -589,12 +1178,12 @@
     },
     {
       "id": "pixelloops-victory-stingers",
-      "title": "Victory & Level Complete Music Pack \u2013 24 Game Stingers",
+      "title": "Victory & Level Complete Music Pack – 24 Game Stingers",
       "author": "PixelLoops",
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; MP3 masters copied from raw-assets/extracted/)",
       "url": "https://pixelloops.itch.io/victory-level-complete-music-pack-24-game-stingers",
       "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
-      "mappedUse": "S20.3 \u2014 replaces the victory and levelUp ToneJS recipes (triumph + levelup stingers).",
+      "mappedUse": "S20.3 — replaces the victory and levelUp ToneJS recipes (triumph + levelup stingers).",
       "files": [
         {
           "path": "audio/stingers/victory.mp3"
@@ -606,12 +1195,12 @@
     },
     {
       "id": "pixelloops-ui-sfx",
-      "title": "UI Sound Effects Pack \u2013 40 Game Interface Sounds (WAV + MP3)",
+      "title": "UI Sound Effects Pack – 40 Game Interface Sounds (WAV + MP3)",
       "author": "PixelLoops",
       "source": "itch.io (purchased; fetched via scripts/fetch-itch-assets.mjs; MP3 masters copied from raw-assets/extracted/, one keeper per cue family)",
       "url": "https://pixelloops.itch.io/ui-sound-effects-pack-40-game-interface-sounds-wav-mp3",
       "license": "PixelLoops itch.io pack terms (see pack page at url): game use licensed to purchaser, no standalone redistribution/resale.",
-      "mappedUse": "S20.3 \u2014 candidates to replace interact/inspect/pickup/coin/chest ToneJS recipes; A/B per cue at wiring time (each family has _02.._04 variants in raw-assets if the _01 keeper loses).",
+      "mappedUse": "S20.3 — candidates to replace interact/inspect/pickup/coin/chest ToneJS recipes; A/B per cue at wiring time (each family has _02.._04 variants in raw-assets if the _01 keeper loses).",
       "files": [
         {
           "path": "audio/ui/click.mp3"
@@ -752,7 +1341,7 @@
       "author": "Kenney (kenney.nl)",
       "source": "user import (raw-assets/extracted/Roguelike Dungeon Pack/)",
       "url": "https://kenney.nl",
-      "license": "CC0 / public domain (License.txt in the pack) \u2014 free for commercial use, no attribution required.",
+      "license": "CC0 / public domain (License.txt in the pack) — free for commercial use, no attribution required.",
       "mappedUse": "Dungeon tile-family breadth (census: worst region at 3 families). 16px cells on a 17px pitch (1px margins). First slices: cracked/shattered/rat-marked stone-floor variants auditioning against the dark dungeon palette.",
       "files": [
         {
@@ -773,7 +1362,7 @@
       "author": "Kenney (kenney.nl)",
       "source": "user import (raw-assets/extracted/Roguelike Interior Pack/)",
       "url": "https://kenney.nl",
-      "license": "CC0 / public domain (License.txt in the pack) \u2014 free for commercial use, no attribution required.",
+      "license": "CC0 / public domain (License.txt in the pack) — free for commercial use, no attribution required.",
       "mappedUse": "Castle-interior furniture and dressing (census: 9 props). 16px cells on a 17px pitch. First slices: lit candelabra, burning wall torch, framed painting; the sheet holds beds, shelves, rugs, a piano and more for further interior passes.",
       "files": [
         {
