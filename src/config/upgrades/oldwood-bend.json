@@ -8,6 +8,11 @@
   },
   "prerequisites": ["upgrade:first-vow"],
   "routePack": "oldwood",
-  "unlocks": ["upgrade:road-provisions", "upgrade:thornwood-mastered", "upgrade:rogue-shortcut"],
+  "unlocks": [
+    "upgrade:road-provisions",
+    "upgrade:thornwood-mastered",
+    "upgrade:rogue-shortcut",
+    "upgrade:lair-oldwood-1"
+  ],
   "track": "roads"
 }

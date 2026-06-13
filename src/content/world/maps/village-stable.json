@@ -2,7 +2,7 @@
   "$schema": "../../../../schemas/map.schema.json",
   "id": "map:village-stable",
   "kind": "map",
-  "name": "Hearthwake Stable Yard",
+  "name": "The Stable Pens",
   "size": { "cols": 28, "rows": 20 },
   "baseTile": "tile:village-cobble",
   "bgmTheme": "interior",
@@ -29,10 +29,10 @@
     },
     { "op": "row-span", "tile": "tile:wood-bridge", "y": 11, "x0": 4, "x1": 23 }
   ],
-  "playerSpawn": { "x": 224, "y": 256 },
+  "playerSpawn": { "x": 56, "y": 192 },
   "spawns": {
-    "default": { "x": 224, "y": 256 },
-    "entry": { "x": 224, "y": 256 }
+    "default": { "x": 56, "y": 192 },
+    "entry": { "x": 56, "y": 192 }
   },
   "entities": [
     { "ref": "prop:stable-stall", "x": 120, "y": 132, "note": "left stall with brushed straw" },
@@ -49,7 +49,40 @@
       "note": "second rack of reins and saddle-bells"
     },
     { "ref": "prop:oat-bin", "x": 304, "y": 226, "note": "open feed bin near the stablehand" },
-    { "ref": "char:oswin-hayward", "x": 208, "y": 160, "dir": -1 }
+    {
+      "ref": "char:oswin-hayward",
+      "x": 380,
+      "y": 160,
+      "dir": -1,
+      "note": "Oswin, penned with the captives"
+    },
+    {
+      "enemy": "forest-orc",
+      "x": 150,
+      "y": 192,
+      "note": "captured-village lair r4: orcs holding the stable mouth"
+    },
+    {
+      "enemy": "oldwood-raider",
+      "x": 210,
+      "y": 230,
+      "note": "captured-village lair r4: raider on the yard lane"
+    },
+    { "enemy": "crypt-bat", "x": 200, "y": 150, "note": "captured-village lair r4: rafter vermin" },
+    { "enemy": "forest-orc", "x": 280, "y": 196, "note": "captured-village lair r4: orc" },
+    { "enemy": "oldwood-raider", "x": 320, "y": 232, "note": "captured-village lair r4: raider" },
+    {
+      "enemy": "gate-sentry",
+      "x": 360,
+      "y": 192,
+      "note": "captured-village lair r4: a sentry over the pens"
+    },
+    {
+      "enemy": "gate-sentry",
+      "x": 400,
+      "y": 168,
+      "note": "captured-village lair r4: second pen-guard — the captives are well held"
+    }
   ],
   "triggers": [
     {

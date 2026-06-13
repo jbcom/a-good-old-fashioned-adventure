@@ -140,7 +140,9 @@ describe("instantiateMap — named spawns", () => {
 
     expect(world.get(MapRuntime)?.mapId).toBe("map:village-house");
     expect(world.queryFirst(IsPlayer)).toBe(player);
-    expect(player?.get(Transform)).toMatchObject({ x: 192, y: 180 });
+    // village-house is now the captured-village lair's room 2 — its entry spawn
+    // sits at the west edge so the line marches the ransacked hall east
+    expect(player?.get(Transform)).toMatchObject({ x: 48, y: 176 });
     expect(player?.get(Health)).toMatchObject({ hp: 44, maxHp: 100 });
   });
 

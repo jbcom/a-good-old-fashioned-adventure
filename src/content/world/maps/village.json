@@ -296,7 +296,27 @@
         ]
       }
     },
-    { "ref": "prop:chest", "x": 712, "y": 270, "contents": "Gold" }
+    { "ref": "prop:chest", "x": 712, "y": 270, "contents": "Gold" },
+    {
+      "enemy": "oldwood-raider",
+      "x": 260,
+      "y": 268,
+      "note": "captured-village lair r1: the dragon's raiders hold the square"
+    },
+    {
+      "enemy": "orc-scout",
+      "x": 330,
+      "y": 300,
+      "note": "captured-village lair r1: scout skirmisher"
+    },
+    { "enemy": "oldwood-raider", "x": 420, "y": 260, "note": "captured-village lair r1: raider" },
+    { "enemy": "forest-orc", "x": 540, "y": 296, "note": "captured-village lair r1: orc warband" },
+    {
+      "enemy": "gate-sentry",
+      "x": 700,
+      "y": 280,
+      "note": "captured-village lair r1: a sentry holds the road east"
+    }
   ],
   "composition": {
     "routeWindows": [

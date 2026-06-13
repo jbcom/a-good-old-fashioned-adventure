@@ -61,9 +61,13 @@ describe("S8.2 shop economy contract", () => {
 
     expect(characters.get("char:threadseller")?.dialogue).toBe("dlgbank:threadseller");
     expect(dialogueBanks.has("dlgbank:threadseller")).toBe(true);
+    // village-shop is now the captured-village lair's "looted market" room; the
+    // keeper + threadseller are held captive there, the shelves toppled. The
+    // shop ECONOMY (Brindle's Counter listings above) is unchanged — only the
+    // map dressing shifted to the ransacked theme.
     const shopRefs = getMap("map:village-shop").entities.map((entity) => entity.ref);
     expect(shopRefs).toEqual(
-      expect.arrayContaining(["prop:shop-shelf", "prop:shop-ledger", "char:threadseller"]),
+      expect.arrayContaining(["prop:shop-shelf", "char:shopkeeper", "char:threadseller"]),
     );
   });
 });

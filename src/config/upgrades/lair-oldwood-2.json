@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-oldwood-2",
+  "label": "Search the Ransacked Homes",
+  "category": "map",
+  "cost": {
+    "roses": 4,
+    "gems": 52
+  },
+  "prerequisites": ["upgrade:lair-oldwood-1"],
+  "lairRoom": {
+    "mapId": "map:oldwood-forest",
+    "depth": 2,
+    "roomMap": "map:village-house"
+  },
+  "unlocks": ["upgrade:lair-oldwood-3"],
+  "track": "roads",
+  "note": "Captured-village lair, room 2: the looted homes where the dragon's minions hoard their plunder. The princess relocates deeper into the nest. Rose-OR-gem, growing along the lair (roses logarithmic, gems exponential)."
+}

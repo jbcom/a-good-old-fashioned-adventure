@@ -100,12 +100,7 @@
     },
     {
       "baseTile": "tile:path",
-      "variants": [
-        "tile:path",
-        "tile:path-ruts",
-        "tile:path-pebbles",
-        "tile:path-moss"
-      ],
+      "variants": ["tile:path", "tile:path-ruts", "tile:path-pebbles", "tile:path-moss"],
       "chunk": {
         "w": 4,
         "h": 2
@@ -115,12 +110,7 @@
     },
     {
       "baseTile": "tile:grass",
-      "variants": [
-        "tile:grass",
-        "tile:grass-tufts",
-        "tile:grass-flowers",
-        "tile:grass-roots"
-      ],
+      "variants": ["tile:grass", "tile:grass-tufts", "tile:grass-flowers", "tile:grass-roots"],
       "chunk": {
         "w": 2,
         "h": 2
@@ -332,15 +322,8 @@
           "x1": 24,
           "y1": 23
         },
-        "majorAnchors": [
-          "char:fern-mender",
-          "prop:fern-mender-cart"
-        ],
-        "minorProps": [
-          "prop:glowcap-ring",
-          "prop:glowcap-ring",
-          "prop:broadleaf-tree"
-        ]
+        "majorAnchors": ["char:fern-mender", "prop:fern-mender-cart"],
+        "minorProps": ["prop:glowcap-ring", "prop:glowcap-ring", "prop:broadleaf-tree"]
       },
       {
         "label": "old oak and lost page trail",
@@ -350,15 +333,8 @@
           "x1": 48,
           "y1": 23
         },
-        "majorAnchors": [
-          "prop:broadleaf-tree",
-          "enemy:orc-scout"
-        ],
-        "minorProps": [
-          "prop:fallen-log",
-          "prop:threshold-root-marker",
-          "prop:bramble-hedge"
-        ]
+        "majorAnchors": ["prop:broadleaf-tree", "enemy:orc-scout"],
+        "minorProps": ["prop:fallen-log", "prop:threshold-root-marker", "prop:bramble-hedge"]
       },
       {
         "label": "last lantern before Sunken Road",
@@ -368,15 +344,8 @@
           "x1": 66,
           "y1": 25
         },
-        "majorAnchors": [
-          "prop:forest-lantern-post",
-          "enemy:forest-shaman"
-        ],
-        "minorProps": [
-          "prop:glowcap-ring",
-          "prop:lantern-oil-crate",
-          "prop:threshold-root-marker"
-        ]
+        "majorAnchors": ["prop:forest-lantern-post", "enemy:forest-shaman"],
+        "minorProps": ["prop:glowcap-ring", "prop:lantern-oil-crate", "prop:threshold-root-marker"]
       }
     ]
   },

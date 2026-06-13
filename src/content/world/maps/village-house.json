@@ -2,24 +2,122 @@
   "$schema": "../../../../schemas/map.schema.json",
   "id": "map:village-house",
   "kind": "map",
-  "name": "Cottage Interior",
-  "size": { "cols": 24, "rows": 18 },
+  "name": "The Ransacked Homes",
+  "size": { "cols": 44, "rows": 22 },
   "baseTile": "tile:stone-floor",
   "bgmTheme": "interior",
   "generation": [
     { "op": "border", "tile": "tile:stone-wall" },
-    { "op": "row-span", "tile": "tile:path", "y": 15, "x0": 9, "x1": 15, "note": "door mat" }
+    {
+      "op": "row-span",
+      "tile": "tile:tavern-floor",
+      "y": 11,
+      "x0": 2,
+      "x1": 41,
+      "note": "the connecting hall the line fights east through"
+    },
+    {
+      "op": "region",
+      "tile": "tile:tavern-floor",
+      "x0": 4,
+      "x1": 12,
+      "y0": 4,
+      "y1": 17,
+      "note": "first ransacked room"
+    },
+    {
+      "op": "region",
+      "tile": "tile:tavern-floor",
+      "x0": 18,
+      "x1": 26,
+      "y0": 4,
+      "y1": 17,
+      "note": "looted middle room"
+    },
+    {
+      "op": "region",
+      "tile": "tile:tavern-floor",
+      "x0": 31,
+      "x1": 39,
+      "y0": 4,
+      "y1": 17,
+      "note": "the captive's back room"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 15,
+      "y0": 2,
+      "y1": 9,
+      "note": "partition between rooms (upper gap is the doorway)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 15,
+      "y0": 13,
+      "y1": 19,
+      "note": "partition lower"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 29,
+      "y0": 2,
+      "y1": 9,
+      "note": "second partition"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:stone-wall",
+      "x": 29,
+      "y0": 13,
+      "y1": 19,
+      "note": "second partition lower"
+    }
   ],
-  "playerSpawn": { "x": 192, "y": 180 },
+  "playerSpawn": { "x": 48, "y": 176 },
   "spawns": {
-    "default": { "x": 192, "y": 180 },
-    "entry": { "x": 192, "y": 180 }
+    "default": { "x": 48, "y": 176 },
+    "entry": { "x": 48, "y": 176 }
   },
   "entities": [
-    { "ref": "prop:table", "x": 208, "y": 136, "note": "woodcutter's work table" },
-    { "ref": "prop:barrel", "x": 264, "y": 172, "note": "stacked kindling barrel" },
-    { "ref": "char:woodcutter", "x": 142, "y": 124, "dir": 1 },
-    { "ref": "prop:chest", "x": 248, "y": 96, "contents": "Gold" }
+    { "ref": "prop:table", "x": 120, "y": 120, "note": "overturned work table" },
+    { "ref": "prop:barrel", "x": 96, "y": 240, "note": "kindling barrel knocked aside" },
+    {
+      "ref": "prop:chest",
+      "x": 360,
+      "y": 96,
+      "contents": "Gold",
+      "note": "the captive's hidden savings"
+    },
+    {
+      "ref": "char:woodcutter",
+      "x": 600,
+      "y": 176,
+      "dir": -1,
+      "note": "the woodcutter, penned in the back room"
+    },
+    {
+      "enemy": "oldwood-raider",
+      "x": 170,
+      "y": 168,
+      "note": "captured-village lair r2: raiders looting the first room"
+    },
+    { "enemy": "crypt-bat", "x": 220, "y": 120, "note": "captured-village lair r2: nest vermin" },
+    {
+      "enemy": "forest-orc",
+      "x": 300,
+      "y": 184,
+      "note": "captured-village lair r2: orc in the middle room"
+    },
+    { "enemy": "oldwood-raider", "x": 380, "y": 176, "note": "captured-village lair r2: raider" },
+    {
+      "enemy": "gate-sentry",
+      "x": 540,
+      "y": 176,
+      "note": "captured-village lair r2: a sentry guards the captive's room"
+    }
   ],
   "triggers": [
     {
@@ -29,7 +127,7 @@
       "toMap": "map:village",
       "toSpawn": "from-house",
       "sfx": "interact",
-      "zone": { "x0": 144, "y0": 232, "x1": 248, "y1": 286 }
+      "zone": { "x0": 16, "y0": 160, "x1": 44, "y1": 200 }
     }
   ]
 }

@@ -2,40 +2,105 @@
   "$schema": "../../../../schemas/map.schema.json",
   "id": "map:village-tavern",
   "kind": "map",
-  "name": "The Unfurled Vine",
-  "size": { "cols": 28, "rows": 20 },
+  "name": "The Nest-Tavern",
+  "size": { "cols": 44, "rows": 22 },
   "baseTile": "tile:tavern-floor",
   "bgmTheme": "interior",
   "generation": [
     { "op": "border", "tile": "tile:stone-wall" },
-    { "op": "row-span", "tile": "tile:path", "y": 17, "x0": 11, "x1": 17 },
-    { "op": "row-span", "tile": "tile:wood-bridge", "y": 6, "x0": 5, "x1": 22 },
-    { "op": "row-span", "tile": "tile:wood-bridge", "y": 12, "x0": 5, "x1": 22 }
+    {
+      "op": "row-span",
+      "tile": "tile:wood-bridge",
+      "y": 6,
+      "x0": 5,
+      "x1": 38,
+      "note": "the long bar the line fights along"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:wood-bridge",
+      "y": 16,
+      "x0": 5,
+      "x1": 38,
+      "note": "the lower benches"
+    },
+    {
+      "op": "region",
+      "tile": "tile:stone-floor-worn",
+      "x0": 33,
+      "x1": 41,
+      "y0": 8,
+      "y1": 14,
+      "note": "the scorched hearth-dais where the dragon nests"
+    }
   ],
-  "playerSpawn": { "x": 224, "y": 256 },
+  "playerSpawn": { "x": 48, "y": 176 },
   "spawns": {
-    "default": { "x": 224, "y": 256 },
-    "entry": { "x": 224, "y": 256 }
+    "default": { "x": 48, "y": 176 },
+    "entry": { "x": 48, "y": 176 }
   },
   "entities": [
-    { "ref": "prop:story-quilt", "x": 96, "y": 112, "note": "stitched returns by the west wall" },
     {
-      "ref": "prop:hearth-song-board",
-      "x": 224,
+      "ref": "prop:story-quilt",
+      "x": 110,
       "y": 112,
-      "note": "posted road songs above the hearth"
+      "note": "the tavern's stitched returns, torn down"
     },
-    { "ref": "prop:table", "x": 148, "y": 150, "note": "left tavern table" },
-    { "ref": "prop:table", "x": 276, "y": 150, "note": "right tavern table" },
-    { "ref": "prop:tavern-bench", "x": 112, "y": 184, "note": "bench under the story-quilt" },
-    { "ref": "prop:tavern-bench", "x": 304, "y": 184, "note": "bench near the companions' table" },
-    { "ref": "prop:barrel", "x": 356, "y": 184, "note": "ale barrel" },
-    { "ref": "char:merrin-underbough", "x": 224, "y": 136, "dir": -1 },
+    { "ref": "prop:table", "x": 220, "y": 150, "note": "an upended tavern table" },
+    { "ref": "prop:tavern-bench", "x": 300, "y": 184, "note": "a bench the garrison drinks at" },
+    { "ref": "prop:barrel", "x": 180, "y": 200, "note": "a broached ale barrel" },
     {
-      "spawnRule": "unchosen-companions",
-      "positions": [{ "x": 160, "y": 110 }, { "x": 288, "y": 110 }]
+      "ref": "char:merrin-underbough",
+      "x": 600,
+      "y": 176,
+      "dir": -1,
+      "note": "Merrin, the keeper, held at the hearth"
     },
-    { "ref": "prop:chest", "x": 352, "y": 224, "contents": "Gold" }
+    {
+      "ref": "prop:chest",
+      "x": 560,
+      "y": 224,
+      "contents": "Gold",
+      "note": "the tavern's takings the dragon hoards"
+    },
+    {
+      "enemy": "forest-orc",
+      "x": 150,
+      "y": 176,
+      "note": "captured-village lair r5: the nest garrison at the door"
+    },
+    {
+      "enemy": "oldwood-raider",
+      "x": 210,
+      "y": 224,
+      "note": "captured-village lair r5: raider on the lower lane"
+    },
+    {
+      "enemy": "orc-scout",
+      "x": 240,
+      "y": 130,
+      "note": "captured-village lair r5: scout on the bar"
+    },
+    { "enemy": "forest-orc", "x": 320, "y": 184, "note": "captured-village lair r5: orc" },
+    { "enemy": "oldwood-raider", "x": 380, "y": 224, "note": "captured-village lair r5: raider" },
+    {
+      "enemy": "forest-shaman",
+      "x": 420,
+      "y": 110,
+      "note": "captured-village lair r5: a shaman on the upper bar (flank, off the lane)"
+    },
+    {
+      "enemy": "gate-sentry",
+      "x": 480,
+      "y": 176,
+      "note": "captured-village lair r5: the door-sentry of the nest"
+    },
+    {
+      "enemy": "glowcap-matron",
+      "x": 600,
+      "y": 240,
+      "note": "captured-village lair r5: the dragon's lieutenant — a glowcap matron holds the hearth (the lair's miniboss climax)"
+    }
   ],
   "triggers": [
     {
@@ -45,7 +110,7 @@
       "toMap": "map:village",
       "toSpawn": "from-tavern",
       "sfx": "interact",
-      "zone": { "x0": 176, "y0": 272, "x1": 272, "y1": 318 }
+      "zone": { "x0": 16, "y0": 160, "x1": 44, "y1": 200 }
     }
   ]
 }
