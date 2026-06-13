@@ -206,28 +206,6 @@ bbbbbbbbbbbbbbbb
 bbbbbbbbbbbbbbbb
 @end
 
-@tile tile:stone-wall
-solid true
-traits Tile,Solid
-rows
-XXXXXXXXXXXXXXXX
-XccccccXXccccccX
-XcCCCCcXXcCCCCcX
-XccccccXXccccccX
-XXXXXXXXXXXXXXXX
-XccXXccccccXXccX
-XCCXXcCCCCcXXCCX
-XccXXccccccXXccX
-XXXXXXXXXXXXXXXX
-XccccccXXccccccX
-XcCCCCcXXcCCCCcX
-XccccccXXccccccX
-XXXXXXXXXXXXXXXX
-XccXXccccccXXccX
-XCCXXcCCCCcXXCCX
-XXXXXXXXXXXXXXXX
-@end
-
 @tile tile:prison-bars
 solid true
 traits Tile,Solid

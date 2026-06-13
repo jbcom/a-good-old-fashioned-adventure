@@ -216,18 +216,17 @@ export function tileFieldCanvas(tileId: string, col: number, row: number): HTMLC
   if (!tile.sheet || !field) return tileCanvas(tileId);
   const fx = ((col % field.cols) + field.cols) % field.cols;
   const fy = ((row % field.rows) + field.rows) % field.rows;
+  // advance by the stride (stepX/stepY), which defaults to the cell size but is
+  // larger for gapped sheets (Kenney's 17px stride over 16px cells) so a field
+  // cell lands on the next cell, never on the 1px separator between them
+  const stepX = field.stepX ?? tile.sheet.w;
+  const stepY = field.stepY ?? tile.sheet.h;
   const rect = {
     image: tile.sheet.image,
-    x: tile.sheet.x + fx * tile.sheet.w,
-    y: tile.sheet.y + fy * tile.sheet.h,
+    x: tile.sheet.x + fx * stepX,
+    y: tile.sheet.y + fy * stepY,
     w: tile.sheet.w,
     h: tile.sheet.h,
   };
   return croppedSheetCanvas(tileId, `${tileId}|field|${fx}x${fy}`, rect);
-}
-
-/** Native pixel height of a tile's bake (sheet crop height, else the .pix grid). */
-export function tilePixelSize(tileId: string): number {
-  const tile = getTile(tileId);
-  return tile.sheet?.h ?? 16;
 }

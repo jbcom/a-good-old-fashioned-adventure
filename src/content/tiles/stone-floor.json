@@ -12,7 +12,8 @@
     "h": 16,
     "field": {
       "cols": 2,
-      "rows": 1
+      "rows": 1,
+      "stepX": 17
     }
   },
   "koota": {

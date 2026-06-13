@@ -39,7 +39,10 @@ export interface TileDef {
     y: number;
     w: number;
     h: number;
-    field?: { cols: number; rows: number };
+    /** stepX/stepY default to w/h; set larger for a gutter between cells (e.g.
+     * the Kenney dungeon sheet's 17px stride over 16px cells) so a field cell
+     * advances by the stride and never crops the 1px separator. */
+    field?: { cols: number; rows: number; stepX?: number; stepY?: number };
   };
   koota: { traits: string[] };
 }
