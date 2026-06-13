@@ -48,6 +48,14 @@ Items are ONLY `- [ ]` (open) or `- [x]` (done) — never ad-hoc states like `[~
 
 ## Queue — to fully implemented and polished
 
+### S-TERRAIN Replace POC procedural .pix terrain with real PNG ground (user mandate 2026-06-13: the procedural was POC; the imported ground/brick/dungeon packs replace it; FIT THE CODE TO THE PNGS, not vice-versa; [[own-the-design-real-assets]])
+- [x] ST.0 Asset audit (DONE 2026-06-13, docs/ASSET-AUDIT.md): content-hash audit of raw-assets vs staged; 92 consumed files removed from raw-assets → 5055 unused candidates visible. Ground-FIELD render mode added (sheet field:{cols,rows} + tileFieldCanvas → per-(col,row) seamless sampling). Found: 'The Ground' has no grass (dither overlays); roguelike GRASS=tufts + GROUND=dithered fills (matches current .pix model); brick=Brick Pack (475), dungeon floors=kenney-dungeon-dark. User chose roguelike.png for style cohesion.
+- [ ] ST.1 Outdoor GROUND + ROAD: wire the roguelike GROUND dithered-fill rows (y≈288) as field tiles for path/sand/dirt bases, and the ROAD autotiles (y≈336) for the dirt road — the biggest visible uplift over flat .pix. READ at game scale, iterate the field cols/rows until seamless.
+- [ ] ST.2 GRASS + leaf-litter: wire roguelike grass (base GROUND fill + scattered tuft overlay, matching the .pix model but PNG); keep the per-variant distinction (flowers/roots/tufts) via overlay or distinct cells.
+- [ ] ST.3 Dungeon/castle FLOORS: extend kenney-dungeon-dark.png (already 4 tiles) to stone-floor + the rest of the interior floor tiles.
+- [ ] ST.4 WALLS: wire stone-wall (+ variants) to the Brick Pack (spritesheet_bricks.png) — the user flagged the brick tiles.
+- [ ] ST.5 Verify: every map READ at game scale on the live Pages shape, map-differentiation gate still ≥0.35, no procedural terrain remains where a PNG fits, browser map-evidence regenerated + READ.
+
 ### S-ART Thorough pixel-art audit (user mandate 2026-06-12: review ALL pixel art for clarity and polish and enough detailed features, and ensure enough breadth for a deep and broad game)
 - [x] SA.1 Audit pass: regenerate and READ every sheet (terrain, props, route-props, characters, bosses, effects, upgrades) at zoom; per-asset verdict (clear / weak / unreadable) recorded in docs/PIXEL-ART-AUDIT.md with the named weaknesses (silhouette, contrast, detail density, palette discipline)
 - [x] SA.2 Polish pass (first sweep): rework every weak grid (more outline discipline, interior detail, broken edges, highlights) — sheets regenerated and re-READ until every asset is clear at game scale
