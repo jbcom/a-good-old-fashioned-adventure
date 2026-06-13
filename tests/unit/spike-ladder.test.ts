@@ -154,21 +154,16 @@ describe("S19.1b spike-detection ladder", () => {
     }
     // Advance should be roughly non-increasing: no LATER map should be easier
     // than its predecessor (a difficulty inversion — the N4 finding,
-    // docs/BALANCE-PLAYTESTS.md). The harness currently measures ONE inversion:
-    // map:deep-forest is anomalously hard (advance ~0.6) so the maps after it
-    // read as "easier" — known content debt tracked as N4, to be fixed by
-    // deep-forest re-tuning + late-map escalation (S19.2). We assert the rest of
-    // the spine is inversion-free and pin the deep-forest anomaly so a NEW
-    // inversion elsewhere still fails the gate.
+    // docs/BALANCE-PLAYTESTS.md). The deep-forest mid-spine spike (kiting-caster
+    // soft-lock) was fixed by the enemy-layout rebalance, so the spine is now
+    // inversion-free; any NEW inversion fails the gate.
     const inversions: string[] = [];
     for (let i = 1; i < ladder.length; i++) {
       if (ladder[i].meanAdvance > ladder[i - 1].meanAdvance + 0.1) {
         inversions.push(`${ladder[i - 1].label}→${ladder[i].label}`);
       }
     }
-    // the only tolerated inversion is the one caused by the deep-forest spike
-    const unexpected = inversions.filter((s) => !s.includes("deep-forest"));
-    expect(unexpected, `unexpected difficulty inversions: ${unexpected.join(", ")}`).toEqual([]);
+    expect(inversions, `difficulty inversions: ${inversions.join(", ")}`).toEqual([]);
   }, 120_000);
 
   it("antagonist-vs-remediation: no enemy unlock is reachable before an offensive line", () => {

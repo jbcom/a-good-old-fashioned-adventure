@@ -100,7 +100,12 @@
     },
     {
       "baseTile": "tile:path",
-      "variants": ["tile:path", "tile:path-ruts", "tile:path-pebbles", "tile:path-moss"],
+      "variants": [
+        "tile:path",
+        "tile:path-ruts",
+        "tile:path-pebbles",
+        "tile:path-moss"
+      ],
       "chunk": {
         "w": 4,
         "h": 2
@@ -110,7 +115,12 @@
     },
     {
       "baseTile": "tile:grass",
-      "variants": ["tile:grass", "tile:grass-tufts", "tile:grass-flowers", "tile:grass-roots"],
+      "variants": [
+        "tile:grass",
+        "tile:grass-tufts",
+        "tile:grass-flowers",
+        "tile:grass-roots"
+      ],
       "chunk": {
         "w": 2,
         "h": 2
@@ -275,28 +285,28 @@
     },
     {
       "enemy": "orc-scout",
-      "x": 500,
-      "y": 220
+      "x": 360,
+      "y": 260
     },
     {
       "enemy": "bramble-stalker",
-      "x": 680,
-      "y": 184
+      "x": 440,
+      "y": 340
     },
     {
       "enemy": "thorn-shaman",
       "x": 900,
-      "y": 450
+      "y": 380
     },
     {
       "enemy": "forest-shaman",
-      "x": 840,
-      "y": 398
+      "x": 820,
+      "y": 240
     },
     {
       "enemy": "glowcap-matron",
       "x": 560,
-      "y": 480,
+      "y": 300,
       "note": "Deep Forest miniboss in the southern glowcap hollow"
     },
     {
@@ -322,8 +332,15 @@
           "x1": 24,
           "y1": 23
         },
-        "majorAnchors": ["char:fern-mender", "prop:fern-mender-cart"],
-        "minorProps": ["prop:glowcap-ring", "prop:glowcap-ring", "prop:broadleaf-tree"]
+        "majorAnchors": [
+          "char:fern-mender",
+          "prop:fern-mender-cart"
+        ],
+        "minorProps": [
+          "prop:glowcap-ring",
+          "prop:glowcap-ring",
+          "prop:broadleaf-tree"
+        ]
       },
       {
         "label": "old oak and lost page trail",
@@ -333,8 +350,15 @@
           "x1": 48,
           "y1": 23
         },
-        "majorAnchors": ["prop:broadleaf-tree", "enemy:orc-scout"],
-        "minorProps": ["prop:fallen-log", "prop:threshold-root-marker", "prop:bramble-hedge"]
+        "majorAnchors": [
+          "prop:broadleaf-tree",
+          "enemy:orc-scout"
+        ],
+        "minorProps": [
+          "prop:fallen-log",
+          "prop:threshold-root-marker",
+          "prop:bramble-hedge"
+        ]
       },
       {
         "label": "last lantern before Sunken Road",
@@ -344,8 +368,15 @@
           "x1": 66,
           "y1": 25
         },
-        "majorAnchors": ["prop:forest-lantern-post", "enemy:forest-shaman"],
-        "minorProps": ["prop:glowcap-ring", "prop:lantern-oil-crate", "prop:threshold-root-marker"]
+        "majorAnchors": [
+          "prop:forest-lantern-post",
+          "enemy:forest-shaman"
+        ],
+        "minorProps": [
+          "prop:glowcap-ring",
+          "prop:lantern-oil-crate",
+          "prop:threshold-root-marker"
+        ]
       }
     ]
   },
