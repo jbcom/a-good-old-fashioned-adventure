@@ -446,6 +446,16 @@
           "path": "heroes/red-mage.png",
           "width": 64,
           "height": 256
+        },
+        {
+          "path": "enemies/rogue.png",
+          "width": 64,
+          "height": 320
+        },
+        {
+          "path": "enemies/hooded-rogue.png",
+          "width": 64,
+          "height": 320
         }
       ]
     },

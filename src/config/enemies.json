@@ -61,7 +61,7 @@
     },
     "oldwood-raider": {
       "name": "Briar Raider",
-      "sprite": "sprite:dragon",
+      "sprite": "sprite:hooded-rogue",
       "palette": "palette:raider",
       "hp": 24,
       "speed": 36,
@@ -73,7 +73,7 @@
     },
     "orc-scout": {
       "name": "Bandit Scout",
-      "sprite": "sprite:dragon",
+      "sprite": "sprite:rogue",
       "palette": "palette:orc",
       "family": "orc",
       "hp": 15,

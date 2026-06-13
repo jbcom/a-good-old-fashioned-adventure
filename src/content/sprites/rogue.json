@@ -1,0 +1,87 @@
+{
+  "$schema": "../../../schemas/sheet-sprite.schema.json",
+  "id": "sprite:rogue",
+  "kind": "sheet-sprite",
+  "description": "Electric Lemon rogue combat sheet, 16px, 20 rows (public/assets/MANIFEST.json#electric-lemon-rpg-characters), series convention mounted (attack pair rows 0-1 two-dirs-per-row at 2 frames, stance 8-11, walk 12-15); bow rows 12-13 area and dash rows stay reserved. Validated by the browser pixel gate + lineup screenshot; rows are data-only to retune. The Bandit Scout's body (docs/CAST-CONVERSION.md \u2014 the orc scout unmasked).",
+  "frameSize": {
+    "w": 16,
+    "h": 16
+  },
+  "anchor": {
+    "x": 8,
+    "y": 15
+  },
+  "directionOrder": ["right", "up", "left", "down"],
+  "animations": {
+    "idle": {
+      "image": "enemies/rogue.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 8,
+        "left": 9,
+        "down": 10,
+        "up": 11
+      },
+      "fps": 2
+    },
+    "walk": {
+      "image": "enemies/rogue.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 12,
+        "left": 13,
+        "down": 14,
+        "up": 15
+      },
+      "fps": 10
+    },
+    "attack": {
+      "image": "enemies/rogue.png",
+      "framesPerDirection": 2,
+      "directional": false,
+      "directionRows": {
+        "right": {
+          "row": 0,
+          "col": 2
+        },
+        "left": {
+          "row": 0,
+          "col": 0
+        },
+        "down": {
+          "row": 1,
+          "col": 0
+        },
+        "up": {
+          "row": 1,
+          "col": 2
+        }
+      },
+      "fps": 10,
+      "loop": false
+    },
+    "hurt": {
+      "image": "enemies/rogue.png",
+      "framesPerDirection": 4,
+      "directional": false,
+      "directionRows": {
+        "right": 8,
+        "left": 9,
+        "down": 10,
+        "up": 11
+      },
+      "fps": 6
+    }
+  },
+  "poseMap": {
+    "idle": "idle",
+    "walk": "walk",
+    "attack": "attack",
+    "hurt": "hurt"
+  },
+  "koota": {
+    "traits": ["Transform", "Sprite", "Palette", "Facing", "Animator", "DepthSorted"]
+  }
+}

@@ -229,6 +229,8 @@ it("renders the five new region trash bodies in one lineup", async () => {
   // direction-row humanoid beside the animals — third layout convention
   spawnEnemy(world, "forest-shaman", 168, 262);
   spawnEnemy(world, "gate-sentry", 40, 300);
+  spawnEnemy(world, "orc-scout", 210, 280);
+  spawnEnemy(world, "oldwood-raider", 240, 320);
   world.queryFirst(IsPlayer)?.set(Transform, { x: 180, y: 360 });
   world.set(CameraState, { x: 110, y: 300, shake: 0 });
   for (let i = 0; i < 30; i++) step(world);

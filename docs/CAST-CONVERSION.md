@@ -104,7 +104,7 @@ terrain.pix until the Kenney dungeon/interior audition lands.
 ## Execution order
 
 1. Classes — COMPLETE: knight → sprite:fighter, wizard → sprite:grey-mage, ranger → sprite:archer (all three playable bodies purchased; rows pinned per sheet with skin-pixel back-row confirmation; directionRows generalized to {row,col} cells for two-directions-per-row attack packing; companions inherit class sprites automatically; 33 browser + 722 unit tests green, players verified in stage screenshots and runtime SpriteRef assertions).
-2. Guards + bandit rewrite — gate-sentry LANDED (guard spearman), Oldwood Bandit LANDED (2-handed swordsman + woodcutter/quest copy rewrite); Bandit Scout + Briar Raider await rogue-sheet pinning (layouts irregular — two-dirs-per-row attacks mixed with single-dir rows).
+2. Guards + bandit rewrite — COMPLETE: gate-sentry (guard spearman), Oldwood Bandit (2-handed swordsman + quest copy), Bandit Scout (rogue, bow) and Briar Raider (hooded rogue) wired with the series convention; the outlaw random-encounter tier (citizen combat variants, behavior types) remains a directive item for the S20 encounter design.
 3. Units — COMPLETE: barbarian→axe warrior, Rite-Keeper→skullcap, War-Cleric→paladin, dread-knight→heavy knight, warlock→hooded mage, stormcaller→grey mage; fx differentiation lands with the S20 fx pass.
 4. Citizens → named NPCs (per-body zoom assignment).
 5. FX swap + locked-class creative unlocks (Spellsinger, Veilwalker).
