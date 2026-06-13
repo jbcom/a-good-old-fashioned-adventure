@@ -1,10 +1,10 @@
 # Continuous Work Directive — a-good-old-fashioned-adventure
 
-**Status:** ACTIVE
+**Status:** RELEASED
 **Owner:** Claude (mandated by jbogaty)
-**Mandate (current):** Rail-command incremental (docs/RAIL-COMMAND.md) built to full polish on the long-running local branch, fully autonomously, docs → tests → code, headed GPU browser journeys driven by the CommanderGovernor through public state, every visual READ before commit, until ALL features are fully implemented and polished. Founding mandate + full history: docs/COMPLETED-MILESTONES.md.
+**Mandate (current):** Rail-command incremental (docs/RAIL-COMMAND.md) built to full polish, fully autonomously, docs → tests → code, headed GPU browser journeys driven by the CommanderGovernor through public state, every visual READ before commit, until ALL features are fully implemented and polished. Founding mandate + full history: docs/COMPLETED-MILESTONES.md and docs/STATE.md.
 
-**Branch:** `feat/incremental-arc` — ALL work layers here as forward commits; remote/CI is touched ONCE at the arc's end (S23). No per-item PRs or pushes. Local review trio at every milestone boundary, findings folded forward.
+**RELEASED 2026-06-13.** The full arc (feat/incremental-arc, 181 commits) merged via PR #14 (commit 2f0cc55), release-please cut 1.2.0. The whole queue is complete — the zone model, 6 hand-crafted Dragon's Lairs (17 rooms, uniform bespoke guardians), the enemy DAG + spawn-placement track, three currencies, S20 polish (rail HUD / combat FX / audio / storybook screens), S21 economy/difficulty/telemetry gates, S22 Android (the debug APK boots and runs on a Pixel-class emulator), S23 final gates + docs refresh. LIVE-VERIFIED: the Android APK boots the rail game on the emulator (a native-only SQLite values-array bug found + fixed on-device), and the GitHub Pages site (https://jonbogaty.com/a-good-old-fashioned-adventure/) plays a full rail run with ALL assets rendering from PNG — a post-merge Pages bug (absolute /assets/ URLs 404'd under the project subpath, falling sprites/audio/wasm to placeholders) was found by the user, fixed in PR #15 (commit fd3acba, base-aware assetUrl), and confirmed on the live deployment via chrome-devtools (94 images 200, audio 200, wasm 200, saves work, zero console errors). The directive is closed; further work begins a fresh mandate.
 
 ## What CONTINUOUS means
 1. Never stop for status reports the user didn't ask for.
