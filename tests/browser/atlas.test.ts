@@ -95,13 +95,11 @@ describe("props and tiles bake from content", () => {
     await preloadSheetImages();
     const data = pixelsOf(tileFieldCanvas("tile:water", 0, 0));
     let r = 0;
-    let g = 0;
     let b = 0;
     let opaque = 0;
     const n = data.length / 4;
     for (let i = 0; i < data.length; i += 4) {
       r += data[i];
-      g += data[i + 1];
       b += data[i + 2];
       if (data[i + 3] > 240) opaque++;
     }
