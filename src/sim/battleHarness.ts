@@ -53,6 +53,10 @@ export interface RunResult {
   enemiesFelled: number;
   /** coins banked (the always-farm-something floor) */
   coins: number;
+  /** gems banked (dragon-hoard farm — felled bosses/minibosses) */
+  gems: number;
+  /** roses banked (objective/rescue farm) */
+  roses: number;
   outcome: "reached-end" | "line-fell" | "stalemate";
 }
 
@@ -138,13 +142,16 @@ function finish(
   unitsFielded: number,
   enemiesFelled: number,
 ): RunResult {
+  const progress = world.get(IncrementalProgress);
   return {
     reachedEnd: outcome === "reached-end",
     advance: Math.max(0, Math.min(1, advance)),
     ticks,
     unitsFielded,
     enemiesFelled,
-    coins: world.get(IncrementalProgress)?.coins ?? 0,
+    coins: progress?.coins ?? 0,
+    gems: progress?.gems ?? 0,
+    roses: progress?.roses ?? 0,
     outcome,
   };
 }

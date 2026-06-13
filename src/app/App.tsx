@@ -45,6 +45,7 @@ import {
 import { spriteCanvas } from "../render/atlas";
 import { GameStage } from "../render/GameStage";
 import { spritePose } from "../render/pose";
+import { autoRun } from "../sim/autoRun";
 import { deployUnit, placedCounts, remainingFor } from "../sim/deploy";
 import {
   emitDialogueChoice,
@@ -788,6 +789,7 @@ function Hud({
   muted,
   timeScale,
   onCycleSpeed,
+  onAuto,
   onTogglePanel,
   onTogglePause,
   onToggleMute,
@@ -800,6 +802,7 @@ function Hud({
   muted: boolean;
   timeScale: number;
   onCycleSpeed: () => void;
+  onAuto: () => void;
   onTogglePanel: () => void;
   onTogglePause: () => void;
   onToggleMute: () => void;
@@ -839,6 +842,15 @@ function Hud({
           onClick={onCycleSpeed}
         >
           {timeScale}×
+        </button>
+        <button
+          className="hud-auto"
+          data-testid="hud-auto"
+          type="button"
+          aria-label="Auto-play the frontier map"
+          onClick={onAuto}
+        >
+          AUTO
         </button>
         <button
           className="hud-menu"
@@ -1346,6 +1358,8 @@ export function App({
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [world, setWorld] = useState<World | null>(null);
   const worldRef = useRef<World | null>(null);
+  // AUTO run seed counter — each press varies the seeded headless sim
+  const autoSeedRef = useRef(0);
 
   // koota caps live worlds at 16: every run replaces the world, so the old
   // one must be destroyed or long sessions crash
@@ -1604,6 +1618,24 @@ export function App({
     setShopState(null);
     setPaused(false);
     setMode("gameover");
+  }, [refreshSnapshot]);
+
+  /**
+   * AUTO (docs/RAIL-COMMAND.md §AUTO): play the frontier map headlessly and
+   * jump to results immediately. Banks the farm whether it wins or loses — a
+   * win shows the rescue results, a loss the gameover ledger (still a farm).
+   */
+  const runAuto = useCallback(() => {
+    const activeWorld = worldRef.current;
+    if (!activeWorld) return;
+    // a per-press seed keeps repeated AUTO runs varied but reproducible
+    autoSeedRef.current += 1;
+    const result = autoRun(activeWorld, autoSeedRef.current);
+    refreshSnapshot(activeWorld, { persist: true });
+    setPanelOpen(false);
+    setShopState(null);
+    setPaused(false);
+    setMode(result.won ? "results" : "gameover");
   }, [refreshSnapshot]);
 
   const openUpgradeGraph = useCallback(() => {
@@ -2075,6 +2107,7 @@ export function App({
             muted={muted}
             timeScale={timeScale}
             onCycleSpeed={cycleSpeed}
+            onAuto={runAuto}
             onTogglePanel={() => setPanelOpen((open) => !open)}
             onTogglePause={togglePause}
             onToggleMute={() => setMuted((value) => !value)}
