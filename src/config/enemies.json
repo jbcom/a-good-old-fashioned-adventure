@@ -238,7 +238,7 @@
     },
     "shadow-warlord": {
       "name": "Shadow Warlord",
-      "sprite": "sprite:dragon",
+      "sprite": "sprite:caped-warrior",
       "palette": "palette:boss",
       "hp": 160,
       "speed": 52,

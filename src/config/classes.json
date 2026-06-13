@@ -244,7 +244,7 @@
       }
     },
     "barbarian": {
-      "sprite": "sprite:barbarian",
+      "sprite": "sprite:axe-warrior",
       "palette": "palette:base",
       "attack": {
         "kind": "melee",
@@ -288,7 +288,7 @@
       }
     },
     "shaman": {
-      "sprite": "sprite:shaman",
+      "sprite": "sprite:skullcap-warrior",
       "palette": "palette:base",
       "attack": {
         "kind": "melee",
