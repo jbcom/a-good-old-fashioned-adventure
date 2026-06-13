@@ -368,6 +368,30 @@
   cursor: pointer;
 }
 
+.hud-speed {
+  margin-left: 4px;
+  min-width: 40px;
+  height: 28px;
+  border: 1px solid var(--frame);
+  border-radius: 4px;
+  background: rgba(249, 236, 202, 0.76);
+  color: var(--text);
+  font-family: var(--font-numeric);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* a warped clock glows so the player feels the acceleration */
+.hud-speed[data-time-scale="5"],
+.hud-speed[data-time-scale="10"] {
+  background: rgba(244, 196, 96, 0.85);
+}
+.hud-speed[data-time-scale="50"],
+.hud-speed[data-time-scale="100"] {
+  background: rgba(232, 122, 64, 0.9);
+  color: #fff;
+}
+
 .side-panel {
   position: absolute;
   top: calc(44px + env(safe-area-inset-top, 0));

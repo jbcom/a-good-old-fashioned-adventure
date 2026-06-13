@@ -13,6 +13,7 @@ export interface CommandPerception {
   enemies: number;
   coins: number;
   frontY: number;
+  timeScale: number;
 }
 
 function shell(): HTMLElement {
@@ -44,7 +45,14 @@ export class CommanderGovernor {
       enemies: Number(data.enemies ?? 0),
       coins: Number(data.coins ?? 0),
       frontY: Number(data.frontY ?? 0),
+      timeScale: Number(data.timeScale ?? 1),
     };
+  }
+
+  /** Cycle the top-bar battle speed; returns the new scale. */
+  async cycleSpeed(): Promise<number> {
+    await this.tap("hud-speed");
+    return this.perceive().timeScale;
   }
 
   /** The single gameplay gesture: drag a toolbox panel onto the field. */

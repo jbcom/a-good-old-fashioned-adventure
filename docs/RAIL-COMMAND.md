@@ -185,6 +185,46 @@ quest engine advances unchanged (rose, victory, results into the DAG
 shop), exactly as if a pawn had spoken to her. The princess stays an
 authored NPC; nothing about her content changes.
 
+## DAG alignment theory (S19.1b lock — the three progressions move together)
+
+This is an INCREMENTAL game, so the whole structure falls out of one rule:
+**monotonic progression where every reachable state is solvable, and
+difficulty rises smoothly.** The three DAGs — classes, enemies, maps —
+advance in lockstep, ordered so that at EVERY node a player can field a
+viable answer and the next node is a small step up, never a cliff. Every
+specific rule below (offense-first, antagonist-vs-remediation, no
+map-jumping) is just that one principle applied. The statistical harness
+exists to PROVE it holds — no permutation of reachable unlocks produces a
+spike, an outlier, or an unsolvable state.
+
+**Class DAG — offense first, support last.** The unlock order is
+melee → ranged → spells (the offensive core), THEN support (bards,
+priests), THEN synergy and composites (the rose-priced endgame). A player
+ALWAYS starts with — and can always drag onto the field — a minimum
+offensive line, because that is what they begin with. By the time support
+and composites are affordable they already have a solid core. Introducing
+support before offense would be fatal: nobody wins a war with just a bard
+and a priest. Mis-ordering a class node is a balance bug the harness must
+catch (a support-heavy reachable state with no offensive answer is a
+spike).
+
+**Enemy DAG — antagonists vs remediation.** Enemies unlock in OPPOSITION
+to the player's available counters: each new wave pattern is introduced
+when (and only when) the player has unlocked the tools to remediate it.
+Unlock an antagonist pattern before its remediation exists and the curve
+spikes. The harness pairs each enemy-unlock state against the
+contemporaneous class-unlock state and asserts the answer exists.
+
+**Map DAG — successive, no jumping.** Maps are ordered DAG points: map 1
+is upgraded/cleared before map 2, and so on — no map-jumping, the same
+reason the class and enemy DAGs are strict. The princess always sits at
+the LAST unlocked map; when the castle node unlocks, the castle moves to
+the last map and the princess moves into the castle. Each map is meant to
+be more fun and crazy than the last, which only works if the player
+reaches it having earned the matching tools. (Tests may override the map
+sequence to START at any map for isolated scenarios — see Testing shape —
+but the SHIPPED progression is strictly successive.)
+
 ## Testing shape
 
 PlayerGovernor becomes a CommanderGovernor: it perceives the public dataset

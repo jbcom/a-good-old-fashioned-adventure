@@ -70,6 +70,7 @@ import { applyEffects, autoStartQuests, questLogLines } from "../sim/quests";
 import { buyShopListing, type ShopTransactionResult, sellShopListing } from "../sim/shop";
 import { frontline } from "../sim/systems/waves";
 import { SIM_DT, step } from "../sim/tick";
+import { nextTier } from "../sim/timeWarp";
 import {
   Choreo,
   FlagState,
@@ -756,6 +757,8 @@ function Hud({
   panelOpen,
   paused,
   muted,
+  timeScale,
+  onCycleSpeed,
   onTogglePanel,
   onTogglePause,
   onToggleMute,
@@ -766,6 +769,8 @@ function Hud({
   panelOpen: boolean;
   paused: boolean;
   muted: boolean;
+  timeScale: number;
+  onCycleSpeed: () => void;
   onTogglePanel: () => void;
   onTogglePause: () => void;
   onToggleMute: () => void;
@@ -795,6 +800,16 @@ function Hud({
         <CurrencyToken label="C" value={snapshot.incrementalProgress.coins} testId="hud-coins" />
         <CurrencyToken label="R" value={snapshot.incrementalProgress.roses} testId="hud-roses" />
         <span className="map-token">{snapshot.mapName}</span>
+        <button
+          className="hud-speed"
+          data-testid="hud-speed"
+          data-time-scale={String(timeScale)}
+          type="button"
+          aria-label={`Battle speed ${timeScale}x`}
+          onClick={onCycleSpeed}
+        >
+          {timeScale}×
+        </button>
         <button
           className="hud-menu"
           data-testid="hud-menu"
@@ -1316,6 +1331,10 @@ export function App({
   const [panelOpen, setPanelOpen] = useState(false);
   const [paused, setPaused] = useState(false);
   const [muted, setMuted] = useState(DEFAULT_SETTINGS.muted);
+  // battle fast-forward (top bar); the loop reads the ref so a speed
+  // change applies without re-arming the animation frame
+  const [timeScale, setTimeScale] = useState(1);
+  const timeScaleRef = useRef(1);
   const [inspectionFeedback, setInspectionFeedback] =
     useState<InspectionFeedbackState>(EMPTY_INSPECTION_FEEDBACK);
   const [deviceProfile, setDeviceProfile] = useState<DeviceProfile>(() =>
@@ -1484,9 +1503,22 @@ export function App({
         player.set(Inventory, { items: options.inventory });
       }
       refreshSnapshot(nextWorld, { persist: true });
+      // a fresh run starts at real time
+      timeScaleRef.current = 1;
+      setTimeScale(1);
     },
     [adoptWorld, audioDebug, loadMap, refreshSnapshot],
   );
+
+  // keep the loop's ref in lockstep with the rendered scale
+  useEffect(() => {
+    timeScaleRef.current = timeScale;
+  }, [timeScale]);
+
+  const cycleSpeed = useCallback(() => {
+    const progress = snapshotRef.current.incrementalProgress;
+    setTimeScale((current) => nextTier(progress, current).scale);
+  }, []);
 
   const continueGame = useCallback(() => {
     if (!latestSave) return;
@@ -1842,13 +1874,17 @@ export function App({
       const dt = Math.min(engine.maxTimestep, (now - last) / 1000);
       last = now;
       if (!dialogue && !paused && !shopState && mode === "playing") {
-        acc += dt;
-        while (acc >= SIM_DT) {
+        acc += dt * timeScaleRef.current;
+        // the burst is capped so a 100x frame can never lock the loop
+        let budget = engine.timeWarp.maxStepsPerFrame;
+        while (acc >= SIM_DT && budget > 0) {
           step(world, SIM_DT);
           handleZoneTriggers(world, zoneEnteredRef.current);
           clearOutbox(world);
           acc -= SIM_DT;
+          budget -= 1;
         }
+        if (budget === 0) acc = 0; // drop the overflow rather than spiral
       } else {
         playerOf(world)?.set(MoveIntent, { x: 0, y: 0 });
       }
@@ -1895,6 +1931,7 @@ export function App({
       "data-inventory": JSON.stringify(snapshot.inventory),
       "data-paused": String(paused),
       "data-muted": String(muted),
+      "data-time-scale": String(timeScale),
       "data-device-profile": deviceProfile,
       "data-sfx-played": String(audioDebug.sfxPlayed),
       "data-inspection-pulses": String(inspectionFeedback.pulses),
@@ -1908,6 +1945,7 @@ export function App({
       mode,
       muted,
       paused,
+      timeScale,
       snapshot.bossPhase,
       snapshot.classId,
       snapshot.enemies,
@@ -1992,6 +2030,8 @@ export function App({
             panelOpen={panelOpen}
             paused={paused}
             muted={muted}
+            timeScale={timeScale}
+            onCycleSpeed={cycleSpeed}
             onTogglePanel={() => setPanelOpen((open) => !open)}
             onTogglePause={togglePause}
             onToggleMute={() => setMuted((value) => !value)}
