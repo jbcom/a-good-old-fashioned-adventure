@@ -165,4 +165,21 @@ describe("vitest browser configuration", () => {
     expect(browserProject?.test?.fileParallelism).toBe(false);
     expect(browserProject?.test?.browser?.fileParallelism).toBe(false);
   });
+
+  it("passes a values array to every native SQLite query/run (S22.1 on-device)", () => {
+    // The native CapacitorSQLite plugin REQUIRES a `values` array on every
+    // query/run, even parameterless ones ("Query: Must provide an Array of
+    // Strings") — the browser sql.js shim is lenient, so a missing values only
+    // fails ON-DEVICE (it broke Continue/load-save on the Android emulator). The
+    // browser suite can't catch it; this source-level gate does.
+    const src = readFileSync(resolve(process.cwd(), "src/persistence/saveRepository.ts"), "utf8");
+    // each CapacitorSQLite.query({...}) / .run({...}) block must contain values:
+    const callBlocks = src.match(/CapacitorSQLite\.(query|run)\(\{[\s\S]*?\}\)/g) ?? [];
+    expect(callBlocks.length, "found query/run calls").toBeGreaterThan(0);
+    for (const block of callBlocks) {
+      expect(block, `a CapacitorSQLite query/run is missing values:\n${block}`).toContain(
+        "values:",
+      );
+    }
+  });
 });

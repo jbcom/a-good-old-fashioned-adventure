@@ -117,6 +117,10 @@ export class CapacitorSaveRepository implements SaveRepository {
       database: SAVE_DB_NAME,
       statement:
         "SELECT id, class_id, map_id, player_x, player_y, level, hp, max_hp, quest_summary, snapshot_json, updated_at FROM save_slots ORDER BY updated_at DESC LIMIT 1",
+      // the native CapacitorSQLite plugin REQUIRES a values array even for a
+      // parameterless query ("Query: Must provide an Array of Strings") — the
+      // browser sql.js shim is lenient, so this only fails on-device (S22.1)
+      values: [],
     });
     return queryRows(result).map(toSummary)[0] ?? null;
   }
