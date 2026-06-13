@@ -140,11 +140,20 @@ First curation shortlist (allow-list candidates):
   texture uplift candidate.
   `public/assets/tilemaps/roguelike.png` — "The Roguelike" v1.16.1 by
   Backterria (credit baked into the sheet corners) — a full organized 16x16
-  roguelike mega-sheet with labeled category columns (terrain, fortifications,
-  creatures, items, weapons, armor, tools, props): hundreds of cells; prime
-  source for SA.3 region props, pickups/items, and prop breadth. Curation
-  step must slice it into named regions (a slicer manifest mapping cell
-  coords → asset ids) so individual cells become addressable content.
+  roguelike mega-sheet. Structure read at zoom (2026-06-12): **row
+  categories × theme columns.** A ~62px label gutter names the category
+  rows — TREES, GRASS, PLANTS, BUSHES, ROCKS, GROUND, ROADS, RAILS,
+  LIQUIDS, MOUNTAINS, FARMS, BUILDINGS, CITIES, WALLS, DOORS, PROPS,
+  furniture/banners/signs (unlabeled), ANIMALS, MONSTERS, HEROES, WEAPONS,
+  APPAREL, ITEMS, RESOURCES, TOOLS, FOOD, UI, SPELLS — and eleven theme
+  column groups run across: Fantasy, Ancient Greece, Space,
+  Post-Apocalypse, PreHistoric, World Wars, Pirates, Ancient Egypt, Japan,
+  CyberPunk, SteamPunk. For Errant Storybook the Fantasy column group is
+  the primary slice source (dungeon + approach props, items, food), with
+  Ancient Greece/Egypt ruins fragments as desert candidates. The slicer
+  manifest maps named cells → tile:/prop: ids; cells are PNG crops, so
+  tiles/props grow the same second raster source the sprites did
+  (a sheetRect on the def → atlas crops from the preloaded image).
 
 ### SA.0(c) research pass — audio mapping (S20.3)
 
