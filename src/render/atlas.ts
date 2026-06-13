@@ -195,3 +195,27 @@ export function tileCanvas(tileId: string): HTMLCanvasElement {
     return rasterizeDrawOps(tile.layers as DrawOp[], resolvePalette("palette:base"));
   });
 }
+
+/**
+ * Tile face at a specific (col,row) on the ground plane. For a `field` ground
+ * tile (a large dithered fill from The Ground pack) this samples a different
+ * 16px cell from the field block per board position — wrapping over the
+ * field's cols×rows — so the map reproduces the pack's seamless ground texture
+ * instead of tiling one cell into visible square seams. Non-field tiles ignore
+ * the position and return their single cached face.
+ */
+export function tileFieldCanvas(tileId: string, col: number, row: number): HTMLCanvasElement {
+  const tile = getTile(tileId);
+  const field = tile.sheet?.field;
+  if (!tile.sheet || !field) return tileCanvas(tileId);
+  const fx = ((col % field.cols) + field.cols) % field.cols;
+  const fy = ((row % field.rows) + field.rows) % field.rows;
+  const rect = {
+    image: tile.sheet.image,
+    x: tile.sheet.x + fx * tile.sheet.w,
+    y: tile.sheet.y + fy * tile.sheet.h,
+    w: tile.sheet.w,
+    h: tile.sheet.h,
+  };
+  return croppedSheetCanvas(tileId, `${tileId}|field|${fx}x${fy}`, rect);
+}

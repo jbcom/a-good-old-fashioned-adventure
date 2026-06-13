@@ -45,7 +45,7 @@ import {
   propCanvas,
   sheetFrameCanvas,
   spriteCanvas,
-  tileCanvas,
+  tileFieldCanvas,
 } from "./atlas";
 import { createDioramaMaterial, setDioramaTexture } from "./materials";
 import { channelsOf, fadeOut, playMotion, releaseMotion, restartMotion } from "./motion";
@@ -78,7 +78,9 @@ function composeGround(world: World): HTMLCanvasElement {
   ctx.imageSmoothingEnabled = false;
   for (let row = 0; row < runtime.rows; row++) {
     for (let col = 0; col < runtime.cols; col++) {
-      ctx.drawImage(tileCanvas(runtime.grid[row][col]), col * TILE, row * TILE);
+      // field ground tiles sample a per-(col,row) cell so a dithered fill
+      // reproduces the pack's seamless ground rather than a seamed repeat
+      ctx.drawImage(tileFieldCanvas(runtime.grid[row][col], col, row), col * TILE, row * TILE);
     }
   }
   return canvas;

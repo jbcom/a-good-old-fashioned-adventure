@@ -24,7 +24,17 @@
         "x": { "type": "integer", "minimum": 0 },
         "y": { "type": "integer", "minimum": 0 },
         "w": { "type": "integer", "minimum": 1 },
-        "h": { "type": "integer", "minimum": 1 }
+        "h": { "type": "integer", "minimum": 1 },
+        "field": {
+          "type": "object",
+          "description": "A multi-cell GROUND FIELD: the (x,y) rect is the top-left of a cols×rows block of 16px cells in the PNG, and the renderer samples a per-(col,row) cell from that block (wrapping) so the map reproduces the pack's large seamless dithered ground instead of tiling one 16px cell into visible seams. For dithered-fill terrain (The Ground pack).",
+          "required": ["cols", "rows"],
+          "properties": {
+            "cols": { "type": "integer", "minimum": 1 },
+            "rows": { "type": "integer", "minimum": 1 }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     },

@@ -27,8 +27,18 @@ export interface TileDef {
   layers?: DrawOp[];
   rows?: string[];
   /** purchased-sheet crop (slicer manifest) — same second raster source
-   * props and sprites carry; palette swaps never apply */
-  sheet?: { image: string; x: number; y: number; w: number; h: number };
+   * props and sprites carry; palette swaps never apply. With `field`, the
+   * (x,y) is the top-left of a cols×rows block of 16px cells and the ground
+   * compositor samples a per-(col,row) cell so a dithered-fill ground tiles
+   * as the pack's large seamless field instead of one repeated cell. */
+  sheet?: {
+    image: string;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    field?: { cols: number; rows: number };
+  };
   koota: { traits: string[] };
 }
 
