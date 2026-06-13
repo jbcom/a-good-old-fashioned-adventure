@@ -691,10 +691,11 @@ function CurrencyToken({ label, value, testId }: { label: string; value: number;
 function UnitChips({ snapshot }: { snapshot: UiSnapshot }) {
   const classes = Object.keys(snapshot.lineByClass).sort();
   return (
-    <div className="unit-chips" data-testid="unit-chips">
+    <div className="unit-chips" data-testid="unit-chips" role="list" aria-label="Fielded units">
       {classes.map((classId) => {
         const slot = snapshot.lineByClass[classId];
         const pct = slot.maxHp > 0 ? Math.round((slot.hp / slot.maxHp) * 100) : 0;
+        const chipLabel = `${classId} ×${slot.count} — ${pct}% hp`;
         return (
           <span
             key={classId}
@@ -703,7 +704,9 @@ function UnitChips({ snapshot }: { snapshot: UiSnapshot }) {
             data-class={classId}
             data-count={slot.count}
             data-hp-percent={pct}
-            title={`${classId} ×${slot.count} — ${pct}% hp`}
+            role="listitem"
+            aria-label={chipLabel}
+            title={chipLabel}
           >
             <span className="unit-chip-glyph" aria-hidden="true">
               {classId.slice(0, 1).toUpperCase()}
@@ -2074,6 +2077,8 @@ export function App({
       "data-boss-phase": snapshot.bossPhase,
       "data-units": String(snapshot.units),
       "data-front-y": snapshot.frontY.toFixed(1),
+      "data-front-x": snapshot.frontX.toFixed(1),
+      "data-wave": String(snapshot.wave),
       "data-withered": String(snapshot.withered),
       "data-a-presses": String(inputStats.current.aPresses),
       "data-attack-calls": String(inputStats.current.attackCalls),
@@ -2127,6 +2132,8 @@ export function App({
       snapshot.projectiles,
       snapshot.units,
       snapshot.frontY,
+      snapshot.frontX,
+      snapshot.wave,
       snapshot.withered,
       selectedUpgradeIndex,
     ],

@@ -342,14 +342,6 @@
   background: rgba(61, 42, 27, 0.24);
 }
 
-.hp-meter::-webkit-meter-optimum-value {
-  background: linear-gradient(90deg, var(--danger), var(--rose));
-}
-
-.xp-meter::-webkit-meter-optimum-value {
-  background: linear-gradient(90deg, var(--signal), #6f8a50);
-}
-
 /* Rail HUD: the LINE vitals aggregate (the whole fielded line's hp). */
 .line-vitals {
   display: flex;
