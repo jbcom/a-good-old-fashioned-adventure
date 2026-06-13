@@ -8,6 +8,7 @@
  * Howls are created lazily per path and cached for the engine's lifetime.
  */
 import { Howl, Howler } from "howler";
+import { assetUrl } from "../lib/assets";
 import { audio } from "../lib/config";
 
 /** Audio engine debug snapshot: label, ready state, mute status, theme, sfx count. */
@@ -29,7 +30,9 @@ export interface GameAudioEngine {
   dispose(): void;
 }
 
-const asset = (path: string) => `/assets/${path}`;
+// resolve under the deployment base (see src/lib/assets.ts) — an absolute
+// /assets/ path 404s on GitHub Pages' project subpath
+const asset = (path: string) => assetUrl(path);
 
 /** Build the howler-backed game audio engine (music, sfx, fades, mute). */
 export function createGameAudioEngine(): GameAudioEngine {

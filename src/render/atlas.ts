@@ -5,6 +5,7 @@
  * sprites): palette-keyed .pix rows, and purchased PNG sheets whose images
  * preload once at boot so every bake stays synchronous.
  */
+import { assetUrl } from "../lib/assets";
 import { getProp, getSprite, getTile, props, sprites, tiles } from "../lib/content/registry";
 import { isSheetSprite, resolveSheetFrame, type SheetFrame } from "../lib/content/sheetSprite";
 import type { SheetSpriteDef } from "../lib/content/types";
@@ -45,7 +46,10 @@ export function preloadSheetImages(): Promise<void> {
     await Promise.all(
       [...paths].map(async (path) => {
         const image = new Image();
-        image.src = `/assets/${path}`;
+        // resolve under the deployment base (GitHub Pages serves from a project
+        // subpath) — an absolute /assets/ 404s there, falling every sheet sprite
+        // back to procedural rendering
+        image.src = assetUrl(path);
         await image.decode();
         sheetImages.set(path, image);
       }),
