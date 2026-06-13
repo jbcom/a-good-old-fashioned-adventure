@@ -313,7 +313,9 @@ export function bankCoins(world: World, amount: number): void {
   const progress = currentProgress(world);
   setProgress(world, {
     ...progress,
-    coins: progress.coins + amount,
+    // clamp on WRITE too, not only on load — so a long farm can't persist a
+    // balance the deserializer would reject (security review 2026-06-13)
+    coins: Math.min(progress.coins + amount, WALLET_CAP),
     currentRunCoinsEarned: progress.currentRunCoinsEarned + amount,
   });
   bankSfx(world, "coin");
@@ -325,7 +327,7 @@ export function bankGems(world: World, amount: number): void {
   const progress = currentProgress(world);
   setProgress(world, {
     ...progress,
-    gems: progress.gems + amount,
+    gems: Math.min(progress.gems + amount, WALLET_CAP),
     currentRunGemsEarned: progress.currentRunGemsEarned + amount,
   });
   bankSfx(world, "pickup");
@@ -358,7 +360,8 @@ function addRoses(world: World, amount: number): IncrementalProgressState {
   if (amount <= 0) return progress;
   const next = {
     ...progress,
-    roses: progress.roses + amount,
+    // clamp on write to hold WALLET_CAP on both read and write paths
+    roses: Math.min(progress.roses + amount, WALLET_CAP),
     currentRunRosesEarned: progress.currentRunRosesEarned + amount,
   };
   setProgress(world, next);

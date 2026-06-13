@@ -3,6 +3,9 @@ import { incremental, player as playerConfig } from "../../src/lib/config";
 import { pushEvent } from "../../src/sim/events";
 import { createGameWorld, instantiateMap } from "../../src/sim/factories";
 import {
+  bankCoins,
+  bankGems,
+  bankRoses,
   grantRunReward,
   purchaseUpgradeNode,
   recordDeathPayout,
@@ -111,6 +114,20 @@ describe("incremental progression state", () => {
     );
     expect(progress.coins).toBe(1_000_000);
     expect(progress.roses).toBe(1_000_000);
+  });
+
+  it("holds the wallet cap on the WRITE path too (security review 2026-06-13)", () => {
+    // banking can't push a balance past the cap the deserializer enforces, so a
+    // long farm never persists a value the load-path would reject
+    const world = createGameWorld(31);
+    instantiateMap(world, "map:village", { classId: "knight" });
+    bankCoins(world, 5_000_000);
+    bankGems(world, 5_000_000);
+    bankRoses(world, 5_000_000);
+    const progress = world.get(IncrementalProgress);
+    expect(progress?.coins).toBe(1_000_000);
+    expect(progress?.gems).toBe(1_000_000);
+    expect(progress?.roses).toBe(1_000_000);
   });
 
   it("buys only connected and affordable upgrade nodes, unlocking classes and route packs", () => {

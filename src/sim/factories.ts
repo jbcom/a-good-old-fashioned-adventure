@@ -359,13 +359,8 @@ export function instantiateMap(world: World, mapId: string, opts: InstantiateOpt
       if (archetype?.boss && archetype.family === "dragon") {
         const progress = world.get(IncrementalProgress) ?? initialIncrementalProgress();
         const kin = kinForMap(progress, mapId);
-        if (kin) {
-          enemyEntity.add(KinIdentity({ relation: kin.relation, mapId }));
-          enemyEntity.set(SpriteRef, { spriteId: kin.spriteId, paletteId: archetype.palette });
-          // the dragon track's combat buffs (multi-attack volley, fireball AoE,
-          // richer reward, tankier body) scale with the purchased dragon-might rank
-          applyDragonBuff(enemyEntity, dragonBuffFor(progress, mapId));
-        }
+        if (kin)
+          dressKinBoss(enemyEntity, kin, archetype.palette, mapId, dragonBuffFor(progress, mapId));
       }
       const family = enemies.archetypes[spawn.enemy]?.family;
       if (family) {
@@ -428,10 +423,27 @@ function injectLairKin(world: World, mapId: string): void {
   const goal =
     axis === "east" ? { x: width - TILE * 2, y: height / 2 } : { x: width / 2, y: TILE * 2 };
   const boss = spawnEnemy(world, "dragon-guardian", goal.x, goal.y);
-  boss.add(KinIdentity({ relation: kin.relation, mapId: parentMap }));
   const dragonArchetype = enemies.archetypes["dragon-guardian"];
-  boss.set(SpriteRef, { spriteId: kin.spriteId, paletteId: dragonArchetype.palette });
-  applyDragonBuff(boss, dragonBuffFor(progress, parentMap));
+  dressKinBoss(boss, kin, dragonArchetype.palette, parentMap, dragonBuffFor(progress, parentMap));
+}
+
+/**
+ * Dress a freshly-spawned dragon boss as the map's KIN holder identically
+ * wherever it spawns (open-map holder OR lair-relocated): tag it with the
+ * kin relation, swap in the baked recolored kin sheet, and apply the
+ * dragon-track combat buff. `tagMapId` is the map whose kin this is (the
+ * parent map for a lair relocation).
+ */
+function dressKinBoss(
+  boss: Entity,
+  kin: { relation: string; spriteId: string },
+  paletteId: string,
+  tagMapId: string,
+  buff: { extraBolts: number; aoeRadius: number; rewardMult: number },
+): void {
+  boss.add(KinIdentity({ relation: kin.relation, mapId: tagMapId }));
+  boss.set(SpriteRef, { spriteId: kin.spriteId, paletteId });
+  applyDragonBuff(boss, buff);
 }
 
 /**
