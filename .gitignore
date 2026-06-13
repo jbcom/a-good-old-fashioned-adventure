@@ -16,7 +16,8 @@ tsconfig.tsbuildinfo
 coverage/
 *.log
 
-# ── test scratch output (committed screenshots live in docs/evidence/)
+# ── test scratch output and regenerated visual evidence (local-only)
+docs/evidence/
 tests/browser/*.png
 tests/browser/__screenshots__/
 .vitest-attachments/
