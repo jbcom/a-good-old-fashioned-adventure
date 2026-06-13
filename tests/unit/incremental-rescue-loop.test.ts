@@ -221,8 +221,12 @@ describe("incremental rescue loop contract", () => {
     for (const classId of incremental.classes.unlockable) {
       expect(classes.classes, classId).toHaveProperty(classId);
       expect(classes.roster, `${classId} should require upgrade unlock`).not.toContain(classId);
-      const unlockNode = incremental.upgradeGraph.nodes.find((node) => node.classId === classId);
-      expect(unlockNode?.category, `${classId} needs class node`).toBe("class");
+      // the class-GRANTING node (category:class), not just any node tagged with
+      // the classId — order-independent now nodes glob from per-file dir
+      const grantingNode = incremental.upgradeGraph.nodes.find(
+        (node) => node.classId === classId && node.category === "class",
+      );
+      expect(grantingNode, `${classId} needs exactly one class-granting node`).toBeDefined();
     }
   });
 

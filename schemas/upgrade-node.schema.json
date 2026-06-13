@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jbcom/a-good-old-fashioned-adventure/schemas/upgrade-node.schema.json",
+  "title": "Upgrade DAG node (one file per node, globbed into incremental.upgradeGraph.nodes)",
+  "type": "object",
+  "required": ["id", "label", "category", "cost", "prerequisites", "unlocks", "track"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "type": "string", "pattern": "^upgrade:[a-z0-9-]+$" },
+    "label": { "type": "string" },
+    "category": {
+      "enum": ["relic", "class", "ability", "enemy", "map", "route", "economy"]
+    },
+    "cost": {
+      "type": "object",
+      "properties": {
+        "coins": { "type": "integer", "minimum": 0 },
+        "roses": { "type": "integer", "minimum": 0 }
+      },
+      "additionalProperties": false
+    },
+    "ranks": { "type": "integer", "minimum": 1 },
+    "rankCostGrowth": { "type": "number", "exclusiveMinimum": 1 },
+    "prerequisites": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^upgrade:[a-z0-9-]+$" }
+    },
+    "unlocks": {
+      "type": "array",
+      "items": { "type": "string", "pattern": "^upgrade:[a-z0-9-]+$" }
+    },
+    "track": { "type": "string" },
+    "classId": { "type": "string" },
+    "enemyFamily": { "type": "string" },
+    "spawnBounty": { "type": "number" },
+    "routePack": { "type": "string" },
+    "effect": {
+      "type": "object",
+      "properties": {
+        "maxHp": { "type": "number" },
+        "unitCount": { "type": "number" },
+        "checkpointBonus": { "type": "number" }
+      },
+      "additionalProperties": false
+    },
+    "note": { "type": "string" }
+  },
+  "additionalProperties": false
+}

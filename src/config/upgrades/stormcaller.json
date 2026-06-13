@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:stormcaller",
+  "label": "Stormcaller",
+  "category": "class",
+  "track": "characters",
+  "cost": {
+    "roses": 9
+  },
+  "prerequisites": ["upgrade:barbarian-storm", "upgrade:sorcerer-emberweave"],
+  "classId": "stormcaller",
+  "unlocks": ["upgrade:eye-of-the-storm"],
+  "note": "Wizard and storm fused: the whirl looses bolts at everything in range."
+}

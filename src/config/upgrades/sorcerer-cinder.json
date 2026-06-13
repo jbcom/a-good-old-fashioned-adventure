@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:sorcerer-cinder",
+  "label": "Sorcerer Cinder",
+  "category": "class",
+  "cost": {
+    "roses": 3
+  },
+  "prerequisites": ["upgrade:dragon-wake"],
+  "classId": "sorcerer",
+  "unlocks": [
+    "upgrade:sorcerer-emberweave",
+    "upgrade:castle-candle-loop",
+    "upgrade:warlock-pact",
+    "upgrade:shaman"
+  ],
+  "track": "characters"
+}

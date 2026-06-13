@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:ranger-craft",
+  "label": "Ranger Fieldcraft",
+  "category": "ability",
+  "cost": {
+    "coins": 20
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.6,
+  "prerequisites": ["upgrade:ranger-trail"],
+  "classId": "ranger",
+  "unlocks": [],
+  "note": "Coin-ranked ranger track deepening the rose-unlocked class.",
+  "track": "characters"
+}

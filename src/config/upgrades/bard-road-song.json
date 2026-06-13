@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:bard-road-song",
+  "label": "Bard's Road Song",
+  "category": "class",
+  "cost": {
+    "roses": 3
+  },
+  "prerequisites": ["upgrade:thornwood-mastered"],
+  "classId": "bard",
+  "unlocks": ["upgrade:bard-meter", "upgrade:princess-boon", "upgrade:priest-vows"],
+  "track": "characters"
+}

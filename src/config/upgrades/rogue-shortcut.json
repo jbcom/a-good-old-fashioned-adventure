@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:rogue-shortcut",
+  "label": "Rogue Shortcut",
+  "category": "class",
+  "cost": {
+    "roses": 2
+  },
+  "prerequisites": ["upgrade:oldwood-bend"],
+  "classId": "rogue",
+  "unlocks": ["upgrade:rogue-knives", "upgrade:sunken-shortcut"],
+  "track": "characters"
+}

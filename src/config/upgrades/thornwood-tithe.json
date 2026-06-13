@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:thornwood-tithe",
+  "label": "Thornwood Tithe",
+  "category": "economy",
+  "cost": {
+    "coins": 18
+  },
+  "ranks": 4,
+  "rankCostGrowth": 1.7,
+  "prerequisites": ["upgrade:thornwood-mastered"],
+  "effect": {
+    "checkpointBonus": 2
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Coin sink for the deep-forest unlock — no rose node may dead-end into another rose (grind-trap rule, user 2026-06-12). Each rank richens this map's checkpoint yield."
+}

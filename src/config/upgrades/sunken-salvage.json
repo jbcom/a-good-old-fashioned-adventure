@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:sunken-salvage",
+  "label": "Sunken Salvage",
+  "category": "economy",
+  "cost": {
+    "coins": 26
+  },
+  "ranks": 4,
+  "rankCostGrowth": 1.7,
+  "prerequisites": ["upgrade:sunken-shortcut"],
+  "effect": {
+    "checkpointBonus": 3
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Coin sink for the sunken-road unlock — closes the second rose wall. Each rank richens this map's salvage yield."
+}

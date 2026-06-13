@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:castle-approach-siege",
+  "label": "Siege Approach",
+  "category": "map",
+  "cost": {
+    "roses": 4
+  },
+  "prerequisites": ["upgrade:sunken-shortcut"],
+  "routePack": "castle-approach",
+  "unlocks": [],
+  "track": "roads"
+}

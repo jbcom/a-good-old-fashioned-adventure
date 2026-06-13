@@ -99,7 +99,7 @@ export type IncrementalTrackId = "vows" | "characters" | "encounters" | "roads" 
 export interface IncrementalUpgradeNode {
   id: string;
   label: string;
-  category: "route" | "enemy" | "class" | "ability" | "map" | "relic";
+  category: "route" | "enemy" | "class" | "ability" | "map" | "relic" | "economy";
   track: IncrementalTrackId;
   cost: Partial<Record<IncrementalCurrencyId, number>>;
   prerequisites: string[];
@@ -224,7 +224,29 @@ export const classes = classesJson as unknown as {
 };
 export const combat = combatJson;
 export const progression = progressionJson;
-export const incremental = incrementalJson as unknown as IncrementalConfig;
+// Upgrade nodes live one-per-file under src/config/upgrades/ (split from the
+// incremental.json monolith) and are globbed + merged back into the graph at
+// build time — the merged shape is identical to the old inline `nodes` array,
+// so no consumer changes. Ordering is stable (sorted by id) for determinism.
+const upgradeNodeModules = import.meta.glob<IncrementalUpgradeNode>("/src/config/upgrades/*.json", {
+  eager: true,
+  import: "default",
+});
+const upgradeNodes = Object.entries(upgradeNodeModules)
+  .sort(([a], [b]) => a.localeCompare(b))
+  .map(([, node]) => {
+    // strip the per-file $schema pointer; it is editor tooling, not graph data
+    const { $schema: _schema, ...rest } = node as IncrementalUpgradeNode & { $schema?: string };
+    return rest as IncrementalUpgradeNode;
+  });
+
+export const incremental = {
+  ...(incrementalJson as unknown as IncrementalConfig),
+  upgradeGraph: {
+    ...(incrementalJson as unknown as IncrementalConfig).upgradeGraph,
+    nodes: upgradeNodes,
+  },
+} as IncrementalConfig;
 export const drops = dropsJson;
 export const enemies = enemiesJson as unknown as {
   aiDefaults: {

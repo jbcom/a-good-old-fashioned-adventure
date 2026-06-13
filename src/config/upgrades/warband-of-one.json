@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:warband-of-one",
+  "label": "Coven Grows",
+  "category": "ability",
+  "track": "characters",
+  "cost": {
+    "coins": 32
+  },
+  "ranks": 2,
+  "rankCostGrowth": 1.8,
+  "prerequisites": ["upgrade:warlock-pact"],
+  "classId": "warlock",
+  "unlocks": [],
+  "effect": {
+    "unitCount": 1
+  },
+  "note": "The pact spreads: one more warlock per rank."
+}

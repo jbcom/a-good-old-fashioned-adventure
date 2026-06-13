@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:oldwood-bend",
+  "label": "Oldwood Bend",
+  "category": "route",
+  "cost": {
+    "roses": 1
+  },
+  "prerequisites": ["upgrade:first-vow"],
+  "routePack": "oldwood",
+  "unlocks": ["upgrade:road-provisions", "upgrade:thornwood-mastered", "upgrade:rogue-shortcut"],
+  "track": "roads"
+}

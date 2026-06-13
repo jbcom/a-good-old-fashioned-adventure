@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:sorcerer-emberweave",
+  "label": "Sorcerer Emberweave",
+  "category": "ability",
+  "cost": {
+    "coins": 40
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.6,
+  "prerequisites": ["upgrade:sorcerer-cinder"],
+  "classId": "sorcerer",
+  "unlocks": ["upgrade:stormcaller"],
+  "note": "Coin-ranked sorcerer track deepening the rose-unlocked class.",
+  "track": "characters"
+}

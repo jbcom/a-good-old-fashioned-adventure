@@ -241,6 +241,20 @@ grow their future rose income. A node with one coin path and one rose path
 is therefore correct by design; the gate permits it (it requires only a
 coin child, not all-coin children).
 
+**Dragon upgrades cost ROSES (the deliberate inversion).** The general
+rule is "new things cost roses, upgrades cost coins." The dragon sub-tree
+INVERTS the upgrade half on purpose: every dragon upgrade makes that map's
+dragon stronger, and a stronger dragon — like a stronger antagonist —
+pays MORE roses on the rescue. So a dragon upgrade is a rose investment
+that returns rose dividends, and pricing it in roses is the logically
+consistent choice (you spend roses to earn more roses, restrained so no
+single upgrade breaks balance — the increment is small and the reward
+scales with it). This is the one place upgrades-within-a-node are
+rose-priced; it does not create a wall because the SIBLING map-economy
+sub-path is always coin-priced and farmable. The map node thus offers
+both: coins to grow your line and the map's yield, roses to grow the
+dragon and your future rose income.
+
 **Rose income is not all-or-nothing.** Because roses are rare, the economy
 must have more sources than full rescues alone: a partial/failed run can
 still pay SOME roses (advancing far enough up the rail, or unlocking a

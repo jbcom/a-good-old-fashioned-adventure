@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-wake",
+  "label": "Dragon Wake",
+  "category": "enemy",
+  "cost": {
+    "roses": 2
+  },
+  "prerequisites": ["upgrade:first-vow"],
+  "enemyFamily": "dragon",
+  "unlocks": ["upgrade:orc-warband", "upgrade:sorcerer-cinder"],
+  "track": "encounters"
+}

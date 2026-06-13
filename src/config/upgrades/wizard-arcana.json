@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:wizard-arcana",
+  "label": "Wizard Arcana",
+  "category": "ability",
+  "cost": {
+    "coins": 22
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.6,
+  "prerequisites": ["upgrade:wizard-focus"],
+  "classId": "wizard",
+  "effect": {
+    "maxHp": 8
+  },
+  "unlocks": [],
+  "track": "characters",
+  "note": "The wizard's own coin sub-track — only reachable after the wizard itself (DAG integrity: no class upgrades before the class node)."
+}

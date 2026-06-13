@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:castle-candle-loop",
+  "label": "Candlelit Castle Loop",
+  "category": "route",
+  "cost": {
+    "roses": 5
+  },
+  "prerequisites": ["upgrade:sorcerer-cinder"],
+  "routePack": "castle-interior",
+  "unlocks": [],
+  "track": "castle"
+}

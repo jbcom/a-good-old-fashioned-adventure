@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:bloodline",
+  "label": "Bloodline",
+  "category": "ability",
+  "track": "characters",
+  "cost": {
+    "coins": 34
+  },
+  "ranks": 2,
+  "rankCostGrowth": 1.8,
+  "prerequisites": ["upgrade:barbarian-storm"],
+  "classId": "barbarian",
+  "unlocks": [],
+  "effect": {
+    "unitCount": 1
+  },
+  "note": "Kin answer the storm: one more barbarian per rank."
+}

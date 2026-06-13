@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:thornwood-mastered",
+  "label": "Thornwood Mastered",
+  "category": "map",
+  "cost": {
+    "roses": 2
+  },
+  "prerequisites": ["upgrade:oldwood-bend"],
+  "routePack": "deep-forest",
+  "unlocks": ["upgrade:thornwood-tithe", "upgrade:bard-road-song"],
+  "track": "roads"
+}

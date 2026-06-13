@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:shaman",
+  "label": "Shaman",
+  "category": "class",
+  "track": "characters",
+  "cost": {
+    "roses": 8
+  },
+  "prerequisites": ["upgrade:priest-vows", "upgrade:sorcerer-cinder"],
+  "classId": "shaman",
+  "unlocks": ["upgrade:spirit-roots"],
+  "note": "Priest and cinder fused: bursts that scorch enemies and mend allies standing inside."
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:ranger-trail",
+  "label": "Ranger Trail",
+  "category": "class",
+  "cost": {
+    "roses": 1
+  },
+  "prerequisites": ["upgrade:first-vow"],
+  "classId": "ranger",
+  "unlocks": ["upgrade:ranger-craft", "upgrade:ranger-leap-rose", "upgrade:wizard-focus"],
+  "track": "characters"
+}

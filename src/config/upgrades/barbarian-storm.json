@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:barbarian-storm",
+  "label": "Barbarian's Storm",
+  "category": "class",
+  "track": "characters",
+  "cost": {
+    "roses": 4
+  },
+  "prerequisites": ["upgrade:knight-vigor"],
+  "classId": "barbarian",
+  "unlocks": ["upgrade:stormcaller", "upgrade:bloodline"],
+  "note": "The blade storm strikes everything in its whirl — the knight keeps the shield."
+}
