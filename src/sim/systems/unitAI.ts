@@ -11,7 +11,7 @@ import type { Entity, World } from "koota";
 import { SeekBehavior, Vector3, Vehicle } from "yuka";
 import { type ClassTemperament, classes, combat, enemies } from "../../lib/config";
 import { chooseGoal, type FieldView } from "../ai";
-import { spawnProjectile } from "../factories";
+import { spawnFx, spawnProjectile } from "../factories";
 import { getRail, nextRailPoint } from "../rail";
 import {
   CombatTimers,
@@ -34,6 +34,8 @@ interface UnitBrain {
   vehicle: Vehicle;
   seek: SeekBehavior;
   pulseLeft: number;
+  /** throttle for streaming feel-fx (charge dust) so it pulses, not spams */
+  fxLeft: number;
 }
 
 const brains = new WeakMap<World, Map<Entity, UnitBrain>>();
@@ -51,7 +53,7 @@ function brainFor(world: World, unit: Entity, x: number, y: number): UnitBrain {
     const seek = new SeekBehavior(new Vector3());
     seek.active = false;
     vehicle.steering.add(seek);
-    brain = { vehicle, seek, pulseLeft: 0 };
+    brain = { vehicle, seek, pulseLeft: 0, fxLeft: 0 };
     perWorld.set(unit, brain);
   }
   return brain;
@@ -132,6 +134,18 @@ function unitStrike(
   if (temperament.withersOnHit) applyWither(world, target.enemy);
   const blast = temperament.blastRadius ?? 0;
   if (blast > 0) {
+    // S20.2 combat feel: the blade-storm whirl sweeps a wide silver arc around
+    // the unit as it splashes the cluster
+    if (temperament.verb === "blade-storm")
+      spawnFx(world, {
+        kind: "arc",
+        spriteId: "sprite:fx-blade-arc",
+        paletteId: "palette:base",
+        dir,
+        left: combat.feedback.bladeArcDuration,
+        x: transform.x,
+        y: transform.y,
+      });
     for (const enemy of [...world.query(IsEnemy, Health, Transform)]) {
       if (enemy === target.enemy) continue;
       const t = enemy.get(Transform);
@@ -145,9 +159,24 @@ function unitStrike(
 }
 
 function applyWither(world: World, enemy: Entity): void {
-  void world;
+  // S20.2 combat feel: the violet haze pulses when the field FRESHLY catches an
+  // enemy (the rising edge), not every frame — a steady refresh wouldn't re-tint
+  const fresh = !enemy.has(Withered) || (enemy.get(Withered)?.left ?? 0) <= 0;
   if (enemy.has(Withered)) enemy.set(Withered, { left: combat.wither.duration });
   else enemy.add(Withered({ left: combat.wither.duration }));
+  if (fresh) {
+    const t = enemy.get(Transform);
+    if (t)
+      spawnFx(world, {
+        kind: "wither",
+        spriteId: "sprite:fx-wither-tint",
+        paletteId: "palette:base",
+        dir: 1,
+        left: combat.feedback.witherTintDuration,
+        x: t.x,
+        y: t.y,
+      });
+  }
 }
 
 function buildFieldView(world: World, self: { x: number; y: number }): FieldView {
@@ -238,6 +267,20 @@ export function unitAIStep(world: World, dt: number): void {
             brain.seek.active = true;
             brain.seek.target.set(target.x, target.y, 0);
             speedScale = temperament.chargeSpeedMultiplier ?? 1;
+            // S20.2 combat feel: dust streaks off a charging unit on a cadence
+            brain.fxLeft -= dt;
+            if (brain.fxLeft <= 0) {
+              brain.fxLeft = 1 / combat.feedback.chargeDustHz;
+              spawnFx(world, {
+                kind: "dust",
+                spriteId: "sprite:fx-charge-dust",
+                paletteId: "palette:base",
+                dir: transform.x <= target.x ? 1 : -1,
+                left: combat.feedback.chargeDustDuration,
+                x: transform.x,
+                y: transform.y,
+              });
+            }
           }
           break;
         }
@@ -346,11 +389,23 @@ export function unitAIStep(world: World, dt: number): void {
           }
         }
         const health = patient?.get(Health);
+        const patientT = patient?.get(Transform);
         if (patient && health && worst < 1) {
           patient.set(Health, {
             hp: Math.min(health.maxHp, health.hp + (temperament.healPerPulse ?? 0)),
             maxHp: health.maxHp,
           });
+          // S20.2 combat feel: a golden bloom blooms over the mended ally
+          if (patientT)
+            spawnFx(world, {
+              kind: "heal",
+              spriteId: "sprite:fx-heal-glow",
+              paletteId: "palette:base",
+              dir: 1,
+              left: combat.feedback.healGlowDuration,
+              x: patientT.x,
+              y: patientT.y,
+            });
         }
       }
     }

@@ -51,7 +51,14 @@
     "projectileTrailHz": 18,
     "projectileTrailDuration": 0.18,
     "roarThrobScale": 0.3,
-    "guardCrouchScale": 0.9
+    "guardCrouchScale": 0.9,
+    "deployPuffDuration": 0.4,
+    "chargeDustDuration": 0.22,
+    "chargeDustHz": 8,
+    "bladeArcDuration": 0.28,
+    "healGlowDuration": 0.5,
+    "witherTintDuration": 0.45,
+    "witherTintHz": 3
   },
   "projectileSprites": {
     "arrow": "sprite:proj-arrow",

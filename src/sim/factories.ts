@@ -4,7 +4,7 @@
  * instantiateMap is the only way a map comes to life.
  */
 import { createWorld, type Entity, type World } from "koota";
-import { classes, enemies, incremental, player as playerConfig } from "../lib/config";
+import { classes, combat, enemies, incremental, player as playerConfig } from "../lib/config";
 import { flags, getCharacter, getMap, getProp } from "../lib/content/registry";
 import { collides } from "./collision";
 import {
@@ -163,7 +163,7 @@ export function spawnUnit(world: World, classId: string, x: number, y: number): 
   // DAG vigor ranks shape the class's units now that no pawn exists
   const hpBonus = upgradeMaxHpBonus(world.get(IncrementalProgress), classId);
   const hp = temperament.hp + hpBonus;
-  return world.spawn(
+  const unit = world.spawn(
     IsUnit({ classId }),
     Transform({ x, y }),
     Facing({ dir: 1 }),
@@ -175,6 +175,17 @@ export function spawnUnit(world: World, classId: string, x: number, y: number): 
     CombatTimers({ attack: 0, dash: 0, dashCooldown: 0, iframes: 0 }),
     SpriteRef({ spriteId: classDef.sprite, paletteId: classDef.palette }),
   );
+  // S20.2 combat feel: a dust puff kicks up where the unit lands on the rail
+  spawnFx(world, {
+    kind: "puff",
+    spriteId: "sprite:fx-deploy-puff",
+    paletteId: "palette:base",
+    dir: 1,
+    left: combat.feedback.deployPuffDuration,
+    x,
+    y,
+  });
+  return unit;
 }
 
 /**

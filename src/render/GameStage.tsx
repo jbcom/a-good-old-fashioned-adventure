@@ -314,13 +314,33 @@ class SceneSync {
         this.meshes.set(id, tracked);
       }
       const progress = 1 - fx.left / fx.total;
+      const fade = fx.left / fx.total;
       const material = tracked.mesh.material as ShaderMaterial;
       if (material.uniforms.uAlpha) {
-        const fade = fx.left / fx.total;
-        material.uniforms.uAlpha.value = fx.kind === "trail" ? fade * 0.6 : fade;
+        // each feel-fx has its own opacity envelope: trails ghost faint, the
+        // wither haze sits low and steady, the rest ease out as they finish
+        const alpha =
+          fx.kind === "trail"
+            ? fade * 0.6
+            : fx.kind === "wither"
+              ? Math.min(0.7, fade * 1.4)
+              : fx.kind === "heal" || fx.kind === "puff"
+                ? Math.sin(fade * Math.PI) // bloom in then out
+                : fade;
+        material.uniforms.uAlpha.value = alpha;
       }
-      const rise = fx.kind === "dissolve" ? progress * combat.feedback.dissolveFxRise : 0;
-      const height = fx.kind === "trail" ? 7 : 9;
+      // the deploy puff and the blade arc grow as they play; the others hold
+      const grow =
+        fx.kind === "puff" ? 1 + progress * 0.6 : fx.kind === "arc" ? 0.6 + progress * 0.8 : 1;
+      tracked.mesh.scale.x = (fx.dir >= 0 ? 1 : -1) * grow;
+      tracked.mesh.scale.y = grow;
+      const rise =
+        fx.kind === "dissolve"
+          ? progress * combat.feedback.dissolveFxRise
+          : fx.kind === "heal"
+            ? progress * 6 // the heal glow lifts off the mended ally
+            : 0;
+      const height = fx.kind === "trail" ? 7 : fx.kind === "wither" ? 4 : 9;
       tracked.mesh.position.set(t.x, height + rise, t.y);
       seen.add(id);
     }

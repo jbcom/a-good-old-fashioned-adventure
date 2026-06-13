@@ -29,7 +29,7 @@ export const SpriteRef = trait({ spriteId: "", paletteId: "" });
 
 /** Short-lived combat/motion feedback burst: swing arcs, death dissolves. */
 export interface FxBurstState {
-  kind: "swing" | "dissolve" | "trail";
+  kind: "swing" | "dissolve" | "trail" | "puff" | "dust" | "arc" | "heal" | "wither";
   spriteId: string;
   paletteId: string;
   dir: number;

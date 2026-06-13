@@ -25,13 +25,13 @@ describe("registries are fully populated", () => {
     expect(tiles.size).toBe(48);
     // 69 authored props + 8 mega-sheet slicer props (dungeon + approach)
     expect(props.size).toBe(82);
-    // 81 .pix sprites + 43 JSON sheet-sprites (src/content/sprites/*.json:
+    // 86 .pix sprites + 43 JSON sheet-sprites (src/content/sprites/*.json:
     // purchased animal/character/dragon-kin slices). S-DAG-ICONS retired 52
-    // generic-node .pix emblems (15 economy + 11 class + 13 enemy-unlock + 13
-    // ability) — those nodes now carry an iconRef crop from the roguelike sheet.
-    // The bespoke .pix that remain are identity emblems (dragon/lair/relic/
-    // route/named-boss/rose-major) the hybrid keeps hand-drawn.
-    expect(sprites.size).toBe(124);
+    // generic-node .pix emblems (now iconRef sheet crops); S20.2 added 5
+    // unit-feel FX sprites (deploy-puff, charge-dust, blade-arc, heal-glow,
+    // wither-tint). The bespoke emblems that remain are identity nodes
+    // (dragon/lair/relic/route/named-boss/rose-major).
+    expect(sprites.size).toBe(129);
     expect(animations.size).toBe(7);
     expect(maps.size).toBe(24);
     expect(quests.size).toBe(21);
