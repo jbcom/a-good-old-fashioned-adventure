@@ -1,6 +1,7 @@
 import { Capacitor } from "@capacitor/core";
 import { CapacitorSQLite, type capSQLiteValues } from "@capacitor-community/sqlite";
 import { defineCustomElements as defineJeepSqlite } from "jeep-sqlite/loader";
+import { assetUrl } from "../lib/assets";
 import { SAVE_DB_NAME, SAVE_DB_VERSION, SAVE_MIGRATIONS } from "./migrations";
 import type { NewSaveEventRow, NewSaveSlotRow, SaveSlotRow } from "./schema";
 
@@ -56,7 +57,12 @@ function ensureJeepSqliteElement() {
   if (typeof window === "undefined" || jeepDefined) return;
   defineJeepSqlite(window);
   if (!document.querySelector("jeep-sqlite")) {
-    document.body.appendChild(document.createElement("jeep-sqlite"));
+    const el = document.createElement("jeep-sqlite");
+    // point jeep-sqlite at the bundled sql-wasm under the deployment base —
+    // its default path is relative to the element/origin and 404s on GitHub
+    // Pages' project subpath, which aborts the web save store
+    el.setAttribute("wasmPath", assetUrl("").replace(/\/$/, ""));
+    document.body.appendChild(el);
   }
   jeepDefined = true;
 }

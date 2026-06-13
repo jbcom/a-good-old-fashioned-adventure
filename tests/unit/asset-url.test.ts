@@ -24,7 +24,11 @@ describe("asset URL resolves under the deployment base", () => {
   it("no source file hardcodes an absolute /assets/ URL for a loaded resource", () => {
     // the runtime resource loaders (sheet images, audio) must route through
     // assetUrl, never a bare `/assets/` template literal — those break on Pages.
-    for (const file of ["src/render/atlas.ts", "src/audio/howlerEngine.ts"]) {
+    for (const file of [
+      "src/render/atlas.ts",
+      "src/audio/howlerEngine.ts",
+      "src/persistence/saveRepository.ts",
+    ]) {
       const src = readFileSync(resolve(process.cwd(), file), "utf8");
       // a backtick/quote-led `/assets/` literal is the bug pattern; assetUrl()
       // and comments are fine
