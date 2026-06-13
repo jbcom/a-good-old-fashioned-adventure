@@ -258,6 +258,7 @@ describe("incremental rescue loop contract", () => {
         "crag",
         "harbour",
         "frostpeak",
+        "ashlands",
         "castle-approach",
         "castle-interior",
       ]),

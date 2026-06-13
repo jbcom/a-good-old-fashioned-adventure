@@ -16,7 +16,7 @@
     "hue": 210,
     "roseYield": 8
   },
-  "unlocks": ["upgrade:dragon-might-frostpeak", "upgrade:dragon-kin-castle-approach"],
+  "unlocks": ["upgrade:dragon-might-frostpeak", "upgrade:dragon-kin-ashlands"],
   "track": "encounters",
   "note": "Kin boss for frostpeak-climb, spliced between harbour and castle-approach."
 }

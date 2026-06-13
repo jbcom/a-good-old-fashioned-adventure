@@ -130,10 +130,26 @@
       "archetypes": ["frost-raven", "rime-bat", "snow-adder", "crypt-bat"]
     },
     {
+      "id": "region:ashlands",
+      "label": "The Ashlands Waste",
+      "tier": 4,
+      "threat": 15,
+      "maps": ["map:ashlands-waste"],
+      "archetypes": ["ash-buzzard", "cinder-adder", "slag-rat", "dune-adder"]
+    },
+    {
+      "id": "region:ashlands-lair",
+      "label": "The Magma Deeps",
+      "tier": 4,
+      "threat": 16,
+      "maps": ["map:cinder-mouth", "map:slag-warren", "map:magma-heart"],
+      "archetypes": ["ash-buzzard", "cinder-adder", "slag-rat", "crypt-bat"]
+    },
+    {
       "id": "region:sunken-crypt",
       "label": "The Sunken Crypt (sunken-road lair)",
       "tier": 4,
-      "threat": 15,
+      "threat": 17,
       "maps": ["map:desert-ruins", "map:castle-dungeon", "map:crypt-vault"],
       "archetypes": ["dune-adder", "carrion-raven", "crypt-bat", "crypt-skeleton", "crypt-sentry"]
     },
@@ -141,7 +157,7 @@
       "id": "region:siege-warcamp",
       "label": "The Siege Warcamp (castle-approach lair)",
       "tier": 4,
-      "threat": 16,
+      "threat": 18,
       "maps": ["map:castle-yard"],
       "archetypes": [
         "forest-orc",
@@ -155,7 +171,7 @@
       "id": "region:dungeon",
       "label": "Obsidian Throne Dungeon",
       "tier": 4,
-      "threat": 17,
+      "threat": 19,
       "maps": [
         "map:castle-hall",
         "map:castle-library",

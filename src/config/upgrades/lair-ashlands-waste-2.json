@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-ashlands-waste-2",
+  "label": "Cross the Slag Warren",
+  "category": "map",
+  "cost": {
+    "roses": 6,
+    "gems": 230
+  },
+  "prerequisites": ["upgrade:lair-ashlands-waste-1"],
+  "lairRoom": {
+    "mapId": "map:ashlands-waste",
+    "depth": 2,
+    "roomMap": "map:slag-warren"
+  },
+  "unlocks": ["upgrade:lair-ashlands-waste-3"],
+  "track": "roads",
+  "note": "Ashlands lair room 2. Unlocking it relocates the princess deeper into the magma deeps."
+}

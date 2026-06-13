@@ -121,7 +121,10 @@ describe("dragon's lair", () => {
         `${roomMap} spawned no waves from the unlocked set — its spawn zones may be unwired`,
       ).toBe(true);
     }
-  });
+    // every lair room runs two full rail sims (sparse + dense); with the world
+    // grown to many themes this is dozens of heavy sims, so give it headroom
+    // beyond the 5s default (it stays well under this even under parallel load)
+  }, 30_000);
 
   it("relocates the DRAGON into the deepest lair room when its kin is unlocked", () => {
     // pick the deepest lair room of a map whose kin can be unlocked

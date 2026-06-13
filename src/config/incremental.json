@@ -132,6 +132,12 @@
       "role": "the frozen peak climb above the salt harbour"
     },
     {
+      "id": "ashlands",
+      "label": "The Ashlands Waste",
+      "maps": ["map:ashlands-waste"],
+      "role": "the burnt caldera waste below the castle wall"
+    },
+    {
       "id": "castle-approach",
       "label": "Siege Approach",
       "maps": ["map:castle-approach", "map:castle-yard"],
@@ -155,6 +161,7 @@
       "map:crag-pass",
       "map:saltmarsh-harbour",
       "map:frostpeak-climb",
+      "map:ashlands-waste",
       "map:castle-approach",
       "map:castle-hall"
     ],
@@ -208,6 +215,10 @@
     "map:frostpeak-climb": {
       "theme": "frostpeak",
       "rooms": ["map:glacier-maw", "map:rime-warren", "map:frostheart-vault"]
+    },
+    "map:ashlands-waste": {
+      "theme": "ashlands",
+      "rooms": ["map:cinder-mouth", "map:slag-warren", "map:magma-heart"]
     }
   }
 }

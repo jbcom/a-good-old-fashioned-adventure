@@ -1,0 +1,22 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:dragon-kin-ashlands",
+  "label": "Rouse the Ash-Nephew",
+  "category": "enemy",
+  "cost": {
+    "roses": 7,
+    "gems": 238
+  },
+  "prerequisites": ["upgrade:dragon-kin-frostpeak"],
+  "enemyFamily": "dragon",
+  "unlocksEnemy": "dragon",
+  "dragonKin": {
+    "mapId": "map:ashlands-waste",
+    "relation": "ash-nephew",
+    "hue": 15,
+    "roseYield": 8
+  },
+  "unlocks": ["upgrade:dragon-might-ashlands", "upgrade:dragon-kin-castle-approach"],
+  "track": "encounters",
+  "note": "Kin boss for ashlands-waste, spliced between frostpeak and castle-approach."
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-ashlands-waste-1",
+  "label": "Enter the Cinder Mouth",
+  "category": "map",
+  "cost": {
+    "roses": 5,
+    "gems": 148
+  },
+  "prerequisites": ["upgrade:ashlands-crossing"],
+  "lairRoom": {
+    "mapId": "map:ashlands-waste",
+    "depth": 1,
+    "roomMap": "map:cinder-mouth"
+  },
+  "unlocks": ["upgrade:lair-ashlands-waste-2"],
+  "track": "roads",
+  "note": "Ashlands lair room 1. Unlocking it relocates the princess deeper into the magma deeps."
+}

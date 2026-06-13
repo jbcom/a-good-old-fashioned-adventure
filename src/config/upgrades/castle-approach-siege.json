@@ -6,7 +6,7 @@
   "cost": {
     "gems": 32
   },
-  "prerequisites": ["upgrade:frostpeak-ascent"],
+  "prerequisites": ["upgrade:ashlands-crossing"],
   "routePack": "castle-approach",
   "unlocks": ["upgrade:lair-castle-approach-1"],
   "track": "roads"

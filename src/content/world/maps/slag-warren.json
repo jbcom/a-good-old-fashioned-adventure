@@ -1,0 +1,153 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:slag-warren",
+  "kind": "map",
+  "name": "The Slag Warren",
+  "size": { "cols": 48, "rows": 24 },
+  "baseTile": "tile:sand-pebbles",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain-scree" },
+    {
+      "op": "region",
+      "tile": "tile:ruin-floor",
+      "x0": 2,
+      "x1": 14,
+      "y0": 2,
+      "y1": 9,
+      "note": "a collapsed forge-floor of the upper slag warren"
+    },
+    {
+      "op": "region",
+      "tile": "tile:ruin-floor",
+      "x0": 33,
+      "x1": 45,
+      "y0": 15,
+      "y1": 22,
+      "note": "the lower forge-floor"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain-crag",
+      "x0": 18,
+      "x1": 28,
+      "y0": 2,
+      "y1": 9,
+      "note": "a clinker-reef the warren-walk skirts, upper"
+    },
+    {
+      "op": "region",
+      "tile": "tile:sand-roots",
+      "x0": 6,
+      "x1": 14,
+      "y0": 16,
+      "y1": 22,
+      "note": "a cracked ash-pan on the lower flank"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path-ruts",
+      "y": 11,
+      "x0": 2,
+      "x1": 45,
+      "note": "the rutted slag-track the line forces through the warren"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path-ruts",
+      "y": 12,
+      "x0": 2,
+      "x1": 45,
+      "note": "slag-track, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 15,
+      "y0": 2,
+      "y1": 8,
+      "note": "a slag-pier pinching the track (the gap below is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 30,
+      "y0": 15,
+      "y1": 21,
+      "note": "a second slag-pier off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:ruin-mosaic",
+      "x0": 37,
+      "x1": 45,
+      "y0": 10,
+      "y1": 14,
+      "note": "the cracked mosaic of the second cinder-nest deep in the warren"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 184 },
+  "spawns": {
+    "default": { "x": 48, "y": 184 },
+    "entry": { "x": 48, "y": 184 }
+  },
+  "entities": [
+    {
+      "ref": "prop:ruin-column",
+      "x": 180,
+      "y": 290,
+      "note": "a forge-pillar slumped in the slag"
+    },
+    {
+      "ref": "prop:sandstone-arch",
+      "x": 300,
+      "y": 150,
+      "note": "a heat-warped arch over the upper track"
+    },
+    {
+      "ref": "prop:ruin-mural",
+      "x": 240,
+      "y": 210,
+      "note": "a scorched mural mid-warren"
+    },
+    {
+      "ref": "prop:desert-shrine",
+      "x": 420,
+      "y": 300,
+      "note": "an ash-choked shrine by the nest"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 600,
+      "y": 200,
+      "contents": "Gold",
+      "note": "a forge-master's strongbox, slag-sealed"
+    },
+    {
+      "enemy": "slag-tyrant",
+      "x": 632,
+      "y": 184,
+      "note": "ashlands lair r2 CLIMAX: a slag-tyrant, the molten-brute that floods the forges, holds the second cinder-nest. The princess relocates deeper into the waste. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:slag-mouth", "x": 230, "y": 184, "note": "spawn zone — the slag-track mouth" },
+    {
+      "id": "gate:slag-pier",
+      "x": 360,
+      "y": 160,
+      "note": "spawn zone — past the slag-pier, upper"
+    },
+    { "id": "gate:slag-pan", "x": 400, "y": 240, "note": "spawn zone — the lower ash-pan" },
+    { "id": "gate:slag-nest", "x": 600, "y": 184, "note": "spawn zone — the second cinder-nest" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:slag-warren-landmark",
+      "kind": "landmark",
+      "label": "The Slag Warren",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 168, "x1": 80, "y1": 200 }
+    }
+  ]
+}

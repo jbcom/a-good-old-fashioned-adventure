@@ -1,0 +1,144 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:cinder-mouth",
+  "kind": "map",
+  "name": "The Cinder Mouth",
+  "size": { "cols": 46, "rows": 22 },
+  "baseTile": "tile:ruin-floor",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain-crag" },
+    {
+      "op": "region",
+      "tile": "tile:sand",
+      "x0": 2,
+      "x1": 12,
+      "y0": 2,
+      "y1": 7,
+      "note": "an ash-drift banked into the cinder mouth, upper"
+    },
+    {
+      "op": "region",
+      "tile": "tile:sand-roots",
+      "x0": 2,
+      "x1": 10,
+      "y0": 15,
+      "y1": 20,
+      "note": "the cracked lower ash-pan"
+    },
+    {
+      "op": "region",
+      "tile": "tile:sand",
+      "x0": 33,
+      "x1": 43,
+      "y0": 14,
+      "y1": 20,
+      "note": "the rear ash-apron of the first cinder-nest"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path-pebbles",
+      "y": 10,
+      "x0": 2,
+      "x1": 43,
+      "note": "the clinker-track the line picks east along"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:path-pebbles",
+      "y": 11,
+      "x0": 2,
+      "x1": 43,
+      "note": "clinker-track, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 14,
+      "y0": 2,
+      "y1": 8,
+      "note": "a slag-pillar pinching the track (the gap below is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 28,
+      "y0": 14,
+      "y1": 19,
+      "note": "a second slag-pillar off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:ruin-mosaic",
+      "x0": 35,
+      "x1": 43,
+      "y0": 8,
+      "y1": 13,
+      "note": "the scorched mosaic of the first cinder-nest at the track's end"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 168 },
+  "spawns": {
+    "default": { "x": 48, "y": 168 },
+    "entry": { "x": 48, "y": 168 }
+  },
+  "entities": [
+    {
+      "ref": "prop:ruin-column",
+      "x": 150,
+      "y": 132,
+      "note": "a heat-toppled column across the track"
+    },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 120,
+      "y": 264,
+      "note": "ash-cured bones raked into the lower pan"
+    },
+    {
+      "ref": "prop:desert-shrine",
+      "x": 260,
+      "y": 132,
+      "note": "a cracked shrine the brood scorched"
+    },
+    {
+      "ref": "prop:sandstone-arch",
+      "x": 380,
+      "y": 290,
+      "note": "a slumped arch by the lower flank"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 560,
+      "y": 132,
+      "contents": "Gold",
+      "note": "a prospector's strongbox, ash-buried"
+    },
+    {
+      "enemy": "cinder-stalker",
+      "x": 600,
+      "y": 168,
+      "note": "ashlands lair r1 CLIMAX: a cinder-stalker, the ash-beast that haunts the track, holds the first cinder-nest. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:cinder-mouth", "x": 220, "y": 168, "note": "spawn zone — the track mouth" },
+    {
+      "id": "gate:cinder-pillar",
+      "x": 330,
+      "y": 148,
+      "note": "spawn zone — past the slag-pillar, upper"
+    },
+    { "id": "gate:cinder-pan", "x": 360, "y": 216, "note": "spawn zone — the lower ash-pan flank" },
+    { "id": "gate:cinder-nest", "x": 560, "y": 168, "note": "spawn zone — the first cinder-nest" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:cinder-mouth-landmark",
+      "kind": "landmark",
+      "label": "The Cinder Mouth",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 152, "x1": 80, "y1": 184 }
+    }
+  ]
+}
