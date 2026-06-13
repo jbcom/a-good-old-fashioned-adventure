@@ -717,22 +717,6 @@
       ]
     },
     {
-      "id": "the-ground",
-      "title": "The Ground (autotile cliffs, dithered grounds, palette ramps)",
-      "author": "Backterria (identified from the owned library: same author/style family as The Roguelike)",
-      "source": "itch.io (purchased; manual import)",
-      "url": "https://backterria.itch.io/the-ground",
-      "license": "Backterria itch.io pack terms (see pack page at url); game-use licensed to purchaser.",
-      "mappedUse": "Terrain texture uplift candidate — autotile cliff/ledge pieces and dithered ground fills for the SA.2 terrain rework (sand + mountain families flagged weak).",
-      "files": [
-        {
-          "path": "tilemaps/ground.png",
-          "width": 448,
-          "height": 384
-        }
-      ]
-    },
-    {
       "id": "elthen-bat",
       "title": "Bat Sprite Pack",
       "author": "Elthen (Ahmet Avci)",
@@ -1348,11 +1332,6 @@
           "path": "tilemaps/kenney-dungeon.png",
           "width": 492,
           "height": 305
-        },
-        {
-          "path": "tilemaps/kenney-dungeon-dark.png",
-          "width": 64,
-          "height": 16
         }
       ]
     },
