@@ -11,5 +11,6 @@
     "h": 12
   },
   "behavior": "chase",
-  "relentless": true
+  "relentless": true,
+  "family": "crypt-skeleton"
 }

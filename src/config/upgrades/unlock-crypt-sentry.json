@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:unlock-crypt-sentry",
+  "label": "Set the Crypt Sentries",
+  "category": "enemy",
+  "cost": {
+    "gems": 64
+  },
+  "prerequisites": ["upgrade:unlock-crypt-skeleton"],
+  "unlocksEnemy": "crypt-sentry",
+  "unlocks": ["upgrade:crypt-sentry-bounty"],
+  "track": "encounters",
+  "note": "The deepest trash antagonist — a relentless dungeon guard of the Obsidian Throne. Each one felled pays its bounty."
+}

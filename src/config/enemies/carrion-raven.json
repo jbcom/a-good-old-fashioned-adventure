@@ -4,7 +4,7 @@
   "name": "Carrion Raven",
   "sprite": "sprite:raven",
   "palette": "palette:base",
-  "family": "bird",
+  "family": "carrion-raven",
   "hp": 12,
   "speed": 48,
   "hitbox": {

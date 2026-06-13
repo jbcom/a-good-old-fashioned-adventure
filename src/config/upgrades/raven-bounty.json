@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:raven-bounty",
+  "label": "Raven Bounty",
+  "category": "economy",
+  "cost": {
+    "coins": 16
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.7,
+  "prerequisites": ["upgrade:unlock-carrion-raven"],
+  "enemyFamily": "carrion-raven",
+  "spawnBounty": 2,
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Each rank pays more coins per carrion-raven felled — the income the unlock promises, and the coin sink that keeps the antagonist chain wall-free."
+}

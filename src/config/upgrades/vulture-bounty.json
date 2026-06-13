@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:vulture-bounty",
+  "label": "Vulture Bounty",
+  "category": "economy",
+  "cost": {
+    "coins": 20
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.7,
+  "prerequisites": ["upgrade:unlock-gatehouse-vulture"],
+  "enemyFamily": "gatehouse-vulture",
+  "spawnBounty": 3,
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Each rank pays more coins per gatehouse-vulture felled — the income the unlock promises, and the coin sink that keeps the antagonist chain wall-free."
+}

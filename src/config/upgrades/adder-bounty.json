@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:adder-bounty",
+  "label": "Adder Bounty",
+  "category": "economy",
+  "cost": {
+    "coins": 16
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.7,
+  "prerequisites": ["upgrade:unlock-dune-adder"],
+  "enemyFamily": "dune-adder",
+  "spawnBounty": 2,
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Each rank pays more coins per dune-adder felled — the income the unlock promises, and the coin sink that keeps the antagonist chain wall-free."
+}

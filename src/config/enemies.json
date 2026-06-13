@@ -79,7 +79,7 @@
       "tier": 4,
       "threat": 9,
       "maps": ["map:castle-hall", "map:castle-library", "map:castle-armory", "map:castle-dungeon"],
-      "archetypes": ["crypt-skeleton", "crypt-sentry", "lectern-shade", "shadow-warlord"]
+      "archetypes": ["crypt-skeleton", "crypt-sentry", "crypt-bat", "carrion-raven"]
     }
   ]
 }

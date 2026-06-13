@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:unlock-carrion-raven",
+  "label": "Call the Carrion Ravens",
+  "category": "enemy",
+  "cost": {
+    "gems": 34
+  },
+  "prerequisites": ["upgrade:unlock-dune-adder"],
+  "unlocksEnemy": "carrion-raven",
+  "unlocks": ["upgrade:raven-bounty", "upgrade:unlock-gatehouse-vulture"],
+  "track": "encounters",
+  "note": "A wheeling scavenger that harries the line from the flanks across the crypt and dungeon — each one felled pays its bounty."
+}

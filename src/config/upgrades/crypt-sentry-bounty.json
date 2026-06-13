@@ -1,0 +1,17 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:crypt-sentry-bounty",
+  "label": "Crypt Sentry Bounty",
+  "category": "economy",
+  "cost": {
+    "coins": 28
+  },
+  "ranks": 3,
+  "rankCostGrowth": 1.7,
+  "prerequisites": ["upgrade:unlock-crypt-sentry"],
+  "enemyFamily": "crypt-sentry",
+  "spawnBounty": 5,
+  "unlocks": [],
+  "track": "encounters",
+  "note": "Each rank pays more coins per crypt-sentry felled — the deepest antagonist's income, and the coin sink that keeps the chain wall-free."
+}

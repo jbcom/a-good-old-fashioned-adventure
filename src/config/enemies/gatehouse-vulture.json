@@ -4,7 +4,7 @@
   "name": "Gatehouse Vulture",
   "sprite": "sprite:vulture",
   "palette": "palette:base",
-  "family": "bird",
+  "family": "gatehouse-vulture",
   "hp": 24,
   "speed": 44,
   "hitbox": {

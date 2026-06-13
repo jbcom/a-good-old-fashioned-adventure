@@ -1,0 +1,14 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:unlock-crypt-skeleton",
+  "label": "Raise the Crypt Skeletons",
+  "category": "enemy",
+  "cost": {
+    "gems": 54
+  },
+  "prerequisites": ["upgrade:unlock-crypt-bat"],
+  "unlocksEnemy": "crypt-skeleton",
+  "unlocks": ["upgrade:skeleton-bounty", "upgrade:unlock-crypt-sentry"],
+  "track": "encounters",
+  "note": "A risen chaser of the dungeon and sunken vault — each one felled pays its bounty."
+}
