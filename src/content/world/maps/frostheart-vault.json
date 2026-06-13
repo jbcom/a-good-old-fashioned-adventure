@@ -3,11 +3,17 @@
   "id": "map:frostheart-vault",
   "kind": "map",
   "name": "The Frostheart Vault",
-  "size": { "cols": 50, "rows": 26 },
+  "size": {
+    "cols": 50,
+    "rows": 26
+  },
   "baseTile": "tile:ruin-mosaic",
   "bgmTheme": "dungeon",
   "generation": [
-    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "border",
+      "tile": "tile:stone-wall"
+    },
     {
       "op": "region",
       "tile": "tile:water-glint",
@@ -104,10 +110,19 @@
       "note": "the frostheart dais where the causeway makes landfall — the climax stand"
     }
   ],
-  "playerSpawn": { "x": 48, "y": 200 },
+  "playerSpawn": {
+    "x": 48,
+    "y": 200
+  },
   "spawns": {
-    "default": { "x": 48, "y": 200 },
-    "entry": { "x": 48, "y": 200 }
+    "default": {
+      "x": 48,
+      "y": 200
+    },
+    "entry": {
+      "x": 48,
+      "y": 200
+    }
   },
   "entities": [
     {
@@ -149,15 +164,30 @@
     }
   ],
   "waveGates": [
-    { "id": "gate:vault-mouth", "x": 240, "y": 200, "note": "spawn zone — the causeway mouth" },
+    {
+      "id": "gate:vault-mouth",
+      "x": 240,
+      "y": 200,
+      "note": "spawn zone — the causeway mouth"
+    },
     {
       "id": "gate:vault-arch",
       "x": 380,
       "y": 176,
       "note": "spawn zone — past the frozen arch, upper"
     },
-    { "id": "gate:vault-flow", "x": 420, "y": 264, "note": "spawn zone — the lower ice-flow" },
-    { "id": "gate:vault-heart", "x": 620, "y": 200, "note": "spawn zone — the frostheart dais" }
+    {
+      "id": "gate:vault-flow",
+      "x": 420,
+      "y": 200,
+      "note": "spawn zone — the lower ice-flow"
+    },
+    {
+      "id": "gate:vault-heart",
+      "x": 620,
+      "y": 200,
+      "note": "spawn zone — the frostheart dais"
+    }
   ],
   "triggers": [
     {
@@ -165,7 +195,12 @@
       "kind": "landmark",
       "label": "The Frostheart Vault",
       "sfx": "interact",
-      "zone": { "x0": 32, "y0": 184, "x1": 80, "y1": 216 }
+      "zone": {
+        "x0": 32,
+        "y0": 184,
+        "x1": 80,
+        "y1": 216
+      }
     }
   ]
 }

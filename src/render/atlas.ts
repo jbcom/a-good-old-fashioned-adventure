@@ -60,14 +60,11 @@ export function preloadSheetImages(): Promise<void> {
 }
 
 /**
- * Shared sheet-crop core: every consumer (sprite frame, prop state, tile
- * face) is a cached crop of a preloaded image, with the same
- * placeholder-until-ready / fail-loud-after discipline.
- */
-/**
- * Cached crop of a purchased sheet raster — the shared path for prop/tile
- * sheet states and the S-DAG-ICONS node emblems. Blits nothing (never stale)
- * while the sheet image is still preloading or unavailable (jsdom).
+ * Cached crop of a purchased sheet raster — the shared sheet-crop core for
+ * every consumer (sprite frame, prop state, tile face, S-DAG-ICONS node
+ * emblem), with the same placeholder-until-ready / fail-loud-after discipline.
+ * Blits nothing (never stale) while the sheet image is still preloading or
+ * unavailable (jsdom).
  */
 export function croppedSheetCanvas(
   ownerId: string,
@@ -213,7 +210,8 @@ export function tileCanvas(tileId: string): HTMLCanvasElement {
 export function tileFieldCanvas(tileId: string, col: number, row: number): HTMLCanvasElement {
   const tile = getTile(tileId);
   const field = tile.sheet?.field;
-  if (!tile.sheet || !field) return tileCanvas(tileId);
+  // no field → render the single face; a truthy field guarantees tile.sheet
+  if (!field || !tile.sheet) return tileCanvas(tileId);
   const fx = ((col % field.cols) + field.cols) % field.cols;
   const fy = ((row % field.rows) + field.rows) % field.rows;
   // advance by the stride (stepX/stepY), which defaults to the cell size but is

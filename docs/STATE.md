@@ -25,15 +25,21 @@ audio), shipped to Android via Capacitor.
 
 | | count |
 |---|---|
-| maps | 24 |
-| enemy archetypes | 34 |
-| upgrade-DAG nodes | 94 |
-| sprites | 129 (86 .pix + 43 purchased-sheet) |
+| maps | 44 |
+| enemy archetypes | 64 |
+| upgrade-DAG nodes | 124 |
+| sprites | 159 (116 .pix + 43 purchased-sheet) |
 | props | 77 |
-| difficulty regions | 8 (threat 2→9) |
-| Dragon's Lairs | 6 (one per spine map) |
+| difficulty regions | 18 (threat 2→19) |
+| spine themes | 9 (rescue→oldwood→deep-forest→sunken→mistmire→crag→harbour→frostpeak→ashlands→castle) |
+| Dragon's Lairs | 9 (one per outdoor spine theme; 3 rooms each) |
 | classes | 12 (3 starting tiers → composites) |
-| unit tests | 901 assertions; browser ~42 |
+| unit tests | 1035 assertions; browser ~48 |
+
+The terrain is real native-resolution PNG (RPG Tiles Vector outdoor, Kenney
+Roguelike Dungeon floors, Retro Textures Fantasy interior floors), supersampled
+at `GROUND_RES=64` px/tile so nothing magnifies into a flat fill (see
+docs/DESIGN.md §terrain).
 
 ## The governing architecture: the ZONE MODEL
 

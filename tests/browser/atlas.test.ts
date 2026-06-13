@@ -20,6 +20,13 @@ function pixelsOf(canvas: HTMLCanvasElement): Uint8ClampedArray {
   return ctx.getImageData(0, 0, canvas.width, canvas.height).data;
 }
 
+/** Fraction of pixels that are (near-)opaque — the no-black-ground-tile gate. */
+function opaqueFraction(data: Uint8ClampedArray): number {
+  let opaque = 0;
+  for (let i = 3; i < data.length; i += 4) if (data[i] > 240) opaque++;
+  return opaque / (data.length / 4);
+}
+
 function hexToRgb(hex: string): [number, number, number] {
   return [
     Number.parseInt(hex.slice(1, 3), 16),
@@ -96,15 +103,13 @@ describe("props and tiles bake from content", () => {
     const data = pixelsOf(tileFieldCanvas("tile:water", 0, 0));
     let r = 0;
     let b = 0;
-    let opaque = 0;
     const n = data.length / 4;
     for (let i = 0; i < data.length; i += 4) {
       r += data[i];
       b += data[i + 2];
-      if (data[i + 3] > 240) opaque++;
     }
     // a fully opaque tile (no map background bleeds through) whose blue beats red
-    expect(opaque / n).toBeGreaterThan(0.95);
+    expect(opaqueFraction(data)).toBeGreaterThan(0.95);
     expect(b / n).toBeGreaterThan(r / n);
   });
 });
@@ -147,7 +152,6 @@ describe("RPG Tiles Vector terrain (native-resolution PNG ground)", () => {
 
     // fully opaque — no map background bleeds through the ground (the bug that
     // showed as a black square when a crop landed on an empty sheet region)
-    let opaque = 0;
     let r = 0;
     let g = 0;
     let b = 0;
@@ -156,9 +160,8 @@ describe("RPG Tiles Vector terrain (native-resolution PNG ground)", () => {
       r += data[i];
       g += data[i + 1];
       b += data[i + 2];
-      if (data[i + 3] > 240) opaque++;
     }
-    expect(opaque / n).toBeGreaterThan(0.98);
+    expect(opaqueFraction(data)).toBeGreaterThan(0.98);
 
     // green-dominant grass (the PNG carries the authored colour, not a fill)
     r /= n;
@@ -190,10 +193,8 @@ describe("RPG Tiles Vector terrain (native-resolution PNG ground)", () => {
       for (let fy = 0; fy < field.rows; fy++) {
         for (let fx = 0; fx < field.cols; fx++) {
           const data = pixelsOf(tileFieldCanvas(tile.id, fx, fy));
-          let opaque = 0;
-          for (let i = 3; i < data.length; i += 4) if (data[i] > 240) opaque++;
           expect(
-            opaque / (data.length / 4),
+            opaqueFraction(data),
             `${tile.id} field cell ${fx},${fy} must be opaque`,
           ).toBeGreaterThan(0.9);
         }

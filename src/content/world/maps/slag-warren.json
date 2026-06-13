@@ -3,11 +3,17 @@
   "id": "map:slag-warren",
   "kind": "map",
   "name": "The Slag Warren",
-  "size": { "cols": 48, "rows": 24 },
+  "size": {
+    "cols": 48,
+    "rows": 24
+  },
   "baseTile": "tile:sand-pebbles",
   "bgmTheme": "dungeon",
   "generation": [
-    { "op": "border", "tile": "tile:mountain-scree" },
+    {
+      "op": "border",
+      "tile": "tile:mountain-scree"
+    },
     {
       "op": "region",
       "tile": "tile:ruin-floor",
@@ -86,10 +92,19 @@
       "note": "the cracked mosaic of the second cinder-nest deep in the warren"
     }
   ],
-  "playerSpawn": { "x": 48, "y": 184 },
+  "playerSpawn": {
+    "x": 48,
+    "y": 184
+  },
   "spawns": {
-    "default": { "x": 48, "y": 184 },
-    "entry": { "x": 48, "y": 184 }
+    "default": {
+      "x": 48,
+      "y": 184
+    },
+    "entry": {
+      "x": 48,
+      "y": 184
+    }
   },
   "entities": [
     {
@@ -101,7 +116,7 @@
     {
       "ref": "prop:sandstone-arch",
       "x": 300,
-      "y": 150,
+      "y": 176,
       "note": "a heat-warped arch over the upper track"
     },
     {
@@ -131,15 +146,30 @@
     }
   ],
   "waveGates": [
-    { "id": "gate:slag-mouth", "x": 230, "y": 184, "note": "spawn zone — the slag-track mouth" },
+    {
+      "id": "gate:slag-mouth",
+      "x": 230,
+      "y": 184,
+      "note": "spawn zone — the slag-track mouth"
+    },
     {
       "id": "gate:slag-pier",
       "x": 360,
       "y": 160,
       "note": "spawn zone — past the slag-pier, upper"
     },
-    { "id": "gate:slag-pan", "x": 400, "y": 240, "note": "spawn zone — the lower ash-pan" },
-    { "id": "gate:slag-nest", "x": 600, "y": 184, "note": "spawn zone — the second cinder-nest" }
+    {
+      "id": "gate:slag-pan",
+      "x": 400,
+      "y": 240,
+      "note": "spawn zone — the lower ash-pan"
+    },
+    {
+      "id": "gate:slag-nest",
+      "x": 600,
+      "y": 184,
+      "note": "spawn zone — the second cinder-nest"
+    }
   ],
   "triggers": [
     {
@@ -147,7 +177,12 @@
       "kind": "landmark",
       "label": "The Slag Warren",
       "sfx": "interact",
-      "zone": { "x0": 32, "y0": 168, "x1": 80, "y1": 200 }
+      "zone": {
+        "x0": 32,
+        "y0": 168,
+        "x1": 80,
+        "y1": 200
+      }
     }
   ]
 }

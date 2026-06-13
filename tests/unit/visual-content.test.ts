@@ -78,11 +78,13 @@ function tileColors(tile: TileDef): Set<string> {
     const channels = new Set<string>();
     const field = tile.sheet.field;
     if (field) {
+      // advance by the stride (stepX/stepY, default cell size) so a gapped
+      // sheet's cell keys match the coordinates tileFieldCanvas actually crops
+      const stepX = field.stepX ?? tile.sheet.w;
+      const stepY = field.stepY ?? tile.sheet.h;
       for (let fy = 0; fy < field.rows; fy++) {
         for (let fx = 0; fx < field.cols; fx++) {
-          channels.add(
-            `cell:${tile.sheet.x + fx * tile.sheet.w},${tile.sheet.y + fy * tile.sheet.h}`,
-          );
+          channels.add(`cell:${tile.sheet.x + fx * stepX},${tile.sheet.y + fy * stepY}`);
         }
       }
     } else {
