@@ -12,8 +12,10 @@
  *   (e.g. "tilemaps/roguelike.png", "fonts/eb-garamond-400.ttf").
  */
 export function assetUrl(path: string): string {
-  const base = import.meta.env.BASE_URL ?? "/";
-  // BASE_URL ends with a slash ("/" at root, "./" or "/sub/" otherwise); join
-  // without doubling slashes
-  return `${base.replace(/\/$/, "")}/assets/${path}`;
+  // optional-chain import.meta.env — it can be undefined in non-Vite contexts
+  // (some test runners / SSR), and accessing .BASE_URL on undefined would throw
+  const base = import.meta.env?.BASE_URL ?? "/";
+  // BASE_URL ends with a slash ("/" at root, "./" or "/sub/" otherwise); strip
+  // it and any accidental leading slash on the path so neither doubles up
+  return `${base.replace(/\/$/, "")}/assets/${path.replace(/^\//, "")}`;
 }
