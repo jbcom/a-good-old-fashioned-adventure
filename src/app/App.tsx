@@ -2041,6 +2041,7 @@ export function App({
     const frame = (now: number) => {
       const dt = Math.min(engine.maxTimestep, (now - last) / 1000);
       last = now;
+      let stepped = false;
       if (!dialogue && !paused && !shopState && mode === "playing") {
         acc += dt * timeScaleRef.current;
         // the burst is capped so a 100x frame can never lock the loop
@@ -2051,12 +2052,18 @@ export function App({
           clearOutbox(world);
           acc -= SIM_DT;
           budget -= 1;
+          stepped = true;
         }
         if (budget === 0) acc = 0; // drop the overflow rather than spiral
       } else {
         playerOf(world)?.set(MoveIntent, { x: 0, y: 0 });
       }
-      refreshSnapshot(world);
+      // the snapshot is UI state — it only needs refreshing when the sim
+      // actually advanced this frame. Menus, pause, dialogue, and gameover get
+      // their snapshot from the explicit refreshSnapshot calls on those
+      // transitions, so skipping here avoids two O(units) world passes (lineVitals
+      // + frontline) every RAF frame while nothing is moving.
+      if (stepped) refreshSnapshot(world);
       raf = requestAnimationFrame(frame);
     };
     raf = requestAnimationFrame(frame);

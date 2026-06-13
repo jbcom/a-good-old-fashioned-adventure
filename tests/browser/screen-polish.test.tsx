@@ -93,13 +93,37 @@ it("captures the gameover and upgrade screens", async () => {
     .poll(() => commander.perceive().mapName, { timeout: 10_000 })
     .toBe("map:rescue-route");
 
-  // results (a win via AUTO) → the upgrade graph
+  // results (a win via AUTO) → the upgrade graph; each sits on its parchment
+  // panel (assert the panel node, not just the screenshot, so a class rename
+  // that drops the parchment surface fails the gate)
   await commander.tap("hud-auto");
   await expect.poll(() => commander.perceive().mode, { timeout: 20_000 }).toBe("results");
+  await expect.element(page.getByTestId("results-panel")).toBeVisible();
   await wait(400);
   expect(await page.screenshot({ path: "../../docs/evidence/screen-results.png" })).toBeTruthy();
   await commander.tap("open-upgrade-graph");
   await expect.element(page.getByTestId("upgrade-detail")).toBeVisible();
+  await expect.element(page.getByTestId("upgrade-panel")).toBeVisible();
   await wait(400);
   expect(await page.screenshot({ path: "../../docs/evidence/screen-upgrade.png" })).toBeTruthy();
+});
+
+it("captures the gameover screen on its parchment panel", async () => {
+  const repository = new MemorySaveRepository();
+  await richSave(repository);
+  await page.viewport(1280, 720);
+  mountApp(repository);
+  const commander = new CommanderGovernor();
+  await expect.element(page.getByTestId("landing-screen")).toBeVisible();
+  await commander.tap("continue-button");
+  await expect
+    .poll(() => commander.perceive().mapName, { timeout: 10_000 })
+    .toBe("map:rescue-route");
+  // retire the run → gameover, which renders on the shared parchment end-panel
+  await commander.tap("hud-menu");
+  await commander.tap("retire-run");
+  await expect.poll(() => commander.perceive().mode, { timeout: 5000 }).toBe("gameover");
+  await expect.element(page.getByTestId("end-panel")).toBeVisible();
+  await wait(400);
+  expect(await page.screenshot({ path: "../../docs/evidence/screen-gameover.png" })).toBeTruthy();
 });
