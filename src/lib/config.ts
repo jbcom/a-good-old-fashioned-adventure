@@ -293,22 +293,38 @@ export const incremental = {
   },
 } as IncrementalConfig;
 export const drops = dropsJson;
-export const enemies = enemiesJson as unknown as {
-  aiDefaults: {
-    aggroRange: number;
-    deaggroRange: number;
-    patrolRange: number;
-    windup: { duration: number; armRange: number; disarmRange: number; castFlash: number };
-  };
-  difficultyCurve: {
-    id: string;
-    label: string;
-    tier: number;
-    threat: number;
-    maps: string[];
-    archetypes: string[];
-  }[];
-  archetypes: Record<string, EnemyArchetype>;
+// Enemy archetypes live one-per-file under src/config/enemies/ (split from the
+// enemies.json monolith, mirroring the upgrade-node split) and are globbed +
+// merged into the archetypes map at build. aiDefaults + difficultyCurve stay
+// in enemies.json. The merged shape is identical to the old inline map, so no
+// consumer changes; the per-file `id`/`$schema` are stripped on merge.
+const enemyArchetypeModules = import.meta.glob<EnemyArchetype & { id: string; $schema?: string }>(
+  "/src/config/enemies/*.json",
+  { eager: true, import: "default" },
+);
+const enemyArchetypes: Record<string, EnemyArchetype> = {};
+for (const mod of Object.values(enemyArchetypeModules)) {
+  const { id, $schema: _schema, ...archetype } = mod;
+  enemyArchetypes[id] = archetype as EnemyArchetype;
+}
+export const enemies = {
+  ...(enemiesJson as unknown as {
+    aiDefaults: {
+      aggroRange: number;
+      deaggroRange: number;
+      patrolRange: number;
+      windup: { duration: number; armRange: number; disarmRange: number; castFlash: number };
+    };
+    difficultyCurve: {
+      id: string;
+      label: string;
+      tier: number;
+      threat: number;
+      maps: string[];
+      archetypes: string[];
+    }[];
+  }),
+  archetypes: enemyArchetypes,
 };
 export const audio = audioJson;
 export const ui = uiJson;

@@ -1,0 +1,27 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "lectern-shade",
+  "name": "Lectern Shade",
+  "sprite": "sprite:boss-lectern-shade",
+  "palette": "palette:base",
+  "hp": 90,
+  "speed": 36,
+  "hitbox": {
+    "w": 14,
+    "h": 14
+  },
+  "behavior": "turret",
+  "touchHarmless": true,
+  "knockbackImmune": true,
+  "miniboss": true,
+  "turret": {
+    "attackRange": 120,
+    "cooldown": 2.4,
+    "projectile": {
+      "type": "shadowbolt",
+      "speed": 70,
+      "life": 2.2
+    },
+    "sfx": "magic"
+  }
+}

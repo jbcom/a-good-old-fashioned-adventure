@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "armory-sentinel",
+  "name": "Armory Sentinel",
+  "sprite": "sprite:boss-armory-sentinel",
+  "palette": "palette:base",
+  "hp": 100,
+  "speed": 40,
+  "hitbox": {
+    "w": 14,
+    "h": 14
+  },
+  "behavior": "guard",
+  "miniboss": true,
+  "guard": {
+    "aggroRange": 60,
+    "deaggroRange": 120,
+    "leashRange": 80
+  }
+}

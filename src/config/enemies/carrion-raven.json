@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "carrion-raven",
+  "name": "Carrion Raven",
+  "sprite": "sprite:raven",
+  "palette": "palette:base",
+  "family": "bird",
+  "hp": 12,
+  "speed": 48,
+  "hitbox": {
+    "w": 10,
+    "h": 10
+  },
+  "behavior": "patrol"
+}

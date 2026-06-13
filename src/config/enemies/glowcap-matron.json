@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "glowcap-matron",
+  "name": "Glowcap Matron",
+  "sprite": "sprite:boss-glowcap-matron",
+  "palette": "palette:base",
+  "hp": 80,
+  "speed": 22,
+  "hitbox": {
+    "w": 14,
+    "h": 14
+  },
+  "behavior": "caster",
+  "miniboss": true,
+  "caster": {
+    "attackRange": 100,
+    "keepDistance": 56,
+    "cooldown": 1.7,
+    "projectile": {
+      "type": "shadowbolt",
+      "speed": 70,
+      "life": 2.2
+    },
+    "sfx": "magic"
+  }
+}

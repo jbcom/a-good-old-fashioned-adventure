@@ -1,5 +1,6 @@
 import Ajv2020 from "ajv/dist/2020";
 import { describe, expect, it } from "vitest";
+import { enemies } from "../../src/lib/config";
 import { parsePixelSheet } from "../../src/lib/content/pixelSheet";
 
 /**
@@ -73,15 +74,17 @@ describe("referential integrity", () => {
     for (const prop of parsed.props) declaredIds.add(prop.id);
     for (const sprite of parsed.sprites) declaredIds.add(sprite.id);
   }
-  for (const [path, doc] of Object.entries(contentModules)) {
+  for (const doc of Object.values(contentModules)) {
     if (typeof doc.id === "string") declaredIds.add(doc.id);
     if (doc.swaps) for (const k of Object.keys(doc.swaps as Json)) declaredIds.add(k);
     for (const registry of ["characters", "items", "flags"] as const) {
       if (doc[registry]) for (const k of Object.keys(doc[registry] as Json)) declaredIds.add(k);
     }
-    if (path.endsWith("config/enemies.json")) {
-      for (const k of Object.keys((doc.archetypes as Json) ?? {})) declaredIds.add(`enemy:${k}`);
-    }
+  }
+  // enemy archetypes are split one-per-file under src/config/enemies/ and
+  // merged in config — seed the ids from the merged map, not the monolith
+  for (const archetypeId of Object.keys(enemies.archetypes)) {
+    declaredIds.add(`enemy:${archetypeId}`);
   }
 
   const refPattern =

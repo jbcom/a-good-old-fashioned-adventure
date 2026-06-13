@@ -1,0 +1,25 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "forest-shaman",
+  "name": "Forest Shaman",
+  "sprite": "sprite:hooded-mage",
+  "palette": "palette:orc",
+  "hp": 25,
+  "speed": 20,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "caster",
+  "caster": {
+    "attackRange": 140,
+    "keepDistance": 60,
+    "cooldown": 2.4,
+    "projectile": {
+      "type": "magmaball",
+      "speed": 60,
+      "life": 3
+    },
+    "sfx": "magic"
+  }
+}
