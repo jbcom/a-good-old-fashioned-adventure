@@ -103,7 +103,7 @@ terrain.pix until the Kenney dungeon/interior audition lands.
 
 ## Execution order
 
-1. Classes knight/ranger/wizard → fighter/archer/grey-mage (touches
+1. Classes: knight → fighter LANDED (sprite:fighter, rows pinned: runs 8-11 E/W/S/N confirmed by skin-pixel probe — row 11 backview; attacks 2f packed two-dirs-per-row on rows 0-1; directionRows generalized to {row,col} cells). ranger/wizard next (touches
    classes.json, hero rendering, class picker UI, companions).
 2. Guards + bandit rewrite (gate-sentry, orc family + quest copy).
 3. Units (paladin/axe/heavy-knight/mages + fx).

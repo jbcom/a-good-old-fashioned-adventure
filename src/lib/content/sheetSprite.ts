@@ -66,7 +66,10 @@ export function resolveSheetFrame(def: SheetSpriteDef, query: SheetFrameQuery): 
   const raw = Math.floor(query.t * anim.fps);
   const frame = anim.loop === false ? Math.min(raw, fpd - 1) : raw % fpd;
   const block = anim.directional ? Math.max(0, def.directionOrder.indexOf(direction)) : 0;
-  const row = anim.directionRows ? anim.directionRows[direction] : (anim.row ?? 0);
+  const dirCell = anim.directionRows?.[direction];
+  const row =
+    dirCell === undefined ? (anim.row ?? 0) : typeof dirCell === "number" ? dirCell : dirCell.row;
+  const startCol = typeof dirCell === "object" ? dirCell.col : 0;
 
   // side-view sheets carry one native facing; flip when the entity points
   // the other way (vertical travel keeps the last horizontal facing). A
@@ -87,7 +90,7 @@ export function resolveSheetFrame(def: SheetSpriteDef, query: SheetFrameQuery): 
     animName,
     anim,
     direction,
-    sourceX: (block * fpd + frame) * def.frameSize.w,
+    sourceX: (block * fpd + startCol + frame) * def.frameSize.w,
     sourceY: row * def.frameSize.h,
     mirror,
   };

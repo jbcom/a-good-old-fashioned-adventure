@@ -4,7 +4,7 @@
   "companionRoster": ["knight", "ranger", "wizard"],
   "classes": {
     "knight": {
-      "sprite": "sprite:hero",
+      "sprite": "sprite:fighter",
       "palette": "palette:knight",
       "attack": {
         "kind": "melee",
@@ -36,7 +36,7 @@
         "kind": "projectile",
         "projectile": "arrow",
         "speed": 180,
-        "life": 2.0,
+        "life": 2,
         "muzzleOffset": {
           "x": 10,
           "y": -6
@@ -50,7 +50,7 @@
         "spreadAngles": [-0.15, 0, 0.15],
         "spreadSpeed": 140,
         "spreadLife": 1.5,
-        "cooldown": 1.0,
+        "cooldown": 1,
         "iframes": 0.25,
         "dashDuration": 0.25,
         "sfx": "dash"
@@ -70,7 +70,7 @@
         "kind": "projectile",
         "projectile": "magic-bolt",
         "speed": 160,
-        "life": 2.0,
+        "life": 2,
         "muzzleOffset": {
           "x": 10,
           "y": -6
@@ -155,7 +155,7 @@
         "engage": 150,
         "auraRadius": 64,
         "healPerPulse": 2,
-        "pulsePeriod": 2.0,
+        "pulsePeriod": 2,
         "hp": 55,
         "speed": 36
       }

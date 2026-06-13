@@ -86,9 +86,11 @@ export interface SheetAnimDef {
   /** y row index for multi-row sheets (row 0 when absent) */
   row?: number;
   /** third layout convention (Electric Lemon humanoids): one row per
-   * direction, frames horizontal. Mutually exclusive with directional/row;
-   * never mirrors — every direction is authored. */
-  directionRows?: { right: number; up: number; left: number; down: number };
+   * direction, frames horizontal. A bare number is the row (frames start
+   * at column 0); {row, col} sets the starting cell for sheets that pack
+   * two directions into one row (the fighter's 2-frame attacks).
+   * Mutually exclusive with directional/row; never mirrors. */
+  directionRows?: Record<"right" | "up" | "left" | "down", number | { row: number; col: number }>;
 }
 
 export interface SheetSpriteDef {

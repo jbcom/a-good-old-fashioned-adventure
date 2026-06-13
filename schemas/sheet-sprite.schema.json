@@ -59,13 +59,23 @@
           "directionRows": {
             "type": "object",
             "required": ["right", "up", "left", "down"],
-            "properties": {
-              "right": { "type": "integer", "minimum": 0 },
-              "up": { "type": "integer", "minimum": 0 },
-              "left": { "type": "integer", "minimum": 0 },
-              "down": { "type": "integer", "minimum": 0 }
-            },
-            "additionalProperties": false
+            "additionalProperties": false,
+            "patternProperties": {
+              "^(right|up|left|down)$": {
+                "oneOf": [
+                  { "type": "integer", "minimum": 0 },
+                  {
+                    "type": "object",
+                    "required": ["row", "col"],
+                    "properties": {
+                      "row": { "type": "integer", "minimum": 0 },
+                      "col": { "type": "integer", "minimum": 0 }
+                    },
+                    "additionalProperties": false
+                  }
+                ]
+              }
+            }
           }
         },
         "additionalProperties": false
