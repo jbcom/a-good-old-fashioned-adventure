@@ -456,6 +456,11 @@
           "path": "enemies/hooded-rogue.png",
           "width": 64,
           "height": 320
+        },
+        {
+          "path": "npcs/guard-swordsman.png",
+          "width": 128,
+          "height": 384
         }
       ]
     },

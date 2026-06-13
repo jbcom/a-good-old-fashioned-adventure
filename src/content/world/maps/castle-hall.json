@@ -190,6 +190,25 @@
       "x": 320,
       "y": 176,
       "note": "an ancestor watches the hall"
+    },
+    {
+      "ref": "char:castle-watchman",
+      "x": 420,
+      "y": 300,
+      "patrol": {
+        "points": [
+          {
+            "x": 420,
+            "y": 300
+          },
+          {
+            "x": 420,
+            "y": 200
+          }
+        ],
+        "speed": 16
+      },
+      "note": "hall patrol north-south"
     }
   ],
   "triggers": [

@@ -3,11 +3,17 @@
   "id": "map:castle-yard",
   "kind": "map",
   "name": "Castle Yard",
-  "size": { "cols": 48, "rows": 34 },
+  "size": {
+    "cols": 48,
+    "rows": 34
+  },
   "baseTile": "tile:grass",
   "bgmTheme": "castle-approach",
   "generation": [
-    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "border",
+      "tile": "tile:stone-wall"
+    },
     {
       "op": "region",
       "tile": "tile:castle-road",
@@ -17,9 +23,27 @@
       "y1": 20,
       "note": "worn yard paving between gate and hall"
     },
-    { "op": "row-span", "tile": "tile:stone-floor", "y": 16, "x0": 1, "x1": 46 },
-    { "op": "row-span", "tile": "tile:stone-floor", "y": 17, "x0": 1, "x1": 46 },
-    { "op": "row-span", "tile": "tile:stone-floor", "y": 18, "x0": 1, "x1": 46 },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor",
+      "y": 16,
+      "x0": 1,
+      "x1": 46
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor",
+      "y": 17,
+      "x0": 1,
+      "x1": 46
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:stone-floor",
+      "y": 18,
+      "x0": 1,
+      "x1": 46
+    },
     {
       "op": "region",
       "tile": "tile:stone-wall",
@@ -30,20 +54,85 @@
       "note": "hall silhouette above the yard"
     }
   ],
-  "playerSpawn": { "x": 96, "y": 272 },
+  "playerSpawn": {
+    "x": 96,
+    "y": 272
+  },
   "spawns": {
-    "default": { "x": 96, "y": 272 },
-    "entry": { "x": 96, "y": 272 },
-    "from-hall": { "x": 696, "y": 272 }
+    "default": {
+      "x": 96,
+      "y": 272
+    },
+    "entry": {
+      "x": 96,
+      "y": 272
+    },
+    "from-hall": {
+      "x": 696,
+      "y": 272
+    }
   },
   "entities": [
-    { "ref": "prop:castle-banner", "x": 236, "y": 212, "note": "weathered king's banner" },
-    { "ref": "prop:castle-banner", "x": 548, "y": 212, "note": "half-furled queen's banner" },
-    { "ref": "prop:castle-lantern", "x": 320, "y": 236, "note": "yard lantern" },
-    { "ref": "prop:castle-lantern", "x": 612, "y": 236, "note": "hall threshold lantern" },
-    { "ref": "prop:barrel", "x": 180, "y": 322, "note": "rain barrel by the gate" },
-    { "ref": "prop:barrel", "x": 660, "y": 324, "note": "supply barrel near the hall" },
-    { "enemy": "gate-sentry", "x": 560, "y": 430 }
+    {
+      "ref": "prop:castle-banner",
+      "x": 236,
+      "y": 212,
+      "note": "weathered king's banner"
+    },
+    {
+      "ref": "prop:castle-banner",
+      "x": 548,
+      "y": 212,
+      "note": "half-furled queen's banner"
+    },
+    {
+      "ref": "prop:castle-lantern",
+      "x": 320,
+      "y": 236,
+      "note": "yard lantern"
+    },
+    {
+      "ref": "prop:castle-lantern",
+      "x": 612,
+      "y": 236,
+      "note": "hall threshold lantern"
+    },
+    {
+      "ref": "prop:barrel",
+      "x": 180,
+      "y": 322,
+      "note": "rain barrel by the gate"
+    },
+    {
+      "ref": "prop:barrel",
+      "x": 660,
+      "y": 324,
+      "note": "supply barrel near the hall"
+    },
+    {
+      "enemy": "gate-sentry",
+      "x": 560,
+      "y": 430
+    },
+    {
+      "ref": "char:castle-watchman",
+      "x": 200,
+      "y": 200,
+      "patrol": {
+        "points": [
+          {
+            "x": 200,
+            "y": 200
+          },
+          {
+            "x": 380,
+            "y": 200
+          }
+        ],
+        "speed": 18
+      },
+      "note": "yard patrol east-west"
+    }
   ],
   "triggers": [
     {
@@ -53,7 +142,12 @@
       "toMap": "map:castle-approach",
       "toSpawn": "from-yard",
       "sfx": "interact",
-      "zone": { "x0": 0, "y0": 244, "x1": 28, "y1": 304 }
+      "zone": {
+        "x0": 0,
+        "y0": 244,
+        "x1": 28,
+        "y1": 304
+      }
     },
     {
       "id": "trigger:hall-entry",
@@ -62,7 +156,12 @@
       "toMap": "map:castle-hall",
       "toSpawn": "entry",
       "sfx": "interact",
-      "zone": { "x0": 726, "y0": 244, "x1": 768, "y1": 304 }
+      "zone": {
+        "x0": 726,
+        "y0": 244,
+        "x1": 768,
+        "y1": 304
+      }
     }
   ]
 }

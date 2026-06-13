@@ -282,6 +282,13 @@
       "role": "voice",
       "portraitColor": "#00d2f7",
       "dialogue": "dlgbank:spellbook"
+    },
+    "char:castle-watchman": {
+      "name": "Castle Watchman",
+      "role": "npc",
+      "sprite": "sprite:guard-swordsman",
+      "palette": "palette:base",
+      "note": "Silent patrol ambience \u2014 the castle keeps its watch (SA.5 guard ambience)."
     }
   }
 }
