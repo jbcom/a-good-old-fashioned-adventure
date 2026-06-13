@@ -1,6 +1,6 @@
 ---
 title: World Plan
-updated: 2026-06-11
+updated: 2026-06-13
 status: current
 domain: design
 ---

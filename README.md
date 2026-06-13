@@ -1,8 +1,9 @@
 # A Good Old-Fashioned Adventure
 
-A storybook action RPG for web and Android. The game presents 16-bit pixel
-designs inside an HD-2D/r3f diorama stage, with React DOM UI, ToneJS audio,
-AnimeJS motion, Yuka enemy behaviors, and Capacitor Android packaging.
+A storybook rail-command incremental for web and Android. The game presents
+16-bit pixel designs inside an HD-2D/r3f diorama stage, with React DOM UI,
+howler.js audio (a purchased sound library), AnimeJS motion, Yuka enemy
+behaviors, and Capacitor Android packaging.
 
 The active product direction is a mobile incremental rescue loop: start at the
 south end of a storybook route, push north as the knight, defeat the dragon,
