@@ -2,6 +2,16 @@
 
 All notable changes will be managed by release-please.
 
+## [1.2.0](https://github.com/jbcom/a-good-old-fashioned-adventure/compare/a-good-old-fashioned-adventure-v1.1.0...a-good-old-fashioned-adventure-v1.2.0) (2026-06-13)
+
+
+### Features
+
+* animate the hero with authored pose frames ([#9](https://github.com/jbcom/a-good-old-fashioned-adventure/issues/9)) ([9812b37](https://github.com/jbcom/a-good-old-fashioned-adventure/commit/9812b37018298234b60acc611db7d871ae418ad0))
+* boss choreography in readable phases ([#13](https://github.com/jbcom/a-good-old-fashioned-adventure/issues/13)) ([be0a776](https://github.com/jbcom/a-good-old-fashioned-adventure/commit/be0a776e4f809b04bbc0817b04f0146c19561a1c))
+* combat telegraphs, north-facing movers, sprite class picker ([#11](https://github.com/jbcom/a-good-old-fashioned-adventure/issues/11)) ([9baf48d](https://github.com/jbcom/a-good-old-fashioned-adventure/commit/9baf48d1e382bc001803150c599cabe3ce893d17))
+* freeze the frame on impact and streak the bolts ([#12](https://github.com/jbcom/a-good-old-fashioned-adventure/issues/12)) ([75a906a](https://github.com/jbcom/a-good-old-fashioned-adventure/commit/75a906aba8f980d4935ab38831b4f5228bac5631))
+
 ## [1.1.0](https://github.com/jbcom/a-good-old-fashioned-adventure/compare/a-good-old-fashioned-adventure-v1.0.1...a-good-old-fashioned-adventure-v1.1.0) (2026-06-12)
 
 
