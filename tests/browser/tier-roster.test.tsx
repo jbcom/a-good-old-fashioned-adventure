@@ -57,6 +57,13 @@ it("fields the tier ladder: medium and composite units fight by their own minds"
         "upgrade:warlock-pact",
         "upgrade:barbarian-storm",
         "upgrade:dread-knight",
+        // Zone model (docs/RAIL-COMMAND.md §maps are zones, not enemies): a
+        // map's waves are region.archetypes ∩ the player's UNLOCKED enemy set.
+        // Without an enemy-DAG unlock no trash spawns — only the boss holds —
+        // so the warlock's withering field would have nothing to mark. Unlock
+        // forest-orc (region:oldwood pool) so the muster waves actually field.
+        "upgrade:dragon-wake",
+        "upgrade:unlock-forest-orc",
       ],
       unlockedClassIds: [
         "knight",
