@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:sand-pebbles",
+  "kind": "tile",
+  "solid": false,
+  "description": "Pebbled hardpan — RPG Tiles Vector earthen cell, native 64px.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 384,
+    "y": 128,
+    "w": 64,
+    "h": 64
+  },
+  "variantOf": "tile:sand",
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

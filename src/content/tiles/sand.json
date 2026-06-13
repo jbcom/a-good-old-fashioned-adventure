@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:sand",
+  "kind": "tile",
+  "solid": false,
+  "description": "Desert hardpan — RPG Tiles Vector warm earthen ground (rpg-terrain.png), the sun-baked dirt floor of the dunes at native 64px. 2x1 field varies it (both cells opaque).",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 320,
+    "y": 0,
+    "w": 64,
+    "h": 64,
+    "field": {
+      "cols": 2,
+      "rows": 1
+    }
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

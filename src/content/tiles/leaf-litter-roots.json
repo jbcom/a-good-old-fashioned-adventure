@@ -1,0 +1,18 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:leaf-litter-roots",
+  "kind": "tile",
+  "solid": false,
+  "description": "Root-tangled forest floor — RPG Tiles Vector grass cell, native 64px.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 64,
+    "y": 128,
+    "w": 64,
+    "h": 64
+  },
+  "variantOf": "tile:leaf-litter",
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

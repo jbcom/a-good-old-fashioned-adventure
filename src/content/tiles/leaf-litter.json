@@ -1,0 +1,21 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:leaf-litter",
+  "kind": "tile",
+  "solid": false,
+  "description": "Forest floor — RPG Tiles Vector grass at the woodland floor; the canopy props above make it read as forest. Native 64px, 2x2 field varies the litter.",
+  "sheet": {
+    "image": "tilemaps/rpg-terrain.png",
+    "x": 0,
+    "y": 64,
+    "w": 64,
+    "h": 64,
+    "field": {
+      "cols": 2,
+      "rows": 2
+    }
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}
