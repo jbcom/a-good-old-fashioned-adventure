@@ -85,6 +85,22 @@ hero (until classes wire), princess, the five clear bosses,
 upgrades.pix emblems (UI iconography, palette-coupled), pickups,
 terrain.pix until the Kenney dungeon/interior audition lands.
 
+## Sheet pinning notes (running)
+
+- **Sword & Shield Fighter combat (128×640, 32px, 20 rows):** a
+  multi-weapon sheet — rows 0-11 are the sword+shield kit (slashes,
+  blocks, stances), rows 12-19 a BOW kit (draw rows 12-13, bow-walk
+  16-19). Direction packing differs from the mage convention: rows mix
+  left-facing and right-facing frames across their four columns —
+  per-row pinning needed before the def is authored (frames may be
+  2-per-direction, not 4). The class def should mount the sword kit;
+  the bow rows are a free second weapon read for a knight bow moment
+  or a separate body variant.
+- **Mage combat (64×256, 16px, 16 rows):** E/W/S/N row blocks ×4
+  states — pinned and shipped (sprite:hooded-mage).
+- **Archer combat (128×256, 32px, 8 rows):** 2 state-blocks; same
+  per-row audit needed as the fighter.
+
 ## Execution order
 
 1. Classes knight/ranger/wizard → fighter/archer/grey-mage (touches
