@@ -333,7 +333,18 @@ function applyRoadTravelled(world: World, event: GameEvent): void {
     ...progress,
     currentRunRoadIds: [...progress.currentRunRoadIds, key],
   });
-  bankCoins(world, incremental.runRewards.roadTravelled.perSegment ?? 0);
+  const base = incremental.runRewards.roadTravelled.perSegment ?? 0;
+  bankCoins(world, base + checkpointBonus(progress));
+}
+
+/** Summed per-checkpoint coin bonus from owned economy upgrade ranks. */
+export function checkpointBonus(progress: IncrementalProgressState): number {
+  let bonus = 0;
+  for (const node of incremental.upgradeGraph.nodes) {
+    const perRank = node.effect?.checkpointBonus ?? 0;
+    if (perRank) bonus += perRank * purchasedRank(progress, node);
+  }
+  return bonus;
 }
 
 /**

@@ -239,8 +239,25 @@
         },
         "prerequisites": ["upgrade:oldwood-bend"],
         "routePack": "deep-forest",
-        "unlocks": ["upgrade:bard-road-song"],
+        "unlocks": ["upgrade:thornwood-tithe", "upgrade:bard-road-song"],
         "track": "roads"
+      },
+      {
+        "id": "upgrade:thornwood-tithe",
+        "label": "Thornwood Tithe",
+        "category": "economy",
+        "cost": {
+          "coins": 18
+        },
+        "ranks": 4,
+        "rankCostGrowth": 1.7,
+        "prerequisites": ["upgrade:thornwood-mastered"],
+        "effect": {
+          "checkpointBonus": 2
+        },
+        "unlocks": [],
+        "track": "roads",
+        "note": "Coin sink for the deep-forest unlock — no rose node may dead-end into another rose (grind-trap rule, user 2026-06-12). Each rank richens this map's checkpoint yield."
       },
       {
         "id": "upgrade:rogue-shortcut",
@@ -320,8 +337,25 @@
         },
         "prerequisites": ["upgrade:rogue-shortcut"],
         "routePack": "sunken-road",
-        "unlocks": ["upgrade:castle-approach-siege"],
+        "unlocks": ["upgrade:sunken-salvage", "upgrade:castle-approach-siege"],
         "track": "roads"
+      },
+      {
+        "id": "upgrade:sunken-salvage",
+        "label": "Sunken Salvage",
+        "category": "economy",
+        "cost": {
+          "coins": 26
+        },
+        "ranks": 4,
+        "rankCostGrowth": 1.7,
+        "prerequisites": ["upgrade:sunken-shortcut"],
+        "effect": {
+          "checkpointBonus": 3
+        },
+        "unlocks": [],
+        "track": "roads",
+        "note": "Coin sink for the sunken-road unlock — closes the second rose wall. Each rank richens this map's salvage yield."
       },
       {
         "id": "upgrade:sorcerer-emberweave",

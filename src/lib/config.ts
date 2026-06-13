@@ -112,7 +112,7 @@ export interface IncrementalUpgradeNode {
   ability?: string;
   ranks?: number;
   rankCostGrowth?: number;
-  effect?: { maxHp?: number; unitCount?: number };
+  effect?: { maxHp?: number; unitCount?: number; checkpointBonus?: number };
   note?: string;
 }
 
