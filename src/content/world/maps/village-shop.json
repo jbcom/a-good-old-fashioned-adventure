@@ -71,6 +71,12 @@
       "y": 96,
       "contents": "HPUp",
       "note": "the keeper's strongbox the raiders missed"
+    },
+    {
+      "enemy": "plunder-boss",
+      "x": 600,
+      "y": 176,
+      "note": "captured-village lair r CLIMAX: the plunder-boss squats on the looted market's spoils. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
     }
   ],
   "waveGates": [

@@ -296,7 +296,13 @@
         ]
       }
     },
-    { "ref": "prop:chest", "x": 712, "y": 270, "contents": "Gold" }
+    { "ref": "prop:chest", "x": 712, "y": 270, "contents": "Gold" },
+    {
+      "enemy": "nest-overseer",
+      "x": 800,
+      "y": 272,
+      "note": "captured-village lair r1 CLIMAX: the orc nest-overseer drives the enslaved square. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
+    }
   ],
   "waveGates": [
     {

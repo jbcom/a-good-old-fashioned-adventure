@@ -167,6 +167,12 @@
       "x": 300,
       "y": 210,
       "note": "drifted bones among the ruin columns"
+    },
+    {
+      "enemy": "ruin-revenant",
+      "x": 224,
+      "y": 120,
+      "note": "sunken-crypt lair r1 CLIMAX: a ruin-revenant, a drowned wraith risen at the ruins' deep (north) end, holds the rail's end. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
     }
   ],
   "waveGates": [

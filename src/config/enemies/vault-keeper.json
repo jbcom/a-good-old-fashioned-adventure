@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "vault-keeper",
+  "name": "Vault Keeper",
+  "sprite": "sprite:boss-vault-keeper",
+  "palette": "palette:base",
+  "hp": 84,
+  "speed": 28,
+  "hitbox": {
+    "w": 14,
+    "h": 14
+  },
+  "behavior": "guard",
+  "guard": {
+    "aggroRange": 108,
+    "deaggroRange": 156,
+    "leashRange": 178,
+    "stance": {
+      "guard": 1.2,
+      "open": 1.4,
+      "damageMultiplier": 0.36,
+      "moveFactor": 0.42
+    }
+  },
+  "miniboss": true
+}

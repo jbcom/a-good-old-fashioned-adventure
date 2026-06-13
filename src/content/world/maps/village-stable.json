@@ -55,6 +55,12 @@
       "y": 160,
       "dir": -1,
       "note": "Oswin, penned with the captives"
+    },
+    {
+      "enemy": "pen-warden",
+      "x": 384,
+      "y": 200,
+      "note": "captured-village lair r CLIMAX: the pen-warden, the dragon's beast-handler, holds the stable pens over the captives. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
     }
   ],
   "waveGates": [

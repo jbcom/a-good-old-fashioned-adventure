@@ -78,10 +78,10 @@
       "note": "the vault's drowned offerings"
     },
     {
-      "enemy": "crypt-skeleton",
+      "enemy": "vault-keeper",
       "x": 620,
       "y": 200,
-      "note": "sunken-crypt lair r3 CLIMAX: a risen vault-warden the step-cousin keeps as a guard. The trash around it is permuted from the unlocked set via the wave gates."
+      "note": "sunken-crypt lair r3 CLIMAX: the vault-keeper, the undead warden of the flooded reliquary, holds the deepest vault. The one authored combatant (a bespoke miniboss, not wave-pool trash); the host is permuted from the unlocked set via the wave gates."
     }
   ],
   "waveGates": [

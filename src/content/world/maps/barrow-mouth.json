@@ -110,6 +110,12 @@
       "y": 132,
       "contents": "Gold",
       "note": "a carter's strongbox, pulled down with him"
+    },
+    {
+      "enemy": "barrow-digger",
+      "x": 600,
+      "y": 168,
+      "note": "roadside-barrow lair r1 CLIMAX: a barrow-digger, the brute that clawed this crawlway, holds the first hollow. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
     }
   ],
   "waveGates": [

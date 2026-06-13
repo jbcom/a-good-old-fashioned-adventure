@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "nest-overseer",
+  "name": "Nest Overseer",
+  "sprite": "sprite:boss-nest-overseer",
+  "palette": "palette:orc",
+  "hp": 52,
+  "speed": 32,
+  "hitbox": {
+    "w": 14,
+    "h": 14
+  },
+  "behavior": "guard",
+  "guard": {
+    "aggroRange": 96,
+    "deaggroRange": 140,
+    "leashRange": 160,
+    "stance": {
+      "guard": 1.0,
+      "open": 1.3,
+      "damageMultiplier": 0.42,
+      "moveFactor": 0.5
+    }
+  },
+  "miniboss": true
+}

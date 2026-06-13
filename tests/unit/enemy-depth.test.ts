@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { describe, expect, it } from "vitest";
-import { enemies } from "../../src/lib/config";
+import { enemies, incremental } from "../../src/lib/config";
 import { getMap } from "../../src/lib/content/registry";
 
 describe("S6.5 regional enemy depth", () => {
@@ -35,6 +35,32 @@ describe("S6.5 regional enemy depth", () => {
         expect(enemies.archetypes[archetypeId], archetypeId).toBeTruthy();
       }
     }
+  });
+
+  it("gives every Dragon's Lair room exactly one authored climax (never trash)", () => {
+    // The lair-climax rule (user choice 2026-06-13, [[lair-climax-rule]]): every
+    // lair room has EXACTLY ONE authored enemy entity, and it is a miniboss or
+    // boss — never a wave-pool trash archetype (that would re-hardcode what the
+    // zone model exists to spawn dynamically). throne-wing set the pattern; this
+    // gate holds every room to it. Derived from mapLairs so new lairs auto-enrol.
+    const offenders: string[] = [];
+    for (const lair of Object.values(incremental.mapLairs ?? {})) {
+      for (const roomMap of lair.rooms) {
+        const authored = getMap(roomMap).entities.filter((e) => e.enemy);
+        if (authored.length !== 1) {
+          offenders.push(`${roomMap}: ${authored.length} authored enemies (want exactly 1)`);
+          continue;
+        }
+        const archetype = enemies.archetypes[authored[0].enemy as string];
+        const isClimax = archetype?.miniboss === true || archetype?.boss !== undefined;
+        if (!isClimax) {
+          offenders.push(`${roomMap}: authored ${authored[0].enemy} is trash, not a climax`);
+        }
+      }
+    }
+    expect(offenders, `lair rooms violating the one-climax rule:\n${offenders.join("\n")}`).toEqual(
+      [],
+    );
   });
 
   it("assigns every map to at most one difficultyCurve region", () => {

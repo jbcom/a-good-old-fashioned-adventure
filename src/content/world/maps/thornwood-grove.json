@@ -55,7 +55,13 @@
       "y": 150,
       "note": "a wild trellis where the meadow ends"
     },
-    { "ref": "prop:chest", "x": 560, "y": 160, "contents": "Gold", "note": "a forager's cache" }
+    { "ref": "prop:chest", "x": 560, "y": 160, "contents": "Gold", "note": "a forager's cache" },
+    {
+      "enemy": "grove-warden",
+      "x": 600,
+      "y": 192,
+      "note": "thornwood-hollow lair r1 CLIMAX: a grove-warden, the thorn-knight of the sunlit meadow, holds where the grove ends. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
+    }
   ],
   "waveGates": [
     { "id": "gate:grove-mid", "x": 360, "y": 192, "note": "spawn zone — the trail mid-lane" },

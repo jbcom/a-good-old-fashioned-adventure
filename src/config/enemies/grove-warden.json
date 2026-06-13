@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "grove-warden",
+  "name": "Grove Warden",
+  "sprite": "sprite:boss-grove-warden",
+  "palette": "palette:base",
+  "hp": 64,
+  "speed": 30,
+  "hitbox": {
+    "w": 14,
+    "h": 14
+  },
+  "behavior": "guard",
+  "guard": {
+    "aggroRange": 100,
+    "deaggroRange": 148,
+    "leashRange": 168,
+    "stance": {
+      "guard": 1.1,
+      "open": 1.4,
+      "damageMultiplier": 0.4,
+      "moveFactor": 0.45
+    }
+  },
+  "miniboss": true
+}

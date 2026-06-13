@@ -90,6 +90,12 @@
       "y": 150,
       "contents": "Gold",
       "note": "the raiders' coin-cache"
+    },
+    {
+      "enemy": "warren-chief",
+      "x": 620,
+      "y": 192,
+      "note": "thornwood-hollow lair r CLIMAX: the warren-chief, the bandit captain, holds the thorn-maze's end. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
     }
   ],
   "waveGates": [

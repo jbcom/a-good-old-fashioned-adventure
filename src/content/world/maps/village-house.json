@@ -48,14 +48,14 @@
       "tile": "tile:stone-wall",
       "x": 15,
       "y0": 2,
-      "y1": 9,
+      "y1": 8,
       "note": "partition between rooms (upper gap is the doorway)"
     },
     {
       "op": "col-span",
       "tile": "tile:stone-wall",
       "x": 15,
-      "y0": 13,
+      "y0": 14,
       "y1": 19,
       "note": "partition lower"
     },
@@ -64,14 +64,14 @@
       "tile": "tile:stone-wall",
       "x": 29,
       "y0": 2,
-      "y1": 9,
+      "y1": 8,
       "note": "second partition"
     },
     {
       "op": "col-span",
       "tile": "tile:stone-wall",
       "x": 29,
-      "y0": 13,
+      "y0": 14,
       "y1": 19,
       "note": "second partition lower"
     }
@@ -97,6 +97,12 @@
       "y": 176,
       "dir": -1,
       "note": "the woodcutter, penned in the back room"
+    },
+    {
+      "enemy": "hearth-stalker",
+      "x": 548,
+      "y": 176,
+      "note": "captured-village lair r CLIMAX: a hearth-stalker lurks in the ransacked homes, guarding the penned woodcutter. The one authored combatant; the host is permuted from the unlocked set via the wave gates."
     }
   ],
   "waveGates": [

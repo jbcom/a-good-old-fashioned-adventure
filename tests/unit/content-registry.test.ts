@@ -25,10 +25,13 @@ describe("registries are fully populated", () => {
     expect(tiles.size).toBe(48);
     // 69 authored props + 8 mega-sheet slicer props (dungeon + approach)
     expect(props.size).toBe(82);
-    // 124 .pix sprites + 43 JSON sheet-sprites (src/content/sprites/*.json:
-    // purchased animal/character/dragon-kin slices). +2 from the barrow-rat
-    // oldwood antagonist: its unlock + bounty node emblems.
-    expect(sprites.size).toBe(167);
+    // 133 .pix sprites + 43 JSON sheet-sprites (src/content/sprites/*.json:
+    // purchased animal/character/dragon-kin slices). +9 from the uniform
+    // room-guardian rule (SC.G): a bespoke boss-* design for each lair room
+    // that lacked an authored climax (barrow-digger, nest-overseer,
+    // hearth-stalker, plunder-boss, pen-warden, grove-warden, warren-chief,
+    // ruin-revenant, vault-keeper).
+    expect(sprites.size).toBe(176);
     expect(animations.size).toBe(7);
     expect(maps.size).toBe(24);
     expect(quests.size).toBe(21);
