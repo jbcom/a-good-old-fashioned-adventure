@@ -12,6 +12,10 @@
  */
 import { type RunScenario, runRail } from "./battleHarness";
 
+/**
+ * A single rung in the tech-tree ladder for tuning sweeps. Omits seed and HP scales so
+ * the same scenario can be tested across a grid of HP multipliers.
+ */
 export interface LadderRung {
   label: string;
   scenario: Omit<RunScenario, "seed" | "unitHpScale" | "enemyHpScale">;

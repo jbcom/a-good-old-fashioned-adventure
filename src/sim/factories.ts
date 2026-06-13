@@ -62,6 +62,10 @@ import {
   WaveState,
 } from "./traits";
 
+/**
+ * Create a new game world with all singleton traits: MapRuntime, FlagState,
+ * RngState, clock, camera, incremental progress, and quest log.
+ */
 export function createGameWorld(seed = 1): World {
   const world = createWorld();
   const flagDefaults: Record<string, boolean> = {};
@@ -84,6 +88,10 @@ export function createGameWorld(seed = 1): World {
   return world;
 }
 
+/**
+ * Spawn the player character at (x, y) with class stats, equipped sprite, and
+ * combat/movement traits.
+ */
 export function spawnPlayer(world: World, classId: string, x: number, y: number): Entity {
   const classDef = classes.classes[classId];
   if (!classDef) throw new Error(`unknown class: ${classId}`);
@@ -107,6 +115,10 @@ export function spawnPlayer(world: World, classId: string, x: number, y: number)
   );
 }
 
+/**
+ * Spawn an NPC (dialogue, quest giver) with optional patrol waypoints and
+ * animation. Stationary if patrol omitted.
+ */
 export function spawnNpc(
   world: World,
   charId: string,
@@ -165,6 +177,10 @@ export function spawnUnit(world: World, classId: string, x: number, y: number): 
   );
 }
 
+/**
+ * Spawn an enemy by archetype (determines stats, sprite, attack pattern).
+ * Bosses receive Choreo; guards receive idle phase.
+ */
 export function spawnEnemy(world: World, archetypeId: string, x: number, y: number): Entity {
   const archetype = enemies.archetypes[archetypeId];
   if (!archetype) throw new Error(`unknown enemy archetype: ${archetypeId}`);
@@ -186,6 +202,10 @@ export function spawnEnemy(world: World, archetypeId: string, x: number, y: numb
   return entity;
 }
 
+/**
+ * Spawn a loot container (chest) with contents serialized as a single string
+ * (e.g., "item:gold:10,item:sword").
+ */
 export function spawnChest(world: World, x: number, y: number, contents: string): Entity {
   const prop = getProp("prop:chest");
   return world.spawn(
@@ -204,6 +224,10 @@ export function spawnChest(world: World, x: number, y: number, contents: string)
   );
 }
 
+/**
+ * Spawn a prop (decorative or interactive object). Add solid collision and/or
+ * interaction traits based on prop definition.
+ */
 export function spawnProp(world: World, propId: string, x: number, y: number): Entity {
   const prop = getProp(propId);
   const entity = world.spawn(PropRef({ propId, state: "default" }), Transform({ x, y }));
@@ -224,10 +248,18 @@ export function spawnProp(world: World, propId: string, x: number, y: number): E
   return entity;
 }
 
+/**
+ * Spawn a pickup item (coins, equipment) that can be collected by the player.
+ * Value is optional (e.g., coin count).
+ */
 export function spawnPickup(world: World, itemId: string, x: number, y: number, value = 0): Entity {
   return world.spawn(IsPickup({ itemId, value }), Transform({ x, y }));
 }
 
+/**
+ * Spawn a visual effect (particle burst, flash). Tracks cumulative spawned count
+ * in FxStats for performance monitoring.
+ */
 export function spawnFx(
   world: World,
   fx: Omit<FxBurstState, "total"> & { x: number; y: number },
@@ -249,6 +281,10 @@ export interface ProjectileSpawn {
   fromPlayer: boolean;
 }
 
+/**
+ * Spawn a projectile (bullet, spell) with velocity and lifetime. Tracks trail
+ * position offset for rendering.
+ */
 export function spawnProjectile(world: World, spec: ProjectileSpawn): Entity {
   const { x, y, ...rest } = spec;
   return world.spawn(Projectile({ ...rest, trail: 0 }), Transform({ x, y }));

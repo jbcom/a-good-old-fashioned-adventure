@@ -22,10 +22,12 @@ function knownUpgradeIds(): Set<string> {
   return new Set(incremental.upgradeGraph.nodes.map((node) => node.id));
 }
 
+/** Maximum rank count for a ranked upgrade node, defaulting to 1 for single-purchase upgrades. */
 export function nodeRanks(node: IncrementalUpgradeNode): number {
   return Math.max(1, Math.floor(node.ranks ?? 1));
 }
 
+/** Returns the rank count owned by the player for a node, 0 if unpurchased. */
 export function purchasedRank(
   progress: IncrementalProgressState,
   node: IncrementalUpgradeNode,
@@ -53,6 +55,7 @@ export function rosterFor(
   });
 }
 
+/** Sums max HP bonus from all purchased upgrades applicable to a class. */
 export function upgradeMaxHpBonus(
   progress: IncrementalProgressState | undefined,
   classId: string,
@@ -68,6 +71,7 @@ export function upgradeMaxHpBonus(
   return bonus;
 }
 
+/** Computes the cost to purchase the next rank of a node, accounting for exponential growth. */
 export function rankCost(
   node: IncrementalUpgradeNode,
   ownedRanks: number,
@@ -184,6 +188,7 @@ function sanitizeIdList(input: unknown, allowed: Set<string>): string[] {
   return result;
 }
 
+/** Creates a fresh progress state with the root upgrade and starting class unlocked. */
 export function initialIncrementalProgress(startingCoins = 0): IncrementalProgressState {
   return {
     coins: Math.max(0, Math.floor(startingCoins)),
@@ -205,6 +210,7 @@ export function initialIncrementalProgress(startingCoins = 0): IncrementalProgre
   };
 }
 
+/** Validates and clamps untrusted progress data, enforcing invariants (root unlock, starting class, wallet cap). */
 export function sanitizeIncrementalProgress(
   input: unknown,
   fallbackCoins = 0,
@@ -269,6 +275,7 @@ function sanitizeLastRun(input: unknown): IncrementalProgressState["lastRun"] {
   };
 }
 
+/** Fetches or initializes the world's incremental progress state. */
 export function currentProgress(world: World): IncrementalProgressState {
   const existing = world.get(IncrementalProgress);
   if (existing) return existing;
@@ -285,6 +292,7 @@ function bankSfx(world: World, name: "coin" | "rose" | "pickup"): void {
   world.get(Outbox)?.sfx.push(name);
 }
 
+/** Restores progress from untrusted save data, sanitizing and writing to world. */
 export function restoreIncrementalProgress(
   world: World,
   input: unknown,
@@ -371,6 +379,7 @@ function kinRoseYield(progress: IncrementalProgressState): number {
   return Math.round(base * rewardMult);
 }
 
+/** Grants a run reward by rewardId: coins/gems/roses or closes a victory, persisting to lastRun. */
 export function grantRunReward(world: World, rewardId: string): void {
   const reward = incremental.runRewards[rewardId];
   if (!reward) return;
@@ -408,6 +417,7 @@ export function grantRunReward(world: World, rewardId: string): void {
   });
 }
 
+/** Applies currency and progression effects from a game event (zone entry or enemy defeat). */
 export function applyIncrementalEventReward(world: World, event: GameEvent): void {
   if (event.type === "zone:entered") {
     applyRoadTravelled(world, event);
@@ -468,7 +478,7 @@ function applyRoadTravelled(world: World, event: GameEvent): void {
   bankCoins(world, base + checkpointBonus(progress));
 }
 
-/** Summed per-checkpoint coin bonus from owned economy upgrade ranks. */
+/** Sums per-checkpoint coin bonus from all purchased economy upgrades. */
 export function checkpointBonus(progress: IncrementalProgressState): number {
   let bonus = 0;
   for (const node of incremental.upgradeGraph.nodes) {
@@ -478,10 +488,7 @@ export function checkpointBonus(progress: IncrementalProgressState): number {
   return bonus;
 }
 
-/**
- * Death pays out: the run's banked coins stay banked and the run closes with
- * a gameover ledger entry instead of a wipe.
- */
+/** Closes the run with a gameover, persisting earned coins/gems/roses to lastRun. */
 export function recordDeathPayout(world: World): IncrementalProgressState {
   const progress = currentProgress(world);
   const next: IncrementalProgressState = {
@@ -504,6 +511,7 @@ export function recordDeathPayout(world: World): IncrementalProgressState {
   return next;
 }
 
+/** Outcome of an upgrade purchase attempt: success flag, node label, reason for failure, and final wallet state. */
 export interface UpgradePurchaseResult {
   ok: boolean;
   nodeId: string;
@@ -523,13 +531,7 @@ function canReachNode(progress: IncrementalProgressState, node: IncrementalUpgra
   return node.prerequisites.every((id) => progress.purchasedUpgradeIds.includes(id));
 }
 
-/**
- * Resolve a node's price into what's actually charged (docs/RAIL-COMMAND.md
- * §Three currencies — dual-cost). A node listing BOTH roses AND gems is an
- * OR-cost (the dragon track): pay roses when affordable (the cheap shortcut),
- * else gems (the painful fallback) — so a rose-poor gem-rich player is never
- * blocked. Single-currency costs (coins connectors, gem majors) pass through.
- */
+/** Resolves OR-cost (rose-or-gem) nodes by checking affordability, returning payment or null if unreachable. */
 export function resolvePayment(
   progress: IncrementalProgressState,
   price: { coins: number; gems: number; roses: number },
@@ -552,6 +554,7 @@ function addUnique(values: string[], value?: string): string[] {
   return [...values, value];
 }
 
+/** Attempts to purchase an upgrade node, validating prerequisites, rank limits, and payment, then updates world state on success. */
 export function purchaseUpgradeNode(world: World, nodeId: string): UpgradePurchaseResult {
   const progress = currentProgress(world);
   const node = nodeById(nodeId);
