@@ -89,6 +89,24 @@
       "y": 128,
       "contents": "RoyalGold",
       "note": "royal stacks strongbox \u2014 branch detours outpay the road"
+    },
+    {
+      "ref": "prop:library-shelf",
+      "x": 200,
+      "y": 160,
+      "note": "phials and scrolls by the reading desks"
+    },
+    {
+      "ref": "prop:library-shelf",
+      "x": 232,
+      "y": 160,
+      "note": "second shelf run"
+    },
+    {
+      "ref": "prop:archive-case",
+      "x": 300,
+      "y": 150,
+      "note": "the dark archive looms"
     }
   ],
   "triggers": [

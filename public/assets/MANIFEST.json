@@ -761,6 +761,22 @@
           "height": 16
         }
       ]
+    },
+    {
+      "id": "kenney-roguelike-interior",
+      "title": "Kenney Roguelike Interior Pack",
+      "author": "Kenney (kenney.nl)",
+      "source": "user import (raw-assets/extracted/Roguelike Interior Pack/)",
+      "url": "https://kenney.nl",
+      "license": "CC0 / public domain (License.txt in the pack) \u2014 free for commercial use, no attribution required.",
+      "mappedUse": "Castle-interior furniture and dressing (census: 9 props). 16px cells on a 17px pitch. First slices: lit candelabra, burning wall torch, framed painting; the sheet holds beds, shelves, rugs, a piano and more for further interior passes.",
+      "files": [
+        {
+          "path": "tilemaps/kenney-interior.png",
+          "width": 458,
+          "height": 305
+        }
+      ]
     }
   ]
 }

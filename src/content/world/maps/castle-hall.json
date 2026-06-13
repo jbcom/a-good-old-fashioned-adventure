@@ -160,6 +160,36 @@
       "dir": -1,
       "requiresRoutePack": "castle-interior",
       "note": "Princess Amber relocated before the throne door"
+    },
+    {
+      "ref": "prop:candelabra",
+      "x": 700,
+      "y": 250,
+      "note": "flanking the approach to the throne door"
+    },
+    {
+      "ref": "prop:candelabra",
+      "x": 764,
+      "y": 250,
+      "note": "second flank"
+    },
+    {
+      "ref": "prop:wall-torch",
+      "x": 400,
+      "y": 180,
+      "note": "hall sconce"
+    },
+    {
+      "ref": "prop:wall-torch",
+      "x": 560,
+      "y": 180,
+      "note": "second sconce"
+    },
+    {
+      "ref": "prop:framed-painting",
+      "x": 320,
+      "y": 176,
+      "note": "an ancestor watches the hall"
     }
   ],
   "triggers": [

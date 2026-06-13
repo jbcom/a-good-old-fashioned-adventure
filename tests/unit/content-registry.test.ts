@@ -24,7 +24,7 @@ describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
     expect(tiles.size).toBe(48);
     // 69 authored props + 8 mega-sheet slicer props (dungeon + approach)
-    expect(props.size).toBe(77);
+    expect(props.size).toBe(82);
     // 61 .pix sprites + 9 purchased sheet sprites (high-dragon, boar pair, snake, raven, vulture, bat, rat, hooded-mage)
     expect(sprites.size).toBe(97);
     expect(animations.size).toBe(7);
