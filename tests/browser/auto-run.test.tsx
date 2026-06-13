@@ -41,6 +41,8 @@ it("AUTO plays the frontier headlessly and jumps to results", async () => {
       coins: 0,
       gems: 0,
       roses: 0,
+      // already cleared a map once → AUTO is unlocked (a frontier exists)
+      rescueCount: 1,
       purchasedUpgradeIds: ["upgrade:first-vow"],
       unlockedClassIds: ["knight"],
       unlockedRoutePackIds: [],
@@ -74,4 +76,52 @@ it("AUTO plays the frontier headlessly and jumps to results", async () => {
   await expect
     .poll(() => commander.perceive().mode, { timeout: 10_000 })
     .toMatch(/results|gameover/);
+}, 240_000);
+
+it("hides AUTO until the player has cleared a map (a frontier exists)", async () => {
+  await page.viewport(1280, 720);
+  await wait(100);
+
+  const repository = new MemorySaveRepository();
+  await repository.upsertSlot({
+    id: 1,
+    classId: "knight",
+    mapId: "map:rescue-route",
+    playerX: 136,
+    playerY: 976,
+    level: 1,
+    hp: 100,
+    maxHp: 100,
+    questSummary: "Hold the road",
+    // rescueCount 0 → no frontier yet → AUTO hidden
+    snapshotJson: JSON.stringify({
+      coins: 0,
+      rescueCount: 0,
+      purchasedUpgradeIds: ["upgrade:first-vow"],
+      unlockedClassIds: ["knight"],
+      unlockedRoutePackIds: [],
+    }),
+    updatedAt: new Date("2026-06-13T17:00:00Z"),
+  });
+
+  container = document.createElement("div");
+  container.style.position = "fixed";
+  container.style.inset = "0";
+  document.body.appendChild(container);
+  root = createRoot(container);
+  root.render(
+    <StrictMode>
+      <App saveRepository={repository} />
+    </StrictMode>,
+  );
+
+  const commander = new CommanderGovernor();
+  await expect.element(page.getByTestId("landing-screen")).toBeVisible();
+  await commander.tap("continue-button");
+  await expect
+    .poll(() => commander.perceive().mapName, { timeout: 10_000 })
+    .toBe("map:rescue-route");
+
+  // AUTO is absent before the first clear
+  expect(document.querySelector('[data-testid="hud-auto"]')).toBeNull();
 }, 240_000);

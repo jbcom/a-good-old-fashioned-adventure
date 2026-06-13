@@ -843,15 +843,19 @@ function Hud({
         >
           {timeScale}×
         </button>
-        <button
-          className="hud-auto"
-          data-testid="hud-auto"
-          type="button"
-          aria-label="Auto-play the frontier map"
-          onClick={onAuto}
-        >
-          AUTO
-        </button>
+        {snapshot.incrementalProgress.rescueCount > 0 && (
+          // AUTO unlocks once the player has cleared a map (a frontier exists
+          // to auto toward) — docs/RAIL-COMMAND.md §AUTO
+          <button
+            className="hud-auto"
+            data-testid="hud-auto"
+            type="button"
+            aria-label="Auto-play the frontier map"
+            onClick={onAuto}
+          >
+            AUTO
+          </button>
+        )}
         <button
           className="hud-menu"
           data-testid="hud-menu"
