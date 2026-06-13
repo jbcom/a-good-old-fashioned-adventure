@@ -275,12 +275,17 @@ re-tune needed; the audit is the validation.
 N4 (late-map escalation) remains for the content stage; N3 (manual stays
 richest) is a standing S20 design constraint.
 
-**N4 NOW HAS HARD DATA (2026-06-13, tests/unit/spike-ladder.test.ts):** the
-map-ladder gate measured the inversion directly — with a frozen knight/ranger/
-wizard roster, the spine advance is 1.0, 1.0, **~0.60 (deep-forest)**, 1.0,
-1.0, 1.0. So `map:deep-forest` is an anomalously hard mid-spine spike: the maps
-AFTER it are easier, exactly the inversion N4 warned about. The gate pins this
-known anomaly and fails on any NEW inversion. FIX (S19.2): re-tune deep-forest
-(its geometry/boss makes the line stall ~midfield) and author proper late-map
-escalation so difficulty rises monotonically; then unpin the deep-forest
-exception from the ladder gate.
+**N4 deep-forest spike — DIAGNOSED then FIXED (2026-06-13, commit 0db23cf).**
+The map-ladder gate measured the inversion: frozen-roster spine advance was
+1.0, 1.0, **~0.60 (deep-forest)**, 1.0, 1.0, 1.0 — deep-forest an anomalous
+mid-spine spike. Root cause (found via the harness): three KITING casters
+(glowcap-matron, thorn-shaman, forest-shaman) clustered mid-to-late soft-locked
+the AI line at midfield — the line marched into the kiting wall at x≈560 and
+stalled chasing retreating casters off the rail. FIX: front-loaded the
+skirmishers, kept one on-lane midfield gate (the miniboss), pushed the two late
+casters to the flanks near the goal. deep-forest now clears 8/8 (advance 1.0);
+the inversion is gone and the ladder gate's exception is removed. LESSON for
+S19.2 content: a cluster of kiting casters on the central rail is a
+line-advance soft-lock; casters belong on flanks or as a final gate, not a
+mid-rail wall. The broader N4 (proper rising late-map escalation, the 10-map
+content) remains for the content stage; the acute spike is closed.
