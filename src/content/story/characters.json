@@ -12,8 +12,8 @@
     "char:woodcutter": {
       "name": "Woodcutter",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:woodcutter",
+      "sprite": "sprite:citizen-grym",
+      "palette": "palette:base",
       "portraitColor": "#946629",
       "dialogue": "dlgbank:woodcutter"
     },
@@ -28,8 +28,8 @@
     "char:shopkeeper": {
       "name": "Keeper Brindle",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:keeper",
+      "sprite": "sprite:citizen-serek",
+      "palette": "palette:base",
       "portraitColor": "#cfa153",
       "dialogue": "dlgbank:shopkeeper",
       "note": "Village shopkeeper whose first kindness leads into the content-authored counter economy."
@@ -37,8 +37,8 @@
     "char:threadseller": {
       "name": "Nell Threadseller",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:threadseller",
+      "sprite": "sprite:citizen-nel",
+      "palette": "palette:base",
       "portraitColor": "#a86569",
       "dialogue": "dlgbank:threadseller",
       "note": "Shop regular who gives Hearthwake's counter a lived-in story signal."
@@ -46,8 +46,8 @@
     "char:road-cart-trader": {
       "name": "Penny Cartwright",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:road-cart-trader",
+      "sprite": "sprite:citizen-julz",
+      "palette": "palette:base",
       "portraitColor": "#b07a2c",
       "dialogue": "dlgbank:road-cart-trader",
       "note": "Moving Hearthwake road-cart trader who turns the shopfront street into a working storefront."
@@ -55,8 +55,8 @@
     "char:page": {
       "name": "Page Pip",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:page",
+      "sprite": "sprite:citizen-artun",
+      "palette": "palette:base",
       "portraitColor": "#7f4f2f",
       "dialogue": "dlgbank:page",
       "note": "Village errand-giver who ties the green, shop, and first road together."
@@ -64,8 +64,8 @@
     "char:mara-cress": {
       "name": "Mara Cress",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:market-mender",
+      "sprite": "sprite:citizen-hana",
+      "palette": "palette:base",
       "portraitColor": "#9f5d57",
       "dialogue": "dlgbank:mara-cress",
       "note": "Market mender who makes Hearthwake feel inhabited before the road opens."
@@ -73,8 +73,8 @@
     "char:tobin-bell": {
       "name": "Tobin Bell",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:bellwarden",
+      "sprite": "sprite:citizen-reza",
+      "palette": "palette:base",
       "portraitColor": "#6d604a",
       "dialogue": "dlgbank:tobin-bell",
       "note": "Notice-board keeper whose advice reinforces the old-fashioned adventure tone."
@@ -82,8 +82,8 @@
     "char:tamsin-hearth": {
       "name": "Tamsin Hearth",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:baker",
+      "sprite": "sprite:citizen-meza",
+      "palette": "palette:base",
       "portraitColor": "#b88958",
       "dialogue": "dlgbank:tamsin-hearth",
       "note": "Village baker who points the opening road toward ordinary Hearthwake life."
@@ -91,8 +91,8 @@
     "char:oswin-hayward": {
       "name": "Oswin Hayward",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:stablehand",
+      "sprite": "sprite:citizen-hark",
+      "palette": "palette:base",
       "portraitColor": "#7f4f2f",
       "dialogue": "dlgbank:oswin-hayward",
       "note": "Stablehand who turns Hearthwake's lower lane into a social working yard."
@@ -100,8 +100,8 @@
     "char:merrin-underbough": {
       "name": "Merrin Underbough",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:tavern-keeper",
+      "sprite": "sprite:citizen-khali",
+      "palette": "palette:base",
       "portraitColor": "#7f4f2f",
       "dialogue": "dlgbank:merrin-underbough",
       "note": "Unfurled Vine keeper who ties the tavern hearth, song-board, and story-quilt to the road."
@@ -130,8 +130,8 @@
     "char:hermit": {
       "name": "Oldwood Hermit",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:hermit",
+      "sprite": "sprite:citizen-janik",
+      "palette": "palette:base",
       "portraitColor": "#6f7f3f",
       "dialogue": "dlgbank:hermit",
       "note": "Forest quest NPC for the Oldwood oath and raider counter."
@@ -139,8 +139,8 @@
     "char:oldwood-roadward": {
       "name": "Mabli Greenmantle",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:roadward",
+      "sprite": "sprite:citizen-seza",
+      "palette": "palette:base",
       "portraitColor": "#5f6f38",
       "dialogue": "dlgbank:oldwood-roadward",
       "note": "Oldwood roadward who turns Oswin's stable service into a first-road favor."
@@ -148,8 +148,8 @@
     "char:oldwood-thorncutter": {
       "name": "Hester Briarhook",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:oldwood-thorncutter",
+      "sprite": "sprite:citizen-khali",
+      "palette": "palette:base",
       "portraitColor": "#4a5f2d",
       "dialogue": "dlgbank:oldwood-thorncutter",
       "note": "Moving Oldwood thorncutter who makes the upper hazel pocket feel tended."
@@ -157,8 +157,8 @@
     "char:oldwood-lantern-keeper": {
       "name": "Caddoc Wick",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:bellwarden",
+      "sprite": "sprite:citizen-nyro",
+      "palette": "palette:base",
       "portraitColor": "#6d604a",
       "dialogue": "dlgbank:oldwood-lantern-keeper",
       "note": "Oldwood last-lantern keeper who turns the quiet threshold walk into a public A-button route verb."
@@ -166,8 +166,8 @@
     "char:lost-page": {
       "name": "Lost Page Rowan",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:lost-page",
+      "sprite": "sprite:citizen-artun",
+      "palette": "palette:base",
       "portraitColor": "#9f5d57",
       "dialogue": "dlgbank:lost-page",
       "note": "Escort-lite Deep Forest NPC guided by landmark zones."
@@ -175,8 +175,8 @@
     "char:fern-mender": {
       "name": "Linnet Fernwise",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:fern-mender",
+      "sprite": "sprite:citizen-vash",
+      "palette": "palette:base",
       "portraitColor": "#4f7f45",
       "dialogue": "dlgbank:fern-mender",
       "note": "Deep Forest mender whose walking loop and fern-lamp work make the lower track feel inhabited."
@@ -184,8 +184,8 @@
     "char:desert-pilgrim": {
       "name": "Pilgrim Safra",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:desert-pilgrim",
+      "sprite": "sprite:citizen-meza",
+      "palette": "palette:base",
       "portraitColor": "#b88958",
       "dialogue": "dlgbank:desert-pilgrim",
       "note": "Desert ruins guide who turns the mural into a readable landmark loop."
@@ -193,8 +193,8 @@
     "char:sunken-courier": {
       "name": "Celia Knotwell",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:sunken-courier",
+      "sprite": "sprite:citizen-julz",
+      "palette": "palette:base",
       "portraitColor": "#8f7657",
       "dialogue": "dlgbank:sunken-courier",
       "note": "Moving Sunken Road courier who turns the shaded layby into a route encounter."
@@ -202,8 +202,8 @@
     "char:sunken-road-wreck-picker": {
       "name": "Petch Marrow",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:desert-pilgrim",
+      "sprite": "sprite:citizen-grym",
+      "palette": "palette:base",
       "portraitColor": "#b08a4f",
       "dialogue": "dlgbank:sunken-road-wreck-picker",
       "note": "Wreck-picker working the sandwyrm wash who turns the widest Sunken Road window into a public A-button route verb."
@@ -218,8 +218,8 @@
     "char:castle-scribe": {
       "name": "Castle Scribe Elowen",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:scribe",
+      "sprite": "sprite:citizen-hana",
+      "palette": "palette:base",
       "portraitColor": "#cfa153",
       "dialogue": "dlgbank:castle-scribe",
       "note": "Castle hall NPC who turns the library and armory into required room verbs before the dungeon."
@@ -227,8 +227,8 @@
     "char:approach-pilgrim": {
       "name": "Aveline Dustcoat",
       "role": "npc",
-      "sprite": "sprite:hero",
-      "palette": "palette:approach-pilgrim",
+      "sprite": "sprite:citizen-seza",
+      "palette": "palette:base",
       "portraitColor": "#6d604a",
       "dialogue": "dlgbank:approach-pilgrim",
       "note": "Moving Castle Approach pilgrim who replaces the empty west-road exception with a playable warning."

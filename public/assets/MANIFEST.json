@@ -1,6 +1,6 @@
 {
   "comment": "License-aware registry of every purchased/imported asset under public/assets/. Raw downloads live in raw-assets/ (gitignored); only curated keepers land here. tests/unit/asset-manifest.test.ts is the integrity gate: every file listed must exist with the stated geometry, and every image under the covered directories must be listed. POLICY: any NEW directory of imported assets under public/assets/ must be added to coveredDirs in the same change, or the gate cannot see it (fonts/ and the engine wasm are first-party, not imports).",
-  "coveredDirs": ["bosses", "tilemaps", "enemies", "audio", "heroes", "units"],
+  "coveredDirs": ["bosses", "tilemaps", "enemies", "audio", "heroes", "units", "npcs"],
   "packs": [
     {
       "id": "high-dragon",
@@ -371,6 +371,76 @@
           "path": "units/heavy-knight.png",
           "width": 128,
           "height": 384
+        },
+        {
+          "path": "npcs/hana.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/julz.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/khali.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/meza.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/nel.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/seza.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/vash.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/artun.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/grym.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/hark.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/janik.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/nyro.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/reza.png",
+          "width": 64,
+          "height": 496
+        },
+        {
+          "path": "npcs/serek.png",
+          "width": 64,
+          "height": 496
         }
       ]
     },
