@@ -277,3 +277,19 @@ preview server for human scrubbing. The GIF stills double-confirmed the
 direction-block order (up = back view, down = camera-facing). Masters and
 previews are regenerable, so both stay gitignored; the def JSON remains
 the runtime source of truth.
+
+**SA.4 adoption ledger (closed 2026-06-12):** (a) frame-import authoring
+ADOPTED for purchased sheets (pnpm author:sheets, four layout
+conventions compiled to tagged masters); richer .pix animation authoring
+via add_frames/tweens REJECTED-for-now — the cast conversion left only
+audit-clear, mostly-static .pix survivors (bosses, princess, effects,
+emblems, pickups), so there is no under-animated bespoke cycle to
+author. (b) audit_animation + get_sprite_info ADOPTED as the QA gate (it
+caught the tag-extension importer bug). (c) preview server ADOPTED
+(raw-assets/previews/ behind the MCP server). (d) palette tooling
+(set_palette/remap) REJECTED-for-now — region identity now comes from
+purchased BODIES, not palette families; the surviving .pix palette
+pipeline is stable and needs no derivation. (e) round-trip story
+DOCUMENTED: text (.pix) and def JSON are the source of truth flowing
+one-way into .aseprite masters for scrubbing and QA; edits flow back by
+editing the source, never the master.
