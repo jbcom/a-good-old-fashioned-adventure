@@ -139,8 +139,39 @@
         },
         "prerequisites": ["upgrade:first-vow"],
         "classId": "ranger",
-        "unlocks": ["upgrade:ranger-craft", "upgrade:ranger-leap-rose"],
+        "unlocks": ["upgrade:ranger-craft", "upgrade:ranger-leap-rose", "upgrade:wizard-focus"],
         "track": "characters"
+      },
+      {
+        "id": "upgrade:wizard-focus",
+        "label": "Wizard Focus",
+        "category": "class",
+        "cost": {
+          "roses": 1
+        },
+        "prerequisites": ["upgrade:ranger-trail"],
+        "classId": "wizard",
+        "unlocks": ["upgrade:wizard-arcana"],
+        "track": "characters",
+        "note": "Completes the offense-first starting trio (melee→ranged→spells): the wizard is the third core body, a rose class-major hung off the ranger so the ranged line precedes the spell line. Its coin sub-track (wizard-arcana) is the connector."
+      },
+      {
+        "id": "upgrade:wizard-arcana",
+        "label": "Wizard Arcana",
+        "category": "ability",
+        "cost": {
+          "coins": 22
+        },
+        "ranks": 3,
+        "rankCostGrowth": 1.6,
+        "prerequisites": ["upgrade:wizard-focus"],
+        "classId": "wizard",
+        "effect": {
+          "maxHp": 8
+        },
+        "unlocks": [],
+        "track": "characters",
+        "note": "The wizard's own coin sub-track — only reachable after the wizard itself (DAG integrity: no class upgrades before the class node)."
       },
       {
         "id": "upgrade:dragon-wake",
@@ -558,6 +589,7 @@
     "starting": "knight",
     "unlockable": [
       "ranger",
+      "wizard",
       "rogue",
       "bard",
       "sorcerer",

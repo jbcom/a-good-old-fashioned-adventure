@@ -98,7 +98,8 @@ describe("incremental progression state", () => {
       roses: 4,
       rescueCount: 2,
       purchasedUpgradeIds: ["upgrade:first-vow", "upgrade:oldwood-bend"],
-      unlockedClassIds: ["knight", "ranger"],
+      // wizard is now a known unlockable class (the offense-first trio's spell slot)
+      unlockedClassIds: ["knight", "ranger", "wizard"],
       unlockedRoutePackIds: ["oldwood"],
     });
   });
