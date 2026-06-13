@@ -19,7 +19,7 @@
 import { execFileSync, spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readdirSync, readFileSync, statSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { basename, dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -124,7 +124,11 @@ for (const pack of packs) {
     // mkdir must stay behind the DRY gate: a leftover empty dir makes the
     // extraction phase (existsSync skip) treat the pack as already extracted
     if (!isArchive && !DRY) mkdirSync(looseDir, { recursive: true });
-    const dest = isArchive ? join(ARCHIVES, upload.filename) : join(looseDir, upload.filename);
+    // basename() strips any path components the API could smuggle (security
+    // pass 2026-06-12; extraction zip-slip accepted as bounded - raw-assets
+    // is gitignored and sources are own purchases over HTTPS)
+    const safeName = basename(upload.filename);
+    const dest = isArchive ? join(ARCHIVES, safeName) : join(looseDir, safeName);
 
     if (existsSync(dest) && statSync(dest).size === upload.size) {
       const md5 = createHash("md5").update(readFileSync(dest)).digest("hex");
