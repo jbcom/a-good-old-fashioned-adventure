@@ -155,8 +155,18 @@
   ],
   "waveGates": [
     { "id": "gate:yard-gate", "x": 280, "y": 272, "note": "spawn zone — the yard gate" },
-    { "id": "gate:yard-north", "x": 400, "y": 200, "note": "spawn zone — the north muster rank" },
-    { "id": "gate:yard-south", "x": 380, "y": 360, "note": "spawn zone — the south siege-works" },
+    {
+      "id": "gate:yard-north",
+      "x": 400,
+      "y": 208,
+      "note": "spawn zone — the north muster rank, on the top edge of the dressed-stone lane"
+    },
+    {
+      "id": "gate:yard-south",
+      "x": 380,
+      "y": 336,
+      "note": "spawn zone — the south siege-works, on the bottom edge of the dressed-stone lane"
+    },
     { "id": "gate:yard-keep", "x": 500, "y": 272, "note": "spawn zone — before the keep steps" }
   ],
   "triggers": [

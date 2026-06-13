@@ -61,7 +61,8 @@ it("fields the tier ladder: medium and composite units fight by their own minds"
         // map's waves are region.archetypes ∩ the player's UNLOCKED enemy set.
         // Without an enemy-DAG unlock no trash spawns — only the boss holds —
         // so the warlock's withering field would have nothing to mark. Unlock
-        // forest-orc (region:oldwood pool) so the muster waves actually field.
+        // forest-orc (region:oldwood pool) so the muster waves actually field;
+        // dragon-wake is its DAG prerequisite (unlock-forest-orc.prerequisites).
         "upgrade:dragon-wake",
         "upgrade:unlock-forest-orc",
       ],

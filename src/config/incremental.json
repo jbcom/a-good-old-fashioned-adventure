@@ -135,6 +135,10 @@
     "castleMap": "map:castle-hall"
   },
   "mapLairs": {
+    "map:rescue-route": {
+      "theme": "roadside-barrow",
+      "rooms": ["map:barrow-mouth", "map:barrow-deep"]
+    },
     "map:oldwood-forest": {
       "theme": "captured-village",
       "rooms": [

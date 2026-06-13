@@ -1,0 +1,26 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "barrow-whelp",
+  "name": "Barrow Whelp",
+  "sprite": "sprite:boss-barrow-whelp",
+  "palette": "palette:base",
+  "hp": 48,
+  "speed": 36,
+  "hitbox": {
+    "w": 12,
+    "h": 12
+  },
+  "behavior": "guard",
+  "guard": {
+    "aggroRange": 90,
+    "deaggroRange": 130,
+    "leashRange": 96,
+    "stance": {
+      "guard": 0.9,
+      "open": 1.3,
+      "damageMultiplier": 0.4,
+      "moveFactor": 0.5
+    }
+  },
+  "miniboss": true
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-rescue-route-2",
+  "label": "Take the Whelp's Nest",
+  "category": "map",
+  "cost": {
+    "roses": 3,
+    "gems": 26
+  },
+  "prerequisites": ["upgrade:lair-rescue-route-1"],
+  "lairRoom": {
+    "mapId": "map:rescue-route",
+    "depth": 2,
+    "roomMap": "map:barrow-deep"
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Dragon's Lair depths (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks): the deepest barrow room — the brother-dragon's whelp coils on its first hoard. Taking the nest relocates the princess HERE (deepest room); once the brother kin is unlocked he relocates to this room and overlays the whelp climax. Rose-OR-gem (roses logarithmic shortcut, gems exponential fallback)."
+}

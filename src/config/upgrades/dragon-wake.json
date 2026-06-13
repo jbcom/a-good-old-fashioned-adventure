@@ -11,7 +11,8 @@
   "unlocks": [
     "upgrade:sorcerer-cinder",
     "upgrade:unlock-forest-orc",
-    "upgrade:dragon-kin-rescue-route"
+    "upgrade:dragon-kin-rescue-route",
+    "upgrade:lair-rescue-route-1"
   ],
   "track": "encounters"
 }

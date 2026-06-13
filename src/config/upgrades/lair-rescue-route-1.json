@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-rescue-route-1",
+  "label": "Break into the Roadside Barrow",
+  "category": "map",
+  "cost": {
+    "roses": 2,
+    "gems": 18
+  },
+  "prerequisites": ["upgrade:dragon-wake"],
+  "lairRoom": {
+    "mapId": "map:rescue-route",
+    "depth": 1,
+    "roomMap": "map:barrow-mouth"
+  },
+  "unlocks": ["upgrade:lair-rescue-route-2"],
+  "track": "roads",
+  "note": "Dragon's Lair entrance (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks): the first lair on the spine — the dragon's brother dug a nest beneath the rescue road, the brood's first warren. Breaking into the barrow mouth relocates the princess into its first room. The cheapest lair (roses logarithmic shortcut, gems exponential fallback)."
+}

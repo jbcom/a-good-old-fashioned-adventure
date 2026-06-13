@@ -17,7 +17,7 @@
       "label": "Oldwood Forest",
       "tier": 1,
       "threat": 2,
-      "maps": ["map:oldwood-forest", "map:rescue-route"],
+      "maps": ["map:oldwood-forest", "map:rescue-route", "map:barrow-mouth", "map:barrow-deep"],
       "archetypes": ["forest-orc", "oldwood-raider", "thorn-shaman"]
     },
     {
