@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-crag-pass-2",
+  "label": "Climb the Scree Warren",
+  "category": "map",
+  "cost": {
+    "roses": 6,
+    "gems": 200
+  },
+  "prerequisites": ["upgrade:lair-crag-pass-1"],
+  "lairRoom": {
+    "mapId": "map:crag-pass",
+    "depth": 2,
+    "roomMap": "map:scree-warren"
+  },
+  "unlocks": ["upgrade:lair-crag-pass-3"],
+  "track": "roads",
+  "note": "Crag lair room 2. Unlocking it relocates the princess deeper into the crag."
+}

@@ -1,0 +1,144 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:summit-roost",
+  "kind": "map",
+  "name": "The Summit Roost",
+  "size": { "cols": 50, "rows": 26 },
+  "baseTile": "tile:stone-floor-cracked",
+  "bgmTheme": "dungeon",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain-crag" },
+    {
+      "op": "region",
+      "tile": "tile:mountain-ledge",
+      "x0": 2,
+      "x1": 12,
+      "y0": 2,
+      "y1": 9,
+      "note": "the wind-scoured upper ledges of the roost rim"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain-ledge",
+      "x0": 2,
+      "x1": 10,
+      "y0": 17,
+      "y1": 24,
+      "note": "the lower roost rim"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:castle-road",
+      "y": 12,
+      "x0": 2,
+      "x1": 47,
+      "note": "the cut summit causeway to the roost the line must hold"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:castle-road",
+      "y": 13,
+      "x0": 2,
+      "x1": 47,
+      "note": "causeway, second course"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 18,
+      "y0": 2,
+      "y1": 9,
+      "note": "a summit horn pinching the causeway (the gap is the run)"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:mountain",
+      "x": 33,
+      "y0": 16,
+      "y1": 23,
+      "note": "a second horn off the lower flank"
+    },
+    {
+      "op": "region",
+      "tile": "tile:grass-tufts",
+      "x0": 38,
+      "x1": 47,
+      "y0": 6,
+      "y1": 20,
+      "note": "the wind-grass crown of the roost where the dragon's eyrie-mother broods"
+    },
+    {
+      "op": "region",
+      "tile": "tile:stone-floor-moss",
+      "x0": 30,
+      "x1": 37,
+      "y0": 9,
+      "y1": 16,
+      "note": "the lichened roost terrace"
+    }
+  ],
+  "playerSpawn": { "x": 48, "y": 200 },
+  "spawns": {
+    "default": { "x": 48, "y": 200 },
+    "entry": { "x": 48, "y": 200 }
+  },
+  "entities": [
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 200,
+      "y": 320,
+      "note": "a reef of bones at the causeway's foot"
+    },
+    {
+      "ref": "prop:wind-ribbon-cairn",
+      "x": 300,
+      "y": 224,
+      "note": "a summit cairn leaning into the wind"
+    },
+    {
+      "ref": "prop:dungeon-web",
+      "x": 360,
+      "y": 170,
+      "note": "the great cliff-web of the roost horn"
+    },
+    {
+      "ref": "prop:ruin-mural",
+      "x": 520,
+      "y": 224,
+      "note": "a weathered summit-shrine carving of the peak before the dragon came"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 600,
+      "y": 224,
+      "contents": "Gold",
+      "note": "the eyrie-hoard's wind-scattered coin"
+    },
+    {
+      "enemy": "eyriemother-tyrant",
+      "x": 680,
+      "y": 200,
+      "note": "crag lair r3 CLIMAX: the eyriemother-tyrant, the brood-mother the crag dragon set to roost the summit. The deepest authored climax of the crag. The one authored combatant; the host is permuted from the unlocked set."
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:roost-mouth", "x": 240, "y": 200, "note": "spawn zone — the causeway mouth" },
+    {
+      "id": "gate:roost-horn",
+      "x": 380,
+      "y": 176,
+      "note": "spawn zone — past the summit horn, upper"
+    },
+    { "id": "gate:roost-rim", "x": 420, "y": 264, "note": "spawn zone — the lower roost rim" },
+    { "id": "gate:roost-crown", "x": 620, "y": 200, "note": "spawn zone — the wind-grass crown" }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:summit-roost-landmark",
+      "kind": "landmark",
+      "label": "The Summit Roost",
+      "sfx": "interact",
+      "zone": { "x0": 32, "y0": 184, "x1": 80, "y1": 216 }
+    }
+  ]
+}

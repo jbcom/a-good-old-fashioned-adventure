@@ -9,7 +9,7 @@
   },
   "prerequisites": ["upgrade:sunken-shortcut"],
   "routePack": "mistmire",
-  "unlocks": ["upgrade:lair-mistmire-marsh-1", "upgrade:castle-approach-siege"],
+  "unlocks": ["upgrade:lair-mistmire-marsh-1", "upgrade:crag-ascent"],
   "track": "roads",
   "note": "The drowned road between the dunes and the castle. Unlocking the mistmire route opens the marsh spine map and gates the castle siege behind it."
 }

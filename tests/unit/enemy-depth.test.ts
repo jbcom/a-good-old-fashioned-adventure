@@ -23,6 +23,8 @@ describe("S6.5 regional enemy depth", () => {
       "region:castle-approach",
       "region:mistmire",
       "region:mistmire-lair",
+      "region:crag",
+      "region:crag-lair",
       "region:sunken-crypt",
       "region:siege-warcamp",
       "region:dungeon",

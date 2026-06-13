@@ -1,0 +1,280 @@
+{
+  "$schema": "../../../../schemas/map.schema.json",
+  "id": "map:crag-pass",
+  "kind": "map",
+  "name": "The Crag Pass",
+  "size": { "cols": 30, "rows": 58 },
+  "baseTile": "tile:grass",
+  "bgmTheme": "overworld",
+  "generation": [
+    { "op": "border", "tile": "tile:mountain-crag" },
+    {
+      "op": "region",
+      "tile": "tile:mountain",
+      "x0": 1,
+      "x1": 9,
+      "y0": 2,
+      "y1": 26,
+      "note": "the sheer west wall hemming the pass"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain",
+      "x0": 22,
+      "x1": 28,
+      "y0": 2,
+      "y1": 22,
+      "note": "the east buttress"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain-scree",
+      "x0": 1,
+      "x1": 7,
+      "y0": 42,
+      "y1": 56,
+      "note": "the scree-choked lower west wall"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain-scree",
+      "x0": 23,
+      "x1": 28,
+      "y0": 30,
+      "y1": 56,
+      "note": "the lower east buttress and its talus"
+    },
+    {
+      "op": "region",
+      "tile": "tile:mountain-ledge",
+      "x0": 1,
+      "x1": 6,
+      "y0": 26,
+      "y1": 42,
+      "note": "the laddered west ledges"
+    },
+    {
+      "op": "region",
+      "tile": "tile:water",
+      "x0": 24,
+      "x1": 28,
+      "y0": 22,
+      "y1": 30,
+      "note": "a glacial tarn pooled against the east wall"
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:castle-road",
+      "x": 15,
+      "y0": 44,
+      "y1": 56,
+      "note": "the cut switchback up from the col"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:castle-road",
+      "y": 44,
+      "x0": 11,
+      "x1": 15
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:castle-road",
+      "x": 11,
+      "y0": 30,
+      "y1": 44
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:castle-road",
+      "y": 30,
+      "x0": 11,
+      "x1": 20
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:castle-road",
+      "x": 20,
+      "y0": 16,
+      "y1": 30
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:castle-road",
+      "y": 16,
+      "x0": 14,
+      "x1": 20
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:castle-road",
+      "x": 14,
+      "y0": 6,
+      "y1": 16,
+      "note": "the final scramble to the summit roost"
+    },
+    {
+      "op": "region",
+      "tile": "tile:path",
+      "x0": 12,
+      "x1": 17,
+      "y0": 3,
+      "y1": 6,
+      "note": "the worn summit terrace where the kin roosts"
+    }
+  ],
+  "terrainVariants": [
+    {
+      "baseTile": "tile:mountain",
+      "variants": [
+        "tile:mountain",
+        "tile:mountain-crag",
+        "tile:mountain-scree",
+        "tile:mountain-ledge"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 811,
+      "note": "the pass's hemming walls and scree"
+    },
+    {
+      "baseTile": "tile:grass",
+      "variants": ["tile:grass", "tile:grass-tufts", "tile:grass-flowers", "tile:grass-roots"],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 812,
+      "note": "the alpine meadow shelves"
+    },
+    {
+      "baseTile": "tile:castle-road",
+      "variants": [
+        "tile:castle-road",
+        "tile:castle-road-cracked",
+        "tile:castle-road-moss",
+        "tile:castle-road-worn"
+      ],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 813,
+      "note": "the cut switchback road"
+    },
+    {
+      "baseTile": "tile:path",
+      "variants": ["tile:path", "tile:path-ruts", "tile:path-pebbles", "tile:path-moss"],
+      "chunk": { "w": 2, "h": 2 },
+      "seed": 814,
+      "note": "the summit terrace"
+    },
+    {
+      "baseTile": "tile:water",
+      "variants": ["tile:water", "tile:water-glint", "tile:water-reeds", "tile:water-deep"],
+      "chunk": { "w": 3, "h": 2 },
+      "seed": 815,
+      "note": "the glacial tarn"
+    }
+  ],
+  "playerSpawn": { "x": 240, "y": 880 },
+  "spawns": {
+    "default": { "x": 240, "y": 880 },
+    "entry": { "x": 240, "y": 880 },
+    "from-mistmire-marsh": { "x": 240, "y": 880 }
+  },
+  "entities": [
+    {
+      "ref": "prop:signpost",
+      "x": 256,
+      "y": 872,
+      "note": "the crag pass begins"
+    },
+    {
+      "ref": "prop:wind-ribbon-cairn",
+      "x": 200,
+      "y": 620,
+      "note": "a wind-ribbon cairn on the meadow shelf"
+    },
+    {
+      "ref": "prop:mossy-waystone",
+      "x": 290,
+      "y": 420,
+      "note": "a frost-split waystone on the saddle"
+    },
+    {
+      "ref": "prop:wind-ribbon-cairn",
+      "x": 230,
+      "y": 240,
+      "note": "the summit-shelf cairn below the roost"
+    },
+    {
+      "enemy": "dragon-guardian",
+      "x": 232,
+      "y": 120,
+      "withoutRoutePack": "castle-interior",
+      "note": "the crag dragon holds the roost until the castle opens"
+    },
+    {
+      "ref": "char:princess-amber",
+      "x": 232,
+      "y": 72,
+      "dir": 1,
+      "withoutRoutePack": "castle-interior",
+      "note": "Princess Amber waits on the summit terrace until the castle opens"
+    },
+    {
+      "ref": "prop:castle-gatehouse",
+      "x": 232,
+      "y": 64,
+      "requiresRoutePack": "castle-interior",
+      "note": "the princess is in another castle: the gate stands on the summit terrace"
+    },
+    {
+      "enemy": "banner-knight",
+      "x": 232,
+      "y": 136,
+      "requiresRoutePack": "castle-interior",
+      "note": "the crag summit becomes a waypoint guarded by its champion"
+    }
+  ],
+  "triggers": [
+    {
+      "id": "trigger:crag-castle-gate",
+      "kind": "portal",
+      "label": "Through the castle gate",
+      "toMap": "map:castle-hall",
+      "toSpawn": "rescue-gate",
+      "sfx": "interact",
+      "requiresRoutePack": "castle-interior",
+      "zone": { "x0": 208, "y0": 40, "x1": 256, "y1": 76 }
+    },
+    {
+      "id": "trigger:crag-col-bend",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the bend out of the green col",
+      "zone": { "x0": 200, "y0": 700, "x1": 280, "y1": 760 }
+    },
+    {
+      "id": "trigger:crag-meadow-shelf",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the mid-pass meadow shelf",
+      "zone": { "x0": 150, "y0": 560, "x1": 230, "y1": 620 }
+    },
+    {
+      "id": "trigger:crag-saddle",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the upper saddle crossing",
+      "zone": { "x0": 260, "y0": 360, "x1": 340, "y1": 420 }
+    },
+    {
+      "id": "trigger:crag-summit-scramble",
+      "kind": "road-waypoint",
+      "label": "Road travelled",
+      "note": "the final scramble below the roost",
+      "zone": { "x0": 190, "y0": 160, "x1": 270, "y1": 220 }
+    }
+  ],
+  "waveGates": [
+    { "id": "gate:crag-col", "x": 240, "y": 800 },
+    { "id": "gate:crag-meadow", "x": 190, "y": 600 },
+    { "id": "gate:crag-saddle", "x": 300, "y": 400 },
+    { "id": "gate:crag-summit", "x": 232, "y": 190 }
+  ]
+}

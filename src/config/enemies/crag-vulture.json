@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "crag-vulture",
+  "name": "Crag Vulture",
+  "sprite": "sprite:vulture",
+  "palette": "palette:base",
+  "family": "crag-vulture",
+  "hp": 16,
+  "speed": 46,
+  "hitbox": {
+    "w": 11,
+    "h": 11
+  },
+  "behavior": "patrol"
+}

@@ -16,7 +16,7 @@
     "hue": 140,
     "roseYield": 6
   },
-  "unlocks": ["upgrade:dragon-might-mistmire", "upgrade:dragon-kin-castle-approach"],
+  "unlocks": ["upgrade:dragon-might-mistmire", "upgrade:dragon-kin-crag"],
   "track": "encounters",
   "note": "Kin boss for mistmire-marsh, spliced between sunken-road and castle-approach. Rose-OR-gem dual cost."
 }

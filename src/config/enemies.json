@@ -82,10 +82,26 @@
       "archetypes": ["bog-serpent", "fen-raven", "mire-boar", "crypt-bat"]
     },
     {
+      "id": "region:crag",
+      "label": "The Crag Pass",
+      "tier": 4,
+      "threat": 9,
+      "maps": ["map:crag-pass"],
+      "archetypes": ["crag-vulture", "scree-adder", "cliff-bat", "mire-boar"]
+    },
+    {
+      "id": "region:crag-lair",
+      "label": "The Crag Roost",
+      "tier": 4,
+      "threat": 10,
+      "maps": ["map:crag-mouth", "map:scree-warren", "map:summit-roost"],
+      "archetypes": ["crag-vulture", "scree-adder", "cliff-bat", "crypt-bat"]
+    },
+    {
       "id": "region:sunken-crypt",
       "label": "The Sunken Crypt (sunken-road lair)",
       "tier": 4,
-      "threat": 9,
+      "threat": 11,
       "maps": ["map:desert-ruins", "map:castle-dungeon", "map:crypt-vault"],
       "archetypes": ["dune-adder", "carrion-raven", "crypt-bat", "crypt-skeleton", "crypt-sentry"]
     },
@@ -93,7 +109,7 @@
       "id": "region:siege-warcamp",
       "label": "The Siege Warcamp (castle-approach lair)",
       "tier": 4,
-      "threat": 10,
+      "threat": 12,
       "maps": ["map:castle-yard"],
       "archetypes": [
         "forest-orc",
@@ -107,7 +123,7 @@
       "id": "region:dungeon",
       "label": "Obsidian Throne Dungeon",
       "tier": 4,
-      "threat": 11,
+      "threat": 13,
       "maps": [
         "map:castle-hall",
         "map:castle-library",

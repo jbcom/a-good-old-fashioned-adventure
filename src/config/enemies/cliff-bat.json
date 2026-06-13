@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/enemy-archetype.schema.json",
+  "id": "cliff-bat",
+  "name": "Cliff Bat",
+  "sprite": "sprite:bat",
+  "palette": "palette:base",
+  "family": "cliff-bat",
+  "hp": 14,
+  "speed": 50,
+  "hitbox": {
+    "w": 10,
+    "h": 10
+  },
+  "behavior": "patrol"
+}

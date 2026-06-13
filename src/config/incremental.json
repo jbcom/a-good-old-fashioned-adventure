@@ -114,6 +114,12 @@
       "role": "the drowned road between the dunes and the castle"
     },
     {
+      "id": "crag",
+      "label": "The Crag Pass",
+      "maps": ["map:crag-pass"],
+      "role": "the high mountain pass above the drowned marsh"
+    },
+    {
       "id": "castle-approach",
       "label": "Siege Approach",
       "maps": ["map:castle-approach", "map:castle-yard"],
@@ -134,6 +140,7 @@
       "map:deep-forest",
       "map:sunken-road",
       "map:mistmire-marsh",
+      "map:crag-pass",
       "map:castle-approach",
       "map:castle-hall"
     ],
@@ -175,6 +182,10 @@
     "map:mistmire-marsh": {
       "theme": "mistmire",
       "rooms": ["map:mire-shallows", "map:mire-warren", "map:mire-heart"]
+    },
+    "map:crag-pass": {
+      "theme": "crag",
+      "rooms": ["map:crag-mouth", "map:scree-warren", "map:summit-roost"]
     }
   }
 }

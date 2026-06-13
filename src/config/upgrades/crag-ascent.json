@@ -1,0 +1,15 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:crag-ascent",
+  "label": "Climb the Crag Pass",
+  "category": "route",
+  "cost": {
+    "roses": 6,
+    "gems": 140
+  },
+  "prerequisites": ["upgrade:mistmire-causeway"],
+  "routePack": "crag",
+  "unlocks": ["upgrade:lair-crag-pass-1", "upgrade:castle-approach-siege"],
+  "track": "roads",
+  "note": "The high mountain pass above the marsh. Unlocking the crag route opens the pass and gates the castle siege behind it."
+}
