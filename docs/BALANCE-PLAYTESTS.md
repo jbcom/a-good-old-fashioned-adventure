@@ -256,3 +256,9 @@ can't yet handle, a clear signal of where to invest).
 These N-findings feed the next stages: N1 → a discoverability beat for the
 rose loop; N2 → lair OR-cost ratio pass in S19.1b; N3 → keep manual play
 the richest loop (S20 polish); N4 → late-map kin walls + escalation (S19.2).
+
+**N1 RESOLVED (2026-06-13, commit d9d9232):** roseLoopHint surfaces a
+results-screen nudge when a dragon-kin node is reached-but-unowned, so the
+gems-first player discovers the rose flywheel instead of never finding it. N2
+(lair OR-cost ratio) and N4 (late-map escalation) remain for the harness/
+content stages; N3 (manual stays richest) is a standing S20 design constraint.
