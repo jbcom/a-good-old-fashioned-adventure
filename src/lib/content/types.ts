@@ -26,6 +26,10 @@ export interface TileDef {
   solid: boolean;
   layers?: DrawOp[];
   rows?: string[];
+  /** Solid base fill drawn UNDER the sheet overlay (roguelike terrain cells are
+   * ~50%-alpha dither/cobble overlays meant to sit on a base color — the .pix
+   * model of base + scattered detail, now base color + PNG overlay). */
+  baseColor?: string;
   /** purchased-sheet crop (slicer manifest) — same second raster source
    * props and sprites carry; palette swaps never apply. With `field`, the
    * (x,y) is the top-left of a cols×rows block of 16px cells and the ground

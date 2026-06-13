@@ -9,6 +9,7 @@ import {
   sheetFrameCanvas,
   spriteCanvas,
   tileCanvas,
+  tileFieldCanvas,
 } from "../../src/render/atlas";
 
 /** Real-browser pixel readback: palette swaps must recolor EXACTLY the
@@ -122,6 +123,65 @@ describe("purchased sheet sprites bake real pixels", () => {
         ).toBeGreaterThan(0.05);
       }
     }
+  });
+});
+
+describe("baseColor + sheet overlay terrain (The Ground pack)", () => {
+  it("grass composites its green base UNDER the ground.png dither overlay", async () => {
+    await preloadSheetImages();
+    const data = pixelsOf(tileFieldCanvas("tile:grass", 0, 0));
+    const [br, bg, bb] = hexToRgb("#3f5f2e");
+
+    // every pixel is fully opaque — the base fill closes the overlay's
+    // transparency so no map-background bleeds through the grass
+    for (let i = 3; i < data.length; i += 4) expect(data[i]).toBe(255);
+
+    // the field is green-dominant (the base color shows through the sparse
+    // overlay): mean green channel beats red and blue, near the base tone
+    let r = 0;
+    let g = 0;
+    let b = 0;
+    const n = data.length / 4;
+    for (let i = 0; i < data.length; i += 4) {
+      r += data[i];
+      g += data[i + 1];
+      b += data[i + 2];
+    }
+    r /= n;
+    g /= n;
+    b /= n;
+    expect(g).toBeGreaterThan(r);
+    expect(g).toBeGreaterThan(b);
+    expect(Math.abs(g - bg)).toBeLessThan(40);
+    expect(Math.abs(r - br)).toBeLessThan(40);
+    expect(Math.abs(b - bb)).toBeLessThan(40);
+
+    // the overlay actually drew — the cell is NOT a uniform flat fill, it
+    // carries the dither texture (some pixels differ from the base)
+    let textured = 0;
+    for (let i = 0; i < data.length; i += 4) {
+      if (
+        Math.abs(data[i] - br) > 6 ||
+        Math.abs(data[i + 1] - bg) > 6 ||
+        Math.abs(data[i + 2] - bb) > 6
+      ) {
+        textured++;
+      }
+    }
+    expect(textured).toBeGreaterThan(0);
+  });
+
+  it("a field tile samples different cells per board position", async () => {
+    await preloadSheetImages();
+    // wrapping over the 2×2 field block: (0,0) and (1,1) are distinct cells,
+    // so the dithered scatter does not repeat as one tiled cell
+    const a = pixelsOf(tileFieldCanvas("tile:grass", 0, 0));
+    const c = pixelsOf(tileFieldCanvas("tile:grass", 1, 1));
+    let diff = 0;
+    for (let i = 0; i < a.length; i += 4) {
+      if (a[i] !== c[i] || a[i + 1] !== c[i + 1] || a[i + 2] !== c[i + 2]) diff++;
+    }
+    expect(diff).toBeGreaterThan(0);
   });
 });
 

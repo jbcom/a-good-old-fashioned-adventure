@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:grass-roots",
+  "variantOf": "tile:grass",
+  "kind": "tile",
+  "solid": false,
+  "description": "Root-knotted grass — tile:grass's denser blade-dither (ground.png cells 0-1×2-3) over a darker, browner-green base so trodden, root-broken ground reads earthier than plain grass. Same base+overlay family; replaces the procedural .pix root clumps.",
+  "baseColor": "#324b26",
+  "sheet": {
+    "image": "tilemaps/ground.png",
+    "x": 0,
+    "y": 32,
+    "w": 16,
+    "h": 16,
+    "field": { "cols": 2, "rows": 2 }
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

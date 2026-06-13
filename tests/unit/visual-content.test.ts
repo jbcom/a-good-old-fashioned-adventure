@@ -66,11 +66,26 @@ function colorsInOps(ops: DrawOp[]): Set<string> {
 }
 
 function tileColors(tile: TileDef): Set<string> {
+  // a PNG-sheet tile carries its authored palette in the image, not in the
+  // content file; the readable color budget is the base fill plus the overlay
+  // (each distinct field cell is its own authored design), so it always clears
+  // the flat-fill floor — count the baseColor and the sheet as real channels
+  if (tile.sheet) {
+    const channels = new Set<string>();
+    if (tile.baseColor) channels.add(tile.baseColor);
+    channels.add(`sheet:${tile.sheet.image}`);
+    if (tile.sheet.field) channels.add(`field:${tile.sheet.field.cols}x${tile.sheet.field.rows}`);
+    return channels;
+  }
   if (tile.rows) return nonTransparentChannels(tile.rows);
   return colorsInOps(tile.layers ?? []);
 }
 
 function tileSignature(tile: TileDef): string {
+  // a sheet tile's identity is its base color + the exact crop/field it samples
+  if (tile.sheet) {
+    return JSON.stringify({ base: tile.baseColor ?? null, sheet: tile.sheet });
+  }
   if (tile.rows) return tile.rows.join("\n");
   return JSON.stringify(
     (tile.layers ?? []).map((op) => ({
@@ -89,6 +104,11 @@ function tileSignature(tile: TileDef): string {
 }
 
 function tileDetailScore(tile: TileDef): number {
+  // a real PNG ground overlay is richer than any hand-placed draw-op set: the
+  // 16px crop is dense authored texture, and a field samples several cells. The
+  // base+overlay composite is the new "not a flat fill" — score it well above
+  // the floor (a bare baseColor with no sheet stays flat and scores low)
+  if (tile.sheet) return tile.sheet.field ? 8 : 6;
   if (tile.rows) return new Set(tile.rows).size;
   return tile.layers?.length ?? 0;
 }

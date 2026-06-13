@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:grass",
+  "kind": "tile",
+  "solid": false,
+  "description": "Grass — a warm storybook-green base (#3f5f2e) with The Ground pack's sparse blade-dither overlay on top (public/assets/tilemaps/ground.png, the ~67-alpha scatter at cells 0-1×0-1). The Ground's top rows are transparency-dither overlays meant to sit on a base color (NOT solid grass), so the tile composites baseColor THEN the cropped overlay — real PNG texture over a clean readable base, replacing the POC .pix grass. The field samples a 2×2 cell block so the scatter tiles seamlessly.",
+  "baseColor": "#3f5f2e",
+  "sheet": {
+    "image": "tilemaps/ground.png",
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 16,
+    "field": { "cols": 2, "rows": 2 }
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

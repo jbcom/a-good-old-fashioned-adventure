@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:grass-tufts",
+  "variantOf": "tile:grass",
+  "kind": "tile",
+  "solid": false,
+  "description": "Tufted grass — the same green base as tile:grass with The Ground pack's DENSER blade-dither (ground.png cells 0-1×2-3, the ~130-alpha medium scatter) so the meadow reads thicker without the bright procedural .pix clumps it replaces. Same base+overlay model; 2×2 field for seamless variation.",
+  "baseColor": "#3f5f2e",
+  "sheet": {
+    "image": "tilemaps/ground.png",
+    "x": 0,
+    "y": 32,
+    "w": 16,
+    "h": 16,
+    "field": { "cols": 2, "rows": 2 }
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

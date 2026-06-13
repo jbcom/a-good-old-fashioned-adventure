@@ -1,0 +1,20 @@
+{
+  "$schema": "../../../schemas/tile.schema.json",
+  "id": "tile:grass-flowers",
+  "variantOf": "tile:grass",
+  "kind": "tile",
+  "solid": false,
+  "description": "Flowering grass — tile:grass's sparse blade-dither (ground.png cells 0-1×0-1) over a slightly warmer, lighter green base so a bloomed patch reads brighter than plain grass while staying in the same overlay family. Replaces the bright procedural .pix flower clumps.",
+  "baseColor": "#4d6b34",
+  "sheet": {
+    "image": "tilemaps/ground.png",
+    "x": 0,
+    "y": 0,
+    "w": 16,
+    "h": 16,
+    "field": { "cols": 2, "rows": 2 }
+  },
+  "koota": {
+    "traits": ["Tile"]
+  }
+}

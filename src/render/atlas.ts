@@ -184,11 +184,65 @@ export function flashCanvas(spriteId: string, paletteId: string): HTMLCanvasElem
   });
 }
 
+/** Tile face size in px (the ground grid cell). */
+const TILE_PX = 16;
+
+/**
+ * Composite a base color fill with a sheet overlay drawn on top — the terrain
+ * model where a roguelike ~50%-alpha dither/cobble cell sits on a solid base
+ * color (real PNG texture over a clean readable base). Returns a fresh canvas
+ * keyed by the caller's cache key.
+ */
+function baseOverlayCanvas(
+  cacheKey: string,
+  baseColor: string,
+  overlay: HTMLCanvasElement,
+  w: number,
+  h: number,
+): HTMLCanvasElement {
+  return baked(cacheKey, () => {
+    const canvas = document.createElement("canvas");
+    canvas.width = w;
+    canvas.height = h;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("2d context unavailable");
+    ctx.imageSmoothingEnabled = false;
+    ctx.fillStyle = baseColor;
+    ctx.fillRect(0, 0, w, h);
+    ctx.drawImage(overlay, 0, 0);
+    return canvas;
+  });
+}
+
 /** Cached 16×16 tile face, rasterized from .pix rows, draw-ops, or purchased sheet. */
 export function tileCanvas(tileId: string): HTMLCanvasElement {
   const tile = getTile(tileId);
   if (tile.sheet) {
-    return croppedSheetCanvas(tileId, `${tileId}|sheet`, tile.sheet);
+    const crop = croppedSheetCanvas(tileId, `${tileId}|sheet`, tile.sheet);
+    // a baseColor draws under the sheet overlay (the roguelike dither model)
+    if (tile.baseColor) {
+      return baseOverlayCanvas(
+        `${tileId}|base+sheet`,
+        tile.baseColor,
+        crop,
+        tile.sheet.w,
+        tile.sheet.h,
+      );
+    }
+    return crop;
+  }
+  // a baseColor-only tile is a flat fill (no overlay) — a clean solid ground
+  if (tile.baseColor) {
+    return baked(`${tileId}|baseColor`, () => {
+      const canvas = document.createElement("canvas");
+      canvas.width = TILE_PX;
+      canvas.height = TILE_PX;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("2d context unavailable");
+      ctx.fillStyle = tile.baseColor as string;
+      ctx.fillRect(0, 0, TILE_PX, TILE_PX);
+      return canvas;
+    });
   }
   return baked(`${tileId}|palette:base`, () => {
     if (tile.rows) return rasterizeRows(tile.rows, resolvePalette("palette:base"));
@@ -217,5 +271,15 @@ export function tileFieldCanvas(tileId: string, col: number, row: number): HTMLC
     w: tile.sheet.w,
     h: tile.sheet.h,
   };
-  return croppedSheetCanvas(tileId, `${tileId}|field|${fx}x${fy}`, rect);
+  const crop = croppedSheetCanvas(tileId, `${tileId}|field|${fx}x${fy}`, rect);
+  if (tile.baseColor) {
+    return baseOverlayCanvas(
+      `${tileId}|base+field|${fx}x${fy}`,
+      tile.baseColor,
+      crop,
+      tile.sheet.w,
+      tile.sheet.h,
+    );
+  }
+  return crop;
 }

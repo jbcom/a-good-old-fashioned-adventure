@@ -9,6 +9,11 @@
     "kind": { "const": "tile" },
     "variantOf": { "type": "string", "pattern": "^tile:[a-z0-9-]+$" },
     "solid": { "type": "boolean" },
+    "baseColor": {
+      "type": "string",
+      "pattern": "^#[0-9a-fA-F]{6}$",
+      "description": "Solid base fill drawn UNDER a sheet overlay. The roguelike terrain cells are ~50%-alpha dither/cobble overlays meant to sit on a base color (the .pix model: base + scattered detail). A tile with baseColor + sheet renders the base rect then the cropped overlay on top — real PNG ground texture over a clean readable base."
+    },
     "layers": { "$ref": "./draw-ops.schema.json#/$defs/opList" },
     "rows": {
       "type": "array",
@@ -45,5 +50,10 @@
       "properties": { "traits": { "type": "array", "items": { "type": "string" } } }
     }
   },
-  "anyOf": [{ "required": ["layers"] }, { "required": ["rows"] }, { "required": ["sheet"] }]
+  "anyOf": [
+    { "required": ["layers"] },
+    { "required": ["rows"] },
+    { "required": ["sheet"] },
+    { "required": ["baseColor"] }
+  ]
 }

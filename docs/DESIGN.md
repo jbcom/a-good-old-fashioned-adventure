@@ -107,12 +107,23 @@ caps, chests, castles, projectile sparks, and palette-swapped roles. The
 content rewrite must keep that specificity and raise it:
 
 - No required terrain tile should be a single flat fill. Grass, path, sand,
-  water, stone, wall, and bridge tiles need at least a ground color, a shadow
-  mark, and authored detail pixels.
+  water, stone, wall, and bridge tiles need authored texture — either hand-placed
+  detail pixels, or a real PNG ground overlay composited over a readable base
+  color (see below).
+- The ground families graduate from procedural `.pix` scatter to **purchased
+  PNG ground packs** where the pack reads better at game scale (The Ground pack,
+  `tilemaps/ground.png`). Those packs author their fills as transparency-dither
+  overlays, so the tile carries a `baseColor` (the readable storybook ground
+  tone) drawn UNDER the cropped sheet overlay; a `field` block samples a
+  different cell per board position so the dither tiles seamlessly instead of
+  repeating one cell into visible seams. The code fits the PNGs, not the reverse:
+  the renderer composites base + overlay, and a tile's richness now comes from
+  the authored PNG texture rather than from hand-placed draw-ops.
 - Repeated exterior terrain should be built from terrain families, not one
   token tile. Grass, path, leaf litter, sand, castle road, and village cobble
-  require four to eight precise 16-bit variants arranged by deterministic
-  chunks, so the road reads as patched ground rather than noise or flat carpet.
+  require four to eight precise variants — `.pix` designs or distinct
+  base-color/overlay-crop pairings — arranged by deterministic chunks, so the
+  road reads as patched ground rather than noise or flat carpet.
 - Hubs must tell the story visually. A village needs facade props, trees,
   roadside furniture, and interior furniture before it can be considered a
   real place.
