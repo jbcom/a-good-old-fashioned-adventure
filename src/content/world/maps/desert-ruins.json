@@ -163,22 +163,26 @@
       "dir": 1
     },
     {
-      "enemy": "dune-adder",
-      "x": 180,
-      "y": 200,
-      "note": "coiled among the ruin columns"
-    },
+      "ref": "prop:dungeon-bone-pile",
+      "x": 300,
+      "y": 210,
+      "note": "drifted bones among the ruin columns"
+    }
+  ],
+  "waveGates": [
     {
-      "enemy": "carrion-raven",
-      "x": 250,
-      "y": 140,
-      "note": "perched ruin watcher"
+      "id": "gate:ruin-aisle",
+      "x": 224,
+      "y": 230,
+      "note": "spawn zone — the ruin aisle behind the line"
     },
+    { "id": "gate:ruin-left", "x": 150, "y": 180, "note": "spawn zone — the left colonnade" },
+    { "id": "gate:ruin-right", "x": 320, "y": 170, "note": "spawn zone — the right colonnade" },
     {
-      "enemy": "carrion-raven",
-      "x": 340,
-      "y": 180,
-      "note": "second carrion bird over the east columns"
+      "id": "gate:ruin-arch",
+      "x": 224,
+      "y": 110,
+      "note": "spawn zone — under the broken arches ahead"
     }
   ],
   "triggers": [

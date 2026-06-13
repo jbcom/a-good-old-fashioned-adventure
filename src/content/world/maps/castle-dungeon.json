@@ -68,54 +68,16 @@
       "contents": "AttackUp"
     },
     {
-      "enemy": "crypt-skeleton",
-      "x": 240,
-      "y": 160
-    },
-    {
-      "enemy": "crypt-skeleton",
-      "x": 380,
-      "y": 300
-    },
-    {
-      "enemy": "crypt-sentry",
-      "x": 420,
-      "y": 100
-    },
-    {
       "enemy": "shadow-warlord",
       "x": 680,
-      "y": 250
+      "y": 250,
+      "note": "sunken-crypt lair r2 CLIMAX: the Shadow Warlord holds the dungeon — the one authored combatant; trash is permuted from the unlocked set via the wave gates"
     },
     {
       "ref": "char:princess-amber",
       "x": 740,
       "y": 250,
       "dir": -1
-    },
-    {
-      "enemy": "crypt-bat",
-      "x": 300,
-      "y": 200,
-      "note": "hanging between the skeleton patrols"
-    },
-    {
-      "enemy": "crypt-bat",
-      "x": 500,
-      "y": 180,
-      "note": "second bat near the sentry corridor"
-    },
-    {
-      "enemy": "cellar-rat",
-      "x": 180,
-      "y": 300,
-      "note": "scurrying by the entry chest"
-    },
-    {
-      "enemy": "cellar-rat",
-      "x": 340,
-      "y": 360,
-      "note": "second rat along the south wall"
     },
     {
       "ref": "prop:dungeon-brazier",
@@ -152,6 +114,27 @@
       "x": 480,
       "y": 380,
       "note": "crypt marker by the south wall"
+    }
+  ],
+  "waveGates": [
+    {
+      "id": "gate:dungeon-entry",
+      "x": 280,
+      "y": 250,
+      "note": "spawn zone — the dungeon entry cells"
+    },
+    {
+      "id": "gate:dungeon-high",
+      "x": 420,
+      "y": 180,
+      "note": "spawn zone — the upper sentry corridor"
+    },
+    { "id": "gate:dungeon-low", "x": 380, "y": 330, "note": "spawn zone — the lower south wall" },
+    {
+      "id": "gate:dungeon-warlord",
+      "x": 580,
+      "y": 250,
+      "note": "spawn zone — before the Warlord's hall"
     }
   ],
   "triggers": [],

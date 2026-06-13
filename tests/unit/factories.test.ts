@@ -123,8 +123,10 @@ describe("instantiateMap — transition preserves the player", () => {
 
     const npcs = [...world.query(IsNpc)].map((e) => e.get(IsNpc)?.charId);
     expect(npcs).toEqual(["char:princess-amber"]);
-    // 2 skeletons + sentry + warlord + 2 crypt bats + 2 cellar rats
-    expect([...world.query(IsEnemy)]).toHaveLength(8);
+    // zone model (docs/RAIL-COMMAND.md §maps are zones): the dungeon authors
+    // ONLY its boss climax (shadow-warlord); trash is permuted from the
+    // unlocked set at the wave gates, not hardcoded
+    expect([...world.query(IsEnemy)]).toHaveLength(1);
     expect(world.get(MapRuntime)?.mapId).toBe("map:castle-dungeon");
   });
 });

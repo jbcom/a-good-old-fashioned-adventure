@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-sunken-road-3",
+  "label": "Breach the Sunken Vault",
+  "category": "map",
+  "cost": {
+    "roses": 8,
+    "gems": 210
+  },
+  "prerequisites": ["upgrade:lair-sunken-road-2"],
+  "lairRoom": {
+    "mapId": "map:sunken-road",
+    "depth": 3,
+    "roomMap": "map:crypt-vault"
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Sunken-crypt lair, the deepest room: a flooded reliquary vault where the step-cousin dragon coils among the drowned dead. The princess (and the sunken-road kin, if unlocked) waits here. Rose-OR-gem at the lair's steepest step (roses logarithmic, gems exponential)."
+}

@@ -13,7 +13,7 @@
     "depth": 2,
     "roomMap": "map:castle-dungeon"
   },
-  "unlocks": [],
+  "unlocks": ["upgrade:lair-sunken-road-3"],
   "track": "roads",
   "note": "Deeper Dragon's Lair room: the princess relocates further into the crypt. Rose-OR-gem, growing along the lair (roses logarithmic, gems exponential)."
 }
