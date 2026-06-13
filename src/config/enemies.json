@@ -47,8 +47,8 @@
   ],
   "archetypes": {
     "forest-orc": {
-      "name": "Forest Orc",
-      "sprite": "sprite:dragon",
+      "name": "Oldwood Bandit",
+      "sprite": "sprite:bandit-swordsman",
       "palette": "palette:orc",
       "family": "orc",
       "hp": 20,
@@ -60,7 +60,7 @@
       "behavior": "patrol"
     },
     "oldwood-raider": {
-      "name": "Oldwood Raider",
+      "name": "Briar Raider",
       "sprite": "sprite:dragon",
       "palette": "palette:raider",
       "hp": 24,
@@ -72,7 +72,7 @@
       "behavior": "patrol"
     },
     "orc-scout": {
-      "name": "Orc Scout",
+      "name": "Bandit Scout",
       "sprite": "sprite:dragon",
       "palette": "palette:orc",
       "family": "orc",

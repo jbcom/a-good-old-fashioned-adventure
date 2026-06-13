@@ -85,7 +85,7 @@ describe("the full original journey, reduced through the quest engine", () => {
     expect(log?.active["quest:broken-bridge"].stage).toBe("cull-orcs");
     expect(questLogLines(world)).toEqual(
       expect.arrayContaining([
-        "Defeat Forest Orcs (0/4)",
+        "Drive off Oldwood Bandits (0/4)",
         "Buy Oswin's oat bundle from the stable counter.",
       ]),
     );

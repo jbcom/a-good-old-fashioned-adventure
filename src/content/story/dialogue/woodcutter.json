@@ -4,17 +4,43 @@
   "kind": "dialogue-bank",
   "speaker": "char:woodcutter",
   "slots": [
-    { "when": { "quest": "quest:broken-bridge", "stage": "find-woodcutter" }, "node": "request" },
-    { "when": { "quest": "quest:broken-bridge", "stage": "cull-orcs" }, "node": "progress" },
-    { "when": { "quest": "quest:broken-bridge", "stage": "report-back" }, "node": "repaired" },
-    { "default": true, "node": "smalltalk" }
+    {
+      "when": {
+        "quest": "quest:broken-bridge",
+        "stage": "find-woodcutter"
+      },
+      "node": "request"
+    },
+    {
+      "when": {
+        "quest": "quest:broken-bridge",
+        "stage": "cull-orcs"
+      },
+      "node": "progress"
+    },
+    {
+      "when": {
+        "quest": "quest:broken-bridge",
+        "stage": "report-back"
+      },
+      "node": "repaired"
+    },
+    {
+      "default": true,
+      "node": "smalltalk"
+    }
   ],
   "nodes": {
     "request": {
       "lines": [
-        "Halt traveler! The river bridge is broken, and vicious Forest Orcs block the path. Cull down 4 Forest Orcs and I will fix the bridge!"
+        "Halt traveler! The river bridge is broken, and masked Oldwood Bandits prowl the path. Drive off 4 of those brigands and I will fix the bridge!"
       ],
-      "choices": [{ "id": "accepted", "text": "I'll handle it." }],
+      "choices": [
+        {
+          "id": "accepted",
+          "text": "I'll handle it."
+        }
+      ],
       "emits": "dlg:woodcutter.request"
     },
     "progress": {
