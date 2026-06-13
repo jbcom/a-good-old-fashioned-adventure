@@ -22,6 +22,7 @@ describe("S6.5 regional enemy depth", () => {
       "region:thornwood-hollow",
       "region:castle-approach",
       "region:sunken-crypt",
+      "region:siege-warcamp",
       "region:dungeon",
     ]);
 

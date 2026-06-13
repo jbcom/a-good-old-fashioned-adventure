@@ -8,6 +8,6 @@
   },
   "prerequisites": ["upgrade:sunken-shortcut"],
   "routePack": "castle-approach",
-  "unlocks": [],
+  "unlocks": ["upgrade:lair-castle-approach-1"],
   "track": "roads"
 }

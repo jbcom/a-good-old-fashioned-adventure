@@ -152,6 +152,10 @@
     "map:sunken-road": {
       "theme": "sunken-crypt",
       "rooms": ["map:desert-ruins", "map:castle-dungeon", "map:crypt-vault"]
+    },
+    "map:castle-approach": {
+      "theme": "siege-warcamp",
+      "rooms": ["map:castle-yard"]
     }
   }
 }

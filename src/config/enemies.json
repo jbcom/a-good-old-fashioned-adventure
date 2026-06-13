@@ -62,7 +62,7 @@
       "label": "Castle Approach",
       "tier": 3,
       "threat": 6,
-      "maps": ["map:sunken-road", "map:castle-approach", "map:castle-yard"],
+      "maps": ["map:sunken-road", "map:castle-approach"],
       "archetypes": ["gate-sentry", "gatehouse-vulture", "dune-adder"]
     },
     {
@@ -72,6 +72,20 @@
       "threat": 7,
       "maps": ["map:desert-ruins", "map:castle-dungeon", "map:crypt-vault"],
       "archetypes": ["dune-adder", "carrion-raven", "crypt-bat", "crypt-skeleton", "crypt-sentry"]
+    },
+    {
+      "id": "region:siege-warcamp",
+      "label": "The Siege Warcamp (castle-approach lair)",
+      "tier": 4,
+      "threat": 8,
+      "maps": ["map:castle-yard"],
+      "archetypes": [
+        "forest-orc",
+        "oldwood-raider",
+        "gate-sentry",
+        "gatehouse-vulture",
+        "orc-scout"
+      ]
     },
     {
       "id": "region:dungeon",

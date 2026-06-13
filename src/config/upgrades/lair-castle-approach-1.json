@@ -1,0 +1,19 @@
+{
+  "$schema": "../../../schemas/upgrade-node.schema.json",
+  "id": "upgrade:lair-castle-approach-1",
+  "label": "Storm the Siege Muster Yard",
+  "category": "map",
+  "cost": {
+    "roses": 5,
+    "gems": 150
+  },
+  "prerequisites": ["upgrade:castle-approach-siege"],
+  "lairRoom": {
+    "mapId": "map:castle-approach",
+    "depth": 1,
+    "roomMap": "map:castle-yard"
+  },
+  "unlocks": [],
+  "track": "roads",
+  "note": "Dragon's Lair entrance (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks): the dragon's host has turned the castle yard into its siege muster ground. Storming it relocates the princess (and the castle-approach kin, if unlocked) into the yard, where the warcamp commander holds. Rose-OR-gem (roses logarithmic shortcut, gems exponential fallback)."
+}
