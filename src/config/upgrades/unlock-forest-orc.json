@@ -8,7 +8,12 @@
   },
   "prerequisites": ["upgrade:dragon-wake"],
   "unlocksEnemy": "forest-orc",
-  "unlocks": ["upgrade:orc-bounty", "upgrade:orc-warband", "upgrade:unlock-oldwood-raider"],
+  "unlocks": [
+    "upgrade:orc-bounty",
+    "upgrade:orc-warband",
+    "upgrade:unlock-oldwood-raider",
+    "upgrade:unlock-barrow-rat"
+  ],
   "track": "encounters",
   "note": "The first antagonist: a single weak orc joins the oldwood waves, paying extra coins per kill."
 }

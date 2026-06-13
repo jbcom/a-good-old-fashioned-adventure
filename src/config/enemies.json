@@ -18,7 +18,7 @@
       "tier": 1,
       "threat": 2,
       "maps": ["map:oldwood-forest", "map:rescue-route", "map:barrow-mouth", "map:barrow-deep"],
-      "archetypes": ["forest-orc", "oldwood-raider", "thorn-shaman"]
+      "archetypes": ["forest-orc", "oldwood-raider", "thorn-shaman", "barrow-rat"]
     },
     {
       "id": "region:captured-village",
