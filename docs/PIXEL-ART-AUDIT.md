@@ -49,6 +49,38 @@ Crates, lantern, cart, ribbon arch all read.
 
 State treatments carry the legibility; composites read fused.
 
+## SA.3 census (counted 2026-06-12 against the 17 shipped maps)
+
+| Region | Trash archetypes (body) | Distinct props | Verdict |
+| --- | --- | --- | --- |
+| village (5 maps) | none (peaceful) | 32 | rich |
+| oldwood/deep-forest (2) | 5 humanoids ALL on sprite:dragon swaps + bramble-stalker (boar ✓) | 16 | humanoid bodies are THE gap |
+| sunken-road/desert (2) | **zero** — region ships only its boss | 18 | needs trash: snake, cobra, raven ready |
+| castle-approach (2) | gate-sentry (hero swap) | 7 | thin both: vulture ready; siege-litter props needed |
+| castle-interior (3) | bosses only | 9 | acceptable (interior = exploration) |
+| dungeon (1) | 2 hero-swap skeletons + warlord (dragon swap) | **1 (chest)** | severest prop gap; bat + rat ready |
+| overworld/route (2) | reuses other regions' | 7 | follows the regions it crosses |
+
+Census-driven order: (1) new animal trash archetypes for the empty/thin
+regions — desert snake + raven, dungeon bat + rat, approach vulture — all
+purchased bodies in hand; (2) dungeon + approach prop vocabulary (the
+roguelike mega-sheet slicer feeds this); (3) bespoke humanoid grids
+(forest orc/raider/shaman trio, skeleton, sentry) — the only gap that
+still needs hand-authored .pix.
+
+**(1) LANDED:** five new archetypes ship — Dune Adder + Carrion Raven
+(sunken-road + desert-ruins, a region that previously had zero trash),
+Gatehouse Vulture (castle-approach guard), Crypt Bat + Cellar Rat
+(castle-dungeon) — wearing sprite:snake/raven/vulture/bat/rat defs with
+rows pinned per sheet (snake walk = the coil row 3; raven flight row 5;
+vulture swoop row 3; bat reuses its wing cycle at three speeds; rat
+scurry row 2). Verified two ways: stage lineup screenshot (raven,
+vulture mid-windup-swell, rat read clean beside the knight) and the
+browser atlas pixel gate (every sheet sprite × every pose must crop >5%
+opaque — catches dead-area row offsets deterministically, which
+screenshot framing cannot). Aseprite masters regenerated for all eight
+sheet defs.
+
 ## Breadth gaps (SA.3 authoring list)
 
 1. **Trash enemies are palette swaps of two grids** (sprite:dragon,

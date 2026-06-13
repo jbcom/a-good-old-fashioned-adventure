@@ -379,6 +379,76 @@
           "armorMultiplier": 0.5
         }
       }
+    },
+    "dune-adder": {
+      "name": "Dune Adder",
+      "sprite": "sprite:snake",
+      "palette": "palette:base",
+      "family": "serpent",
+      "hp": 16,
+      "speed": 28,
+      "hitbox": {
+        "w": 12,
+        "h": 8
+      },
+      "behavior": "patrol"
+    },
+    "carrion-raven": {
+      "name": "Carrion Raven",
+      "sprite": "sprite:raven",
+      "palette": "palette:base",
+      "family": "bird",
+      "hp": 12,
+      "speed": 48,
+      "hitbox": {
+        "w": 10,
+        "h": 10
+      },
+      "behavior": "patrol"
+    },
+    "gatehouse-vulture": {
+      "name": "Gatehouse Vulture",
+      "sprite": "sprite:vulture",
+      "palette": "palette:base",
+      "family": "bird",
+      "hp": 24,
+      "speed": 44,
+      "hitbox": {
+        "w": 12,
+        "h": 12
+      },
+      "behavior": "guard",
+      "guard": {
+        "aggroRange": 120,
+        "deaggroRange": 150,
+        "leashRange": 100
+      }
+    },
+    "crypt-bat": {
+      "name": "Crypt Bat",
+      "sprite": "sprite:bat",
+      "palette": "palette:base",
+      "family": "bat",
+      "hp": 10,
+      "speed": 52,
+      "hitbox": {
+        "w": 8,
+        "h": 8
+      },
+      "behavior": "patrol"
+    },
+    "cellar-rat": {
+      "name": "Cellar Rat",
+      "sprite": "sprite:rat",
+      "palette": "palette:base",
+      "family": "rat",
+      "hp": 14,
+      "speed": 40,
+      "hitbox": {
+        "w": 10,
+        "h": 8
+      },
+      "behavior": "patrol"
     }
   }
 }

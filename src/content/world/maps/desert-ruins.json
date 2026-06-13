@@ -3,15 +3,45 @@
   "id": "map:desert-ruins",
   "kind": "map",
   "name": "Desert Ruins",
-  "size": { "cols": 28, "rows": 22 },
+  "size": {
+    "cols": 28,
+    "rows": 22
+  },
   "baseTile": "tile:ruin-floor",
   "bgmTheme": "sunken-road",
   "generation": [
-    { "op": "border", "tile": "tile:mountain" },
-    { "op": "row-span", "tile": "tile:ruin-mosaic", "y": 10, "x0": 5, "x1": 22 },
-    { "op": "row-span", "tile": "tile:ruin-mosaic", "y": 11, "x0": 6, "x1": 21 },
-    { "op": "col-span", "tile": "tile:ruin-mosaic", "x": 14, "y0": 6, "y1": 18 },
-    { "op": "col-span", "tile": "tile:ruin-mosaic", "x": 13, "y0": 8, "y1": 16 },
+    {
+      "op": "border",
+      "tile": "tile:mountain"
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:ruin-mosaic",
+      "y": 10,
+      "x0": 5,
+      "x1": 22
+    },
+    {
+      "op": "row-span",
+      "tile": "tile:ruin-mosaic",
+      "y": 11,
+      "x0": 6,
+      "x1": 21
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:ruin-mosaic",
+      "x": 14,
+      "y0": 6,
+      "y1": 18
+    },
+    {
+      "op": "col-span",
+      "tile": "tile:ruin-mosaic",
+      "x": 13,
+      "y0": 8,
+      "y1": 16
+    },
     {
       "op": "region",
       "tile": "tile:castle-road",
@@ -39,36 +69,142 @@
       "note": "warm old planks around the pilgrim's camp"
     }
   ],
-  "playerSpawn": { "x": 224, "y": 304 },
+  "playerSpawn": {
+    "x": 224,
+    "y": 304
+  },
   "spawns": {
-    "default": { "x": 224, "y": 304 },
-    "entry": { "x": 224, "y": 304 }
+    "default": {
+      "x": 224,
+      "y": 304
+    },
+    "entry": {
+      "x": 224,
+      "y": 304
+    }
   },
   "entities": [
-    { "ref": "prop:sandstone-arch", "x": 112, "y": 120, "note": "left broken arch" },
-    { "ref": "prop:sandstone-arch", "x": 336, "y": 120, "note": "right broken arch" },
-    { "ref": "prop:ruin-column", "x": 104, "y": 208, "note": "left aisle column" },
-    { "ref": "prop:ruin-column", "x": 344, "y": 208, "note": "right aisle column" },
-    { "ref": "prop:ruin-column", "x": 144, "y": 152, "note": "fallen gallery column" },
-    { "ref": "prop:ruin-column", "x": 304, "y": 152, "note": "fallen gallery column" },
-    { "ref": "prop:ruin-mural", "x": 224, "y": 128, "note": "readable old-road mural" },
-    { "ref": "prop:desert-shrine", "x": 224, "y": 192, "note": "pilgrim's road shrine" },
-    { "ref": "prop:pilgrim-canopy", "x": 320, "y": 292, "note": "Safra's shade canopy" },
-    { "ref": "prop:pilgrim-canopy", "x": 136, "y": 292, "note": "rolled map canopy" },
-    { "ref": "prop:barrel", "x": 160, "y": 248, "note": "water jar and pack barrel" },
-    { "ref": "prop:table", "x": 288, "y": 252, "note": "pilgrim's rubbing table" },
-    { "ref": "char:desert-pilgrim", "x": 176, "y": 240, "dir": 1 }
+    {
+      "ref": "prop:sandstone-arch",
+      "x": 112,
+      "y": 120,
+      "note": "left broken arch"
+    },
+    {
+      "ref": "prop:sandstone-arch",
+      "x": 336,
+      "y": 120,
+      "note": "right broken arch"
+    },
+    {
+      "ref": "prop:ruin-column",
+      "x": 104,
+      "y": 208,
+      "note": "left aisle column"
+    },
+    {
+      "ref": "prop:ruin-column",
+      "x": 344,
+      "y": 208,
+      "note": "right aisle column"
+    },
+    {
+      "ref": "prop:ruin-column",
+      "x": 144,
+      "y": 152,
+      "note": "fallen gallery column"
+    },
+    {
+      "ref": "prop:ruin-column",
+      "x": 304,
+      "y": 152,
+      "note": "fallen gallery column"
+    },
+    {
+      "ref": "prop:ruin-mural",
+      "x": 224,
+      "y": 128,
+      "note": "readable old-road mural"
+    },
+    {
+      "ref": "prop:desert-shrine",
+      "x": 224,
+      "y": 192,
+      "note": "pilgrim's road shrine"
+    },
+    {
+      "ref": "prop:pilgrim-canopy",
+      "x": 320,
+      "y": 292,
+      "note": "Safra's shade canopy"
+    },
+    {
+      "ref": "prop:pilgrim-canopy",
+      "x": 136,
+      "y": 292,
+      "note": "rolled map canopy"
+    },
+    {
+      "ref": "prop:barrel",
+      "x": 160,
+      "y": 248,
+      "note": "water jar and pack barrel"
+    },
+    {
+      "ref": "prop:table",
+      "x": 288,
+      "y": 252,
+      "note": "pilgrim's rubbing table"
+    },
+    {
+      "ref": "char:desert-pilgrim",
+      "x": 176,
+      "y": 240,
+      "dir": 1
+    },
+    {
+      "enemy": "dune-adder",
+      "x": 180,
+      "y": 200,
+      "note": "coiled among the ruin columns"
+    },
+    {
+      "enemy": "carrion-raven",
+      "x": 250,
+      "y": 140,
+      "note": "perched ruin watcher"
+    },
+    {
+      "enemy": "carrion-raven",
+      "x": 340,
+      "y": 180,
+      "note": "second carrion bird over the east columns"
+    }
   ],
   "triggers": [
     {
       "id": "trigger:read-mural",
       "kind": "story",
       "label": "Read the Sunken Road mural",
-      "zone": { "x0": 184, "y0": 116, "x1": 264, "y1": 164 },
+      "zone": {
+        "x0": 184,
+        "y0": 116,
+        "x1": 264,
+        "y1": 164
+      },
       "effects": [
-        { "setFlag": "flag:ruin-mural-read" },
-        { "startDialogue": { "bank": "dlgbank:desert-pilgrim", "slot": "mural" } },
-        { "sfx": "interact" }
+        {
+          "setFlag": "flag:ruin-mural-read"
+        },
+        {
+          "startDialogue": {
+            "bank": "dlgbank:desert-pilgrim",
+            "slot": "mural"
+          }
+        },
+        {
+          "sfx": "interact"
+        }
       ]
     },
     {
@@ -78,7 +214,12 @@
       "toMap": "map:sunken-road",
       "toSpawn": "from-ruins",
       "sfx": "interact",
-      "zone": { "x0": 176, "y0": 332, "x1": 272, "y1": 352 }
+      "zone": {
+        "x0": 176,
+        "y0": 332,
+        "x1": 272,
+        "y1": 352
+      }
     }
   ]
 }

@@ -24,8 +24,8 @@ describe("registries are fully populated", () => {
   it("counts match the content tree", () => {
     expect(tiles.size).toBe(44);
     expect(props.size).toBe(69);
-    // 61 .pix sprites + 3 purchased sheet sprites (high-dragon, wild-boar light/dark)
-    expect(sprites.size).toBe(64);
+    // 61 .pix sprites + 8 purchased sheet sprites (high-dragon, boar pair, snake, raven, vulture, bat, rat)
+    expect(sprites.size).toBe(69);
     expect(animations.size).toBe(7);
     expect(maps.size).toBe(17);
     expect(quests.size).toBe(21);

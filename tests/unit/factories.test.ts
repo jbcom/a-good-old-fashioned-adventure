@@ -122,7 +122,8 @@ describe("instantiateMap — transition preserves the player", () => {
 
     const npcs = [...world.query(IsNpc)].map((e) => e.get(IsNpc)?.charId);
     expect(npcs).toEqual(["char:princess-amber"]);
-    expect([...world.query(IsEnemy)]).toHaveLength(4);
+    // 2 skeletons + sentry + warlord + 2 crypt bats + 2 cellar rats
+    expect([...world.query(IsEnemy)]).toHaveLength(8);
     expect(world.get(MapRuntime)?.mapId).toBe("map:castle-dungeon");
   });
 });

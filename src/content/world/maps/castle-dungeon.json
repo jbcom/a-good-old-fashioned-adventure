@@ -3,11 +3,17 @@
   "id": "map:castle-dungeon",
   "kind": "map",
   "name": "Obsidian Throne Dungeon",
-  "size": { "cols": 48, "rows": 32 },
+  "size": {
+    "cols": 48,
+    "rows": 32
+  },
   "baseTile": "tile:stone-floor",
   "bgmTheme": "dungeon",
   "generation": [
-    { "op": "border", "tile": "tile:stone-wall" },
+    {
+      "op": "border",
+      "tile": "tile:stone-wall"
+    },
     {
       "op": "col-span",
       "tile": "tile:prison-bars",
@@ -34,20 +40,90 @@
       "exceptCols": [14, 15, 16, 17, 18, 30, 31, 32, 33, 34]
     }
   ],
-  "playerSpawn": { "x": 80, "y": 250 },
+  "playerSpawn": {
+    "x": 80,
+    "y": 250
+  },
   "spawns": {
-    "default": { "x": 80, "y": 250 },
-    "entry": { "x": 80, "y": 250 }
+    "default": {
+      "x": 80,
+      "y": 250
+    },
+    "entry": {
+      "x": 80,
+      "y": 250
+    }
   },
   "entities": [
-    { "ref": "prop:chest", "x": 200, "y": 100, "contents": "Gold" },
-    { "ref": "prop:chest", "x": 220, "y": 400, "contents": "AttackUp" },
-    { "enemy": "crypt-skeleton", "x": 240, "y": 160 },
-    { "enemy": "crypt-skeleton", "x": 380, "y": 300 },
-    { "enemy": "crypt-sentry", "x": 420, "y": 100 },
-    { "enemy": "shadow-warlord", "x": 680, "y": 250 },
-    { "ref": "char:princess-amber", "x": 740, "y": 250, "dir": -1 }
+    {
+      "ref": "prop:chest",
+      "x": 200,
+      "y": 100,
+      "contents": "Gold"
+    },
+    {
+      "ref": "prop:chest",
+      "x": 220,
+      "y": 400,
+      "contents": "AttackUp"
+    },
+    {
+      "enemy": "crypt-skeleton",
+      "x": 240,
+      "y": 160
+    },
+    {
+      "enemy": "crypt-skeleton",
+      "x": 380,
+      "y": 300
+    },
+    {
+      "enemy": "crypt-sentry",
+      "x": 420,
+      "y": 100
+    },
+    {
+      "enemy": "shadow-warlord",
+      "x": 680,
+      "y": 250
+    },
+    {
+      "ref": "char:princess-amber",
+      "x": 740,
+      "y": 250,
+      "dir": -1
+    },
+    {
+      "enemy": "crypt-bat",
+      "x": 300,
+      "y": 200,
+      "note": "hanging between the skeleton patrols"
+    },
+    {
+      "enemy": "crypt-bat",
+      "x": 500,
+      "y": 180,
+      "note": "second bat near the sentry corridor"
+    },
+    {
+      "enemy": "cellar-rat",
+      "x": 180,
+      "y": 300,
+      "note": "scurrying by the entry chest"
+    },
+    {
+      "enemy": "cellar-rat",
+      "x": 340,
+      "y": 360,
+      "note": "second rat along the south wall"
+    }
   ],
   "triggers": [],
-  "onEnter": [{ "dialogue": "dlgbank:dungeon-guard", "slot": "taunt", "once": true }]
+  "onEnter": [
+    {
+      "dialogue": "dlgbank:dungeon-guard",
+      "slot": "taunt",
+      "once": true
+    }
+  ]
 }

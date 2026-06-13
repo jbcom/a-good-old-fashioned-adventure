@@ -1,8 +1,15 @@
 import { describe, expect, it } from "vitest";
 import basePalette from "../../src/content/palettes/base.json";
 import swaps from "../../src/content/palettes/swaps.json";
-import { getCharacterSprite } from "../../src/lib/content/registry";
-import { propCanvas, spriteCanvas, tileCanvas } from "../../src/render/atlas";
+import { getCharacterSprite, sprites } from "../../src/lib/content/registry";
+import { isSheetSprite, resolveSheetFrame } from "../../src/lib/content/sheetSprite";
+import {
+  preloadSheetImages,
+  propCanvas,
+  sheetFrameCanvas,
+  spriteCanvas,
+  tileCanvas,
+} from "../../src/render/atlas";
 
 /** Real-browser pixel readback: palette swaps must recolor EXACTLY the
  * swapped channels and leave every other pixel byte-identical. */
@@ -88,5 +95,32 @@ describe("props and tiles bake from content", () => {
     const water = pixelsOf(tileCanvas("tile:water"));
     const deepSea = hexToRgb(basePalette.colors.l.hex);
     expect([water[0], water[1], water[2]]).toEqual(deepSea);
+  });
+});
+
+describe("purchased sheet sprites bake real pixels", () => {
+  it("every sheet sprite's poses crop non-empty frames", async () => {
+    await preloadSheetImages();
+    for (const def of [...sprites.values()].filter(isSheetSprite)) {
+      for (const pose of Object.keys(def.poseMap)) {
+        const frame = resolveSheetFrame(def, {
+          pose,
+          choreoPhase: "",
+          facingDir: 1,
+          moveX: 0,
+          moveY: 0,
+          t: 0,
+        });
+        const data = pixelsOf(sheetFrameCanvas(def, frame));
+        let opaque = 0;
+        for (let i = 3; i < data.length; i += 4) if (data[i] > 0) opaque++;
+        // a wrong row offset or direction block crops dead sheet area —
+        // demand a real silhouette, not a sliver
+        expect(
+          opaque / (def.frameSize.w * def.frameSize.h),
+          `${def.id} pose ${pose} (${frame.anim.image} @${frame.sourceX},${frame.sourceY})`,
+        ).toBeGreaterThan(0.05);
+      }
+    }
   });
 });
