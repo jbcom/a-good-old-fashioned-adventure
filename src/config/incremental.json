@@ -133,5 +133,11 @@
     "princessAtLastUnlocked": true,
     "castleNode": "upgrade:castle-candle-loop",
     "castleMap": "map:castle-hall"
+  },
+  "mapLairs": {
+    "map:sunken-road": {
+      "theme": "sunken-crypt",
+      "rooms": ["map:desert-ruins", "map:castle-dungeon"]
+    }
   }
 }

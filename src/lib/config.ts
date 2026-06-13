@@ -123,6 +123,20 @@ export interface IncrementalUpgradeNode {
     /** roses the princess pays for felling this kin on the run */
     roseYield?: number;
   };
+  /**
+   * Dragon's Lair room (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks).
+   * Present on a lair room-unlock node: which map's lair this belongs to, the
+   * room's depth (1 = the lair entrance that relocates the princess in), and
+   * the playable rail map id for that room. Unlocking deeper rooms moves the
+   * princess (and the dragon, if its kin is unlocked) to the deepest room.
+   */
+  lairRoom?: {
+    mapId: string;
+    /** 1-based room depth along the lair (room 1 is the entrance) */
+    depth: number;
+    /** the playable rail map this room loads */
+    roomMap: string;
+  };
   /** Coins each warband reinforcement pays on defeat, beyond enemyDefeated. */
   spawnBounty?: number;
   ability?: string;
@@ -177,6 +191,14 @@ export interface IncrementalConfig {
     castleNode: string;
     castleMap: string;
   };
+  /**
+   * Per-map Dragon's Lair (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks):
+   * a themed multi-room dungeon hanging off a spine map. `theme` names the
+   * dungeon flavor (cave/netherrealm/castle/crypt…); `rooms` is the ordered
+   * playable room rail maps (room 1 first). The lair-unlock node relocates the
+   * princess into room 1; each deeper room node moves her further in.
+   */
+  mapLairs?: Record<string, { theme: string; rooms: string[] }>;
 }
 
 export interface EnemyArchetype {

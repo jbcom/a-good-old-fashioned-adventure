@@ -31,17 +31,46 @@ export function currentMap(progress: IncrementalProgressState): string {
 }
 
 /**
- * Where the princess waits: the last unlocked map, unless the castle node is
- * bought — then she is in the castle at the spine's end (the Mario relocation).
+ * The deepest unlocked Dragon's Lair room for a map (docs/RAIL-COMMAND.md §Each
+ * map's FOUR sub-tracks), or null when the map's lair is not unlocked. Walks
+ * the lair room nodes (rose-OR-gem) the player has purchased and returns the
+ * highest-depth one's room rail — that is where the princess (and the dragon,
+ * if its kin is unlocked) has relocated to.
+ */
+export function deepestLairRoom(
+  progress: IncrementalProgressState,
+  mapId: string,
+): { roomMap: string; depth: number } | null {
+  let deepest: { roomMap: string; depth: number } | null = null;
+  for (const node of incremental.upgradeGraph.nodes) {
+    const room = node.lairRoom;
+    if (!room || room.mapId !== mapId) continue;
+    if (!progress.purchasedUpgradeIds.includes(node.id)) continue;
+    if (!deepest || room.depth > deepest.depth) {
+      deepest = { roomMap: room.roomMap, depth: room.depth };
+    }
+  }
+  return deepest;
+}
+
+/**
+ * Where the princess waits. Priority (docs/RAIL-COMMAND.md §Each map's FOUR
+ * sub-tracks): if the current map's Dragon's Lair is unlocked, she is in its
+ * deepest unlocked room (the lair relocation). Otherwise the castle relocation
+ * (castle node bought → the castle at the spine's end). Otherwise the last
+ * unlocked map.
  */
 export function princessMap(progress: IncrementalProgressState): string {
+  const here = currentMap(progress);
+  const lairRoom = deepestLairRoom(progress, here);
+  if (lairRoom) return lairRoom.roomMap;
   if (
     incremental.mapDag.princessAtLastUnlocked &&
     progress.purchasedUpgradeIds.includes(incremental.mapDag.castleNode)
   ) {
     return incremental.mapDag.castleMap;
   }
-  return currentMap(progress);
+  return here;
 }
 
 /** True when the player has unlocked the entire spine (the castle is reachable). */

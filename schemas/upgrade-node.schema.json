@@ -49,6 +49,17 @@
       },
       "additionalProperties": false
     },
+    "lairRoom": {
+      "type": "object",
+      "description": "Dragon's Lair room (docs/RAIL-COMMAND.md §Each map's FOUR sub-tracks). Present on a lair room-unlock node: which map's lair, the room depth (1 = entrance), and the playable rail map the room loads.",
+      "required": ["mapId", "depth", "roomMap"],
+      "properties": {
+        "mapId": { "type": "string", "pattern": "^map:[a-z0-9-]+$" },
+        "depth": { "type": "integer", "minimum": 1 },
+        "roomMap": { "type": "string", "pattern": "^map:[a-z0-9-]+$" }
+      },
+      "additionalProperties": false
+    },
     "effect": {
       "type": "object",
       "properties": {
