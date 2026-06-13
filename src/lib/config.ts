@@ -154,6 +154,13 @@ export interface IncrementalConfig {
     maps: string[];
     role: string;
   }[];
+  mapDag: {
+    /** ordered linear spine of route maps — runs play the furthest unlocked */
+    order: string[];
+    princessAtLastUnlocked: boolean;
+    castleNode: string;
+    castleMap: string;
+  };
 }
 
 export interface EnemyArchetype {

@@ -115,5 +115,19 @@
       "maps": ["map:castle-hall", "map:castle-library", "map:castle-armory"],
       "role": "rose-gated side loop with scribe and heraldic objectives"
     }
-  ]
+  ],
+  "mapDag": {
+    "comment": "Successive map progression (docs/RAIL-COMMAND.md §Map DAG — no jumping): an ordered list of route maps. A run plays the player's furthest UNLOCKED map; clearing it (felling the kin boss) unlocks the next via its gem major. The princess always sits at the last unlocked map; the castle node relocates the castle to the last map and the princess into it. Side maps (interiors) hang off their route map and are not part of the linear spine.",
+    "order": [
+      "map:rescue-route",
+      "map:oldwood-forest",
+      "map:deep-forest",
+      "map:sunken-road",
+      "map:castle-approach",
+      "map:castle-hall"
+    ],
+    "princessAtLastUnlocked": true,
+    "castleNode": "upgrade:castle-candle-loop",
+    "castleMap": "map:castle-hall"
+  }
 }

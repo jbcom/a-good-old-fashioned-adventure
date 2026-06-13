@@ -66,6 +66,7 @@ import {
   sanitizeIncrementalProgress,
   type UpgradePurchaseResult,
 } from "../sim/incrementalProgress";
+import { currentMap } from "../sim/mapProgression";
 import { applyEffects, autoStartQuests, questLogLines } from "../sim/quests";
 import { buyShopListing, type ShopTransactionResult, sellShopListing } from "../sim/shop";
 import { frontline } from "../sim/systems/waves";
@@ -1465,7 +1466,10 @@ export function App({
   const startGame = useCallback(
     (options: StartOptions = {}) => {
       const classId = options.classId ?? incremental.classes.starting;
-      const mapId = options.mapId ?? incremental.loop.startMap;
+      // a run plays the player's furthest unlocked map (map DAG — no jumping);
+      // an explicit options.mapId (continue/test seam) still wins
+      const startProgress = options.incrementalProgress ?? snapshotRef.current.incrementalProgress;
+      const mapId = options.mapId ?? currentMap(startProgress);
       const nextWorld = createGameWorld(19);
       autoStartQuests(nextWorld);
       adoptWorld(nextWorld);
