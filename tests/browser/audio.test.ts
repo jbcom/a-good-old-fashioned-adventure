@@ -39,10 +39,35 @@ describe("howler engine (real browser)", () => {
     engine.dispose();
   });
 
+  it("plays the S20.3 rail cues: deploy, wave-horn, collapse, victory, voices", () => {
+    // every cue the rail sim pushes must resolve in the engine without throwing
+    const engine = createGameAudioEngine();
+    const cues = [
+      "deploy",
+      "wave-horn",
+      "collapse",
+      "victory",
+      "attack-blade",
+      "attack-arcane",
+      "attack-fire",
+      "attack-storm",
+      "attack-frost",
+      "attack-shout",
+    ];
+    for (const cue of cues) engine.playSfx(cue);
+    expect(engine.debugState().sfxPlayed).toBe(cues.length);
+    engine.dispose();
+  });
+
   it("serves the mapped audio files over HTTP", async () => {
-    // one per channel kind: a music theme, an ambient bed, an sfx cue
+    // one per channel kind: a music theme, an ambient bed, an sfx cue, plus the
+    // new rail cues so a 404'd recipe is caught at the gate
     await loaded(audio.music.village);
     await loaded(audio.ambient.dungeon);
     await loaded(audio.sfx.slash);
+    await loaded(audio.sfx.deploy);
+    await loaded(audio.sfx["wave-horn"]);
+    await loaded(audio.sfx.collapse);
+    await loaded(audio.sfx["attack-storm"]);
   }, 15_000);
 });

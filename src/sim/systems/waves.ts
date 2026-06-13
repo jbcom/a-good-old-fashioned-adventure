@@ -85,6 +85,8 @@ export function waveStep(world: World): void {
     const outbox = world.get(Outbox);
     if (outbox && outbox.endGame === null) {
       recordDeathPayout(world);
+      // S20.3 audio: the collapse stinger as the line falls and the run closes
+      outbox.sfx.push("collapse");
       outbox.endGame = "gameover";
     }
     return;
@@ -111,6 +113,8 @@ export function waveStep(world: World): void {
     );
     spawned.add(WaveSpawned({ wave }));
   }
+  // S20.3 audio: a horn sounds as each fresh wave releases from the gates
+  world.get(Outbox)?.sfx.push("wave-horn");
   world.set(WaveState, { wave, engaged: true });
 }
 

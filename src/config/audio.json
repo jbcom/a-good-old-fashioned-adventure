@@ -65,6 +65,15 @@
     "ui-error": "audio/ui/error.mp3",
     "ui-unlock": "audio/ui/unlock.mp3",
     "ui-notification": "audio/ui/notification.mp3",
-    "ui-achievement": "audio/ui/achievement.mp3"
+    "ui-achievement": "audio/ui/achievement.mp3",
+    "deploy": "audio/sfx/land.mp3",
+    "wave-horn": "audio/ui/notification.mp3",
+    "collapse": "audio/ui/error.mp3",
+    "attack-blade": "audio/sfx/slash.mp3",
+    "attack-arcane": "audio/sfx/magic.mp3",
+    "attack-fire": "audio/sfx/spell-fire.mp3",
+    "attack-storm": "audio/sfx/spell-electric.mp3",
+    "attack-frost": "audio/sfx/spell-ice.mp3",
+    "attack-shout": "audio/sfx/boss-roar.mp3"
   }
 }

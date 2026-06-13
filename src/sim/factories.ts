@@ -185,6 +185,8 @@ export function spawnUnit(world: World, classId: string, x: number, y: number): 
     x,
     y,
   });
+  // S20.3 audio: the deploy thunk as the unit lands
+  world.get(Outbox)?.sfx.push("deploy");
   return unit;
 }
 

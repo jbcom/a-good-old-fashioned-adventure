@@ -23,6 +23,8 @@ export interface ClassAttack {
   speed?: number;
   life?: number;
   muzzleOffset?: { x: number; y: number };
+  /** Per-class attack sfx recipe (S20.3): the verb's distinct attack voice. */
+  voice?: string;
 }
 
 /** Shape of a class ability (shield, leap, or blink with activation/cooldown params). */

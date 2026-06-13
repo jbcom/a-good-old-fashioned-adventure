@@ -153,6 +153,9 @@ export function applyEffects(
       grantRunReward(world, effect.grantRunReward);
     }
     if (typeof effect.endGame === "string" && outbox) {
+      // S20.3 audio: the victory stinger on a rescue; collapse is sounded at the
+      // wave-collapse site (a quest-driven gameover is rare — guard either way)
+      outbox.sfx.push(effect.endGame === "victory" ? "victory" : "collapse");
       outbox.endGame = effect.endGame as "victory" | "gameover";
     }
   }

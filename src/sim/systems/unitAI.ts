@@ -53,7 +53,9 @@ function brainFor(world: World, unit: Entity, x: number, y: number): UnitBrain {
     const seek = new SeekBehavior(new Vector3());
     seek.active = false;
     vehicle.steering.add(seek);
-    brain = { vehicle, seek, pulseLeft: 0, fxLeft: 0 };
+    // seed fxLeft to a full interval so the first charge dust trails BEHIND the
+    // unit once it's moving, not at the spawn point on frame one
+    brain = { vehicle, seek, pulseLeft: 0, fxLeft: 1 / combat.feedback.chargeDustHz };
     perWorld.set(unit, brain);
   }
   return brain;
@@ -95,8 +97,10 @@ function unitStrike(
   unit.set(CombatTimers, { ...timers, attack: attack.cooldown });
   const dir = target.x >= transform.x ? 1 : -1;
 
+  // S20.3 audio: each class voices its own attack (the verb's distinct sound),
+  // falling back to the generic cue when a class has no bespoke voice
   if (attack.kind === "projectile") {
-    world.get(Outbox)?.sfx.push("magic");
+    world.get(Outbox)?.sfx.push(attack.voice ?? "magic");
     // storm-volley looses a bolt at EVERY enemy in the whirl radius;
     // everyone else fires a single aimed shot
     const targets =
@@ -128,7 +132,7 @@ function unitStrike(
     return;
   }
 
-  world.get(Outbox)?.sfx.push("slash");
+  world.get(Outbox)?.sfx.push(attack.voice ?? "slash");
   // melee: strike the target, and an AoE temperament splashes the cluster
   damageEnemy(world, target.enemy, meleeDamage(1), dir);
   if (temperament.withersOnHit) applyWither(world, target.enemy);
@@ -159,12 +163,19 @@ function unitStrike(
 }
 
 function applyWither(world: World, enemy: Entity): void {
-  // S20.2 combat feel: the violet haze pulses when the field FRESHLY catches an
-  // enemy (the rising edge), not every frame — a steady refresh wouldn't re-tint
-  const fresh = !enemy.has(Withered) || (enemy.get(Withered)?.left ?? 0) <= 0;
-  if (enemy.has(Withered)) enemy.set(Withered, { left: combat.wither.duration });
-  else enemy.add(Withered({ left: combat.wither.duration }));
-  if (fresh) {
+  // S20.2/S20.3 combat feel: the violet haze re-blooms over a withered enemy on
+  // a slow cadence (witherTintHz) — once when the field freshly catches it, then
+  // periodically while it stays withered, so a long-held enemy keeps its mark.
+  const prior = enemy.get(Withered);
+  const fresh = !prior || prior.left <= 0;
+  const tintLeft = fresh ? 0 : Math.max(0, prior.tintLeft);
+  if (enemy.has(Withered)) enemy.set(Withered, { left: combat.wither.duration, tintLeft });
+  else enemy.add(Withered({ left: combat.wither.duration, tintLeft }));
+  if (tintLeft <= 0) {
+    enemy.set(Withered, {
+      left: combat.wither.duration,
+      tintLeft: 1 / combat.feedback.witherTintHz,
+    });
     const t = enemy.get(Transform);
     if (t)
       spawnFx(world, {

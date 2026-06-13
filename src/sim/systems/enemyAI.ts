@@ -175,7 +175,12 @@ export function enemyAIStep(world: World, dt: number): void {
     // having a target (an unopposed survivor must still shed the debuff)
     const witherNow = enemy.get(Withered);
     if (witherNow && witherNow.left > 0) {
-      enemy.set(Withered, { left: Math.max(0, witherNow.left - dt) });
+      // the tint-refresh cadence counts down alongside the debuff so the haze
+      // re-blooms periodically while the enemy stays withered (S20.3)
+      enemy.set(Withered, {
+        left: Math.max(0, witherNow.left - dt),
+        tintLeft: Math.max(0, witherNow.tintLeft - dt),
+      });
     }
     const playerPos = nearestAllyTo(world, transform);
     if (!playerPos) continue;
