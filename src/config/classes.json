@@ -1,7 +1,13 @@
 {
   "$schema": "../../schemas/config.schema.json",
-  "roster": ["knight"],
-  "companionRoster": ["knight", "ranger", "wizard"],
+  "roster": [
+    "knight"
+  ],
+  "companionRoster": [
+    "knight",
+    "ranger",
+    "wizard"
+  ],
   "classes": {
     "knight": {
       "sprite": "sprite:fighter",
@@ -47,7 +53,11 @@
         "kind": "leap",
         "label": "LEAP",
         "backwardDistance": 45,
-        "spreadAngles": [-0.15, 0, 0.15],
+        "spreadAngles": [
+          -0.15,
+          0,
+          0.15
+        ],
         "spreadSpeed": 140,
         "spreadLife": 1.5,
         "cooldown": 1,
@@ -220,7 +230,7 @@
       }
     },
     "warlock": {
-      "sprite": "sprite:warlock",
+      "sprite": "sprite:hooded-mage",
       "palette": "palette:base",
       "attack": {
         "kind": "projectile",
@@ -312,7 +322,7 @@
       }
     },
     "stormcaller": {
-      "sprite": "sprite:stormcaller",
+      "sprite": "sprite:grey-mage",
       "palette": "palette:base",
       "attack": {
         "kind": "projectile",

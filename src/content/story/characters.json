@@ -20,8 +20,8 @@
     "char:gwydion": {
       "name": "Mage Gwydion",
       "role": "npc",
-      "sprite": "sprite:princess",
-      "palette": "palette:wizard",
+      "sprite": "sprite:grey-mage",
+      "palette": "palette:base",
       "portraitColor": "#00d2f7",
       "dialogue": "dlgbank:gwydion"
     },
