@@ -298,6 +298,17 @@ expensive way; neither is ever locked out. The unifying principle: roses
 ACCELERATE the dragon ecosystem, gems GUARANTEE access to it, and the
 mandatory game (maps/classes on gems, the line on coins) runs regardless.
 
+**Nobody is punished for curiosity — not to the point of impossibility.**
+The design's humane guarantee: a player who unlocks maps 2, 3, 4 out of
+FOMO ("I wanna see all the maps and dungeons!") and then realizes they're
+spread thin is NOT trapped. By then they have MANY maps (so more coins),
+and they ALWAYS have at least the first dragon to farm (so always
+something), and roses they've earned still buy dragons. They can sit and
+farm the first dragon to recover. There is ALWAYS a path forward — it
+might just be slower. Exploration is never a dead end; the floor of the
+game is always reachable, so the player's curiosity is rewarded with
+content, never with an unwinnable state.
+
 **This is also the anti-block guarantee.** Because the MANDATORY
 progression — new maps, new classes (the majors) — runs on GEMS, and gems
 plus coins are always farmable from the first dragon and the trash, a
