@@ -51,6 +51,33 @@ const TIERS: Array<{
   },
 ];
 
+// the bounty/placement flywheel running: orc-bounty + placement ranks owned, on
+// an orc-dense map. Validates that the enemy-DAG coin flywheel (restored in
+// S21.4 — wave kills now pay bounty) raises income WITHOUT a runaway spike.
+const FLYWHEEL: {
+  mapId: string;
+  unlockedClassIds: string[];
+  purchasedUpgradeIds: string[];
+  upgradeRanks: Record<string, number>;
+} = {
+  mapId: "map:oldwood-forest",
+  unlockedClassIds: ["knight", "ranger"],
+  purchasedUpgradeIds: [
+    "upgrade:first-vow",
+    "upgrade:ranger-trail",
+    "upgrade:warband-of-one",
+    "upgrade:dragon-wake",
+    "upgrade:unlock-forest-orc",
+    "upgrade:orc-bounty",
+    "upgrade:placement-forest-orc",
+  ],
+  upgradeRanks: {
+    "upgrade:warband-of-one": 3,
+    "upgrade:orc-bounty": 3,
+    "upgrade:placement-forest-orc": 4,
+  },
+};
+
 describe("S21.2 measured rail income", () => {
   it("measures positive coin income, and rising income-per-second, by tier", () => {
     // KEY economy property (measured, not modeled): per-RUN coin income is
@@ -97,5 +124,44 @@ describe("S21.2 measured rail income", () => {
         `${node.id} (${price}C) needs >3 measured early runs (${meanCoins.toFixed(0)}C/run)`,
       ).toBeLessThanOrEqual(meanCoins * 3);
     }
+  }, 60_000);
+
+  it("the bounty/placement flywheel raises income without a runaway spike", () => {
+    // S21.4 restored the enemy-DAG coin flywheel (wave kills now pay bounty).
+    // With orc-bounty + placement ranks owned on an orc-dense map, income must
+    // RISE over the no-bounty baseline (the flywheel pays) but stay BOUNDED
+    // (orc-bounty rank 3 = 6 coins/kill × placement ×2 = a capped per-kill
+    // bonus, never a runaway). We assert: flywheel income > baseline, and the
+    // per-kill coin yield stays within a sane multiple of the flat base reward.
+    const seeds = [3, 7, 11, 19];
+    const noBounty = {
+      ...FLYWHEEL,
+      purchasedUpgradeIds: FLYWHEEL.purchasedUpgradeIds.filter(
+        (id) => id !== "upgrade:orc-bounty" && id !== "upgrade:placement-forest-orc",
+      ),
+      upgradeRanks: { "upgrade:warband-of-one": 3 },
+    };
+
+    const meanCoins = (scenario: typeof FLYWHEEL) =>
+      seeds
+        .map((seed) => runRail({ ...scenario, seed, maxTicks: SIM_HZ * 120 }).coins)
+        .reduce((a, b) => a + b, 0) / seeds.length;
+    const meanFelled = (scenario: typeof FLYWHEEL) =>
+      seeds
+        .map((seed) => runRail({ ...scenario, seed, maxTicks: SIM_HZ * 120 }).enemiesFelled)
+        .reduce((a, b) => a + b, 0) / seeds.length;
+
+    const flywheelCoins = meanCoins(FLYWHEEL);
+    const baseCoins = meanCoins(noBounty);
+    expect(flywheelCoins, "the flywheel should out-earn the no-bounty baseline").toBeGreaterThan(
+      baseCoins,
+    );
+
+    // per-kill yield stays bounded: total coins / enemies felled must not exceed
+    // a sane ceiling (the flat base + the capped bounty multiplier), so a maxed
+    // flywheel is a healthy boost, never a runaway exploit
+    const perKill = flywheelCoins / Math.max(1, meanFelled(FLYWHEEL));
+    const base = incremental.runRewards.enemyDefeated.base ?? 0;
+    expect(perKill, `per-kill yield ${perKill.toFixed(1)}C is a runaway`).toBeLessThan(base * 8);
   }, 60_000);
 });
