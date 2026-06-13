@@ -30,6 +30,10 @@ export interface TileDef {
 export interface PropState {
   rows?: string[];
   drawOps?: DrawOp[];
+  /** purchased-sheet crop (docs/CONTENT-ARCHITECTURE.md §Purchased PNG
+   * sheet sprites — slicer manifest): cell rect inside a preloaded image
+   * under public/assets/. Palette swaps never apply. */
+  sheet?: { image: string; x: number; y: number; w: number; h: number };
 }
 
 export interface PropDef {

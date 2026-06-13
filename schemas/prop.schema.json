@@ -61,6 +61,23 @@
           {
             "required": ["drawOps"],
             "properties": { "drawOps": { "$ref": "./draw-ops.schema.json#/$defs/opList" } }
+          },
+          {
+            "required": ["sheet"],
+            "properties": {
+              "sheet": {
+                "type": "object",
+                "required": ["image", "x", "y", "w", "h"],
+                "properties": {
+                  "image": { "type": "string", "pattern": "^[a-z0-9/_.-]+\\.png$" },
+                  "x": { "type": "integer", "minimum": 0 },
+                  "y": { "type": "integer", "minimum": 0 },
+                  "w": { "type": "integer", "minimum": 1 },
+                  "h": { "type": "integer", "minimum": 1 }
+                },
+                "additionalProperties": false
+              }
+            }
           }
         ]
       }

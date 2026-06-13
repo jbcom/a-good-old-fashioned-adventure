@@ -116,6 +116,42 @@
       "x": 340,
       "y": 360,
       "note": "second rat along the south wall"
+    },
+    {
+      "ref": "prop:dungeon-brazier",
+      "x": 210,
+      "y": 120,
+      "note": "torchlight against the bare corridor"
+    },
+    {
+      "ref": "prop:dungeon-brazier",
+      "x": 430,
+      "y": 120,
+      "note": "second brazier down the hall"
+    },
+    {
+      "ref": "prop:dungeon-web",
+      "x": 140,
+      "y": 180,
+      "note": "cobwebbed corner near the entry"
+    },
+    {
+      "ref": "prop:dungeon-bone-pile",
+      "x": 320,
+      "y": 300,
+      "note": "what the rats left"
+    },
+    {
+      "ref": "prop:dungeon-cell-gate",
+      "x": 560,
+      "y": 200,
+      "note": "a barred cell on the way to the warlord"
+    },
+    {
+      "ref": "prop:dungeon-grave",
+      "x": 480,
+      "y": 380,
+      "note": "crypt marker by the south wall"
     }
   ],
   "triggers": [],

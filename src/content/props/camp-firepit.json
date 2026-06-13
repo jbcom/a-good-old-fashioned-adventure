@@ -1,0 +1,16 @@
+{
+  "$schema": "../../../schemas/prop.schema.json",
+  "id": "prop:camp-firepit",
+  "kind": "prop",
+  "description": "Lit firepit sliced from the Backterria mega-sheet — siege-camp litter on the castle approach.",
+  "grid": { "w": 16, "h": 16 },
+  "anchor": { "x": 8, "y": 16 },
+  "solid": true,
+  "states": {
+    "default": {
+      "sheet": { "image": "tilemaps/roguelike.png", "x": 208, "y": 416, "w": 16, "h": 16 }
+    }
+  },
+  "defaultPalette": "palette:base",
+  "koota": { "traits": ["Transform", "Sprite", "DepthSorted"] }
+}

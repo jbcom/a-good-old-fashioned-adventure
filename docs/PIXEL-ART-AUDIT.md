@@ -68,6 +68,28 @@ roguelike mega-sheet slicer feeds this); (3) bespoke humanoid grids
 (forest orc/raider/shaman trio, skeleton, sentry) — the only gap that
 still needs hand-authored .pix.
 
+### Second user import wave (inventoried 2026-06-12, raw-assets/)
+
+The census's remaining gaps now have purchased candidates on disk:
+
+- **Humanoid bodies (was "the only hand-authored gap"):**
+  `citizens-guards-warriors` (40 sheets: archer, 2-handed swordsman,
+  sword+shield fighter in combat/non-combat sets, plus citizens + guards)
+  → gate-sentry, castle guards, village ambience;
+  `warriors_rogues_mages` (57 sheets: mages incl. hooded variants → forest
+  shaman/thorn-shaman bodies, rogues → oldwood raiders, warriors → orc
+  tier); `heavy-knight` (4 sheets incl. thrust/dash attacks) → elite or
+  banner-knight uplevel. Style-check at zoom required before wiring.
+- **Kenney roguelike family** (License.txt CC0-style packs): Dungeon +
+  Interior tilesheets attack the census's worst tile counts (dungeon 3
+  families, interior 6); City pack (1040 tiles) feeds village/city props;
+  Base + Characters extend the slicer source set.
+- **FX + texture packs:** Explosion Pack (5 explosion strip sheets) feeds
+  S20.2 wave fx; Rune Pack (667) feeds spell/emblem fx; Foliage packs are
+  vector-scale — style-clash risk with 16-bit Errant Storybook, audition
+  before any use; Brick/RPG Tiles Vector/RTS Medieval likewise need a
+  scale audition first.
+
 **(1) LANDED:** five new archetypes ship — Dune Adder + Carrion Raven
 (sunken-road + desert-ruins, a region that previously had zero trash),
 Gatehouse Vulture (castle-approach guard), Crypt Bat + Cellar Rat

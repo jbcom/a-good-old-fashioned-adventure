@@ -68,9 +68,11 @@ export function resolveSheetFrame(def: SheetSpriteDef, query: SheetFrameQuery): 
   const block = anim.directional ? Math.max(0, def.directionOrder.indexOf(direction)) : 0;
 
   // side-view sheets carry one native facing; flip when the entity points
-  // the other way (vertical travel keeps the last horizontal facing)
+  // the other way (vertical travel keeps the last horizontal facing). A
+  // directional animation already picked its block — mirroring on top
+  // would double-flip, so facing only applies to row animations.
   let mirror = false;
-  if (def.facing) {
+  if (def.facing && !anim.directional) {
     const horizontal =
       direction === "left" || direction === "right"
         ? direction

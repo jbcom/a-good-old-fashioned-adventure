@@ -266,6 +266,36 @@
       "x": 820,
       "y": 300,
       "note": "wheeling over the siege litter before the gate"
+    },
+    {
+      "ref": "prop:war-banner",
+      "x": 700,
+      "y": 290,
+      "note": "siege heraldry lining the road"
+    },
+    {
+      "ref": "prop:war-banner",
+      "x": 940,
+      "y": 290,
+      "note": "second banner before the gate"
+    },
+    {
+      "ref": "prop:camp-firepit",
+      "x": 250,
+      "y": 330,
+      "note": "burned-out pilgrim camp"
+    },
+    {
+      "ref": "prop:supply-crate",
+      "x": 660,
+      "y": 330,
+      "note": "abandoned provisions"
+    },
+    {
+      "ref": "prop:supply-crate",
+      "x": 810,
+      "y": 310,
+      "note": "crates near the vulture's perch"
     }
   ],
   "composition": {

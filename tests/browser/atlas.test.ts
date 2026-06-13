@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import basePalette from "../../src/content/palettes/base.json";
 import swaps from "../../src/content/palettes/swaps.json";
-import { getCharacterSprite, sprites } from "../../src/lib/content/registry";
+import { getCharacterSprite, props, sprites } from "../../src/lib/content/registry";
 import { isSheetSprite, resolveSheetFrame } from "../../src/lib/content/sheetSprite";
 import {
   preloadSheetImages,
@@ -119,6 +119,24 @@ describe("purchased sheet sprites bake real pixels", () => {
         expect(
           opaque / (def.frameSize.w * def.frameSize.h),
           `${def.id} pose ${pose} (${frame.anim.image} @${frame.sourceX},${frame.sourceY})`,
+        ).toBeGreaterThan(0.05);
+      }
+    }
+  });
+});
+
+describe("sheet-sliced props bake real pixels", () => {
+  it("every sheet prop state crops a non-empty cell", async () => {
+    await preloadSheetImages();
+    for (const def of props.values()) {
+      for (const [state, propState] of Object.entries(def.states)) {
+        if (!propState.sheet) continue;
+        const data = pixelsOf(propCanvas(def.id, state));
+        let opaque = 0;
+        for (let i = 3; i < data.length; i += 4) if (data[i] > 0) opaque++;
+        expect(
+          opaque / (propState.sheet.w * propState.sheet.h),
+          `${def.id} state ${state} @${propState.sheet.x},${propState.sheet.y}`,
         ).toBeGreaterThan(0.05);
       }
     }
