@@ -35,9 +35,9 @@ describe("S17.4 the rail", () => {
     for (let i = 1; i < rail.length; i++) {
       expect(rail[i].y).toBeLessThan(rail[i - 1].y);
     }
-    const south = { y: 1000 };
+    const south = { x: 0, y: 1000 };
     expect(nextRailPoint(rail, south)?.triggerId).toBe(rail[0].triggerId);
-    expect(nextRailPoint(rail, { y: rail[rail.length - 1].y - 10 })).toBeNull();
+    expect(nextRailPoint(rail, { x: 0, y: rail[rail.length - 1].y - 10 })).toBeNull();
   });
 
   it("a unit with a quiet field marches the route north", () => {

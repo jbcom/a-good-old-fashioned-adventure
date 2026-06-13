@@ -28,6 +28,7 @@ import {
   Withered,
 } from "../traits";
 import { damageEnemy, meleeDamage } from "./combat";
+import { railAxis } from "./waves";
 
 interface UnitBrain {
   vehicle: Vehicle;
@@ -294,7 +295,8 @@ export function unitAIStep(world: World, dt: number): void {
       } else {
         // no threat in sight: march the designed route (docs/RAIL-COMMAND.md)
         const mapId = world.get(MapRuntime)?.mapId ?? "";
-        const ahead = mapId ? nextRailPoint(getRail(mapId), transform) : null;
+        const axis = railAxis(world);
+        const ahead = mapId ? nextRailPoint(getRail(mapId, axis), transform, axis) : null;
         if (ahead) {
           brain.seek.active = true;
           brain.seek.target.set(ahead.x, ahead.y, 0);

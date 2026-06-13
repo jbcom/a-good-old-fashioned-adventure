@@ -123,13 +123,42 @@ export function rescueStep(world: World): void {
   reduceEvent(world, { type: "dlg", event: "dlg:princess-amber.freed:seen" });
 }
 
-/** Front line: the northmost living unit's position (rail runs south→north). */
+/**
+ * Rail advance axis: which way the line pushes (docs/RAIL-COMMAND.md §Rail
+ * axis). Derived from the player spawn — spawn at the bottom → south→north,
+ * spawn at the left → west→east. The far end is where the princess waits.
+ */
+export function railAxis(world: World): "north" | "east" {
+  const runtime = world.get(MapRuntime);
+  if (!runtime) return "north";
+  const def = getMap(runtime.mapId);
+  // a tall map with a low spawn climbs north; a wide map with a left spawn runs east
+  const spawn = def.playerSpawn;
+  const w = runtime.cols * 16;
+  return spawn.x < w * 0.25 && runtime.cols >= runtime.rows ? "east" : "north";
+}
+
+/** How far along the rail axis a point sits — larger is further toward the goal. */
+function axisProgress(axis: "north" | "east", x: number, y: number, height: number): number {
+  // north: progress grows as y shrinks (climbing up); east: as x grows
+  return axis === "east" ? x : height - y;
+}
+
+/** Front line: the unit furthest along the rail axis (axis-agnostic). */
 export function frontline(world: World): { x: number; y: number } | null {
+  const runtime = world.get(MapRuntime);
+  const axis = railAxis(world);
+  const height = (runtime?.rows ?? 64) * 16;
   let best: { x: number; y: number } | null = null;
+  let bestProgress = -Infinity;
   for (const unit of world.query(IsUnit, Transform)) {
     const t = unit.get(Transform);
     if (!t) continue;
-    if (!best || t.y < best.y) best = { x: t.x, y: t.y };
+    const progress = axisProgress(axis, t.x, t.y, height);
+    if (progress > bestProgress) {
+      bestProgress = progress;
+      best = { x: t.x, y: t.y };
+    }
   }
   return best;
 }

@@ -103,6 +103,17 @@ the FRONT (furthest allied unit), so the view advances exactly as the user
 described. Rail checkpoints keep paying `roadTravelled` when the front
 crosses them.
 
+**Rail axis (S19.2b lock).** rescue-route runs SOUTH→NORTH (tall map,
+spawn at the bottom), but the other spine maps are WIDE and run WEST→EAST
+(spawn at the left). So "the front" is not always "the northmost unit" —
+each map declares a `railAxis` (the direction the line advances), and
+`frontline` projects unit positions onto that axis to find the furthest.
+The advance, the rescue-proximity check, and the wave-gate crossings all
+read the axis, so a horizontal map plays exactly like a vertical one with
+the rail turned 90°. Wave gates and the princess anchor are authored at
+the FAR end of each map's axis (the north/east edge the line pushes
+toward).
+
 ## What survives unchanged
 
 Dual currency and death-pays-out; the emblem DAG screen (it is the between-
