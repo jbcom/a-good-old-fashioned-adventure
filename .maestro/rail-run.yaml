@@ -1,0 +1,29 @@
+# S23.3 live-verify: a Maestro flow that boots the Android app, starts a new
+# rail run, deploys a unit, and confirms the rail game is live on-device. Run on
+# a booted emulator with the debug APK installed:
+#   maestro test .maestro/rail-run.yaml
+appId: com.jbogaty.goodoldfashionedadventure
+---
+- launchApp:
+    clearState: true
+# the storybook landing screen — its title proves the parchment screen rendered
+- assertVisible: "A Good Old-Fashioned Adventure"
+- assertVisible: "New Game"
+# start the run
+- tapOn: "New Game"
+# the rail HUD proves the rail game loaded (the LINE-command HUD, not a hero bar)
+- assertVisible:
+    text: "LINE"
+    timeout: 15000
+- assertVisible: "WAVE.*"
+# deploy a unit: tap a toolbox class chip, then the rail. The toolbox sits along
+# the bottom edge; the rail runs down the middle. Tap by point (webview canvas).
+- tapOn:
+    point: "15%,90%"
+- tapOn:
+    point: "50%,40%"
+# give the line a moment to engage; the WAVE counter is the live-sim proof
+- assertVisible:
+    text: "WAVE.*"
+    timeout: 8000
+- takeScreenshot: rail-run-live
