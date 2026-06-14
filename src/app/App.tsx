@@ -1032,13 +1032,18 @@ function Minimap({ snapshot }: { snapshot: UiSnapshot }) {
     };
     for (let y = 0; y < snapshot.runtime.rows; y++) {
       for (let x = 0; x < snapshot.runtime.cols; x++) {
-        const explored = snapshot.explored.has(`${x},${y}`);
         const tile = getTile(snapshot.runtime.grid[y][x]);
         const colorTile = tile.variantOf ?? tile.id;
-        ctx.fillStyle = explored ? (colors[colorTile] ?? ui.theme.textBody) : ui.theme.background;
+        const base = colors[colorTile] ?? ui.theme.textBody;
+        // this is a rail-command route map, not a fog-of-war explorer: show the
+        // whole known road always (a start-of-run all-unexplored map rendered as
+        // a useless black rectangle). Unexplored cells just sit a touch dimmer.
+        ctx.fillStyle = base;
+        ctx.globalAlpha = snapshot.explored.has(`${x},${y}`) ? 1 : 0.5;
         ctx.fillRect(Math.floor(x * sx), Math.floor(y * sy), Math.ceil(sx), Math.ceil(sy));
       }
     }
+    ctx.globalAlpha = 1;
     ctx.fillStyle = ui.theme.accentRed;
     ctx.fillRect(
       Math.floor((snapshot.playerX / engine.tileSize) * sx) - 2,
