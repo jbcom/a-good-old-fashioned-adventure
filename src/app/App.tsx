@@ -657,7 +657,17 @@ function handleZoneTriggers(world: World, entered: Set<string>) {
   }
 }
 
-function CurrencyToken({ label, value, testId }: { label: string; value: number; testId: string }) {
+function CurrencyToken({
+  label,
+  value,
+  testId,
+  name,
+}: {
+  label: string;
+  value: number;
+  testId: string;
+  name: string;
+}) {
   const ref = useRef<HTMLSpanElement | null>(null);
   const last = useRef(value);
   useEffect(() => {
@@ -676,7 +686,14 @@ function CurrencyToken({ label, value, testId }: { label: string; value: number;
     last.current = value;
   }, [value]);
   return (
-    <span ref={ref} className="currency-token" data-testid={testId}>
+    <span
+      ref={ref}
+      className="currency-token"
+      data-testid={testId}
+      title={`${name}: ${value}`}
+      role="img"
+      aria-label={`${value} ${name}`}
+    >
       {label} {value}
     </span>
   );
@@ -915,9 +932,24 @@ function Hud({
           WAVE {snapshot.wave}
         </span>
         <UnitChips snapshot={snapshot} />
-        <CurrencyToken label="C" value={snapshot.incrementalProgress.coins} testId="hud-coins" />
-        <CurrencyToken label="G" value={snapshot.incrementalProgress.gems} testId="hud-gems" />
-        <CurrencyToken label="R" value={snapshot.incrementalProgress.roses} testId="hud-roses" />
+        <CurrencyToken
+          label="C"
+          name="Coins"
+          value={snapshot.incrementalProgress.coins}
+          testId="hud-coins"
+        />
+        <CurrencyToken
+          label="G"
+          name="Gems"
+          value={snapshot.incrementalProgress.gems}
+          testId="hud-gems"
+        />
+        <CurrencyToken
+          label="R"
+          name="Roses"
+          value={snapshot.incrementalProgress.roses}
+          testId="hud-roses"
+        />
         <span className="map-token">{snapshot.mapName}</span>
         <button
           className="hud-speed"
@@ -1360,6 +1392,7 @@ function UpgradeWebPanel({
         <h1>Upgrade Graph</h1>
         <div className="upgrade-purse" data-testid="upgrade-purse">
           <span>{snapshot.incrementalProgress.coins} Coins</span>
+          <span>{snapshot.incrementalProgress.gems} Gems</span>
           <span>{snapshot.incrementalProgress.roses} Roses</span>
         </div>
         <fieldset className="upgrade-graph-list" aria-label="Upgrade Graph">
