@@ -2318,6 +2318,23 @@ export function App({
             >
               RESUME
             </button>
+            <button
+              className="menu-button"
+              data-testid="pause-mute"
+              type="button"
+              aria-pressed={muted}
+              onClick={() => setMuted((value) => !value)}
+            >
+              {muted ? "UNMUTE" : "MUTE"}
+            </button>
+            <button
+              className="menu-button danger"
+              data-testid="pause-retire"
+              type="button"
+              onClick={retireRun}
+            >
+              RETIRE RUN
+            </button>
           </div>
         </section>
       )}
