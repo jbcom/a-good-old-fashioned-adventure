@@ -19,8 +19,29 @@ export function clearAtlas(): void {
   cache.clear();
 }
 
+/**
+ * Reset the sheet-preload state so a test can reproduce the cold-load race a
+ * deployed build hits (first ground bake before images decode). Test-only.
+ */
+export function resetSheetPreloadForTest(): void {
+  sheetPreload = null;
+  sheetsReady = false;
+  sheetImages.clear();
+}
+
 let sheetPreload: Promise<void> | null = null;
 let sheetsReady = false;
+
+/**
+ * True once every purchased sheet image has decoded. The ground is baked ONCE
+ * per (map, rev) and cached; if that first bake ran before the images arrived
+ * (slow network on a deployed build), every tile is a transparent placeholder
+ * and the ground renders black forever. The renderer reads this to force a
+ * one-time recompose when the sheets finish loading.
+ */
+export function sheetsAreReady(): boolean {
+  return sheetsReady;
+}
 
 /**
  * Load every image referenced by registered sheet sprites — idempotent,

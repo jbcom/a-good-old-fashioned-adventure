@@ -22,7 +22,8 @@
     "author:pixelart": "node scripts/export-pixelart.mjs",
     "cap:sync": "pnpm build && cap sync android",
     "cap:run:android": "pnpm cap:sync && cap run android",
-    "author:sheets": "node scripts/import-sheet-sprites.mjs"
+    "author:sheets": "node scripts/import-sheet-sprites.mjs",
+    "test:e2e:deployed": "playwright test --config=playwright.config.ts"
   },
   "dependencies": {
     "@capacitor-community/sqlite": "8.1.0",
@@ -46,8 +47,10 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.16",
     "@capacitor/cli": "8.4.0",
+    "@playwright/test": "^1.60.0",
     "@types/howler": "^2.2.13",
     "@types/node": "^25.9.3",
+    "@types/pngjs": "^6.0.5",
     "@types/react": "^19.2.17",
     "@types/react-dom": "^19.2.3",
     "@types/three": "^0.184.1",
@@ -57,6 +60,7 @@
     "@vitest/browser-playwright": "^4.1.8",
     "drizzle-kit": "^0.31.10",
     "playwright": "^1.60.0",
+    "pngjs": "^7.0.0",
     "sharp": "^0.35.1",
     "typescript": "^6.0.3",
     "vite": "^8.0.16",

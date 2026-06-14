@@ -44,6 +44,7 @@ import {
   preloadSheetImages,
   propCanvas,
   sheetFrameCanvas,
+  sheetsAreReady,
   spriteCanvas,
   tileFieldCanvas,
 } from "./atlas";
@@ -75,7 +76,9 @@ function textureFor(canvas: HTMLCanvasElement): CanvasTexture {
   return texture;
 }
 
-function composeGround(world: World): HTMLCanvasElement {
+/** Bake the whole ground plane into one supersampled canvas (exported for the
+ * deployed-build black-ground regression test). */
+export function composeGround(world: World): HTMLCanvasElement {
   const runtime = world.get(MapRuntime);
   if (!runtime) throw new Error("no MapRuntime");
   // supersampled ground texture: GROUND_RES px per world tile so high-res
@@ -123,6 +126,10 @@ interface GroundTrack {
   mapId: string;
   rev: number;
   mesh: Mesh;
+  // false when this ground was baked before the sheet images had decoded — its
+  // tiles are transparent placeholders (black ground). The renderer recomposes
+  // once sheetsAreReady() flips true so a slow deployed build self-heals.
+  bakedReady: boolean;
 }
 
 function disposeGroundMesh(mesh: Mesh): void {
@@ -146,9 +153,18 @@ class SceneSync {
   private syncGround(world: World, scene: Scene): void {
     const runtime = world.get(MapRuntime);
     if (!runtime || runtime.mapId === "") return;
-    if (this.ground && this.ground.mapId === runtime.mapId && this.ground.rev === runtime.rev) {
-      return;
-    }
+    // skip recompose when the cached ground still matches AND it was baked with
+    // the sheet images present. A ground baked before the sheets decoded (slow
+    // deployed build) has bakedReady=false and re-bakes EVERY frame until the
+    // sheets are ready — so it heals from black incrementally as the terrain
+    // PNGs arrive (sheetImages populates per-image), not only after every last
+    // sheet (incl. audio) finishes. The fix for the deployed black-terrain race.
+    const stillValid =
+      this.ground &&
+      this.ground.mapId === runtime.mapId &&
+      this.ground.rev === runtime.rev &&
+      this.ground.bakedReady;
+    if (stillValid) return;
     if (this.ground) {
       scene.remove(this.ground.mesh);
       disposeGroundMesh(this.ground.mesh);
@@ -166,7 +182,12 @@ class SceneSync {
     mesh.rotation.x = -Math.PI / 2;
     mesh.position.set(worldW / 2, 0, worldH / 2);
     scene.add(mesh);
-    this.ground = { mapId: runtime.mapId, rev: runtime.rev, mesh };
+    this.ground = {
+      mapId: runtime.mapId,
+      rev: runtime.rev,
+      mesh,
+      bakedReady: sheetsAreReady(),
+    };
   }
 
   private billboard(
