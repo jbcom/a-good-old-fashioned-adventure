@@ -7,8 +7,8 @@
   "description": "Worn flagstone — RPG Tiles Vector grey paving cell, native 64px.",
   "sheet": {
     "image": "tilemaps/rpg-terrain.png",
-    "x": 640,
-    "y": 256,
+    "x": 960,
+    "y": 192,
     "w": 64,
     "h": 64
   },

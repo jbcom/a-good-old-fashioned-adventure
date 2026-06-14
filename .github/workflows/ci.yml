@@ -34,6 +34,10 @@ jobs:
       - run: pnpm test
       - run: pnpm test:browser
       - run: pnpm build
+      # deployed-build E2E: play the SHIPPED bundle under the Pages subpath with
+      # throttled network — the gate that catches production-only bugs the
+      # dev-server tests can't (e.g. the black-ground asset-load race).
+      - run: pnpm test:e2e:deployed
 
   android:
     name: Android Debug APK

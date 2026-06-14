@@ -6,11 +6,14 @@
   "description": "Paved castle road — the RPG Tiles Vector pack's opaque 64px grey flagstone (public/assets/tilemaps/rpg-terrain.png, cols 9-10, rows 3-4) so the approach reads as a laid stone causeway distinct from both the dirt path and the mountain rock, at native resolution. The 2×2 field varies the paving.",
   "sheet": {
     "image": "tilemaps/rpg-terrain.png",
-    "x": 576,
-    "y": 192,
+    "x": 640,
+    "y": 320,
     "w": 64,
     "h": 64,
-    "field": { "cols": 2, "rows": 2 }
+    "field": {
+      "cols": 1,
+      "rows": 1
+    }
   },
   "koota": {
     "traits": ["Tile"]

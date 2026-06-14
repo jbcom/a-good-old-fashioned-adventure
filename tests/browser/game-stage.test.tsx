@@ -2,8 +2,8 @@ import { StrictMode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, expect, it } from "vitest";
 import { page } from "vitest/browser";
-import { preloadSheetImages } from "../../src/render/atlas";
-import { GameStage } from "../../src/render/GameStage";
+import { clearAtlas, preloadSheetImages, resetSheetPreloadForTest } from "../../src/render/atlas";
+import { composeGround, GameStage } from "../../src/render/GameStage";
 import { createGameWorld, instantiateMap, spawnEnemy } from "../../src/sim/factories";
 import { autoStartQuests } from "../../src/sim/quests";
 import { step } from "../../src/sim/tick";
@@ -57,6 +57,46 @@ it("renders the live overworld from a running world", async () => {
   await new Promise((resolve) => setTimeout(resolve, 600));
   const path = await page.screenshot({ path: "game-stage-overworld.png" });
   expect(path).toBeTruthy();
+});
+
+it("re-bakes a NON-BLACK ground when sheet images load after the first compose", async () => {
+  // The deployed-build black-terrain bug: composeGround bakes ONCE per (map,
+  // rev) and caches it; if that first bake runs before the sheet images decode
+  // (slow GitHub Pages network), every PNG ground tile is a transparent
+  // placeholder and the ground renders black forever. Locally assets load
+  // instantly so the bug is invisible — this reproduces the race directly on
+  // composeGround and proves the ground must (and does) heal once sheets load.
+  const world = createGameWorld(3);
+  instantiateMap(world, "map:overworld", { classId: "knight" });
+  for (let i = 0; i < 5; i++) step(world);
+
+  const opaqueFraction = (canvas: HTMLCanvasElement) => {
+    const ctx = canvas.getContext("2d");
+    if (!ctx) throw new Error("2d context unavailable");
+    const data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    let opaque = 0;
+    for (let i = 3; i < data.length; i += 4) if (data[i] > 240) opaque++;
+    return opaque / (data.length / 4);
+  };
+
+  // COLD: sheets not loaded → the PNG ground tiles bake transparent (the bug).
+  clearAtlas();
+  resetSheetPreloadForTest();
+  const cold = composeGround(world);
+  expect(
+    opaqueFraction(cold),
+    "expected the cold (pre-load) ground to be mostly transparent — that IS the bug being guarded",
+  ).toBeLessThan(0.5);
+
+  // HOT: load the sheets, clear the stale cache, re-bake → opaque ground. The
+  // renderer's syncGround does exactly this recompose once sheetsAreReady().
+  await preloadSheetImages();
+  clearAtlas();
+  const hot = composeGround(world);
+  expect(
+    opaqueFraction(hot),
+    "the ground rendered black after sheets loaded — the deployed-build fix regressed",
+  ).toBeGreaterThan(0.95);
 });
 
 it("renders the dungeon after a map transition", async () => {

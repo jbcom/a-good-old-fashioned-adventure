@@ -42,7 +42,12 @@ import {
   readViewport,
   resolveDeviceProfile,
 } from "../platform/deviceProfile";
-import { croppedSheetCanvas, spriteCanvas } from "../render/atlas";
+import {
+  croppedSheetCanvas,
+  loadedSheetCount,
+  sheetsAreReady,
+  spriteCanvas,
+} from "../render/atlas";
 import { GameStage } from "../render/GameStage";
 import { spritePose } from "../render/pose";
 import { autoChain } from "../sim/autoRun";
@@ -657,7 +662,17 @@ function handleZoneTriggers(world: World, entered: Set<string>) {
   }
 }
 
-function CurrencyToken({ label, value, testId }: { label: string; value: number; testId: string }) {
+function CurrencyToken({
+  label,
+  value,
+  testId,
+  name,
+}: {
+  label: string;
+  value: number;
+  testId: string;
+  name: string;
+}) {
   const ref = useRef<HTMLSpanElement | null>(null);
   const last = useRef(value);
   useEffect(() => {
@@ -676,7 +691,14 @@ function CurrencyToken({ label, value, testId }: { label: string; value: number;
     last.current = value;
   }, [value]);
   return (
-    <span ref={ref} className="currency-token" data-testid={testId}>
+    <span
+      ref={ref}
+      className="currency-token"
+      data-testid={testId}
+      title={`${name}: ${value}`}
+      role="img"
+      aria-label={`${value} ${name}`}
+    >
       {label} {value}
     </span>
   );
@@ -739,20 +761,54 @@ function usePanelEntrance(signature: string) {
   return ref;
 }
 
+/**
+ * Draw a baked sprite/sheet canvas into a <canvas>, re-drawing each frame until
+ * the sheet images preload. The atlas returns a transparent placeholder until
+ * the PNG decodes (the same bake-before-load race as the ground), so a single
+ * mount-time draw leaves a UI sprite-thumb BLANK forever — toolbox icons,
+ * upgrade emblems. This loops until sheetsAreReady() so the icon appears as soon
+ * as its sheet arrives. Callers run it inside an effect keyed to their inputs.
+ */
+function paintThumbUntilReady(
+  target: HTMLCanvasElement | null,
+  source: () => HTMLCanvasElement,
+): () => void {
+  let raf = 0;
+  // only RE-bake the thumb when a new sheet has actually decoded, not every
+  // frame: the source canvas is identical between two frames unless
+  // loadedSheetCount() rose, so this polls cheaply and paints at most once per
+  // arriving PNG (then stops the moment every sheet is ready).
+  let lastCount = -1;
+  const draw = () => {
+    if (!target) return;
+    const count = loadedSheetCount();
+    if (count !== lastCount) {
+      lastCount = count;
+      const src = source();
+      if (src.width > 0 && src.height > 0) {
+        target.width = src.width;
+        target.height = src.height;
+        const ctx = target.getContext("2d");
+        if (ctx) {
+          ctx.imageSmoothingEnabled = false;
+          ctx.clearRect(0, 0, target.width, target.height);
+          ctx.drawImage(src, 0, 0);
+        }
+      }
+    }
+    if (!sheetsAreReady()) raf = requestAnimationFrame(draw);
+  };
+  draw();
+  return () => cancelAnimationFrame(raf);
+}
+
 /** Knight holds the center of the picker until the full roster aligns. */
 function ClassSpriteThumb({ classId }: { classId: string }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
-    const target = ref.current;
     const def = classes.classes[classId];
-    if (!target || !def) return;
-    const source = spriteCanvas(def.sprite, def.palette);
-    target.width = source.width;
-    target.height = source.height;
-    const ctx = target.getContext("2d");
-    if (!ctx) return;
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(source, 0, 0);
+    if (!def) return;
+    return paintThumbUntilReady(ref.current, () => spriteCanvas(def.sprite, def.palette));
   }, [classId]);
   return <canvas className="class-thumb" ref={ref} />;
 }
@@ -890,9 +946,24 @@ function Hud({
           WAVE {snapshot.wave}
         </span>
         <UnitChips snapshot={snapshot} />
-        <CurrencyToken label="C" value={snapshot.incrementalProgress.coins} testId="hud-coins" />
-        <CurrencyToken label="G" value={snapshot.incrementalProgress.gems} testId="hud-gems" />
-        <CurrencyToken label="R" value={snapshot.incrementalProgress.roses} testId="hud-roses" />
+        <CurrencyToken
+          label="C"
+          name="Coins"
+          value={snapshot.incrementalProgress.coins}
+          testId="hud-coins"
+        />
+        <CurrencyToken
+          label="G"
+          name="Gems"
+          value={snapshot.incrementalProgress.gems}
+          testId="hud-gems"
+        />
+        <CurrencyToken
+          label="R"
+          name="Roses"
+          value={snapshot.incrementalProgress.roses}
+          testId="hud-roses"
+        />
         <span className="map-token">{snapshot.mapName}</span>
         <button
           className="hud-speed"
@@ -1007,13 +1078,18 @@ function Minimap({ snapshot }: { snapshot: UiSnapshot }) {
     };
     for (let y = 0; y < snapshot.runtime.rows; y++) {
       for (let x = 0; x < snapshot.runtime.cols; x++) {
-        const explored = snapshot.explored.has(`${x},${y}`);
         const tile = getTile(snapshot.runtime.grid[y][x]);
         const colorTile = tile.variantOf ?? tile.id;
-        ctx.fillStyle = explored ? (colors[colorTile] ?? ui.theme.textBody) : ui.theme.background;
+        const base = colors[colorTile] ?? ui.theme.textBody;
+        // this is a rail-command route map, not a fog-of-war explorer: show the
+        // whole known road always (a start-of-run all-unexplored map rendered as
+        // a useless black rectangle). Unexplored cells just sit a touch dimmer.
+        ctx.fillStyle = base;
+        ctx.globalAlpha = snapshot.explored.has(`${x},${y}`) ? 1 : 0.5;
         ctx.fillRect(Math.floor(x * sx), Math.floor(y * sy), Math.ceil(sx), Math.ceil(sy));
       }
     }
+    ctx.globalAlpha = 1;
     ctx.fillStyle = ui.theme.accentRed;
     ctx.fillRect(
       Math.floor((snapshot.playerX / engine.tileSize) * sx) - 2,
@@ -1124,7 +1200,7 @@ function ShopPanel({
           type="button"
           onClick={onBuy}
         >
-          A Buy
+          Buy
         </button>
         <button
           className="menu-button compact"
@@ -1132,7 +1208,7 @@ function ShopPanel({
           type="button"
           onClick={onSell}
         >
-          B Sell
+          Sell
         </button>
         <p className="shop-status" data-testid="shop-status">
           {shopState.message || `${snapshot.incrementalProgress.coins} coins in purse.`}
@@ -1202,7 +1278,7 @@ function ResultsPanel({
             type="button"
             onClick={onOpenUpgrade}
           >
-            A Upgrade Graph
+            Upgrade Graph
           </button>
           <button
             className="menu-button"
@@ -1230,21 +1306,15 @@ function EmblemThumb({
   iconRef?: { image: string; x: number; y: number; w: number; h: number };
 }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
+  // S-DAG-ICONS hybrid: a node with an iconRef draws a purchased-sheet crop
+  // (which races the preload); otherwise its bespoke emblem-<slug>.pix grid
+  // (synchronous). paintThumbUntilReady redraws until the sheet is ready.
   useEffect(() => {
-    const target = ref.current;
-    if (!target) return;
-    // S-DAG-ICONS hybrid: a node with an iconRef draws a purchased-sheet crop;
-    // otherwise it falls back to its bespoke emblem-<slug>.pix grid.
-    const source = iconRef
-      ? croppedSheetCanvas(nodeId, `emblem|${nodeId}|icon`, iconRef)
-      : spriteCanvas(emblemSpriteId(nodeId), "palette:base");
-    if (source.width === 0 || source.height === 0) return; // missing sprite: leave blank loudly in tests, not 0x0
-    target.width = source.width;
-    target.height = source.height;
-    const ctx = target.getContext("2d");
-    if (!ctx) return;
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(source, 0, 0);
+    return paintThumbUntilReady(ref.current, () =>
+      iconRef
+        ? croppedSheetCanvas(nodeId, `emblem|${nodeId}|icon`, iconRef)
+        : spriteCanvas(emblemSpriteId(nodeId), "palette:base"),
+    );
   }, [nodeId, iconRef]);
   return <canvas className="emblem-thumb" ref={ref} />;
 }
@@ -1336,6 +1406,7 @@ function UpgradeWebPanel({
         <h1>Upgrade Graph</h1>
         <div className="upgrade-purse" data-testid="upgrade-purse">
           <span>{snapshot.incrementalProgress.coins} Coins</span>
+          <span>{snapshot.incrementalProgress.gems} Gems</span>
           <span>{snapshot.incrementalProgress.roses} Roses</span>
         </div>
         <fieldset className="upgrade-graph-list" aria-label="Upgrade Graph">
@@ -1380,10 +1451,10 @@ function UpgradeWebPanel({
         </div>
         <div className="result-actions">
           <button className="menu-button" data-testid="upgrade-buy" type="button" onClick={onBuy}>
-            A Buy
+            Buy
           </button>
           <button className="menu-button" data-testid="upgrade-back" type="button" onClick={onBack}>
-            B Back
+            Back
           </button>
         </div>
       </div>
@@ -1403,18 +1474,38 @@ function UnitToolbox({
   onDisarm: () => void;
 }) {
   const roster = rosterFor(snapshot.incrementalProgress);
+  // which class is currently picked up — drives the drag affordance the player
+  // was missing: the armed panel highlights and the whole stage shows a
+  // "grabbing" cursor + "drop to deploy" hint until the unit lands.
+  const [armedClass, setArmedClass] = useState<string | null>(null);
+  useEffect(() => {
+    if (!armedClass) return;
+    document.body.dataset.deploying = "1";
+    const disarm = () => {
+      setArmedClass(null);
+      onDisarm();
+    };
+    window.addEventListener("pointerup", disarm);
+    window.addEventListener("pointercancel", disarm);
+    return () => {
+      delete document.body.dataset.deploying;
+      window.removeEventListener("pointerup", disarm);
+      window.removeEventListener("pointercancel", disarm);
+    };
+  }, [armedClass, onDisarm]);
   return (
-    <div className="unit-toolbox" data-testid="unit-toolbox">
+    <div className="unit-toolbox" data-testid="unit-toolbox" data-armed={armedClass ?? ""}>
       {roster.map(({ classId }) => {
         const remaining = remainingFor(world, classId);
         return (
           <button
-            className="toolbox-panel"
+            className={`toolbox-panel${armedClass === classId ? " armed" : ""}`}
             data-testid={`toolbox-panel-${classId}`}
             data-remaining={remaining}
             type="button"
             key={classId}
             aria-label={`Deploy ${classId} (${remaining} left)`}
+            aria-pressed={armedClass === classId}
             disabled={remaining <= 0}
             onPointerDown={(event) => {
               // releasing capture lets the drop land on the stage; synthetic
@@ -1422,9 +1513,9 @@ function UnitToolbox({
               try {
                 (event.currentTarget as Element).releasePointerCapture(event.pointerId);
               } catch {}
+              setArmedClass(classId);
               onArm(classId);
             }}
-            onPointerUp={onDisarm}
           >
             <ClassSpriteThumb classId={classId} />
             <span className="toolbox-count">{remaining}</span>
@@ -2274,6 +2365,23 @@ export function App({
             >
               RESUME
             </button>
+            <button
+              className="menu-button"
+              data-testid="pause-mute"
+              type="button"
+              aria-pressed={muted}
+              onClick={() => setMuted((value) => !value)}
+            >
+              {muted ? "UNMUTE" : "MUTE"}
+            </button>
+            <button
+              className="menu-button danger"
+              data-testid="pause-retire"
+              type="button"
+              onClick={retireRun}
+            >
+              RETIRE RUN
+            </button>
           </div>
         </section>
       )}
@@ -2294,7 +2402,7 @@ export function App({
               </p>
             )}
             <button className="menu-button" type="button" onClick={startNextRun}>
-              A NEXT CHAPTER
+              NEXT CHAPTER
             </button>
           </div>
         </section>

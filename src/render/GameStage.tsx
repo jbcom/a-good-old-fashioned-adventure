@@ -41,9 +41,11 @@ import {
 } from "../sim/traits";
 import {
   flashCanvas,
+  loadedSheetCount,
   preloadSheetImages,
   propCanvas,
   sheetFrameCanvas,
+  sheetsAreReady,
   spriteCanvas,
   tileFieldCanvas,
 } from "./atlas";
@@ -75,7 +77,9 @@ function textureFor(canvas: HTMLCanvasElement): CanvasTexture {
   return texture;
 }
 
-function composeGround(world: World): HTMLCanvasElement {
+/** Bake the whole ground plane into one supersampled canvas (exported for the
+ * deployed-build black-ground regression test). */
+export function composeGround(world: World): HTMLCanvasElement {
   const runtime = world.get(MapRuntime);
   if (!runtime) throw new Error("no MapRuntime");
   // supersampled ground texture: GROUND_RES px per world tile so high-res
@@ -123,6 +127,13 @@ interface GroundTrack {
   mapId: string;
   rev: number;
   mesh: Mesh;
+  // false when this ground was baked before the sheet images had decoded — its
+  // tiles are transparent placeholders (black ground). The renderer recomposes
+  // when more sheets load so a slow deployed build self-heals.
+  bakedReady: boolean;
+  // how many sheet images were loaded when this ground was baked — the ground
+  // re-bakes ONLY when this rises (a new terrain PNG arrived), not every frame.
+  bakedSheetCount: number;
 }
 
 function disposeGroundMesh(mesh: Mesh): void {
@@ -146,9 +157,18 @@ class SceneSync {
   private syncGround(world: World, scene: Scene): void {
     const runtime = world.get(MapRuntime);
     if (!runtime || runtime.mapId === "") return;
-    if (this.ground && this.ground.mapId === runtime.mapId && this.ground.rev === runtime.rev) {
-      return;
-    }
+    // skip recompose when the cached ground still matches AND it was baked with
+    // every sheet that has loaded so far. A ground baked before the sheets
+    // decoded (slow deployed build) re-bakes ONLY when more sheets arrive
+    // (loadedSheetCount rises) — so it heals from black incrementally as the
+    // terrain PNGs land, at one re-bake per image rather than one per frame
+    // (the fix for the deployed black-terrain race, without the per-frame cost).
+    const stillValid =
+      this.ground &&
+      this.ground.mapId === runtime.mapId &&
+      this.ground.rev === runtime.rev &&
+      (this.ground.bakedReady || this.ground.bakedSheetCount === loadedSheetCount());
+    if (stillValid) return;
     if (this.ground) {
       scene.remove(this.ground.mesh);
       disposeGroundMesh(this.ground.mesh);
@@ -166,7 +186,13 @@ class SceneSync {
     mesh.rotation.x = -Math.PI / 2;
     mesh.position.set(worldW / 2, 0, worldH / 2);
     scene.add(mesh);
-    this.ground = { mapId: runtime.mapId, rev: runtime.rev, mesh };
+    this.ground = {
+      mapId: runtime.mapId,
+      rev: runtime.rev,
+      mesh,
+      bakedReady: sheetsAreReady(),
+      bakedSheetCount: loadedSheetCount(),
+    };
   }
 
   private billboard(
@@ -471,7 +497,10 @@ export function GameStage({ world }: { world: World }) {
       }}
       style={{ width: "100%", height: "100%" }}
     >
-      <color attach="background" args={["#141013"]} />
+      {/* a warm storybook horizon, not a black void: when the camera tilts past
+          the ground plane's far edge this fills the top of the frame as sky
+          rather than the dark stripe the old #141013 left there */}
+      <color attach="background" args={["#3a4a2c"]} />
       <WorldScene world={world} />
     </Canvas>
   );

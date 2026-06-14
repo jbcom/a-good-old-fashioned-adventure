@@ -7,7 +7,7 @@
   "description": "Craggy rock — RPG Tiles Vector grey stone cell, native 64px. Solid.",
   "sheet": {
     "image": "tilemaps/rpg-terrain.png",
-    "x": 896,
+    "x": 832,
     "y": 192,
     "w": 64,
     "h": 64

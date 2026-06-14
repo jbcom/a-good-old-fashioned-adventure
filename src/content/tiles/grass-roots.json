@@ -7,8 +7,8 @@
   "description": "Grass variant — RPG Tiles Vector 64px grass cell (rpg-terrain.png) at a distinct centre cell for blade/tone variety; opaque, native-res, no flat fill.",
   "sheet": {
     "image": "tilemaps/rpg-terrain.png",
-    "x": 128,
-    "y": 0,
+    "x": 64,
+    "y": 64,
     "w": 64,
     "h": 64
   },

@@ -10,7 +10,10 @@
     "y": 0,
     "w": 64,
     "h": 64,
-    "field": { "cols": 2, "rows": 2 }
+    "field": {
+      "cols": 2,
+      "rows": 1
+    }
   },
   "koota": {
     "traits": ["Tile", "Solid", "AnimatedTile"]

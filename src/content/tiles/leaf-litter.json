@@ -6,8 +6,8 @@
   "description": "Forest floor — RPG Tiles Vector grass at the woodland floor; the canopy props above make it read as forest. Native 64px, 2x2 field varies the litter.",
   "sheet": {
     "image": "tilemaps/rpg-terrain.png",
-    "x": 0,
-    "y": 64,
+    "x": 192,
+    "y": 0,
     "w": 64,
     "h": 64,
     "field": {

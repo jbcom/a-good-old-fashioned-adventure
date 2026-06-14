@@ -7,7 +7,7 @@
   "description": "Pebbled dirt — RPG Tiles Vector dirt cell scattered with stones, native 64px.",
   "sheet": {
     "image": "tilemaps/rpg-terrain.png",
-    "x": 512,
+    "x": 576,
     "y": 64,
     "w": 64,
     "h": 64

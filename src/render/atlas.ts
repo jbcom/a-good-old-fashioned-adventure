@@ -19,8 +19,46 @@ export function clearAtlas(): void {
   cache.clear();
 }
 
+/**
+ * Reset the sheet-preload state so a test can reproduce the cold-load race a
+ * deployed build hits (first ground bake before images decode). Test-only.
+ * Bumps preloadEpoch so any preload run still in flight from before the reset
+ * no-ops on completion instead of writing sheetsReady/sheetImages against the
+ * fresh state (stale-completion guard).
+ */
+export function resetSheetPreloadForTest(): void {
+  preloadEpoch += 1;
+  sheetPreload = null;
+  sheetsReady = false;
+  sheetImages.clear();
+}
+
 let sheetPreload: Promise<void> | null = null;
 let sheetsReady = false;
+// monotonic token identifying the current preload generation — a preload whose
+// epoch no longer matches has been superseded by a reset and must not mutate state
+let preloadEpoch = 0;
+
+/**
+ * True once every purchased sheet image has decoded. The ground is baked ONCE
+ * per (map, rev) and cached; if that first bake ran before the images arrived
+ * (slow network on a deployed build), every tile is a transparent placeholder
+ * and the ground renders black forever. The renderer reads this to force a
+ * one-time recompose when the sheets finish loading.
+ */
+export function sheetsAreReady(): boolean {
+  return sheetsReady;
+}
+
+/**
+ * How many sheet images have decoded so far. Rises monotonically as preload
+ * progresses. The renderer recomposes the ground only when this CHANGES (a new
+ * terrain PNG arrived) rather than every frame while loading — so the slow-load
+ * self-heal stays cheap (one re-bake per image, not one per frame).
+ */
+export function loadedSheetCount(): number {
+  return sheetImages.size;
+}
 
 /**
  * Load every image referenced by registered sheet sprites — idempotent,
@@ -30,6 +68,7 @@ let sheetsReady = false;
  */
 export function preloadSheetImages(): Promise<void> {
   sheetPreload ??= (async () => {
+    const epoch = preloadEpoch;
     const paths = new Set<string>();
     for (const def of sprites.values()) {
       if (!isSheetSprite(def)) continue;
@@ -51,10 +90,14 @@ export function preloadSheetImages(): Promise<void> {
         // back to procedural rendering
         image.src = assetUrl(path);
         await image.decode();
+        // a reset during load superseded this run — drop the decoded image
+        // rather than repopulate a cleared map
+        if (epoch !== preloadEpoch) return;
         sheetImages.set(path, image);
       }),
     );
-    sheetsReady = true;
+    // only mark ready if this run is still the current generation
+    if (epoch === preloadEpoch) sheetsReady = true;
   })();
   return sheetPreload;
 }
