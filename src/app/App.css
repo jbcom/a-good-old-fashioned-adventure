@@ -82,13 +82,20 @@
 }
 
 .landing-screen {
+  /* fill the viewport and centre the title card — without this the card sat
+     top-aligned in the upper half with a black dead-space void below it */
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
   overflow: hidden;
   background:
     linear-gradient(
       180deg,
       rgba(249, 217, 142, 0.88),
       rgba(237, 197, 119, 0.72) 36%,
-      rgba(49, 95, 59, 0.54)
+      rgba(49, 95, 59, 0.54) 70%,
+      rgba(49, 95, 59, 0.6)
     ),
     var(--bg);
 }
@@ -313,6 +320,41 @@
   margin: 8px 0 0;
   color: var(--muted);
   font-size: 15px;
+}
+
+/* Base styling for every parchment menu/action button (landing, pause, results,
+   shop, upgrade, dialogue). Without this the class fell back to the raw browser
+   default grey button, jarring against the styled HUD. */
+.menu-button {
+  min-height: 42px;
+  padding: 8px 18px;
+  border: 1px solid var(--frame);
+  border-radius: 8px;
+  background: var(--panel-strong);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    transform 80ms ease;
+}
+
+.menu-button:hover:not(:disabled) {
+  background: #fff6df;
+  border-color: var(--accent);
+}
+
+.menu-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.menu-button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 .menu-button:disabled {
@@ -588,11 +630,18 @@
 
 .quest-panel p,
 .control-hint,
+/* a debug readout of the audio engine state — kept in the DOM for tests but
+   visually hidden so players never see "howler ready overworld sound" */
 .audio-state {
-  margin: 0;
-  color: var(--body);
-  font-size: 13px;
-  line-height: 1.38;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .minimap-wrap {
@@ -943,10 +992,7 @@
   color: var(--aether);
 }
 
-.audio-state {
-  margin-top: 12px;
-  font-family: var(--font-numeric);
-}
+/* (the audio-state debug readout is visually hidden — see the rule above) */
 
 .menu-controls {
   display: grid;
