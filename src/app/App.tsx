@@ -1149,7 +1149,7 @@ function ShopPanel({
           type="button"
           onClick={onBuy}
         >
-          A Buy
+          Buy
         </button>
         <button
           className="menu-button compact"
@@ -1157,7 +1157,7 @@ function ShopPanel({
           type="button"
           onClick={onSell}
         >
-          B Sell
+          Sell
         </button>
         <p className="shop-status" data-testid="shop-status">
           {shopState.message || `${snapshot.incrementalProgress.coins} coins in purse.`}
@@ -1227,7 +1227,7 @@ function ResultsPanel({
             type="button"
             onClick={onOpenUpgrade}
           >
-            A Upgrade Graph
+            Upgrade Graph
           </button>
           <button
             className="menu-button"
@@ -1399,10 +1399,10 @@ function UpgradeWebPanel({
         </div>
         <div className="result-actions">
           <button className="menu-button" data-testid="upgrade-buy" type="button" onClick={onBuy}>
-            A Buy
+            Buy
           </button>
           <button className="menu-button" data-testid="upgrade-back" type="button" onClick={onBack}>
-            B Back
+            Back
           </button>
         </div>
       </div>
@@ -2313,7 +2313,7 @@ export function App({
               </p>
             )}
             <button className="menu-button" type="button" onClick={startNextRun}>
-              A NEXT CHAPTER
+              NEXT CHAPTER
             </button>
           </div>
         </section>
