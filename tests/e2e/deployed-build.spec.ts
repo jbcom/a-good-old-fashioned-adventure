@@ -77,3 +77,67 @@ test("deployed build: the game boots and the terrain renders (not black)", async
   expect(failedRequests, "no asset should fail to load on the deployed subpath").toEqual([]);
   expect(consoleErrors, "the deployed build should boot with zero console errors").toEqual([]);
 });
+
+test("deployed build: a real rescue run deploys units, the line advances and farms", async ({
+  page,
+}) => {
+  test.setTimeout(120_000);
+  const consoleErrors: string[] = [];
+  page.on("console", (m) => {
+    if (m.type() === "error") consoleErrors.push(m.text());
+  });
+  page.on("pageerror", (e) => consoleErrors.push(`pageerror: ${e.message}`));
+
+  await page.goto("./", { waitUntil: "load" });
+  await page.getByRole("button", { name: /new game/i }).click();
+  await page.waitForSelector("canvas[data-ready='1']", { timeout: 30_000 });
+  await page.waitForLoadState("networkidle", { timeout: 60_000 });
+
+  const linePercent = () =>
+    page.locator('[data-testid="line-vitals"]').getAttribute("data-line-percent");
+  const coins = () =>
+    page
+      .locator('[data-testid="hud-coins"]')
+      .innerText()
+      .then((t) => Number(t.replace(/\D/g, "")) || 0);
+
+  const startAdvance = Number((await linePercent()) ?? "0");
+  const startCoins = await coins();
+
+  // deploy the available classes by the real gesture: pointerDown on a toolbox
+  // panel arms the class, pointerUp on the stage drops it. Repeat to keep the
+  // line fed; the rail then auto-advances and the waves farm.
+  const stage = page.locator('[data-testid="world-stage-shell"]');
+  const panels = page.locator('[data-testid^="toolbox-panel-"]');
+  await expect(panels.first()).toBeVisible({ timeout: 15_000 });
+  const stageBox = await stage.boundingBox();
+  if (!stageBox) throw new Error("no stage to drop onto");
+
+  const count = await panels.count();
+  for (let i = 0; i < 12; i++) {
+    const panel = panels.nth(i % Math.max(1, count));
+    if ((await panel.getAttribute("disabled")) !== null) continue;
+    const box = await panel.boundingBox();
+    if (!box) continue;
+    await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+    await page.mouse.down();
+    // drop onto the middle of the rail corridor
+    await page.mouse.move(stageBox.x + stageBox.width / 2, stageBox.y + stageBox.height * 0.55);
+    await page.mouse.up();
+    await page.waitForTimeout(250);
+  }
+
+  // let the rail run so waves spawn and the line pushes
+  await page.waitForTimeout(8000);
+
+  const endAdvance = Number((await linePercent()) ?? "0");
+  const endCoins = await coins();
+
+  // the always-advance floor (docs/RAIL-COMMAND.md): a real run either pushes the
+  // line off the start OR farms coins from the waves — it is not a dead strand.
+  expect(
+    endAdvance > startAdvance + 0.01 || endCoins > startCoins,
+    `run made no progress on the deployed build (advance ${startAdvance}→${endAdvance}, coins ${startCoins}→${endCoins})`,
+  ).toBe(true);
+  expect(consoleErrors, "the run should play with zero console errors").toEqual([]);
+});
