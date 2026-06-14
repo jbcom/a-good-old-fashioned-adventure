@@ -492,7 +492,10 @@ export function GameStage({ world }: { world: World }) {
       }}
       style={{ width: "100%", height: "100%" }}
     >
-      <color attach="background" args={["#141013"]} />
+      {/* a warm storybook horizon, not a black void: when the camera tilts past
+          the ground plane's far edge this fills the top of the frame as sky
+          rather than the dark stripe the old #141013 left there */}
+      <color attach="background" args={["#3a4a2c"]} />
       <WorldScene world={world} />
     </Canvas>
   );
