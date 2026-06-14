@@ -1,6 +1,6 @@
 # Continuous Work Directive — a-good-old-fashioned-adventure
 
-**Status:** RELEASED
+**Status:** ACTIVE
 **Owner:** Claude (mandated by jbogaty)
 **Mandate (current):** Rail-command incremental (docs/RAIL-COMMAND.md) built to full polish on the long-running local branch, fully autonomously, docs → tests → code, headed GPU browser journeys driven by the CommanderGovernor through public state, every visual READ before commit, until ALL features are fully implemented and polished. Founding mandate + full history: docs/COMPLETED-MILESTONES.md.
 
@@ -47,6 +47,13 @@ Items are ONLY `- [ ]` (open) or `- [x]` (done) — never ad-hoc states like `[~
 - The .pix validator passes undeclared lowercase channel chars silently — eyeball every new grid in the regenerated sheet.
 
 ## Queue — to fully implemented and polished
+
+### S-LIVE Test what the game SHOULD be, not what it currently is (user mandate 2026-06-13: "OPEN IT AND TRY TO PLAY THE DAMN GAME"; the live Pages site had SO many issues that descriptive tests + the dev-server harness all missed — the bar is REAL deployed-build E2E, every theme reachable+beatable, visual-spec not self-compare, live audio/save/mobile)
+- [x] SL.0 Live black-ground bug FOUND + FIXED (DONE 2026-06-13, PR #20). Opened the live site, tried to play it → the whole game rendered on black (no terrain, lone sprite) though every asset loaded 200. Root cause: composeGround bakes the ground ONCE per (map,rev) and caches it; on a slow network the first bake runs before the terrain PNGs decode → all-transparent (black) ground cached forever (dev-server/test harness all `await preload` so it was invisible). FIX: re-bake the ground every frame until `sheetsAreReady()` (heals incrementally as PNGs arrive). E2E GATE added: @playwright/test builds the bundle, serves dist/ under the /a-good-old-fashioned-adventure/ subpath, plays it under ~1.5Mbps throttle, asserts ground not-black + zero console errors + zero failed requests; wired into CI after build.
+- [ ] SL.1 Deployed-build E2E breadth: extend the playwright suite beyond the smoke — drive an ACTUAL rescue run to a win on the deployed artifact (deploy units, advance the line, fell the kin, reach the princess); assert audio plays and a save persists across reload on the subpath build.
+- [ ] SL.2 Every theme reachable + beatable: an E2E (or headless harness fed by the real upgrade DAG) that unlocks → reaches → fights → wins → relocates the princess for EACH of the 9 spine themes, on the deployed build. Prove the full progression, not just map-instantiation.
+- [ ] SL.3 Visual spec, not self-compare: each map screenshot-checked against an authored SPEC of what it should look like (intended art per biome), not against its own current output. The current map-evidence is self-referential — a black map would "match" its own black baseline.
+- [ ] SL.4 Mobile: the Android APK boots and plays a run on an emulator (Maestro/local emulator available); assert the same not-black-ground + playable bar on device.
 
 ### S-TERRAIN Replace POC procedural .pix terrain with real PNG ground (user mandate 2026-06-13: the procedural was POC; the imported ground/brick/dungeon packs replace it; FIT THE CODE TO THE PNGS, not vice-versa; [[own-the-design-real-assets]])
 - [x] ST.0 Asset audit (DONE 2026-06-13, docs/ASSET-AUDIT.md): content-hash audit of raw-assets vs staged; 92 consumed files removed from raw-assets → 5055 unused candidates visible. Ground-FIELD render mode added (sheet field:{cols,rows} + tileFieldCanvas → per-(col,row) seamless sampling). Found: 'The Ground' has no grass (dither overlays); roguelike GRASS=tufts + GROUND=dithered fills (matches current .pix model); brick=Brick Pack (475), dungeon floors=kenney-dungeon-dark. User chose roguelike.png for style cohesion.
