@@ -2,6 +2,14 @@
 
 All notable changes will be managed by release-please.
 
+## [1.2.1](https://github.com/jbcom/a-good-old-fashioned-adventure/compare/a-good-old-fashioned-adventure-v1.2.0...a-good-old-fashioned-adventure-v1.2.1) (2026-06-14)
+
+
+### Bug Fixes
+
+* live black-ground bug + a thorough QA pass (terrain, icons, UI, drag) + deployed-build E2E gate ([#20](https://github.com/jbcom/a-good-old-fashioned-adventure/issues/20)) ([1d4713e](https://github.com/jbcom/a-good-old-fashioned-adventure/commit/1d4713e529fd86738f6a76961a05df686a13670c))
+* resolve assets under the deployment base (Pages sprites/audio 404) ([#15](https://github.com/jbcom/a-good-old-fashioned-adventure/issues/15)) ([fd3acba](https://github.com/jbcom/a-good-old-fashioned-adventure/commit/fd3acba6a65ae868782bfe70e6003c9ddbf07237))
+
 ## [1.2.0](https://github.com/jbcom/a-good-old-fashioned-adventure/compare/a-good-old-fashioned-adventure-v1.1.0...a-good-old-fashioned-adventure-v1.2.0) (2026-06-13)
 
 
