@@ -1113,6 +1113,39 @@
   cursor: default;
 }
 
+/* the drag affordance: the picked-up class lifts and glows, and while a unit is
+   armed the whole stage shows a grabbing cursor + a "drop to deploy" hint so the
+   player knows they're carrying a unit (the missing feedback behind "no drag"). */
+.toolbox-panel.armed {
+  border-color: var(--accent);
+  background: #fff6df;
+  cursor: grabbing;
+  transform: translateY(-6px) scale(1.08);
+  box-shadow: 0 6px 14px rgba(61, 42, 27, 0.4);
+}
+
+body[data-deploying] .world-stage-shell {
+  cursor: grabbing;
+}
+
+body[data-deploying] .world-stage-shell::after {
+  content: "Drop to deploy";
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--panel-strong);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  pointer-events: none;
+  z-index: 30;
+}
+
 .toolbox-panel .class-thumb {
   width: 32px;
   height: 32px;

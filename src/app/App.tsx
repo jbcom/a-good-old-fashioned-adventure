@@ -1427,18 +1427,38 @@ function UnitToolbox({
   onDisarm: () => void;
 }) {
   const roster = rosterFor(snapshot.incrementalProgress);
+  // which class is currently picked up — drives the drag affordance the player
+  // was missing: the armed panel highlights and the whole stage shows a
+  // "grabbing" cursor + "drop to deploy" hint until the unit lands.
+  const [armedClass, setArmedClass] = useState<string | null>(null);
+  useEffect(() => {
+    if (!armedClass) return;
+    document.body.dataset.deploying = "1";
+    const disarm = () => {
+      setArmedClass(null);
+      onDisarm();
+    };
+    window.addEventListener("pointerup", disarm);
+    window.addEventListener("pointercancel", disarm);
+    return () => {
+      delete document.body.dataset.deploying;
+      window.removeEventListener("pointerup", disarm);
+      window.removeEventListener("pointercancel", disarm);
+    };
+  }, [armedClass, onDisarm]);
   return (
-    <div className="unit-toolbox" data-testid="unit-toolbox">
+    <div className="unit-toolbox" data-testid="unit-toolbox" data-armed={armedClass ?? ""}>
       {roster.map(({ classId }) => {
         const remaining = remainingFor(world, classId);
         return (
           <button
-            className="toolbox-panel"
+            className={`toolbox-panel${armedClass === classId ? " armed" : ""}`}
             data-testid={`toolbox-panel-${classId}`}
             data-remaining={remaining}
             type="button"
             key={classId}
             aria-label={`Deploy ${classId} (${remaining} left)`}
+            aria-pressed={armedClass === classId}
             disabled={remaining <= 0}
             onPointerDown={(event) => {
               // releasing capture lets the drop land on the stage; synthetic
@@ -1446,9 +1466,9 @@ function UnitToolbox({
               try {
                 (event.currentTarget as Element).releasePointerCapture(event.pointerId);
               } catch {}
+              setArmedClass(classId);
               onArm(classId);
             }}
-            onPointerUp={onDisarm}
           >
             <ClassSpriteThumb classId={classId} />
             <span className="toolbox-count">{remaining}</span>
