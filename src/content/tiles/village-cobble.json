@@ -6,13 +6,13 @@
   "description": "Village cobble lane — RPG Tiles Vector cobbled-dirt cell (rpg-terrain.png), warm packed stone, native 64px. 2x2 field varies the lane.",
   "sheet": {
     "image": "tilemaps/rpg-terrain.png",
-    "x": 384,
-    "y": 0,
+    "x": 128,
+    "y": 448,
     "w": 64,
     "h": 64,
     "field": {
       "cols": 2,
-      "rows": 2
+      "rows": 1
     }
   },
   "koota": {

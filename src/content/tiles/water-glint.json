@@ -7,7 +7,7 @@
   "description": "Glinting water — RPG Tiles Vector water cell, brighter ripple, native 64px.",
   "sheet": {
     "image": "tilemaps/rpg-terrain.png",
-    "x": 896,
+    "x": 832,
     "y": 64,
     "w": 64,
     "h": 64

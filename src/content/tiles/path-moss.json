@@ -7,8 +7,8 @@
   "description": "Mossy dirt edge — RPG Tiles Vector dirt-to-grass cell, native 64px.",
   "sheet": {
     "image": "tilemaps/rpg-terrain.png",
-    "x": 320,
-    "y": 64,
+    "x": 0,
+    "y": 448,
     "w": 64,
     "h": 64
   },

@@ -7,8 +7,8 @@
   "description": "Rock ledge — RPG Tiles Vector grey stone cell, native 64px. Solid.",
   "sheet": {
     "image": "tilemaps/rpg-terrain.png",
-    "x": 896,
-    "y": 256,
+    "x": 960,
+    "y": 192,
     "w": 64,
     "h": 64
   },

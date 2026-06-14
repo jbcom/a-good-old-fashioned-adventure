@@ -7,7 +7,7 @@
   "description": "Scree slope — RPG Tiles Vector grey stone cell, native 64px. Solid.",
   "sheet": {
     "image": "tilemaps/rpg-terrain.png",
-    "x": 832,
+    "x": 896,
     "y": 256,
     "w": 64,
     "h": 64
