@@ -42,7 +42,12 @@ import {
   readViewport,
   resolveDeviceProfile,
 } from "../platform/deviceProfile";
-import { croppedSheetCanvas, sheetsAreReady, spriteCanvas } from "../render/atlas";
+import {
+  croppedSheetCanvas,
+  loadedSheetCount,
+  sheetsAreReady,
+  spriteCanvas,
+} from "../render/atlas";
 import { GameStage } from "../render/GameStage";
 import { spritePose } from "../render/pose";
 import { autoChain } from "../sim/autoRun";
@@ -769,17 +774,26 @@ function paintThumbUntilReady(
   source: () => HTMLCanvasElement,
 ): () => void {
   let raf = 0;
+  // only RE-bake the thumb when a new sheet has actually decoded, not every
+  // frame: the source canvas is identical between two frames unless
+  // loadedSheetCount() rose, so this polls cheaply and paints at most once per
+  // arriving PNG (then stops the moment every sheet is ready).
+  let lastCount = -1;
   const draw = () => {
     if (!target) return;
-    const src = source();
-    if (src.width > 0 && src.height > 0) {
-      target.width = src.width;
-      target.height = src.height;
-      const ctx = target.getContext("2d");
-      if (ctx) {
-        ctx.imageSmoothingEnabled = false;
-        ctx.clearRect(0, 0, target.width, target.height);
-        ctx.drawImage(src, 0, 0);
+    const count = loadedSheetCount();
+    if (count !== lastCount) {
+      lastCount = count;
+      const src = source();
+      if (src.width > 0 && src.height > 0) {
+        target.width = src.width;
+        target.height = src.height;
+        const ctx = target.getContext("2d");
+        if (ctx) {
+          ctx.imageSmoothingEnabled = false;
+          ctx.clearRect(0, 0, target.width, target.height);
+          ctx.drawImage(src, 0, 0);
+        }
       }
     }
     if (!sheetsAreReady()) raf = requestAnimationFrame(draw);

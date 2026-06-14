@@ -41,6 +41,7 @@ import {
 } from "../sim/traits";
 import {
   flashCanvas,
+  loadedSheetCount,
   preloadSheetImages,
   propCanvas,
   sheetFrameCanvas,
@@ -128,8 +129,11 @@ interface GroundTrack {
   mesh: Mesh;
   // false when this ground was baked before the sheet images had decoded — its
   // tiles are transparent placeholders (black ground). The renderer recomposes
-  // once sheetsAreReady() flips true so a slow deployed build self-heals.
+  // when more sheets load so a slow deployed build self-heals.
   bakedReady: boolean;
+  // how many sheet images were loaded when this ground was baked — the ground
+  // re-bakes ONLY when this rises (a new terrain PNG arrived), not every frame.
+  bakedSheetCount: number;
 }
 
 function disposeGroundMesh(mesh: Mesh): void {
@@ -154,16 +158,16 @@ class SceneSync {
     const runtime = world.get(MapRuntime);
     if (!runtime || runtime.mapId === "") return;
     // skip recompose when the cached ground still matches AND it was baked with
-    // the sheet images present. A ground baked before the sheets decoded (slow
-    // deployed build) has bakedReady=false and re-bakes EVERY frame until the
-    // sheets are ready — so it heals from black incrementally as the terrain
-    // PNGs arrive (sheetImages populates per-image), not only after every last
-    // sheet (incl. audio) finishes. The fix for the deployed black-terrain race.
+    // every sheet that has loaded so far. A ground baked before the sheets
+    // decoded (slow deployed build) re-bakes ONLY when more sheets arrive
+    // (loadedSheetCount rises) — so it heals from black incrementally as the
+    // terrain PNGs land, at one re-bake per image rather than one per frame
+    // (the fix for the deployed black-terrain race, without the per-frame cost).
     const stillValid =
       this.ground &&
       this.ground.mapId === runtime.mapId &&
       this.ground.rev === runtime.rev &&
-      this.ground.bakedReady;
+      (this.ground.bakedReady || this.ground.bakedSheetCount === loadedSheetCount());
     if (stillValid) return;
     if (this.ground) {
       scene.remove(this.ground.mesh);
@@ -187,6 +191,7 @@ class SceneSync {
       rev: runtime.rev,
       mesh,
       bakedReady: sheetsAreReady(),
+      bakedSheetCount: loadedSheetCount(),
     };
   }
 

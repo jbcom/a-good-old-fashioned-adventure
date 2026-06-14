@@ -4,12 +4,15 @@
  * (/a-good-old-fashioned-adventure/...). Used by playwright.config.ts webServer.
  */
 
-import { readFile, stat } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { createServer } from "node:http";
-import { extname, join, normalize } from "node:path";
+import { extname, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ROOT = fileURLToPath(new URL("../../dist", import.meta.url));
+const ROOT = resolve(fileURLToPath(new URL("../../dist", import.meta.url)));
+// every served file must live strictly UNDER ROOT — guard with the path
+// separator so a sibling like `<ROOT>-evil` can't pass a bare startsWith.
+const ROOT_PREFIX = ROOT + sep;
 const SUBPATH = "/a-good-old-fashioned-adventure";
 const PORT = Number(process.argv[2] ?? 8911);
 const MIME = {
@@ -35,18 +38,22 @@ createServer(async (req, res) => {
     }
     path = path.slice(SUBPATH.length) || "/";
     if (path === "/" || path.endsWith("/")) path += "index.html";
-    const file = normalize(join(ROOT, path));
-    if (!file.startsWith(ROOT)) {
+    // resolve the request against ROOT, then require the result to sit under
+    // ROOT_PREFIX — rejects `../` escapes and `<ROOT>-sibling` near-misses alike
+    const file = resolve(ROOT, `.${sep}${path}`);
+    if (file !== ROOT && !file.startsWith(ROOT_PREFIX)) {
       res.writeHead(403).end("traversal");
       return;
     }
-    const info = await stat(file).catch(() => null);
-    if (!info?.isFile()) {
+    // single read; treat ENOENT/EISDIR (and any read failure) as 404 so there's
+    // no stat→read TOCTOU window — the file is opened exactly once.
+    const body = await readFile(file).catch(() => null);
+    if (body === null) {
       res.writeHead(404).end("not found");
       return;
     }
     res.writeHead(200, { "content-type": MIME[extname(file)] ?? "application/octet-stream" });
-    res.end(await readFile(file));
+    res.end(body);
   } catch (err) {
     res.writeHead(500).end(String(err));
   }
