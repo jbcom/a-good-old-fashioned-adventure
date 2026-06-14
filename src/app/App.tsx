@@ -42,7 +42,7 @@ import {
   readViewport,
   resolveDeviceProfile,
 } from "../platform/deviceProfile";
-import { croppedSheetCanvas, spriteCanvas } from "../render/atlas";
+import { croppedSheetCanvas, sheetsAreReady, spriteCanvas } from "../render/atlas";
 import { GameStage } from "../render/GameStage";
 import { spritePose } from "../render/pose";
 import { autoChain } from "../sim/autoRun";
@@ -739,20 +739,45 @@ function usePanelEntrance(signature: string) {
   return ref;
 }
 
+/**
+ * Draw a baked sprite/sheet canvas into a <canvas>, re-drawing each frame until
+ * the sheet images preload. The atlas returns a transparent placeholder until
+ * the PNG decodes (the same bake-before-load race as the ground), so a single
+ * mount-time draw leaves a UI sprite-thumb BLANK forever — toolbox icons,
+ * upgrade emblems. This loops until sheetsAreReady() so the icon appears as soon
+ * as its sheet arrives. Callers run it inside an effect keyed to their inputs.
+ */
+function paintThumbUntilReady(
+  target: HTMLCanvasElement | null,
+  source: () => HTMLCanvasElement,
+): () => void {
+  let raf = 0;
+  const draw = () => {
+    if (!target) return;
+    const src = source();
+    if (src.width > 0 && src.height > 0) {
+      target.width = src.width;
+      target.height = src.height;
+      const ctx = target.getContext("2d");
+      if (ctx) {
+        ctx.imageSmoothingEnabled = false;
+        ctx.clearRect(0, 0, target.width, target.height);
+        ctx.drawImage(src, 0, 0);
+      }
+    }
+    if (!sheetsAreReady()) raf = requestAnimationFrame(draw);
+  };
+  draw();
+  return () => cancelAnimationFrame(raf);
+}
+
 /** Knight holds the center of the picker until the full roster aligns. */
 function ClassSpriteThumb({ classId }: { classId: string }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
   useEffect(() => {
-    const target = ref.current;
     const def = classes.classes[classId];
-    if (!target || !def) return;
-    const source = spriteCanvas(def.sprite, def.palette);
-    target.width = source.width;
-    target.height = source.height;
-    const ctx = target.getContext("2d");
-    if (!ctx) return;
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(source, 0, 0);
+    if (!def) return;
+    return paintThumbUntilReady(ref.current, () => spriteCanvas(def.sprite, def.palette));
   }, [classId]);
   return <canvas className="class-thumb" ref={ref} />;
 }
@@ -1230,21 +1255,15 @@ function EmblemThumb({
   iconRef?: { image: string; x: number; y: number; w: number; h: number };
 }) {
   const ref = useRef<HTMLCanvasElement | null>(null);
+  // S-DAG-ICONS hybrid: a node with an iconRef draws a purchased-sheet crop
+  // (which races the preload); otherwise its bespoke emblem-<slug>.pix grid
+  // (synchronous). paintThumbUntilReady redraws until the sheet is ready.
   useEffect(() => {
-    const target = ref.current;
-    if (!target) return;
-    // S-DAG-ICONS hybrid: a node with an iconRef draws a purchased-sheet crop;
-    // otherwise it falls back to its bespoke emblem-<slug>.pix grid.
-    const source = iconRef
-      ? croppedSheetCanvas(nodeId, `emblem|${nodeId}|icon`, iconRef)
-      : spriteCanvas(emblemSpriteId(nodeId), "palette:base");
-    if (source.width === 0 || source.height === 0) return; // missing sprite: leave blank loudly in tests, not 0x0
-    target.width = source.width;
-    target.height = source.height;
-    const ctx = target.getContext("2d");
-    if (!ctx) return;
-    ctx.imageSmoothingEnabled = false;
-    ctx.drawImage(source, 0, 0);
+    return paintThumbUntilReady(ref.current, () =>
+      iconRef
+        ? croppedSheetCanvas(nodeId, `emblem|${nodeId}|icon`, iconRef)
+        : spriteCanvas(emblemSpriteId(nodeId), "palette:base"),
+    );
   }, [nodeId, iconRef]);
   return <canvas className="emblem-thumb" ref={ref} />;
 }
